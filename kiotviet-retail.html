@@ -142,7 +142,7 @@
                      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <button data-mode="10" data-topic="Tối ưu vận hành" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tối ưu vận hành</button>
                         <button data-mode="10" data-topic="Tối ưu quản lý" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tối ưu quản lý</button>
-                        <button data-mode="10" data-topic="Thúc đẩy doanh thu" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tăng doanh thu</button>
+                        <button data-mode="10" data-topic="Tăng doanh thu" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tăng doanh thu</button>
                     </div>
                 </div>
             </div>
@@ -336,11 +336,19 @@
             resetState();
             const currentQuestion = questionsForGame[currentQuestionIndex];
             const questionNo = currentQuestionIndex + 1;
+            
+            // *** CHANGE: Shuffle answers before displaying ***
+            const shuffledAnswers = [...currentQuestion.answers];
+            shuffleArray(shuffledAnswers);
+            // ***********************************************
+
             elements.questionText.innerText = currentQuestion.question;
             elements.progressText.innerText = `Câu ${questionNo}/${questionsForGame.length}`;
             elements.progressBar.style.width = `${(questionNo / questionsForGame.length) * 100}%`;
             elements.questionText.parentElement.classList.add('fade-in');
-            currentQuestion.answers.forEach(answer => {
+
+            // Use the shuffled array to create buttons
+            shuffledAnswers.forEach(answer => {
                 const button = document.createElement('button');
                 button.innerText = answer.text;
                 button.className = 'option-btn w-full text-left p-4 rounded-lg bg-slate-50/70 border border-slate-200 hover:border-kv-blue hover:bg-blue-50/70 transition-all font-medium';
@@ -460,9 +468,11 @@
             radio.addEventListener('change', (e) => {
                 const selectedMode = e.target.value;
                 
-                // Reset previous selections
-                resetStartScreen();
-                e.target.checked = true; // Re-check the current radio
+                // Reset previous selections but keep the radio checked
+                selectedGameMode = { mode: null, text: '', topic: null };
+                elements.startGameBtn.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
+                elements.startGameBtn.setAttribute('disabled', '');
+                elements.modeButtons.forEach(btn => btn.classList.remove('btn-selected-green'));
                 
                 if (selectedMode === 'random') {
                     elements.randomOptionsContainer.classList.remove('mode-group-disabled');
@@ -476,25 +486,26 @@
         
         elements.modeButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                // Remove green highlight from all buttons
-                elements.modeButtons.forEach(btn => {
+                const parentGroup = e.currentTarget.closest('.mode-group');
+                if (parentGroup.classList.contains('mode-group-disabled')) return;
+
+                // Remove green highlight from all buttons in the same group
+                parentGroup.querySelectorAll('.mode-btn').forEach(btn => {
                     btn.classList.remove('btn-selected-green');
                 });
                 
-                // Add green highlight to clicked button
                 const selectedButton = e.currentTarget;
                 selectedButton.classList.add('btn-selected-green');
 
-                // Store selected mode
                 selectedGameMode.mode = selectedButton.dataset.mode;
                 selectedGameMode.topic = selectedButton.dataset.topic || null;
-                selectedGameMode.text = selectedButton.innerText;
+                
                 if(selectedGameMode.topic) {
-                     selectedGameMode.text = `Chủ đề: ${selectedGameMode.text}`;
+                     selectedGameMode.text = `Chủ đề: ${selectedButton.innerText}`;
+                } else {
+                     selectedGameMode.text = `Ngẫu nhiên: ${selectedButton.innerText}`;
                 }
 
-
-                // Show and enable start button
                 elements.startGameBtn.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
                 elements.startGameBtn.removeAttribute('disabled');
             });
