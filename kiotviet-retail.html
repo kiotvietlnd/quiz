@@ -3,541 +3,418 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KiotViet Quiz Game</title>
-    
-    <!-- Tailwind CSS -->
+    <title>Quiz Game KiotViet Retail</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Confetti JS -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
     <style>
-        body {    
-            font-family: 'Inter', sans-serif;
-            background-color: #f8fafc;
-            touch-action: manipulation;
-        }
-        @keyframes moveInCircle { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
-        @keyframes moveVertical { 0% { transform: translateY(-50%); } 50% { transform: translateY(50%); } 100% { transform: translateY(-50%); } }
-        @keyframes moveHorizontal { 0% { transform: translateX(-50%); } 50% { transform: translateX(50%); } 100% { transform: translateX(-50%); } }
-        
-        .soft-glow-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: linear-gradient(to bottom right, #f8fafc, #e0f2fe); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; touch-action: manipulation; }
+        .soft-glow-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: linear-gradient(to bottom right, #f8fafc, #e0f2fe); overflow: hidden; }
         .soft-glow-background .shape { position: absolute; filter: blur(140px); opacity: 0.25; }
         .soft-glow-background .shape1 { height: 350px; width: 350px; background: #166def; border-radius: 50%; top: -50px; left: -100px; animation: moveInCircle 22s ease-in-out infinite; }
+        @keyframes moveInCircle { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
         .soft-glow-background .shape2 { height: 450px; width: 450px; background: #16a34a; border-radius: 50%; bottom: -100px; right: -100px; animation: moveVertical 28s ease-in-out infinite; }
-        .soft-glow-background .shape3 { height: 300px; width: 500px; background: #f97316; border-radius: 50%; top: 50%; left: 50%; animation: moveHorizontal 35s ease-in-out infinite; }
-        
-        .kv-blue { color: #166def; }
-        .bg-kv-blue { background-color: #166def; }
-        .hover\:bg-kv-blue-dark:hover { background-color: #0a58ca; }
-        .border-kv-blue { border-color: #166def; }
-
+        @keyframes moveVertical { 0% { transform: translateY(-50%); } 50% { transform: translateY(50%); } 100% { transform: translateY(-50%); } }
+        .kv-blue { color: #166def; } .bg-kv-blue { background-color: #166def; } .hover\:bg-kv-blue-dark:hover { background-color: #0a58ca; }
         .main-card { background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(203, 213, 225, 0.5); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
-        .mode-btn { transition: all 0.2s ease; }
-        .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
-        .btn-selected-green { background-color: #16a34a !important; border-color: #15803d !important; }
-        .btn-selected-green:hover { background-color: #15803d !important; }
-
-        .mode-group { transition: opacity 0.3s ease-in-out; }
-        .mode-group-disabled { opacity: 0.4; pointer-events: none; }
-        
-        .radio-label {
-            display: inline-flex;
-            align-items: center;
-            cursor: pointer;
-            padding: 0.75rem 1.5rem;
-            border: 2px solid #cbd5e1;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease;
-        }
-        input[type="radio"]:checked + .radio-label {
-            border-color: #166def;
-            background-color: #eff6ff;
-            color: #1e40af;
-            font-weight: 600;
-        }
-        input[type="radio"] { display: none; }
-
+        .fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .mode-btn { transition: all 0.2s ease; } .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .btn-selected-green { background-color: #16a34a !important; border-color: #15803d !important; color: white !important; }
         .correct { background-color: #10B981 !important; color: white !important; border-color: #059669 !important; }
         .incorrect { background-color: #EF4444 !important; color: white !important; border-color: #DC2626 !important; }
-        .fade-in { animation: fadeIn 0.5s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .certificate {
-            border: 10px solid #166def;
-            padding: 2rem;
-            background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%);
-            position: relative;
-        }
+        #certificate-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16 / 9; display: flex; flex-direction: column; }
+        #certificate-content { flex-grow: 1; border: 10px solid #166def; padding: clamp(1rem, 4vw, 2rem); background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%); display: flex; flex-direction: column; justify-content: center; }
+        .review-answer.is-correct-answer { border-left: 4px solid #10B981; background-color: #f0fdf4; }
+        .review-answer.is-selected-incorrect { border-left: 4px solid #EF4444; background-color: #fef2f2; }
+        .btn { font-weight: bold; padding: 0.75rem 2rem; border-radius: 0.5rem; text-align: center; transition: all 0.2s; cursor: pointer; }
+        .btn-blue { background-color: #166def; color: white; } .btn-blue:hover { background-color: #0a58ca; }
+        .btn-green { background-color: #16a34a; color: white; } .btn-green:hover { background-color: #15803d; }
+        .btn-slate { background-color: #475569; color: white; } .btn-slate:hover { background-color: #334155; }
     </style>
 </head>
 <body class="text-slate-700 antialiased flex items-center justify-center min-h-screen p-4">
-
-    <!-- The Soft Glow & Gradient Foundation -->
-    <div class="soft-glow-background">
-        <div class="shape shape1"></div>
-        <div class="shape shape2"></div>
-        <div class="shape shape3"></div>
-    </div>
-    
+    <div class="soft-glow-background"><div class="shape shape1"></div><div class="shape shape2"></div></div>
     <main class="w-full max-w-2xl">
         <!-- Start Screen -->
         <div id="start-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 fade-in">
-            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-10 mx-auto mb-6">
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-2">Quiz Game KiotViet Retail</h1>
-            <p class="text-slate-600 text-center mb-6">Vui lòng nhập thông tin và chọn chế độ chơi</p>
-            
-            <div class="space-y-4 mb-6">
-                <div>
-                    <label for="name-input" class="block text-sm font-medium text-slate-700 mb-1">Họ và tên</label>
-                    <input type="text" id="name-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg focus:ring-2 focus:ring-kv-blue focus:border-kv-blue" placeholder="Nguyễn Văn A">
-                </div>
-                <div>
-                    <label for="department-input" class="block text-sm font-medium text-slate-700 mb-1">Phòng ban</label>
-                    <input type="text" id="department-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg focus:ring-2 focus:ring-kv-blue focus:border-kv-blue" placeholder="TSHNI99">
-                </div>
-            </div>
-            <p id="error-message" class="text-red-500 text-center mb-4 h-5"></p>
-
-            <div class="text-center mb-4">
-                <p class="text-lg font-semibold text-slate-700 mb-3">1. Chọn chế độ chơi</p>
-                <div class="flex justify-center gap-4">
-                    <div>
-                        <input type="radio" id="mode-random-radio" name="game-mode-radio" value="random">
-                        <label for="mode-random-radio" class="radio-label">
-                            <i class="fas fa-random mr-2"></i> Ngẫu nhiên
-                        </label>
-                    </div>
-                    <div>
-                        <input type="radio" id="mode-topic-radio" name="game-mode-radio" value="topic">
-                        <label for="mode-topic-radio" class="radio-label">
-                            <i class="fas fa-book-open mr-2"></i> Theo chủ đề
-                        </label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mt-6 space-y-6">
-                <!-- Random Options -->
-                <div id="random-options" class="mode-group mode-group-disabled">
-                    <p class="text-slate-600 text-center font-semibold mb-3">2. Chọn số câu ngẫu nhiên</p>
-                    <div class="grid grid-cols-2 gap-4">
-                        <button data-mode="5" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">5 câu</button>
-                        <button data-mode="30" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">30 câu</button>
-                        <button data-mode="all" class="mode-btn col-span-2 w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Toàn bộ (50 câu)</button>
-                    </div>
-                </div>
-
-                <!-- Topic Options -->
-                <div id="topic-options" class="mode-group mode-group-disabled">
-                    <p class="text-slate-600 text-center font-semibold mb-3">2. Chọn chủ đề (10 câu)</p>
-                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <button data-mode="10" data-topic="Tối ưu vận hành" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tối ưu vận hành</button>
-                        <button data-mode="10" data-topic="Tối ưu quản lý" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tối ưu quản lý</button>
-                        <button data-mode="10" data-topic="Thúc đẩy doanh thu" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Thúc đẩy doanh thu</button>
-                    </div>
-                </div>
-            </div>
-
-             <div class="mt-8">
-                <button id="start-game-btn" class="w-full bg-kv-blue hover:bg-kv-blue-dark text-white font-bold py-4 px-6 rounded-lg text-xl opacity-0 -translate-y-2 pointer-events-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Bắt đầu</button>
-            </div>
+             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-10 mx-auto mb-6">
+             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-2">Quiz Game KiotViet Retail</h1>
+             <p class="text-slate-600 text-center mb-6">Vui lòng nhập thông tin và chọn chế độ chơi</p>
+             <div class="space-y-4 mb-6">
+                 <div><label for="name-input" class="block text-sm font-medium text-slate-700 mb-1">Họ và tên</label><input type="text" id="name-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg focus:ring-2 focus:ring-kv-blue" placeholder="Nguyễn Văn A"></div>
+                 <div><label for="department-input" class="block text-sm font-medium text-slate-700 mb-1">Phòng ban</label><input type="text" id="department-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg" placeholder="TSHNI99"></div>
+             </div>
+             <div id="mode-selection-area" class="space-y-6"></div>
+             <p id="error-message" class="text-red-500 text-center mt-4 h-5"></p>
+             <button id="start-btn" class="w-full mt-4 btn btn-blue text-lg">Bắt đầu</button>
         </div>
+        <!-- Other screens will be populated by JS -->
+        <div id="quiz-container" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden fade-in"></div>
+        <div id="result-area" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden text-center fade-in"></div>
+        <div id="review-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden fade-in w-full max-w-3xl"></div>
+    </main>
+    <div id="certificate-screen" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"></div>
+<script>
+    // --- Data Injection Placeholders ---
+    const quizDataForClient = [{"id":"q_1","topic":"Tối ưu vận hành","question":"Cửa hàng tạp hóa cần tìm vị trí mặt hàng gia dụng trên kệ. Tính năng nào trên Màn hình bán hàng hỗ trợ thu ngân thực hiện điều này?","answers":[{"id":"a_1_0","text":"Tùy chọn hiển thị"},{"id":"a_1_1","text":"Chế độ nhập"},{"id":"a_1_2","text":"Xem chi tiết"}]},{"id":"q_2","topic":"Tối ưu vận hành","question":"Cửa hàng mỹ phẩm cần tìm sản phẩm theo thuộc tính 'Loại da' (khô, dầu). Chế độ bán hàng nào trên KiotViet hỗ trợ tính năng này?","answers":[{"id":"a_2_0","text":"Bán nhanh"},{"id":"a_2_1","text":"Bán nhanh và Bán thường"},{"id":"a_2_2","text":"Bán thường"}]},{"id":"q_3","topic":"Tối ưu vận hành","question":"Hiệu thuốc cần thêm mã sản phẩm cho thuốc mới nhập. Giao diện nào trên KiotViet cho phép thực hiện điều này?","answers":[{"id":"a_3_0","text":"Danh mục hàng hóa, Nhập hàng, Kiểm kho"},{"id":"a_3_1","text":"Màn hình bán hàng"},{"id":"a_3_2","text":"Trên cả Màn hình bán hàng và các giao diện Danh mục hàng hóa, Nhập hàng, Kiểm kho"}]},{"id":"q_4","topic":"Tối ưu vận hành","question":"Tại cửa hàng tạp hóa, khi khách hàng mua nhiều mặt hàng, thu ngân có thể áp dụng giảm giá như thế nào?","answers":[{"id":"a_4_0","text":"Giảm giá cho từng sản phẩm"},{"id":"a_4_1","text":"Giảm giá cho toàn bộ hóa đơn"},{"id":"a_4_2","text":"Giảm giá cho từng sản phẩm và Giảm giá cho toàn bộ hóa đơn"}]},{"id":"q_5","topic":"Tối ưu vận hành","question":"Trong trường hợp mất mạng Internet, cửa hàng thời trang có thể tiếp tục sử dụng phần nào của KiotViet để thực hiện giao dịch bán hàng?","answers":[{"id":"a_5_0","text":"Có thể sử dụng Màn hình bán hàng"},{"id":"a_5_1","text":"Có thể sử dụng Màn hình quản lý"},{"id":"a_5_2","text":"Có thể sử dụng cả Màn hình bán hàng và Màn hình quản lý"}]},{"id":"q_6","topic":"Tối ưu vận hành","question":"Hiệu sách cần nhập mã vạch tự động trong quá trình kiểm kho. Phương pháp nào dưới đây được hỗ trợ bởi KiotViet?","answers":[{"id":"a_6_0","text":"Sử dụng máy quét mã vạch"},{"id":"a_6_1","text":"Sử dụng camera điện thoại"},{"id":"a_6_2","text":"Sử dụng cả máy quét mã vạch và camera điện thoại"}]},{"id":"q_7","topic":"Tối ưu vận hành","question":"Khi cửa hàng tạp hóa thực hiện trả hàng theo hóa đơn, giá hoàn trả cho khách được phần mềm gợi ý dựa trên yếu tố nào?","answers":[{"id":"a_7_0","text":"Giá vốn của sản phẩm theo hóa đơn gốc"},{"id":"a_7_1","text":"Giá bán của sản phẩm tại thời điểm trả hàng"},{"id":"a_7_2","text":"Giá bán của sản phẩm theo hóa đơn gốc"}]},{"id":"q_8","topic":"Tối ưu vận hành","question":"Khi cửa hàng tạp hóa trả hàng nhanh, giá hoàn trả cho khách được phần mềm gợi ý dựa trên thời điểm nào?","answers":[{"id":"a_8_0","text":"Giá vốn của sản phẩm theo hóa đơn gốc"},{"id":"a_8_1","text":"Giá bán của sản phẩm tại thời điểm trả hàng"},{"id":"a_8_2","text":"Giá bán của sản phẩm theo hóa đơn gốc"}]},{"id":"q_9","topic":"Tối ưu vận hành","question":"Cửa hàng tạp hóa muốn xử lý một phiếu đặt hàng thành nhiều hóa đơn khác nhau. KiotViet có hỗ trợ tính năng này không?","answers":[{"id":"a_9_0","text":"Chỉ có thể tạo hóa đơn 1 lần duy nhất"},{"id":"a_9_1","text":"Chỉ có thể tạo hóa đơn tối đa 2 lần"},{"id":"a_9_2","text":"Có thể tạo hóa đơn nhiều lần"}]},{"id":"q_10","topic":"Tối ưu vận hành","question":"Một cửa hàng tạp hóa cần thông báo thanh toán QR thành công qua loa máy tính để quản lý giao dịch. Ngân hàng nào có thể đáp ứng yêu cầu này?","answers":[{"id":"a_10_0","text":"Techcombank"},{"id":"a_10_1","text":"Sacombank"},{"id":"a_10_2","text":"Vietcombank"}]},{"id":"q_11","topic":"Tối ưu vận hành","question":"Khi sử dụng Màn hiển thị QR F92, cửa hàng có thể phát thông báo thanh toán qua loa cho loại Ví điện tử MOMO nào?","answers":[{"id":"a_11_0","text":"Chỉ hỗ trợ Ví điện tử MOMO cá nhân"},{"id":"a_11_1","text":"Hỗ trợ cả Ví điện tử MOMO cá nhân và doanh nghiệp"},{"id":"a_11_2","text":"Chỉ hỗ trợ Ví điện tử MOMO doanh nghiệp"}]},{"id":"q_12","topic":"Tối ưu vận hành","question":"Để phục vụ chi nhánh tại nước ngoài, KiotViet cung cấp những tính năng đặc biệt nào liên quan đến múi giờ và đơn vị tiền tệ?","answers":[{"id":"a_12_0","text":"Chọn múi giờ cho chi nhánh ở nước ngoài"},{"id":"a_12_1","text":"Sử dụng đơn vị tiền tệ khác VNĐ"},{"id":"a_12_2","text":"Hỗ trợ cả việc chọn múi giờ và sử dụng đơn vị tiền tệ khác VNĐ"}]},{"id":"q_13","topic":"Tối ưu vận hành","question":"Cửa hàng tạp hóa cần phát thông báo chuyển khoản thành công qua loa. Tính năng này yêu cầu tài khoản ngân hàng thuộc danh sách nào?","answers":[{"id":"a_13_0","text":"Tất cả các ngân hàng trên thế giới"},{"id":"a_13_1","text":"Tất cả các ngân hàng tại Việt Nam"},{"id":"a_13_2","text":"Các ngân hàng có liên kết với KiotViet"}]},{"id":"q_14","topic":"Tối ưu vận hành","question":"Để hiển thị mã QR động VietQR dựa trên thông tin hóa đơn, cửa hàng cần sử dụng tài khoản ngân hàng thuộc nhóm nào?","answers":[{"id":"a_14_0","text":"Chỉ có VIB Bank"},{"id":"a_14_1","text":"Tất cả các ngân hàng tại Việt Nam thuộc hệ thống Napas"},{"id":"a_14_2","text":"Chỉ các ngân hàng có liên kết với KiotViet"}]},{"id":"q_15","topic":"Tối ưu vận hành","question":"Khi kết nối với các đơn vị giao vận trên KiotViet, cửa hàng tạp hóa có thể thực hiện những thao tác nào liên quan đến vận chuyển?","answers":[{"id":"a_15_0","text":"Xem báo giá và lựa chọn đơn vị vận chuyển"},{"id":"a_15_1","text":"Theo dõi tình trạng giao hàng"},{"id":"a_15_2","text":"Vừa xem báo giá, lựa chọn đơn vị vận chuyển, vừa theo dõi tình trạng giao hàng"}]},{"id":"q_16","topic":"Tối ưu vận hành","question":"Khi sử dụng KiotViet Retail, cửa hàng có thể kết nối với những nhà phát hành hóa đơn điện tử nào?","answers":[{"id":"a_16_0","text":"Chỉ hỗ trợ KV eInvoice"},{"id":"a_16_1","text":"Chỉ hỗ trợ FPT"},{"id":"a_16_2","text":"Cả KV eInvoice và FPT, MISA, Viettel, VNPT"}]},{"id":"q_17","topic":"Tối ưu vận hành","question":"Khi sử dụng KiotViet Retail, cửa hàng có thể tính thuế VAT theo những phương pháp nào?","answers":[{"id":"a_17_0","text":"Phương pháp khấu trừ"},{"id":"a_17_1","text":"Phương pháp trực tiếp"},{"id":"a_17_2","text":"Lựa chọn Phương pháp khấu trừ hoặc Phương pháp trực tiếp"}]},{"id":"q_18","topic":"Tối ưu vận hành","question":"Khi áp dụng phương pháp khấu trừ, cửa hàng thời trang có thể thiết lập thuế suất VAT cho các sản phẩm ra sao?","answers":[{"id":"a_18_0","text":"Chỉ 1 mức thuế suất chung"},{"id":"a_18_1","text":"Chỉ mức VAT chuẩn là 8%"},{"id":"a_18_2","text":"Các sản phẩm có thể có thuế suất VAT khác nhau"}]},{"id":"q_19","topic":"Tối ưu vận hành","question":"Khi sử dụng KiotViet, cửa hàng tạp hóa có thể in mã QR của Hóa đơn điện tử tích hợp với Hóa đơn bán hàng không? Nếu được, điều kiện là gì?","answers":[{"id":"a_19_0","text":"Có, cần bật tính năng này trong Màn hình bán hàng"},{"id":"a_19_1","text":"Không, phải in riêng"},{"id":"a_19_2","text":"Không, phần mềm chưa hỗ trợ"}]},{"id":"q_20","topic":"Tối ưu quản lý","question":"Để phân biệt các size áo và váy (S, M, L) trong quản lý hàng hóa, cửa hàng thời trang cần sử dụng tính năng gì trên KiotViet?","answers":[{"id":"a_20_0","text":"Nhóm hàng"},{"id":"a_20_1","text":"Phân loại"},{"id":"a_20_2","text":"Thuộc tính"}]},{"id":"q_21","topic":"Tối ưu quản lý","question":"Cửa hàng cung cấp dịch vụ giặt là cần thiết lập loại hàng hóa nào trên KiotViet để tính tiền cho dịch vụ giặt áo sơ mi?","answers":[{"id":"a_21_0","text":"Hàng hóa thường"},{"id":"a_21_1","text":"Hàng combo đóng gói"},{"id":"a_21_2","text":"Hàng dịch vụ"}]},{"id":"q_22","topic":"Tối ưu quản lý","question":"Cửa hàng muốn bán giỏ quà Tết, trong đó mỗi giỏ quà gồm nhiều sản phẩm như bánh, mứt và rượu vang. Loại hàng hóa nào trên KiotViet phù hợp?","answers":[{"id":"a_22_0","text":"Combo - Đóng gói"},{"id":"a_22_1","text":"Sản xuất"},{"id":"a_22_2","text":"Chế biến"}]},{"id":"q_23","topic":"Tối ưu quản lý","question":"Khi bán hàng hóa có quản lý Lô-HSD, nếu bật tùy chọn 'Gợi ý Lô HSD', hệ thống sẽ ưu tiên lựa chọn sản phẩm từ lô nào để bán?","answers":[{"id":"a_23_0","text":"Lô có date gần nhất"},{"id":"a_23_1","text":"Lô có date xa nhất"},{"id":"a_23_2","text":"Lô ngẫu nhiên"}]},{"id":"q_24","topic":"Tối ưu quản lý","question":"Ngành hàng nào trên KiotViet hỗ trợ tính năng Quản lý hàng hóa theo Serial-IMEI?","answers":[{"id":"a_24_0","text":"Tạp hóa"},{"id":"a_24_1","text":"Điện thoại - Điện máy"},{"id":"a_24_2","text":"Tất cả các ngành hàng"}]},{"id":"q_25","topic":"Tối ưu quản lý","question":"Khi gộp nhiều phiếu kiểm kho trên KiotViet, trạng thái của các phiếu cần gộp phải đảm bảo điều kiện nào?","answers":[{"id":"a_25_0","text":"Các phiếu phải ở trạng thái Phiếu tạm"},{"id":"a_25_1","text":"Chỉ cần 1 phiếu ở trạng thái phiếu tạm"},{"id":"a_25_2","text":"Các phiếu phải ở trạng thái hoàn thành"}]},{"id":"q_26","topic":"Tối ưu quản lý","question":"Tem mã vạch của sản phẩm in từ KiotViet có thể chứa những thông tin nào dưới đây?","answers":[{"id":"a_26_0","text":"Chỉ Tên cửa hàng"},{"id":"a_26_1","text":"Chỉ Giá bán sản phẩm"},{"id":"a_26_2","text":"Cả tên cửa hàng và giá bán sản phẩm"}]},{"id":"q_27","topic":"Tối ưu quản lý","question":"Để trả lại hàng hóa cho Nhà cung cấp, cửa hàng cần sử dụng giao dịch nào trong KiotViet?","answers":[{"id":"a_27_0","text":"Đổi trả hàng"},{"id":"a_27_1","text":"Trả hàng"},{"id":"a_27_2","text":"Trả hàng nhập"}]},{"id":"q_28","topic":"Tối ưu quản lý","question":"Cửa hàng bán đồ gia dụng cần nhập hàng với số lượng và giá khác nhau cho cùng một mã sản phẩm. Tính năng nào trên KiotViet hỗ trợ việc này?","answers":[{"id":"a_28_0","text":"Thêm dòng"},{"id":"a_28_1","text":"Thiết lập giá"},{"id":"a_28_2","text":"Chỉnh sửa thành tiền"}]},{"id":"q_29","topic":"Tối ưu quản lý","question":"Khi nhập hàng, nếu cần thay đổi giá bán của sản phẩm, cửa hàng bán đồ chơi trẻ em nên sử dụng tính năng nào trên KiotViet?","answers":[{"id":"a_29_0","text":"Thêm dòng"},{"id":"a_29_1","text":"Thiết lập giá"},{"id":"a_29_2","text":"Chỉnh sửa thành tiền"}]},{"id":"q_30","topic":"Tối ưu quản lý","question":"Cửa hàng kinh doanh giày dép muốn lập phiếu thu khi khách hàng thanh toán công nợ. Họ có thể thực hiện thao tác này ở đâu trên KiotViet?","answers":[{"id":"a_30_0","text":"Sổ quỹ"},{"id":"a_30_1","text":"Màn hình bán hàng"},{"id":"a_30_2","text":"Cả trên Sổ quỹ và Màn hình bán hàng"}]},{"id":"q_31","topic":"Tối ưu quản lý","question":"Khi sử dụng tính năng Quản lý khách hàng theo người phụ trách trên KiotViet, cửa hàng có thể thực hiện những thao tác nào?","answers":[{"id":"a_31_0","text":"Thiết lập người phụ trách"},{"id":"a_31_1","text":"Giới hạn xem và giao dịch theo người phụ trách"},{"id":"a_31_2","text":"Vừa thiết lập, vừa giới hạn xem và giao dịch theo người phụ trách"}]},{"id":"q_32","topic":"Tối ưu quản lý","question":"Khi sử dụng KiotViet, cửa hàng điện tử có thể quản lý riêng biệt theo từng chi nhánh đối với những đối tượng nào?","answers":[{"id":"a_32_0","text":"Khách hàng"},{"id":"a_32_1","text":"Nhà cung cấp"},{"id":"a_32_2","text":"Cả Khách hàng và Nhà cung cấp"}]},{"id":"q_33","topic":"Tối ưu quản lý","question":"Để ghi nhận công nợ ban đầu của Nhà cung cấp, cửa hàng bán đồ gia dụng cần sử dụng tính năng nào trên KiotViet?","answers":[{"id":"a_33_0","text":"Điều chỉnh"},{"id":"a_33_1","text":"Thanh toán"},{"id":"a_33_2","text":"Chiết khấu thanh toán"}]},{"id":"q_34","topic":"Tối ưu quản lý","question":"Để quản lý giờ làm việc của nhân viên, cửa hàng có thể sử dụng hình thức chấm công nào được hỗ trợ bởi KiotViet?","answers":[{"id":"a_34_0","text":"Nhận diện khuôn mặt"},{"id":"a_34_1","text":"Chấm công mobile qua Zalo Mini App"},{"id":"a_34_2","text":"Cả nhận diện khuôn mặt và chấm công mobile qua Zalo Mini App"}]},{"id":"q_35","topic":"Tối ưu quản lý","question":"Khi sử dụng KiotViet, cửa hàng thời trang có thể dùng Sổ quỹ để làm gì?","answers":[{"id":"a_35_0","text":"Quản lý các giao dịch thu chi"},{"id":"a_35_1","text":"Tên một loại báo cáo"},{"id":"a_35_2","text":"Vừa là tính năng quản lý thu chi, vừa là tên một loại báo cáo"}]},{"id":"q_36","topic":"Tối ưu quản lý","question":"Để biết tổng giá vốn và tổng giá bán của tất cả sản phẩm, cửa hàng thời trang nên xem báo cáo nào trên KiotViet?","answers":[{"id":"a_36_0","text":"Báo cáo hàng hóa > Giá trị kho"},{"id":"a_36_1","text":"Báo cáo bán hàng > Hàng hóa"},{"id":"a_36_2","text":"Báo cáo cuối ngày > Tổng hợp"}]},{"id":"q_37","topic":"Tối ưu quản lý","question":"Khi cần xem báo cáo chi tiết với nhiều cột thông tin, cửa hàng tạp hóa nên sử dụng kiểu hiển thị nào trên KiotViet?","answers":[{"id":"a_37_0","text":"Kiểu ngang"},{"id":"a_37_1","text":"Kiểu dọc"},{"id":"a_37_2","text":"Kiểu biểu đồ"}]},{"id":"q_38","topic":"Thúc đẩy doanh thu","question":"Khi sử dụng KiotViet, cửa hàng tạp hóa có thể đồng bộ thông tin nào của sản phẩm lên các sàn Thương mại điện tử?","answers":[{"id":"a_38_0","text":"Giá bán"},{"id":"a_38_1","text":"Giá vốn"},{"id":"a_38_2","text":"Cả giá bán và giá vốn"}]},{"id":"q_39","topic":"Thúc đẩy doanh thu","question":"Khi kết nối KiotViet với Tiktok Shop, cửa hàng có thể khởi tạo danh mục sản phẩm trên cả hai nền tảng theo những cách nào?","answers":[{"id":"a_39_0","text":"Sao chép từ Tiktok Shop về KiotViet"},{"id":"a_39_1","text":"Xuất file từ KiotViet sang Tiktok Shop"},{"id":"a_39_2","text":"Cả sao chép từ Tiktok Shop về và xuất file từ KiotViet sang Tiktok Shop"}]},{"id":"q_40","topic":"Thúc đẩy doanh thu","question":"Khi sử dụng KiotViet, cửa hàng tạp hóa có thể áp dụng tính năng Tin nhắn mẫu để phản hồi khách hàng trên những mạng xã hội nào?","answers":[{"id":"a_40_0","text":"Facebook"},{"id":"a_40_1","text":"Instagram"},{"id":"a_40_2","text":"Cả Facebook và Instagram"}]},{"id":"q_41","topic":"Thúc đẩy doanh thu","question":"Khi sử dụng Facebook POS, cửa hàng có thể liên kết gian hàng KiotViet với nhiều Fanpage hay không?","answers":[{"id":"a_41_0","text":"Chỉ liên kết được 1 fanpage"},{"id":"a_41_1","text":"Chỉ liên kết được tối đa 5 fanpage"},{"id":"a_41_2","text":"Có thể liên kết nhiều fanpage"}]},{"id":"q_42","topic":"Thúc đẩy doanh thu","question":"Khi sử dụng màn hình Facebook POS trên KiotViet, cửa hàng có thể gửi tin nhắn xác nhận đặt hàng tự động cho khách không? Nếu có, điều kiện là gì?","answers":[{"id":"a_42_0","text":"Không, chỉ hỗ trợ xác nhận mua hàng"},{"id":"a_42_1","text":"Có, cần thiết lập “Gửi tin nhắn xác nhận đặt hàng”"},{"id":"a_42_2","text":"Có, cần thiết lập “Gửi tin nhắn xác nhận mua hàng”"}]},{"id":"q_43","topic":"Thúc đẩy doanh thu","question":"Khi livestream bán hàng, cửa hàng có thể in bình luận từ mạng xã hội nào nếu sử dụng KiotViet?","answers":[{"id":"a_43_0","text":"Livestream trên Fanpage Facebook"},{"id":"a_43_1","text":"Livestream trên Tiktok cá nhân"},{"id":"a_43_2","text":"Cả khi livestream trên Fanpage Facebook và Tiktok cá nhân"}]},{"id":"q_44","topic":"Thúc đẩy doanh thu","question":"Khi khách hàng vào xem website của một cửa hàng tạp hóa sử dụng nền tảng KiotViet Web, họ có thể thực hiện những thao tác nào?","answers":[{"id":"a_44_0","text":"Đặt hàng online"},{"id":"a_44_1","text":"Xem thông tin giới thiệu, liên hệ"},{"id":"a_44_2","text":"Vừa đặt hàng online, vừa xem thông tin giới thiệu, liên hệ"}]},{"id":"q_45","topic":"Thúc đẩy doanh thu","question":"Để phân tích hiệu quả kinh doanh, cửa hàng tạp hóa cần xác định sản phẩm bán chạy và bán chậm. Mục phân tích thông minh nào hỗ trợ điều này?","answers":[{"id":"a_45_0","text":"Phân tích kinh doanh"},{"id":"a_45_1","text":"Phân tích hàng hóa"},{"id":"a_45_2","text":"Phân tích khách hàng"}]},{"id":"q_46","topic":"Thúc đẩy doanh thu","question":"Khi sử dụng KiotViet, cửa hàng thời trang có thể thiết lập những loại chương trình khuyến mại nào?","answers":[{"id":"a_46_0","text":"Giảm giá theo giá trị hóa đơn"},{"id":"a_46_1","text":"Mua hàng tặng hàng"},{"id":"a_46_2","text":"Cả giảm giá theo giá trị hóa đơn và mua hàng tặng hàng"}]},{"id":"q_47","topic":"Thúc đẩy doanh thu","question":"Voucher trên KiotViet Retail có ý nghĩa là giảm giá theo hình thức nào?","answers":[{"id":"a_47_0","text":"VND"},{"id":"a_47_1","text":"%"},{"id":"a_47_2","text":"Có thể là VND hoặc %"}]},{"id":"q_48","topic":"Thúc đẩy doanh thu","question":"Coupon trên KiotViet Retail có ý nghĩa là giảm giá theo hình thức nào?","answers":[{"id":"a_48_0","text":"VND"},{"id":"a_48_1","text":"%"},{"id":"a_48_2","text":"Có thể là VND hoặc %"}]},{"id":"q_49","topic":"Thúc đẩy doanh thu","question":"Khi sử dụng KiotViet, cửa hàng tạp hóa có thể thiết lập tích điểm cho sản phẩm có giảm giá hay không?","answers":[{"id":"a_49_0","text":"Do cửa hàng thiết lập"},{"id":"a_49_1","text":"KiotViet luôn cho phép"},{"id":"a_49_2","text":"KiotViet luôn không cho phép"}]},{"id":"q_50","topic":"Thúc đẩy doanh thu","question":"Để gửi tin nhắn ZNS từ KiotViet Retail nhằm xác nhận mua hàng hoặc trả hàng, cửa hàng cần đảm bảo những điều kiện nào?","answers":[{"id":"a_50_0","text":"Nạp đủ tiền, còn hạn mức gửi tin"},{"id":"a_50_1","text":"SĐT khách hàng là số đăng ký Zalo"},{"id":"a_50_2","text":"Cần đảm bảo cả việc nạp đủ tiền, còn hạn mức và SĐT khách hàng là số Zalo"}]}];
+    const encodedAnswerKey = "eyJxXzEiOiJhXzFfMiIsImFfMiI6ImFfMl8yIiwicV8zIjoiYV8zXzIiLCJxXzQiOiJhXzRfMiIsImFfNSI6ImFfNV8wIiwicV82IjoiYV82XzIiLCJxXzciOiJhXzdfMiIsImFfOCI6ImFfOF8xIiwicV85IjoiYV85XzIiLCJxXzEwIjoiYV8xMF8yIiwicV8xMSI6ImFfMTFfMSIsImFfMTIiOiJhXzEyXzIiLCJxXzEzIjoiYV8xM18yIiwicV8xNCI6ImFfMTRfMSIsImFfMTUiOiJhXzE1XzIiLCJxXzE2IjoiYV8xNl8yIiwicV8xNyI6ImFfMTdfMiIsImFfMTgiOiJhXzE4XzIiLCJxXzE5IjoiYV8xOV8wIiwicV8yMCI6ImFfMjBfMiIsImFfMjEiOiJhXzIxXzIiLCJxXzIyIjoiYV8yMl8wIiwicV8yMyI6ImFfMjNfMCIsImFfMjQiOiJhXzI0XzEiLCJxXzI1IjoiYV8yNV8wIiwicV8yNiI6ImFfMjZfMiIsImFfMjciOiJhXzI3XzIiLCJxXzI4IjoiYV8yOF8wIiwicV8yOSI6ImFfMjlfMSIsImFfMzAiOiJhXzMwXzIiLCJxXzMxIjoiYV8zMV8yIiwicV8zMiI6ImFfMzJfMiIsImFfMzMiOiJhXzMzXzAiLCJxXzM0IjoiYV8zNF8yIiwicV8zNSI6ImFfMzVfMCIsImFfMzYiOiJhXzM2XzAiLCJxXzM3IjoiYV8zN18wIiwicV8zOCI6ImFfMzhfMCIsImFfMzkiOiJhXzM5XzIiLCJxXzQwIjoiYV80MF8yIiwicV80MSI6ImFfNDFfMiIsImFfNDIiOiJhXzQyXzEiLCJxXzQzIjoiYV80M18yIiwicV80NCI6ImFfNDRfMiIsImFfNDUiOiJhXzQ1XzEiLCJxXzQ2IjoiYV80Nl8yIiwicV80NyI6ImFfNDdfMCIsImFfNDgiOiJhXzQ4XzEiLCJxXzQ5IjoiYV80OV8wIiwicV81MCI6ImFfNTBfMiJ9";
+    const feedbackMessages = { incorrect: `Rất tiếc, bạn đã sai.` };
+    
+    // --- State & Global Variables ---
+    let answerKey, currentQuestionIndex, score, questionsForGame, gameResults, selectedMode, userInfo;
+    
+    const elements = {}; // Will be populated on DOMContentLoaded
 
-        <!-- Quiz Container -->
-        <div id="quiz-container" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden">
-            <!-- Header -->
-            <div class="flex justify-between items-center mb-6">
-                <div id="score-display" class="text-lg font-bold kv-blue">Điểm: 0</div>
-                <div id="progress-text" class="text-lg font-semibold text-slate-600">Câu 1/10</div>
+    function setupHTML() {
+        // This function injects the inner HTML for complex elements to keep the body clean.
+        document.getElementById('quiz-container').innerHTML = `
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-sm font-semibold text-slate-600"><span id="question-count"></span></div>
+                <div id="score-display" class="text-lg font-bold text-kv-blue">Điểm: 0</div>
             </div>
-            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-8">
-                <div id="progress-bar" class="bg-kv-blue h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
+            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
+                <div id="progress-bar" class="bg-kv-blue h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
             </div>
             <div id="question-area">
-                <h2 id="question-text" class="text-xl font-semibold text-slate-800 mb-6 min-h-[80px]"></h2>
-                <div id="answer-options" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
-                <div id="feedback-area" class="mt-4 text-center min-h-[50px] text-base"></div>
+                <p id="question-text" class="text-xl font-semibold text-slate-800 mb-6 min-h-[84px]"></p>
+                <div id="answers-container" class="space-y-3"></div>
             </div>
-            <div class="mt-8 text-right">
-                <button id="next-btn" class="bg-slate-800 hover:bg-slate-900 text-white font-bold py-3 px-8 rounded-lg text-lg transition-colors hidden">Câu tiếp theo</button>
-            </div>
-        </div>
+            <div id="feedback-area" class="mt-6 text-center"></div>
+            <button id="next-btn" class="hidden w-full mt-6 btn btn-green text-lg">Câu tiếp theo</button>`;
 
-        <!-- Result Screen -->
-        <div id="result-area" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden text-center">
-            <h2 id="result-title" class="text-3xl font-bold text-slate-800 mb-4"></h2>
+        document.getElementById('result-area').innerHTML = `
+            <h2 id="result-title" class="text-3xl font-bold text-slate-800 mb-4">Hoàn thành!</h2>
             <p id="score-text" class="text-xl text-slate-600 mb-6"></p>
-            <div id="fail-message" class="hidden text-red-500 font-medium text-base mb-6"></div>
-            <div class="flex justify-center gap-4">
-                 <button id="certificate-btn" class="hidden w-full sm:w-auto bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-8 rounded-lg text-lg">Xem giấy khen</button>
-                 <button id="restart-btn" class="w-full sm:w-auto bg-kv-blue hover:bg-kv-blue-dark text-white font-bold py-3 px-8 rounded-lg text-lg">Chơi lại</button>
-            </div>
-        </div>
+            <div id="fail-message" class="hidden text-lg text-red-600 font-semibold mb-6">Cần cố gắng hơn!</div>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                 <button id="review-btn" class="btn btn-slate">Xem lại đáp án</button>
+                 <button id="certificate-btn" class="hidden btn btn-green">Xem giấy khen</button>
+                 <button id="restart-btn" class="btn btn-blue">Chơi lại</button>
+            </div>`;
         
-        <!-- Certificate Screen -->
-        <div id="certificate-screen" class="main-card rounded-2xl p-6 sm:p-8 hidden fade-in text-center">
-             <div class="certificate">
-                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-8 mx-auto mb-6">
-                <h2 class="text-4xl font-extrabold text-kv-blue" style="font-family: 'Times New Roman', serif;"><i class="fas fa-trophy text-yellow-400 mr-3"></i>GIẤY KHEN</h2>
-                <p class="mt-6 text-lg text-slate-700">Trân trọng trao tặng:</p>
-                <p id="cert-name" class="text-2xl font-bold text-slate-800 my-2"></p>
-                <p id="cert-department" class="text-lg text-slate-600"></p>
-                <p class="mt-4 text-lg text-slate-700">Đã xuất sắc hoàn thành <strong>Quiz Game KiotViet Retail</strong></p>
-                <p id="cert-mode" class="mt-2 text-slate-600 font-medium"></p>
-                <p id="cert-score" class="text-xl font-semibold text-slate-800 my-2"></p>
-                <p id="cert-date" class="mt-8 text-slate-500"></p>
-             </div>
-             <button id="restart-from-cert-btn" class="mt-8 w-full sm:w-auto bg-kv-blue hover:bg-kv-blue-dark text-white font-bold py-3 px-8 rounded-lg text-lg">Chơi lại</button>
-        </div>
-    </main>
-    <script>
-        const quizDataForClient = [
-            { id: "q_1", topic: "Tối ưu vận hành", question: "Cửa hàng tạp hóa cần tìm vị trí mặt hàng gia dụng trên kệ. Tính năng nào trên Màn hình bán hàng hỗ trợ thu ngân thực hiện điều này?", answers: [{ id: "a_1_1", text: "Tùy chọn hiển thị" }, { id: "a_1_2", text: "Chế độ nhập" }, { id: "a_1_3", text: "Xem chi tiết" }, { id: "a_1_4", text: "In mã vạch" }] },
-            { id: "q_2", topic: "Tối ưu vận hành", question: "Cửa hàng mỹ phẩm cần tìm sản phẩm theo thuộc tính 'Loại da' (khô, dầu). Chế độ bán hàng nào trên KiotViet hỗ trợ tính năng này?", answers: [{ id: "a_2_1", text: "Bán nhanh" }, { id: "a_2_2", text: "Bán nhanh và Bán thường" }, { id: "a_2_3", text: "Bán thường" }, { id: "a_2_4", text: "Bán nhanh và Bán giao hàng" }] },
-            { id: "q_3", topic: "Tối ưu vận hành", question: "Hiệu thuốc cần thêm mã sản phẩm cho thuốc mới nhập. Giao diện nào trên KiotViet cho phép thực hiện điều này?", answers: [{ id: "a_3_1", text: "Danh mục hàng hóa, Nhập hàng, Kiểm kho" }, { id: "a_3_2", text: "Màn hình bán hàng" }, { id: "a_3_3", text: "Trên cả Màn hình bán hàng và các giao diện Danh mục hàng hóa, Nhập hàng, Kiểm kho" }, { id: "a_3_4", text: "Báo cáo bán hàng" }] },
-            { id: "q_4", topic: "Tối ưu vận hành", question: "Tại cửa hàng tạp hóa, khi khách hàng mua nhiều mặt hàng, thu ngân có thể áp dụng giảm giá như thế nào?", answers: [{ id: "a_4_1", text: "Giảm giá cho từng sản phẩm" }, { id: "a_4_2", text: "Giảm giá cho toàn bộ hóa đơn" }, { id: "a_4_3", text: "Giảm giá cho từng sản phẩm và Giảm giá cho toàn bộ hóa đơn" }, { id: "a_4_4", text: "Không thể giảm giá" }] },
-            { id: "q_5", topic: "Tối ưu vận hành", question: "Trong trường hợp mất mạng Internet, cửa hàng thời trang có thể tiếp tục sử dụng phần nào của KiotViet để thực hiện giao dịch bán hàng?", answers: [{ id: "a_5_1", text: "Có thể sử dụng Màn hình bán hàng" }, { id: "a_5_2", text: "Có thể sử dụng Màn hình quản lý" }, { id: "a_5_3", text: "Có thể sử dụng cả Màn hình bán hàng và Màn hình quản lý" }, { id: "a_5_4", text: "Không sử dụng được màn hình nào của KiotViet" }] },
-            { id: "q_6", topic: "Tối ưu vận hành", question: "Hiệu sách cần nhập mã vạch tự động trong quá trình kiểm kho. Phương pháp nào dưới đây được hỗ trợ bởi KiotViet?", answers: [{ id: "a_6_1", text: "Sử dụng máy quét mã vạch" }, { id: "a_6_2", text: "Sử dụng camera điện thoại" }, { id: "a_6_3", text: "Sử dụng cả máy quét mã vạch và camera điện thoại" }, { id: "a_6_4", text: "Chưa có tính năng hỗ trợ" }] },
-            { id: "q_7", topic: "Tối ưu vận hành", question: "Khi cửa hàng tạp hóa thực hiện trả hàng theo hóa đơn, giá hoàn trả cho khách được phần mềm gợi ý dựa trên yếu tố nào?", answers: [{ id: "a_7_1", text: "Giá vốn của sản phẩm theo hóa đơn gốc" }, { id: "a_7_2", text: "Giá bán của sản phẩm tại thời điểm trả hàng" }, { id: "a_7_3", text: "Giá bán của sản phẩm theo hóa đơn gốc" }, { id: "a_7_4", text: "Giá vốn của sản phẩm tại thời điểm trả hàng" }] },
-            { id: "q_8", topic: "Tối ưu vận hành", question: "Khi cửa hàng tạp hóa trả hàng nhanh, giá hoàn trả cho khách được phần mềm gợi ý dựa trên thời điểm nào?", answers: [{ id: "a_8_1", text: "Giá vốn của sản phẩm theo hóa đơn gốc" }, { id: "a_8_2", text: "Giá bán của sản phẩm tại thời điểm trả hàng" }, { id: "a_8_3", text: "Giá bán của sản phẩm theo hóa đơn gốc" }, { id: "a_8_4", text: "Giá vốn của sản phẩm tại thời điểm trả hàng" }] },
-            { id: "q_9", topic: "Tối ưu vận hành", question: "Cửa hàng tạp hóa muốn xử lý một phiếu đặt hàng thành nhiều hóa đơn khác nhau. KiotViet có hỗ trợ tính năng này không?", answers: [{ id: "a_9_1", text: "Chỉ có thể tạo hóa đơn 1 lần duy nhất" }, { id: "a_9_2", text: "Chỉ có thể tạo hóa đơn tối đa 2 lần" }, { id: "a_9_3", text: "Có thể tạo hóa đơn nhiều lần" }, { id: "a_9_4", text: "Chỉ có thể tạo hóa đơn tối đa 3 lần" }] },
-            { id: "q_10", topic: "Tối ưu vận hành", question: "Một cửa hàng tạp hóa cần thông báo thanh toán QR thành công qua loa máy tính để quản lý giao dịch. Ngân hàng nào có thể đáp ứng yêu cầu này?", answers: [{ id: "a_10_1", text: "Techcombank" }, { id: "a_10_2", text: "Sacombank" }, { id: "a_10_3", text: "Vietcombank" }, { id: "a_10_4", text: "Tất cả các ngân hàng" }] },
-            { id: "q_11", topic: "Tối ưu vận hành", question: "Khi sử dụng Màn hiển thị QR F92, cửa hàng có thể phát thông báo thanh toán qua loa cho loại Ví điện tử MOMO nào?", answers: [{ id: "a_11_1", text: "Chỉ hỗ trợ Ví điện tử MOMO cá nhân" }, { id: "a_11_2", text: "Hỗ trợ cả Ví điện tử MOMO cá nhân và doanh nghiệp" }, { id: "a_11_3", text: "Chỉ hỗ trợ Ví điện tử MOMO doanh nghiệp" }, { id: "a_11_4", text: "Chưa hỗ trợ Ví điện tử MOMO" }] },
-            { id: "q_12", topic: "Tối ưu vận hành", question: "Để phục vụ chi nhánh tại nước ngoài, KiotViet cung cấp những tính năng đặc biệt nào liên quan đến múi giờ và đơn vị tiền tệ?", answers: [{ id: "a_12_1", text: "Chọn múi giờ cho chi nhánh ở nước ngoài" }, { id: "a_12_2", text: "Sử dụng đơn vị tiền tệ khác VNĐ" }, { id: "a_12_3", text: "Hỗ trợ cả việc chọn múi giờ và sử dụng đơn vị tiền tệ khác VNĐ" }, { id: "a_12_4", text: "Chưa hỗ trợ tính năng cho nước ngoài" }] },
-            { id: "q_13", topic: "Tối ưu vận hành", question: "Cửa hàng tạp hóa cần phát thông báo chuyển khoản thành công qua loa. Tính năng này yêu cầu tài khoản ngân hàng thuộc danh sách nào?", answers: [{ id: "a_13_1", text: "Tất cả các ngân hàng trên thế giới" }, { id: "a_13_2", text: "Tất cả các ngân hàng tại Việt Nam" }, { id: "a_13_3", text: "Các ngân hàng có liên kết với KiotViet" }, { id: "a_13_4", text: "Chưa hỗ trợ tính năng này" }] },
-            { id: "q_14", topic: "Tối ưu vận hành", question: "Để hiển thị mã QR động VietQR dựa trên thông tin hóa đơn, cửa hàng cần sử dụng tài khoản ngân hàng thuộc nhóm nào?", answers: [{ id: "a_14_1", text: "Chỉ có VIB Bank" }, { id: "a_14_2", text: "Tất cả các ngân hàng tại Việt Nam thuộc hệ thống Napas" }, { id: "a_14_3", text: "Chỉ các ngân hàng có liên kết với KiotViet" }, { id: "a_14_4", text: "Chỉ tài khoản ngân hàng doanh nghiệp" }] },
-            { id: "q_15", topic: "Tối ưu vận hành", question: "Khi kết nối với các đơn vị giao vận trên KiotViet, cửa hàng tạp hóa có thể thực hiện những thao tác nào liên quan đến vận chuyển?", answers: [{ id: "a_15_1", text: "Xem báo giá và lựa chọn đơn vị vận chuyển" }, { id: "a_15_2", text: "Theo dõi tình trạng giao hàng" }, { id: "a_15_3", text: "Vừa xem báo giá, lựa chọn đơn vị vận chuyển, vừa theo dõi tình trạng giao hàng" }, { id: "a_15_4", text: "Chưa hỗ trợ kết nối giao vận" }] },
-            { id: "q_16", topic: "Tối ưu vận hành", question: "Khi sử dụng KiotViet Retail, cửa hàng có thể kết nối với những nhà phát hành hóa đơn điện tử nào?", answers: [{ id: "a_16_1", text: "Chỉ hỗ trợ KV eInvoice" }, { id: "a_16_2", text: "Chỉ hỗ trợ FPT" }, { id: "a_16_3", text: "Cả KV eInvoice và FPT, MISA, Viettel, VNPT" }, { id: "a_16_4", text: "Chỉ hỗ trợ MISA" }] },
-            { id: "q_17", topic: "Tối ưu vận hành", question: "Khi sử dụng KiotViet Retail, cửa hàng có thể tính thuế VAT theo những phương pháp nào?", answers: [{ id: "a_17_1", text: "Phương pháp khấu trừ" }, { id: "a_17_2", text: "Phương pháp trực tiếp" }, { id: "a_17_3", text: "Lựa chọn Phương pháp khấu trừ hoặc Phương pháp trực tiếp" }, { id: "a_17_4", text: "Phương pháp từng lần phát sinh" }] },
-            { id: "q_18", topic: "Tối ưu vận hành", question: "Khi áp dụng phương pháp khấu trừ, cửa hàng thời trang có thể thiết lập thuế suất VAT cho các sản phẩm ra sao?", answers: [{ id: "a_18_1", text: "Chỉ 1 mức thuế suất chung" }, { id: "a_18_2", text: "Chỉ mức VAT chuẩn là 8%" }, { id: "a_18_3", text: "Các sản phẩm có thể có thuế suất VAT khác nhau" }, { id: "a_18_4", text: "Thuế suất tự động áp dụng theo ngành hàng" }] },
-            { id: "q_19", topic: "Tối ưu vận hành", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể in mã QR của Hóa đơn điện tử tích hợp với Hóa đơn bán hàng không? Nếu được, điều kiện là gì?", answers: [{ id: "a_19_1", text: "Có, cần bật tính năng này trong Màn hình bán hàng" }, { id: "a_19_2", text: "Không, phải in riêng" }, { id: "a_19_3", text: "Không, phần mềm chưa hỗ trợ" }, { id: "a_19_4", text: "Có, nhưng phải trả thêm phí" }] },
-            { id: "q_20", topic: "Tối ưu quản lý", question: "Để phân biệt các size áo và váy (S, M, L) trong quản lý hàng hóa, cửa hàng thời trang cần sử dụng tính năng gì trên KiotViet?", answers: [{ id: "a_20_1", text: "Nhóm hàng" }, { id: "a_20_2", text: "Phân loại" }, { id: "a_20_3", text: "Thuộc tính" }, { id: "a_20_4", text: "Ghi chú sản phẩm" }] },
-            { id: "q_21", topic: "Tối ưu quản lý", question: "Cửa hàng cung cấp dịch vụ giặt là cần thiết lập loại hàng hóa nào trên KiotViet để tính tiền cho dịch vụ giặt áo sơ mi?", answers: [{ id: "a_21_1", text: "Hàng hóa thường" }, { id: "a_21_2", text: "Hàng combo đóng gói" }, { id: "a_21_3", text: "Hàng dịch vụ" }, { id: "a_21_4", text: "Hàng hóa có Lô - Hạn sử dụng" }] },
-            { id: "q_22", topic: "Tối ưu quản lý", question: "Cửa hàng muốn bán giỏ quà Tết, trong đó mỗi giỏ quà gồm nhiều sản phẩm như bánh, mứt và rượu vang. Loại hàng hóa nào trên KiotViet phù hợp?", answers: [{ id: "a_22_1", text: "Combo - Đóng gói" }, { id: "a_22_2", text: "Sản xuất" }, { id: "a_22_3", text: "Chế biến" }, { id: "a_22_4", text: "Hàng hóa thường" }] },
-            { id: "q_23", topic: "Tối ưu quản lý", question: "Khi bán hàng hóa có quản lý Lô-HSD, nếu bật tùy chọn 'Gợi ý Lô HSD', hệ thống sẽ ưu tiên lựa chọn sản phẩm từ lô nào để bán?", answers: [{ id: "a_23_1", text: "Lô có date gần nhất" }, { id: "a_23_2", text: "Lô có date xa nhất" }, { id: "a_23_3", text: "Lô ngẫu nhiên" }, { id: "a_23_4", text: "Lô được nhập vào đầu tiên" }] },
-            { id: "q_24", topic: "Tối ưu quản lý", question: "Ngành hàng nào trên KiotViet hỗ trợ tính năng Quản lý hàng hóa theo Serial-IMEI?", answers: [{ id: "a_24_1", text: "Tạp hóa" }, { id: "a_24_2", text: "Điện thoại - Điện máy" }, { id: "a_24_3", text: "Tất cả các ngành hàng" }, { id: "a_24_4", text: "Ngành hàng Khác" }] },
-            { id: "q_25", topic: "Tối ưu quản lý", question: "Khi gộp nhiều phiếu kiểm kho trên KiotViet, trạng thái của các phiếu cần gộp phải đảm bảo điều kiện nào?", answers: [{ id: "a_25_1", text: "Các phiếu phải ở trạng thái Phiếu tạm" }, { id: "a_25_2", text: "Chỉ cần 1 phiếu ở trạng thái phiếu tạm" }, { id: "a_25_3", text: "Các phiếu phải ở trạng thái hoàn thành" }, { id: "a_25_4", text: "Không yêu cầu về trạng thái phiếu" }] },
-            { id: "q_26", topic: "Tối ưu quản lý", question: "Tem mã vạch của sản phẩm in từ KiotViet có thể chứa những thông tin nào dưới đây?", answers: [{ id: "a_26_1", text: "Chỉ Tên cửa hàng" }, { id: "a_26_2", text: "Chỉ Giá bán sản phẩm" }, { id: "a_26_3", text: "Cả tên cửa hàng và giá bán sản phẩm" }, { id: "a_26_4", text: "Chỉ Giá vốn sản phẩm" }] },
-            { id: "q_27", topic: "Tối ưu quản lý", question: "Để trả lại hàng hóa cho Nhà cung cấp, cửa hàng cần sử dụng giao dịch nào trong KiotViet?", answers: [{ id: "a_27_1", text: "Đổi trả hàng" }, { id: "a_27_2", text: "Trả hàng" }, { id: "a_27_3", text: "Trả hàng nhập" }, { id: "a_27_4", text: "Tạo phiếu chi" }] },
-            { id: "q_28", topic: "Tối ưu quản lý", question: "Cửa hàng bán đồ gia dụng cần nhập hàng với số lượng và giá khác nhau cho cùng một mã sản phẩm. Tính năng nào trên KiotViet hỗ trợ việc này?", answers: [{ id: "a_28_1", text: "Thêm dòng" }, { id: "a_28_2", text: "Thiết lập giá" }, { id: "a_28_3", text: "Chỉnh sửa thành tiền" }, { id: "a_28_4", text: "Ghi chú cho sản phẩm" }] },
-            { id: "q_29", topic: "Tối ưu quản lý", question: "Khi nhập hàng, nếu cần thay đổi giá bán của sản phẩm, cửa hàng bán đồ chơi trẻ em nên sử dụng tính năng nào trên KiotViet?", answers: [{ id: "a_29_1", text: "Thêm dòng" }, { id: "a_29_2", text: "Thiết lập giá" }, { id: "a_29_3", text: "Chỉnh sửa thành tiền" }, { id: "a_29_4", text: "Thiết lập cửa hàng" }] },
-            { id: "q_30", topic: "Tối ưu quản lý", question: "Cửa hàng kinh doanh giày dép muốn lập phiếu thu khi khách hàng thanh toán công nợ. Họ có thể thực hiện thao tác này ở đâu trên KiotViet?", answers: [{ id: "a_30_1", text: "Sổ quỹ" }, { id: "a_30_2", text: "Màn hình bán hàng" }, { id: "a_30_3", text: "Cả trên Sổ quỹ và Màn hình bán hàng" }, { id: "a_30_4", text: "Chỉ có thể thực hiện ở Sổ quỹ" }] },
-            { id: "q_31", topic: "Tối ưu quản lý", question: "Khi sử dụng tính năng Quản lý khách hàng theo người phụ trách trên KiotViet, cửa hàng có thể thực hiện những thao tác nào?", answers: [{ id: "a_31_1", text: "Thiết lập người phụ trách" }, { id: "a_31_2", text: "Giới hạn xem và giao dịch theo người phụ trách" }, { id: "a_31_3", text: "Vừa thiết lập, vừa giới hạn xem và giao dịch theo người phụ trách" }, { id: "a_31_4", text: "Chưa hỗ trợ tính năng này" }] },
-            { id: "q_32", topic: "Tối ưu quản lý", question: "Khi sử dụng KiotViet, cửa hàng điện tử có thể quản lý riêng biệt theo từng chi nhánh đối với những đối tượng nào?", answers: [{ id: "a_32_1", text: "Khách hàng" }, { id: "a_32_2", text: "Nhà cung cấp" }, { id: "a_32_3", text: "Cả Khách hàng và Nhà cung cấp" }, { id: "a_32_4", text: "Chưa hỗ trợ quản lý riêng theo chi nhánh cho tất cả dữ liệu trên phần mềm" }] },
-            { id: "q_33", topic: "Tối ưu quản lý", question: "Để ghi nhận công nợ ban đầu của Nhà cung cấp, cửa hàng bán đồ gia dụng cần sử dụng tính năng nào trên KiotViet?", answers: [{ id: "a_33_1", text: "Điều chỉnh" }, { id: "a_33_2", text: "Thanh toán" }, { id: "a_33_3", text: "Chiết khấu thanh toán" }, { id: "a_33_4", text: "Lập phiếu chi" }] },
-            { id: "q_34", topic: "Tối ưu quản lý", question: "Để quản lý giờ làm việc của nhân viên, cửa hàng có thể sử dụng hình thức chấm công nào được hỗ trợ bởi KiotViet?", answers: [{ id: "a_34_1", text: "Nhận diện khuôn mặt" }, { id: "a_34_2", text: "Chấm công mobile qua Zalo Mini App" }, { id: "a_34_3", text: "Cả nhận diện khuôn mặt và chấm công mobile qua Zalo Mini App" }, { id: "a_34_4", text: "Chấm công bằng thẻ từ" }] },
-            { id: "q_35", topic: "Tối ưu quản lý", question: "Khi sử dụng KiotViet, cửa hàng thời trang có thể dùng Sổ quỹ để làm gì?", answers: [{ id: "a_35_1", text: "Quản lý các giao dịch thu chi" }, { id: "a_35_2", text: "Tên một loại báo cáo" }, { id: "a_35_3", text: "Vừa là tính năng quản lý thu chi, vừa là tên một loại báo cáo" }, { id: "a_35_4", text: "Lập kế hoạch chi tiêu cho cửa hàng" }] },
-            { id: "q_36", topic: "Tối ưu quản lý", question: "Để biết tổng giá vốn và tổng giá bán của tất cả sản phẩm, cửa hàng thời trang nên xem báo cáo nào trên KiotViet?", answers: [{ id: "a_36_1", text: "Báo cáo hàng hóa > Giá trị kho" }, { id: "a_36_2", text: "Báo cáo bán hàng > Hàng hóa" }, { id: "a_36_3", text: "Báo cáo cuối ngày > Tổng hợp" }, { id: "a_36_4", text: "Báo cáo công nợ" }] },
-            { id: "q_37", topic: "Tối ưu quản lý", question: "Khi cần xem báo cáo chi tiết với nhiều cột thông tin, cửa hàng tạp hóa nên sử dụng kiểu hiển thị nào trên KiotViet?", answers: [{ id: "a_37_1", text: "Kiểu ngang" }, { id: "a_37_2", text: "Kiểu dọc" }, { id: "a_37_3", text: "Kiểu biểu đồ" }, { id: "a_37_4", text: "Kiểu tóm tắt" }] },
-            { id: "q_38", topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể đồng bộ thông tin nào của sản phẩm lên các sàn Thương mại điện tử?", answers: [{ id: "a_38_1", text: "Giá bán" }, { id: "a_38_2", text: "Giá vốn" }, { id: "a_38_3", text: "Cả giá bán và giá vốn" }, { id: "a_38_4", text: "Lịch sử nhập hàng" }] },
-            { id: "q_39", topic: "Thúc đẩy doanh thu", question: "Khi kết nối KiotViet với Tiktok Shop, cửa hàng có thể khởi tạo danh mục sản phẩm trên cả hai nền tảng theo những cách nào?", answers: [{ id: "a_39_1", text: "Sao chép từ Tiktok Shop về KiotViet" }, { id: "a_39_2", text: "Xuất file từ KiotViet sang Tiktok Shop" }, { id: "a_39_3", text: "Cả sao chép từ Tiktok Shop về và xuất file từ KiotViet sang Tiktok Shop" }, { id: "a_39_4", text: "Chưa hỗ trợ sao chép" }] },
-            { id: "q_40", topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể áp dụng tính năng Tin nhắn mẫu để phản hồi khách hàng trên những mạng xã hội nào?", answers: [{ id: "a_40_1", text: "Facebook" }, { id: "a_40_2", text: "Instagram" }, { id: "a_40_3", text: "Cả Facebook và Instagram" }, { id: "a_40_4", text: "Tiktok" }] },
-            { id: "q_41", topic: "Thúc đẩy doanh thu", question: "Khi sử dụng Facebook POS, cửa hàng có thể liên kết gian hàng KiotViet với nhiều Fanpage hay không?", answers: [{ id: "a_41_1", text: "Chỉ liên kết được 1 fanpage" }, { id: "a_41_2", text: "Chỉ liên kết được tối đa 5 fanpage" }, { id: "a_41_3", text: "Có thể liên kết nhiều fanpage" }, { id: "a_41_4", text: "Chỉ liên kết được tối đa 2 fanpage" }] },
-            { id: "q_42", topic: "Thúc đẩy doanh thu", question: "Khi sử dụng màn hình Facebook POS trên KiotViet, cửa hàng có thể gửi tin nhắn xác nhận đặt hàng tự động cho khách không? Nếu có, điều kiện là gì?", answers: [{ id: "a_42_1", text: "Không, chỉ hỗ trợ xác nhận mua hàng" }, { id: "a_42_2", text: "Có, cần thiết lập “Gửi tin nhắn xác nhận đặt hàng”" }, { id: "a_42_3", text: "Có, cần thiết lập “Gửi tin nhắn xác nhận mua hàng”" }, { id: "a_42_4", text: "Không, phải gửi tin nhắn thủ công" }] },
-            { id: "q_43", topic: "Thúc đẩy doanh thu", question: "Khi livestream bán hàng, cửa hàng có thể in bình luận từ mạng xã hội nào nếu sử dụng KiotViet?", answers: [{ id: "a_43_1", text: "Livestream trên Fanpage Facebook" }, { id: "a_43_2", text: "Livestream trên Tiktok cá nhân" }, { id: "a_43_3", text: "Cả khi livestream trên Fanpage Facebook và Tiktok cá nhân" }, { id: "a_43_4", text: "Livestream trên Youtube" }] },
-            { id: "q_44", topic: "Thúc đẩy doanh thu", question: "Khi khách hàng vào xem website của một cửa hàng tạp hóa sử dụng nền tảng KiotViet Web, họ có thể thực hiện những thao tác nào?", answers: [{ id: "a_44_1", text: "Đặt hàng online" }, { id: "a_44_2", text: "Xem thông tin giới thiệu, liên hệ" }, { id: "a_44_3", text: "Vừa đặt hàng online, vừa xem thông tin giới thiệu, liên hệ" }, { id: "a_44_4", text: "Xem báo cáo doanh thu của cửa hàng" }] },
-            { id: "q_45", topic: "Thúc đẩy doanh thu", question: "Để phân tích hiệu quả kinh doanh, cửa hàng tạp hóa cần xác định sản phẩm bán chạy và bán chậm. Mục phân tích thông minh nào hỗ trợ điều này?", answers: [{ id: "a_45_1", text: "Phân tích kinh doanh" }, { id: "a_45_2", text: "Phân tích hàng hóa" }, { id: "a_45_3", text: "Phân tích khách hàng" }, { id: "a_45_4", text: "Phân tích nhà cung cấp" }] },
-            { id: "q_46", topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng thời trang có thể thiết lập những loại chương trình khuyến mại nào?", answers: [{ id: "a_46_1", text: "Giảm giá theo giá trị hóa đơn" }, { id: "a_46_2", text: "Mua hàng tặng hàng" }, { id: "a_46_3", text: "Cả giảm giá theo giá trị hóa đơn và mua hàng tặng hàng" }, { id: "a_46_4", text: "Chưa có tính năng Khuyến mại trên KiotViet" }] },
-            { id: "q_47", topic: "Thúc đẩy doanh thu", question: "Voucher trên KiotViet Retail có ý nghĩa là giảm giá theo hình thức nào?", answers: [{ id: "a_47_1", text: "VND" }, { id: "a_47_2", text: "%" }, { id: "a_47_3", text: "Có thể là VND hoặc %" }, { id: "a_47_4", text: "USD" }] },
-            { id: "q_48", topic: "Thúc đẩy doanh thu", question: "Coupon trên KiotViet Retail có ý nghĩa là giảm giá theo hình thức nào?", answers: [{ id: "a_48_1", text: "VND" }, { id: "a_48_2", text: "%" }, { id: "a_48_3", text: "Có thể là VND hoặc %" }, { id: "a_48_4", text: "USD" }] },
-            { id: "q_49", topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể thiết lập tích điểm cho sản phẩm có giảm giá hay không?", answers: [{ id: "a_49_1", text: "Do cửa hàng thiết lập" }, { id: "a_49_2", text: "KiotViet luôn cho phép" }, { id: "a_49_3", text: "KiotViet luôn không cho phép" }, { id: "a_49_4", text: "Chỉ được tích điểm cho sản phẩm có giảm giá dùng Bảng giá chung" }] },
-            { id: "q_50", topic: "Thúc đẩy doanh thu", question: "Để gửi tin nhắn ZNS từ KiotViet Retail nhằm xác nhận mua hàng hoặc trả hàng, cửa hàng cần đảm bảo những điều kiện nào?", answers: [{ id: "a_50_1", text: "Nạp đủ tiền, còn hạn mức gửi tin" }, { id: "a_50_2", text: "SĐT khách hàng là số đăng ký Zalo" }, { id: "a_50_3", text: "Cần đảm bảo cả việc nạp đủ tiền, còn hạn mức và SĐT khách hàng là số Zalo" }, { id: "a_50_4", text: "Không có điều kiện gì" }] }
+        document.getElementById('review-screen').innerHTML = `
+            <h2 class="text-2xl font-bold text-slate-800 text-center mb-6">Xem Lại Kết Quả</h2>
+            <div id="review-container" class="space-y-6 max-h-[60vh] overflow-y-auto pr-2"></div>
+            <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                <button id="certificate-btn-from-review" class="hidden btn btn-green">Xem giấy khen</button>
+                <button id="restart-from-review-btn" class="btn btn-blue">Chơi lại</button>
+            </div>`;
+
+        document.getElementById('certificate-screen').innerHTML = `
+            <div id="certificate-wrapper">
+                <div id="certificate-content">
+                    <div class="text-center">
+                        <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-8 sm:h-10 mx-auto mb-4">
+                        <h1 class="text-2xl sm:text-4xl font-bold text-kv-blue" style="font-family: 'Times New Roman', serif;">GIẤY CHỨNG NHẬN</h1>
+                        <p class="text-base sm:text-lg mt-4">Trân trọng trao cho</p>
+                        <p id="cert-name" class="text-xl sm:text-3xl font-bold text-slate-800 my-4 border-b-2 border-slate-300 pb-2"></p>
+                        <p id="cert-department" class="text-base sm:text-lg font-medium text-slate-600 -mt-2 mb-4"></p>
+                        <p class="text-base sm:text-lg">Đã xuất sắc hoàn thành bài kiểm tra</p>
+                        <p id="cert-quiz-name" class="text-lg sm:text-xl font-semibold my-2 text-slate-700"></p>
+                        <p class="text-base sm:text-lg">Với số điểm</p>
+                        <p id="cert-score" class="text-3xl sm:text-4xl font-bold text-green-600 my-4"></p>
+                        <p class="text-xs sm:text-sm text-slate-500">Ngày hoàn thành: <span id="cert-date"></span></p>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+                    <button id="review-btn-from-cert" class="btn btn-slate">Xem lại đáp án</button>
+                    <button id="close-cert-btn" class="btn btn-blue">Đóng</button>
+                </div>
+            </div>`;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupHTML();
+        const ids = [
+            'start-screen', 'quiz-container', 'result-area', 'review-screen', 'certificate-screen',
+            'name-input', 'department-input', 'mode-selection-area', 'error-message', 'start-btn',
+            'question-count', 'score-display', 'progress-bar', 'question-text', 'answers-container',
+            'feedback-area', 'next-btn', 'result-title', 'score-text', 'fail-message', 'review-btn',
+            'certificate-btn', 'restart-btn', 'review-container', 'certificate-btn-from-review',
+            'restart-from-review-btn', 'certificate-wrapper', 'certificate-content', 'cert-name',
+            'cert-department', 'cert-quiz-name', 'cert-score', 'cert-date', 'review-btn-from-cert', 'close-cert-btn'
         ];
+        ids.forEach(id => {
+            elements[id.replace(/-(\w)/g, (match, p1) => p1.toUpperCase())] = document.getElementById(id);
+        });
+        initializeGame();
+    });
 
-        // *** THIS IS THE FIX *** The encoded string has been regenerated with correct question IDs.
-        const encodedAnswerKey = "eyJxXzEiOiJhXzFfMyIsInFfMiI6ImFfMl8zIiwicV8zIjoiYV8zXzMiLCJxXzQiOiJhXzRfMyIsInFfNSI6ImFfNV8xIiwicV82IjoiYV82XzMiLCJxXzciOiJhXzdfMyIsInFfOCI6ImFfOF8yIiwicV85IjoiYV85XzMiLCJxXzEwIjoiYV8xMF8zIiwicV8xMSI6ImFfMTFfMiIsInFfMTIiOiJhXzEyXzMiLCJxXzEzIjoiYV8xM18zIiwicV8xNCI6ImFfMTRfMiIsInFfMTUiOiJhXzE1XzMiLCJxXzE2IjoiYV8xNl8zIiwicV8xNyI6ImFfMTdfMyIsInFfMTgiOiJhXzE4XzMiLCJxXzE5IjoiYV8xOV8xIiwicV8yMCI6ImFfMjBfMyIsInFfMjEiOiJhXzIxXzMiLCJxXzIyIjoiYV8yMl8xIiwicV8yMyI6ImFfMjNfMSIsInFfMjQiOiJhXzI0XzIiLCJxXzI1IjoiYV8yNV8xIiwicV8yNiI6ImFfMjZfMyIsInFfMjciOiJhXzI3XzMiLCJxXzI4IjoiYV8yOF8xIiwicV8yOSI6ImFfMjlfMiIsInFfMzAiOiJhXzMwXzMiLCJxXzMxIjoiYV8zMV8zIiwicV8zMiI6ImFfMzJfMyIsInFfMzMiOiJhXzMzXzEiLCJxXzM0IjoiYV8zNF8zIiwicV8zNSI6ImFfMzVfMSIsInFfMzYiOiJhXzM2XzEiLCJxXzM3IjoiYV8zN18xIiwicV8zOCI6ImFfMzhfMSIsInFfMzkiOiJhXzM5XzMiLCJxXzQwIjoiYV80MF8zIiwicV80MSI6ImFfNDFfMyIsInFfNDIiOiJhXzQyXzIiLCJxXzQzIjoiYV80M18zIiwicV80NCI6ImFfNDRfMyIsInFfNDUiOiJhXzQ1XzIiLCJxXzQ2IjoiYV80Nl8zIiwicV80NyI6ImFfNDdfMSIsInFfNDgiOiJhXzQ4XzIiLCJxXzQ5IjoiYV80OV8xIiwicV81MCI6ImFfNTBfMyJ9";
-        
-        let answerKey;
-
-        const elements = {
-            startScreen: document.getElementById('start-screen'),
-            quizContainer: document.getElementById('quiz-container'),
-            resultArea: document.getElementById('result-area'),
-            certificateScreen: document.getElementById('certificate-screen'),
-            nameInput: document.getElementById('name-input'),
-            departmentInput: document.getElementById('department-input'),
-            errorMessage: document.getElementById('error-message'),
-            modeButtons: document.querySelectorAll('.mode-btn'),
-            questionText: document.getElementById('question-text'),
-            answerOptionsContainer: document.getElementById('answer-options'),
-            nextBtn: document.getElementById('next-btn'),
-            restartBtn: document.getElementById('restart-btn'),
-            restartFromCertBtn: document.getElementById('restart-from-cert-btn'),
-            certificateBtn: document.getElementById('certificate-btn'),
-            progressText: document.getElementById('progress-text'),
-            progressBar: document.getElementById('progress-bar'),
-            scoreDisplay: document.getElementById('score-display'),
-            scoreText: document.getElementById('score-text'),
-            resultTitle: document.getElementById('result-title'),
-            failMessage: document.getElementById('fail-message'),
-            feedbackArea: document.getElementById('feedback-area'),
-            certName: document.getElementById('cert-name'),
-            certDepartment: document.getElementById('cert-department'),
-            certMode: document.getElementById('cert-mode'),
-            certScore: document.getElementById('cert-score'),
-            certDate: document.getElementById('cert-date'),
-            startGameBtn: document.getElementById('start-game-btn'),
-            modeRadioButtons: document.querySelectorAll('input[name="game-mode-radio"]'),
-            randomOptionsContainer: document.getElementById('random-options'),
-            topicOptionsContainer: document.getElementById('topic-options'),
-        };
-
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let questionsForGame = [];
-        let playerName = '';
-        let playerDepartment = '';
-        let selectedGameMode = { mode: null, text: '', topic: null };
-        
-        const shuffleArray = (array) => { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } };
-        
-        function initializeGame(gameOptions) {
-            playerName = elements.nameInput.value.trim();
-            playerDepartment = elements.departmentInput.value.trim();
-            if (!playerName || !playerDepartment) { elements.errorMessage.innerText = "Vui lòng điền đầy đủ thông tin."; return; }
-            
-            elements.errorMessage.innerText = "";
-            
-            let sourceQuestions = [...quizDataForClient];
-            if (gameOptions.topic) {
-                sourceQuestions = sourceQuestions.filter(q => q.topic === gameOptions.topic);
-            }
-
-            shuffleArray(sourceQuestions);
-
-            if (gameOptions.mode === 'all') {
-                questionsForGame = sourceQuestions;
-            } else {
-                questionsForGame = sourceQuestions.slice(0, parseInt(gameOptions.mode));
-            }
-            
-            elements.startScreen.classList.add('hidden');
-            elements.quizContainer.classList.remove('hidden');
-            elements.quizContainer.classList.add('fade-in');
-            startQuiz();
-        }
-
-        function startQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            elements.progressBar.style.width = '0%';
-            elements.scoreDisplay.innerText = `Điểm: 0`;
-            elements.nextBtn.classList.add('hidden');
-            elements.resultArea.classList.add('hidden');
-            elements.quizContainer.classList.remove('hidden');
-            showQuestion();
-        }
-
-        function showQuestion() {
-            resetState();
-            const currentQuestion = questionsForGame[currentQuestionIndex];
-            const questionNo = currentQuestionIndex + 1;
-            
-            const shuffledAnswers = [...currentQuestion.answers];
-            shuffleArray(shuffledAnswers);
-
-            elements.questionText.innerText = currentQuestion.question;
-            elements.progressText.innerText = `Câu ${questionNo}/${questionsForGame.length}`;
-            elements.progressBar.style.width = `${(questionNo / questionsForGame.length) * 100}%`;
-            elements.questionText.parentElement.classList.add('fade-in');
-
-            shuffledAnswers.forEach(answer => {
-                const button = document.createElement('button');
-                button.innerText = answer.text;
-                button.className = 'option-btn w-full text-left p-4 rounded-lg bg-slate-50/70 border border-slate-200 hover:border-kv-blue hover:bg-blue-50/70 transition-all font-medium';
-                button.dataset.questionId = currentQuestion.id;
-                button.dataset.answerId = answer.id;
-                button.addEventListener('click', selectAnswer);
-                elements.answerOptionsContainer.appendChild(button);
-            });
-        }
-
-        function resetState() {
-            elements.nextBtn.classList.add('hidden');
-            elements.feedbackArea.innerHTML = '';
-            elements.questionText.parentElement.classList.remove('fade-in');
-            while (elements.answerOptionsContainer.firstChild) {
-                elements.answerOptionsContainer.removeChild(elements.answerOptionsContainer.firstChild);
-            }
-        }
-
-        function selectAnswer(e) {
-            const selectedBtn = e.target;
-            const questionId = selectedBtn.dataset.questionId;
-            const selectedAnswerId = selectedBtn.dataset.answerId;
-            
-            const correctAnswerId = answerKey[questionId];
-            const isCorrect = selectedAnswerId === correctAnswerId;
-            
-            const feedbackMessage = document.createElement('p');
-            feedbackMessage.className = 'font-medium';
-            if (isCorrect) {
-                score++;
-                elements.scoreDisplay.innerText = `Điểm: ${score}`;
-                feedbackMessage.innerHTML = '🎉 Chúc mừng bạn, đáp án hoàn toàn chính xác!';
-                feedbackMessage.className += ' text-green-600';
-            } else {
-                feedbackMessage.innerHTML = `Rất tiếc, bạn đã sai. Tham khảo thêm tại <a href="https://sites.google.com/view/kvretail-faq" target="_blank" class="underline font-bold text-kv-blue hover:text-blue-700">Hỏi đáp KiotViet Retail</a> hoặc <a href="https://notebooklm.google.com/notebook/a4480a38-2d6e-4974-9880-c45e534f5fa5" target="_blank" class="underline font-bold text-kv-blue hover:text-blue-700">Chatbot Riri</a> nhé!`;
-                feedbackMessage.className += ' text-red-500';
-            }
-            elements.feedbackArea.appendChild(feedbackMessage);
-
-            Array.from(elements.answerOptionsContainer.children).forEach(button => {
-                if (button.dataset.answerId === correctAnswerId) {
-                    button.classList.add('correct');
-                } else if (button === selectedBtn) {
-                    button.classList.add('incorrect');
-                }
-                button.disabled = true;
-            });
-            elements.nextBtn.classList.remove('hidden');
-        }
-        
-        function triggerConfetti() {
-            const duration = 3 * 1000;
-            const animationEnd = Date.now() + duration;
-            const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
-            function randomInRange(min, max) { return Math.random() * (max - min) + min; }
-            const interval = setInterval(function() {
-                const timeLeft = animationEnd - Date.now();
-                if (timeLeft <= 0) return clearInterval(interval);
-                const particleCount = 50 * (timeLeft / duration);
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-                confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-            }, 250);
-        }
-
-        function showScore() {
-            elements.quizContainer.classList.add('hidden');
-            elements.resultArea.classList.remove('hidden');
-            elements.resultArea.classList.add('fade-in');
-            const percentage = (score / questionsForGame.length) * 100;
-            elements.scoreText.innerText = `${playerName} (${playerDepartment}) đã trả lời đúng ${score}/${questionsForGame.length} câu.`;
-            
-            if (percentage >= 80) {
-                elements.resultTitle.innerText = "🎉 CHÚC MỪNG CHIẾN THẮNG! 🎉";
-                elements.failMessage.classList.add('hidden');
-                elements.certificateBtn.classList.remove('hidden');
-                elements.restartBtn.classList.add('hidden');
-                triggerConfetti();
-            } else {
-                elements.resultTitle.innerText = "Cần cố gắng hơn!";
-                elements.failMessage.innerHTML = `Để cải thiện kết quả, bạn hãy ôn tập thêm tại <a href="https://sites.google.com/view/kvretail-faq" target="_blank" class="underline font-bold text-kv-blue hover:text-blue-700">Hỏi đáp KiotViet Retail</a> hoặc <a href="https://notebooklm.google.com/notebook/a4480a38-2d6e-4974-9880-c45e534f5fa5" target="_blank" class="underline font-bold text-kv-blue hover:text-blue-700">Chatbot Riri</a> nhé!`;
-                elements.failMessage.classList.remove('hidden');
-                elements.certificateBtn.classList.add('hidden');
-                elements.restartBtn.classList.remove('hidden');
-            }
-        }
-        
-        function showCertificate() {
-            elements.resultArea.classList.add('hidden');
-            elements.certificateScreen.classList.remove('hidden');
-            elements.certName.innerText = playerName;
-            elements.certDepartment.innerText = `Phòng ban: ${playerDepartment}`;
-            elements.certMode.innerHTML = `Chế độ chơi: <strong>${selectedGameMode.text}</strong>`;
-            elements.certScore.innerText = `Với kết quả: ${score}/${questionsForGame.length} (${((score / questionsForGame.length) * 100).toFixed(0)}%)`;
-            const today = new Date();
-            elements.certDate.innerText = `Hà Nội, ngày ${today.getDate()} tháng ${today.getMonth() + 1} năm ${today.getFullYear()}`;
-        }
-        
-        function resetStartScreen() {
-             selectedGameMode = { mode: null, text: '', topic: null };
-            elements.startGameBtn.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
-            elements.startGameBtn.setAttribute('disabled', '');
-            elements.modeButtons.forEach(btn => {
-                 btn.classList.remove('btn-selected-green');
-            });
-            elements.modeRadioButtons.forEach(radio => radio.checked = false);
-            elements.randomOptionsContainer.classList.add('mode-group-disabled');
-            elements.topicOptionsContainer.classList.add('mode-group-disabled');
-        }
-
-        function handleRestart() {
-            elements.quizContainer.classList.add('hidden');
-            elements.resultArea.classList.add('hidden');
-            elements.certificateScreen.classList.add('hidden');
-            elements.startScreen.classList.remove('hidden');
-            elements.startScreen.classList.add('fade-in');
-            resetStartScreen();
-        }
-
-        function handleNextButton() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < questionsForGame.length) showQuestion();
-            else showScore();
-        }
-        
+    function initializeGame() {
         try {
             answerKey = JSON.parse(atob(encodedAnswerKey));
         } catch (e) {
-            console.error("Could not decode or parse the answer key.", e);
-            document.body.innerHTML = "<h1>Lỗi trò chơi: Không thể tải đáp án. Vui lòng liên hệ quản trị viên.</h1>";
+            document.body.innerHTML = `<p style='font-family: sans-serif; text-align: center; margin-top: 50px; font-size: 1.2rem; color: #b91c1c;'>Lỗi nghiêm trọng: Dữ liệu trò chơi bị hỏng.</p>`;
+            return;
         }
-
-        elements.modeRadioButtons.forEach(radio => {
-            radio.addEventListener('change', (e) => {
-                const selectedMode = e.target.value;
-                selectedGameMode = { mode: null, text: '', topic: null };
-                elements.startGameBtn.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
-                elements.startGameBtn.setAttribute('disabled', '');
-                elements.modeButtons.forEach(btn => btn.classList.remove('btn-selected-green'));
-                
-                if (selectedMode === 'random') {
-                    elements.randomOptionsContainer.classList.remove('mode-group-disabled');
-                    elements.topicOptionsContainer.classList.add('mode-group-disabled');
-                } else if (selectedMode === 'topic') {
-                    elements.topicOptionsContainer.classList.remove('mode-group-disabled');
-                    elements.randomOptionsContainer.classList.add('mode-group-disabled');
-                }
-            });
-        });
+        setupModeSelection();
+        addEventListeners();
+        resetGame();
+    }
+    
+    function setupModeSelection() {
+        const topics = [...new Set(quizDataForClient.map(q => q.topic))].filter(Boolean);
+        let html = `
+            <div id="random-mode-group">
+                <p class="font-semibold text-slate-800 text-center mb-3">Chơi ngẫu nhiên</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="random" data-count="5">5 câu</button>
+                    <button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="random" data-count="30">30 câu</button>
+                    <button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="random" data-count="all">Toàn bộ</button>
+                </div>
+            </div>`;
+        if (topics.length > 0) {
+            html += `
+                <div id="topic-mode-group" class="mt-6">
+                    <p class="font-semibold text-slate-800 text-center mb-3">Chơi theo chủ đề</p>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        ${topics.map(topic => `<button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="topic" data-topic="${topic}" data-count="10">${topic}</button>`).join('')}
+                    </div>
+                </div>`;
+        }
+        elements.modeSelectionArea.innerHTML = html;
         
-        elements.modeButtons.forEach(button => {
+        document.querySelectorAll('.mode-btn').forEach(button => {
             button.addEventListener('click', (e) => {
-                const parentGroup = e.currentTarget.closest('.mode-group');
-                if (parentGroup.classList.contains('mode-group-disabled')) return;
-
-                parentGroup.querySelectorAll('.mode-btn').forEach(btn => {
-                    btn.classList.remove('btn-selected-green');
-                });
-                
-                const selectedButton = e.currentTarget;
-                selectedButton.classList.add('btn-selected-green');
-
-                selectedGameMode.mode = selectedButton.dataset.mode;
-                selectedGameMode.topic = selectedButton.dataset.topic || null;
-                
-                if(selectedGameMode.topic) {
-                     selectedGameMode.text = `Chủ đề: ${selectedButton.innerText}`;
-                } else {
-                     selectedGameMode.text = `Ngẫu nhiên: ${selectedButton.innerText}`;
-                }
-
-                elements.startGameBtn.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
-                elements.startGameBtn.removeAttribute('disabled');
+                document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('btn-selected-green'));
+                e.currentTarget.classList.add('btn-selected-green');
+                selectedMode = e.currentTarget.dataset;
             });
         });
+    }
 
-        elements.startGameBtn.addEventListener('click', () => {
-             if (selectedGameMode.mode) {
-                initializeGame(selectedGameMode);
+    function addEventListeners() {
+        elements.startBtn.addEventListener('click', startGame);
+        elements.nextBtn.addEventListener('click', nextQuestion);
+        elements.restartBtn.addEventListener('click', resetGame);
+        elements.restartFromReviewBtn.addEventListener('click', resetGame);
+        elements.reviewBtn.addEventListener('click', showReview);
+        elements.certificateBtn.addEventListener('click', showCertificate);
+        elements.closeCertBtn.addEventListener('click', closeCertificate);
+        elements.certificateBtnFromReview.addEventListener('click', showCertificate);
+        elements.reviewBtnFromCert.addEventListener('click', showReview);
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && !elements.certificateScreen.classList.contains('hidden')) {
+                showScreen('result-area');
+            }
+        });
+    }
+
+    function showScreen(screenId) {
+        const allScreens = Object.keys(elements).filter(k => k.endsWith('Screen') || k.endsWith('Container') || k.endsWith('Area'));
+        ['startScreen', 'quizContainer', 'resultArea', 'reviewScreen', 'certificateScreen'].forEach(key => {
+            if (elements[key]) {
+                elements[key].classList.add('hidden');
             }
         });
 
-        elements.nextBtn.addEventListener('click', handleNextButton);
-        elements.restartBtn.addEventListener('click', handleRestart);
-        elements.restartFromCertBtn.addEventListener('click', handleRestart);
-        elements.certificateBtn.addEventListener('click', showCertificate);
+        const mainElement = document.querySelector('main');
+        if (screenId === 'certificate-screen') {
+            mainElement.style.display = 'none';
+            elements.certificateScreen.classList.remove('hidden');
+        } else {
+            mainElement.style.display = 'block';
+            const screenKey = screenId.replace(/-(\w)/g, (m, p1) => p1.toUpperCase());
+            if (elements[screenKey]) {
+                elements[screenKey].classList.remove('hidden');
+            }
+        }
+    }
 
-    </script>
+    function startGame() {
+        userInfo = { name: elements.nameInput.value.trim(), department: elements.departmentInput.value.trim() };
+        if (!userInfo.name || !userInfo.department) {
+            elements.errorMessage.innerText = 'Vui lòng điền đầy đủ Họ và tên và Phòng ban.';
+            return;
+        }
+        if (!selectedMode || !selectedMode.mode) {
+            elements.errorMessage.innerText = 'Vui lòng chọn một chế độ chơi.';
+            return;
+        }
+        elements.errorMessage.innerText = '';
+        prepareQuestions();
+        if (questionsForGame.length === 0) {
+            elements.errorMessage.innerText = 'Không có câu hỏi cho chủ đề này.';
+            return;
+        }
+        showScreen('quiz-container');
+        showQuestion();
+    }
+
+    function prepareQuestions() {
+        let source = [...quizDataForClient];
+        if (selectedMode.mode === 'topic') {
+            source = source.filter(q => q.topic === selectedMode.topic);
+        }
+        source = shuffleArray(source);
+        if (selectedMode.count && selectedMode.count !== 'all') {
+            questionsForGame = source.slice(0, parseInt(selectedMode.count, 10));
+        } else {
+            questionsForGame = source;
+        }
+    }
+
+    function showQuestion() {
+        elements.feedbackArea.innerHTML = '';
+        elements.nextBtn.classList.add('hidden');
+        const q = questionsForGame[currentQuestionIndex];
+        elements.questionCount.innerText = `Câu ${currentQuestionIndex + 1}/${questionsForGame.length}`;
+        elements.progressBar.style.width = `${((currentQuestionIndex + 1) / questionsForGame.length) * 100}%`;
+        elements.questionText.innerText = q.question;
+        elements.answersContainer.innerHTML = '';
+        shuffleArray([...q.answers]).forEach(ans => {
+            const btn = document.createElement('button');
+            btn.innerHTML = `<span>${ans.text}</span>`;
+            btn.className = 'w-full text-left p-4 bg-white/80 border-2 border-slate-300 rounded-lg hover:bg-blue-100 hover:border-kv-blue transition-all duration-200 flex items-center';
+            btn.dataset.answerId = ans.id;
+            btn.dataset.questionId = q.id;
+            btn.onclick = selectAnswer;
+            elements.answersContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(e) {
+        const selectedBtn = e.currentTarget;
+        const { questionId, answerId } = selectedBtn.dataset;
+        const isCorrect = answerId === answerKey[questionId];
+
+        gameResults.push({
+            question: questionsForGame[currentQuestionIndex],
+            selectedAnswerId: answerId,
+            correctAnswerId: answerKey[questionId],
+            isCorrect
+        });
+
+        const feedback = document.createElement('p');
+        feedback.className = 'font-medium text-lg';
+        if (isCorrect) {
+            score++;
+            elements.scoreDisplay.innerText = `Điểm: ${score}`;
+            feedback.innerHTML = '🎉 Chúc mừng bạn, đáp án hoàn toàn chính xác!';
+            feedback.className += ' text-green-600';
+            selectedBtn.classList.add('correct');
+        } else {
+            feedback.innerText = feedbackMessages.incorrect;
+            feedback.className += ' text-red-500';
+            selectedBtn.classList.add('incorrect');
+        }
+        elements.feedbackArea.appendChild(feedback);
+        Array.from(elements.answersContainer.children).forEach(button => button.onclick = null);
+        elements.nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        (currentQuestionIndex < questionsForGame.length) ? showQuestion() : showScore();
+    }
+
+    function showScore() {
+        const percentage = (score / questionsForGame.length) * 100;
+        elements.scoreText.innerText = `Bạn đã trả lời đúng ${score}/${questionsForGame.length} câu (${percentage.toFixed(0)}%)`;
+        const passed = percentage >= 80;
+        elements.resultTitle.innerText = passed ? "Xuất sắc!" : "Hoàn thành!";
+        elements.failMessage.classList.toggle('hidden', passed);
+        elements.certificateBtn.classList.toggle('hidden', !passed);
+        elements.certificateBtnFromReview.classList.toggle('hidden', !passed);
+        if (passed) confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        showScreen('result-area');
+    }
+
+    function showReview() {
+        const correct = gameResults.filter(r => r.isCorrect);
+        const incorrect = gameResults.filter(r => !r.isCorrect);
+
+        const render = (results, title, isCorrectSection) => {
+            if (results.length === 0) return '';
+            let html = `<div class="mb-8"><h3 class="text-xl font-bold ${isCorrectSection ? 'text-green-600' : 'text-red-600'} border-b-2 pb-2 mb-4">${title} (${results.length})</h3><div class="space-y-4">`;
+            results.forEach(r => {
+                html += `<div class="p-4 bg-white/50 rounded-lg shadow-sm">
+                    <p class="font-semibold text-slate-800 mb-3">${r.question.question}</p>
+                    <div class="space-y-2 text-sm">`;
+                r.question.answers.forEach(ans => {
+                    let classes = 'review-answer flex items-center p-3 rounded-md border border-slate-200';
+                    let icon = '';
+                    if (ans.id === r.correctAnswerId) { // Always show the correct answer
+                        classes += ' is-correct-answer';
+                        icon = `<i class="fas fa-check-circle text-green-500 mr-3"></i>`;
+                    } else if (ans.id === r.selectedAnswerId && !r.isCorrect) { // If user selected this and it was wrong
+                        classes += ' is-selected-incorrect';
+                        icon = `<i class="fas fa-times-circle text-red-500 mr-3"></i>`;
+                    }
+                    html += `<div class="${classes}">${icon}<span>${ans.text}</span></div>`;
+                });
+                html += `</div></div>`;
+            });
+            return html + '</div></div>';
+        };
+
+        const reviewContent = (gameResults) => {
+             let html = `<div class="space-y-4">`;
+             gameResults.forEach((r, index) => {
+                 html += `<div class="p-4 bg-white/50 rounded-lg shadow-sm">
+                     <p class="font-semibold text-slate-800 mb-3">${index + 1}. ${r.question.question}</p>
+                     <div class="space-y-2 text-sm">`;
+                 r.question.answers.forEach(ans => {
+                     let classes = 'review-answer flex items-center p-3 rounded-md border border-slate-200';
+                     let icon = '';
+                     if (ans.id === r.correctAnswerId) {
+                         classes += ' is-correct-answer';
+                         icon = `<i class="fas fa-check-circle text-green-500 mr-3"></i>`;
+                     } else if (ans.id === r.selectedAnswerId) {
+                         classes += ' is-selected-incorrect';
+                         icon = `<i class="fas fa-times-circle text-red-500 mr-3"></i>`;
+                     }
+                     html += `<div class="${classes}">${icon}<span>${ans.text}</span></div>`;
+                 });
+                 html += `</div></div>`;
+             });
+             return html + '</div>';
+        };
+        elements.reviewContainer.innerHTML = reviewContent(gameResults);
+        showScreen('review-screen');
+    }
+
+    function showCertificate() {
+        elements.certName.innerText = userInfo.name;
+        elements.certDepartment.innerText = `Phòng ban: ${userInfo.department}`;
+        elements.certQuizName.innerText = document.title;
+        elements.certScore.innerText = `${score}/${questionsForGame.length}`;
+        elements.certDate.innerText = new Date().toLocaleDateString('vi-VN');
+        showScreen('certificate-screen');
+        const certWrapper = elements.certificateWrapper;
+        if (certWrapper.requestFullscreen) certWrapper.requestFullscreen();
+        else if (certWrapper.webkitRequestFullscreen) certWrapper.webkitRequestFullscreen();
+    }
+
+    function closeCertificate() {
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+        showScreen('result-area');
+    }
+    
+    function resetGame() {
+        currentQuestionIndex = 0; score = 0;
+        gameResults = []; questionsForGame = []; selectedMode = {}; userInfo = {};
+        if (document.querySelectorAll('.mode-btn').length > 0) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('btn-selected-green'));
+        }
+        elements.scoreDisplay.innerText = `Điểm: 0`;
+        elements.progressBar.style.width = '0%';
+        showScreen('start-screen');
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+</script>
 </body>
 </html>
