@@ -20,14 +20,11 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
-        /* Custom Design System Styles from Template */
         body {    
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Fallback background */
+            background-color: #f8fafc;
             touch-action: manipulation;
         }
-
-        /* Soft Glow & Gradient Foundation */
         @keyframes moveInCircle { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
         @keyframes moveVertical { 0% { transform: translateY(-50%); } 50% { transform: translateY(50%); } 100% { transform: translateY(-50%); } }
         @keyframes moveHorizontal { 0% { transform: translateX(-50%); } 50% { transform: translateX(50%); } 100% { transform: translateX(-50%); } }
@@ -46,6 +43,28 @@
         .main-card { background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(203, 213, 225, 0.5); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
         .mode-btn { transition: all 0.2s ease; }
         .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .btn-selected-green { background-color: #16a34a !important; border-color: #15803d !important; }
+        .btn-selected-green:hover { background-color: #15803d !important; }
+
+        .mode-group { transition: opacity 0.3s ease-in-out; }
+        .mode-group-disabled { opacity: 0.4; pointer-events: none; }
+        
+        .radio-label {
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 0.5rem;
+            transition: all 0.2s ease;
+        }
+        input[type="radio"]:checked + .radio-label {
+            border-color: #166def;
+            background-color: #eff6ff;
+            color: #1e40af;
+            font-weight: 600;
+        }
+        input[type="radio"] { display: none; }
 
         .correct { background-color: #10B981 !important; color: white !important; border-color: #059669 !important; }
         .incorrect { background-color: #EF4444 !important; color: white !important; border-color: #DC2626 !important; }
@@ -74,7 +93,7 @@
         <div id="start-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 fade-in">
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-10 mx-auto mb-6">
             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-2">Quiz Game KiotViet Retail</h1>
-            <p class="text-slate-600 text-center mb-8">Vui lòng nhập thông tin và chọn chế độ chơi</p>
+            <p class="text-slate-600 text-center mb-6">Vui lòng nhập thông tin và chọn chế độ chơi</p>
             
             <div class="space-y-4 mb-6">
                 <div>
@@ -86,16 +105,49 @@
                     <input type="text" id="department-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg focus:ring-2 focus:ring-kv-blue focus:border-kv-blue" placeholder="TSHNI99">
                 </div>
             </div>
-            
             <p id="error-message" class="text-red-500 text-center mb-4 h-5"></p>
 
-            <div class="grid grid-cols-2 gap-4">
-                <button data-mode="5" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">5 câu ngẫu nhiên</button>
-                <button data-mode="10" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">10 câu ngẫu nhiên</button>
-                <button data-mode="15" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">15 câu ngẫu nhiên</button>
-                <button data-mode="all" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Toàn bộ (30 câu)</button>
+            <div class="text-center mb-4">
+                <p class="text-lg font-semibold text-slate-700 mb-3">1. Chọn chế độ chơi</p>
+                <div class="flex justify-center gap-4">
+                    <div>
+                        <input type="radio" id="mode-random-radio" name="game-mode-radio" value="random">
+                        <label for="mode-random-radio" class="radio-label">
+                            <i class="fas fa-random mr-2"></i> Ngẫu nhiên
+                        </label>
+                    </div>
+                    <div>
+                        <input type="radio" id="mode-topic-radio" name="game-mode-radio" value="topic">
+                        <label for="mode-topic-radio" class="radio-label">
+                            <i class="fas fa-book-open mr-2"></i> Theo chủ đề
+                        </label>
+                    </div>
+                </div>
             </div>
-             <div class="mt-6">
+
+            <div class="mt-6 space-y-6">
+                <!-- Random Options -->
+                <div id="random-options" class="mode-group mode-group-disabled">
+                    <p class="text-slate-600 text-center font-semibold mb-3">2. Chọn số câu ngẫu nhiên</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <button data-mode="5" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">5 câu</button>
+                        <button data-mode="30" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">30 câu</button>
+                        <button data-mode="all" class="mode-btn col-span-2 w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Toàn bộ (50 câu)</button>
+                    </div>
+                </div>
+
+                <!-- Topic Options -->
+                <div id="topic-options" class="mode-group mode-group-disabled">
+                    <p class="text-slate-600 text-center font-semibold mb-3">2. Chọn nhóm giải pháp (10 câu)</p>
+                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <button data-mode="10" data-topic="Tối ưu vận hành" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tối ưu vận hành</button>
+                        <button data-mode="10" data-topic="Tối ưu quản lý" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tối ưu quản lý</button>
+                        <button data-mode="10" data-topic="Thúc đẩy doanh thu" class="mode-btn w-full bg-slate-700 hover:bg-slate-800 text-white font-bold py-3 px-4 rounded-lg text-base">Tăng doanh thu</button>
+                    </div>
+                </div>
+            </div>
+
+             <div class="mt-8">
                 <button id="start-game-btn" class="w-full bg-kv-blue hover:bg-kv-blue-dark text-white font-bold py-4 px-6 rounded-lg text-xl opacity-0 -translate-y-2 pointer-events-none transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>Bắt đầu</button>
             </div>
         </div>
@@ -105,7 +157,7 @@
             <!-- Header -->
             <div class="flex justify-between items-center mb-6">
                 <div id="score-display" class="text-lg font-bold kv-blue">Điểm: 0</div>
-                <div id="progress-text" class="text-lg font-semibold text-slate-600">Câu 1/5</div>
+                <div id="progress-text" class="text-lg font-semibold text-slate-600">Câu 1/10</div>
             </div>
             <div class="w-full bg-slate-200 rounded-full h-2.5 mb-8">
                 <div id="progress-bar" class="bg-kv-blue h-2.5 rounded-full transition-all duration-300" style="width: 0%"></div>
@@ -149,36 +201,56 @@
     </main>
     <script>
         const quizData = [
-            { question: "Để tìm kiếm sản phẩm trong KiotViet khi nhớ chính xác mã hàng, bạn cần nhập thông tin nào vào ô tìm kiếm?", answers: [{ text: "Một phần tên sản phẩm", correct: false }, { text: "Từ khóa liên quan", correct: false }, { text: "Mã hàng nội bộ hoặc mã vạch của nhà sản xuất", correct: true }, { text: "Giá bán sản phẩm", correct: false }] },
-            { question: "Nếu không nhớ chính xác tên sản phẩm, bạn có thể tìm kiếm bằng cách nào?", answers: [{ text: "Chỉ có thể tìm kiếm bằng mã sản phẩm", correct: false }, { text: "Gõ một phần tên hoặc từ khóa liên quan", correct: true }, { text: "Nhấn vào biểu tượng \"Danh mục\"", correct: false }, { text: "Tra cứu chi tiết sản phẩm", correct: false }] },
-            { question: "Khi tìm kiếm bằng một phần tên hoặc từ khóa, hệ thống KiotViet sẽ hiển thị gì?", answers: [{ text: "Chỉ có một kết quả duy nhất", correct: false }, { text: "Thông báo lỗi", correct: false }, { text: "Danh sách các gợi ý ngay lập tức", correct: true }, { text: "Màn hình thêm sản phẩm mới", correct: false }] },
-            { question: "Để lọc sản phẩm theo nhóm hàng trong chế độ \"Bán thường\" trên màn hình bán hàng, bạn cần làm gì?", answers: [{ text: "Vào mục \"Tùy chọn Hiển thị\"", correct: false }, { text: "Nhấn vào icon \"Danh mục\"", correct: true }, { text: "Nhập tên nhóm hàng vào ô tìm kiếm", correct: false }, { text: "Bấm vào hình ảnh sản phẩm", correct: false }] },
-            { question: "Làm thế nào để hiển thị số lượng tồn kho trực tiếp trên mỗi sản phẩm trên màn hình bán hàng?", answers: [{ text: "Tìm kiếm sản phẩm bằng mã vạch", correct: false }, { text: "Nhấn vào icon \"Danh mục\"", correct: false }, { text: "Vào mục \"Tùy chọn Hiển thị\" > \"Khác\" và bật tùy chọn \"Tồn kho\"", correct: true }, { text: "Bấm vào hình ảnh của sản phẩm để xem chi tiết", correct: false }] },
-            { question: "Tính năng xem tồn kho trên màn hình bán hàng giúp chủ cửa hàng Bình Minh làm gì?", answers: [{ text: "Thêm sản phẩm mới", correct: false }, { text: "Tra cứu chi tiết vị trí sản phẩm", correct: false }, { text: "Theo dõi số lượng tồn ngay trên mỗi sản phẩm", correct: true }, { text: "Xử lý đơn hàng đã bán", correct: false }] },
-            { question: "Bạn có thể tra cứu vị trí của một sản phẩm mà không cần thêm nó vào đơn hàng không?", answers: [{ text: "Không, bắt buộc phải thêm vào đơn hàng", correct: false }, { text: "Có, sau khi tìm kiếm, bấm vào hình ảnh của sản phẩm", correct: true }, { text: "Chỉ khi sản phẩm đó là sản phẩm mới", correct: false }, { text: "Chỉ khi có mã vạch", correct: false }] },
-            { question: "Sau khi bấm vào hình ảnh sản phẩm trong kết quả gợi ý, cửa sổ chi tiết sản phẩm sẽ hiển thị những thông tin gì?", answers: [{ text: "Chỉ tên và giá bán", correct: false }, { text: "Vị trí và các thông tin quan trọng khác của sản phẩm", correct: true }, { text: "Lịch sử bán hàng của sản phẩm", correct: false }, { text: "Tùy chọn thêm sản phẩm mới", correct: false }] },
-            { question: "Nếu một sản phẩm không hiển thị trong kết quả tìm kiếm, bước đầu tiên bạn nên làm gì?", answers: [{ text: "Thêm sản phẩm mới ngay lập tức", correct: false }, { text: "Liên hệ hỗ trợ KiotViet", correct: false }, { text: "Đảm bảo rằng sản phẩm đã được thêm đúng cách vào hệ thống tồn kho", correct: true }, { text: "Thay đổi từ khóa tìm kiếm", correct: false }] },
-            { question: "Để kiểm tra trạng thái của một sản phẩm không hiển thị, bạn có thể xem ở đâu trong KiotViet?", answers: [{ text: "Màn hình bán hàng", correct: false }, { text: "Mục \"Tùy chọn Hiển thị\"", correct: false }, { text: "Danh mục Hàng hóa", correct: true }, { text: "Báo cáo doanh thu", correct: false }] },
-            { question: "Nếu bạn muốn thêm một sản phẩm hoàn toàn mới chưa có trong hệ thống KiotViet, bạn sẽ tìm tùy chọn nào?", answers: [{ text: "Bấm vào hình ảnh của một sản phẩm bất kỳ", correct: false }, { text: "Vào mục \"Tùy chọn Hiển thị\"", correct: false }, { text: "\"Thêm sản phẩm mới\" ngay dưới thanh tìm kiếm", correct: true }, { text: "Trong danh mục Hàng hóa", correct: false }] },
-            { question: "Khi sử dụng tùy chọn \"Thêm sản phẩm mới\", những thông tin cần thiết nào có thể được nhập ngay lập tức?", answers: [{ text: "Chỉ mã hàng", correct: false }, { text: "Chỉ giá bán", correct: false }, { text: "Chỉ tồn kho", correct: false }, { text: "Tên, mã hàng, giá bán và tồn kho", correct: true }] },
-            { question: "Khi thêm sản phẩm mới thông qua thanh tìm kiếm, sản phẩm đó sẽ được lưu vào đâu?", answers: [{ text: "Chỉ vào đơn hàng hiện tại", correct: false }, { text: "Vào đơn hàng và lưu vào hệ thống", correct: true }, { text: "Chỉ vào danh mục hàng hóa tạm thời", correct: false }, { text: "Không lưu tự động, cần thao tác thêm sau", correct: false }] },
-            { question: "Các tùy chọn tìm kiếm trong KiotViet được đánh giá là gì?", answers: [{ text: "Hạn chế", correct: false }, { text: "Rất linh hoạt", correct: true }, { text: "Phức tạp", correct: false }, { text: "Chỉ dành cho người nhớ mã hàng", correct: false }] },
-            { question: "Chức năng tra cứu chi tiết sản phẩm cho phép xem thông tin gì ngoài vị trí?", answers: [{ text: "Chỉ tồn kho", correct: false }, { text: "Chỉ giá vốn", correct: false }, { text: "Các thông tin quan trọng khác của sản phẩm đó", correct: true }, { text: "Lịch sử nhập hàng", correct: false }] },
-            { question: "Trong chế độ \"Bán thường\", icon \"Danh mục\" có chức năng gì?", answers: [{ text: "Thêm sản phẩm mới", correct: false }, { text: "Lọc sản phẩm theo nhóm hàng", correct: true }, { text: "Điều chỉnh giá bán", correct: false }, { text: "Xem báo cáo doanh thu", correct: false }] },
-            { question: "Nếu Bình Minh cần xem số lượng tồn kho một cách nhanh chóng trên màn hình bán hàng, cô ấy nên kích hoạt tùy chọn nào?", answers: [{ text: "Tùy chọn \"Giá bán\"", correct: false }, { text: "Tùy chọn \"Tồn kho\"", correct: true }, { text: "Tùy chọn \"Vị trí\"", correct: false }, { text: "Tùy chọn \"Mã hàng\"", correct: false }] },
-            { question: "Việc tra cứu chi tiết sản phẩm bằng cách bấm vào hình ảnh sản phẩm trong kết quả gợi ý là một tính năng giúp:", answers: [{ text: "Rút ngắn thời gian thanh toán", correct: false }, { text: "Hiểu rõ hơn về sản phẩm mà không cần thêm vào đơn hàng", correct: true }, { text: "Thay đổi thông tin sản phẩm", correct: false }, { text: "Xem hình ảnh lớn hơn", correct: false }] },
-            { question: "Khi Bình Minh gặp khó khăn vì không nhớ chính xác tên hoặc mã hàng, KiotViet đã giải quyết vấn đề này như thế nào?", answers: [{ text: "Yêu cầu nhập đúng thông tin", correct: false }, { text: "Chỉ tìm kiếm được nếu có mã vạch", correct: false }, { text: "Cho phép gõ một phần tên hoặc từ khóa liên quan", correct: true }, { text: "Yêu cầu kiểm tra lại danh mục hàng hóa", correct: false }] },
-            { question: "Mục \"Tùy chọn Hiển thị\" > \"Khác\" trong KiotViet dùng để làm gì?", answers: [{ text: "Thay đổi giao diện người dùng", correct: false }, { text: "Bật/tắt các tùy chọn hiển thị thông tin như tồn kho", correct: true }, { text: "Thiết lập mã vạch cho sản phẩm", correct: false }, { text: "Quản lý quyền truy cập", correct: false }] },
-            { question: "Nếu một sản phẩm mới được thêm vào hệ thống KiotViet thông qua tùy chọn \"Thêm sản phẩm mới\" dưới thanh tìm kiếm, sản phẩm đó có sẵn sàng để bán không?", answers: [{ text: "Không, cần thêm bước phê duyệt", correct: false }, { text: "Chỉ khi có mã vạch", correct: false }, { text: "Có, các thông tin cần thiết đã được nhập để thêm ngay vào đơn hàng", correct: true }, { text: "Chỉ khi có tồn kho lớn hơn 0", correct: false }] },
-            { question: "Mục đích chính của việc lọc sản phẩm theo nhóm hàng là gì?", answers: [{ text: "Để in tem nhãn", correct: false }, { text: "Giúp người dùng dễ dàng tìm kiếm và quản lý sản phẩm trong các danh mục cụ thể", correct: true }, { text: "Để thay đổi giá bán đồng loạt", correct: false }, { text: "Để kiểm tra lịch sử nhập hàng", correct: false }] },
-            { question: "Khả năng tra cứu vị trí sản phẩm là đặc điểm hữu ích cho ai?", answers: [{ text: "Khách hàng mua sắm", correct: false }, { text: "Người quản lý kho hoặc nhân viên bán hàng cần biết vị trí cụ thể của sản phẩm", correct: true }, { text: "Kế toán", correct: false }, { text: "Nhà cung cấp", correct: false }] },
-            { question: "Nếu bạn cần nhập thông tin tồn kho cho một sản phẩm mới, bạn có thể thực hiện điều đó ở đâu khi sử dụng tính năng \"Thêm sản phẩm mới\"?", answers: [{ text: "Chỉ trong danh mục Hàng hóa sau khi lưu", correct: false }, { text: "Ngay trong cửa sổ \"Thêm sản phẩm mới\"", correct: true }, { text: "Thông qua màn hình \"Tùy chọn Hiển thị\"", correct: false }, { text: "Không thể nhập tồn kho cho sản phẩm mới", correct: false }] },
-            { question: "An Nhiên đã hướng dẫn Bình Minh cách xem tồn kho trực tiếp trên mỗi sản phẩm. Điều này giúp Bình Minh tránh được vấn đề gì?", answers: [{ text: "Nhập sai tên sản phẩm", correct: false }, { text: "Bán quá số lượng tồn kho hoặc không biết sản phẩm nào đang hết hàng", correct: true }, { text: "Không tìm thấy vị trí sản phẩm", correct: false }, { text: "Khó khăn khi thêm sản phẩm mới", correct: false }] },
-            { question: "Tính năng gợi ý danh sách sản phẩm ngay lập tức khi gõ một phần tên hoặc từ khóa mang lại lợi ích gì?", answers: [{ text: "Giảm thiểu lỗi chính tả", correct: false }, { text: "Tiết kiệm thời gian tìm kiếm và tăng tốc độ bán hàng", correct: true }, { text: "Cung cấp thêm thông tin chi tiết về sản phẩm", correct: false }, { text: "Tự động thêm sản phẩm vào đơn hàng", correct: false }] },
-            { question: "Mục \"Danh mục Hàng hóa\" trong KiotViet dùng để làm gì khi sản phẩm không hiển thị?", answers: [{ text: "Thêm sản phẩm mới nhanh chóng", correct: false }, { text: "Kiểm tra trạng thái và đảm bảo sản phẩm đã được thêm đúng cách", correct: true }, { text: "Xem báo cáo bán hàng", correct: false }, { text: "Lọc sản phẩm theo nhóm", correct: false }] },
-            { question: "Việc có thể tra cứu chi tiết sản phẩm mà không cần thêm vào đơn hàng thể hiện điều gì về tính linh hoạt của KiotViet?", answers: [{ text: "Chỉ cho phép xem thông tin cơ bản", correct: false }, { text: "Hạn chế các thao tác xem trước", correct: false }, { text: "Cho phép người dùng kiểm tra thông tin kỹ lưỡng trước khi quyết định thêm vào đơn hàng", correct: true }, { text: "Phụ thuộc vào loại sản phẩm", correct: false }] },
-            { question: "Giả sử Bình Minh cần tìm một sản phẩm nhưng chỉ nhớ mã vạch của nhà sản xuất, cô ấy sẽ làm gì?", answers: [{ text: "Gõ tên sản phẩm vào ô tìm kiếm", correct: false }, { text: "Nhập mã vạch vào ô tìm kiếm", correct: true }, { text: "Tìm trong danh mục hàng hóa", correct: false }, { text: "Bật tùy chọn \"Tồn kho\"", correct: false }] },
-            { question: "Tóm lại, các tính năng tìm kiếm và quản lý sản phẩm của KiotViet được thiết kế để hỗ trợ chủ cửa hàng như Bình Minh giải quyết vấn đề gì?", answers: [{ text: "Chỉ quản lý tài chính", correct: false }, { text: "Chỉ quản lý nhân viên", correct: false }, { text: "Giúp tìm kiếm, quản lý và thêm sản phẩm một cách nhanh chóng, chính xác và hiệu quả", correct:true }, { text: "Chỉ phục vụ cho việc in hóa đơn", correct: false }] }
+            { topic: "Tối ưu vận hành", question: "Cửa hàng tạp hóa cần tìm vị trí mặt hàng gia dụng trên kệ. Tính năng nào trên Màn hình bán hàng hỗ trợ thu ngân thực hiện điều này?", answers: [{ text: "Tùy chọn hiển thị", correct: false }, { text: "Chế độ nhập", correct: false }, { text: "Xem chi tiết", correct: true }, { text: "In mã vạch", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Cửa hàng mỹ phẩm cần tìm sản phẩm theo thuộc tính 'Loại da' (khô, dầu). Chế độ bán hàng nào trên KiotViet hỗ trợ tính năng này?", answers: [{ text: "Bán nhanh", correct: false }, { text: "Bán nhanh và Bán thường", correct: false }, { text: "Bán thường", correct: true }, { text: "Bán nhanh và Bán giao hàng", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Hiệu thuốc cần thêm mã sản phẩm cho thuốc mới nhập. Giao diện nào trên KiotViet cho phép thực hiện điều này?", answers: [{ text: "Danh mục hàng hóa, Nhập hàng, Kiểm kho", correct: false }, { text: "Màn hình bán hàng", correct: false }, { text: "Trên cả Màn hình bán hàng và các giao diện Danh mục hàng hóa, Nhập hàng, Kiểm kho", correct: true }, { text: "Báo cáo bán hàng", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Tại cửa hàng tạp hóa, khi khách hàng mua nhiều mặt hàng, thu ngân có thể áp dụng giảm giá như thế nào?", answers: [{ text: "Giảm giá cho từng sản phẩm", correct: false }, { text: "Giảm giá cho toàn bộ hóa đơn", correct: false }, { text: "Giảm giá cho từng sản phẩm và Giảm giá cho toàn bộ hóa đơn", correct: true }, { text: "Không thể giảm giá", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Trong trường hợp mất mạng Internet, cửa hàng thời trang có thể tiếp tục sử dụng phần nào của KiotViet để thực hiện giao dịch bán hàng?", answers: [{ text: "Có thể sử dụng Màn hình bán hàng", correct: true }, { text: "Có thể sử dụng Màn hình quản lý", correct: false }, { text: "Có thể sử dụng cả Màn hình bán hàng và Màn hình quản lý", correct: false }, { text: "Không sử dụng được màn hình nào của KiotViet", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Hiệu sách cần nhập mã vạch tự động trong quá trình kiểm kho. Phương pháp nào dưới đây được hỗ trợ bởi KiotViet?", answers: [{ text: "Sử dụng máy quét mã vạch", correct: false }, { text: "Sử dụng camera điện thoại", correct: false }, { text: "Sử dụng cả máy quét mã vạch và camera điện thoại", correct: true }, { text: "Chưa có tính năng hỗ trợ", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi cửa hàng tạp hóa thực hiện trả hàng theo hóa đơn, giá hoàn trả cho khách được phần mềm gợi ý dựa trên yếu tố nào?", answers: [{ text: "Giá vốn của sản phẩm theo hóa đơn gốc", correct: false }, { text: "Giá bán của sản phẩm tại thời điểm trả hàng", correct: false }, { text: "Giá bán của sản phẩm theo hóa đơn gốc", correct: true }, { text: "Giá vốn của sản phẩm tại thời điểm trả hàng", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi cửa hàng tạp hóa trả hàng nhanh, giá hoàn trả cho khách được phần mềm gợi ý dựa trên thời điểm nào?", answers: [{ text: "Giá vốn của sản phẩm theo hóa đơn gốc", correct: false }, { text: "Giá bán của sản phẩm tại thời điểm trả hàng", correct: true }, { text: "Giá bán của sản phẩm theo hóa đơn gốc", correct: false }, { text: "Giá vốn của sản phẩm tại thời điểm trả hàng", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Cửa hàng tạp hóa muốn xử lý một phiếu đặt hàng thành nhiều hóa đơn khác nhau. KiotViet có hỗ trợ tính năng này không?", answers: [{ text: "Chỉ có thể tạo hóa đơn 1 lần duy nhất", correct: false }, { text: "Chỉ có thể tạo hóa đơn tối đa 2 lần", correct: false }, { text: "Có thể tạo hóa đơn nhiều lần", correct: true }, { text: "Chỉ có thể tạo hóa đơn tối đa 3 lần", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Một cửa hàng tạp hóa cần thông báo thanh toán QR thành công qua loa máy tính để quản lý giao dịch. Ngân hàng nào có thể đáp ứng yêu cầu này?", answers: [{ text: "Techcombank", correct: false }, { text: "Sacombank", correct: false }, { text: "Vietcombank", correct: true }, { text: "Tất cả các ngân hàng", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi sử dụng Màn hiển thị QR F92, cửa hàng có thể phát thông báo thanh toán qua loa cho loại Ví điện tử MOMO nào?", answers: [{ text: "Chỉ hỗ trợ Ví điện tử MOMO cá nhân", correct: false }, { text: "Hỗ trợ cả Ví điện tử MOMO cá nhân và doanh nghiệp", correct: true }, { text: "Chỉ hỗ trợ Ví điện tử MOMO doanh nghiệp", correct: false }, { text: "Chưa hỗ trợ Ví điện tử MOMO", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Để phục vụ chi nhánh tại nước ngoài, KiotViet cung cấp những tính năng đặc biệt nào liên quan đến múi giờ và đơn vị tiền tệ?", answers: [{ text: "Chọn múi giờ cho chi nhánh ở nước ngoài", correct: false }, { text: "Sử dụng đơn vị tiền tệ khác VNĐ", correct: false }, { text: "Hỗ trợ cả việc chọn múi giờ và sử dụng đơn vị tiền tệ khác VNĐ", correct: true }, { text: "Chưa hỗ trợ tính năng cho nước ngoài", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Cửa hàng tạp hóa cần phát thông báo chuyển khoản thành công qua loa. Tính năng này yêu cầu tài khoản ngân hàng thuộc danh sách nào?", answers: [{ text: "Tất cả các ngân hàng trên thế giới", correct: false }, { text: "Tất cả các ngân hàng tại Việt Nam", correct: false }, { text: "Các ngân hàng có liên kết với KiotViet", correct: true }, { text: "Chưa hỗ trợ tính năng này", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Để hiển thị mã QR động VietQR dựa trên thông tin hóa đơn, cửa hàng cần sử dụng tài khoản ngân hàng thuộc nhóm nào?", answers: [{ text: "Chỉ có VIB Bank", correct: false }, { text: "Tất cả các ngân hàng tại Việt Nam thuộc hệ thống Napas", correct: true }, { text: "Chỉ các ngân hàng có liên kết với KiotViet", correct: false }, { text: "Chỉ tài khoản ngân hàng doanh nghiệp", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi kết nối với các đơn vị giao vận trên KiotViet, cửa hàng tạp hóa có thể thực hiện những thao tác nào liên quan đến vận chuyển?", answers: [{ text: "Xem báo giá và lựa chọn đơn vị vận chuyển", correct: false }, { text: "Theo dõi tình trạng giao hàng", correct: false }, { text: "Vừa xem báo giá, lựa chọn đơn vị vận chuyển, vừa theo dõi tình trạng giao hàng", correct: true }, { text: "Chưa hỗ trợ kết nối giao vận", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi sử dụng KiotViet Retail, cửa hàng có thể kết nối với những nhà phát hành hóa đơn điện tử nào?", answers: [{ text: "Chỉ hỗ trợ KV eInvoice", correct: false }, { text: "Chỉ hỗ trợ FPT", correct: false }, { text: "Cả KV eInvoice và FPT, MISA, Viettel, VNPT", correct: true }, { text: "Chỉ hỗ trợ MISA", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi sử dụng KiotViet Retail, cửa hàng có thể tính thuế VAT theo những phương pháp nào?", answers: [{ text: "Phương pháp khấu trừ", correct: false }, { text: "Phương pháp trực tiếp", correct: false }, { text: "Lựa chọn Phương pháp khấu trừ hoặc Phương pháp trực tiếp", correct: true }, { text: "Phương pháp từng lần phát sinh", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi áp dụng phương pháp khấu trừ, cửa hàng thời trang có thể thiết lập thuế suất VAT cho các sản phẩm ra sao?", answers: [{ text: "Chỉ 1 mức thuế suất chung", correct: false }, { text: "Chỉ mức VAT chuẩn là 8%", correct: false }, { text: "Các sản phẩm có thể có thuế suất VAT khác nhau", correct: true }, { text: "Thuế suất tự động áp dụng theo ngành hàng", correct: false }] },
+            { topic: "Tối ưu vận hành", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể in mã QR của Hóa đơn điện tử tích hợp với Hóa đơn bán hàng không? Nếu được, điều kiện là gì?", answers: [{ text: "Có, cần bật tính năng này trong Màn hình bán hàng", correct: true }, { text: "Không, phải in riêng", correct: false }, { text: "Không, phần mềm chưa hỗ trợ", correct: false }, { text: "Có, nhưng phải trả thêm phí", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Để phân biệt các size áo và váy (S, M, L) trong quản lý hàng hóa, cửa hàng thời trang cần sử dụng tính năng gì trên KiotViet?", answers: [{ text: "Nhóm hàng", correct: false }, { text: "Phân loại", correct: false }, { text: "Thuộc tính", correct: true }, { text: "Ghi chú sản phẩm", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Cửa hàng cung cấp dịch vụ giặt là cần thiết lập loại hàng hóa nào trên KiotViet để tính tiền cho dịch vụ giặt áo sơ mi?", answers: [{ text: "Hàng hóa thường", correct: false }, { text: "Hàng combo đóng gói", correct: false }, { text: "Hàng dịch vụ", correct: true }, { text: "Hàng hóa có Lô - Hạn sử dụng", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Cửa hàng muốn bán giỏ quà Tết, trong đó mỗi giỏ quà gồm nhiều sản phẩm như bánh, mứt và rượu vang. Loại hàng hóa nào trên KiotViet phù hợp?", answers: [{ text: "Combo - Đóng gói", correct: true }, { text: "Sản xuất", correct: false }, { text: "Chế biến", correct: false }, { text: "Hàng hóa thường", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi bán hàng hóa có quản lý Lô-HSD, nếu bật tùy chọn 'Gợi ý Lô HSD', hệ thống sẽ ưu tiên lựa chọn sản phẩm từ lô nào để bán?", answers: [{ text: "Lô có date gần nhất", correct: true }, { text: "Lô có date xa nhất", correct: false }, { text: "Lô ngẫu nhiên", correct: false }, { text: "Lô được nhập vào đầu tiên", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Ngành hàng nào trên KiotViet hỗ trợ tính năng Quản lý hàng hóa theo Serial-IMEI?", answers: [{ text: "Tạp hóa", correct: false }, { text: "Điện thoại - Điện máy", correct: true }, { text: "Tất cả các ngành hàng", correct: false }, { text: "Ngành hàng Khác", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi gộp nhiều phiếu kiểm kho trên KiotViet, trạng thái của các phiếu cần gộp phải đảm bảo điều kiện nào?", answers: [{ text: "Các phiếu phải ở trạng thái Phiếu tạm", correct: true }, { text: "Chỉ cần 1 phiếu ở trạng thái phiếu tạm", correct: false }, { text: "Các phiếu phải ở trạng thái hoàn thành", correct: false }, { text: "Không yêu cầu về trạng thái phiếu", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Tem mã vạch của sản phẩm in từ KiotViet có thể chứa những thông tin nào dưới đây?", answers: [{ text: "Chỉ Tên cửa hàng", correct: false }, { text: "Chỉ Giá bán sản phẩm", correct: false }, { text: "Cả tên cửa hàng và giá bán sản phẩm", correct: true }, { text: "Chỉ Giá vốn sản phẩm", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Để trả lại hàng hóa cho Nhà cung cấp, cửa hàng cần sử dụng giao dịch nào trong KiotViet?", answers: [{ text: "Đổi trả hàng", correct: false }, { text: "Trả hàng", correct: false }, { text: "Trả hàng nhập", correct: true }, { text: "Tạo phiếu chi", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Cửa hàng bán đồ gia dụng cần nhập hàng với số lượng và giá khác nhau cho cùng một mã sản phẩm. Tính năng nào trên KiotViet hỗ trợ việc này?", answers: [{ text: "Thêm dòng", correct: true }, { text: "Thiết lập giá", correct: false }, { text: "Chỉnh sửa thành tiền", correct: false }, { text: "Ghi chú cho sản phẩm", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi nhập hàng, nếu cần thay đổi giá bán của sản phẩm, cửa hàng bán đồ chơi trẻ em nên sử dụng tính năng nào trên KiotViet?", answers: [{ text: "Thêm dòng", correct: false }, { text: "Thiết lập giá", correct: true }, { text: "Chỉnh sửa thành tiền", correct: false }, { text: "Thiết lập cửa hàng", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Cửa hàng kinh doanh giày dép muốn lập phiếu thu khi khách hàng thanh toán công nợ. Họ có thể thực hiện thao tác này ở đâu trên KiotViet?", answers: [{ text: "Sổ quỹ", correct: false }, { text: "Màn hình bán hàng", correct: false }, { text: "Cả trên Sổ quỹ và Màn hình bán hàng", correct: true }, { text: "Chỉ có thể thực hiện ở Sổ quỹ", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi sử dụng tính năng Quản lý khách hàng theo người phụ trách trên KiotViet, cửa hàng có thể thực hiện những thao tác nào?", answers: [{ text: "Thiết lập người phụ trách", correct: false }, { text: "Giới hạn xem và giao dịch theo người phụ trách", correct: false }, { text: "Vừa thiết lập, vừa giới hạn xem và giao dịch theo người phụ trách", correct: true }, { text: "Chưa hỗ trợ tính năng này", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi sử dụng KiotViet, cửa hàng điện tử có thể quản lý riêng biệt theo từng chi nhánh đối với những đối tượng nào?", answers: [{ text: "Khách hàng", correct: false }, { text: "Nhà cung cấp", correct: false }, { text: "Cả Khách hàng và Nhà cung cấp", correct: true }, { text: "Chưa hỗ trợ quản lý riêng theo chi nhánh cho tất cả dữ liệu trên phần mềm", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Để ghi nhận công nợ ban đầu của Nhà cung cấp, cửa hàng bán đồ gia dụng cần sử dụng tính năng nào trên KiotViet?", answers: [{ text: "Điều chỉnh", correct: true }, { text: "Thanh toán", correct: false }, { text: "Chiết khấu thanh toán", correct: false }, { text: "Lập phiếu chi", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Để quản lý giờ làm việc của nhân viên, cửa hàng có thể sử dụng hình thức chấm công nào được hỗ trợ bởi KiotViet?", answers: [{ text: "Nhận diện khuôn mặt", correct: false }, { text: "Chấm công mobile qua Zalo Mini App", correct: false }, { text: "Cả nhận diện khuôn mặt và chấm công mobile qua Zalo Mini App", correct: true }, { text: "Chấm công bằng thẻ từ", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi sử dụng KiotViet, cửa hàng thời trang có thể dùng Sổ quỹ để làm gì?", answers: [{ text: "Quản lý các giao dịch thu chi", correct: true }, { text: "Tên một loại báo cáo", correct: false }, { text: "Vừa là tính năng quản lý thu chi, vừa là tên một loại báo cáo", correct: false }, { text: "Lập kế hoạch chi tiêu cho cửa hàng", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Để biết tổng giá vốn và tổng giá bán của tất cả sản phẩm, cửa hàng thời trang nên xem báo cáo nào trên KiotViet?", answers: [{ text: "Báo cáo hàng hóa > Giá trị kho", correct: true }, { text: "Báo cáo bán hàng > Hàng hóa", correct: false }, { text: "Báo cáo cuối ngày > Tổng hợp", correct: false }, { text: "Báo cáo công nợ", correct: false }] },
+            { topic: "Tối ưu quản lý", question: "Khi cần xem báo cáo chi tiết với nhiều cột thông tin, cửa hàng tạp hóa nên sử dụng kiểu hiển thị nào trên KiotViet?", answers: [{ text: "Kiểu ngang", correct: true }, { text: "Kiểu dọc", correct: false }, { text: "Kiểu biểu đồ", correct: false }, { text: "Kiểu tóm tắt", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể đồng bộ thông tin nào của sản phẩm lên các sàn Thương mại điện tử?", answers: [{ text: "Giá bán", correct: true }, { text: "Giá vốn", correct: false }, { text: "Cả giá bán và giá vốn", correct: false }, { text: "Lịch sử nhập hàng", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi kết nối KiotViet với Tiktok Shop, cửa hàng có thể khởi tạo danh mục sản phẩm trên cả hai nền tảng theo những cách nào?", answers: [{ text: "Sao chép từ Tiktok Shop về KiotViet", correct: false }, { text: "Xuất file từ KiotViet sang Tiktok Shop", correct: false }, { text: "Cả sao chép từ Tiktok Shop về và xuất file từ KiotViet sang Tiktok Shop", correct: true }, { text: "Chưa hỗ trợ sao chép", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể áp dụng tính năng Tin nhắn mẫu để phản hồi khách hàng trên những mạng xã hội nào?", answers: [{ text: "Facebook", correct: false }, { text: "Instagram", correct: false }, { text: "Cả Facebook và Instagram", correct: true }, { text: "Tiktok", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi sử dụng Facebook POS, cửa hàng có thể liên kết gian hàng KiotViet với nhiều Fanpage hay không?", answers: [{ text: "Chỉ liên kết được 1 fanpage", correct: false }, { text: "Chỉ liên kết được tối đa 5 fanpage", correct: false }, { text: "Có thể liên kết nhiều fanpage", correct: true }, { text: "Chỉ liên kết được tối đa 2 fanpage", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi sử dụng màn hình Facebook POS trên KiotViet, cửa hàng có thể gửi tin nhắn xác nhận đặt hàng tự động cho khách không? Nếu có, điều kiện là gì?", answers: [{ text: "Không, chỉ hỗ trợ xác nhận mua hàng", correct: false }, { text: "Có, cần thiết lập “Gửi tin nhắn xác nhận đặt hàng”", correct: true }, { text: "Có, cần thiết lập “Gửi tin nhắn xác nhận mua hàng”", correct: false }, { text: "Không, phải gửi tin nhắn thủ công", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi livestream bán hàng, cửa hàng có thể in bình luận từ mạng xã hội nào nếu sử dụng KiotViet?", answers: [{ text: "Livestream trên Fanpage Facebook", correct: false }, { text: "Livestream trên Tiktok cá nhân", correct: false }, { text: "Cả khi livestream trên Fanpage Facebook và Tiktok cá nhân", correct: true }, { text: "Livestream trên Youtube", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi khách hàng vào xem website của một cửa hàng tạp hóa sử dụng nền tảng KiotViet Web, họ có thể thực hiện những thao tác nào?", answers: [{ text: "Đặt hàng online", correct: false }, { text: "Xem thông tin giới thiệu, liên hệ", correct: false }, { text: "Vừa đặt hàng online, vừa xem thông tin giới thiệu, liên hệ", correct: true }, { text: "Xem báo cáo doanh thu của cửa hàng", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Để phân tích hiệu quả kinh doanh, cửa hàng tạp hóa cần xác định sản phẩm bán chạy và bán chậm. Mục phân tích thông minh nào hỗ trợ điều này?", answers: [{ text: "Phân tích kinh doanh", correct: false }, { text: "Phân tích hàng hóa", correct: true }, { text: "Phân tích khách hàng", correct: false }, { text: "Phân tích nhà cung cấp", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng thời trang có thể thiết lập những loại chương trình khuyến mại nào?", answers: [{ text: "Giảm giá theo giá trị hóa đơn", correct: false }, { text: "Mua hàng tặng hàng", correct: false }, { text: "Cả giảm giá theo giá trị hóa đơn và mua hàng tặng hàng", correct: true }, { text: "Chưa có tính năng Khuyến mại trên KiotViet", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Voucher trên KiotViet Retail có ý nghĩa là giảm giá theo hình thức nào?", answers: [{ text: "VND", correct: true }, { text: "%", correct: false }, { text: "Có thể là VND hoặc %", correct: false }, { text: "USD", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Coupon trên KiotViet Retail có ý nghĩa là giảm giá theo hình thức nào?", answers: [{ text: "VND", correct: false }, { text: "%", correct: true }, { text: "Có thể là VND hoặc %", correct: false }, { text: "USD", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Khi sử dụng KiotViet, cửa hàng tạp hóa có thể thiết lập tích điểm cho sản phẩm có giảm giá hay không?", answers: [{ text: "Do cửa hàng thiết lập", correct: true }, { text: "KiotViet luôn cho phép", correct: false }, { text: "KiotViet luôn không cho phép", correct: false }, { text: "Chỉ được tích điểm cho sản phẩm có giảm giá dùng Bảng giá chung", correct: false }] },
+            { topic: "Thúc đẩy doanh thu", question: "Để gửi tin nhắn ZNS từ KiotViet Retail nhằm xác nhận mua hàng hoặc trả hàng, cửa hàng cần đảm bảo những điều kiện nào?", answers: [{ text: "Nạp đủ tiền, còn hạn mức gửi tin", correct: false }, { text: "SĐT khách hàng là số đăng ký Zalo", correct: false }, { text: "Cần đảm bảo cả việc nạp đủ tiền, còn hạn mức và SĐT khách hàng là số Zalo", correct: true }, { text: "Không có điều kiện gì", correct: false }] }
         ];
 
         const elements = {
@@ -209,6 +281,9 @@
             certScore: document.getElementById('cert-score'),
             certDate: document.getElementById('cert-date'),
             startGameBtn: document.getElementById('start-game-btn'),
+            modeRadioButtons: document.querySelectorAll('input[name="game-mode-radio"]'),
+            randomOptionsContainer: document.getElementById('random-options'),
+            topicOptionsContainer: document.getElementById('topic-options'),
         };
 
         let currentQuestionIndex = 0;
@@ -216,24 +291,28 @@
         let questionsForGame = [];
         let playerName = '';
         let playerDepartment = '';
-        let selectedGameMode = { mode: null, text: '' };
+        let selectedGameMode = { mode: null, text: '', topic: null };
         
         const shuffleArray = (array) => { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } };
         
-        function initializeGame(mode, modeText) {
+        function initializeGame(gameOptions) {
             playerName = elements.nameInput.value.trim();
             playerDepartment = elements.departmentInput.value.trim();
             if (!playerName || !playerDepartment) { elements.errorMessage.innerText = "Vui lòng điền đầy đủ thông tin."; return; }
             
             elements.errorMessage.innerText = "";
             
-            const shuffledQuestions = [...quizData];
-            shuffleArray(shuffledQuestions);
+            let sourceQuestions = [...quizData];
+            if (gameOptions.topic) {
+                sourceQuestions = quizData.filter(q => q.topic === gameOptions.topic);
+            }
 
-            if (mode === 'all') {
-                questionsForGame = shuffledQuestions;
+            shuffleArray(sourceQuestions);
+
+            if (gameOptions.mode === 'all') {
+                questionsForGame = sourceQuestions;
             } else {
-                questionsForGame = shuffledQuestions.slice(0, parseInt(mode));
+                questionsForGame = sourceQuestions.slice(0, parseInt(gameOptions.mode));
             }
             
             elements.startScreen.classList.add('hidden');
@@ -350,21 +429,25 @@
             elements.certDate.innerText = `Hà Nội, ngày ${today.getDate()} tháng ${today.getMonth() + 1} năm ${today.getFullYear()}`;
         }
         
+        function resetStartScreen() {
+             selectedGameMode = { mode: null, text: '', topic: null };
+            elements.startGameBtn.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
+            elements.startGameBtn.setAttribute('disabled', '');
+            elements.modeButtons.forEach(btn => {
+                 btn.classList.remove('btn-selected-green');
+            });
+            elements.modeRadioButtons.forEach(radio => radio.checked = false);
+            elements.randomOptionsContainer.classList.add('mode-group-disabled');
+            elements.topicOptionsContainer.classList.add('mode-group-disabled');
+        }
+
         function handleRestart() {
             elements.quizContainer.classList.add('hidden');
             elements.resultArea.classList.add('hidden');
             elements.certificateScreen.classList.add('hidden');
             elements.startScreen.classList.remove('hidden');
             elements.startScreen.classList.add('fade-in');
-
-            // Reset start screen state
-            selectedGameMode = { mode: null, text: '' };
-            elements.startGameBtn.classList.add('opacity-0', '-translate-y-2', 'pointer-events-none');
-            elements.startGameBtn.setAttribute('disabled', '');
-            elements.modeButtons.forEach(btn => {
-                 btn.classList.remove('bg-kv-blue', 'hover:bg-kv-blue-dark');
-                 btn.classList.add('bg-slate-700', 'hover:bg-slate-800');
-            });
+            resetStartScreen();
         }
 
         function handleNextButton() {
@@ -372,23 +455,44 @@
             if (currentQuestionIndex < questionsForGame.length) showQuestion();
             else showScore();
         }
+
+        elements.modeRadioButtons.forEach(radio => {
+            radio.addEventListener('change', (e) => {
+                const selectedMode = e.target.value;
+                
+                // Reset previous selections
+                resetStartScreen();
+                e.target.checked = true; // Re-check the current radio
+                
+                if (selectedMode === 'random') {
+                    elements.randomOptionsContainer.classList.remove('mode-group-disabled');
+                    elements.topicOptionsContainer.classList.add('mode-group-disabled');
+                } else if (selectedMode === 'topic') {
+                    elements.topicOptionsContainer.classList.remove('mode-group-disabled');
+                    elements.randomOptionsContainer.classList.add('mode-group-disabled');
+                }
+            });
+        });
         
         elements.modeButtons.forEach(button => {
             button.addEventListener('click', (e) => {
-                // Remove highlight from all buttons
+                // Remove green highlight from all buttons
                 elements.modeButtons.forEach(btn => {
-                    btn.classList.remove('bg-kv-blue', 'hover:bg-kv-blue-dark');
-                    btn.classList.add('bg-slate-700', 'hover:bg-slate-800');
+                    btn.classList.remove('btn-selected-green');
                 });
                 
-                // Add highlight to clicked button
+                // Add green highlight to clicked button
                 const selectedButton = e.currentTarget;
-                selectedButton.classList.remove('bg-slate-700', 'hover:bg-slate-800');
-                selectedButton.classList.add('bg-kv-blue', 'hover:bg-kv-blue-dark');
+                selectedButton.classList.add('btn-selected-green');
 
                 // Store selected mode
                 selectedGameMode.mode = selectedButton.dataset.mode;
+                selectedGameMode.topic = selectedButton.dataset.topic || null;
                 selectedGameMode.text = selectedButton.innerText;
+                if(selectedGameMode.topic) {
+                     selectedGameMode.text = `Chủ đề: ${selectedGameMode.text}`;
+                }
+
 
                 // Show and enable start button
                 elements.startGameBtn.classList.remove('opacity-0', '-translate-y-2', 'pointer-events-none');
@@ -398,7 +502,7 @@
 
         elements.startGameBtn.addEventListener('click', () => {
              if (selectedGameMode.mode) {
-                initializeGame(selectedGameMode.mode, selectedGameMode.text);
+                initializeGame(selectedGameMode);
             }
         });
 
@@ -406,7 +510,7 @@
         elements.restartBtn.addEventListener('click', handleRestart);
         elements.restartFromCertBtn.addEventListener('click', handleRestart);
         elements.certificateBtn.addEventListener('click', showCertificate);
+
     </script>
 </body>
 </html>
-
