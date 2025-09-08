@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="vi" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game KiotViet FNB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; touch-action: manipulation; }
+        .soft-glow-background { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: linear-gradient(to bottom right, #f8fafc, #e0f2fe); overflow: hidden; }
+        .soft-glow-background .shape { position: absolute; filter: blur(140px); opacity: 0.25; }
+        .soft-glow-background .shape1 { height: 350px; width: 350px; background: #166def; border-radius: 50%; top: -50px; left: -100px; animation: moveInCircle 22s ease-in-out infinite; }
+        @keyframes moveInCircle { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } 100% { transform: rotate(360deg); } }
+        .soft-glow-background .shape2 { height: 450px; width: 450px; background: #16a34a; border-radius: 50%; bottom: -100px; right: -100px; animation: moveVertical 28s ease-in-out infinite; }
+        @keyframes moveVertical { 0% { transform: translateY(-50%); } 50% { transform: translateY(50%); } 100% { transform: translateY(-50%); } }
+        .kv-blue { color: #166def; } .bg-kv-blue { background-color: #166def; }
+        .main-card { background-color: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid rgba(203, 213, 225, 0.5); box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04); }
+        .fade-in { animation: fadeIn 0.5s ease-in-out; } @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .mode-btn { transition: all 0.2s ease; } .mode-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+        .btn-selected-green { background-color: #16a34a !important; border-color: #15803d !important; color: white !important; }
+        .correct { background-color: #10B981 !important; color: white !important; border-color: #059669 !important; }
+        .incorrect { background-color: #EF4444 !important; color: white !important; border-color: #DC2626 !important; }
+        #certificate-wrapper { width: 100%; max-width: 1100px; aspect-ratio: 16 / 9; display: flex; flex-direction: column; }
+        #certificate-content { flex-grow: 1; border: 10px solid #166def; padding: clamp(1rem, 4vw, 2rem); background: linear-gradient(135deg, #ffffff 0%, #f7faff 100%); display: flex; flex-direction: column; justify-content: center; }
+        .review-answer.is-correct-answer { border-left: 4px solid #10B981; background-color: #f0fdf4; }
+        .review-answer.is-selected-incorrect { border-left: 4px solid #EF4444; background-color: #fef2f2; }
+        .btn { font-weight: bold; padding: 0.75rem 2rem; border-radius: 0.5rem; text-align: center; transition: all 0.2s; cursor: pointer; }
+        .btn-blue { background-color: #166def; color: white; } .btn-blue:hover { background-color: #0a58ca; }
+        .btn-green { background-color: #16a34a; color: white; } .btn-green:hover { background-color: #15803d; }
+        .btn-slate { background-color: #475569; color: white; } .btn-slate:hover { background-color: #334155; }
+    </style></head><body class="text-slate-700 antialiased flex items-center justify-center min-h-screen p-4">
+    <div class="soft-glow-background"><div class="shape shape1"></div><div class="shape shape2"></div></div>
+    <main class="w-full max-w-2xl">
+        <div id="start-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 fade-in"></div>
+        <div id="quiz-container" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden fade-in"></div>
+        <div id="result-area" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden text-center fade-in"></div>
+        <div id="review-screen" class="main-card rounded-2xl p-6 sm:p-8 lg:p-10 hidden fade-in w-full max-w-3xl"></div>
+    </main>
+    <div id="certificate-screen" class="hidden fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 fade-in"></div><script>
+    // --- Data Injection Placeholders (SIMPLIFIED) ---
+    const quizDataForClient = [{"id":"q1","topic":"Tối ưu vận hành","question":"Trong trường hợp khách hàng muốn thêm topping khi gọi món tại cửa hàng cà phê sử dụng KiotViet FnB, nhân viên cần thực hiện thao tác nào?","answers":[{"id":"q1_a1","text":"Bấm vào Ghi chú/Món thêm"},{"id":"q1_a2","text":"Chọn topping riêng như chọn món chính"},{"id":"q1_a3","text":"Chưa hỗ trợ tính năng thêm topping cho món chính"}]},{"id":"q2","topic":"Tối ưu vận hành","question":"Trong trường hợp khách hàng yêu cầu giảm 50% đường và 50% đá khi gọi món tại cửa hàng trà sữa, nhân viên cần thực hiện thao tác nào để ghi nhận nhanh yêu cầu này?","answers":[{"id":"q2_a1","text":"Thiết lập mẫu ghi chú món"},{"id":"q2_a2","text":"Sử dụng tính năng món thêm"},{"id":"q2_a3","text":"Chưa hỗ trợ tính năng này"}]},{"id":"q3","topic":"Tối ưu vận hành","question":"Trong trường hợp cửa hàng Karaoke muốn tự động thêm các món hoa quả và đồ uống vào đơn hàng khi tạo đơn, KiotViet cung cấp giải pháp nào?","answers":[{"id":"q3_a1","text":"Sử dụng tính năng \"Món có sẵn trong đơn\" trên Màn hình Thu ngân"},{"id":"q3_a2","text":"Sử dụng tính năng \"Ghi chú / Món thêm\" trên Màn hình Thu ngân"},{"id":"q3_a3","text":"Chưa hỗ trợ nhu cầu này"}]},{"id":"q4","topic":"Tối ưu vận hành","question":"Trong quán cafe, thiết bị nào có thể được sử dụng để nhân viên nhận và xử lý gọi món từ khách hàng?","answers":[{"id":"q4_a1","text":"Máy tính, Máy POS Android"},{"id":"q4_a2","text":"Điện thoại, Máy tính bảng"},{"id":"q4_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q5","topic":"Tối ưu vận hành","question":"Trong trường hợp khách hàng đặt 2 cốc Trà sữa, một cốc có Topping Trân châu đen và một cốc có Topping Trân châu trắng, nhân viên cần thực hiện thao tác nào để nhập đơn chính xác?","answers":[{"id":"q5_a1","text":"Order cốc Trà sữa với Trân châu trắng trước, bấm Thông báo, sau đó order tiếp cốc Trà sữa với Trân châu đen"},{"id":"q5_a2","text":"Tạo thành 2 hóa đơn cho mỗi cốc trà sữa"},{"id":"q5_a3","text":"Sử dụng tính năng Thêm dòng"}]},{"id":"q6","topic":"Tối ưu vận hành","question":"Trong ngành hàng đồ ăn và đồ uống, ứng dụng nào được sử dụng để nhân viên thực hiện thao tác gọi món trực tiếp trên điện thoại?","answers":[{"id":"q6_a1","text":"KiotViet"},{"id":"q6_a2","text":"KiotViet Nhân viên nhà hàng"},{"id":"q6_a3","text":"HiKiot"}]},{"id":"q7","topic":"Tối ưu vận hành","question":"Trong trường hợp nhân viên hủy món trong đơn hàng, phần mềm KiotViet sẽ xử lý và ghi nhận thông tin như thế nào?","answers":[{"id":"q7_a1","text":"Nhân viên được yêu cầu nhập lý do hủy món"},{"id":"q7_a2","text":"Quản lý nhận được thông báo từ app FnB Quản lý (nếu thiết lập)"},{"id":"q7_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q8","topic":"Tối ưu vận hành","question":"Trong trường hợp cửa hàng sử dụng máy tính để gửi thông báo chế biến, ứng dụng nào bắt buộc phải được bật liên tục trên máy tính?","answers":[{"id":"q8_a1","text":"KiotViet Kết nối"},{"id":"q8_a2","text":"AnyDesk"},{"id":"q8_a3","text":"Ultraviewer"}]},{"id":"q9","topic":"Tối ưu vận hành","question":"Khi sử dụng máy POS Android để gửi thông báo bếp, cửa hàng cần thiết lập tùy chọn nào trong phần \"Dùng máy in chế biến / tem nhãn\" để đảm bảo quy trình in chế biến hoạt động chính xác?","answers":[{"id":"q9_a1","text":"Bật \"In bar, bếp trực tiếp từ điện thoại\""},{"id":"q9_a2","text":"Tắt \"In bar, bếp trực tiếp từ điện thoại\""},{"id":"q9_a3","text":"Tắt \"Dùng máy in chế biến / tem nhãn\""}]},{"id":"q10","topic":"Tối ưu vận hành","question":"Khi sử dụng máy tính cài app KiotViet Kết nối để gửi thông báo bếp, cửa hàng cần thiết lập tùy chọn nào trong phần \"Dùng máy in chế biến / tem nhãn\" để đảm bảo quy trình in chế biến hoạt động chính xác?","answers":[{"id":"q10_a1","text":"Bật \"In bar, bếp trực tiếp từ điện thoại\""},{"id":"q10_a2","text":"Tắt \"In bar, bếp trực tiếp từ điện thoại\""},{"id":"q10_a3","text":"Tắt \"Dùng máy in chế biến / tem nhãn\""}]},{"id":"q11","topic":"Tối ưu vận hành","question":"Trong ngành hàng đồ uống, loại máy in nào phù hợp để in tem dán cốc trà sữa?","answers":[{"id":"q11_a1","text":"KV804"},{"id":"q11_a2","text":"KV838"},{"id":"q11_a3","text":"365B"}]},{"id":"q12","topic":"Tối ưu vận hành","question":"Trong trường hợp hai khách hàng ngồi chung tại một bàn nhưng không đi cùng nhau, thu ngân cần sử dụng tính năng nào để tách hóa đơn riêng cho từng khách?","answers":[{"id":"q12_a1","text":"Chuyển bàn"},{"id":"q12_a2","text":"Gộp bàn"},{"id":"q12_a3","text":"Tách - Ghép đơn"}]},{"id":"q13","topic":"Tối ưu vận hành","question":"Trong ngành FNB, ngăn kéo đựng tiền có thể được thiết lập để tự động mở khi in hóa đơn từ các thiết bị nào?","answers":[{"id":"q13_a1","text":"Chỉ có thể thiết lập nếu sử dụng máy tính"},{"id":"q13_a2","text":"Chỉ có thể thiết lập nếu sử dụng máy POS"},{"id":"q13_a3","text":"Có thể thiết lập với mọi thiết bị thanh toán sử dụng KiotViet: Máy tính, điện thoại, máy POS"}]},{"id":"q14","topic":"Tối ưu vận hành","question":"Trong trường hợp khách hàng muốn xem hóa đơn tại bàn trước khi thanh toán, cửa hàng có thể thực hiện thao tác nào?","answers":[{"id":"q14_a1","text":"Cửa hàng in Phiếu tạm tính cho khách kiểm tra"},{"id":"q14_a2","text":"Cửa hàng in hóa đơn cho khách, nếu cần thay đổi hóa đơn thì hủy hóa đơn và sao chép tạo lại hóa đơn khác"},{"id":"q14_a3","text":"Nhân viên mở app KiotViet Nhân viên nhà hàng đưa cho khách xem thông tin thanh toán để kiểm tra"}]},{"id":"q15","topic":"Tối ưu vận hành","question":"Khi khách hàng xác nhận không sử dụng một số món trong đơn hàng sau khi in tạm tính, nhân viên cần thực hiện thao tác nào để cập nhật lại số lượng?","answers":[{"id":"q15_a1","text":"Kiểm đồ"},{"id":"q15_a2","text":"Hủy món"},{"id":"q15_a3","text":"Kiểm kho"}]},{"id":"q16","topic":"Tối ưu vận hành","question":"Trong trường hợp khách hàng muốn thanh toán một phần đơn hàng và giữ lại phần còn lại để thanh toán sau, cửa hàng có thể sử dụng tính năng nào trên KiotViet FnB?","answers":[{"id":"q16_a1","text":"Có thể sử dụng chức năng Thanh toán một phần"},{"id":"q16_a2","text":"Cần hủy bớt món trong đơn này và tạo đơn mới chứa các món còn lại rồi thanh toán"},{"id":"q16_a3","text":"Thanh toán toàn bộ hóa đơn rồi sử dụng chức năng cập nhật hóa đơn để xóa bớt món chưa thanh toán"}]},{"id":"q17","topic":"Tối ưu vận hành","question":"Khi sử dụng tài khoản ngân hàng đăng ký dịch vụ thông báo chuyển QR trong thanh toán KiotViet, phần mềm hỗ trợ những tính năng nào?","answers":[{"id":"q17_a1","text":"Phát loa \"Thanh báo thành công\" trên thiết bị F92"},{"id":"q17_a2","text":"Có thể tự động thanh toán hóa đơn khi chuyển khoản thành công"},{"id":"q17_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q18","topic":"Tối ưu vận hành","question":"Khi sử dụng Giải pháp thanh toán SoftPOS để thanh toán bằng thẻ (Visa/Master/Napas) tại Hà Nội, cửa hàng cần liên kết với ngân hàng nào?","answers":[{"id":"q18_a1","text":"TPBank"},{"id":"q18_a2","text":"VIB Bank"},{"id":"q18_a3","text":"MB Bank"}]},{"id":"q19","topic":"Tối ưu vận hành","question":"Trong trường hợp cửa hàng kê khai thuế theo phương pháp trực tiếp, liệu có thể sử dụng KiotViet để phát hành hóa đơn điện tử không?","answers":[{"id":"q19_a1","text":"Có hỗ trợ cả phương pháp khấu trừ và phương pháp trực tiếp"},{"id":"q19_a2","text":"Chỉ hỗ trợ phương pháp khấu trừ, chưa hỗ trợ phương pháp trực tiếp"},{"id":"q19_a3","text":"Chưa hỗ trợ phát hành hóa đơn điện tử từ KiotViet"}]},{"id":"q20","topic":"Tối ưu vận hành","question":"Trong ngành hàng đồ ăn và đồ uống, cửa hàng có thể thiết lập mức thuế VAT khác nhau (8% cho đồ ăn và 10% cho đồ uống có cồn) trên phần mềm KiotViet không?","answers":[{"id":"q20_a1","text":"Cửa hàng có thể thiết lập VAT 8% cho đồ ăn và 10% cho đồ uống có cồn"},{"id":"q20_a2","text":"Chỉ hỗ trợ VAT 8%"},{"id":"q20_a3","text":"Chỉ hỗ trợ VAT 10%"}]},{"id":"q21","topic":"Tối ưu vận hành","question":"Sau khi bật tính năng Quản lý Thuế, cửa hàng có thể thực hiện những thao tác nào để thay đổi thuế suất cho sản phẩm hàng hóa?","answers":[{"id":"q21_a1","text":"Chính sửa thuế suất thủ công cho từng hàng hóa"},{"id":"q21_a2","text":"Lựa chọn nhiều hàng hóa sau đó thực hiện thay đổi thuế suất hàng loạt"},{"id":"q21_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q22","topic":"Tối ưu vận hành","question":"Để ghi nhận thông tin đặt bàn của khách hàng, cửa hàng cần thực hiện thao tác trên màn hình nào trong phần mềm KiotViet FnB?","answers":[{"id":"q22_a1","text":"Lễ tân"},{"id":"q22_a2","text":"Thu ngân"},{"id":"q22_a3","text":"Chưa hỗ trợ"}]},{"id":"q23","topic":"Tối ưu vận hành","question":"Trong ngành hàng dịch vụ, tính năng nào trên KiotViet giúp cửa hàng quản lý và giám sát thu chi tiền mặt chi tiết theo từng ca làm việc để tránh thất thoát?","answers":[{"id":"q23_a1","text":"Kết ca"},{"id":"q23_a2","text":"Quản lý nhân viên"},{"id":"q23_a3","text":"Sổ quỹ"}]},{"id":"q24","topic":"Tối ưu vận hành","question":"Trong nhà hàng, thao tác đóng / mở ca trên KiotViet có thể hoạt động trên những loại thiết bị nào?","answers":[{"id":"q24_a1","text":"Trên máy tính (Màn hình thu ngân)"},{"id":"q24_a2","text":"Trên điện thoại (App nhân viên nhà hàng)"},{"id":"q24_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q25","topic":"Tối ưu quản lý","question":"Trong ngành FNB, loại hàng hóa nào có thể được quản lý tồn kho trên phần mềm KiotViet FNB?","answers":[{"id":"q25_a1","text":"Hàng hóa thường"},{"id":"q25_a2","text":"Hàng combo đóng gói"},{"id":"q25_a3","text":"Hàng dịch vụ"}]},{"id":"q26","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, loại hàng hóa nào có thể được thiết lập làm món thêm (như đường, đá, hoặc topping) trên phần mềm KiotViet FNB?","answers":[{"id":"q26_a1","text":"Hàng hóa thường"},{"id":"q26_a2","text":"Hàng combo đóng gói"},{"id":"q26_a3","text":"Hàng dịch vụ"}]},{"id":"q27","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, làm thế nào để thêm mới một loại Hàng hóa thường (như lon Pepsi) trên phần mềm KiotViet FNB?","answers":[{"id":"q27_a1","text":"Chỉ có thể thêm mới trên Màn hình Quản lý"},{"id":"q27_a2","text":"Chỉ có thể thêm mới trên Màn hình Thu ngân"},{"id":"q27_a3","text":"Có thể thêm mới trên cả Màn hình quản lý và Màn hình thu ngân"}]},{"id":"q28","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, để tạo món Cà phê muối với các tùy chọn kích cỡ S, M, L, nhân viên cần sử dụng tính năng nào trên KiotViet FNB?","answers":[{"id":"q28_a1","text":"Thuộc tính"},{"id":"q28_a2","text":"Đơn vị tính"},{"id":"q28_a3","text":"Nhóm hàng"}]},{"id":"q29","topic":"Tối ưu quản lý","question":"Trong một quán karaoke, loại hàng hóa nào phù hợp để tính tiền giờ hát trên phần mềm KiotViet FNB?","answers":[{"id":"q29_a1","text":"Hàng hóa thường"},{"id":"q29_a2","text":"Hàng dịch vụ"},{"id":"q29_a3","text":"Hàng chế biến"}]},{"id":"q30","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, loại hàng hóa nào phù hợp để quản lý định lượng nguyên liệu (như cà phê bột, sữa) khi pha chế một cốc cà phê?","answers":[{"id":"q30_a1","text":"Hàng hóa thường"},{"id":"q30_a2","text":"Hàng dịch vụ"},{"id":"q30_a3","text":"Hàng chế biến"}]},{"id":"q31","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, làm thế nào để cập nhật giá bán của nhiều sản phẩm cùng lúc trên phần mềm KiotViet FNB?","answers":[{"id":"q31_a1","text":"Sử dụng tính năng Thiết lập giá, chỉ có trên Màn hình quản lý"},{"id":"q31_a2","text":"Sử dụng tính năng Thiết lập giá, chỉ có trên Màn hình thu ngân"},{"id":"q31_a3","text":"Sử dụng tính năng Thiết lập giá, có trên Màn hình quản lý và Màn hình thu ngân"}]},{"id":"q32","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, màn hình thu ngân trên KiotViet FNB hỗ trợ những hình thức trả hàng nào?","answers":[{"id":"q32_a1","text":"Trả hàng theo hóa đơn"},{"id":"q32_a2","text":"Trả hàng nhanh"},{"id":"q32_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q33","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, làm thế nào để thêm thông tin của 10 Nhà cung cấp vào hệ thống quản lý KiotViet?","answers":[{"id":"q33_a1","text":"Chỉ có thể thêm mới lần lượt từng Nhà cung cấp trên phần mềm"},{"id":"q33_a2","text":"Chỉ có thể tải mẫu excel từ KiotViet, cập thông tin và import lên KiotViet"},{"id":"q33_a3","text":"Có thể thêm mới lần lượt từng Nhà cung cấp trên phần mềm hoặc tải mẫu excel từ KiotViet, cập thông tin và import lên KiotViet"}]},{"id":"q34","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, khi xem chi tiết thông tin của một khách hàng, nhân viên có thể theo dõi những thông tin nào?","answers":[{"id":"q34_a1","text":"Lịch sử giao dịch"},{"id":"q34_a2","text":"Công nợ"},{"id":"q34_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q35","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, phần mềm KiotViet hỗ trợ những phương pháp tính lương nào cho nhân viên?","answers":[{"id":"q35_a1","text":"Chỉ hỗ trợ tính lương theo giờ"},{"id":"q35_a2","text":"Chỉ hỗ trợ tính lương theo ca"},{"id":"q35_a3","text":"Hỗ trợ tùy chọn tính lương cố định, lương theo giờ, theo ca, theo ngày công chuẩn"}]},{"id":"q36","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, làm thế nào để nhân viên có thể tạo phiếu thu trên phần mềm KiotViet?","answers":[{"id":"q36_a1","text":"Lập phiếu thu trên màn hình thu ngân"},{"id":"q36_a2","text":"Lập phiếu thu trên màn hình quản lý trong mục Sổ quỹ"},{"id":"q36_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q37","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, báo cáo nào trên KiotViet có thể hiển thị lợi nhuận thuần của cửa hàng sau khi đã trừ đi tất cả các khoản chi phí?","answers":[{"id":"q37_a1","text":"Báo cáo bán hàng"},{"id":"q37_a2","text":"Báo cáo hàng hóa"},{"id":"q37_a3","text":"Báo cáo tài chính"}]},{"id":"q38","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, báo cáo nào trên App Quản lý Nhà hàng và App Nhân viên cung cấp thông tin chi tiết về Thu chi, Hàng hóa, Phòng bàn, Kênh bán và CTKM?","answers":[{"id":"q38_a1","text":"Báo cáo lợi nhuận"},{"id":"q38_a2","text":"Báo cáo cuối ngày"},{"id":"q38_a3","text":"Báo cáo tài chính"}]},{"id":"q39","topic":"Tối ưu quản lý","question":"Trong một quán cà phê, nếu nhân viên được phân quyền bồi bàn, những đặc điểm nào về chức năng sẽ xuất hiện trên màn hình thu ngân và app KiotViet Nhân viên?","answers":[{"id":"q39_a1","text":"Có nút \"Yêu cầu thanh toán\""},{"id":"q39_a2","text":"Không có nút \"Thanh toán\""},{"id":"q39_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q40","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, làm thế nào để thiết lập thực đơn điện tử trên phần mềm KiotViet FNB?","answers":[{"id":"q40_a1","text":"Thiết lập Thực đơn điện tử trong mục Bán online > Website bán hàng"},{"id":"q40_a2","text":"Thiết lập Thực đơn điện tử trong mục Bán online > Bán hàng Zalo"},{"id":"q40_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q41","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, làm thế nào để khách hàng có thể gọi món thông qua thực đơn điện tử?","answers":[{"id":"q41_a1","text":"Quét mã QR gắn với bàn để mở menu thực đơn điện tử và gọi món"},{"id":"q41_a2","text":"Quét mã QR để tải ứng dụng HiKiot để gọi món"},{"id":"q41_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q42","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, tính năng website trực tuyến trên KiotViet hỗ trợ những lợi ích nào cho cửa hàng?","answers":[{"id":"q42_a1","text":"Đăng tải thông tin hình ảnh, địa chỉ, nội dung giới thiệu cửa hàng"},{"id":"q42_a2","text":"Nhận gọi món từ xa"},{"id":"q42_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q43","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, tính năng Phân tích thông minh trên app KiotViet Quản lý Nhà hàng có thể hỗ trợ cửa hàng như thế nào?","answers":[{"id":"q43_a1","text":"Phân loại thực đơn tự động, giúp tập trung nguồn lực để tối ưu thực đơn và tăng hiệu quả chiến lược kinh doanh"},{"id":"q43_a2","text":"Dự toán các khoản thu chi, tính toán khả năng thiếu hoặc dư nguồn tiền kinh doanh để lên kế hoạch xử lý kịp thời"},{"id":"q43_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q44","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, phần mềm KiotViet FNB hỗ trợ những hình thức khuyến mại nào?","answers":[{"id":"q44_a1","text":"Khuyến mại Đơn hàng từ 2.000.000 đồng giảm giá 10%."},{"id":"q44_a2","text":"Mua Pizza size lớn sẽ được giảm 50% giá cho Salad đi kèm."},{"id":"q44_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q45","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, mã giảm giá Voucher trên KiotViet FNB có thể áp dụng theo những hình thức nào?","answers":[{"id":"q45_a1","text":"Theo %"},{"id":"q45_a2","text":"Theo VNĐ"},{"id":"q45_a3","text":"Có thể giảm theo % hoặc VNĐ"}]},{"id":"q46","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, để thêm mới đợt phát hành Voucher, nhân viên cần thực hiện thao tác nào trong phần thiết lập?","answers":[{"id":"q46_a1","text":"Thiết lập > Thiết lập Voucher"},{"id":"q46_a2","text":"Thiết lập > Quản lý khuyến mại"},{"id":"q46_a3","text":"Thiết lập > Quản lý thu khác"}]},{"id":"q47","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, thông tin về việc khách hàng thanh toán bằng điểm có thể được theo dõi trên những báo cáo nào?","answers":[{"id":"q47_a1","text":"Báo cáo cuối ngày"},{"id":"q47_a2","text":"Báo cáo tài chính"},{"id":"q47_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q48","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, những loại tin nhắn ZNS nào có thể được gửi từ phần mềm KiotViet FNB?","answers":[{"id":"q48_a1","text":"Xác nhận đăng ký hội viên thành công"},{"id":"q48_a2","text":"Xác nhận đặt bàn thành công"},{"id":"q48_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q49","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, Facebook POS hỗ trợ quản lý tin nhắn và bình luận từ Fanpage như thế nào?","answers":[{"id":"q49_a1","text":"Đồng bộ tin nhắn và bình luận từ Fanpage về quản lý tập trung."},{"id":"q49_a2","text":"\"Cho phép thiết lập tự động ẩn bình luận trên page\""},{"id":"q49_a3","text":"Cả 2 phương án còn lại đều đúng"}]},{"id":"q50","topic":"Thúc đẩy doanh thu","question":"Trong một quán cà phê, việc liên kết KiotViet với ShopeeFood mang lại những lợi ích gì cho cửa hàng?","answers":[{"id":"q50_a1","text":"Khi khách đặt món trên ShopeeFood, đơn hàng sẽ tự động cập nhật lên phần mềm KiotViet ngay lập tức, không cần nhập lại thủ công"},{"id":"q50_a2","text":"Khi có đơn hàng mới từ ShopeeFood, phần mềm tự động trích xuất thông tin khách hàng từ đơn đặt hàng để quản lý trên KiotViet"},{"id":"q50_a3","text":"Cả 2 phương án còn lại đều đúng"}]}];
+    const answerKey = {"q1":"q1_a1","q2":"q2_a1","q3":"q3_a1","q4":"q4_a3","q5":"q5_a3","q6":"q6_a2","q7":"q7_a3","q8":"q8_a1","q9":"q9_a1","q10":"q10_a2","q11":"q11_a3","q12":"q12_a3","q13":"q13_a3","q14":"q14_a1","q15":"q15_a1","q16":"q16_a1","q17":"q17_a3","q18":"q18_a3","q19":"q19_a1","q20":"q20_a1","q21":"q21_a3","q22":"q22_a1","q23":"q23_a3","q24":"q24_a3","q25":"q25_a1","q26":"q26_a1","q27":"q27_a3","q28":"q28_a1","q29":"q29_a2","q30":"q30_a3","q31":"q31_a3","q32":"q32_a3","q33":"q33_a3","q34":"q34_a3","q35":"q35_a3","q36":"q36_a3","q37":"q37_a3","q38":"q38_a2","q39":"q39_a3","q40":"q40_a3","q41":"q41_a1","q42":"q42_a3","q43":"q43_a3","q44":"q44_a3","q45":"q45_a3","q46":"q46_a2","q47":"q47_a3","q48":"q48_a3","q49":"q49_a3","q50":"q50_a3"}; // Direct object, no encoding
+    const feedbackMessages = { incorrect: `Rất tiếc, bạn đã sai. Bạn hãy tham khảo thêm tài liệu tại <a href='https://sites.google.com/view/thuvienkiotviet/' target='_blank' class='text-kv-blue underline'>Thư viện KiotViet</a> nhé!`, fail: `Cần cố gắng hơn! Bạn hãy tham khảo thêm tài liệu tại <a href='https://sites.google.com/view/thuvienkiotviet/' target='_blank' class='text-kv-blue underline'>Thư viện KiotViet</a> nhé!` };
+    
+    // --- State & Global Variables ---
+    let currentQuestionIndex, score, questionsForGame, gameResults, selectedMode, userInfo;
+    
+    const elements = {};
+
+    function setupHTML() {
+        elements.startScreen = document.getElementById('start-screen');
+        elements.quizContainer = document.getElementById('quiz-container');
+        elements.resultArea = document.getElementById('result-area');
+        elements.reviewScreen = document.getElementById('review-screen');
+        elements.certificateScreen = document.getElementById('certificate-screen');
+
+        elements.startScreen.innerHTML = `
+             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-10 mx-auto mb-6">
+             <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 text-center mb-2">${document.title}</h1>
+             <p class="text-slate-600 text-center mb-6">Vui lòng nhập thông tin và chọn chế độ chơi</p>
+             <div class="space-y-4 mb-6">
+                <div><label for="name-input" class="block text-sm font-medium text-slate-700 mb-1">Họ và tên</label><input type="text" id="name-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg focus:ring-2 focus:ring-kv-blue" placeholder="Nguyễn Văn A"></div>
+                <div><label for="department-input" class="block text-sm font-medium text-slate-700 mb-1">Phòng ban</label><input type="text" id="department-input" class="w-full p-3 bg-white/80 border border-slate-300 rounded-lg" placeholder="TSHNI99"></div>
+             </div>
+             <div id="mode-selection-area" class="space-y-6"></div>
+             <p id="error-message" class="text-red-500 text-center mt-4 h-5"></p>
+             <button id="start-btn" class="w-full mt-4 btn btn-blue text-lg">Bắt đầu</button>`;
+        
+        elements.quizContainer.innerHTML = `
+            <div class="flex justify-between items-center mb-4">
+                <div class="text-sm font-semibold text-slate-600"><span id="question-count"></span></div>
+                <div id="score-display" class="text-lg font-bold text-kv-blue">Điểm: 0</div>
+            </div>
+            <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
+                <div id="progress-bar" class="bg-kv-blue h-2.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+            </div>
+            <p id="question-text" class="text-xl font-semibold text-slate-800 mb-6 min-h-[84px]"></p>
+            <div id="answers-container" class="space-y-3"></div>
+            <div id="feedback-area" class="mt-6 text-center"></div>
+            <button id="next-btn" class="hidden w-full mt-6 btn btn-green text-lg">Câu tiếp theo</button>`;
+
+        elements.resultArea.innerHTML = `
+            <h2 id="result-title" class="text-3xl font-bold text-slate-800 mb-4">Hoàn thành!</h2>
+            <p id="score-text" class="text-xl text-slate-600 mb-6"></p>
+            <div id="fail-message" class="hidden text-lg text-red-600 font-semibold mb-6">${feedbackMessages.fail}</div>
+            <div class="flex flex-col sm:flex-row justify-center gap-4">
+                 <button id="review-btn" class="btn btn-slate">Xem lại đáp án</button>
+                 <button id="certificate-btn" class="hidden btn btn-green">Xem giấy khen</button>
+                 <button id="restart-btn" class="btn btn-blue">Chơi lại</button>
+            </div>`;
+        
+        elements.reviewScreen.innerHTML = `
+            <h2 class="text-2xl font-bold text-slate-800 text-center mb-6">Xem Lại Kết Quả</h2>
+            <div id="review-container" class="space-y-6 max-h-[60vh] overflow-y-auto pr-2"></div>
+            <div class="mt-8 flex flex-col sm:flex-row justify-center gap-4">
+                <button id="certificate-btn-from-review" class="hidden btn btn-green">Xem giấy khen</button>
+                <button id="restart-from-review-btn" class="btn btn-blue">Chơi lại</button>
+            </div>`;
+
+        elements.certificateScreen.innerHTML = `
+            <div id="certificate-wrapper">
+                <div id="certificate-content">
+                    <div class="text-center">
+                        <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-8 sm:h-10 mx-auto mb-4">
+                        <h1 class="text-2xl sm:text-4xl font-bold text-kv-blue" style="font-family: 'Times New Roman', serif;">GIẤY CHỨNG NHẬN</h1>
+                        <p class="text-base sm:text-lg mt-4">Trân trọng trao cho</p>
+                        <p id="cert-name" class="text-xl sm:text-3xl font-bold text-slate-800 my-4 border-b-2 border-slate-300 pb-2"></p>
+                        <p id="cert-department" class="text-base sm:text-lg font-medium text-slate-600 -mt-2 mb-4"></p>
+                        <p class="text-base sm:text-lg">Đã xuất sắc hoàn thành bài kiểm tra</p>
+                        <p id="cert-quiz-name" class="text-lg sm:text-xl font-semibold my-2 text-slate-700"></p>
+                        <p class="text-base sm:text-lg">Với số điểm</p>
+                        <p id="cert-score" class="text-3xl sm:text-4xl font-bold text-green-600 my-4"></p>
+                        <p class="text-xs sm:text-sm text-slate-500">Ngày hoàn thành: <span id="cert-date"></span></p>
+                    </div>
+                </div>
+                <div class="flex flex-col sm:flex-row justify-center gap-4 mt-4">
+                    <button id="review-btn-from-cert" class="btn btn-slate">Xem lại đáp án</button>
+                    <button id="close-cert-btn" class="btn btn-blue">Đóng</button>
+                </div>
+            </div>`;
+    }
+
+    function cacheElements() {
+        const ids = [
+            'name-input', 'department-input', 'mode-selection-area', 'error-message', 'start-btn',
+            'question-count', 'score-display', 'progress-bar', 'question-text', 'answers-container',
+            'feedback-area', 'next-btn', 'result-title', 'score-text', 'fail-message', 'review-btn',
+            'certificate-btn', 'restart-btn', 'review-container', 'certificate-btn-from-review',
+            'restart-from-review-btn', 'certificate-wrapper', 'cert-name', 'cert-department',
+            'cert-quiz-name', 'cert-score', 'cert-date', 'review-btn-from-cert', 'close-cert-btn'
+        ];
+        ids.forEach(id => {
+            elements[id.replace(/-(\w)/g, (m, p1) => p1.toUpperCase())] = document.getElementById(id);
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setupHTML();
+        cacheElements();
+        if (!answerKey || !quizDataForClient) {
+            document.body.innerHTML = `<p style='font-family: sans-serif; text-align: center; margin-top: 50px; font-size: 1.2rem; color: #b91c1c;'>Lỗi nghiêm trọng: Dữ liệu trò chơi bị hỏng.</p>`;
+            return;
+        }
+        setupModeSelection();
+        addEventListeners();
+        resetGame();
+    });
+    
+    function setupModeSelection() {
+        const topics = [...new Set(quizDataForClient.map(q => q.topic))].filter(Boolean);
+        let html = `
+            <div id="random-mode-group">
+                <p class="font-semibold text-slate-800 text-center mb-3">Chơi ngẫu nhiên</p>
+                <div class="flex flex-wrap justify-center gap-3">
+                    <button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="random" data-count="5">5 câu</button>
+                    <button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="random" data-count="30">30 câu</button>
+                    <button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="random" data-count="all">Toàn bộ</button>
+                </div>
+            </div>`;
+        if (topics.length > 0) {
+            html += `
+                <div id="topic-mode-group" class="mt-6">
+                    <p class="font-semibold text-slate-800 text-center mb-3">Chơi theo chủ đề</p>
+                    <div class="flex flex-wrap justify-center gap-3">
+                        ${topics.map(topic => `<button class="mode-btn bg-white border border-slate-300 text-slate-700 font-semibold py-2 px-5 rounded-lg" data-mode="topic" data-topic="${topic}">${topic}</button>`).join('')}
+                    </div>
+                </div>`;
+        }
+        elements.modeSelectionArea.innerHTML = html;
+        
+        document.querySelectorAll('.mode-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('btn-selected-green'));
+                e.currentTarget.classList.add('btn-selected-green');
+                selectedMode = e.currentTarget.dataset;
+            });
+        });
+    }
+
+    function addEventListeners() {
+        elements.startBtn.addEventListener('click', startGame);
+        elements.nextBtn.addEventListener('click', nextQuestion);
+        elements.restartBtn.addEventListener('click', resetGame);
+        elements.restartFromReviewBtn.addEventListener('click', resetGame);
+        elements.reviewBtn.addEventListener('click', showReview);
+        elements.certificateBtn.addEventListener('click', showCertificate);
+        elements.closeCertBtn.addEventListener('click', closeCertificate);
+        elements.certificateBtnFromReview.addEventListener('click', showCertificate);
+        elements.reviewBtnFromCert.addEventListener('click', showReview);
+        document.addEventListener('fullscreenchange', () => {
+            if (!document.fullscreenElement && !elements.certificateScreen.classList.contains('hidden')) {
+                showScreen('resultArea');
+            }
+        });
+    }
+
+    function showScreen(screenKey) {
+        ['startScreen', 'quizContainer', 'resultArea', 'reviewScreen', 'certificateScreen'].forEach(key => {
+            elements[key].classList.add('hidden');
+        });
+        elements[screenKey].classList.remove('hidden');
+        document.querySelector('main').style.display = (screenKey === 'certificateScreen') ? 'none' : 'block';
+    }
+
+    function startGame() {
+        userInfo = { name: elements.nameInput.value.trim(), department: elements.departmentInput.value.trim() };
+        if (!userInfo.name || !userInfo.department) {
+            elements.errorMessage.innerText = 'Vui lòng điền đầy đủ Họ và tên và Phòng ban.'; return;
+        }
+        if (!selectedMode || !selectedMode.mode) {
+            elements.errorMessage.innerText = 'Vui lòng chọn một chế độ chơi.'; return;
+        }
+        elements.errorMessage.innerText = '';
+        prepareQuestions();
+        if (questionsForGame.length === 0) {
+            elements.errorMessage.innerText = 'Không có câu hỏi cho chủ đề này.'; return;
+        }
+        showScreen('quizContainer');
+        showQuestion();
+    }
+
+    function prepareQuestions() {
+        let source = [...quizDataForClient];
+        if (selectedMode.mode === 'topic') {
+            source = source.filter(q => q.topic === selectedMode.topic).slice(0, 10);
+        }
+        source = shuffleArray(source);
+        if (selectedMode.count && selectedMode.count !== 'all') {
+            questionsForGame = source.slice(0, parseInt(selectedMode.count, 10));
+        } else { questionsForGame = source; }
+    }
+
+    function showQuestion() {
+        elements.feedbackArea.innerHTML = '';
+        elements.nextBtn.classList.add('hidden');
+        const q = questionsForGame[currentQuestionIndex];
+        elements.questionCount.innerText = `Câu ${currentQuestionIndex + 1}/${questionsForGame.length}`;
+        elements.progressBar.style.width = `${((currentQuestionIndex + 1) / questionsForGame.length) * 100}%`;
+        elements.questionText.innerText = q.question;
+        elements.answersContainer.innerHTML = '';
+        shuffleArray([...q.answers]).forEach(ans => {
+            const btn = document.createElement('button');
+            btn.innerHTML = `<span>${ans.text}</span>`;
+            btn.className = 'w-full text-left p-4 bg-white/80 border-2 border-slate-300 rounded-lg hover:bg-blue-100 hover:border-kv-blue transition-all duration-200 flex items-center';
+            btn.dataset.answerId = ans.id;
+            btn.dataset.questionId = q.id;
+            btn.onclick = selectAnswer;
+            elements.answersContainer.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(e) {
+        const selectedBtn = e.currentTarget;
+        const { questionId, answerId } = selectedBtn.dataset;
+        const isCorrect = answerId === answerKey[questionId];
+
+        gameResults.push({
+            question: questionsForGame[currentQuestionIndex],
+            selectedAnswerId: answerId,
+            correctAnswerId: answerKey[questionId],
+            isCorrect
+        });
+
+        const feedback = document.createElement('p');
+        feedback.className = 'font-medium text-lg';
+        if (isCorrect) {
+            score++;
+            elements.scoreDisplay.innerText = `Điểm: ${score}`;
+            feedback.innerHTML = '🎉 Chúc mừng bạn, đáp án hoàn toàn chính xác!';
+            feedback.className += ' text-green-600';
+            selectedBtn.classList.add('correct');
+        } else {
+            feedback.innerHTML = feedbackMessages.incorrect;
+            feedback.className += ' text-red-500';
+            selectedBtn.classList.add('incorrect');
+        }
+        elements.feedbackArea.appendChild(feedback);
+        Array.from(elements.answersContainer.children).forEach(button => button.onclick = null);
+        elements.nextBtn.classList.remove('hidden');
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        (currentQuestionIndex < questionsForGame.length) ? showQuestion() : showScore();
+    }
+
+    function showScore() {
+        const percentage = (score / questionsForGame.length) * 100;
+        elements.scoreText.innerText = `Bạn đã trả lời đúng ${score}/${questionsForGame.length} câu (${percentage.toFixed(0)}%)`;
+        const passed = percentage >= 80;
+        elements.resultTitle.innerText = passed ? "Xuất sắc!" : "Hoàn thành!";
+        elements.failMessage.classList.toggle('hidden', passed);
+        elements.certificateBtn.classList.toggle('hidden', !passed);
+        elements.certificateBtnFromReview.classList.toggle('hidden', !passed);
+        if (passed) confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        showScreen('resultArea');
+    }
+
+    function showReview() {
+        const correct = gameResults.filter(r => r.isCorrect);
+        const incorrect = gameResults.filter(r => !r.isCorrect);
+
+        const render = (results, title, isCorrectSection) => {
+            if (results.length === 0) return '';
+            let html = `<div class="mb-8"><h3 class="text-xl font-bold ${isCorrectSection ? 'text-green-600' : 'text-red-600'} border-b-2 pb-2 mb-4">${title} (${results.length})</h3><div class="space-y-4">`;
+            results.forEach(r => {
+                html += `<div class="p-4 bg-white/50 rounded-lg shadow-sm">
+                    <p class="font-semibold text-slate-800 mb-3">${r.question.question}</p>
+                    <div class="space-y-2 text-sm">`;
+                r.question.answers.forEach(ans => {
+                    let classes = 'review-answer flex items-center p-3 rounded-md border border-slate-200';
+                    let icon = '';
+                    if (isCorrectSection && ans.id === r.correctAnswerId) {
+                        classes += ' is-correct-answer';
+                        icon = `<i class="fas fa-check-circle text-green-500 mr-3"></i>`;
+                    } else if (!isCorrectSection && ans.id === r.selectedAnswerId) {
+                        classes += ' is-selected-incorrect';
+                        icon = `<i class="fas fa-times-circle text-red-500 mr-3"></i>`;
+                    }
+                    html += `<div class="${classes}">${icon}<span>${ans.text}</span></div>`;
+                });
+                html += `</div></div>`;
+            });
+            return html + '</div></div>';
+        };
+        elements.reviewContainer.innerHTML = render(correct, 'Các câu trả lời đúng', true) + render(incorrect, 'Các câu cần xem lại', false);
+        showScreen('reviewScreen');
+    }
+
+    function showCertificate() {
+        elements.certName.innerText = userInfo.name;
+        elements.certDepartment.innerText = `Phòng ban: ${userInfo.department}`;
+        elements.certQuizName.innerText = document.title;
+        elements.certScore.innerText = `${score}/${questionsForGame.length}`;
+        elements.certDate.innerText = new Date().toLocaleDateString('vi-VN');
+        showScreen('certificateScreen');
+        if (elements.certificateWrapper.requestFullscreen) elements.certificateWrapper.requestFullscreen();
+        else if (elements.certificateWrapper.webkitRequestFullscreen) elements.certificateWrapper.webkitRequestFullscreen();
+    }
+
+    function closeCertificate() {
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+        }
+        showScreen('resultArea');
+    }
+    
+    function resetGame() {
+        currentQuestionIndex = 0; score = 0;
+        gameResults = []; questionsForGame = []; selectedMode = {}; userInfo = {};
+        if (document.querySelectorAll('.mode-btn').length > 0) {
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.remove('btn-selected-green'));
+        }
+        if(elements.scoreDisplay) elements.scoreDisplay.innerText = `Điểm: 0`;
+        if(elements.progressBar) elements.progressBar.style.width = '0%';
+        showScreen('startScreen');
+    }
+
+    function shuffleArray(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }</script></body></html>
