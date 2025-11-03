@@ -378,11 +378,15 @@
         const percentage = (score / questionsForGame.length) * 100;
         elements.scoreText.innerText = `Bạn đã trả lời đúng ${score}/${questionsForGame.length} câu (${percentage.toFixed(0)}%)`;
         const passed = percentage >= 80;
+        
         elements.resultTitle.innerText = passed ? "Xuất sắc!" : "Hoàn thành!";
-        elements.failMessage.classList.toggle('hidden', !passed);
+        elements.failMessage.classList.toggle('hidden', passed);
         elements.certificateBtn.classList.toggle('hidden', !passed);
         elements.certificateBtnFromReview.classList.toggle('hidden', !passed);
-        if (passed) confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        
+        if (passed) {
+            confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+        }
         showScreen('resultArea');
     }
 
@@ -399,22 +403,24 @@
                     <div class="space-y-2 text-sm">`;
                 
                 // --- START: MODIFICATION ---
-                // Find the single answer the user selected
-                const selectedAnswer = r.question.answers.find(ans => ans.id === r.selectedAnswerId);
-
-                if (selectedAnswer) {
+                r.question.answers.forEach(ans => {
                     let classes = 'review-answer flex items-center p-3 rounded-md border border-slate-200';
                     let icon = '';
+                    const isSelectedAnswer = ans.id === r.selectedAnswerId;
                     
-                    if (r.isCorrect) {
-                        classes += ' is-correct-answer';
-                        icon = `<i class="fas fa-check-circle text-green-500 mr-3"></i>`;
-                    } else {
-                        classes += ' is-selected-incorrect';
-                        icon = `<i class="fas fa-times-circle text-red-500 mr-3"></i>`;
+                    if (isSelectedAnswer) {
+                        if (r.isCorrect) {
+                            classes += ' is-correct-answer';
+                            icon = `<i class="fas fa-check-circle text-green-500 mr-3"></i>`;
+                        } else {
+                            classes += ' is-selected-incorrect';
+                            icon = `<i class="fas fa-times-circle text-red-500 mr-3"></i>`;
+                        }
                     }
-                    html += `<div class="${classes}">${icon}<span>Bạn đã chọn: ${selectedAnswer.text}</span></div>`;
-                }
+                    // No special styling for non-selected answers.
+
+                    html += `<div class="${classes}">${icon}<span>${ans.text}</span></div>`;
+                });
                 // --- END: MODIFICATION ---
 
                 html += `</div></div>`;
@@ -423,18 +429,22 @@
             return html;
         };
         
-        // Show incorrect answers first
+        // Show incorrect answers first, then correct ones
         elements.reviewContainer.innerHTML = render(incorrect, 'Câu trả lời sai', false) + render(correct, 'Câu trả lời đúng', true);
         showScreen('reviewScreen');
     }
 
     function showCertificate() {
         const now = new Date();
+        const percentage = (score / questionsForGame.length) * 100;
+
         elements.certName.innerText = userInfo.name;
         elements.certDepartment.innerText = userInfo.department;
         elements.certQuizName.innerText = document.title;
         elements.certGameMode.innerText = gameModeName; 
-        elements.certScore.innerText = `${score}/${questionsForGame.length}`;
+        // --- START: MODIFICATION ---
+        elements.certScore.innerText = `${percentage.toFixed(0)}% (${score}/${questionsForGame.length})`;
+        // --- END: MODIFICATION ---
         elements.certDate.innerText = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
         showScreen('certificateScreen');
         try {
