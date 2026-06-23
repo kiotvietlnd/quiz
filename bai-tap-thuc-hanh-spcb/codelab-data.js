@@ -54,7 +54,7 @@ const CODELAB_DATA = [
           "6. Tại phần Đơn vị tính: Nhập đơn vị cơ bản là Túi.",
           "7. Tại phần Thuộc tính: Nhấn Tạo thuộc tính, nhập tên thuộc tính là \"Trọng lượng\". Nhập các giá trị thuộc tính: \"Túi 2kg\" (nhấn Enter), \"Túi 3kg\" (nhấn Enter). Nhấn Lưu."
         ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị rõ các pHàng hóa cùng loại của Nước giặt OMO Matic vừa tạo."
+        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị rõ các Hàng hóa cùng loại của Nước giặt OMO Matic vừa tạo."
       },
       {
         title: "Bài tập 3: Nhập hàng và ghi nhận công nợ",
