@@ -530,6 +530,19 @@
 
                 if (!name) return;
 
+                // TỰ ĐỘNG BỎ QUA NẾU LÀ DÒNG TIÊU ĐỀ BỊ LẪN VÀO DATA
+                if (
+                    name.toLowerCase() === 'họ và tên' || 
+                    name.toLowerCase() === 'studentname' || 
+                    timestamp.toLowerCase() === 'ngày' || 
+                    timestamp.toLowerCase() === 'timestamp' ||
+                    dept.toLowerCase() === 'phòng ban' ||
+                    course.toLowerCase() === 'khóa' ||
+                    course.toLowerCase() === 'khoá'
+                ) {
+                    return;
+                }
+
                 // 1. Lưu bản ghi dữ liệu phẳng
                 rawParsedEntries.push({
                     ngay: timestamp,
@@ -1061,7 +1074,7 @@
             const card = document.createElement('div');
             card.className = "glass-panel p-6 md:p-8 rounded-3xl border border-white/60 hover:shadow-xl transition-all relative flex flex-col gap-5 mb-6";
 
-            const parsedDept = (!deptName || deptName.toUpperCase().includes("CHƯA BIẾT PHÒNG BAN")) ? "Chưa phân bộ phận" : deptName;
+            const parsedDept = (!deptName || deptName.toUpperCase().includes("CHƯA BIẾT PHòng ban")) ? "Chưa phân bộ phận" : deptName;
 
             const filterClassVal = document.getElementById('filterClass').value;
             const filterSessionVal = document.getElementById('filterSession').value;
