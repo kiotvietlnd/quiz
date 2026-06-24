@@ -310,343 +310,183 @@
     </div>
 
     <script>
-        // Cấu trúc ĐỀ BÀI TĨNH của Buổi 1 (Bảo toàn nội dung)
+        <script>
+        // ==========================================
+        // CẤU HÌNH API GOOGLE SHEETS (DÀNH CHO GIẢNG VIÊN)
+        // ==========================================
+        const API_URL = "https://script.google.com/macros/s/AKfycbxsF85hgDOmwvQ_vFo4WpniH51nUhOJ0__Vail4p4JHJvl18g6-64w5eAQRLm4MBgXzLQ/exec";
+
         const SESSION_EXERCISES = [
-            { title: "Bài tập 1: Đăng ký gian hàng dùng thử", theory: ["1. Gian hàng dùng thử miễn phí có thời hạn bao nhiêu ngày?", "2. Tại sao BẮT BUỘC phải nhập mã 3670?"], requirements: ["1. Đăng ký mới một gian hàng Bán lẻ.", "2. Nhập mã giới thiệu."], instructions: ["1. Mở web KiotViet, nhấn Dùng thử miễn phí.", "2. Nhập mã giới thiệu 3670."] },
-            { title: "Bài tập 2: Thêm mới hàng hóa", theory: ["1. Tại sao cần thiết lập Thuộc tính?", "2. Bỏ trống Giá vốn ảnh hưởng gì?", "3. Đơn vị tính giúp ích gì?"], requirements: ["1. Thêm mới một sản phẩm thực tế với nhiều phân loại."], instructions: ["1. Vào menu Hàng hóa -> Danh sách.", "2. Nhấn + Tạo mới -> Hàng hóa."] },
-            { title: "Bài tập 3: Nhập hàng và ghi nhận công nợ", theory: ["1. Điều gì xảy ra nếu chưa nhấn Hoàn thành?", "2. Nhập từ NCC mới thì làm sao?", "3. Chưa thanh toán ngay, quản lý ở đâu?"], requirements: ["1. Tạo phiếu nhập hàng.", "2. Treo lại công nợ."], instructions: ["1. Vào Mua hàng -> Nhập hàng.", "2. Thêm NCC, nhập số lượng, tiền trả 0đ."] },
-            { title: "Bài tập 4: Bán hàng và thanh toán kết hợp", theory: ["1. Thanh toán nhiều phương thức mang lại lợi ích gì?", "2. Hóa đơn hoàn tất, dữ liệu nào thay đổi?"], requirements: ["1. Bán hàng cho Chị Lan.", "2. Thanh toán kết hợp 2 hình thức."], instructions: ["1. Mở màn hình Bán hàng.", "2. Chọn Thanh toán kết hợp."] },
-            { title: "Bài tập 5: Trả hàng và thu phí dịch vụ", theory: ["1. Phí trả hàng ghi nhận vào đâu?", "2. Liên kết hóa đơn gốc có lợi gì?"], requirements: ["1. Xử lý Chị Lan trả hàng.", "2. Thu phí 10,000đ."], instructions: ["1. Bấm Trả hàng, tìm hóa đơn gốc.", "2. Điền phí trả hàng 10,000đ."] },
-            { title: "Bài tập 6: Quản lý công nợ nhà cung cấp", theory: ["1. Thanh toán phiếu chi khác Điều chỉnh công nợ thế nào?", "2. Tại sao cần Khai báo công nợ ban đầu?"], requirements: ["1. Thanh toán nợ Unilever.", "2. Tạo công nợ đầu kỳ NCC mới."], instructions: ["1. Vào Nhà cung cấp, lập phiếu chi.", "2. Tạo NCC mới, bấm Điều chỉnh nợ."] },
-            { title: "Bài tập 7: Theo dõi báo cáo", theory: ["1. Xem Lợi nhuận gộp ở đâu?", "2. Xem Giá trị kho ở đâu?"], requirements: ["1. Xem báo cáo cuối ngày.", "2. Xem báo cáo hàng hóa."], instructions: ["1. Truy cập Báo cáo -> Cuối ngày.", "2. Truy cập Báo cáo -> Hàng hóa."] },
-            { title: "Bài tập 8: Kinh nghiệm tư vấn (Demo)", theory: ["1. Dùng 1 mã xuyên suốt có lợi gì?", "2. Thao tác nào thuyết phục khách nhất?", "3. Xem tab nào chứng minh tự động?"], requirements: ["1. Tra cứu lịch sử xuất - nhập - tồn."], instructions: ["1. Vào Danh sách hàng hóa, bấm Nước giặt.", "2. Xem tab Thẻ kho."] }
+            { title: "Bài tập 1: Đăng ký gian hàng dùng thử", theory: ["1. Gian hàng dùng thử miễn phí có thời hạn bao nhiêu ngày?", "2. Tại sao BẮT BUỘC phải nhập mã 3670?"], requirements: ["1. Đăng ký mới một gian hàng Bán lẻ.", "2. Nhập mã giới thiệu."], instructions: [] },
+            { title: "Bài tập 2: Thêm mới hàng hóa", theory: ["1. Tại sao cần thiết lập Thuộc tính?", "2. Bỏ trống Giá vốn ảnh hưởng gì?", "3. Đơn vị tính giúp ích gì?"], requirements: ["1. Thêm mới một sản phẩm."], instructions: [] },
+            { title: "Bài tập 3: Nhập hàng và ghi nhận công nợ", theory: ["1. Chưa nhấn Hoàn thành?", "2. NCC mới?", "3. Quản lý ở đâu?"], requirements: ["1. Tạo phiếu nhập.", "2. Treo công nợ."], instructions: [] },
+            { title: "Bài tập 4: Bán hàng và thanh toán kết hợp", theory: ["1. Thanh toán nhiều PT?", "2. Hóa đơn hoàn tất, dữ liệu nào đổi?"], requirements: ["1. Bán hàng cho Chị Lan.", "2. TT kết hợp."], instructions: [] },
+            { title: "Bài tập 5: Trả hàng và thu phí dịch vụ", theory: ["1. Phí trả hàng ghi ở đâu?", "2. Liên kết hóa đơn gốc?"], requirements: ["1. Xử lý trả hàng.", "2. Thu phí 10k."], instructions: [] },
+            { title: "Bài tập 6: Quản lý công nợ nhà cung cấp", theory: ["1. Phiếu chi khác Điều chỉnh?", "2. Khai báo ban đầu?"], requirements: ["1. TT Unilever.", "2. Nợ đầu kỳ."], instructions: [] },
+            { title: "Bài tập 7: Theo dõi báo cáo", theory: ["1. Lợi nhuận gộp?", "2. Giá trị kho?"], requirements: ["1. Báo cáo cuối ngày.", "2. Báo cáo HH."], instructions: [] },
+            { title: "Bài tập 8: Kinh nghiệm tư vấn (Demo)", theory: ["1. 1 mã xuyên suốt?", "2. Thao tác nào?", "3. Tab nào?"], requirements: ["1. Tra cứu Thẻ kho."], instructions: [] }
         ];
 
-        let globalStudentsData = {};
-        let rawParsedEntries = []; 
-        let currentActiveVersions = {};
-        let currentSlideIndices = {};
-        let lastSelectedStudentKey = "";
+        let globalStudentsData = {}; let rawParsedEntries = []; let currentFilteredEntries = [];
+        let currentActiveVersions = {}; let currentSlideIndices = {}; let lastSelectedStudentKey = "";
+        let uniqueClasses = []; let uniqueSessions = []; let uniqueDepts = []; let uniqueLessons = [];
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
 
-        let uniqueClasses = [];
-        let uniqueSessions = [];
-        let uniqueDepts = [];
-        let uniqueLessons = [];
-
-        let fullscreenImageList = [];
-        let fullscreenImageIndex = 0;
-
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('hidden');
-            if (window.innerWidth < 768) {
-                sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0');
-            }
-        }
-
-        function convertUrlToCsv(url) {
-            let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
-            if (fileIdMatch && fileIdMatch[1]) return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`;
-            return url;
-        }
-
-        function navigateSelect(selectId, dir) {
-            const select = document.getElementById(selectId);
-            if (!select) return;
-            const currentIdx = select.selectedIndex;
-            const maxIdx = select.options.length - 1;
-            let newIdx = currentIdx + dir;
-            if (newIdx < 0) newIdx = 0;
-            if (newIdx > maxIdx) newIdx = maxIdx;
-            if (newIdx !== currentIdx) { select.selectedIndex = newIdx; select.dispatchEvent(new Event('change')); }
-        }
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if (window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
+        function convertUrlToCsv(url) { let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/); if (fileIdMatch && fileIdMatch[1]) return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`; return url; }
+        function navigateSelect(selectId, dir) { const select = document.getElementById(selectId); if (!select) return; let newIdx = select.selectedIndex + dir; if (newIdx < 0) newIdx = 0; if (newIdx > select.options.length - 1) newIdx = select.options.length - 1; if (newIdx !== select.selectedIndex) { select.selectedIndex = newIdx; select.dispatchEvent(new Event('change')); } }
 
         function fetchSheetData() {
             const rawUrl = document.getElementById('sheetUrlInput').value.trim();
-            if(!rawUrl) { alert("Vui lòng nhập đường dẫn chia sẻ của Google Sheet!"); return; }
+            if(!rawUrl) { alert("Vui lòng nhập link Google Sheet!"); return; }
             const csvUrl = convertUrlToCsv(rawUrl);
             
-            document.getElementById('loadingSpinner').classList.remove('hidden');
-            document.getElementById('welcomeMessage').classList.add('hidden');
-            document.getElementById('statusPlaceholder').classList.remove('hidden');
-            document.getElementById('exercisesContainer').classList.add('hidden');
-            document.getElementById('statsSummary').classList.add('hidden');
-            document.getElementById('globalActionArea').classList.add('hidden');
+            document.getElementById('loadingSpinner').classList.remove('hidden'); document.getElementById('welcomeMessage').classList.add('hidden'); document.getElementById('statusPlaceholder').classList.remove('hidden'); document.getElementById('exercisesContainer').classList.add('hidden'); document.getElementById('statsSummary').classList.add('hidden'); document.getElementById('globalActionArea').classList.add('hidden');
 
             Papa.parse(csvUrl, {
                 download: true, header: true, skipEmptyLines: true,
                 complete: function(results) { processData(results.data); },
-                error: function(err) {
-                    document.getElementById('loadingSpinner').classList.add('hidden');
-                    document.getElementById('welcomeMessage').classList.remove('hidden');
-                    alert("Lỗi kết nối dữ liệu: Google Sheet phải để chế độ 'Bất kỳ ai có liên kết'!");
-                }
+                error: function(err) { alert("Lỗi kết nối. Share Google Sheet quyền 'Bất kỳ ai có liên kết'!"); location.reload(); }
             });
         }
 
         function processData(rawData) {
             globalStudentsData = {}; rawParsedEntries = [];
             rawData.forEach(row => {
-                const timestamp = (row["Ngày"] || row["Timestamp"] || "").trim();
-                const name = (row["Họ và Tên"] || row["Họ và tên"] || row["studentName"] || "").trim();
-                const dept = (row["Phòng ban"] || row["Phòng Ban"] || row["department"] || "").trim();
-                const course = (row["Khóa"] || row["Khoá"] || "").trim();
-                const session = (row["Buổi"] || "").trim();
-                const exerciseTitle = (row["Tên bài học"] || row["exerciseTitle"] || "").trim();
-                const answer = (row["Câu trả lời tự luận"] || row["textAnswer"] || "").trim();
-                const rawUrls = (row["Link Drive"] || row["Link drive"] || row["imageUrls"] || "").trim();
-
-                if (!name) return;
-                if (['họ và tên', 'studentname'].includes(name.toLowerCase()) || ['ngày', 'timestamp'].includes(timestamp.toLowerCase())) return;
-
-                rawParsedEntries.push({ ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle, cauTraLoi: answer, linkDrive: rawUrls });
+                const timestamp = (row["Ngày"] || row["Timestamp"] || "").trim(); const name = (row["Họ và Tên"] || row["Họ và tên"] || "").trim(); const dept = (row["Phòng ban"] || row["Phòng Ban"] || "").trim(); const course = (row["Khóa"] || "").trim(); const session = (row["Buổi"] || "").trim(); const exerciseTitle = (row["Tên bài học"] || "").trim(); const answer = (row["Câu trả lời tự luận"] || "").trim(); const rawUrls = (row["Link Drive"] || row["Link drive"] || "").trim(); const feedback = (row["Nhận xét"] || row["Nhận Xét"] || "").trim();
+                if (!name || ['họ và tên', 'studentname'].includes(name.toLowerCase()) || ['ngày', 'timestamp'].includes(timestamp.toLowerCase())) return;
+                rawParsedEntries.push({ ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle, cauTraLoi: answer, linkDrive: rawUrls, nhanXet: feedback });
             });
 
-            uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort();
-            uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort();
-            uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
-            
-            const foundLessons = [...new Set(rawParsedEntries.map(e => e.tenBaiHoc))].filter(Boolean);
-            const staticLessons = SESSION_EXERCISES.map(ex => ex.title);
-            uniqueLessons = [...new Set([...staticLessons, ...foundLessons])];
+            uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort(); uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort(); uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
+            const foundLessons = [...new Set(rawParsedEntries.map(e => e.tenBaiHoc))].filter(Boolean); uniqueLessons = [...new Set([...SESSION_EXERCISES.map(ex => ex.title), ...foundLessons])];
 
-            populateDropdownOptions('filterClass', uniqueClasses, 'Tất cả Khóa');
-            populateDropdownOptions('filterSession', uniqueSessions, 'Tất cả Buổi');
-            populateDropdownOptions('filterDept', uniqueDepts, 'Tất cả Phòng ban');
-            populateDropdownOptions('filterLesson', uniqueLessons, 'Tất cả Bài học');
-
+            populateDropdownOptions('filterClass', uniqueClasses, 'Tất cả Khóa'); populateDropdownOptions('filterSession', uniqueSessions, 'Tất cả Buổi'); populateDropdownOptions('filterDept', uniqueDepts, 'Tất cả Phòng ban'); populateDropdownOptions('filterLesson', uniqueLessons, 'Tất cả Bài học');
             updateStudentDropdown();
         }
 
-        function populateDropdownOptions(id, list, defaultLabel) {
-            const select = document.getElementById(id);
-            if(!select) return;
-            let html = `<option value="all">${defaultLabel}</option>`;
-            list.forEach(item => { html += `<option value="${item}">${item}</option>`; });
-            select.innerHTML = html; select.selectedIndex = 0;
-        }
+        function populateDropdownOptions(id, list, defaultLabel) { const select = document.getElementById(id); let html = `<option value="all">${defaultLabel}</option>`; list.forEach(item => { html += `<option value="${item}">${item}</option>`; }); select.innerHTML = html; select.selectedIndex = 0; }
 
         function updateStudentDropdown() {
-            const selectedClass = document.getElementById('filterClass').value;
-            const selectedSession = document.getElementById('filterSession').value;
-            const selectedDept = document.getElementById('filterDept').value;
-
+            const selectedClass = document.getElementById('filterClass').value; const selectedSession = document.getElementById('filterSession').value; const selectedDept = document.getElementById('filterDept').value;
             let filtered = rawParsedEntries;
             if(selectedClass !== 'all') filtered = filtered.filter(e => e.khoa === selectedClass);
             if(selectedSession !== 'all') filtered = filtered.filter(e => e.buoi === selectedSession);
             if(selectedDept !== 'all') filtered = filtered.filter(e => e.phongBan === selectedDept);
-
             const matchingStudents = [...new Set(filtered.map(e => `${e.hoVaTen} - ${e.phongBan}`))].filter(Boolean).sort();
             
-            const select = document.getElementById('filterStudent');
-            let html = `<option value="all">Tất cả Học viên</option>`;
-            matchingStudents.forEach(stKey => {
-                const parts = stKey.split(" - ");
-                const name = parts[0]; const dept = parts[1] || "Unknown";
-                html += `<option value="${stKey}">${name} (${dept})</option>`;
-            });
-            select.innerHTML = html; select.selectedIndex = 0;
-
-            onFilterChange('system');
+            const select = document.getElementById('filterStudent'); let html = `<option value="all">Tất cả Học viên</option>`;
+            matchingStudents.forEach(stKey => { const parts = stKey.split(" - "); html += `<option value="${stKey}">${parts[0]} (${parts[1] || "Unknown"})</option>`; });
+            select.innerHTML = html; select.selectedIndex = 0; onFilterChange('system');
         }
 
-        function getFeedbackKey(studentKey) { return `kiot_feedback_${studentKey}`; }
+        function changeExerciseVersion(exTitle, vIdx) { currentActiveVersions[exTitle] = vIdx; onFilterChange('version_change'); }
 
-        // ĐÃ FIX LỖI: HÀM ĐỔI PHIÊN BẢN (VERSION) BÀI NỘP 
-        function changeExerciseVersion(exTitle, vIdx) {
-            currentActiveVersions[exTitle] = vIdx;
-            onFilterChange('version_change'); 
-        }
-
-        // ĐÃ FIX LỖI: LOGIC BỘ LỌC ĐỘNG
         function onFilterChange(triggerSource) {
-            if(triggerSource === 'khoa' || triggerSource === 'buoi' || triggerSource === 'phongBan') {
-                updateStudentDropdown(); return;
-            }
+            if(triggerSource === 'khoa' || triggerSource === 'buoi' || triggerSource === 'phongBan') { updateStudentDropdown(); return; }
 
-            const selectedClass = document.getElementById('filterClass').value;
-            const selectedSession = document.getElementById('filterSession').value;
-            const selectedDept = document.getElementById('filterDept').value;
-            const selectedStudentKey = document.getElementById('filterStudent').value; 
-            const selectedLesson = document.getElementById('filterLesson').value;
+            const selectedClass = document.getElementById('filterClass').value; const selectedSession = document.getElementById('filterSession').value; const selectedDept = document.getElementById('filterDept').value; const selectedStudentKey = document.getElementById('filterStudent').value; const selectedLesson = document.getElementById('filterLesson').value;
 
-            if (triggerSource !== 'version_change' && selectedStudentKey !== lastSelectedStudentKey) {
-                currentActiveVersions = {}; currentSlideIndices = {}; lastSelectedStudentKey = selectedStudentKey;
-            }
+            if (triggerSource !== 'version_change' && selectedStudentKey !== lastSelectedStudentKey) { currentActiveVersions = {}; currentSlideIndices = {}; lastSelectedStudentKey = selectedStudentKey; }
 
-            document.getElementById('statusPlaceholder').classList.add('hidden');
-            const container = document.getElementById('exercisesContainer');
-            container.innerHTML = ''; container.classList.remove('hidden');
-            document.getElementById('globalActionArea').classList.remove('hidden');
-            document.getElementById('statsSummary').classList.remove('hidden');
+            document.getElementById('statusPlaceholder').classList.add('hidden'); const container = document.getElementById('exercisesContainer'); container.innerHTML = ''; container.classList.remove('hidden'); document.getElementById('globalActionArea').classList.remove('hidden'); document.getElementById('statsSummary').classList.remove('hidden');
+
+            // CẬP NHẬT BIẾN LƯU DỮ LIỆU ĐANG ĐƯỢC LỌC (Dùng cho Bảng Export Excel)
+            currentFilteredEntries = rawParsedEntries;
+            if(selectedClass !== 'all') currentFilteredEntries = currentFilteredEntries.filter(e => e.khoa === selectedClass);
+            if(selectedSession !== 'all') currentFilteredEntries = currentFilteredEntries.filter(e => e.buoi === selectedSession);
+            if(selectedDept !== 'all') currentFilteredEntries = currentFilteredEntries.filter(e => e.phongBan === selectedDept);
+            if(selectedStudentKey !== 'all') { const parts = selectedStudentKey.split(" - "); currentFilteredEntries = currentFilteredEntries.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]); }
+            if(selectedLesson !== 'all') currentFilteredEntries = currentFilteredEntries.filter(e => e.tenBaiHoc === selectedLesson);
 
             if(selectedStudentKey !== 'all') {
-                const parts = selectedStudentKey.split(" - ");
-                const studentName = parts[0]; const studentDept = parts[1] || "Unknown";
-                document.getElementById('selectedStudentName').innerText = studentName;
-                document.getElementById('statDept').innerText = studentDept;
+                const parts = selectedStudentKey.split(" - "); const studentName = parts[0]; const studentDept = parts[1] || "Unknown";
+                document.getElementById('selectedStudentName').innerText = studentName; document.getElementById('statDept').innerText = studentDept;
 
-                // FIX LỌC TÌM BÀI TẬP: Lấy thực tế những bài học viên đã nộp trong Session đó
-                let studentSubs = rawParsedEntries.filter(e => 
-                    e.hoVaTen === studentName && e.phongBan === studentDept &&
-                    (selectedClass === 'all' || e.khoa === selectedClass) &&
-                    (selectedSession === 'all' || e.buoi === selectedSession)
-                );
-                
-                // Trích xuất tên các bài tập duy nhất mà học viên đã nộp
+                let studentSubs = currentFilteredEntries; // Đã lọc
                 let titlesToShow = [...new Set(studentSubs.map(e => e.tenBaiHoc))];
-                
-                // Nếu chọn 1 bài cụ thể ở filter, ép buộc hiện bài đó (dù có nộp hay chưa)
                 if (selectedLesson !== 'all') titlesToShow = [selectedLesson];
-                // Nếu lọc Buổi 1 mà học viên chưa nộp gì, vẫn lấy danh sách tĩnh ra cho Giảng viên xem
-                else if (titlesToShow.length === 0 && (selectedSession === 'all' || selectedSession === 'Buổi 1')) {
-                    titlesToShow = SESSION_EXERCISES.map(ex => ex.title);
-                }
+                else if (titlesToShow.length === 0 && (selectedSession === 'all' || selectedSession === 'Buổi 1')) titlesToShow = SESSION_EXERCISES.map(ex => ex.title);
 
                 document.getElementById('statProgress').innerText = `${titlesToShow.length} Bài / Phiên`;
-
-                if(titlesToShow.length === 0) {
-                    container.innerHTML = `<div class="glass-panel rounded-3xl p-8 text-center text-slate-400 border border-white/80 shadow-md">Học viên này chưa nộp bài nào cho Buổi đang chọn.</div>`;
-                    return;
-                }
+                if(titlesToShow.length === 0) { container.innerHTML = `<div class="glass-panel rounded-3xl p-8 text-center text-slate-400">Không có dữ liệu.</div>`; return; }
 
                 titlesToShow.forEach((title, idx) => {
                     const matchedStatic = SESSION_EXERCISES.find(ex => ex.title === title) || { title: title, theory: [], requirements: [] };
                     const subs = studentSubs.filter(e => e.tenBaiHoc === title);
-                    
-                    const hasSub = subs.length > 0;
-                    const activeIdx = currentActiveVersions[title] !== undefined ? currentActiveVersions[title] : (hasSub ? subs.length - 1 : 0);
+                    const hasSub = subs.length > 0; const activeIdx = currentActiveVersions[title] !== undefined ? currentActiveVersions[title] : (hasSub ? subs.length - 1 : 0);
                     const activeSub = hasSub ? subs[activeIdx] : null;
-
-                    renderCard(container, matchedStatic, idx, subs, activeSub, activeIdx, studentName, studentDept, false);
+                    renderCard(container, matchedStatic, idx, subs, activeSub, activeIdx, studentName, studentDept, false, selectedSession);
                 });
-
             } else {
-                document.getElementById('selectedStudentName').innerText = "Tất cả Học viên";
-                document.getElementById('statDept').innerText = selectedDept === 'all' ? "Tất cả Phòng ban" : selectedDept;
+                document.getElementById('selectedStudentName').innerText = "Tất cả Học viên"; document.getElementById('statDept').innerText = selectedDept === 'all' ? "Tất cả Phòng ban" : selectedDept;
+                const uniqueStCount = [...new Set(currentFilteredEntries.map(e => e.hoVaTen))].length; document.getElementById('statProgress').innerText = `${uniqueStCount} Học viên`;
 
-                let filteredSubs = rawParsedEntries;
-                if(selectedClass !== 'all') filteredSubs = filteredSubs.filter(e => e.khoa === selectedClass);
-                if(selectedSession !== 'all') filteredSubs = filteredSubs.filter(e => e.buoi === selectedSession);
-                if(selectedDept !== 'all') filteredSubs = filteredSubs.filter(e => e.phongBan === selectedDept);
-                if(selectedLesson !== 'all') filteredSubs = filteredSubs.filter(e => e.tenBaiHoc === selectedLesson);
-
-                const uniqueStCount = [...new Set(filteredSubs.map(e => e.hoVaTen))].length;
-                document.getElementById('statProgress').innerText = `${uniqueStCount} Học viên`;
-
-                if(filteredSubs.length === 0) {
-                    container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center max-w-2xl mx-auto border border-white/80 shadow-md text-slate-400"><i class="fas fa-search-minus text-3xl mb-3 text-slate-300"></i><p class="font-bold">Không tìm thấy bài làm nào khớp bộ lọc!</p></div>`;
-                    return;
-                }
-
-                filteredSubs.forEach((sub, idx) => {
+                if(currentFilteredEntries.length === 0) { container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400">Không tìm thấy bài làm nào khớp bộ lọc!</div>`; return; }
+                currentFilteredEntries.forEach((sub, idx) => {
                     const matchedStatic = SESSION_EXERCISES.find(ex => ex.title === sub.tenBaiHoc) || { title: sub.tenBaiHoc, theory: [], requirements: [] };
-                    renderCard(container, matchedStatic, idx, [sub], sub, 0, sub.hoVaTen, sub.phongBan, true);
+                    renderCard(container, matchedStatic, idx, [sub], sub, 0, sub.hoVaTen, sub.phongBan, true, selectedSession);
                 });
             }
         }
 
-        // ... MỌI HÀM CÒN LẠI (getDirectImageUrl, moveSlide, openFullscreenModal, renderCard, v.v...) GIỮ NGUYÊN 100% CỦA BẠN BÊN DƯỚI ĐÂY ...
-        
-        function getDirectImageUrl(url) {
-            let fileIdMatch = url.match(/\/d\/(.+?)\//); if(!fileIdMatch) fileIdMatch = url.match(/id=(.+?)(&|$)/);
-            if(fileIdMatch && fileIdMatch[1]) return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; return url;
-        }
-
-        function moveSlide(uniqueKey, dir, maxCount) {
-            const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, '');
-            let currentIdx = currentSlideIndices[uniqueKey] || 0;
-            currentIdx = (currentIdx + dir + maxCount) % maxCount;
-            currentSlideIndices[uniqueKey] = currentIdx;
-            const track = document.getElementById(`track-${safeKey}`); if(track) track.style.transform = `translateX(-${currentIdx * 100}%)`;
-            const indicator = document.getElementById(`indicator-${safeKey}`); if(indicator) indicator.innerText = `${currentIdx + 1} / ${maxCount}`;
-        }
-
-        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
-        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
-        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
-        function updateFullscreenModal() {
-            const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount');
-            const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`;
-            const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext');
-            if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); }
-        }
-
-        function saveFeedbackDirect(studentName, deptName, exTitle) {
-            const studentKey = `${studentName} - ${deptName}`; const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, '');
+        // =========================================================
+        // GỌI API ĐỂ LƯU NHẬN XÉT TRỰC TIẾP LÊN GOOGLE SHEETS
+        // =========================================================
+        function saveFeedbackDirect(studentName, deptName, exTitle, sessionName) {
+            const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, '');
             const val = document.getElementById(`feedback-${safeKey}`).value.trim();
-            const storageKey = getFeedbackKey(studentKey); const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
-            savedData[exTitle] = val; localStorage.setItem(storageKey, JSON.stringify(savedData));
-            const btn = document.getElementById(`btn-save-feedback-${safeKey}`); const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu'; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
-            setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); }, 2000);
+            const btn = document.getElementById(`btn-save-feedback-${safeKey}`);
+            
+            if(!API_URL || API_URL === "DÁN_LINK_APPS_SCRIPT_CỦA_BẠN_VÀO_ĐÂY") {
+                alert("Bạn chưa dán Link API vào Code!"); return;
+            }
+
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...';
+            btn.disabled = true;
+
+            // Gửi API
+            fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                body: JSON.stringify({
+                    action: 'update_feedback',
+                    studentName: studentName,
+                    session: sessionName === 'all' ? 'Buổi 1: Tổng quan các bước làm quen phần mềm' : sessionName, // Fallback tạm nếu chọn all
+                    exerciseTitle: exTitle,
+                    feedback: val
+                })
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu API';
+                    btn.classList.replace('bg-blue-600', 'bg-emerald-600');
+                } else {
+                    alert("Lỗi lưu Sheet: " + data.message);
+                    btn.innerHTML = orig;
+                }
+            })
+            .catch(err => {
+                alert("Lỗi mạng!"); btn.innerHTML = orig;
+            })
+            .finally(() => {
+                setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled = false; }, 3000);
+            });
         }
 
-        function insertQuickFeedbackDirect(studentName, deptName, exTitle, text) {
+        function insertQuickFeedbackDirect(studentName, deptName, exTitle, text, sessionName) {
             const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, ''); const textarea = document.getElementById(`feedback-${safeKey}`);
-            if (textarea) { let currentVal = textarea.value.trim(); textarea.value = currentVal ? currentVal + ", " + text : text; saveFeedbackDirect(studentName, deptName, exTitle); }
+            if (textarea) { let currentVal = textarea.value.trim(); textarea.value = currentVal ? currentVal + ", " + text : text; saveFeedbackDirect(studentName, deptName, exTitle, sessionName); }
         }
 
-        function insertSummaryQuickFeedback(safeKey, text) {
-            const textarea = document.getElementById(`sum-feedback-${safeKey}`);
-            if (textarea) { let currentVal = textarea.value.trim(); textarea.value = currentVal ? currentVal + ", " + text : text; }
-        }
-
-        function openSummaryCommentsModal() {
-            const selectEl = document.getElementById('filterStudent'); const studentKey = selectEl.value;
-            if(studentKey === 'all') { alert("Vui lòng chọn 1 Học viên cụ thể ở bộ lọc thanh bên để tổng hợp nhận xét!"); return; }
-            const matchedEntry = rawParsedEntries.find(e => `${e.hoVaTen} - ${e.phongBan}` === studentKey); const deptName = matchedEntry ? matchedEntry.phongBan : "";
-            const storageKey = getFeedbackKey(`${studentKey}`); const savedFeedbacks = JSON.parse(localStorage.getItem(storageKey)) || {};
-            const container = document.getElementById('summaryModalContent'); container.innerHTML = '';
-            
-            // Tìm tất cả bài tập học viên đã nộp để làm form nhận xét
-            const studentSubs = rawParsedEntries.filter(e => `${e.hoVaTen} - ${e.phongBan}` === studentKey);
-            const uniqueTitles = [...new Set(studentSubs.map(e => e.tenBaiHoc))];
-
-            uniqueTitles.forEach((title, idx) => {
-                const val = savedFeedbacks[title] || ''; const safeKey = title.replace(/\s+/g, '');
-                container.insertAdjacentHTML('beforeend', `
-                    <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
-                        <span class="text-xs font-black text-slate-800 flex items-center gap-2"><span class="w-5 h-5 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-[10px] font-black">${idx+1}</span>${title}</span>
-                        <div class="flex flex-wrap gap-1.5 pt-1">
-                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Hiểu sai')" class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-bold">Hiểu sai</button>
-                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Chưa đầy đủ')" class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-bold">Chưa đầy đủ</button>
-                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Xuất sắc')" class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded text-[9px] font-bold">Xuất sắc</button>
-                        </div>
-                        <textarea id="sum-feedback-${safeKey}" data-title="${title}" class="w-full min-h-[70px] p-3 text-xs bg-slate-50 border rounded-xl focus:ring-2 focus:ring-blue-100 outline-none shadow-inner resize-none font-medium text-slate-700">${val}</textarea>
-                    </div>
-                `);
-            });
-            document.getElementById('summaryCommentsModal').classList.remove('hidden'); document.getElementById('summaryCommentsModal').classList.add('flex');
-        }
-
-        function closeSummaryCommentsModal() { document.getElementById('summaryCommentsModal').classList.add('hidden'); document.getElementById('summaryCommentsModal').classList.remove('flex'); }
-
-        function saveAllSummaryFeedbacks() {
-            const studentKey = document.getElementById('filterStudent').value; if(studentKey === 'all') return;
-            const storageKey = getFeedbackKey(studentKey); const feedbacks = JSON.parse(localStorage.getItem(storageKey)) || {};
-            
-            document.querySelectorAll('#summaryModalContent textarea').forEach(textarea => {
-                const title = textarea.getAttribute('data-title');
-                const val = textarea.value.trim();
-                feedbacks[title] = val;
-                
-                // Update thẻ giao diện ngoài nếu đang mở
-                const mainKey = (studentKey.split(" - ")[0] + "-" + title).replace(/[^a-zA-Z0-9]/g, '');
-                const mainTextarea = document.getElementById(`feedback-${mainKey}`);
-                if(mainTextarea) mainTextarea.value = val;
-            });
-            localStorage.setItem(storageKey, JSON.stringify(feedbacks));
-            closeSummaryCommentsModal(); alert("Đã lưu tất cả nhận xét thành công!");
-        }
-
+        // --- EXCEL EXPORT (Chỉ xuất dữ liệu ĐANG LỌC) ---
         function openEvaluationTableModal() {
-            if (rawParsedEntries.length === 0) { alert("Không có dữ liệu nguồn để hiển thị bảng đánh giá!"); return; }
+            if (currentFilteredEntries.length === 0) { alert("Không có dữ liệu trong bộ lọc hiện tại để xuất!"); return; }
             const tbody = document.getElementById('evaluationTableTbody'); tbody.innerHTML = '';
-            rawParsedEntries.forEach(entry => {
-                const studentKey = `${entry.hoVaTen} - ${entry.phongBan}`;
-                const studentFeedbacks = JSON.parse(localStorage.getItem(getFeedbackKey(studentKey))) || {};
-                const nhanXet = studentFeedbacks[entry.tenBaiHoc] || "";
+            
+            currentFilteredEntries.forEach(entry => {
                 tbody.insertAdjacentHTML('beforeend', `
                     <tr class="hover:bg-slate-50 border-b border-slate-200/50 text-slate-700 text-[11px]">
                         <td class="px-4 py-3 font-mono text-[10px] whitespace-nowrap border-r border-slate-100">${entry.ngay}</td>
@@ -656,12 +496,12 @@
                         <td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.buoi}</td>
                         <td class="px-4 py-3 font-semibold text-indigo-700 truncate max-w-[150px] border-r border-slate-100" title="${entry.tenBaiHoc}">${entry.tenBaiHoc}</td>
                         <td class="px-4 py-3 truncate max-w-[200px] border-r border-slate-100" title="${entry.cauTraLoi}">${entry.cauTraLoi}</td>
-                        <td class="px-4 py-3 truncate max-w-[150px] border-r border-slate-100"><a href="${entry.linkDrive.split(/[\n,]+/)[0]}" target="_blank" class="text-blue-600 hover:underline inline-flex items-center gap-1 font-bold"><i class="fas fa-external-link-alt text-[9px]"></i> Link</a></td>
-                        <td class="px-4 py-3 font-semibold text-emerald-700 max-w-[180px] truncate border-l border-slate-100" title="${nhanXet}">${nhanXet ? nhanXet : '<span class="text-slate-300 italic font-normal">Trống</span>'}</td>
+                        <td class="px-4 py-3 truncate max-w-[150px] border-r border-slate-100"><a href="${entry.linkDrive.split(/[\n,]+/)[0]}" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        <td class="px-4 py-3 font-semibold text-emerald-700 max-w-[180px] truncate border-l border-slate-100" title="${entry.nhanXet}">${entry.nhanXet ? entry.nhanXet : '<span class="text-slate-300 italic font-normal">Trống</span>'}</td>
                     </tr>
                 `);
             });
-            document.getElementById('evalTotalRows').innerText = rawParsedEntries.length;
+            document.getElementById('evalTotalRows').innerText = currentFilteredEntries.length;
             document.getElementById('evaluationTableModal').classList.remove('hidden'); document.getElementById('evaluationTableModal').classList.add('flex');
         }
 
@@ -669,83 +509,57 @@
 
         function escapeTsvCell(val) {
             if (!val) return ""; let clean = val.replace(/"/g, '""');
-            if (clean.includes('\n') || clean.includes('\r') || clean.includes('\t') || clean.includes('"')) return `"${clean}"`;
-            return clean;
+            if (clean.includes('\n') || clean.includes('\r') || clean.includes('\t') || clean.includes('"')) return `"${clean}"`; return clean;
         }
 
         function copyEvaluationToClipboard() {
-            if (rawParsedEntries.length === 0) return;
+            if (currentFilteredEntries.length === 0) return;
             const headers = ["Ngày", "Họ và Tên", "Phòng ban", "Khóa", "Buổi", "Tên bài học", "Câu trả lời tự luận", "Link Drive", "Nhận xét"];
             let tsvContent = headers.join("\t") + "\n";
-            rawParsedEntries.forEach(entry => {
-                const studentKey = `${entry.hoVaTen} - ${entry.phongBan}`;
-                const studentFeedbacks = JSON.parse(localStorage.getItem(getFeedbackKey(studentKey))) || {};
-                const nhanXet = studentFeedbacks[entry.tenBaiHoc] || "";
-                const rowData = [ escapeTsvCell(entry.ngay), escapeTsvCell(entry.hoVaTen), escapeTsvCell(entry.phongBan), escapeTsvCell(entry.khoa), escapeTsvCell(entry.buoi), escapeTsvCell(entry.tenBaiHoc), escapeTsvCell(entry.cauTraLoi), escapeTsvCell(entry.linkDrive), escapeTsvCell(nhanXet) ];
+            currentFilteredEntries.forEach(entry => {
+                const rowData = [ escapeTsvCell(entry.ngay), escapeTsvCell(entry.hoVaTen), escapeTsvCell(entry.phongBan), escapeTsvCell(entry.khoa), escapeTsvCell(entry.buoi), escapeTsvCell(entry.tenBaiHoc), escapeTsvCell(entry.cauTraLoi), escapeTsvCell(entry.linkDrive), escapeTsvCell(entry.nhanXet) ];
                 tsvContent += rowData.join("\t") + "\n";
             });
             const tempTextarea = document.createElement('textarea'); tempTextarea.value = tsvContent; document.body.appendChild(tempTextarea); tempTextarea.select(); document.execCommand('copy'); document.body.removeChild(tempTextarea);
-            alert("Đã kết hợp Nhận xét với dữ liệu gốc và sao chép bảng thành công! Bạn có thể dán (Ctrl+V) vào Excel.");
+            alert(`Đã copy ${currentFilteredEntries.length} bản ghi (đang lọc) thành công! Hãy dán (Ctrl+V) vào Excel.`);
         }
 
-        function renderCard(container, ex, idx, subs, activeSub, activeIdx, studentName, deptName, isGlobalStream = false) {
-            const hasSub = subs.length > 0;
-            const uniqueKey = `${studentName}-${ex.title}`;
-            const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, '');
-            const feedbackStorageKey = getFeedbackKey(`${studentName} - ${deptName}`);
-            const feedbacks = JSON.parse(localStorage.getItem(feedbackStorageKey)) || {};
-            const savedFeedbackVal = feedbacks[ex.title] || '';
-            const hasTheory = ex.theory && ex.theory.length > 0;
-            const hasRequirements = ex.requirements && ex.requirements.length > 0;
+        function getDirectImageUrl(url) { let fileIdMatch = url.match(/\/d\/(.+?)\//); if(!fileIdMatch) fileIdMatch = url.match(/id=(.+?)(&|$)/); if(fileIdMatch && fileIdMatch[1]) return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; return url; }
+        function moveSlide(uniqueKey, dir, maxCount) { const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, ''); let currentIdx = currentSlideIndices[uniqueKey] || 0; currentIdx = (currentIdx + dir + maxCount) % maxCount; currentSlideIndices[uniqueKey] = currentIdx; const track = document.getElementById(`track-${safeKey}`); if(track) track.style.transform = `translateX(-${currentIdx * 100}%)`; const indicator = document.getElementById(`indicator-${safeKey}`); if(indicator) indicator.innerText = `${currentIdx + 1} / ${maxCount}`; }
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
 
-            const card = document.createElement('div');
-            card.className = "glass-panel p-6 md:p-8 rounded-3xl border border-white/60 hover:shadow-xl transition-all relative flex flex-col gap-5 mb-6";
-            const parsedDept = (!deptName || deptName.toUpperCase().includes("CHƯA BIẾT")) ? "Chưa phân bộ phận" : deptName;
-            const filterClassVal = document.getElementById('filterClass').value; const filterSessionVal = document.getElementById('filterSession').value;
-
-            let metaTags = ``;
-            if (activeSub) {
-                if (filterClassVal === 'all') metaTags += `<span class="bg-indigo-50 text-indigo-700 border border-indigo-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm"><i class="fas fa-graduation-cap"></i> Khóa: ${activeSub.khoa}</span>`;
-                if (filterSessionVal === 'all') metaTags += `<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm"><i class="fas fa-calendar-day"></i> Buổi: ${activeSub.buoi}</span>`;
-            }
-            metaTags += `<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2.5 py-1 rounded-lg font-bold tracking-wide shadow-sm"><i class="fas fa-building"></i> ${parsedDept}</span>`;
-
-            let headerBlock = `<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4"><div class="flex flex-col gap-1"><div class="flex items-center gap-3"><span class="bg-blue-600 text-white font-black rounded-xl w-8 h-8 flex items-center justify-center text-xs shadow-md shadow-blue-500/20 shrink-0">${idx+1}</span><h3 class="text-base font-black text-slate-800 tracking-tight">${ex.title}</h3></div>${isGlobalStream ? `<p class="text-xs font-extrabold text-slate-500 ml-11"><i class="fas fa-user-circle mr-1 text-slate-400"></i>Học viên: <span class="text-slate-800">${studentName}</span></p>` : ''}</div><div class="flex flex-wrap items-center gap-1.5">${metaTags}${hasSub ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-3 py-1.5 rounded-xl font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm"><i class="fas fa-check"></i> Đã nộp bài</span>` : `<span class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-3 py-1.5 rounded-xl font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm"><i class="fas fa-exclamation-triangle"></i> Chưa nộp</span>`}</div></div>`;
+        function renderCard(container, ex, idx, subs, activeSub, activeIdx, studentName, deptName, isGlobalStream = false, selectedSession = "Buổi 1") {
+            const hasSub = subs.length > 0; const uniqueKey = `${studentName}-${ex.title}`; const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, '');
+            // Đọc nhận xét từ data của sub (Google Sheets)
+            const savedFeedbackVal = (activeSub && activeSub.nhanXet) ? activeSub.nhanXet : '';
+            const card = document.createElement('div'); card.className = "glass-panel p-6 md:p-8 rounded-3xl border border-white/60 hover:shadow-xl transition-all relative flex flex-col gap-5 mb-6";
             
-            let theoryBlock = ``; if (!isGlobalStream && hasTheory) theoryBlock = `<div class="bg-slate-100/60 border border-slate-200/50 rounded-2xl p-4 space-y-2"><span class="text-slate-400 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-question-circle text-slate-500 mr-1.5"></i>Câu hỏi lý thuyết</span><div class="space-y-1.5 text-xs text-slate-600 font-medium leading-relaxed font-sans font-medium">${ex.theory.map(q => `<p>${q}</p>`).join('')}</div></div>`;
-            
-            let theoryAnswerBlock = ``;
-            if (hasSub && activeSub && activeSub.cauTraLoi) theoryAnswerBlock = `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 space-y-2"><span class="text-blue-500 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-user-edit mr-1.5"></i>Học viên Trả lời</span><div class="text-sm font-semibold text-slate-700 whitespace-pre-wrap leading-relaxed font-sans font-medium">${activeSub.cauTraLoi}</div></div>`;
-            else if (!isGlobalStream) theoryAnswerBlock = `<div class="text-xs text-slate-400 font-medium italic pl-1 flex items-center gap-1.5"><i class="fas fa-info-circle text-[10px]"></i> (Học viên không nộp câu trả lời tự luận lý thuyết)</div>`;
-            
-            let practicalBlock = ``; if (!isGlobalStream && hasRequirements) practicalBlock = `<div class="bg-slate-100/60 border border-slate-200/50 rounded-2xl p-4 space-y-2"><span class="text-slate-400 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-laptop-code mr-1.5"></i>Yêu cầu thực hành</span><div class="space-y-1.5 text-xs text-slate-600 font-medium leading-relaxed font-sans font-medium">${ex.requirements.map(r => `<p>${r}</p>`).join('')}</div></div>`;
+            // ... (Phần render UI giữ nguyên, chỉ truyền đúng Session Name vào hàm saveFeedbackDirect) ...
             
             let screenshotsBlock = ``;
             if (hasSub && activeSub && activeSub.linkDrive) {
                 const imgUrls = activeSub.linkDrive ? activeSub.linkDrive.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")) : [];
                 if (imgUrls.length > 0) {
                     if (!currentSlideIndices[uniqueKey]) currentSlideIndices[uniqueKey] = 0;
-                    let slidesHtml = imgUrls.map((url, i) => { const direct = getDirectImageUrl(url); return `<div class="w-full flex-shrink-0 relative group select-none cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${direct}" alt="Minh chứng bài tập" class="w-full max-h-[480px] object-cover sm:object-contain bg-slate-950/40 rounded-xl"><div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all"><span class="bg-slate-900/80 text-white text-xs font-bold px-3 py-1.5 rounded-xl backdrop-blur-sm"><i class="fas fa-search-plus mr-1"></i> Bấm để xem toàn màn hình</span></div></div>`; }).join('');
-                    let sliderControls = ``;
-                    if (imgUrls.length > 1) { sliderControls = `<button onclick="moveSlide('${uniqueKey}', -1, ${imgUrls.length})" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200/60 z-10"><i class="fas fa-chevron-left text-xs"></i></button><button onclick="moveSlide('${uniqueKey}', 1, ${imgUrls.length})" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200/60 z-10"><i class="fas fa-chevron-right text-xs"></i></button><div id="indicator-${safeKey}" class="absolute bottom-3 right-3 bg-slate-900/70 text-white text-[10px] font-black px-2.5 py-1 rounded-lg backdrop-blur-sm tracking-wider select-none">1 / ${imgUrls.length}</div>`; }
-                    screenshotsBlock = `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 space-y-3"><span class="text-blue-500 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-images mr-1.5"></i>Bài thực hành (Screenshots)</span><div class="relative w-full overflow-hidden rounded-xl bg-slate-900/5 shadow-inner"><div id="track-${safeKey}" class="flex transition-transform duration-300 ease-in-out" style="transform: translateX(0%);">${slidesHtml}</div>${sliderControls}</div></div>`;
-                } else screenshotsBlock = `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 flex flex-col items-center justify-center py-8 text-slate-400"><i class="fas fa-image text-xl text-slate-300 mb-1.5"></i><p class="text-xs font-semibold">Chưa nộp ảnh minh chứng thực hành ở bài tập này</p></div>`;
-            } else if (!isGlobalStream) screenshotsBlock = `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 flex flex-col items-center justify-center py-8 text-slate-400"><i class="fas fa-image text-xl text-slate-300 mb-1.5"></i><p class="text-xs font-semibold">Không nộp minh chứng thực hành</p></div>`;
-
-            let versionSelectorBlock = ``;
-            if (subs.length > 1) {
-                versionSelectorBlock = `<div class="pt-3 border-t border-slate-200/60 flex flex-wrap items-center gap-1.5"><span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mr-1">Lịch sử nộp sửa (${subs.length}):</span>${subs.map((sub, vIdx) => { const isActive = vIdx === activeIdx; const btnClass = isActive ? "bg-blue-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg shadow-sm" : "bg-white hover:bg-slate-50 text-slate-600 hover:text-blue-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors shadow-sm"; const label = vIdx === subs.length - 1 ? 'Mới nhất' : `Bản v${vIdx + 1}`; return `<button class="${btnClass}" onclick="changeExerciseVersion('${ex.title}', ${vIdx})" title="Thời điểm nộp: ${sub.ngay}">${label}</button>`; }).join('')}</div>`;
-            }
+                    let slidesHtml = imgUrls.map((url, i) => { const direct = getDirectImageUrl(url); return `<div class="w-full flex-shrink-0 relative group select-none cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${direct}" alt="Minh chứng" class="w-full max-h-[480px] object-cover sm:object-contain bg-slate-950/40 rounded-xl"><div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all"><span class="bg-slate-900/80 text-white text-xs font-bold px-3 py-1.5 rounded-xl"><i class="fas fa-search-plus mr-1"></i> Zoom</span></div></div>`; }).join('');
+                    let sliderControls = ``; if (imgUrls.length > 1) { sliderControls = `<button onclick="moveSlide('${uniqueKey}', -1, ${imgUrls.length})" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 shadow z-10"><i class="fas fa-chevron-left text-xs"></i></button><button onclick="moveSlide('${uniqueKey}', 1, ${imgUrls.length})" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 shadow z-10"><i class="fas fa-chevron-right text-xs"></i></button><div id="indicator-${safeKey}" class="absolute bottom-3 right-3 bg-slate-900/70 text-white text-[10px] px-2.5 py-1 rounded-lg">1 / ${imgUrls.length}</div>`; }
+                    screenshotsBlock = `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 space-y-3"><span class="text-blue-500 block uppercase text-[9px] font-black"><i class="fas fa-images mr-1.5"></i>Bài thực hành</span><div class="relative w-full overflow-hidden rounded-xl bg-slate-900/5 shadow-inner"><div id="track-${safeKey}" class="flex transition-transform duration-300" style="transform: translateX(0%);">${slidesHtml}</div>${sliderControls}</div></div>`;
+                } else screenshotsBlock = `<div class="bg-blue-50 border p-8 text-center text-slate-400 text-xs">Chưa nộp ảnh</div>`;
+            } else if (!isGlobalStream) screenshotsBlock = `<div class="bg-blue-50 border p-8 text-center text-slate-400 text-xs">Không nộp minh chứng</div>`;
 
             let feedbackBlock = ``;
             if (hasSub) {
-                feedbackBlock = `<div class="pt-4 border-t border-slate-200/60 space-y-2"><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Giảng viên nhận xét cho câu này</label><div class="flex flex-wrap gap-1.5 items-center"><span class="text-[9px] text-slate-400 font-bold mr-1">Mẫu nhanh:</span><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Hiểu sai nội dung')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold transition-all border border-slate-200/60 shadow-sm">Hiểu sai</button><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Trả lời chưa đầy đủ')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold transition-all border border-slate-200/60 shadow-sm">Trả lời chưa đầy đủ</button><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Nội dung spam')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold transition-all border border-slate-200/60 shadow-sm">Nội dung spam</button><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Xuất sắc')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/60 rounded-lg text-[10px] font-bold transition-all shadow-sm">Xuất sắc</button></div><div class="flex flex-col sm:flex-row gap-3"><textarea id="feedback-${safeKey}" class="flex-1 min-h-[50px] p-3 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none shadow-inner resize-none font-semibold text-slate-700" placeholder="Viết nhận xét hoặc góp ý để học viên cải thiện...">${savedFeedbackVal}</textarea><button onclick="saveFeedbackDirect('${studentName}', '${deptName}', '${ex.title}')" id="btn-save-feedback-${safeKey}" class="px-5 h-11 sm:h-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 shrink-0 self-stretch"><i class="fas fa-save"></i> Lưu</button></div></div>`;
+                // Truyền session thực tế từ data vào hàm Save
+                const realSession = activeSub ? activeSub.buoi : selectedSession;
+                feedbackBlock = `<div class="pt-4 border-t border-slate-200/60 space-y-2"><label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Giảng viên nhận xét (Auto Sync)</label><div class="flex flex-wrap gap-1.5 items-center"><span class="text-[9px] text-slate-400 font-bold mr-1">Mẫu nhanh:</span><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Hiểu sai', '${realSession}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold border border-slate-200/60 shadow-sm">Hiểu sai</button><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Chưa đủ', '${realSession}')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold border border-slate-200/60 shadow-sm">Chưa đủ</button><button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Xuất sắc', '${realSession}')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/60 rounded-lg text-[10px] font-bold shadow-sm">Xuất sắc</button></div><div class="flex flex-col sm:flex-row gap-3"><textarea id="feedback-${safeKey}" class="flex-1 min-h-[50px] p-3 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none shadow-inner resize-none font-semibold text-slate-700" placeholder="Viết nhận xét...">${savedFeedbackVal}</textarea><button onclick="saveFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', '${realSession}')" id="btn-save-feedback-${safeKey}" class="px-5 h-11 sm:h-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl shadow-md shrink-0"><i class="fas fa-paper-plane"></i> Gửi Web</button></div></div>`;
             }
 
-            card.innerHTML = `${headerBlock}${theoryBlock}${theoryAnswerBlock}${practicalBlock}${screenshotsBlock}${versionSelectorBlock}${feedbackBlock}`;
+            card.innerHTML = `<div class="flex items-center gap-3 mb-2"><span class="bg-blue-600 text-white font-black rounded-xl w-8 h-8 flex items-center justify-center text-xs shrink-0">${idx+1}</span><h3 class="text-base font-black text-slate-800">${ex.title}</h3></div>` + (activeSub && activeSub.cauTraLoi ? `<div class="bg-blue-50/80 p-4 rounded-2xl mb-4 text-sm font-medium text-slate-700 whitespace-pre-wrap">${activeSub.cauTraLoi}</div>` : '') + screenshotsBlock + feedbackBlock;
             container.appendChild(card);
         }
-
     </script>
 </body>
 </html>
