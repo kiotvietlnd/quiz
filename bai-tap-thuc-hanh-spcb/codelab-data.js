@@ -6,7 +6,7 @@ const APP_CONFIG = {
     API_URL: "https://script.google.com/macros/s/AKfycbz_aYSTYqs7ovJFQAG-OROfNE3BtkrY1cbFVPixmBRdCycQQdVh9Ej4n0tZjceoIXwv0A/exec", 
     
     // 2. Tên khóa học (Sẽ dùng để tạo Folder trên Google Drive)
-    COURSE_NAME: "26KV15" 
+    COURSE_NAME: "26KV00" 
 };
 
 // --- DỮ LIỆU NỘI DUNG TOÀN BỘ KHÓA HỌC ---
