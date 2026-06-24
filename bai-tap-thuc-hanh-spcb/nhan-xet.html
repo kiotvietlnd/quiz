@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bảng Điều Phối Bài Làm Học Viên - Buổi 1</title>
+    <!-- Tailwind CSS & Roboto Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- PapaParse để xử lý đọc file CSV từ Google Sheet chuẩn xác -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <style>
+        body { font-family: 'Roboto', sans-serif; background-color: #f3f4f6; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+
+    <!-- HEADER & ĐIỀU KHIỂN -->
+    <header class="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <!-- Tiêu đề -->
+                <div class="flex items-center gap-3">
+                    <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-6">
+                    <h1 class="text-xl font-bold text-gray-800 border-l border-gray-300 pl-3">Bảng Theo Dõi Thực Hành (Giảng Viên)</h1>
+                </div>
+                
+                <!-- Liên kết Google Sheet -->
+                <div class="flex flex-1 max-w-xl items-center gap-2">
+                    <input type="text" id="sheetUrlInput" 
+                           class="w-full text-xs border border-gray-300 rounded-lg px-3 py-2 outline-none focus:ring-1 focus:ring-blue-500" 
+                           placeholder="Dán link chia sẻ Google Sheet tại đây..." 
+                           value="https://docs.google.com/spreadsheets/d/10v72M9_6aT0aGZX0EIUBbGfHLMsy3KpQg1LR_EJL1NY/edit?usp=sharing">
+                    <button onclick="fetchSheetData()" class="bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition shrink-0 shadow-sm">
+                        Đồng bộ
+                    </button>
+                </div>
+            </div>
+
+            <!-- Khu vực lọc học viên -->
+            <div class="mt-4 pt-4 border-t border-gray-100 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                <div class="w-full sm:w-80">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">Chọn học viên để xem bài làm</label>
+                    <select id="studentSelect" onchange="onStudentSelectChange()" class="w-full border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 font-medium text-gray-800 focus:outline-none focus:ring-1 focus:ring-blue-500">
+                        <option value="">Đang tải danh sách học viên...</option>
+                    </select>
+                </div>
+
+                <!-- Thống kê tổng quát học viên đang chọn -->
+                <div id="statsSummary" class="flex-1 flex gap-6 text-sm hidden">
+                    <div>
+                        <span class="text-gray-500">Bộ phận:</span>
+                        <strong id="statDept" class="text-gray-800 ml-1">-</strong>
+                    </div>
+                    <div>
+                        <span class="text-gray-500">Tiến độ nộp:</span>
+                        <strong id="statProgress" class="text-green-600 ml-1">0/8 bài tập</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTAINER CHÍNH -->
+    <main class="flex-1 max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8 w-full">
+        <!-- Màn hình trạng thái Loading / Chào mừng -->
+        <div id="statusPlaceholder" class="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center my-10">
+            <div id="loadingSpinner" class="hidden flex flex-col items-center">
+                <svg class="animate-spin h-10 w-10 text-blue-600 mb-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                <p class="font-bold text-gray-700 text-lg">Đang đồng bộ dữ liệu từ Google Sheets...</p>
+                <p class="text-sm text-gray-400 mt-1">Xin vui lòng đợi trong giây lát</p>
+            </div>
+            <div id="welcomeMessage" class="text-gray-500">
+                <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
+                <p class="font-bold text-lg text-gray-700">Chào mừng Giảng viên!</p>
+                <p class="text-sm mt-2">Vui lòng dán link chia sẻ Google Sheet và nhấn nút <strong class="text-blue-600">"Đồng bộ"</strong> để bắt đầu kiểm tra bài làm.</p>
+            </div>
+        </div>
+
+        <!-- BÁO CÁO CHI TIẾT BÀI LÀM -->
+        <div id="exercisesContainer" class="space-y-6 hidden">
+            <!-- Bài làm của học viên sẽ hiển thị động tại đây -->
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="text-center py-6 bg-white border-t border-gray-200 mt-auto">
+        <p class="text-xs text-gray-400">© 2026 KiotViet Learning & Development • Công cụ dành riêng cho Giảng viên</p>
+    </footer>
+
+    <script>
+        // Cấu trúc ĐỀ BÀI TĨNH của Buổi 1 (Trích xuất nguyên mẫu từ codelab-data.js)
+        const SESSION_EXERCISES = [
+            {
+                title: "Bài tập 1: Đăng ký gian hàng dùng thử",
+                theory: [
+                    "1. Gian hàng dùng thử miễn phí trên hệ thống KiotViet có thời hạn sử dụng tối đa là bao nhiêu ngày?",
+                    "2. Tại sao học viên BẮT BUỘC phải nhấn tổ hợp phím Ctrl+1 và nhập mã giới thiệu \"3670\" ngay sau khi đăng nhập thành công vào gian hàng vừa đăng ký?"
+                ],
+                requirements: [
+                    "1. Đăng ký mới một gian hàng dùng thử trên website KiotViet với ngành hàng Bán lẻ.",
+                    "2. Thực hiện thao tác nhập mã giới thiệu đào tạo để tránh việc hệ thống ghi nhận là khách hàng tiềm năng và chuyển cho Telesales."
+                ],
+                instructions: [
+                    "1. Mở trình duyệt web, truy cập vào trang chủ: https://www.kiotviet.vn/ và nhấn nút Dùng thử miễn phí.",
+                    "2. Điền đầy đủ thông tin cá nhân (Họ tên, Điện thoại, Khu vực...), nhấn tổ hợp phím Ctrl + 1 trên bàn phím, một hộp thoại sẽ hiện ra, nhập mã giới thiệu 3670 của phòng Đào tạo và tiến hành đăng ký."
+                ]
+            },
+            {
+                title: "Bài tập 2: Thêm mới hàng hóa",
+                theory: [
+                    "1. Tại sao cần phải thiết lập các \"Thuộc tính\" (như trọng lượng, màu sắc, kích cỡ) khi thêm mới hàng hóa thay vì tạo mỗi loại thành một mã sản phẩm độc lập?",
+                    "2. Nếu bạn bỏ trống ô \"Giá vốn\" khi thêm mới hàng hóa, điều này sẽ ảnh hưởng như thế nào đến báo cáo lợi nhuận sau này?",
+                    "3. Tính năng \"Đơn vị tính\" (ví dụ: Hộp, Lốc, Thùng) giúp ích gì cho thu ngân trong quá trình bán hàng?"
+                ],
+                requirements: [
+                    "1. Thêm mới một sản phẩm thực tế của cửa hàng với nhiều phân loại trọng lượng khác nhau."
+                ],
+                instructions: [
+                    "1. Tại màn hình Tổng quan, vào menu Hàng hóa -> chọn Danh sách hàng hóa.",
+                    "2. Nhấn nút + Tạo mới -> chọn Hàng hóa và khai báo đầy đủ thông tin mẫu."
+                ]
+            },
+            {
+                title: "Bài tập 3: Nhập hàng và ghi nhận công nợ",
+                theory: [
+                    "1. Điều gì sẽ xảy ra với số lượng tồn kho của sản phẩm trên hệ thống nếu bạn chưa nhấn \"Hoàn thành\" trong phiếu nhập hàng?",
+                    "2. Khi nhập hàng từ một nhà cung cấp mới mà chưa có thông tin trên hệ thống, bạn cần thao tác như thế nào?",
+                    "3. Nếu nhập hàng nhưng chưa thanh toán ngay, số tiền này sẽ được KiotViet quản lý ở mục nào?"
+                ],
+                requirements: [
+                    "1. Tạo phiếu nhập hàng cho mặt hàng Nước giặt OMO Matic vừa tạo để ghi nhận tồn kho.",
+                    "2. Treo lại công nợ, chưa thanh toán tiền ngay cho nhà cung cấp."
+                ],
+                instructions: [
+                    "1. Vào menu Mua hàng -> chọn Nhập hàng. Nhấn nút + Nhập hàng.",
+                    "2. Thêm Nhà phân phối Unilever, chọn số lượng 20, để tiền thanh toán là 0đ và ấn Hoàn thành."
+                ]
+            },
+            {
+                title: "Bài tập 4: Bán hàng và thanh toán kết hợp",
+                theory: [
+                    "1. Việc cho phép áp dụng đồng thời nhiều phương thức thanh toán trên một hóa đơn mang lại lợi ích gì?",
+                    "2. Khi hóa đơn bán hàng được hoàn tất, hệ thống KiotViet sẽ tự động thay đổi những dữ liệu nào?"
+                ],
+                requirements: [
+                    "1. Tạo hóa đơn bán hàng có mặt hàng Nước giặt OMO Matic - Túi 2kg cho khách hàng mới Chị Lan.",
+                    "2. Khách hàng thanh toán kết hợp 2 hình thức: Tiền mặt và Chuyển khoản."
+                ],
+                instructions: [
+                    "1. Vào màn hình Bán hàng, tìm và chọn khách hàng Chị Lan.",
+                    "2. Nhấp chọn Thanh toán kết hợp, thanh toán 100k Tiền mặt và 80k Chuyển khoản."
+                ]
+            },
+            {
+                title: "Bài tập 5: Trả hàng và thu phí dịch vụ",
+                theory: [
+                    "1. Khi xử lý trả hàng có thu phí dịch vụ, số tiền phí này sẽ được KiotViet ghi nhận vào đâu trong hệ thống báo cáo? Tại sao?",
+                    "2. Việc liên kết giao dịch trả hàng với hóa đơn gốc mang lại lợi ích gì trong việc quản lý?"
+                ],
+                requirements: [
+                    "1. Xử lý tình huống khách hàng (Chị Lan) mang trả lại sản phẩm vừa mua.",
+                    "2. Áp dụng chính sách thu phí trả hàng là 10,000đ."
+                ],
+                instructions: [
+                    "1. Tại màn hình Bán hàng, bấm biểu tượng Trả hàng, tìm lại hóa đơn gốc của Chị Lan.",
+                    "2. Điền Phí trả hàng là 10,000đ và thực hiện bấm Trả hàng."
+                ]
+            },
+            {
+                title: "Bài tập 6: Quản lý công nợ nhà cung cấp",
+                theory: [
+                    "1. Thao tác \"Thanh toán phiếu chi\" khác với thao tác \"Điều chỉnh công nợ\" ở điểm nào?",
+                    "2. Tại sao lại cần chức năng \"Khai báo công nợ ban đầu\" khi bắt đầu sử dụng KiotViet?"
+                ],
+                requirements: [
+                    "1. Thanh toán khoản nợ của Nhà phân phối Unilever (Phương thức: Tiền mặt).",
+                    "2. Tạo một khoản công nợ tồn đầu kỳ cho Nhà cung cấp mới."
+                ],
+                instructions: [
+                    "1. Vào Mua hàng -> Nhà cung cấp. Tìm Unilever và lập phiếu chi thanh toán nợ.",
+                    "2. Tạo nhà phân phối mới, chọn tab Nợ cần trả và bấm Điều chỉnh để tăng công nợ ban đầu."
+                ]
+            },
+            {
+                title: "Bài tập 7: Theo dõi báo cáo",
+                theory: [
+                    "1. Để xem được Lợi nhuận gộp của cửa hàng trong ngày, bạn cần vào báo cáo nào?",
+                    "2. Để xem được Tổng giá vốn của toàn bộ sản phẩm (Giá trị kho), bạn cần vào báo cáo nào?"
+                ],
+                requirements: [
+                    "1. Xem báo cáo cuối ngày để kiểm tra lại các giao dịch đã thực hành.",
+                    "2. Xem báo cáo hàng hóa để kiểm tra lượng tồn kho."
+                ],
+                instructions: [
+                    "1. Truy cập Báo cáo -> Cuối ngày.",
+                    "2. Truy cập Báo cáo -> Hàng hóa để xem thẻ Xuất nhập tồn."
+                ]
+            },
+            {
+                title: "Bài tập 8: Kinh nghiệm tư vấn (Demo)",
+                theory: [
+                    "1. Lợi ích của việc dùng 1 mã sản phẩm xuyên suốt khi demo cho khách hàng?",
+                    "2. Thao tác nào cần tập trung nhất để thuyết phục khách hàng rằng KiotViet dễ sử dụng?",
+                    "3. Cần chỉ cho khách hàng xem tab nào để chứng minh tồn kho được cập nhật tự động?"
+                ],
+                requirements: ["1. Tra cứu lại toàn bộ lịch sử xuất - nhập - tồn của mã hàng hóa đã dùng."],
+                instructions: [
+                    "1. Vào Danh sách hàng hóa, bấm vào Nước giặt OMO.",
+                    "2. Click xem tab Thẻ kho để theo dõi biến động tồn cuối."
+                ]
+            }
+        ];
+
+        let globalStudentsData = {}; // Gom nhóm dữ liệu dạng: { "Tên - Bộ phận": { name, dept, submissions: { exTitle: [ { timestamp, answer, urls } ] } } }
+        let currentActiveVersions = {}; // Lưu trữ cấu hình version hiển thị hiện tại cho từng bài tập: { exTitle: versionIndex }
+
+        // TỰ ĐỘNG CHUYỂN LINK CHIA SẺ SPREADSHEET SANG LINK CSV CÓ QUYÊN CƠ BẢN
+        function convertUrlToCsv(url) {
+            let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (fileIdMatch && fileIdMatch[1]) {
+                return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`;
+            }
+            return url;
+        }
+
+        // TẢI DỮ LIỆU TỪ GOOGLE SHEETS
+        function fetchSheetData() {
+            const rawUrl = document.getElementById('sheetUrlInput').value.trim();
+            if(!rawUrl) {
+                alert("Vui lòng nhập đường dẫn chia sẻ của Google Sheet!");
+                return;
+            }
+
+            const csvUrl = convertUrlToCsv(rawUrl);
+            
+            // Hiển thị trạng thái Loading
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            document.getElementById('welcomeMessage').classList.add('hidden');
+            document.getElementById('statusPlaceholder').classList.remove('hidden');
+            document.getElementById('exercisesContainer').classList.add('hidden');
+            document.getElementById('statsSummary').classList.add('hidden');
+
+            // Sử dụng thư viện PapaParse để đọc file CSV bất đồng bộ
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processData(results.data);
+                },
+                error: function(err) {
+                    document.getElementById('loadingSpinner').classList.add('hidden');
+                    document.getElementById('welcomeMessage').classList.remove('hidden');
+                    alert("Lỗi kết nối dữ liệu: Hãy đảm bảo rằng liên kết Google Sheet đã được cài đặt ở chế độ 'Bất kỳ ai có liên kết đều có thể xem'!");
+                }
+            });
+        }
+
+        // XỬ LÝ GOM NHÓM DỮ LIỆU LOG SANG FORMAT HỌC VIÊN + ĐỀ BÀI + PHIÊN BẢN
+        function processData(rawData) {
+            globalStudentsData = {};
+
+            // Đọc và phân bổ từng dòng log từ Sheet
+            rawData.forEach(row => {
+                // Thử nhận diện tiêu đề cột linh hoạt theo format mẫu
+                const timestamp = row["Ngày"] || row["Timestamp"] || "";
+                const name = row["Họ và Tên"] || row["Họ và tên"] || row["studentName"] || "";
+                const dept = row["Phòng ban"] || row["department"] || "";
+                const exerciseTitle = row["Tên bài học"] || row["exerciseTitle"] || "";
+                const answer = row["Câu trả lời tự luận"] || row["textAnswer"] || "";
+                const rawUrls = row["Link Drive"] || row["Link drive"] || row["imageUrls"] || "";
+
+                if (!name.trim()) return; // Bỏ qua nếu dòng rỗng hoặc không có tên
+
+                const studentKey = `${name.trim()} - ${dept.trim()}`;
+
+                // Khởi tạo thực thể học viên nếu chưa có
+                if (!globalStudentsData[studentKey]) {
+                    globalStudentsData[studentKey] = {
+                        name: name.trim(),
+                        dept: dept.trim(),
+                        submissions: {} // Lưu trữ dạng: { [exerciseTitle]: [ { timestamp, answer, urls } ] }
+                    };
+                }
+
+                if (!globalStudentsData[studentKey].submissions[exerciseTitle]) {
+                    globalStudentsData[studentKey].submissions[exerciseTitle] = [];
+                }
+
+                // Parse các liên kết Google Drive (hỗ trợ phân cách bằng xuống dòng hoặc dấu phẩy)
+                const urls = rawUrls ? rawUrls.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")) : [];
+
+                // Do sheet ghi nhận theo thời gian tăng dần, các bài nộp tuần tự sẽ tự động được xếp đúng trình tự
+                globalStudentsData[studentKey].submissions[exerciseTitle].push({
+                    timestamp: timestamp,
+                    answer: answer.trim(),
+                    imageUrls: urls
+                });
+            });
+
+            // Cập nhật lên Dropdown lựa chọn
+            populateDropdown();
+        }
+
+        // ĐỔ DANH SÁCH HỌC VIÊN VÀO SELECT DROPDOWN
+        function populateDropdown() {
+            const selectEl = document.getElementById('studentSelect');
+            selectEl.innerHTML = '<option value="">-- Chọn tên học viên --</option>';
+
+            const keys = Object.keys(globalStudentsData).sort();
+            if(keys.length === 0) {
+                selectEl.innerHTML = '<option value="">Không tìm thấy dữ liệu học viên nào</option>';
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                document.getElementById('welcomeMessage').classList.remove('hidden');
+                return;
+            }
+
+            keys.forEach(key => {
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.innerText = key;
+                selectEl.appendChild(opt);
+            });
+
+            // Ẩn Loading
+            document.getElementById('statusPlaceholder').classList.add('hidden');
+            
+            // Nếu chỉ có một vài học viên, tự động mở học viên đầu tiên
+            if (keys.length > 0) {
+                selectEl.selectedIndex = 1;
+                onStudentSelectChange();
+            }
+        }
+
+        // SỰ KIỆN KHI THAY ĐỔI HỌC VIÊN
+        function onStudentSelectChange() {
+            const selectEl = document.getElementById('studentSelect');
+            const studentKey = selectEl.value;
+
+            if(!studentKey) {
+                document.getElementById('statusPlaceholder').classList.remove('hidden');
+                document.getElementById('welcomeMessage').classList.remove('hidden');
+                document.getElementById('exercisesContainer').classList.add('hidden');
+                document.getElementById('statsSummary').classList.add('hidden');
+                return;
+            }
+
+            const student = globalStudentsData[studentKey];
+            
+            // Thiết lập mặc định: Hiển thị PHIÊN BẢN CUỐI CÙNG (MỚI NHẤT) của từng bài tập
+            currentActiveVersions = {};
+            SESSION_EXERCISES.forEach(ex => {
+                const subs = student.submissions[ex.title] || [];
+                currentActiveVersions[ex.title] = subs.length > 0 ? subs.length - 1 : 0;
+            });
+
+            // Hiển thị phần Thống kê nhanh
+            document.getElementById('statDept').innerText = student.dept;
+            
+            let completedCount = 0;
+            SESSION_EXERCISES.forEach(ex => {
+                if (student.submissions[ex.title] && student.submissions[ex.title].length > 0) completedCount++;
+            });
+            document.getElementById('statProgress').innerText = `${completedCount}/8 bài tập`;
+            document.getElementById('statsSummary').classList.remove('hidden');
+
+            renderStudentReport(student);
+        }
+
+        // CHUYỂN ĐỔI LINK DRIVE CHIA SẺ SANG LINK ẢNH TĨNH TRỰC TIẾP
+        function getDirectImageUrl(url) {
+            let fileIdMatch = url.match(/\/d\/(.+?)\//);
+            if(!fileIdMatch) {
+                fileIdMatch = url.match(/id=(.+?)(&|$)/);
+            }
+            if(fileIdMatch && fileIdMatch[1]) {
+                return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
+            }
+            return url;
+        }
+
+        // THAY ĐỔI PHIÊN BẢN KHI CLICK LỊCH SỬ NỘP BÀI
+        function changeExerciseVersion(exTitle, versionIdx) {
+            currentActiveVersions[exTitle] = versionIdx;
+            const selectEl = document.getElementById('studentSelect');
+            const student = globalStudentsData[selectEl.value];
+            if(student) renderStudentReport(student);
+        }
+
+        // VẼ TOÀN BỘ DANH SÁCH BÀI LÀM CỦA HỌC VIÊN ĐANG CHỌN
+        function renderStudentReport(student) {
+            const container = document.getElementById('exercisesContainer');
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            document.getElementById('statusPlaceholder').classList.add('hidden');
+
+            SESSION_EXERCISES.forEach((ex, idx) => {
+                const card = document.createElement('div');
+                card.className = "bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex flex-col md:flex-row gap-6 hover:shadow transition duration-150";
+
+                const subList = student.submissions[ex.title] || [];
+                const hasSub = subList.length > 0;
+                
+                // Trích xuất phiên bản đang được chọn để hiển thị
+                const activeIdx = currentActiveVersions[ex.title] || 0;
+                const activeSub = hasSub ? subList[activeIdx] : null;
+
+                // --- 1. PHẦN ĐỀ BÀI TĨNH (Bên trái) ---
+                let leftHtml = `
+                    <div class="flex-1 md:w-5/12 flex flex-col justify-between">
+                        <div>
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-blue-100 text-blue-700 font-bold rounded-full w-6 h-6 flex items-center justify-center text-xs shrink-0">${idx+1}</span>
+                                <h3 class="text-base font-bold text-gray-800">${ex.title}</h3>
+                            </div>
+                            
+                            <!-- Đề bài tĩnh: Lý thuyết -->
+                            <div class="bg-gray-50 border border-gray-100 rounded-lg p-3 text-xs text-gray-600 mb-3 space-y-1">
+                                <strong class="text-gray-500 block">📝 ĐỀ BÀI LÝ THUYẾT:</strong>
+                                ${ex.theory.map(q => `<p>${q}</p>`).join('')}
+                            </div>
+
+                            <!-- Đề bài tĩnh: Thực hành -->
+                            <div class="bg-orange-50 border border-orange-100 rounded-lg p-3 text-xs text-orange-800 mb-3 space-y-1">
+                                <strong class="text-orange-700 block">💻 YÊU CẦU THỰC HÀNH:</strong>
+                                ${ex.requirements.map(r => `<p>${r}</p>`).join('')}
+                            </div>
+                        </div>
+                        
+                        <!-- Trạng thái hoàn thành nhanh -->
+                        <div class="pt-2">
+                            ${hasSub 
+                                ? `<span class="bg-green-100 text-green-700 border border-green-200 text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1 w-fit">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path></svg> Đã nộp bài
+                                   </span>`
+                                : `<span class="bg-red-50 text-red-600 border border-red-100 text-xs px-2.5 py-1 rounded-full font-semibold flex items-center gap-1 w-fit">
+                                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path></svg> Chưa hoàn thành
+                                   </span>`
+                            }
+                        </div>
+                    </div>
+                `;
+
+                // --- 2. PHẦN BÀI LÀM ĐỘNG CỦA HỌC VIÊN (Bên phải) ---
+                let rightHtml = `
+                    <div class="flex-1 md:w-7/12 border-t md:border-t-0 md:border-l border-gray-100 pt-4 md:pt-0 md:pl-6 flex flex-col justify-between">
+                `;
+
+                if (hasSub && activeSub) {
+                    rightHtml += `
+                        <div class="space-y-4">
+                            <!-- Phiên bản đang hiển thị -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2">
+                                <span class="text-xs text-gray-400 font-mono">📅 Cập nhật: ${activeSub.timestamp}</span>
+                                <span class="bg-blue-50 text-blue-700 font-bold text-[11px] px-2 py-0.5 rounded border border-blue-200">
+                                    Phiên bản: ${activeIdx === subList.length - 1 ? 'Mới nhất (v' + (activeIdx+1) + ')' : 'Cũ (v' + (activeIdx+1) + ')'}
+                                </span>
+                            </div>
+
+                            <!-- Câu trả lời lý thuyết tự luận -->
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">✍️ Kết quả trả lời lý thuyết:</h4>
+                                ${activeSub.answer 
+                                    ? `<div class="bg-blue-50 border-l-4 border-blue-500 rounded p-3 text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">${activeSub.answer}</div>`
+                                    : `<p class="text-xs italic text-gray-400">Không có câu trả lời tự luận</p>`
+                                }
+                            </div>
+
+                            <!-- Hình ảnh thực hành minh chứng -->
+                            <div>
+                                <h4 class="text-xs font-bold text-gray-500 uppercase tracking-wider mb-1.5">📸 Ảnh minh chứng thực hành:</h4>
+                                ${activeSub.imageUrls && activeSub.imageUrls.length > 0 
+                                    ? `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                        ${activeSub.imageUrls.map(url => {
+                                            const directImg = getDirectImageUrl(url);
+                                            return `
+                                                <a href="${url}" target="_blank" class="block border border-gray-200 rounded-lg overflow-hidden hover:opacity-90 transition bg-gray-50">
+                                                    <img src="${directImg}" alt="Minh chứng" class="w-full h-32 object-cover">
+                                                    <div class="p-2 text-[10px] text-blue-600 truncate font-semibold underline text-center bg-white border-t border-gray-100">Click để phóng to ↗</div>
+                                                </a>
+                                            `;
+                                        }).join('')}
+                                       </div>`
+                                    : `<p class="text-xs italic text-gray-400">Không nộp ảnh minh chứng ở bước này</p>`
+                                }
+                            </div>
+                        </div>
+
+                        <!-- CƠ CHẾ CHỌN LỊCH SỬ NỘP BÀI (VERSION SELECTOR) -->
+                        ${subList.length > 1 
+                            ? `<div class="mt-4 pt-3 border-t border-gray-100 flex flex-wrap items-center gap-1.5">
+                                <span class="text-xs font-bold text-gray-400">Lịch sử bài nộp (${subList.length}):</span>
+                                ${subList.map((sub, vIdx) => {
+                                    const isActive = vIdx === activeIdx;
+                                    const btnClass = isActive 
+                                        ? "bg-blue-600 text-white text-xs font-bold px-2 py-1 rounded" 
+                                        : "bg-gray-100 hover:bg-gray-200 text-gray-600 text-xs px-2 py-1 rounded border border-gray-200 transition";
+                                    const label = vIdx === subList.length - 1 ? 'Mới nhất' : `Bản v${vIdx + 1}`;
+                                    return `
+                                        <button class="${btnClass}" onclick="changeExerciseVersion('${ex.title}', ${vIdx})" title="Thời điểm nộp: ${sub.timestamp}">
+                                            ${label}
+                                        </button>
+                                    `;
+                                }).join('')}
+                               </div>`
+                            : ''
+                        }
+                    `;
+                } else {
+                    rightHtml += `
+                        <div class="flex flex-col items-center justify-center py-10 text-gray-400 bg-gray-50 rounded-lg border border-dashed border-gray-200 h-full">
+                            <svg class="w-10 h-10 text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                            <p class="text-xs font-bold">Chưa có kết quả nộp bài</p>
+                        </div>
+                    `;
+                }
+
+                rightHtml += `</div>`;
+
+                card.innerHTML = leftHtml + rightHtml;
+                container.appendChild(card);
+            });
+        }
+
+        // TỰ ĐỘNG CHẠY TẢI DỮ LIỆU BAN ĐẦU KHI MỞ TRANG
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSheetData();
+        });
+    </script>
+</body>
+</html>
