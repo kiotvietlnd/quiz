@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KIỂM TRA BÀI TẬP THỰC HÀNH CỦA HỌC VIÊN</title>
+    
+    <!-- Tailwind CSS & Standard Theme Config -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        kiot: '#166def',
+                        kiotHover: '#0f52b8',
+                        kiotLight: '#e8f0fe'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Font Awesome & Inter Font -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- PapaParse để xử lý đọc file CSV từ Google Sheet -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; -webkit-tap-highlight-color: transparent; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        #filterArea::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
+        .chart-scrollbar::-webkit-scrollbar { width: 8px; height: 8px; }
+        .chart-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
+        .glow-blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 15s ease-in-out infinite; background: rgba(37, 99, 235, 0.08); }
+        .glow-blob-2 { position: absolute; bottom: -10%; right: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 18s ease-in-out infinite reverse; background: rgba(16, 185, 129, 0.08); }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(30px) scale(1.05); } }
+
+        .glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05), 0 8px 10px -6px rgba(0,0,0,0.01); }
+        .glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+        
+        #sidebar select option { background-color: #1e3a8a; color: #f8fafc; }
+        select:focus { outline: none; box-shadow: none; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
+
+    <div class="tech-bg">
+        <div class="glow-blob-1"></div>
+        <div class="glow-blob-2"></div>
+    </div>
+
+    <!-- Sidebar / Cấu hình nguồn & Lọc học viên -->
+    <aside id="sidebar" class="w-72 bg-gradient-to-b from-blue-900 via-indigo-800 to-purple-800 border-r border-white/10 flex flex-col z-30 transition-all duration-300 flex-shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden">
+        
+        <div class="h-16 flex items-center px-4 border-b border-white/10 flex-shrink-0 justify-between relative z-10">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-7 brightness-0 invert drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+            <button onclick="toggleSidebar()" class="md:hidden text-white/50 hover:text-red-400 p-1 transition-colors"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <!-- Controls & Google Sheet Config Area -->
+        <div id="filterArea" class="p-4 flex-1 overflow-y-auto flex flex-col scroll-smooth relative z-10 space-y-4">
+            
+            <div class="pb-3 border-b border-white/10">
+                <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-2.5">Cấu hình nguồn</h2>
+                <div class="space-y-2">
+                    <input type="text" id="sheetUrlInput" class="w-full bg-white/10 text-white placeholder-slate-400 text-xs rounded-xl p-2.5 h-[36px] focus:outline-none focus:ring-2 focus:ring-blue-400 border border-white/10 font-medium shadow-inner truncate" placeholder="Dán link chia sẻ Google Sheet..." value="https://docs.google.com/spreadsheets/d/10v72M9_6aT0aGZX0EIUBbGfHLMsy3KpQg1LR_EJL1NY/edit?usp=sharing">
+                    <button onclick="fetchSheetData()" class="w-full h-9 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2"><i class="fas fa-sync-alt"></i> Đồng bộ dữ liệu</button>
+                </div>
+            </div>
+
+            <div class="space-y-3.5">
+                <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-1.5">Bộ lọc bài làm</h2>
+                
+                <!-- 1. Dropdown Khóa -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Khóa học</label>
+                    <select id="filterClass" onchange="onFilterChange('khoa')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Khóa</option>
+                    </select>
+                </div>
+
+                <!-- 2. Dropdown Buổi -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label>
+                    <select id="filterSession" onchange="onFilterChange('buoi')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Buổi</option>
+                    </select>
+                </div>
+
+                <!-- 3. Dropdown Phòng Ban -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Phòng ban</label>
+                    <select id="filterDept" onchange="onFilterChange('phongBan')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Phòng ban</option>
+                    </select>
+                </div>
+
+                <!-- 4. Dropdown Học Viên -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label>
+                    <div class="flex items-stretch h-[34px] bg-white/10 rounded-lg border border-white/10 overflow-hidden shadow-inner">
+                        <button onclick="navigateSelect('filterStudent', -1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors flex-shrink-0"><i class="fas fa-chevron-left text-[10px]"></i></button>
+                        <select id="filterStudent" onchange="onFilterChange('hoVaTen')" class="flex-1 w-full bg-transparent border-none text-white text-[11px] focus:ring-0 outline-none px-2 font-semibold cursor-pointer truncate">
+                            <option value="all">Tất cả Học viên</option>
+                        </select>
+                        <button onclick="navigateSelect('filterStudent', 1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors flex-shrink-0"><i class="fas fa-chevron-right text-[10px]"></i></button>
+                    </div>
+                </div>
+
+                <!-- 5. Dropdown Tên bài học -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Tên bài học</label>
+                    <div class="flex items-stretch h-[34px] bg-white/10 rounded-lg border border-white/10 overflow-hidden shadow-inner">
+                        <button onclick="navigateSelect('filterLesson', -1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors flex-shrink-0"><i class="fas fa-chevron-left text-[10px]"></i></button>
+                        <select id="filterLesson" onchange="onFilterChange('tenBaiHoc')" class="flex-1 w-full bg-transparent border-none text-white text-[11px] focus:ring-0 outline-none px-2 font-semibold cursor-pointer truncate">
+                            <option value="all">Tất cả Bài học</option>
+                        </select>
+                        <button onclick="navigateSelect('filterLesson', 1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors flex-shrink-0"><i class="fas fa-chevron-right text-[10px]"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md flex-shrink-0 flex flex-col gap-2 relative z-10">
+            <span class="text-[10px] text-slate-300 font-semibold text-center"><i class="fas fa-graduation-cap text-indigo-400 mr-1"></i> KiotViet Learning & Development</span>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10">
+        
+        <!-- Header -->
+        <header class="glass-header h-16 flex items-center justify-between px-6 z-20 flex-shrink-0 w-full">
+            <div class="flex items-center gap-4 flex-1">
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-blue-600 p-2 rounded-xl hover:bg-blue-50 transition-colors">
+                    <i class="fas fa-bars text-lg"></i>
+                </button>
+                <div class="flex items-center gap-2.5">
+                    <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h1 class="text-sm md:text-base font-black text-slate-800 tracking-tight font-sans">KIỂM TRA BÀI TẬP THỰC HÀNH CỦA HỌC VIÊN</h1>
+                </div>
+            </div>
+            <div class="text-right hidden sm:block">
+                <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Hệ thống</span>
+                <span class="text-xs font-bold text-blue-600">Chấm Bài Trực Tuyến</span>
+            </div>
+        </header>
+
+        <!-- Main Content Viewport -->
+        <div class="flex-1 overflow-auto p-4 md:p-6 lg:p-8 relative pb-28">
+            <div class="max-w-4xl mx-auto w-full">
+                
+                <!-- Stats Summary Row -->
+                <div id="statsSummary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8 z-10 relative hidden">
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-user"></i></div>
+                        <div>
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Học Viên Đang Chọn</p>
+                            <p class="text-base font-black text-slate-800 truncate max-w-[200px]" id="selectedStudentName">-</p>
+                        </div>
+                    </div>
+                    
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-building"></i></div>
+                        <div>
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Bộ Phận / Phòng Ban</p>
+                            <p class="text-base font-black text-slate-800" id="statDept">-</p>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-tasks"></i></div>
+                        <div>
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Trạng Thái Lọc</p>
+                            <p class="text-base font-black text-emerald-600" id="statProgress">0/8 bài tập</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Placeholder (Welcome / Loading states) -->
+                <div id="statusPlaceholder" class="glass-panel rounded-3xl p-12 text-center max-w-2xl mx-auto my-10 border border-white/80 shadow-md">
+                    <div id="loadingSpinner" class="hidden flex flex-col items-center">
+                        <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                        <p class="font-black text-slate-700 text-lg">Đang đồng bộ dữ liệu...</p>
+                        <p class="text-sm text-slate-400 font-medium mt-1">Hệ thống đang trích xuất dữ liệu từ Google Sheets</p>
+                    </div>
+                    <div id="welcomeMessage" class="text-slate-500">
+                        <div class="w-16 h-16 bg-blue-50 text-blue-500 border border-blue-100 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm">
+                            <i class="fas fa-cloud-download-alt"></i>
+                        </div>
+                        <p class="font-black text-lg text-slate-700">Chào mừng Giảng viên!</p>
+                        <p class="text-sm mt-2 font-medium leading-relaxed">Hãy dán link chia sẻ Google Sheet ở cột cấu hình bên trái và nhấn nút <strong class="text-blue-600">"Đồng bộ dữ liệu"</strong> để bắt đầu quá trình chấm điểm.</p>
+                    </div>
+                </div>
+
+                <!-- Exercises Content Container -->
+                <div id="exercisesContainer" class="space-y-8 hidden"></div>
+
+                <!-- Global Action Button (Xem nhận xét & Xuất bảng) -->
+                <div id="globalActionArea" class="mt-8 flex flex-col sm:flex-row justify-center gap-4 hidden">
+                    <button onclick="openSummaryCommentsModal()" class="px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-black text-xs md:text-sm rounded-2xl shadow-xl shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <i class="fas fa-comment-dots text-base"></i> Xem Nhận Xét & Sửa Loạt
+                    </button>
+                    <button onclick="openEvaluationTableModal()" class="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs md:text-sm rounded-2xl shadow-xl shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <i class="fas fa-table text-base"></i> Xem Bảng Đánh Giá & Xuất Excel
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center py-4 bg-white/70 border-t border-slate-200/50 flex-shrink-0 z-20">
+            <p class="text-[10px] font-semibold text-slate-400">© 2026 KiotViet Learning & Development • Công cụ dành riêng cho Giảng viên</p>
+        </footer>
+    </main>
+
+    <!-- FULLSCREEN IMAGE VIEW MODAL -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[150] hidden flex-col justify-between items-center p-4 transition-all">
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
+            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
+            <div class="flex items-center gap-3">
+                <a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Xem ảnh gốc</a>
+                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+        </div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
+            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button>
+            <img id="fullscreenModalImg" src="" alt="Minh chứng toàn màn hình" class="max-w-full max-h-full object-contain rounded-lg">
+            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
+        </div>
+        <div class="h-8 shrink-0"></div>
+    </div>
+
+    <!-- SUMMARY COMMENTS MODAL -->
+    <div id="summaryCommentsModal" class="fixed inset-0 z-[140] hidden flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden border border-slate-200 transition-all">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
+                <h4 class="font-black text-slate-800 text-sm md:text-base flex items-center gap-2"><i class="fas fa-comment-dots text-indigo-600"></i> Tổng Hợp Nhận Xét Của Học Viên</h4>
+                <button onclick="closeSummaryCommentsModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
+                    <i class="fas fa-times text-sm"></i>
+                </button>
+            </div>
+            <div id="summaryModalContent" class="p-6 overflow-y-auto flex-1 bg-slate-50/50 space-y-4">
+                <!-- Nội dung các câu hỏi và ô textarea sẽ được đổ tự động tại đây -->
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-end bg-white shrink-0 gap-3">
+                <button onclick="closeSummaryCommentsModal()" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-xs transition-colors">Hủy bỏ</button>
+                <button onclick="saveAllSummaryFeedbacks()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-xs transition-colors shadow-lg shadow-blue-500/20">Lưu Tất Cả</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- EVALUATION TABLE VIEW MODAL (Bảng dữ liệu đánh giá tổng hợp) -->
+    <div id="evaluationTableModal" class="fixed inset-0 z-[130] hidden flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-7xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200 transition-all">
+            <!-- Header -->
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0 flex-wrap gap-3">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-table text-emerald-600 text-lg"></i>
+                    <h4 class="font-black text-slate-800 text-sm md:text-base">Bảng Đánh Giá Thực Hành Tổng Hợp</h4>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="copyEvaluationToClipboard()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-md shadow-emerald-500/10">
+                        <i class="fas fa-file-excel"></i> Copy Đánh giá sang Excel
+                    </button>
+                    <button onclick="closeEvaluationTableModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
+                        <i class="fas fa-times text-sm"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Body Table -->
+            <div class="overflow-auto flex-1 bg-white chart-scrollbar">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 sticky top-0 z-10 font-bold uppercase tracking-wider text-[10px]">
+                        <tr>
+                            <th class="px-4 py-3 border-r border-slate-200">Ngày</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Họ và Tên</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Phòng ban</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Khóa</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Buổi</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Tên bài học</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Câu trả lời tự luận</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Link Drive</th>
+                            <th class="px-4 py-3">Nhận xét</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evaluationTableTbody" class="divide-y divide-slate-100">
+                        <!-- Đổ dữ liệu động từ script -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Footer -->
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
+                <span class="text-xs font-bold text-slate-500">Tổng cộng: <span id="evalTotalRows" class="text-emerald-600">0</span> bản ghi bài làm.</span>
+                <button onclick="closeEvaluationTableModal()" class="px-5 py-2.5 text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-xl font-bold text-xs transition-colors">Đóng</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Cấu trúc ĐỀ BÀI TĨNH của Buổi 1 (Bảo toàn nội dung)
+        const SESSION_EXERCISES = [
+            {
+                title: "Bài tập 1: Đăng ký gian hàng dùng thử",
+                theory: [
+                    "1. Gian hàng dùng thử miễn phí trên hệ thống KiotViet có thời hạn sử dụng tối đa là bao nhiêu ngày?",
+                    "2. Tại sao học viên BẮT BUỘC phải nhấn tổ hợp phím Ctrl+1 và nhập mã giới thiệu \"3670\" ngay sau khi đăng nhập thành công vào gian hàng vừa đăng ký?"
+                ],
+                requirements: [
+                    "1. Đăng ký mới một gian hàng dùng thử trên website KiotViet với ngành hàng Bán lẻ.",
+                    "2. Thực hiện thao tác nhập mã giới thiệu đào tạo để tránh việc hệ thống ghi nhận là khách hàng tiềm năng và chuyển cho Telesales."
+                ],
+                instructions: [
+                    "1. Mở trình duyệt web, truy cập vào trang chủ: https://www.kiotviet.vn/ và nhấn nút Dùng thử miễn phí.",
+                    "2. Điền đầy đủ thông tin cá nhân (Họ tên, Điện thoại, Khu vực...), nhấn tổ hợp phím Ctrl + 1 trên bàn phím, một hộp thoại sẽ hiện ra, nhập mã giới thiệu 3670 của phòng Đào tạo và tiến hành đăng ký."
+                ]
+            },
+            {
+                title: "Bài tập 2: Thêm mới hàng hóa",
+                theory: [
+                    "1. Tại sao cần phải thiết lập các \"Thuộc tính\" (như trọng lượng, màu sắc, kích cỡ) khi thêm mới hàng hóa thay vì tạo mỗi loại thành một mã sản phẩm độc lập?",
+                    "2. Nếu bạn bỏ trống ô \"Giá vốn\" khi thêm mới hàng hóa, điều này sẽ ảnh hưởng như thế nào đến báo cáo lợi nhuận sau này?",
+                    "3. Tính năng \"Đơn vị tính\" (ví dụ: Hộp, Lốc, Thùng) giúp ích gì cho thu ngân trong quá trình bán hàng?"
+                ],
+                requirements: [
+                    "1. Thêm mới một sản phẩm thực tế của cửa hàng với nhiều phân loại trọng lượng khác nhau."
+                ],
+                instructions: [
+                    "1. Tại màn hình Tổng quan, vào menu Hàng hóa -> chọn Danh sách hàng hóa.",
+                    "2. Nhấn nút + Tạo mới -> chọn Hàng hóa và khai báo đầy đủ thông tin mẫu."
+                ]
+            },
+            {
+                title: "Bài tập 3: Nhập hàng và ghi nhận công nợ",
+                theory: [
+                    "1. Điều gì sẽ xảy ra với số lượng tồn kho của sản phẩm trên hệ thống nếu bạn chưa nhấn \"Hoàn thành\" trong phiếu nhập hàng?",
+                    "2. Khi nhập hàng từ một nhà cung cấp mới mà chưa có thông tin trên hệ thống, bạn cần thao tác như thế nào?",
+                    "3. Nếu nhập hàng nhưng chưa thanh toán ngay, số tiền này sẽ được KiotViet quản lý ở mục nào?"
+                ],
+                requirements: [
+                    "1. Tạo phiếu nhập hàng cho mặt hàng Nước giặt OMO Matic vừa tạo để ghi nhận tồn kho.",
+                    "2. Treo lại công nợ, chưa thanh toán tiền ngay cho nhà cung cấp."
+                ],
+                instructions: [
+                    "1. Vào menu Mua hàng -> chọn Nhập hàng. Nhấn nút + Nhập hàng.",
+                    "2. Thêm Nhà phân phối Unilever, chọn số lượng 20, để tiền thanh toán là 0đ và ấn Hoàn thành."
+                ]
+            },
+            {
+                title: "Bài tập 4: Bán hàng và thanh toán kết hợp",
+                theory: [
+                    "1. Việc cho phép áp dụng đồng thời nhiều phương thức thanh toán trên một hóa đơn mang lại lợi ích gì?",
+                    "2. Khi hóa đơn bán hàng được hoàn tất, hệ thống KiotViet sẽ tự động thay đổi những dữ liệu nào?"
+                ],
+                requirements: [
+                    "1. Tạo hóa đơn bán hàng có mặt hàng Nước giặt OMO Matic - Túi 2kg cho khách hàng mới Chị Lan.",
+                    "2. Khách hàng thanh toán kết hợp 2 hình thức: Tiền mặt và Chuyển khoản."
+                ],
+                instructions: [
+                    "1. Vào màn hình Bán hàng, tìm và chọn khách hàng Chị Lan.",
+                    "2. Nhấp chọn Thanh toán kết hợp, thanh toán 100k Tiền mặt và 80k Chuyển khoản."
+                ]
+            },
+            {
+                title: "Bài tập 5: Trả hàng và thu phí dịch vụ",
+                theory: [
+                    "1. Khi xử lý trả hàng có thu phí dịch vụ, số tiền phí này sẽ được KiotViet ghi nhận vào đâu trong hệ thống báo cáo? Tại sao?",
+                    "2. Việc liên kết giao dịch trả hàng với hóa đơn gốc mang lại lợi ích gì trong việc quản lý?"
+                ],
+                requirements: [
+                    "1. Xử lý tình huống khách hàng (Chị Lan) mang trả lại sản phẩm vừa mua.",
+                    "2. Áp dụng chính sách thu phí trả hàng là 10,000đ."
+                ],
+                instructions: [
+                    "1. Tại màn hình Bán hàng, bấm biểu tượng Trả hàng, tìm lại hóa đơn gốc của Chị Lan.",
+                    "2. Điền Phí trả hàng là 10,000đ và thực hiện bấm Trả hàng."
+                ]
+            },
+            {
+                title: "Bài tập 6: Quản lý công nợ nhà cung cấp",
+                theory: [
+                    "1. Thao tác \"Thanh toán phiếu chi\" khác với thao tác \"Điều chỉnh công nợ\" ở điểm nào?",
+                    "2. Tại sao lại cần chức năng \"Khai báo công nợ ban đầu\" khi bắt đầu sử dụng KiotViet?"
+                ],
+                requirements: [
+                    "1. Thanh toán khoản nợ của Nhà phân phối Unilever (Phương thức: Tiền mặt).",
+                    "2. Tạo một khoản công nợ tồn đầu kỳ cho Nhà cung cấp mới."
+                ],
+                instructions: [
+                    "1. Vào Mua hàng -> Nhà cung cấp. Tìm Unilever và lập phiếu chi thanh toán nợ.",
+                    "2. Tạo nhà phân phối mới, chọn tab Nợ cần trả và bấm Điều chỉnh để tăng công nợ ban đầu."
+                ]
+            },
+            {
+                title: "Bài tập 7: Theo dõi báo cáo",
+                theory: [
+                    "1. Để xem được Lợi nhuận gộp của cửa hàng trong ngày, bạn cần vào báo cáo nào?",
+                    "2. Để xem được Tổng giá vốn của toàn bộ sản phẩm (Giá trị kho), bạn cần vào báo cáo nào?"
+                ],
+                requirements: [
+                    "1. Xem báo cáo cuối ngày để kiểm tra lại các giao dịch đã thực hành.",
+                    "2. Xem báo cáo hàng hóa để kiểm tra lượng tồn kho."
+                ],
+                instructions: [
+                    "1. Truy cập Báo cáo -> Cuối ngày.",
+                    "2. Truy cập Báo cáo -> Hàng hóa để xem thẻ Xuất nhập tồn."
+                ]
+            },
+            {
+                title: "Bài tập 8: Kinh nghiệm tư vấn (Demo)",
+                theory: [
+                    "1. Lợi ích của việc dùng 1 mã sản phẩm xuyên suốt khi demo cho khách hàng?",
+                    "2. Thao tác nào cần tập trung nhất để thuyết phục khách hàng rằng KiotViet dễ sử dụng?",
+                    "3. Cần chỉ cho khách hàng xem tab nào để chứng minh tồn kho được cập nhật tự động?"
+                ],
+                requirements: ["1. Tra cứu lại toàn bộ lịch sử xuất - nhập - tồn của mã hàng hóa đã dùng."],
+                instructions: [
+                    "1. Vào Danh sách hàng hóa, bấm vào Nước giặt OMO.",
+                    "2. Click xem tab Thẻ kho để theo dõi biến động tồn cuối."
+                ]
+            }
+        ];
+
+        let globalStudentsData = {};
+        let rawParsedEntries = []; 
+        let currentActiveVersions = {};
+        let currentSlideIndices = {};
+        let lastSelectedStudentKey = "";
+
+        // Unique values for dropdown filters
+        let uniqueClasses = [];
+        let uniqueSessions = [];
+        let uniqueDepts = [];
+        let uniqueLessons = [];
+
+        // Fullscreen Modal State
+        let fullscreenImageList = [];
+        let fullscreenImageIndex = 0;
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('hidden');
+            if (window.innerWidth < 768) {
+                sidebar.classList.toggle('absolute');
+                sidebar.classList.toggle('inset-y-0');
+                sidebar.classList.toggle('left-0');
+            }
+        }
+
+        function convertUrlToCsv(url) {
+            let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
+            if (fileIdMatch && fileIdMatch[1]) {
+                return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`;
+            }
+            return url;
+        }
+
+        function navigateSelect(selectId, dir) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            const currentIdx = select.selectedIndex;
+            const maxIdx = select.options.length - 1;
+            let newIdx = currentIdx + dir;
+            
+            if (newIdx < 0) newIdx = 0;
+            if (newIdx > maxIdx) newIdx = maxIdx;
+            
+            if (newIdx !== currentIdx) {
+                select.selectedIndex = newIdx;
+                select.dispatchEvent(new Event('change')); 
+            }
+        }
+
+        function fetchSheetData() {
+            const rawUrl = document.getElementById('sheetUrlInput').value.trim();
+            if(!rawUrl) {
+                alert("Vui lòng nhập đường dẫn chia sẻ của Google Sheet!");
+                return;
+            }
+
+            const csvUrl = convertUrlToCsv(rawUrl);
+            
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            document.getElementById('welcomeMessage').classList.add('hidden');
+            document.getElementById('statusPlaceholder').classList.remove('hidden');
+            document.getElementById('exercisesContainer').classList.add('hidden');
+            document.getElementById('statsSummary').classList.add('hidden');
+            document.getElementById('globalActionArea').classList.add('hidden');
+
+            Papa.parse(csvUrl, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    processData(results.data);
+                },
+                error: function(err) {
+                    document.getElementById('loadingSpinner').classList.add('hidden');
+                    document.getElementById('welcomeMessage').classList.remove('hidden');
+                    alert("Lỗi kết nối dữ liệu: Hãy đảm bảo rằng liên kết Google Sheet đã được cài đặt ở chế độ 'Bất kỳ ai có liên kết đều có thể xem'!");
+                }
+            });
+        }
+
+        function processData(rawData) {
+            globalStudentsData = {};
+            rawParsedEntries = [];
+
+            rawData.forEach(row => {
+                const timestamp = (row["Ngày"] || row["Timestamp"] || "").trim();
+                const name = (row["Họ và Tên"] || row["Họ và tên"] || row["studentName"] || "").trim();
+                const dept = (row["Phòng ban"] || row["Phòng Ban"] || row["department"] || "").trim();
+                const course = (row["Khóa"] || row["Khoá"] || "26KV15").trim();
+                const session = (row["Buổi"] || "Buổi 1").trim();
+                const exerciseTitle = (row["Tên bài học"] || row["exerciseTitle"] || "").trim();
+                const answer = (row["Câu trả lời tự luận"] || row["textAnswer"] || "").trim();
+                const rawUrls = (row["Link Drive"] || row["Link drive"] || row["imageUrls"] || "").trim();
+
+                if (!name) return;
+
+                // 1. Lưu bản ghi dữ liệu phẳng
+                rawParsedEntries.push({
+                    ngay: timestamp,
+                    hoVaTen: name,
+                    phongBan: dept,
+                    khoa: course,
+                    buoi: session,
+                    tenBaiHoc: exerciseTitle,
+                    cauTraLoi: answer,
+                    linkDrive: rawUrls
+                });
+
+                // 2. Gom nhóm chuẩn hóa theo khóa nhận diện "Tên - Bộ phận"
+                const studentKey = `${name} - ${dept}`;
+                if (!globalStudentsData[studentKey]) {
+                    globalStudentsData[studentKey] = {
+                        name: name,
+                        dept: dept,
+                        submissions: {}
+                    };
+                }
+
+                if (!globalStudentsData[studentKey].submissions[exerciseTitle]) {
+                    globalStudentsData[studentKey].submissions[exerciseTitle] = [];
+                }
+
+                const urls = rawUrls ? rawUrls.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")) : [];
+
+                globalStudentsData[studentKey].submissions[exerciseTitle].push({
+                    ngay: timestamp,
+                    hoVaTen: name,
+                    phongBan: dept,
+                    khoa: course,
+                    buoi: session,
+                    tenBaiHoc: exerciseTitle,
+                    cauTraLoi: answer,
+                    linkDrive: rawUrls,
+                    imageUrls: urls
+                });
+            });
+
+            // Chiết xuất giá trị lọc độc nhất
+            uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort();
+            uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort();
+            uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
+            
+            const foundLessons = [...new Set(rawParsedEntries.map(e => e.tenBaiHoc))].filter(Boolean);
+            const staticLessons = SESSION_EXERCISES.map(ex => ex.title);
+            uniqueLessons = [...new Set([...staticLessons, ...foundLessons])];
+
+            populateDropdownOptions('filterClass', uniqueClasses, 'Tất cả Khóa');
+            populateDropdownOptions('filterSession', uniqueSessions, 'Tất cả Buổi');
+            populateDropdownOptions('filterDept', uniqueDepts, 'Tất cả Phòng ban');
+            populateDropdownOptions('filterLesson', uniqueLessons, 'Tất cả Bài học');
+
+            updateStudentDropdown();
+        }
+
+        function populateDropdownOptions(id, list, defaultLabel) {
+            const select = document.getElementById(id);
+            if(!select) return;
+            let html = `<option value="all">${defaultLabel}</option>`;
+            list.forEach(item => {
+                html += `<option value="${item}">${item}</option>`;
+            });
+            select.innerHTML = html;
+            select.selectedIndex = 0;
+        }
+
+        // Cập nhật tầng Học viên dựa trên các bộ lọc Khóa học, Buổi học, Bộ phận đã chọn
+        function updateStudentDropdown() {
+            const selectedClass = document.getElementById('filterClass').value;
+            const selectedSession = document.getElementById('filterSession').value;
+            const selectedDept = document.getElementById('filterDept').value;
+
+            let filtered = rawParsedEntries;
+            if(selectedClass !== 'all') filtered = filtered.filter(e => e.khoa === selectedClass);
+            if(selectedSession !== 'all') filtered = filtered.filter(e => e.buoi === selectedSession);
+            if(selectedDept !== 'all') filtered = filtered.filter(e => e.phongBan === selectedDept);
+
+            // Gom mã học viên duy nhất kèm phòng ban để tránh lỗi xung đột cùng tên khác phòng ban
+            const matchingStudents = [...new Set(filtered.map(e => `${e.hoVaTen} - ${e.phongBan}`))].filter(Boolean).sort();
+            
+            const select = document.getElementById('filterStudent');
+            let html = `<option value="all">Tất cả Học viên</option>`;
+            matchingStudents.forEach(stKey => {
+                const parts = stKey.split(" - ");
+                const name = parts[0];
+                const dept = parts[1] || "Chưa phân bộ phận";
+                html += `<option value="${stKey}">${name} (${dept})</option>`;
+            });
+            select.innerHTML = html;
+            select.selectedIndex = 0;
+
+            onFilterChange();
+        }
+
+        function getFeedbackKey(studentKey) {
+            return `kiot_feedback_${studentKey}`;
+        }
+
+        // ĐIỀU PHỐI RENDER CHUẨN XÁC DỮ LIỆU ĐÃ LỌC
+        function onFilterChange(triggerSource) {
+            if(triggerSource === 'khoa' || triggerSource === 'buoi' || triggerSource === 'phongBan') {
+                updateStudentDropdown();
+                return;
+            }
+
+            const selectedClass = document.getElementById('filterClass').value;
+            const selectedSession = document.getElementById('filterSession').value;
+            const selectedDept = document.getElementById('filterDept').value;
+            const selectedStudentKey = document.getElementById('filterStudent').value; // Trả về "Họ tên - Bộ phận" hoặc "all"
+            const selectedLesson = document.getElementById('filterLesson').value;
+
+            // Reset phiên bản và chỉ mục slider nếu chuyển đổi đối tượng học viên mới
+            if (selectedStudentKey !== lastSelectedStudentKey) {
+                currentActiveVersions = {};
+                currentSlideIndices = {};
+                lastSelectedStudentKey = selectedStudentKey;
+            }
+
+            document.getElementById('statusPlaceholder').classList.add('hidden');
+            const container = document.getElementById('exercisesContainer');
+            container.innerHTML = '';
+            container.classList.remove('hidden');
+            document.getElementById('globalActionArea').classList.remove('hidden');
+            document.getElementById('statsSummary').classList.remove('hidden');
+
+            // --- 1. HIỂN THỊ TRẠNG THÁI SCORECARDS ---
+            if(selectedStudentKey !== 'all') {
+                const parts = selectedStudentKey.split(" - ");
+                const studentName = parts[0];
+                const studentDept = parts[1] || "Chưa phân bộ phận";
+
+                document.getElementById('selectedStudentName').innerText = studentName;
+                document.getElementById('statDept').innerText = studentDept;
+
+                let completedCount = 0;
+                const exercisesToShow = selectedLesson === 'all' 
+                    ? SESSION_EXERCISES 
+                    : SESSION_EXERCISES.filter(ex => ex.title === selectedLesson);
+
+                exercisesToShow.forEach(ex => {
+                    const matches = rawParsedEntries.filter(e => 
+                        e.hoVaTen === studentName && 
+                        e.phongBan === studentDept &&
+                        e.tenBaiHoc === ex.title &&
+                        (selectedClass === 'all' || e.khoa === selectedClass) &&
+                        (selectedSession === 'all' || e.buoi === selectedSession)
+                    );
+                    if(matches.length > 0) completedCount++;
+                });
+                document.getElementById('statProgress').innerText = `${completedCount}/${exercisesToShow.length} bài tập`;
+            } else {
+                document.getElementById('selectedStudentName').innerText = "Tất cả Học viên";
+                document.getElementById('statDept').innerText = selectedDept === 'all' ? "Tất cả Phòng ban" : selectedDept;
+
+                let filtered = rawParsedEntries;
+                if(selectedClass !== 'all') filtered = filtered.filter(e => e.khoa === selectedClass);
+                if(selectedSession !== 'all') filtered = filtered.filter(e => e.buoi === selectedSession);
+                if(selectedDept !== 'all') filtered = filtered.filter(e => e.phongBan === selectedDept);
+                if(selectedLesson !== 'all') filtered = filtered.filter(e => e.tenBaiHoc === selectedLesson);
+
+                const uniqueStCount = [...new Set(filtered.map(e => e.hoVaTen))].length;
+                document.getElementById('statProgress').innerText = `${uniqueStCount} học viên nộp bài`;
+            }
+
+            // --- 2. XỬ LÝ LỌC VÀ RENDER CARD HỌC VIÊN ---
+            if(selectedStudentKey !== 'all') {
+                // CHẾ ĐỘ A: Xem chi tiết của một Học viên cụ thể
+                const parts = selectedStudentKey.split(" - ");
+                const studentName = parts[0];
+                const studentDept = parts[1];
+
+                const exercisesToShow = selectedLesson === 'all' 
+                    ? SESSION_EXERCISES 
+                    : SESSION_EXERCISES.filter(ex => ex.title === selectedLesson);
+
+                if(exercisesToShow.length === 0 && selectedLesson !== 'all') {
+                    const dynamicEx = {
+                        title: selectedLesson,
+                        theory: [],
+                        requirements: []
+                    };
+                    exercisesToShow.push(dynamicEx);
+                }
+
+                exercisesToShow.forEach((ex, idx) => {
+                    const subs = rawParsedEntries.filter(e => 
+                        e.hoVaTen === studentName && 
+                        e.phongBan === studentDept &&
+                        e.tenBaiHoc === ex.title &&
+                        (selectedClass === 'all' || e.khoa === selectedClass) &&
+                        (selectedSession === 'all' || e.buoi === selectedSession)
+                    );
+
+                    const hasSub = subs.length > 0;
+                    const activeIdx = currentActiveVersions[ex.title] !== undefined ? currentActiveVersions[ex.title] : (hasSub ? subs.length - 1 : 0);
+                    const activeSub = hasSub ? subs[activeIdx] : null;
+
+                    renderCard(container, ex, idx, subs, activeSub, activeIdx, studentName, studentDept, false);
+                });
+            } else {
+                // CHẾ ĐỘ B: Luồng xem tổng hợp của nhiều học viên (Stream View)
+                let filteredSubs = rawParsedEntries;
+                if(selectedClass !== 'all') filteredSubs = filteredSubs.filter(e => e.khoa === selectedClass);
+                if(selectedSession !== 'all') filteredSubs = filteredSubs.filter(e => e.buoi === selectedSession);
+                if(selectedDept !== 'all') filteredSubs = filteredSubs.filter(e => e.phongBan === selectedDept);
+                if(selectedLesson !== 'all') filteredSubs = filteredSubs.filter(e => e.tenBaiHoc === selectedLesson);
+
+                if(filteredSubs.length === 0) {
+                    container.innerHTML = `
+                        <div class="glass-panel rounded-3xl p-12 text-center max-w-2xl mx-auto border border-white/80 shadow-md text-slate-400">
+                            <i class="fas fa-search-minus text-3xl mb-3 text-slate-300"></i>
+                            <p class="font-bold">Không tìm thấy bài làm nào khớp bộ lọc!</p>
+                            <p class="text-xs mt-1 font-medium">Hãy thử nới lỏng các bộ lọc bên trái.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                filteredSubs.forEach((sub, idx) => {
+                    const matchedStatic = SESSION_EXERCISES.find(ex => ex.title === sub.tenBaiHoc) || {
+                        title: sub.tenBaiHoc,
+                        theory: [],
+                        requirements: []
+                    };
+
+                    renderCard(container, matchedStatic, idx, [sub], sub, 0, sub.hoVaTen, sub.phongBan, true);
+                });
+            }
+        }
+
+        function getDirectImageUrl(url) {
+            let fileIdMatch = url.match(/\/d\/(.+?)\//);
+            if(!fileIdMatch) {
+                fileIdMatch = url.match(/id=(.+?)(&|$)/);
+            }
+            if(fileIdMatch && fileIdMatch[1]) {
+                return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
+            }
+            return url;
+        }
+
+        // --- Logic Custom Image Slider ---
+        function moveSlide(uniqueKey, dir, maxCount) {
+            const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, '');
+            let currentIdx = currentSlideIndices[uniqueKey] || 0;
+            currentIdx = (currentIdx + dir + maxCount) % maxCount;
+            currentSlideIndices[uniqueKey] = currentIdx;
+
+            const track = document.getElementById(`track-${safeKey}`);
+            if(track) {
+                track.style.transform = `translateX(-${currentIdx * 100}%)`;
+            }
+
+            const indicator = document.getElementById(`indicator-${safeKey}`);
+            if(indicator) {
+                indicator.innerText = `${currentIdx + 1} / ${maxCount}`;
+            }
+        }
+
+        // --- Fullscreen View Modal Logic ---
+        function openFullscreenModal(urls, idx) {
+            fullscreenImageList = urls;
+            fullscreenImageIndex = idx;
+            updateFullscreenModal();
+            document.getElementById('fullscreenModal').classList.remove('hidden');
+            document.getElementById('fullscreenModal').classList.add('flex');
+        }
+
+        function closeFullscreenModal() {
+            document.getElementById('fullscreenModal').classList.add('hidden');
+            document.getElementById('fullscreenModal').classList.remove('flex');
+        }
+
+        function changeFullscreenImg(dir) {
+            if (fullscreenImageList.length === 0) return;
+            fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length;
+            updateFullscreenModal();
+        }
+
+        function updateFullscreenModal() {
+            const img = document.getElementById('fullscreenModalImg');
+            const viewRawBtn = document.getElementById('fullscreenModalRawBtn');
+            const countText = document.getElementById('fullscreenModalCount');
+            
+            const currentUrl = fullscreenImageList[fullscreenImageIndex];
+            img.src = getDirectImageUrl(currentUrl);
+            viewRawBtn.href = currentUrl;
+            countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`;
+            
+            const prevBtn = document.getElementById('fullscreenModalPrev');
+            const nextBtn = document.getElementById('fullscreenModalNext');
+            if (fullscreenImageList.length <= 1) {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+            }
+        }
+
+        // --- Quản lý Nhận xét cục bộ cho từng câu hỏi ---
+        function saveFeedbackDirect(studentName, deptName, exTitle) {
+            const studentKey = `${studentName} - ${deptName}`;
+            const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, '');
+            const val = document.getElementById(`feedback-${safeKey}`).value.trim();
+
+            const storageKey = getFeedbackKey(studentKey);
+            const savedData = JSON.parse(localStorage.getItem(storageKey)) || {};
+            savedData[exTitle] = val;
+            localStorage.setItem(storageKey, JSON.stringify(savedData));
+
+            const btn = document.getElementById(`btn-save-feedback-${safeKey}`);
+            const orig = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu';
+            btn.classList.replace('bg-blue-600', 'bg-emerald-600');
+            setTimeout(() => {
+                btn.innerHTML = orig;
+                btn.classList.replace('bg-emerald-600', 'bg-blue-600');
+            }, 2000);
+        }
+
+        function insertQuickFeedbackDirect(studentName, deptName, exTitle, text) {
+            const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, '');
+            const textarea = document.getElementById(`feedback-${safeKey}`);
+            if (textarea) {
+                let currentVal = textarea.value.trim();
+                if (currentVal) {
+                    textarea.value = currentVal + ", " + text;
+                } else {
+                    textarea.value = text;
+                }
+                saveFeedbackDirect(studentName, deptName, exTitle);
+            }
+        }
+
+        function insertSummaryQuickFeedback(safeKey, text) {
+            const textarea = document.getElementById(`sum-feedback-${safeKey}`);
+            if (textarea) {
+                let currentVal = textarea.value.trim();
+                if (currentVal) {
+                    textarea.value = currentVal + ", " + text;
+                } else {
+                    textarea.value = text;
+                }
+            }
+        }
+
+        // --- Summary Comments Panel Logic ---
+        function openSummaryCommentsModal() {
+            const selectEl = document.getElementById('filterStudent');
+            const studentKey = selectEl.value;
+            if(studentKey === 'all') {
+                alert("Vui lòng chọn 1 Học viên cụ thể ở bộ lọc thanh bên để tổng hợp nhận xét!");
+                return;
+            }
+
+            const matchedEntry = rawParsedEntries.find(e => e.hoVaTen === studentKey);
+            const deptName = matchedEntry ? matchedEntry.phongBan : "";
+            const storageKey = getFeedbackKey(`${studentKey} - ${deptName}`);
+            const savedFeedbacks = JSON.parse(localStorage.getItem(storageKey)) || {};
+
+            const container = document.getElementById('summaryModalContent');
+            container.innerHTML = '';
+
+            SESSION_EXERCISES.forEach((ex, idx) => {
+                const val = savedFeedbacks[ex.title] || '';
+                const safeKey = ex.title.replace(/\s+/g, '');
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+                        <span class="text-xs font-black text-slate-800 flex items-center gap-2">
+                            <span class="w-5 h-5 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-[10px] font-black">${idx+1}</span>
+                            ${ex.title}
+                        </span>
+                        <div class="flex flex-wrap gap-1.5 pt-1">
+                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Hiểu sai nội dung')" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded text-[9px] font-bold transition-colors">Hiểu sai</button>
+                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Trả lời chưa đầy đủ')" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded text-[9px] font-bold transition-colors">Chưa đầy đủ</button>
+                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Nội dung spam')" class="px-2 py-0.5 bg-slate-100 hover:bg-slate-200 text-slate-500 rounded text-[9px] font-bold transition-colors">Spam</button>
+                            <button onclick="insertSummaryQuickFeedback('${safeKey}', 'Xuất sắc')" class="px-2 py-0.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 rounded text-[9px] font-bold transition-colors">Xuất sắc</button>
+                        </div>
+                        <textarea id="sum-feedback-${safeKey}" class="w-full min-h-[70px] p-3 text-xs bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none shadow-inner resize-none font-medium text-slate-700" placeholder="Viết nhận xét của bạn...">${val}</textarea>
+                    </div>
+                `);
+            });
+
+            document.getElementById('summaryCommentsModal').classList.remove('hidden');
+            document.getElementById('summaryCommentsModal').classList.add('flex');
+        }
+
+        function closeSummaryCommentsModal() {
+            document.getElementById('summaryCommentsModal').classList.add('hidden');
+            document.getElementById('summaryCommentsModal').classList.remove('flex');
+        }
+
+        function saveAllSummaryFeedbacks() {
+            const selectEl = document.getElementById('filterStudent');
+            const studentKey = selectEl.value;
+            if(studentKey === 'all') return;
+
+            const matchedEntry = rawParsedEntries.find(e => e.hoVaTen === studentKey);
+            const deptName = matchedEntry ? matchedEntry.phongBan : "";
+            const storageKey = getFeedbackKey(`${studentKey} - ${deptName}`);
+            const feedbacks = {};
+
+            SESSION_EXERCISES.forEach((ex) => {
+                const safeKey = ex.title.replace(/\s+/g, '');
+                const val = document.getElementById(`sum-feedback-${safeKey}`).value.trim();
+                feedbacks[ex.title] = val;
+
+                const mainKey = (studentKey + "-" + ex.title).replace(/[^a-zA-Z0-9]/g, '');
+                const mainTextarea = document.getElementById(`feedback-${mainKey}`);
+                if(mainTextarea) {
+                    mainTextarea.value = val;
+                }
+            });
+
+            localStorage.setItem(storageKey, JSON.stringify(feedbacks));
+            closeSummaryCommentsModal();
+            alert("Đã lưu tất cả nhận xét thành công!");
+        }
+
+        // --- EVALUATION TABLE MODAL AND EXCEL EXPORT LOGIC ---
+        function openEvaluationTableModal() {
+            if (rawParsedEntries.length === 0) {
+                alert("Không có dữ liệu nguồn để hiển thị bảng đánh giá!");
+                return;
+            }
+
+            const tbody = document.getElementById('evaluationTableTbody');
+            tbody.innerHTML = '';
+
+            rawParsedEntries.forEach(entry => {
+                const studentKey = `${entry.hoVaTen} - ${entry.phongBan}`;
+                const studentFeedbacks = JSON.parse(localStorage.getItem(getFeedbackKey(studentKey))) || {};
+                const nhanXet = studentFeedbacks[entry.tenBaiHoc] || "";
+
+                tbody.insertAdjacentHTML('beforeend', `
+                    <tr class="hover:bg-slate-50 border-b border-slate-200/50 text-slate-700 text-[11px]">
+                        <td class="px-4 py-3 font-mono text-[10px] whitespace-nowrap border-r border-slate-100">${entry.ngay}</td>
+                        <td class="px-4 py-3 font-bold text-slate-800 border-r border-slate-100">${entry.hoVaTen}</td>
+                        <td class="px-4 py-3 border-r border-slate-100">${entry.phongBan}</td>
+                        <td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.khoa}</td>
+                        <td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.buoi}</td>
+                        <td class="px-4 py-3 font-semibold text-indigo-700 truncate max-w-[150px] border-r border-slate-100" title="${entry.tenBaiHoc}">${entry.tenBaiHoc}</td>
+                        <td class="px-4 py-3 truncate max-w-[200px] border-r border-slate-100" title="${entry.cauTraLoi}">${entry.cauTraLoi}</td>
+                        <td class="px-4 py-3 truncate max-w-[150px] border-r border-slate-100" title="${entry.linkDrive}">
+                            <a href="${entry.linkDrive}" target="_blank" class="text-blue-600 hover:underline inline-flex items-center gap-1 font-bold"><i class="fas fa-external-link-alt text-[9px]"></i> Link</a>
+                        </td>
+                        <td class="px-4 py-3 font-semibold text-emerald-700 max-w-[180px] truncate border-l border-slate-100" title="${nhanXet}">
+                            ${nhanXet ? nhanXet : '<span class="text-slate-300 italic font-normal">Trống</span>'}
+                        </td>
+                    </tr>
+                `);
+            });
+
+            document.getElementById('evalTotalRows').innerText = rawParsedEntries.length;
+            document.getElementById('evaluationTableModal').classList.remove('hidden');
+            document.getElementById('evaluationTableModal').classList.add('flex');
+        }
+
+        function closeEvaluationTableModal() {
+            document.getElementById('evaluationTableModal').classList.add('hidden');
+            document.getElementById('evaluationTableModal').classList.remove('flex');
+        }
+
+        // Đóng gói ô dữ liệu an toàn để tránh bị ngắt dòng khi dán sang Excel
+        function escapeTsvCell(val) {
+            if (!val) return "";
+            let clean = val.replace(/"/g, '""');
+            if (clean.includes('\n') || clean.includes('\r') || clean.includes('\t') || clean.includes('"')) {
+                return `"${clean}"`;
+            }
+            return clean;
+        }
+
+        function copyEvaluationToClipboard() {
+            if (rawParsedEntries.length === 0) return;
+
+            const headers = ["Ngày", "Họ và Tên", "Phòng ban", "Khóa", "Buổi", "Tên bài học", "Câu trả lời tự luận", "Link Drive", "Nhận xét"];
+            let tsvContent = headers.join("\t") + "\n";
+
+            rawParsedEntries.forEach(entry => {
+                const studentKey = `${entry.hoVaTen} - ${entry.phongBan}`;
+                const studentFeedbacks = JSON.parse(localStorage.getItem(getFeedbackKey(studentKey))) || {};
+                const nhanXet = studentFeedbacks[entry.tenBaiHoc] || "";
+
+                // Làm sạch và mã hóa chuẩn TSV 
+                const rowData = [
+                    escapeTsvCell(entry.ngay),
+                    escapeTsvCell(entry.hoVaTen),
+                    escapeTsvCell(entry.phongBan),
+                    escapeTsvCell(entry.khoa),
+                    escapeTsvCell(entry.buoi),
+                    escapeTsvCell(entry.tenBaiHoc),
+                    escapeTsvCell(entry.cauTraLoi),
+                    escapeTsvCell(entry.linkDrive), 
+                    escapeTsvCell(nhanXet)
+                ];
+
+                tsvContent += rowData.join("\t") + "\n";
+            });
+
+            const tempTextarea = document.createElement('textarea');
+            tempTextarea.value = tsvContent;
+            document.body.appendChild(tempTextarea);
+            tempTextarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextarea);
+
+            alert("Đã kết hợp Nhận xét với dữ liệu gốc và sao chép bảng thành công! Bạn có thể dán (Ctrl+V) trực tiếp vào Excel hoặc Google Sheets.");
+        }
+
+        // --- HÀM THIẾT KẾ CARD BÀI TẬP LINH HOẠT ---
+        function renderCard(container, ex, idx, subs, activeSub, activeIdx, studentName, deptName, isGlobalStream = false) {
+            const hasSub = subs.length > 0;
+            const uniqueKey = `${studentName}-${ex.title}`;
+            const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, '');
+
+            const feedbackStorageKey = getFeedbackKey(`${studentName} - ${deptName}`);
+            const feedbacks = JSON.parse(localStorage.getItem(feedbackStorageKey)) || {};
+            const savedFeedbackVal = feedbacks[ex.title] || '';
+
+            // Kiểm tra đề có hiệu lực không
+            const hasTheory = ex.theory && ex.theory.length > 0 && !ex.theory[0].includes("Không có đề bài lý thuyết");
+            const hasRequirements = ex.requirements && ex.requirements.length > 0 && !ex.requirements[0].includes("Xem kết quả nộp bài");
+
+            const card = document.createElement('div');
+            card.className = "glass-panel p-6 md:p-8 rounded-3xl border border-white/60 hover:shadow-xl transition-all relative flex flex-col gap-5 mb-6";
+
+            const parsedDept = (!deptName || deptName.toUpperCase().includes("CHƯA BIẾT PHÒNG BAN")) ? "Chưa phân bộ phận" : deptName;
+
+            const filterClassVal = document.getElementById('filterClass').value;
+            const filterSessionVal = document.getElementById('filterSession').value;
+
+            let metaTags = ``;
+            if (activeSub) {
+                if (filterClassVal === 'all') {
+                    metaTags += `<span class="bg-indigo-50 text-indigo-700 border border-indigo-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm"><i class="fas fa-graduation-cap"></i> Khóa: ${activeSub.khoa}</span>`;
+                }
+                if (filterSessionVal === 'all') {
+                    metaTags += `<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm"><i class="fas fa-calendar-day"></i> Buổi: ${activeSub.buoi}</span>`;
+                }
+            }
+            metaTags += `<span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2.5 py-1 rounded-lg font-bold tracking-wide shadow-sm"><i class="fas fa-building"></i> ${parsedDept}</span>`;
+
+            let headerBlock = `
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4">
+                    <div class="flex flex-col gap-1">
+                        <div class="flex items-center gap-3">
+                            <span class="bg-blue-600 text-white font-black rounded-xl w-8 h-8 flex items-center justify-center text-xs shadow-md shadow-blue-500/20 shrink-0">${idx+1}</span>
+                            <h3 class="text-base font-black text-slate-800 tracking-tight">${ex.title}</h3>
+                        </div>
+                        ${isGlobalStream ? `<p class="text-xs font-extrabold text-slate-500 ml-11"><i class="fas fa-user-circle mr-1 text-slate-400"></i>Học viên: <span class="text-slate-800">${studentName}</span></p>` : ''}
+                    </div>
+                    <div class="flex flex-wrap items-center gap-1.5">
+                        ${metaTags}
+                        ${hasSub 
+                            ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-3 py-1.5 rounded-xl font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm"><i class="fas fa-check"></i> Đã nộp bài</span>`
+                            : `<span class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-3 py-1.5 rounded-xl font-black uppercase tracking-wider flex items-center gap-1.5 shadow-sm"><i class="fas fa-exclamation-triangle"></i> Chưa nộp</span>`
+                        }
+                    </div>
+                </div>
+            `;
+
+            // 2. Câu hỏi lý thuyết (Nền xám)
+            let theoryBlock = ``;
+            if (!isGlobalStream && hasTheory) {
+                theoryBlock = `
+                    <div class="bg-slate-100/60 border border-slate-200/50 rounded-2xl p-4 space-y-2">
+                        <span class="text-slate-400 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-question-circle text-slate-500 mr-1.5"></i>Câu hỏi lý thuyết</span>
+                        <div class="space-y-1.5 text-xs text-slate-600 font-medium leading-relaxed font-sans font-medium">
+                            ${ex.theory.map(q => `<p>${q}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 3. Học viên trả lời (Nền xanh)
+            let theoryAnswerBlock = ``;
+            if (hasSub && activeSub && activeSub.cauTraLoi) {
+                theoryAnswerBlock = `
+                    <div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 space-y-2">
+                        <span class="text-blue-500 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-user-edit mr-1.5"></i>Học viên Trả lời</span>
+                        <div class="text-sm font-semibold text-slate-700 whitespace-pre-wrap leading-relaxed font-sans font-medium">${activeSub.cauTraLoi}</div>
+                    </div>
+                `;
+            } else if (!isGlobalStream) {
+                theoryAnswerBlock = `
+                    <div class="text-xs text-slate-400 font-medium italic pl-1 flex items-center gap-1.5">
+                        <i class="fas fa-info-circle text-[10px]"></i> (Học viên không nộp câu trả lời tự luận lý thuyết)
+                    </div>
+                `;
+            }
+
+            // 4. Yêu cầu thực hành (Nền xám)
+            let practicalBlock = ``;
+            if (!isGlobalStream && hasRequirements) {
+                practicalBlock = `
+                    <div class="bg-slate-100/60 border border-slate-200/50 rounded-2xl p-4 space-y-2">
+                        <span class="text-slate-400 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-laptop-code mr-1.5"></i>Yêu cầu thực hành</span>
+                        <div class="space-y-1.5 text-xs text-slate-600 font-medium leading-relaxed font-sans font-medium">
+                            ${ex.requirements.map(r => `<p>${r}</p>`).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            // 5. Bài thực hành Screenshots Slider (Nền xanh)
+            let screenshotsBlock = ``;
+            if (hasSub && activeSub && activeSub.linkDrive) {
+                const imgUrls = activeSub.linkDrive ? activeSub.linkDrive.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")) : [];
+
+                if (imgUrls.length > 0) {
+                    if (!currentSlideIndices[uniqueKey]) currentSlideIndices[uniqueKey] = 0;
+
+                    let slidesHtml = imgUrls.map((url, i) => {
+                        const direct = getDirectImageUrl(url);
+                        return `
+                            <div class="w-full flex-shrink-0 relative group select-none cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})">
+                                <img src="${direct}" alt="Minh chứng bài tập" class="w-full max-h-[480px] object-cover sm:object-contain bg-slate-950/40 rounded-xl">
+                                <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-all">
+                                    <span class="bg-slate-900/80 text-white text-xs font-bold px-3 py-1.5 rounded-xl backdrop-blur-sm"><i class="fas fa-search-plus mr-1"></i> Bấm để xem toàn màn hình</span>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    let sliderControls = ``;
+                    if (imgUrls.length > 1) {
+                        sliderControls = `
+                            <button onclick="moveSlide('${uniqueKey}', -1, ${imgUrls.length})" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200/60 z-10"><i class="fas fa-chevron-left text-xs"></i></button>
+                            <button onclick="moveSlide('${uniqueKey}', 1, ${imgUrls.length})" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 hover:bg-white text-slate-800 shadow-md flex items-center justify-center transition-all border border-slate-200/60 z-10"><i class="fas fa-chevron-right text-xs"></i></button>
+                            <div id="indicator-${safeKey}" class="absolute bottom-3 right-3 bg-slate-900/70 text-white text-[10px] font-black px-2.5 py-1 rounded-lg backdrop-blur-sm tracking-wider select-none">1 / ${imgUrls.length}</div>
+                        `;
+                    }
+
+                    screenshotsBlock = `
+                        <div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 space-y-3">
+                            <span class="text-blue-500 block tracking-wider uppercase text-[9px] font-black"><i class="fas fa-images mr-1.5"></i>Bài thực hành (Screenshots)</span>
+                            <div class="relative w-full overflow-hidden rounded-xl bg-slate-900/5 shadow-inner">
+                                <div id="track-${safeKey}" class="flex transition-transform duration-300 ease-in-out" style="transform: translateX(0%);">
+                                    ${slidesHtml}
+                                </div>
+                                ${sliderControls}
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    screenshotsBlock = `
+                        <div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 flex flex-col items-center justify-center py-8 text-slate-400">
+                            <i class="fas fa-image text-xl text-slate-300 mb-1.5"></i>
+                            <p class="text-xs font-semibold">Chưa nộp ảnh minh chứng thực hành ở bài tập này</p>
+                        </div>
+                    `;
+                }
+            } else if (!isGlobalStream) {
+                screenshotsBlock = `
+                    <div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 flex flex-col items-center justify-center py-8 text-slate-400">
+                        <i class="fas fa-image text-xl text-slate-300 mb-1.5"></i>
+                        <p class="text-xs font-semibold">Không nộp minh chứng thực hành</p>
+                    </div>
+                `;
+            }
+
+            // 6. Lịch sử các phiên bản sửa bài
+            let versionSelectorBlock = ``;
+            if (subs.length > 1) {
+                versionSelectorBlock = `
+                    <div class="pt-3 border-t border-slate-200/60 flex flex-wrap items-center gap-1.5">
+                        <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider mr-1">Lịch sử nộp sửa (${subs.length}):</span>
+                        ${subs.map((sub, vIdx) => {
+                            const isActive = vIdx === activeIdx;
+                            const btnClass = isActive 
+                                ? "bg-blue-600 text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg shadow-sm" 
+                                : "bg-white hover:bg-slate-50 text-slate-600 hover:text-blue-600 text-[10px] font-bold px-2.5 py-1.5 rounded-lg border border-slate-200 transition-colors shadow-sm";
+                            const label = vIdx === subs.length - 1 ? 'Mới nhất' : `Bản v${vIdx + 1}`;
+                            return `
+                                <button class="${btnClass}" onclick="changeExerciseVersion('${ex.title}', ${vIdx})" title="Thời điểm nộp: ${sub.ngay}">
+                                    ${label}
+                                </button>
+                            `;
+                        }).join('')}
+                    </div>
+                `;
+            }
+
+            // 7. Nhận xét của giảng viên (Có chèn nhanh nhận xét)
+            let feedbackBlock = ``;
+            if (hasSub) {
+                feedbackBlock = `
+                    <div class="pt-4 border-t border-slate-200/60 space-y-2">
+                        <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Giảng viên nhận xét cho câu này</label>
+                        
+                        <div class="flex flex-wrap gap-1.5 items-center">
+                            <span class="text-[9px] text-slate-400 font-bold mr-1">Mẫu nhanh:</span>
+                            <button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Hiểu sai nội dung')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold transition-all border border-slate-200/60 shadow-sm">Hiểu sai</button>
+                            <button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Trả lời chưa đầy đủ')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold transition-all border border-slate-200/60 shadow-sm">Trả lời chưa đầy đủ</button>
+                            <button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Nội dung spam')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-[10px] font-bold transition-all border border-slate-200/60 shadow-sm">Nội dung spam</button>
+                            <button onclick="insertQuickFeedbackDirect('${studentName}', '${deptName}', '${ex.title}', 'Xuất sắc')" class="px-2 py-1 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200/60 rounded-lg text-[10px] font-bold transition-all shadow-sm">Xuất sắc</button>
+                        </div>
+
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <textarea id="feedback-${safeKey}" class="flex-1 min-h-[50px] p-3 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-500 outline-none shadow-inner resize-none font-semibold text-slate-700" placeholder="Viết nhận xét hoặc góp ý để học viên cải thiện...">${savedFeedbackVal}</textarea>
+                            <button onclick="saveFeedbackDirect('${studentName}', '${deptName}', '${ex.title}')" id="btn-save-feedback-${safeKey}" class="px-5 h-11 sm:h-auto bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5 shrink-0 self-stretch"><i class="fas fa-save"></i> Lưu</button>
+                        </div>
+                    </div>
+                `;
+            }
+
+            card.innerHTML = `
+                ${headerBlock}
+                ${theoryBlock}
+                ${theoryAnswerBlock}
+                ${practicalBlock}
+                ${screenshotsBlock}
+                ${versionSelectorBlock}
+                ${feedbackBlock}
+            `;
+            container.appendChild(card);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchSheetData();
+        });
+    </script>
+</body>
+</html>
