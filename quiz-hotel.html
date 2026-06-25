@@ -37,7 +37,6 @@
             padding: 0 1rem;
         }
 
-        /* Form đăng nhập ban đầu */
         .auth-card {
             background: white;
             padding: 2rem;
@@ -59,9 +58,8 @@
             font-size: 1rem;
         }
 
-        /* Giao diện làm bài */
         .quiz-layout {
-            display: none; /* Ẩn ban đầu */
+            display: none;
             grid-template-columns: 280px 1fr;
             gap: 2rem;
         }
@@ -148,14 +146,15 @@
         .btn-success { background: var(--success-color); color: white; }
         .btn-outline { background: white; border: 1px solid var(--border-color); }
 
-        /* Trạng thái lưu trữ kết quả */
         .loading-overlay {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             align-items: center; justify-content: center;
-            font-size: 1.5rem; font-weight: bold;
+            font-size: 1.3rem; font-weight: bold;
+            flex-direction: column;
+            gap: 1rem;
         }
     </style>
 </head>
@@ -213,19 +212,18 @@
             <h2 style="color: var(--success-color)">Nộp Bài Thành Công!</h2>
             <p style="margin: 1rem 0; font-size: 1.1rem;">Kết quả của bạn đã được ghi nhận tự động vào hệ thống.</p>
             <div style="font-size: 1.5rem; font-weight: bold; margin: 1.5rem 0;" id="score-display">0/30 câu đúng</div>
-            <p style="color: #64748b">Vui lòng liên hệ quản trị viên hoặc truy cập trang xem kết quả để kiểm tra điểm.</p>
+            <p style="color: #64748b">Hệ thống đã cập nhật điểm của bạn vào Google Sheets.</p>
         </div>
     </div>
 
     <div class="loading-overlay" id="loading">
-        Đang gửi kết quả lên hệ thống...
+        <div>Đang gửi kết quả lên hệ thống...</div>
+        <div style="font-size: 0.9rem; font-weight: normal; color: #64748b;">Vui lòng không đóng trình duyệt lúc này.</div>
     </div>
 
     <script>
-        // CẤU HÌNH WEB APP URL TỪ GOOGLE APPS SCRIPT Ở BƯỚC 1
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqFBqnkI32xXYKP7Z7q3Qq13UA3-wCHeyuC-xDvx-0ur8dKr2p6Ee_2VhDQA3DMLs7tQ/exec";
 
-        // Danh sách câu hỏi dữ liệu trắc nghiệm
         const questions = [
             { id: 1, question: "Để sửa đổi thông tin người đại diện đặt phòng hoặc thay đổi kênh bán trên giao diện Web, lễ tân cần thực hiện thao tác nào trước tiên?", options: { A: "Hủy phiếu đặt phòng cũ để tạo lại phiếu đặt phòng mới hoàn toàn.", B: "Vào chi tiết hóa đơn thanh toán và bấm nút Hoàn tiền cho khách.", C: "Truy cập chi tiết phiếu đặt phòng từ Lịch đặt phòng và chọn nút Sửa đặt phòng." }, correct: "C" },
             { id: 2, question: "Màn hình Tổng quan trên giao diện máy tính (Web) được phân bổ thành các khu vực chính nào?", options: { A: "Danh sách phòng trống bên trái, sơ đồ phòng ở giữa, báo cáo doanh thu bên phải.", B: "Biểu đồ thống kê bên trái, menu tính năng nhanh góc trên phải, lịch sử hoạt động góc dưới phải.", C: "Thiết lập giá phòng bên trái, danh sách hóa đơn ở giữa, thông tin khách hàng bên phải." }, correct: "B" },
@@ -264,7 +262,6 @@
         let studentName = "";
         let studentDept = "";
 
-        // Chuyển sang màn hình làm bài
         function startQuiz(event) {
             event.preventDefault();
             studentName = document.getElementById('student-name').value.trim();
@@ -282,7 +279,6 @@
             loadQuestion(0);
         }
 
-        // Tạo bảng điều hướng câu hỏi bên trái
         function initNavGrid() {
             const grid = document.getElementById('nav-grid');
             grid.innerHTML = '';
@@ -296,7 +292,6 @@
             });
         }
 
-        // Tải câu hỏi hiện tại
         function loadQuestion(idx) {
             currentIdx = idx;
             const q = questions[idx];
@@ -332,7 +327,6 @@
                 document.getElementById('btn-submit').style.display = 'none';
             }
 
-            // Cập nhật thanh tiến độ
             const percent = ((idx + 1) / questions.length) * 100;
             document.getElementById('progress-bar').style.width = `${percent}%`;
         }
@@ -350,7 +344,6 @@
             }
         }
 
-        // Tính điểm và gửi lên Google Sheets qua Apps Script
         function submitQuiz() {
             let correctCount = 0;
             questions.forEach((q, idx) => {
@@ -359,10 +352,8 @@
 
             const percentVal = Math.round((correctCount / questions.length) * 100);
 
-            // Hiện loader chờ lưu kết quả
             document.getElementById('loading').style.display = 'flex';
 
-            // Xây dựng URL API dạng GET chứa các tham số cần gửi
             const url = `${SCRIPT_URL}?action=save`
                 + `&name=${encodeURIComponent(studentName)}`
                 + `&department=${encodeURIComponent(studentDept)}`
@@ -370,22 +361,24 @@
                 + `&total=${questions.length}`
                 + `&percentage=${percentVal}`;
 
-            fetch(url)
-                .then(res => res.json())
+            fetch(url, { method: "GET", redirect: "follow" })
+                .then(res => {
+                    if (!res.ok) throw new Error("Yêu cầu gửi dữ liệu không thành công.");
+                    return res.json();
+                })
                 .then(data => {
                     document.getElementById('loading').style.display = 'none';
-                    if (data.status === "success") {
+                    if (data && data.status === "success") {
                         document.getElementById('quiz-screen').style.display = 'none';
                         document.getElementById('score-display').textContent = `${correctCount}/${questions.length} câu đúng (${percentVal}%)`;
                         document.getElementById('result-screen').style.display = 'block';
                     } else {
-                        alert("Có lỗi xảy ra khi lưu kết quả. Vui lòng thử lại.");
+                        alert("Có lỗi từ hệ thống: " + (data.message || "Không xác định"));
                     }
                 })
                 .catch(err => {
                     document.getElementById('loading').style.display = 'none';
-                    console.error(err);
-                    alert("Không thể kết nối đến hệ thống cơ sở dữ liệu. Hãy đảm bảo URL Apps Script đã được cấu hình đúng.");
+                    alert("Không thể kết nối đến hệ thống cơ sở dữ liệu.\n\nChi tiết lỗi: " + err.message);
                 });
         }
     </script>
