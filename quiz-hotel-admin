@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh Sách Kết Quả Trắc Nghiệm</title>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --success-color: #10b981;
+            --neutral-light: #f8fafc;
+            --border-color: #e2e8f0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f1f5f9;
+            color: #334155;
+            padding: 2rem 1rem;
+        }
+
+        .dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 { margin-bottom: 1.5rem; text-align: center; color: var(--primary-color); }
+        
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .btn-refresh {
+            padding: 0.75rem 1.5rem;
+            background: #0284c7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+            margin-top: 1rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: var(--neutral-light);
+            font-weight: 600;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-success { background: #d1fae5; color: #065f46; }
+        .badge-warning { background: #fef3c7; color: #92400e; }
+
+        .loading { text-align: center; font-size: 1.2rem; color: #64748b; padding: 2rem; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard">
+        <h2>Bảng Điểm Trắc Nghiệm Học Viên</h2>
+
+        <div class="controls">
+            <input type="text" id="search-box" class="search-input" placeholder="Tìm kiếm theo họ tên hoặc phòng ban..." oninput="filterResults()">
+            <button class="btn-refresh" onclick="fetchResults()">Tải lại dữ liệu</button>
+        </div>
+
+        <div class="table-responsive">
+            <table id="results-table" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>Thời gian</th>
+                        <th>Họ tên</th>
+                        <th>Phòng ban</th>
+                        <th>Điểm số</th>
+                        <th>Tỷ lệ đạt</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="loading-text" class="loading">Đang kết nối để tải dữ liệu từ Google Sheets...</div>
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqFBqnkI32xXYKP7Z7q3Qq13UA3-wCHeyuC-xDvx-0ur8dKr2p6Ee_2VhDQA3DMLs7tQ/exec";
+        
+        let allResults = [];
+
+        function fetchResults() {
+            document.getElementById('loading-text').style.display = 'block';
+            document.getElementById('loading-text').innerHTML = "Đang kết nối để tải dữ liệu từ Google Sheets...";
+            document.getElementById('results-table').style.display = 'none';
+
+            fetch(`${SCRIPT_URL}?action=read`, { method: "GET", redirect: "follow" })
+                .then(res => {
+                    if (!res.ok) throw new Error("Yêu cầu tải dữ liệu không thành công.");
+                    return res.json();
+                })
+                .then(data => {
+                    document.getElementById('loading-text').style.display = 'none';
+                    
+                    if (data && data.status === "error") {
+                        document.getElementById('loading-text').innerHTML = `<span style="color:red; font-weight:bold;">Lỗi hệ thống: ${data.message}</span>`;
+                    } else if (data && data.length > 0) {
+                        allResults = data;
+                        renderTable(data);
+                        document.getElementById('results-table').style.display = 'table';
+                    } else {
+                        document.getElementById('loading-text').textContent = "Hiện chưa có học viên nào làm bài.";
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('loading-text').innerHTML = `<span style="color:red; font-weight:bold;">Lỗi kết nối: ${err.message}. Hãy kiểm tra cấu hình.</span>`;
+                });
+        }
+
+        function renderTable(data) {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                const rate = parseInt(row["Tỷ lệ"]);
+                const badgeClass = rate >= 80 ? 'badge-success' : 'badge-warning';
+
+                tr.innerHTML = `
+                    <td>${row["Thời gian"] || '-'}</td>
+                    <td style="font-weight: 600;">${row["Họ tên"] || '-'}</td>
+                    <td>${row["Phòng ban"] || '-'}</td>
+                    <td>${row["Số câu đúng"]}/${row["Tổng số câu"]}</td>
+                    <td><span class="badge ${badgeClass}">${row["Tỷ lệ"]}%</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function filterResults() {
+            const query = document.getElementById('search-box').value.trim().toLowerCase();
+            const filtered = allResults.filter(row => {
+                const name = (row["Họ tên"] || '').toLowerCase();
+                const dept = (row["Phòng ban"] || '').toLowerCase();
+                return name.includes(query) || dept.includes(query);
+            });
+            renderTable(filtered);
+        }
+
+        window.onload = fetchResults;
+    </script>
+</body>
+</html>
