@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game KiotViet Salon - Sales & DVKH</title>
+    
+    <!-- Tailwind CSS & Font & Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: { 
+                extend: {
+                    colors: {
+                        kvBlue: '#166def',
+                        kvBlueHover: '#1259c7',
+                        kvSlate: '#2c3e50',
+                    }
+                } 
+            }
+        }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; font-size: 15px; -webkit-tap-highlight-color: transparent; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #eff6ff 0%, #f8fafc 50%, #e0f2fe 100%); }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); }
+        .review-item { padding: 1.5rem; border-radius: 12px; margin: 1.25rem 0; background-color: #f8fafc; border-left: 5px solid #cbd5e1; transition: all 0.2s ease; }
+        .review-item.correct { border-left-color: #10b981; }
+        .review-item.incorrect { border-left-color: #ef4444; }
+        @keyframes pulse-attention { 0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(22, 109, 239, 0.3); } 50% { transform: scale(1.02); box-shadow: 0 0 0 6px rgba(22, 109, 239, 0); } }
+        .btn-attention { animation: pulse-attention 2.5s infinite ease-in-out; }
+        .animate-fade-in { animation: fadeIn 0.35s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn-interact { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s; }
+        .btn-interact:hover { transform: translateY(-1.5px); box-shadow: 0 6px 15px -3px rgba(22, 109, 239, 0.15); }
+        .nav-btn { background-color: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 8px; padding: 0.6rem 0; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.2s; }
+        .nav-btn:hover { background-color: #e2e8f0; }
+        .nav-btn.active { background-color: #166def; color: white; border-color: #166def; }
+        .nav-btn.answered { background-color: #eff6ff; color: #166def; border-color: #bfdbfe; }
+    </style>
+</head>
+<body class="h-full flex flex-col text-slate-800 antialiased selection:bg-blue-100 selection:text-blue-900">
+
+    <div class="tech-bg"></div>
+
+    <!-- HEADER (Động hóa tiêu đề Navbar) -->
+    <header class="h-[72px] shrink-0 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-30 shadow-md border-b border-blue-500/20" style="background: linear-gradient(45deg, #166def 0%, #1259c7 72%, #ffffff 78%, #166def 100%);">
+        <div class="flex items-center gap-3">
+            <div class="flex-shrink-0 select-none bg-white px-3 py-2 rounded-xl shadow-sm flex items-center">
+                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-5">
+            </div>
+            <div class="hidden md:flex items-center gap-3 border-l border-white/20 pl-4 py-1">
+                <div>
+                    <h1 id="header-title" class="text-base font-bold text-white tracking-tight leading-tight">Quiz Game KiotViet Salon</h1>
+                    <p id="header-subtitle" class="text-[11px] font-medium text-white uppercase tracking-widest leading-none mt-1">ĐẤU TRƯỜNG SALES & DVKH</p>
+                </div>
+            </div>
+        </div>
+        <div>
+            <button id="btn-exit" onclick="showExitModal()" class="hidden btn-interact bg-rose-500 hover:bg-rose-600 text-white font-bold text-sm px-4 py-2 rounded-lg shadow-sm">
+                <i class="fa-solid fa-right-from-bracket mr-1"></i> Thoát
+            </button>
+        </div>
+    </header>
+
+    <div class="container flex-1 flex flex-col justify-center py-6">
+        <!-- Đăng nhập học viên -->
+        <div class="auth-card glass rounded-2xl p-6 md:p-8 shadow-xl max-w-[550px] w-full mx-auto border border-slate-200 animate-fade-in block" id="auth-screen">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-blue-50 text-kvBlue flex items-center justify-center text-3xl shadow-sm border border-blue-100 mx-auto mb-3">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <h2 class="text-xl md:text-2xl font-extrabold text-slate-800 leading-tight">Đăng Nhập Sân Chơi</h2>
+                <p class="text-sm text-slate-500 font-semibold mt-2">Chào mừng các chiến binh Sales & DVKH đến với đấu trường KiotViet Salon!</p>
+            </div>
+            
+            <form id="auth-form" onsubmit="startQuiz(event)" class="space-y-5">
+                <div class="form-group">
+                    <label class="text-sm font-bold text-slate-600 uppercase tracking-wider block mb-2">Họ và Tên của bạn</label>
+                    <input type="text" id="student-name" class="w-full bg-slate-50 text-slate-800 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-kvBlue/20 transition-all font-semibold" required placeholder="Nhập đầy đủ họ và tên...">
+                </div>
+                <div class="form-group">
+                    <label class="text-sm font-bold text-slate-600 uppercase tracking-wider block mb-2">Mã Phòng ban</label>
+                    <input type="text" id="student-dept" class="w-full bg-slate-50 text-slate-800 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-kvBlue/20 transition-all font-semibold" required list="dept-suggestions" placeholder="Nhập tự do hoặc chọn (TSSGN1, DSHNI1...)">
+                    <datalist id="dept-suggestions">
+                        <option value="TSSGN1">
+                        <option value="DSHNI1">
+                    </datalist>
+                </div>
+
+                <div class="form-group">
+                    <label class="text-sm font-bold text-slate-600 uppercase tracking-wider block mb-2">Chọn Chế Độ Chơi</label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="cursor-pointer">
+                            <input type="radio" name="game-mode" value="5" class="peer hidden" checked>
+                            <div class="text-center py-3 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-600 peer-checked:border-kvBlue peer-checked:bg-blue-50/50 peer-checked:text-kvBlue transition-all">
+                                <i class="fa-solid fa-bolt mb-1 block text-lg"></i> Flash <br><span class="text-xs font-normal">05 Câu</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="game-mode" value="10" class="peer hidden">
+                            <div class="text-center py-3 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-600 peer-checked:border-kvBlue peer-checked:bg-blue-50/50 peer-checked:text-kvBlue transition-all">
+                                <i class="fa-solid fa-fire mb-1 block text-lg"></i> Pro <br><span class="text-xs font-normal">10 Câu</span>
+                            </div>
+                        </label>
+                        <label class="cursor-pointer">
+                            <input type="radio" name="game-mode" value="30" class="peer hidden">
+                            <div class="text-center py-3 rounded-xl border-2 border-slate-200 bg-white font-bold text-slate-600 peer-checked:border-kvBlue peer-checked:bg-blue-50/50 peer-checked:text-kvBlue transition-all">
+                                <i class="fa-solid fa-crown mb-1 block text-lg"></i> Ultra <br><span class="text-xs font-normal">30 Câu</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-attention w-full py-3.5 bg-kvBlue hover:bg-kvBlueHover text-white font-bold rounded-xl text-sm uppercase tracking-wider shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 mt-2">
+                    Bắt đầu chinh phục <i class="fa-solid fa-play"></i>
+                </button>
+            </form>
+        </div>
+
+        <!-- Màn hình làm bài -->
+        <div class="hidden grid-cols-1 lg:grid-cols-[300px_1fr] gap-6" id="quiz-screen">
+            <aside class="flex flex-col gap-4">
+                <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200">
+                    <div class="timer-box flex items-center justify-center gap-2 bg-blue-50 border border-blue-200 rounded-xl py-3 text-2xl font-black text-kvBlue mb-4" id="timer-wrapper">
+                        <i class="fa-regular fa-clock text-xl"></i>
+                        <span id="timer">00:00</span>
+                    </div>
+                    
+                    <div class="border-b border-slate-200 pb-3 mb-4">
+                        <h4 class="font-extrabold text-slate-800 truncate text-base" id="sb-name">Học viên: -</h4>
+                        <p class="text-xs text-slate-500 font-bold uppercase mt-1" id="sb-dept">Phòng: -</p>
+                    </div>
+
+                    <!-- Cảnh báo gian lận Real-time trực quan -->
+                    <div id="cheat-warning-box" class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs font-semibold text-amber-700 hidden animate-fade-in select-none">
+                        <div class="flex items-center gap-1.5 font-bold">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500 animate-bounce"></i> 
+                            <span>PHÁT HIỆN RỜI TAB!</span>
+                        </div>
+                        <p class="mt-1 text-[11px] text-slate-600">Số lần chuyển tab/màn hình: <span id="switches-count-ui" class="font-black text-amber-800 text-sm">0</span>/15</p>
+                        <p id="cheat-danger-msg" class="text-[10px] mt-1 text-amber-500 font-medium">Vượt quá 15 lần bài thi sẽ bị đánh dấu gian lận.</p>
+                    </div>
+
+                    <span class="text-xs font-black text-slate-500 uppercase tracking-wider block mb-3">Bản đồ câu hỏi</span>
+                    <div class="question-grid grid grid-cols-4 gap-2 max-h-[250px] overflow-y-auto custom-scrollbar pr-2 pb-2" id="nav-grid"></div>
+                </div>
+            </aside>
+
+            <div class="glass rounded-2xl p-6 md:p-8 shadow-sm border border-slate-200 flex flex-col min-h-[500px]">
+                <div class="progress-container bg-slate-200 h-2 rounded-full overflow-hidden mb-5">
+                    <div class="progress-bar bg-gradient-to-r from-kvBlue to-blue-400 h-full w-0 transition-all duration-300" id="progress-bar"></div>
+                </div>
+                
+                <div id="question-area" class="space-y-5 flex-1 flex flex-col justify-start">
+                    <div>
+                        <span class="text-xs font-extrabold text-kvBlue bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-full uppercase tracking-widest" id="question-index">CÂU HỎI 1</span>
+                    </div>
+                    <h3 class="text-lg md:text-xl font-bold text-slate-800 leading-snug" id="question-text">Đang tải câu hỏi từ hệ thống...</h3>
+                    <div id="media-area" class="w-full flex justify-center"></div>
+                    <div class="options-container flex flex-col gap-3.5" id="options-container"></div>
+                </div>
+
+                <div class="action-container border-t border-slate-200 pt-5 mt-6 flex justify-between">
+                    <button class="btn btn-outline btn-interact flex items-center gap-2 px-5 py-2.5 border border-slate-300 hover:bg-slate-100 text-slate-700 font-bold rounded-xl text-sm" id="btn-prev" onclick="navigate(-1)"><i class="fa-solid fa-chevron-left text-xs"></i> Quay lại</button>
+                    <button class="btn btn-primary btn-interact flex items-center gap-2 px-5 py-2.5 bg-kvBlue hover:bg-kvBlueHover text-white font-bold rounded-xl text-sm" id="btn-next" onclick="navigate(1)">Tiếp theo <i class="fa-solid fa-chevron-right text-xs"></i></button>
+                    <button class="btn btn-success btn-interact btn-attention flex items-center gap-2 px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-sm" id="btn-submit" onclick="showConfirmModal()"><i class="fa-solid fa-paper-plane text-xs"></i> Nộp bài</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giao diện kết quả -->
+        <div class="hidden glass rounded-2xl p-6 md:p-8 shadow-lg max-w-[800px] w-full mx-auto border border-slate-200 animate-fade-in" id="result-screen">
+            <div class="result-header text-center mb-6">
+                <div class="w-16 h-16 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-3xl shadow-sm border border-amber-100 mx-auto mb-4">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <h2 class="text-xl md:text-2xl font-black text-slate-800">Bảng Vàng Thành Tích</h2>
+                <div class="score-display text-4xl md:text-5xl font-extrabold text-slate-800 my-3" id="score-text">0/0</div>
+                <div id="badge-container" class="mb-4"></div>
+                <p id="eval-feedback" class="text-sm font-semibold text-slate-600 max-w-[500px] mx-auto leading-relaxed"></p>
+                
+                <div class="mt-6 flex justify-center">
+                    <button onclick="exitQuiz()" class="btn-interact bg-kvBlue hover:bg-kvBlueHover text-white font-bold px-6 py-3 rounded-xl text-sm shadow-md flex items-center gap-2">
+                        <i class="fa-solid fa-house"></i> Về Trang Chủ Chơi Tiếp
+                    </button>
+                </div>
+            </div>
+            
+            <div class="review-title flex flex-col sm:flex-row justify-between items-center border-b border-slate-200 pb-3 mb-4 gap-3">
+                <span class="text-base font-black text-slate-700 uppercase tracking-wider">Phân tích chi tiết</span>
+                <div class="flex gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200">
+                    <button id="filter-all" onclick="filterReview('all', this)" class="filter-btn px-4 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm text-sm font-bold transition-all">Tất cả</button>
+                    <button id="filter-correct" onclick="filterReview('correct', this)" class="filter-btn px-4 py-1.5 rounded-lg text-slate-500 hover:text-green-650 text-sm font-bold transition-all">Câu Đúng</button>
+                    <button id="filter-incorrect" onclick="filterReview('incorrect', this)" class="filter-btn px-4 py-1.5 rounded-lg text-slate-500 hover:text-rose-600 text-sm font-bold transition-all">Câu Sai</button>
+                </div>
+            </div>
+            <div id="review-container" class="space-y-4"></div>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div class="hidden fixed inset-0 bg-black/60 z-50 items-center justify-center p-4 backdrop-blur-sm" id="confirm-modal">
+        <div class="modal-card glass bg-white p-6 md:p-8 rounded-3xl max-w-[450px] w-full text-center shadow-2xl border border-slate-200 animate-fade-in">
+            <div class="w-14 h-14 rounded-full bg-blue-50 text-kvBlue flex items-center justify-center text-2xl border border-blue-100 mx-auto mb-4">
+                <i class="fa-solid fa-paper-plane animate-bounce"></i>
+            </div>
+            <h3 class="font-extrabold text-slate-800 text-lg">Xác Nhận Nộp Bài</h3>
+            <p id="modal-alert-text" class="text-slate-600 mt-2 text-sm leading-relaxed">Bạn đã sẵn sàng nộp bài?</p>
+            <div class="modal-actions mt-6 flex justify-center gap-3">
+                <button class="btn btn-outline py-2.5 px-5 text-sm border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-xl" onclick="closeConfirmModal()">Xem lại</button>
+                <button class="btn py-2.5 px-6 text-sm bg-kvBlue hover:bg-kvBlueHover text-white font-bold rounded-xl shadow-md" onclick="submitQuiz()">Nộp bài ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden fixed inset-0 bg-black/60 z-50 items-center justify-center p-4 backdrop-blur-sm" id="exit-modal">
+        <div class="modal-card glass bg-white p-6 md:p-8 rounded-3xl max-w-[400px] w-full text-center shadow-2xl border border-slate-200 animate-fade-in">
+            <div class="w-14 h-14 rounded-full bg-rose-50 text-rose-600 flex items-center justify-center text-2xl border border-rose-100 mx-auto mb-4">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="font-extrabold text-slate-800 text-lg">Cảnh Báo Thoát</h3>
+            <p class="text-slate-600 mt-2 text-sm leading-relaxed">Bạn có chắc chắn muốn thoát? Toàn bộ quá trình làm bài hiện tại sẽ <span class="font-bold text-rose-500">không được lưu lại</span>.</p>
+            <div class="modal-actions mt-6 flex justify-center gap-3">
+                <button class="btn btn-outline py-2.5 px-5 text-sm border border-slate-300 hover:bg-slate-50 text-slate-700 font-bold rounded-xl" onclick="closeExitModal()">Tiếp tục làm bài</button>
+                <button class="btn py-2.5 px-6 text-sm bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl shadow-md" onclick="exitQuiz()">Thoát ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="hidden fixed inset-0 bg-white/95 z-50 flex-col items-center justify-center gap-4 backdrop-blur-sm animate-fade-in" id="loading">
+        <div class="w-12 h-12 border-4 border-slate-200 border-t-kvBlue rounded-full animate-spin"></div>
+        <div id="loading-text" class="text-sm font-bold text-slate-600 tracking-wide">Đang đồng bộ dữ liệu...</div>
+    </div>
+
+    <script>
+        // ĐỊNH DANH KHÓA HỌC ĐỘNG (Bạn chỉ cần đổi biến này để nhân bản file HTML mới!)
+        const COURSE_NAME = "Salon"; 
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqFBqnkI32xXYKP7Z7q3Qq13UA3-wCHeyuC-xDvx-0ur8dKr2p6Ee_2VhDQA3DMLs7tQ/exec";
+        
+        let allDbQuestions = []; 
+        let questions = [];      
+        let answers = {};        
+        let currentIdx = 0;
+        let timerInterval = null;
+        let studentName = "";
+        let studentDept = "";
+        let autoNextTimeout = null;
+        let tabSwitches = 0;
+        let isExiting = false; // Chặn lưu phiên tự động khi đóng tab để thoát hoàn toàn
+
+        // Real-time Anti-cheat Warning
+        document.addEventListener('visibilitychange', () => {
+            if (isExiting) return; 
+            
+            if (document.hidden) {
+                tabSwitches++;
+                
+                const warningBox = document.getElementById('cheat-warning-box');
+                const countUi = document.getElementById('switches-count-ui');
+                const dangerMsg = document.getElementById('cheat-danger-msg');
+                
+                if (warningBox && countUi && dangerMsg) {
+                    countUi.textContent = tabSwitches;
+                    warningBox.classList.remove('hidden');
+                    
+                    if (tabSwitches >= 15) {
+                        warningBox.className = "mb-4 p-3 bg-red-50 border border-red-200 rounded-xl text-xs font-semibold text-red-700 animate-pulse select-none";
+                        countUi.className = "font-black text-red-800 text-sm";
+                        dangerMsg.innerHTML = "⚠️ BÀI THI ĐÃ BỊ HỆ THỐNG ĐÁNH DẤU GIAN LẬN!";
+                        dangerMsg.className = "text-[10px] mt-1 text-red-600 font-extrabold";
+                    } else {
+                        warningBox.className = "mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs font-semibold text-amber-700 select-none";
+                        countUi.className = "font-black text-amber-800 text-sm";
+                        dangerMsg.className = "text-[10px] mt-1 text-amber-600 font-medium";
+                    }
+                }
+                saveSession(); 
+            }
+        });
+
+        function showElement(id, displayClass = 'block') {
+            const el = document.getElementById(id);
+            if (el) { el.classList.remove('hidden'); el.classList.add(displayClass); }
+        }
+
+        function hideElement(id, displayClass = 'block') {
+            const el = document.getElementById(id);
+            if (el) { el.classList.add('hidden'); el.classList.remove(displayClass); }
+        }
+
+        function updateHeaderState(screen) {
+            const titleEl = document.getElementById('header-title');
+            const subtitleEl = document.getElementById('header-subtitle');
+            if (!titleEl || !subtitleEl) return;
+            
+            if (screen === 'result') {
+                titleEl.textContent = "Kết Quả Quiz Game";
+                subtitleEl.textContent = "BẢNG THÀNH TÍCH SALES & DVKH";
+            } else {
+                titleEl.textContent = "Quiz Game KiotViet Salon";
+                subtitleEl.textContent = "ĐẤU TRƯỜNG SALES & DVKH";
+            }
+        }
+
+        window.onload = function() {
+            updateHeaderState('quiz'); 
+            const savedSession = sessionStorage.getItem('active_quiz_session');
+            if (savedSession) {
+                const sessionData = JSON.parse(savedSession);
+                studentName = sessionData.name;
+                studentDept = sessionData.dept;
+                allDbQuestions = sessionData.allDbQuestions || [];
+                questions = sessionData.questions;
+                answers = sessionData.answers;
+                currentIdx = sessionData.currentIdx;
+                tabSwitches = sessionData.tabSwitches || 0;
+                
+                document.getElementById('student-name').value = studentName;
+                document.getElementById('student-dept').value = studentDept;
+                
+                document.getElementById('sb-name').textContent = "Học viên: " + studentName;
+                document.getElementById('sb-dept').textContent = "Phòng: " + studentDept;
+                
+                if (tabSwitches > 0) {
+                    const warningBox = document.getElementById('cheat-warning-box');
+                    const countUi = document.getElementById('switches-count-ui');
+                    if (warningBox && countUi) {
+                        countUi.textContent = tabSwitches;
+                        warningBox.classList.remove('hidden');
+                    }
+                }
+
+                initNavGrid();
+                loadQuestion(currentIdx);
+                startTimer();
+            }
+        };
+
+        function saveSession() {
+            if (questions.length === 0) return;
+            const sessionData = {
+                name: studentName, 
+                dept: studentDept, 
+                allDbQuestions: allDbQuestions, 
+                questions: questions, 
+                answers: answers, 
+                currentIdx: currentIdx,
+                tabSwitches: tabSwitches
+            };
+            sessionStorage.setItem('active_quiz_session', JSON.stringify(sessionData));
+        }
+
+        function startQuiz(event) {
+            event.preventDefault();
+            studentName = document.getElementById('student-name').value.trim();
+            studentDept = document.getElementById('student-dept').value.trim();
+            
+            const selectedMode = document.querySelector('input[name="game-mode"]:checked').value;
+            const numQuestions = parseInt(selectedMode);
+
+            if (!studentName || !studentDept) return;
+
+            showElement('loading', 'flex');
+            document.getElementById('loading-text').textContent = "Đang kiểm tra lịch sử lượt thi...";
+            updateHeaderState('quiz');
+
+            // ĐỒNG BỘ ĐA KHÓA HỌC: Truyền thêm tham số course
+            fetch(`${SCRIPT_URL}?action=check_history&course=${encodeURIComponent(COURSE_NAME)}&name=${encodeURIComponent(studentName)}&department=${encodeURIComponent(studentDept)}`)
+                .then(res => {
+                    if (!res.ok) throw new Error("Kiểm tra lịch sử thi thất bại.");
+                    return res.json();
+                })
+                .then(history => {
+                    if (history.status === "success") {
+                        if (history.attempts === 1 && history.passed) {
+                            hideElement('loading', 'flex');
+                            alert("Bạn đã thi đạt kỳ kiểm tra này, không cần thi lại");
+                            return;
+                        }
+                        if (history.attempts >= 2) {
+                            hideElement('loading', 'flex');
+                            alert("Bạn đã hết số lần thi quy định.");
+                            return;
+                        }
+                        if (history.attempts === 1 && !history.passed) {
+                            alert("Đây là lần thi lại (Lần 2). Vui lòng làm bài cẩn thận.");
+                        }
+
+                        document.getElementById('loading-text').textContent = "Đang tải cấu trúc đề thi ngẫu nhiên...";
+                        // ĐỒNG BỘ ĐA KHÓA HỌC: Lấy câu hỏi động theo khóa học định danh
+                        fetch(`${SCRIPT_URL}?action=get_questions&course=${encodeURIComponent(COURSE_NAME)}`)
+                            .then(res => {
+                                if (!res.ok) throw new Error("Yêu cầu tải đề không thành công.");
+                                return res.json();
+                            })
+                            .then(data => {
+                                hideElement('loading', 'flex');
+                                if (data.status === "success") {
+                                    allDbQuestions = data.questions;
+                                    allDbQuestions.forEach((q, idx) => {
+                                        q.originalIndex = idx;
+                                    });
+
+                                    let shuffled = [...allDbQuestions].sort(() => Math.random() - 0.5);
+                                    questions = shuffled.slice(0, numQuestions);
+                                    
+                                    questions.forEach(q => {
+                                        q.shuffledKeys = ['A', 'B', 'C'].sort(() => Math.random() - 0.5);
+                                    });
+
+                                    const now = Date.now();
+                                    const end = now + numQuestions * 60 * 1000;
+                                    sessionStorage.setItem('quiz_start_time', now);
+                                    sessionStorage.setItem('quiz_end_time', end);
+
+                                    answers = {}; 
+                                    tabSwitches = 0; 
+
+                                    document.getElementById('sb-name').textContent = "Học viên: " + studentName;
+                                    document.getElementById('sb-dept').textContent = "Phòng: " + studentDept;
+                                    
+                                    hideElement('auth-screen', 'block');
+                                    showElement('quiz-screen', 'grid');
+                                    showElement('btn-exit', 'block');
+
+                                    initNavGrid();
+                                    loadQuestion(0);
+                                    startTimer();
+                                    saveSession();
+                                } else {
+                                    alert("Không thể tải đề: " + data.message);
+                                }
+                            })
+                            .catch(err => {
+                                hideElement('loading', 'flex');
+                                alert("Kết nối máy chủ tải đề thất bại: " + err.message);
+                            });
+                    } else {
+                        hideElement('loading', 'flex');
+                        alert("Không thể xác minh lịch sử thi: " + history.message);
+                    }
+                })
+                .catch(err => {
+                    hideElement('loading', 'flex');
+                    alert("Kiểm tra lịch sử thi thất bại: " + err.message);
+                });
+        }
+
+        function initNavGrid() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+            questions.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'nav-btn text-sm';
+                btn.id = `nav-btn-${idx}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => loadQuestion(idx);
+                grid.appendChild(btn);
+            });
+            updateNavButtons();
+        }
+
+        function updateNavButtons() {
+            questions.forEach((q, idx) => {
+                const btn = document.getElementById(`nav-btn-${idx}`);
+                if (btn) {
+                    btn.classList.remove('answered');
+                    if (answers[q.originalIndex]) btn.classList.add('answered');
+                }
+            });
+        }
+
+        function loadQuestion(idx) {
+            currentIdx = idx;
+            const q = questions[idx];
+
+            document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+                btn.classList.remove('active');
+                if (i === idx) btn.classList.add('active');
+            });
+
+            document.getElementById('question-index').textContent = `CÂU HỎI ${idx + 1} CỦA ${questions.length}`;
+            document.getElementById('question-text').textContent = q.question;
+
+            const mediaArea = document.getElementById('media-area');
+            mediaArea.innerHTML = renderMedia(q.media);
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            q.shuffledKeys.forEach(key => {
+                const isSelected = answers[q.originalIndex] === key;
+                const card = document.createElement('div');
+                
+                card.className = `option-card group relative flex items-center justify-between p-4 rounded-xl border bg-white/60 hover:bg-white hover:shadow-md transition-all duration-200 cursor-pointer ${
+                    isSelected 
+                    ? 'border-kvBlue bg-blue-50/50 ring-2 ring-kvBlue/20 shadow-sm' 
+                    : 'border-slate-200 hover:border-kvBlue/50'
+                }`;
+                card.onclick = () => selectOption(key);
+                
+                const checkCircle = isSelected 
+                    ? `<div class="shrink-0 w-6 h-6 flex items-center justify-center rounded-full border border-kvBlue bg-kvBlue text-white scale-110 shadow-sm transition-all" style="min-width: 24px;"><i class="fa-solid fa-check text-[10px]"></i></div>` 
+                    : `<div class="shrink-0 w-6 h-6 rounded-full border border-slate-300 bg-white group-hover:border-kvBlue/50 transition-all" style="min-width: 24px;"></div>`;
+
+                card.innerHTML = `
+                    <div class="flex items-center gap-3.5 flex-1">
+                        <div class="option-prefix shrink-0 w-10 h-10 rounded-lg flex items-center justify-center font-bold text-sm border transition-all ${
+                            isSelected 
+                            ? 'border-kvBlue bg-kvBlue text-white shadow-sm' 
+                            : 'border-slate-200 bg-slate-50 text-slate-500 group-hover:border-kvBlue/30 group-hover:bg-blue-50/50 group-hover:text-kvBlue'
+                        }">
+                            ${key}
+                        </div>
+                        <div class="option-text text-sm sm:text-[15px] font-semibold text-slate-700 group-hover:text-slate-900 transition-colors leading-relaxed">
+                            ${q.options[key]}
+                        </div>
+                    </div>
+                    ${checkCircle}
+                `;
+                container.appendChild(card);
+            });
+
+            document.getElementById('btn-prev').style.visibility = idx === 0 ? 'hidden' : 'visible';
+            if (idx === questions.length - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-submit').style.display = 'flex';
+            } else {
+                document.getElementById('btn-next').style.display = 'flex';
+                document.getElementById('btn-submit').style.display = 'none';
+            }
+
+            const percent = ((idx + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+            
+            saveSession();
+        }
+
+        function renderMedia(mediaUrl) {
+            if (!mediaUrl) return "";
+            const urls = mediaUrl.split(',').map(url => url.trim());
+            let html = '<div class="question-media my-3 flex flex-col items-center gap-3">';
+            urls.forEach(url => {
+                if (url.match(/\.(jpeg|jpg|gif|png|webp)/i)) {
+                    html += `<img src="${url}" class="media-image max-h-[250px] shadow border border-slate-200 object-contain rounded-lg" alt="Minh họa">`;
+                } else if (url.match(/\.(mp4|webm|ogg)/i)) {
+                    html += `<video src="${url}" controls class="media-video max-h-[250px] shadow rounded-lg"></video>`;
+                } else if (url !== "") {
+                    html += `<a href="${url}" target="_blank" class="media-link flex items-center gap-2 text-kvBlue font-semibold hover:underline bg-blue-50 px-4 py-2 rounded-lg border border-blue-100"><i class="fa-solid fa-paperclip"></i> Tài liệu đính kèm</a>`;
+                }
+            });
+            html += '</div>';
+            return html;
+        }
+
+        function selectOption(key) {
+            const q = questions[currentIdx];
+            answers[q.originalIndex] = key; 
+            
+            document.getElementById(`nav-btn-${currentIdx}`).classList.add('answered');
+            loadQuestion(currentIdx); 
+
+            clearTimeout(autoNextTimeout);
+            if (currentIdx < questions.length - 1) {
+                autoNextTimeout = setTimeout(() => {
+                    navigate(1);
+                }, 600);
+            }
+        }
+
+        function navigate(dir) {
+            const target = currentIdx + dir;
+            if (target >= 0 && target < questions.length) {
+                loadQuestion(target);
+            }
+        }
+
+        function startTimer() {
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                const now = Date.now();
+                const end = parseInt(sessionStorage.getItem('quiz_end_time')) || (now + 30 * 60 * 1000);
+                const timeRemaining = Math.max(0, Math.floor((end - now) / 1000));
+
+                if (timeRemaining <= 0) {
+                    clearInterval(timerInterval);
+                    document.getElementById('timer').textContent = "00:00"; 
+                    
+                    setTimeout(() => {
+                        alert("Thời gian làm bài đã kết thúc! Hệ thống tự động nộp bài.");
+                        submitQuiz();
+                    }, 50);
+                } else {
+                    const mins = Math.floor(timeRemaining / 60);
+                    const secs = timeRemaining % 60;
+                    document.getElementById('timer').textContent = 
+                        `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+                    
+                    if (timeRemaining <= 60) {
+                        document.getElementById('timer-wrapper').classList.remove('bg-blue-50', 'text-kvBlue');
+                        document.getElementById('timer-wrapper').classList.add('bg-red-100', 'text-red-700', 'animate-pulse');
+                    }
+                }
+            }, 1000);
+        }
+
+        function showConfirmModal() {
+            const activeOriginalIndices = questions.map(q => q.originalIndex);
+            let answeredCount = 0;
+            activeOriginalIndices.forEach(idx => {
+                if (answers[idx] !== undefined) answeredCount++;
+            });
+            const unanswered = questions.length - answeredCount;
+            const alertText = document.getElementById('modal-alert-text');
+            
+            if (unanswered > 0) {
+                alertText.innerHTML = `Bạn vẫn còn <span class="text-rose-600 font-extrabold text-base">${unanswered} câu chưa xử lý</span>. Bạn có chắc chắn muốn nộp bài lúc này?`;
+            } else {
+                alertText.textContent = "Bạn đã giải quyết toàn bộ câu hỏi cực tốt! Bạn muốn nộp bài và xem điểm ngay bây giờ?";
+            }
+            showElement('confirm-modal', 'flex');
+        }
+
+        function closeConfirmModal() { hideElement('confirm-modal', 'flex'); }
+        function showExitModal() { showElement('exit-modal', 'flex'); }
+        function closeExitModal() { hideElement('exit-modal', 'flex'); }
+        
+        // SỬA LỖI VỀ TRANG CHỦ CHƠI TIẾP: Set cờ isExiting để dọn sạch hoàn toàn rác session và reload thành công
+        function exitQuiz() {
+            isExiting = true; 
+            sessionStorage.removeItem('active_quiz_session');
+            sessionStorage.removeItem('quiz_start_time');
+            sessionStorage.removeItem('quiz_end_time');
+            window.location.reload();
+        }
+
+        function submitQuiz() {
+            closeConfirmModal();
+            showElement('loading', 'flex');
+            document.getElementById('loading-text').textContent = "Đang ghi nhận kết quả và chấm điểm...";
+
+            let submitPayload = {};
+            questions.forEach(q => {
+                submitPayload[q.originalIndex] = answers[q.originalIndex] !== undefined ? answers[q.originalIndex] : "";
+            });
+
+            const startTimeVal = parseInt(sessionStorage.getItem('quiz_start_time')) || Date.now();
+            const durationSec = Math.floor((Date.now() - startTimeVal) / 1000);
+
+            // ĐỒNG BỘ ĐA KHÓA HỌC: Gửi kèm tham số course định danh khóa học khi nộp bài
+            const url = `${SCRIPT_URL}?action=save&course=${encodeURIComponent(COURSE_NAME)}`
+                + `&name=${encodeURIComponent(studentName)}`
+                + `&department=${encodeURIComponent(studentDept)}`
+                + `&answers=${encodeURIComponent(JSON.stringify(submitPayload))}`
+                + `&duration=${durationSec}`
+                + `&switches=${tabSwitches}`;
+
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 25000);
+
+            fetch(url, { method: "GET", redirect: "follow", signal: controller.signal })
+                .then(res => {
+                    clearTimeout(timeoutId);
+                    if (!res.ok) throw new Error("Gửi dữ liệu nộp bài thất bại.");
+                    return res.json();
+                })
+                .then(data => {
+                    hideElement('loading', 'flex');
+                    if (data && data.status === "success") {
+                        clearInterval(timerInterval);
+                        sessionStorage.removeItem('active_quiz_session');
+                        hideElement('btn-exit', 'block');
+                        showResults(data);
+                    } else {
+                        alert("Lỗi hệ thống: " + (data.message || "Không xác định"));
+                    }
+                })
+                .catch(err => {
+                    clearTimeout(timeoutId);
+                    hideElement('loading', 'flex');
+                    if (err.name === 'AbortError') {
+                        alert("Hệ thống phản hồi chậm hoặc quá thời gian kết nối (Timeout). Vui lòng kiểm tra lại mạng và bấm nút Nộp bài lần nữa.");
+                    } else {
+                        alert("Kết nối mạng không ổn định. Bài làm vẫn được lưu trữ tạm an toàn trên trình duyệt, vui lòng bấm nút Nộp bài lại.\nChi tiết lỗi: " + err.message);
+                    }
+                });
+        }
+
+        function showResults(data) {
+            hideElement('quiz-screen', 'grid');
+            showElement('result-screen', 'block');
+            updateHeaderState('result'); 
+
+            const activeQuestionTexts = questions.map(q => q.question);
+            const filteredReview = data.review.filter(item => activeQuestionTexts.includes(item.question));
+
+            const totalQuestions = filteredReview.length;
+            const score = filteredReview.filter(item => item.correct).length;
+            const percentage = totalQuestions > 0 ? (score / totalQuestions) * 100 : 0;
+
+            document.getElementById('score-text').textContent = `${score}/${totalQuestions}`;
+            
+            const badgeContainer = document.getElementById('badge-container');
+            const feedbackText = document.getElementById('eval-feedback');
+            const isPassed = percentage >= 80;
+            const attemptNum = data.attemptNum || 1; 
+
+            if (isPassed) {
+                badgeContainer.innerHTML = '<span class="bg-green-100 text-green-700 border border-green-200 font-bold px-4 py-1.5 rounded-full text-sm">KẾT QUẢ: ĐẠT TIÊU CHUẨN</span>';
+                feedbackText.innerHTML = `Chúc mừng bạn! Bạn đã xuất sắc hoàn thành kỳ kiểm tra.<br>Lượt thi ghi nhận: <span class="text-green-600 font-extrabold text-[15px] mt-2 block"><i class="fa-solid fa-circle-check"></i> Lần ${attemptNum} (PASS)</span>`;
+                fireConfetti();
+            } else {
+                badgeContainer.innerHTML = '<span class="bg-rose-100 text-rose-700 border border-rose-200 font-bold px-4 py-1.5 rounded-full text-sm">KẾT QUẢ: CHƯA ĐẠT (FAIL)</span>';
+                
+                if (attemptNum === 1) {
+                    feedbackText.innerHTML = `Kết quả của bạn là: <span class="text-rose-500 font-extrabold">CHƯA ĐẠT (FAIL)</span>.<br><span class="text-rose-600 font-extrabold text-[15px] mt-2 block"><i class="fa-solid fa-triangle-exclamation"></i> Bạn ${studentName} còn 1 lượt thi lại.</span><span class="text-slate-600 font-bold block mt-1.5">Chúc bạn thi tốt ở lần 2 nhé!</span>`;
+                } else {
+                    feedbackText.innerHTML = `Kết quả của bạn là: <span class="text-rose-500 font-extrabold">CHƯA ĐẠT (FAIL)</span>.<br><span class="text-slate-500 font-extrabold text-[15px] mt-2 block"><i class="fa-solid fa-circle-info"></i> Bạn đã hết lượt thi quy định cho kỳ thi này.</span>`;
+                }
+            }
+
+            const revContainer = document.getElementById('review-container');
+            revContainer.innerHTML = '';
+
+            filteredReview.forEach((item, idx) => {
+                const card = document.createElement('div');
+                card.className = `review-item ${item.correct ? 'correct' : 'incorrect'} border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm mb-4`;
+                let mediaHtml = renderMedia(item.media);
+
+                // THIẾT KẾ LẠI BADGE TRẠNG THÁI CHỐNG VỠ DÒNG
+                const getOptionStyle = (key) => {
+                    const isChosen = item.chosen === key;
+                    const isCorrect = item.correctKey === key;
+                    
+                    let cardClass = "border-slate-200 bg-white/60 text-slate-700";
+                    let prefixClass = "border-slate-200 bg-slate-50 text-slate-500";
+                    let textClass = "text-slate-700";
+                    let statusBadge = "";
+                    
+                    if (isCorrect) {
+                        cardClass = "border-emerald-500 bg-emerald-50/50 text-emerald-900 ring-1 ring-emerald-500/20";
+                        prefixClass = "border-emerald-500 bg-emerald-500 text-white shadow-sm";
+                        textClass = "text-emerald-900 font-bold";
+                        statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0 whitespace-nowrap select-none"><i class="fa-solid fa-circle-check"></i> ${isChosen ? 'Chính xác' : 'Đáp án chuẩn'}</span>`;
+                    } else if (isChosen) {
+                        cardClass = "border-rose-400 bg-rose-50/50 text-rose-900 ring-1 ring-rose-400/20";
+                        prefixClass = "border-rose-400 bg-rose-400 text-white shadow-sm";
+                        textClass = "text-rose-900 font-bold";
+                        statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-rose-700 bg-rose-100 px-2 py-1 rounded-lg shrink-0 whitespace-nowrap select-none"><i class="fa-solid fa-circle-xmark"></i> Bạn chọn</span>`;
+                    }
+                    
+                    return { cardClass, prefixClass, textClass, statusBadge };
+                };
+
+                const optA = getOptionStyle('A');
+                const optB = getOptionStyle('B');
+                const optC = getOptionStyle('C');
+
+                card.innerHTML = `
+                    <button onclick="toggleAccordion(this)" class="w-full flex items-center justify-between p-4 bg-slate-50 hover:bg-slate-100/70 transition-colors text-left font-bold text-slate-800 select-none">
+                        <div class="flex items-center gap-3 pr-4 truncate">
+                            <span class="shrink-0 px-2.5 py-1 rounded-lg text-xs font-extrabold uppercase ${item.correct ? 'bg-emerald-100 text-emerald-700' : 'bg-rose-100 text-rose-700'}">
+                                Câu ${idx + 1}
+                            </span>
+                            <span class="truncate text-sm sm:text-base text-slate-700 font-semibold">${item.question}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-xs px-2 py-0.5 rounded-full font-bold ${item.correct ? 'bg-emerald-50 text-emerald-600' : 'bg-rose-50 text-rose-600'}">
+                                ${item.correct ? 'Đúng' : 'Sai'}
+                            </span>
+                            <i class="fa-solid fa-chevron-down text-slate-400 text-xs transition-transform duration-200"></i>
+                        </div>
+                    </button>
+                    
+                    <div class="accordion-content hidden p-5 border-t border-slate-150 bg-white space-y-4">
+                        <h4 class="font-bold text-slate-800 text-base md:text-lg leading-relaxed">${item.question}</h4>
+                        ${mediaHtml}
+                        
+                        <div class="grid grid-cols-1 gap-3 mt-4">
+                            <!-- Option A -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl border ${optA.cardClass} gap-3">
+                                <div class="flex items-center gap-3.5 flex-1 min-w-0">
+                                    <span class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm border shrink-0 ${optA.prefixClass}">A</span>
+                                    <span class="text-sm sm:text-[15px] font-semibold ${optA.textClass} break-words">${item.options['A']}</span>
+                                </div>
+                                <div class="shrink-0">
+                                    ${optA.statusBadge}
+                                </div>
+                            </div>
+                            <!-- Option B -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl border ${optB.cardClass} gap-3">
+                                <div class="flex items-center gap-3.5 flex-1 min-w-0">
+                                    <span class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm border shrink-0 ${optB.prefixClass}">B</span>
+                                    <span class="text-sm sm:text-[15px] font-semibold ${optB.textClass} break-words">${item.options['B']}</span>
+                                </div>
+                                <div class="shrink-0">
+                                    ${optB.statusBadge}
+                                </div>
+                            </div>
+                            <!-- Option C -->
+                            <div class="flex items-center justify-between p-3.5 rounded-xl border ${optC.cardClass} gap-3">
+                                <div class="flex items-center gap-3.5 flex-1 min-w-0">
+                                    <span class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm border shrink-0 ${optC.prefixClass}">C</span>
+                                    <span class="text-sm sm:text-[15px] font-semibold ${optC.textClass} break-words">${item.options['C']}</span>
+                                </div>
+                                <div class="shrink-0">
+                                    ${optC.statusBadge}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                revContainer.appendChild(card);
+            });
+
+            filterReview('all', document.getElementById('filter-all'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleAccordion(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('.fa-chevron-down');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                if (icon) icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                if (icon) icon.classList.remove('rotate-180');
+            }
+        }
+
+        function filterReview(type, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-4 py-1.5 rounded-lg text-slate-500 hover:text-kvBlue text-sm font-bold transition-all';
+            });
+            btnElement.className = 'filter-btn px-4 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm text-sm font-bold transition-all';
+
+            const items = document.querySelectorAll('.review-item');
+            items.forEach(item => {
+                if (type === 'all') {
+                    item.classList.remove('hidden');
+                } else if (type === 'correct') {
+                    if (item.classList.contains('correct')) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                } else if (type === 'incorrect') {
+                    if (item.classList.contains('incorrect')) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function fireConfetti() {
+            const duration = 2.5 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#166def', '#10b981', '#3b82f6'] });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#166def', '#10b981', '#3b82f6'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
