@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Danh Sách Kết Quả Trắc Nghiệm</title>
+    <title>Bảng Điều Khiển Quản Lý Đào Tạo</title>
     <style>
         :root {
             --primary-color: #0f172a;
             --success-color: #10b981;
+            --danger-color: #ef4444;
             --neutral-light: #f8fafc;
             --border-color: #e2e8f0;
         }
@@ -21,7 +22,7 @@
         }
 
         .dashboard {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 0 auto;
             background: white;
             padding: 2rem;
@@ -29,63 +30,101 @@
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
-        h2 { margin-bottom: 1.5rem; text-align: center; color: var(--primary-color); }
-        
+        h2 { margin-bottom: 2rem; text-align: center; color: var(--primary-color); font-size: 1.8rem; }
+
+        /* Các khối KPIs */
+        .kpi-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .kpi-card {
+            background: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .kpi-card h4 { font-size: 0.9rem; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; }
+        .kpi-card div { font-size: 1.8rem; font-weight: 800; color: var(--primary-color); }
+
+        /* Khung quản lý và bảng */
         .controls {
             display: flex;
             gap: 1rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .search-input {
             flex: 1;
+            min-width: 280px;
             padding: 0.75rem;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             font-size: 1rem;
+            outline: none;
         }
 
-        .btn-refresh {
+        .btn {
             padding: 0.75rem 1.5rem;
-            background: #0284c7;
             color: white;
             border: none;
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
+            font-size: 1rem;
         }
+        .btn-info { background: #0284c7; }
+        .btn-success { background: var(--success-color); }
 
         .table-responsive {
             overflow-x: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
             text-align: left;
-            margin-top: 1rem;
         }
 
         th, td {
-            padding: 0.75rem 1rem;
+            padding: 1rem;
             border-bottom: 1px solid var(--border-color);
         }
 
         th {
             background-color: var(--neutral-light);
             font-weight: 600;
+            cursor: pointer;
+            user-select: none;
         }
+        th:hover { background-color: #f1f5f9; }
 
         .badge {
             display: inline-block;
             padding: 0.25rem 0.5rem;
             border-radius: 9999px;
             font-size: 0.85rem;
-            font-weight: 600;
+            font-weight: 700;
         }
-
         .badge-success { background: #d1fae5; color: #065f46; }
-        .badge-warning { background: #fef3c7; color: #92400e; }
+        .badge-danger { background: #fee2e2; color: #991b1b; }
+
+        /* Phân trang */
+        .pagination {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+        }
 
         .loading { text-align: center; font-size: 1.2rem; color: #64748b; padding: 2rem; }
     </style>
@@ -93,22 +132,40 @@
 <body>
 
     <div class="dashboard">
-        <h2>Bảng Điểm Trắc Nghiệm Học Viên</h2>
+        <h2>Bảng Điểm Đánh Giá Năng Lực Học Viên</h2>
+
+        <!-- Khối thống kê KPIs -->
+        <div class="kpi-container">
+            <div class="kpi-card">
+                <h4>Tổng số bài làm</h4>
+                <div id="kpi-total">0</div>
+            </div>
+            <div class="kpi-card">
+                <h4>Điểm trung bình</h4>
+                <div id="kpi-average">0.0</div>
+            </div>
+            <div class="kpi-card">
+                <h4>Tỷ lệ đạt (>= 80%)</h4>
+                <div id="kpi-pass-rate" style="color: var(--success-color);">0%</div>
+            </div>
+        </div>
 
         <div class="controls">
-            <input type="text" id="search-box" class="search-input" placeholder="Tìm kiếm theo họ tên hoặc phòng ban..." oninput="filterResults()">
-            <button class="btn-refresh" onclick="fetchResults()">Tải lại dữ liệu</button>
+            <input type="text" id="search-box" class="search-input" placeholder="Tìm kiếm theo họ tên hoặc phòng ban..." oninput="onSearch()">
+            <button class="btn btn-info" onclick="fetchResults()">Tải lại dữ liệu</button>
+            <button class="btn btn-success" onclick="exportToCSV()">Xuất Excel/CSV</button>
         </div>
 
         <div class="table-responsive">
             <table id="results-table" style="display: none;">
                 <thead>
                     <tr>
-                        <th>Thời gian</th>
-                        <th>Họ tên</th>
-                        <th>Phòng ban</th>
-                        <th>Điểm số</th>
-                        <th>Tỷ lệ đạt</th>
+                        <th onclick="sortTable('Thời gian')">Thời gian ⇅</th>
+                        <th onclick="sortTable('Họ tên')">Họ tên ⇅</th>
+                        <th onclick="sortTable('Phòng ban')">Phòng ban ⇅</th>
+                        <th onclick="sortTable('Số câu đúng')">Điểm số ⇅</th>
+                        <th onclick="sortTable('Tỷ lệ')">Tỷ lệ đạt ⇅</th>
+                        <th>Trạng thái</th>
                     </tr>
                 </thead>
                 <tbody id="table-body">
@@ -116,70 +173,186 @@
             </table>
         </div>
 
-        <div id="loading-text" class="loading">Đang kết nối để tải dữ liệu từ Google Sheets...</div>
+        <!-- Thanh phân trang -->
+        <div class="pagination" id="pagination-ctrl" style="display: none;">
+            <button class="btn btn-info" id="btn-page-prev" onclick="changePage(-1)">Trang trước</button>
+            <span id="page-info" style="font-weight: 600;">Trang 1 / 1</span>
+            <button class="btn btn-info" id="btn-page-next" onclick="changePage(1)">Trang sau</button>
+        </div>
+
+        <div id="loading-text" class="loading">Đang kết nối để tải dữ liệu từ máy chủ trung tâm...</div>
     </div>
 
     <script>
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqFBqnkI32xXYKP7Z7q3Qq13UA3-wCHeyuC-xDvx-0ur8dKr2p6Ee_2VhDQA3DMLs7tQ/exec";
         
         let allResults = [];
+        let filteredResults = [];
+        
+        // Cấu hình phân trang
+        let currentPage = 1;
+        const rowsPerPage = 10; // 10 dòng một trang
+
+        // Cấu hình sắp xếp
+        let currentSortColumn = 'Thời gian';
+        let isSortAscending = false;
 
         function fetchResults() {
             document.getElementById('loading-text').style.display = 'block';
-            document.getElementById('loading-text').innerHTML = "Đang kết nối để tải dữ liệu từ Google Sheets...";
+            document.getElementById('loading-text').textContent = "Đang kết nối để tải dữ liệu từ máy chủ trung tâm...";
             document.getElementById('results-table').style.display = 'none';
+            document.getElementById('pagination-ctrl').style.display = 'none';
 
             fetch(`${SCRIPT_URL}?action=read`, { method: "GET", redirect: "follow" })
                 .then(res => {
-                    if (!res.ok) throw new Error("Yêu cầu tải dữ liệu không thành công.");
+                    if (!res.ok) throw new Error("Yêu cầu lấy báo cáo thất bại.");
                     return res.json();
                 })
                 .then(data => {
                     document.getElementById('loading-text').style.display = 'none';
-                    
                     if (data && data.status === "error") {
                         document.getElementById('loading-text').innerHTML = `<span style="color:red; font-weight:bold;">Lỗi hệ thống: ${data.message}</span>`;
                     } else if (data && data.length > 0) {
                         allResults = data;
-                        renderTable(data);
+                        filteredResults = [...data];
+                        calculateKPIs(data);
+                        sortData(currentSortColumn, true); // Sắp xếp theo cột thời gian mặc định
                         document.getElementById('results-table').style.display = 'table';
+                        document.getElementById('pagination-ctrl').style.display = 'flex';
                     } else {
-                        document.getElementById('loading-text').textContent = "Hiện chưa có học viên nào làm bài.";
+                        document.getElementById('loading-text').textContent = "Hiện chưa có kết quả làm bài nào.";
                     }
                 })
                 .catch(err => {
-                    document.getElementById('loading-text').innerHTML = `<span style="color:red; font-weight:bold;">Lỗi kết nối: ${err.message}. Hãy kiểm tra cấu hình.</span>`;
+                    document.getElementById('loading-text').innerHTML = `<span style="color:red; font-weight:bold;">Lỗi kết nối máy chủ: ${err.message}. Hãy kiểm tra cấu hình.</span>`;
                 });
         }
 
-        function renderTable(data) {
+        function calculateKPIs(data) {
+            const total = data.length;
+            let sumScores = 0;
+            let passCount = 0;
+
+            data.forEach(row => {
+                sumScores += parseFloat(row["Số câu đúng"]) || 0;
+                const percentage = parseFloat(row["Tỷ lệ"]) || 0;
+                if (percentage >= 80) passCount++;
+            });
+
+            const average = total > 0 ? (sumScores / total).toFixed(1) : "0.0";
+            const passRate = total > 0 ? Math.round((passCount / total) * 100) : 0;
+
+            document.getElementById('kpi-total').textContent = total;
+            document.getElementById('kpi-average').textContent = average;
+            document.getElementById('kpi-pass-rate').textContent = `${passRate}%`;
+        }
+
+        function renderTable() {
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            data.forEach(row => {
+            // Phân tách trang
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+            const pageData = filteredResults.slice(startIndex, endIndex);
+
+            pageData.forEach(row => {
                 const tr = document.createElement('tr');
                 const rate = parseInt(row["Tỷ lệ"]);
-                const badgeClass = rate >= 80 ? 'badge-success' : 'badge-warning';
+                const isPassed = rate >= 80;
 
                 tr.innerHTML = `
                     <td>${row["Thời gian"] || '-'}</td>
                     <td style="font-weight: 600;">${row["Họ tên"] || '-'}</td>
                     <td>${row["Phòng ban"] || '-'}</td>
                     <td>${row["Số câu đúng"]}/${row["Tổng số câu"]}</td>
-                    <td><span class="badge ${badgeClass}">${row["Tỷ lệ"]}%</span></td>
+                    <td>${row["Tỷ lệ"]}%</td>
+                    <td><span class="badge ${isPassed ? 'badge-success' : 'badge-danger'}">${isPassed ? 'ĐẠT' : 'CHƯA ĐẠT'}</span></td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            // Cập nhật thông số phân trang
+            const totalPages = Math.ceil(filteredResults.length / rowsPerPage) || 1;
+            document.getElementById('page-info').textContent = `Trang ${currentPage} / ${totalPages}`;
+            document.getElementById('btn-page-prev').disabled = currentPage === 1;
+            document.getElementById('btn-page-next').disabled = currentPage === totalPages;
         }
 
-        function filterResults() {
+        function changePage(dir) {
+            const totalPages = Math.ceil(filteredResults.length / rowsPerPage) || 1;
+            const target = currentPage + dir;
+            if (target >= 1 && target <= totalPages) {
+                currentPage = target;
+                renderTable();
+            }
+        }
+
+        function onSearch() {
             const query = document.getElementById('search-box').value.trim().toLowerCase();
-            const filtered = allResults.filter(row => {
+            filteredResults = allResults.filter(row => {
                 const name = (row["Họ tên"] || '').toLowerCase();
                 const dept = (row["Phòng ban"] || '').toLowerCase();
                 return name.includes(query) || dept.includes(query);
             });
-            renderTable(filtered);
+            currentPage = 1;
+            renderTable();
+        }
+
+        function sortTable(columnName) {
+            if (currentSortColumn === columnName) {
+                isSortAscending = !isSortAscending;
+            } else {
+                currentSortColumn = columnName;
+                isSortAscending = true;
+            }
+            sortData(columnName, false);
+        }
+
+        function sortData(columnName, defaultDesc = false) {
+            let asc = isSortAscending;
+            if (defaultDesc) asc = false; // Luôn ưu tiên thời gian mới nhất lên đầu khi nạp
+
+            filteredResults.sort((a, b) => {
+                let valA = a[columnName];
+                let valB = b[columnName];
+
+                if (columnName === "Số câu đúng" || columnName === "Tỷ lệ") {
+                    valA = parseFloat(valA) || 0;
+                    valB = parseFloat(valB) || 0;
+                } else {
+                    valA = (valA || '').toString().toLowerCase();
+                    valB = (valB || '').toString().toLowerCase();
+                }
+
+                if (valA < valB) return asc ? -1 : 1;
+                if (valA > valB) return asc ? 1 : -1;
+                return 0;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        function exportToCSV() {
+            if (filteredResults.length === 0) return alert("Không có dữ liệu khả dụng để xuất.");
+            
+            let csvContent = "\uFEFF"; // Thêm BOM UTF-8 để hiển thị chính xác chữ tiếng Việt trong Excel
+            csvContent += "Thời gian,Họ tên,Phòng ban,Số câu đúng,Tổng số câu,Tỷ lệ,Trạng thái\n";
+
+            filteredResults.forEach(row => {
+                const isPassed = parseInt(row["Tỷ lệ"]) >= 80 ? "ĐẠT" : "CHƯA ĐẠT";
+                csvContent += `"${row["Thời gian"]}","${row["Họ tên"]}","${row["Phòng ban"]}",${row["Số câu đúng"]},${row["Tổng số câu"]},${row["Tỷ lệ"]},"${isPassed}"\n`;
+            });
+
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            const url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", `Bao_Cao_Ket_Qua_${new Date().toISOString().slice(0,10)}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         window.onload = fetchResults;
