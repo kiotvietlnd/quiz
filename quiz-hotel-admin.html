@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <!-- Thẻ KPI chỉ số -->
+        <!-- Thẻ KPI -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 text-center flex flex-col justify-center">
                 <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Tổng Lượt Chơi</span>
@@ -88,7 +88,7 @@
             </div>
         </div>
 
-        <!-- Hệ thống Biểu đồ cập nhật lọc thời gian thực -->
+        <!-- Biểu đồ -->
         <div id="charts-wrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-6" style="display: none;">
             <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col items-center">
                 <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-4 self-start"><i class="fa-solid fa-chart-pie mr-1 text-kvBlue"></i> Tỷ Lệ Đạt</h3>
@@ -106,14 +106,21 @@
 
         <div class="glass rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col gap-4">
             
-            <!-- Bộ lọc điều hướng -->
+            <!-- Điều khiển bộ lọc -->
             <div class="flex flex-col lg:flex-row gap-3 justify-between items-stretch lg:items-center">
-                <div class="flex flex-wrap gap-2 flex-1 max-w-[950px]">
+                <div class="flex flex-wrap gap-2 flex-1 max-w-[1000px]">
                     <div class="relative flex-1 min-w-[180px]">
                         <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
                             <i class="fa-solid fa-magnifying-glass text-sm"></i>
                         </span>
-                        <input type="text" id="search-box" oninput="handleFilterChange()" class="w-full bg-slate-50 text-slate-800 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-kvBlue/20 transition-all font-semibold" placeholder="Tìm theo tên học viên hoặc phòng ban...">
+                        <input type="text" id="search-box" oninput="handleFilterChange()" class="w-full bg-slate-50 text-slate-800 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-kvBlue/20 transition-all font-semibold" placeholder="Tìm theo tên học viên...">
+                    </div>
+
+                    <!-- NEW FILTER: Lọc theo Khóa học (Tự động cập nhật danh sách các môn thi thực tế từ Sheets) -->
+                    <div class="min-w-[140px]">
+                        <select id="filter-course" onchange="handleFilterChange()" class="w-full bg-slate-50 text-slate-700 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-kvBlue/20">
+                            <option value="all">Tất cả khóa học</option>
+                        </select>
                     </div>
                     
                     <div class="min-w-[140px]">
@@ -122,7 +129,6 @@
                         </select>
                     </div>
 
-                    <!-- Bộ lọc Chế độ chơi Flash, Pro, Ultra -->
                     <div class="min-w-[140px]">
                         <select id="filter-mode" onchange="handleFilterChange()" class="w-full bg-slate-50 text-slate-700 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-kvBlue/20">
                             <option value="all">Tất cả chế độ</option>
@@ -132,7 +138,7 @@
                         </select>
                     </div>
 
-                    <div class="min-w-[140px]">
+                    <div class="min-w-[120px]">
                         <select id="filter-status" onchange="handleFilterChange()" class="w-full bg-slate-50 text-slate-700 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-kvBlue/20">
                             <option value="all">Tất cả kết quả</option>
                             <option value="PASS">PASS</option>
@@ -155,7 +161,6 @@
                     <button onclick="fetchResults()" class="btn-interact flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm border border-slate-200">
                         <i class="fa-solid fa-arrows-rotate"></i> Làm mới
                     </button>
-                    <!-- Đã bỏ nút bấm Đóng gói kỳ thi theo yêu cầu -->
                     <button onclick="exportToCSV()" class="btn-interact flex items-center justify-center gap-1.5 px-4 py-2.5 bg-kvBlue hover:bg-kvBlueHover text-white font-bold rounded-xl text-sm shadow-sm">
                         <i class="fa-solid fa-file-excel"></i> Xuất CSV
                     </button>
@@ -168,6 +173,7 @@
                     <thead>
                         <tr class="bg-slate-50 text-slate-500 text-xs font-bold uppercase select-none">
                             <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Thời gian')">Thời gian chơi <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Khóa học')">Khóa học <i class="fa-solid fa-sort ml-1"></i></th>
                             <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Họ tên')">Học viên <i class="fa-solid fa-sort ml-1"></i></th>
                             <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Phòng ban')">Phòng ban <i class="fa-solid fa-sort ml-1"></i></th>
                             <th class="px-5 py-4 text-center cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Lần thi')">Lần thi <i class="fa-solid fa-sort ml-1"></i></th>
@@ -229,6 +235,7 @@
                         allResults = data;
                         filteredResults = [...data];
                         
+                        populateCourseFilter(); // Tự dựng bộ lọc các Khóa học động
                         populateDeptFilter();
                         sortData(currentSortColumn, true);
                         
@@ -241,6 +248,19 @@
                 .catch(err => {
                     document.getElementById('loading-text').innerHTML = `<span class="text-rose-500 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Lỗi kết nối API: ${err.message}. Vui lòng thử tải lại trang.</span>`;
                 });
+        }
+
+        // Tự động quét dữ liệu thực tế tại cột "Khóa học" của Sheets để tạo bộ lọc các Khóa học động (Scalable)
+        function populateCourseFilter() {
+            const select = document.getElementById('filter-course');
+            select.innerHTML = '<option value="all">Tất cả khóa học</option>';
+            const courses = [...new Set(allResults.map(item => item["Khóa học"] || "Hotel").filter(Boolean))];
+            courses.forEach(course => {
+                const opt = document.createElement('option');
+                opt.value = course;
+                opt.textContent = course;
+                select.appendChild(opt);
+            });
         }
 
         function populateDeptFilter() {
@@ -295,7 +315,7 @@
             renderPaginationControls(totalPages);
 
             if (totalItems === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="p-8 text-center text-slate-400 font-semibold"><i class="fa-solid fa-inbox block text-2xl mb-2"></i> Không tìm thấy kết quả phù hợp</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="10" class="p-8 text-center text-slate-400 font-semibold"><i class="fa-solid fa-inbox block text-2xl mb-2"></i> Không tìm thấy kết quả phù hợp</td></tr>`;
                 return;
             }
 
@@ -310,10 +330,10 @@
                     : `<span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm select-none"><i class="fa-solid fa-circle-xmark"></i> FAIL</span>`;
 
                 const attemptNum = row["Lần thi"] || '1';
+                const courseName = row["Khóa học"] || 'Hotel';
                 const duration = row["Thời gian hoàn thành"] || '-';
                 const switchesCount = parseInt(row["Cảnh báo gian lận"]) || 0;
                 
-                // ĐÃ TỐI ƯU: Chỉ hiển thị số lần màu đỏ nhấp nháy nổi bật khi >= 15 lần, loại bỏ chữ (Gian lận) chống nhảy dòng
                 let antiCheatBadge = `<span class="font-semibold text-slate-500">${switchesCount} lần</span>`;
                 if (switchesCount >= 15) {
                     antiCheatBadge = `<span class="font-extrabold text-rose-600 animate-pulse">${switchesCount} lần</span>`;
@@ -323,8 +343,9 @@
                 tr.className = "hover:bg-blue-50/30 transition-colors border-b border-slate-100";
                 tr.innerHTML = `
                     <td class="px-5 py-3.5 font-semibold text-slate-500 whitespace-nowrap">${row["Thời gian"] || '-'}</td>
+                    <td class="px-5 py-3.5"><span class="bg-blue-50 text-kvBlue border border-blue-100 text-xs font-bold px-2.5 py-1 rounded-lg">${courseName}</span></td>
                     <td class="px-5 py-3.5 font-bold text-slate-800">${row["Họ tên"] || '-'}</td>
-                    <td class="px-5 py-3.5"><span class="bg-blue-50 text-kvBlue border border-blue-100 text-xs font-bold px-2.5 py-1 rounded-lg">${row["Phòng ban"] || '-'}</span></td>
+                    <td class="px-5 py-3.5 font-semibold text-slate-500">${row["Phòng ban"] || '-'}</td>
                     <td class="px-5 py-3.5 font-bold text-slate-600 text-center">${attemptNum}</td>
                     <td class="px-5 py-3.5 font-bold text-slate-800">${row["Số câu đúng"]}/${row["Tổng số câu"]}</td>
                     <td class="px-5 py-3.5 font-extrabold text-slate-600">${row["Tỷ lệ"]}%</td>
@@ -385,27 +406,32 @@
             renderTable();
         }
 
+        // Tích hợp Lọc động theo cả Khóa học (Course) lẫn Phòng ban, Chế độ và Kết quả
         function handleFilterChange() {
             const query = document.getElementById('search-box').value.trim().toLowerCase();
             const deptValue = document.getElementById('filter-dept').value;
             const statusValue = document.getElementById('filter-status').value;
             const modeValue = document.getElementById('filter-mode').value; 
+            const courseValue = document.getElementById('filter-course').value; // Bộ lọc Khóa học mới
 
             filteredResults = allResults.filter(row => {
                 const name = (row["Họ tên"] || '').toLowerCase();
                 const dept = (row["Phòng ban"] || '').toLowerCase();
+                const courseName = (row["Khóa học"] || 'Hotel').toLowerCase();
                 
                 const rate = parseFloat(row["Tỷ lệ"]) || 0;
                 const status = rate >= 80 ? "PASS" : "FAIL";
-                
                 const totalQuestions = parseInt(row["Tổng số câu"]) || 0;
 
                 const matchSearch = name.includes(query) || dept.includes(query);
                 const matchDept = (deptValue === "all" || row["Phòng ban"] === deptValue);
                 const matchStatus = (statusValue === "all" || status === statusValue);
                 const matchMode = (modeValue === "all" || totalQuestions === parseInt(modeValue));
+                
+                // Trực quan hóa so khớp Khóa học
+                const matchCourse = (courseValue === "all" || courseName === courseValue.toLowerCase());
 
-                return matchSearch && matchDept && matchStatus && matchMode;
+                return matchSearch && matchDept && matchStatus && matchMode && matchCourse;
             });
 
             currentIdx = 1; 
@@ -417,6 +443,7 @@
             document.getElementById('filter-dept').value = "all";
             document.getElementById('filter-status').value = "all";
             document.getElementById('filter-mode').value = "all";
+            document.getElementById('filter-course').value = "all";
             document.getElementById('items-per-page').value = "10";
             pageLimit = 10;
             currentIdx = 1;
@@ -537,15 +564,16 @@
             if (filteredResults.length === 0) return alert("Không có dữ liệu khả dụng để xuất file.");
             
             let csvContent = "\uFEFF"; 
-            csvContent += "Thời gian,Họ tên,Phòng ban,Lần thi,Số câu đúng,Tổng số câu,Tỷ lệ,Thời gian làm,Cảnh báo gian lận,Trạng thái\n";
+            csvContent += "Thời gian,Khóa học,Họ tên,Phòng ban,Lần thi,Số câu đúng,Tổng số câu,Tỷ lệ,Thời gian làm,Cảnh báo gian lận,Trạng thái\n";
 
             filteredResults.forEach(row => {
                 const pct = parseInt(row["Tỷ lệ"]);
                 const isPassed = pct >= 80 ? "PASS" : "FAIL";
                 const attemptNum = row["Lần thi"] || '1';
+                const courseName = row["Khóa học"] || 'Hotel';
                 const duration = row["Thời gian hoàn thành"] || '-';
                 const switches = row["Cảnh báo gian lận"] || '0';
-                csvContent += `"${row["Thời gian"]}","${row["Họ tên"]}","${row["Phòng ban"]}",${attemptNum},${row["Số câu đúng"]},${row["Tổng số câu"]},${row["Tỷ lệ"]},"${duration}","${switches}","${isPassed}"\n`;
+                csvContent += `"${row["Thời gian"]}","${courseName}","${row["Họ tên"]}","${row["Phòng ban"]}",${attemptNum},${row["Số câu đúng"]},${row["Tổng số câu"]},${row["Tỷ lệ"]},"${duration}","${switches}","${isPassed}"\n`;
             });
 
             const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
