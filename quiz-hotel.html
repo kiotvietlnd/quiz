@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Game KiotViet Hotel - Sales & DVKH</title>
     
+    <!-- Tailwind CSS & Font & Icons -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -50,6 +51,7 @@
 
     <div class="tech-bg"></div>
 
+    <!-- HEADER (Động hóa tiêu đề Navbar) -->
     <header class="h-[72px] shrink-0 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-30 shadow-md border-b border-blue-500/20" style="background: linear-gradient(45deg, #166def 0%, #1259c7 72%, #ffffff 78%, #166def 100%);">
         <div class="flex items-center gap-3">
             <div class="flex-shrink-0 select-none bg-white px-3 py-2 rounded-xl shadow-sm flex items-center">
@@ -138,7 +140,7 @@
                         <p class="text-xs text-slate-500 font-bold uppercase mt-1" id="sb-dept">Phòng: -</p>
                     </div>
 
-                    <!-- Hộp cảnh báo gian lận Real-time -->
+                    <!-- Cảnh báo gian lận Real-time trực quan -->
                     <div id="cheat-warning-box" class="mb-4 p-3 bg-amber-50 border border-amber-200 rounded-xl text-xs font-semibold text-amber-700 hidden animate-fade-in select-none">
                         <div class="flex items-center gap-1.5 font-bold">
                             <i class="fa-solid fa-triangle-exclamation text-amber-500 animate-bounce"></i> 
@@ -186,7 +188,6 @@
                 <div id="badge-container" class="mb-4"></div>
                 <p id="eval-feedback" class="text-sm font-semibold text-slate-600 max-w-[500px] mx-auto leading-relaxed"></p>
                 
-                <!-- Nút về trang chủ để thi tiếp/thi lại -->
                 <div class="mt-6 flex justify-center">
                     <button onclick="exitQuiz()" class="btn-interact bg-kvBlue hover:bg-kvBlueHover text-white font-bold px-6 py-3 rounded-xl text-sm shadow-md flex items-center gap-2">
                         <i class="fa-solid fa-house"></i> Về Trang Chủ Chơi Tiếp
@@ -241,6 +242,8 @@
     </div>
 
     <script>
+        // ĐỊNH DANH KHÓA HỌC ĐỘNG (Bạn chỉ cần đổi biến này để nhân bản file HTML mới!)
+        const COURSE_NAME = "Hotel"; 
         const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqFBqnkI32xXYKP7Z7q3Qq13UA3-wCHeyuC-xDvx-0ur8dKr2p6Ee_2VhDQA3DMLs7tQ/exec";
         
         let allDbQuestions = []; 
@@ -252,12 +255,11 @@
         let studentDept = "";
         let autoNextTimeout = null;
         let tabSwitches = 0;
-        
-        // NEW: Cờ hiệu khống chế sự kiện tắt tab ngầm khi reload trang thoát bài thi
-        let isExiting = false;
+        let isExiting = false; // Chặn lưu phiên tự động khi đóng tab để thoát hoàn toàn
 
+        // Real-time Anti-cheat Warning
         document.addEventListener('visibilitychange', () => {
-            if (isExiting) return; // Nếu đang chủ động thoát thì không đếm và lưu session nữa
+            if (isExiting) return; 
             
             if (document.hidden) {
                 tabSwitches++;
@@ -328,11 +330,6 @@
                 document.getElementById('sb-name').textContent = "Học viên: " + studentName;
                 document.getElementById('sb-dept').textContent = "Phòng: " + studentDept;
                 
-                hideElement('auth-screen', 'block');
-                showElement('quiz-screen', 'grid');
-                showElement('btn-exit', 'block');
-                
-                // Phục hồi hộp cảnh báo gian lận nếu có
                 if (tabSwitches > 0) {
                     const warningBox = document.getElementById('cheat-warning-box');
                     const countUi = document.getElementById('switches-count-ui');
@@ -376,7 +373,8 @@
             document.getElementById('loading-text').textContent = "Đang kiểm tra lịch sử lượt thi...";
             updateHeaderState('quiz');
 
-            fetch(`${SCRIPT_URL}?action=check_history&name=${encodeURIComponent(studentName)}&department=${encodeURIComponent(studentDept)}`)
+            // ĐỒNG BỘ ĐA KHÓA HỌC: Truyền thêm tham số course
+            fetch(`${SCRIPT_URL}?action=check_history&course=${encodeURIComponent(COURSE_NAME)}&name=${encodeURIComponent(studentName)}&department=${encodeURIComponent(studentDept)}`)
                 .then(res => {
                     if (!res.ok) throw new Error("Kiểm tra lịch sử thi thất bại.");
                     return res.json();
@@ -398,7 +396,8 @@
                         }
 
                         document.getElementById('loading-text').textContent = "Đang tải cấu trúc đề thi ngẫu nhiên...";
-                        fetch(`${SCRIPT_URL}?action=get_questions`)
+                        // ĐỒNG BỘ ĐA KHÓA HỌC: Lấy câu hỏi động theo khóa học định danh
+                        fetch(`${SCRIPT_URL}?action=get_questions&course=${encodeURIComponent(COURSE_NAME)}`)
                             .then(res => {
                                 if (!res.ok) throw new Error("Yêu cầu tải đề không thành công.");
                                 return res.json();
@@ -585,7 +584,6 @@
             }
         }
 
-        // SỬA LỖI ĐẾM NGƯỢC TREO 1 GIÂY KHI CHƯA NỘP BÀI: Ép vẽ 00:00 trước, sau đó hoãn 50ms rồi nộp bài
         function startTimer() {
             clearInterval(timerInterval);
             timerInterval = setInterval(() => {
@@ -595,9 +593,8 @@
 
                 if (timeRemaining <= 0) {
                     clearInterval(timerInterval);
-                    document.getElementById('timer').textContent = "00:00"; // Ép hiển thị 00:00 lập tức
+                    document.getElementById('timer').textContent = "00:00"; 
                     
-                    // Delay nhẹ để trình duyệt Paint xong giao diện, tránh bị hộp thoại Alert chặn luồng vẽ
                     setTimeout(() => {
                         alert("Thời gian làm bài đã kết thúc! Hệ thống tự động nộp bài.");
                         submitQuiz();
@@ -637,7 +634,7 @@
         function showExitModal() { showElement('exit-modal', 'flex'); }
         function closeExitModal() { hideElement('exit-modal', 'flex'); }
         
-        // ĐÃ SỬA: Thêm cờ hiệu isExiting trước khi xóa session để chặn hoàn toàn lỗi nhảy ngược màn cũ
+        // SỬA LỖI VỀ TRANG CHỦ CHƠI TIẾP: Set cờ isExiting để dọn sạch hoàn toàn rác session và reload thành công
         function exitQuiz() {
             isExiting = true; 
             sessionStorage.removeItem('active_quiz_session');
@@ -659,7 +656,8 @@
             const startTimeVal = parseInt(sessionStorage.getItem('quiz_start_time')) || Date.now();
             const durationSec = Math.floor((Date.now() - startTimeVal) / 1000);
 
-            const url = `${SCRIPT_URL}?action=save`
+            // ĐỒNG BỘ ĐA KHÓA HỌC: Gửi kèm tham số course định danh khóa học khi nộp bài
+            const url = `${SCRIPT_URL}?action=save&course=${encodeURIComponent(COURSE_NAME)}`
                 + `&name=${encodeURIComponent(studentName)}`
                 + `&department=${encodeURIComponent(studentDept)}`
                 + `&answers=${encodeURIComponent(JSON.stringify(submitPayload))}`
@@ -738,7 +736,7 @@
                 card.className = `review-item ${item.correct ? 'correct' : 'incorrect'} border border-slate-200 rounded-2xl overflow-hidden bg-white shadow-sm mb-4`;
                 let mediaHtml = renderMedia(item.media);
 
-                // THIẾT KẾ LẠI BADGE TRẠNG THÁI: Khóa cứng độ rộng bằng shrink-0, ngăn bóp chữ nhảy dòng mất mỹ quan
+                // THIẾT KẾ LẠI BADGE TRẠNG THÁI CHỐNG VỠ DÒNG
                 const getOptionStyle = (key) => {
                     const isChosen = item.chosen === key;
                     const isCorrect = item.correctKey === key;
@@ -752,7 +750,7 @@
                         cardClass = "border-emerald-500 bg-emerald-50/50 text-emerald-900 ring-1 ring-emerald-500/20";
                         prefixClass = "border-emerald-500 bg-emerald-500 text-white shadow-sm";
                         textClass = "text-emerald-900 font-bold";
-                        statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2.5 py-1 rounded-lg shrink-0 whitespace-nowrap select-none"><i class="fa-solid fa-circle-check"></i> ${isChosen ? 'Chính xác' : 'Đáp án chuẩn'}</span>`;
+                        statusBadge = `<span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0 whitespace-nowrap select-none"><i class="fa-solid fa-circle-check"></i> ${isChosen ? 'Chính xác' : 'Đáp án chuẩn'}</span>`;
                     } else if (isChosen) {
                         cardClass = "border-rose-400 bg-rose-50/50 text-rose-900 ring-1 ring-rose-400/20";
                         prefixClass = "border-rose-400 bg-rose-400 text-white shadow-sm";
