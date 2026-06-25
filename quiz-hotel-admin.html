@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bảng Điều Khiển Đào Tạo - KiotViet Hotel</title>
+    <title>Thống Kê Quiz Game KiotViet Hotel</title>
     
-    <!-- Tailwind CSS, Font Inter & FontAwesome -->
+    <!-- Tailwind CSS Configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -13,118 +13,193 @@
                 extend: {
                     colors: {
                         kvBlue: '#166def',
-                        kvGreen: '#7cb342',
-                        kvGreenHover: '#689f38',
+                        kvBlueHover: '#1259c7',
                         kvSlate: '#2c3e50',
                     }
                 } 
             }
         }
     </script>
+    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Chart.js phục vụ vẽ biểu đồ trực quan -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
         body { 
             font-family: 'Inter', sans-serif;
-            font-size: 13px; 
+            font-size: 14px; 
+            -webkit-tap-highlight-color: transparent;
         }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* Radial Background Gradient - Blue Tech Style đồng bộ */
         .tech-bg { 
             position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10;
-            background: radial-gradient(circle at top right, #f8fafc 0%, #f1f5f9 60%, #e2e8f0 100%);
+            background: radial-gradient(circle at top right, #eff6ff 0%, #f8fafc 50%, #e0f2fe 100%);
         }
-        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.4); }
+        .glass { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.5); }
+        
+        .btn-interact { transition: transform 0.15s ease, box-shadow 0.15s; }
+        .btn-interact:hover { transform: translateY(-1px); }
     </style>
 </head>
 <body class="h-full flex flex-col text-slate-800 antialiased">
 
     <div class="tech-bg"></div>
 
-    <!-- HEADER -->
-    <header class="h-[72px] shrink-0 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-30 shadow-md border-b border-kvGreen/20 bg-gradient-to-r from-kvSlate via-slate-800 to-[#1e293b]">
+    <!-- HEADER (Đồng bộ dải màu gradient từ trang học viên) -->
+    <header class="h-[72px] shrink-0 flex items-center justify-between px-4 sm:px-6 lg:px-8 z-30 shadow-md border-b border-blue-500/20" style="background: linear-gradient(45deg, #166def 0%, #1259c7 72%, #ffffff 78%, #166def 100%);">
         <div class="flex items-center gap-3">
             <div class="flex-shrink-0 select-none bg-white px-3 py-2 rounded-xl shadow-sm flex items-center">
                 <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-5">
             </div>
             <div class="flex items-center gap-3 border-l border-white/20 pl-4 py-1">
                 <div>
-                    <h1 class="text-xs sm:text-[14px] font-bold text-white tracking-tight leading-tight">Cổng Kiểm Soát Chất Lượng Đào Tạo</h1>
-                    <p class="text-[10px] font-semibold text-kvGreen uppercase tracking-widest leading-none mt-0.5">Xếp Hạng Thi Đua</p>
+                    <h1 class="text-sm font-bold text-white tracking-tight leading-tight">Kết Quả Quiz Game</h1>
+                    <p class="text-[11px] font-medium text-white uppercase tracking-widest leading-none mt-1">Bảng Thành Tích Sales & DVKH</p>
                 </div>
             </div>
         </div>
-        <div class="flex items-center gap-3">
-            <span class="text-xs font-bold text-slate-300 hidden sm:inline-flex items-center gap-1.5 bg-white/5 px-3 py-1.5 rounded-full border border-white/10">
-                <i class="fa-solid fa-graduation-cap text-kvGreen"></i> Giảng Viên & Quản Trị
+        <div>
+            <span class="text-xs font-bold text-white/90 bg-white/10 px-3 py-1.5 rounded-full border border-white/10 flex items-center gap-1.5 select-none">
+                <i class="fa-solid fa-square-poll-vertical"></i> Dữ Liệu Thời Gian Thực
             </span>
         </div>
     </header>
 
-    <div class="container max-w-[1100px] w-full mx-auto py-8 px-4 flex-1 flex flex-col justify-start">
-        <div class="dashboard glass rounded-2xl p-6 md:p-8 shadow-lg border border-slate-200">
-            <h2 class="text-lg font-black text-slate-800 mb-6 flex items-center gap-2">
-                <i class="fa-solid fa-chart-line text-kvGreen"></i> Bảng Theo Dõi Thành Tích - Sales & DVKH
-            </h2>
+    <div class="container mx-auto px-4 py-6 flex-1 flex flex-col gap-6 max-w-[1200px]">
+        
+        <!-- TIÊU ĐỀ TRANG -->
+        <div class="flex items-center gap-2">
+            <div class="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center text-lg shadow-sm">
+                <i class="fa-solid fa-gamepad"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-extrabold text-slate-800">Thống Kê Điểm Số & Lượt Chơi</h2>
+                <p class="text-xs text-slate-500 font-semibold">Cập nhật tự động kết quả thi đấu từ các lượt chơi của đội ngũ Sales & DVKH</p>
+            </div>
+        </div>
 
-            <!-- KPIs -->
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-8">
-                <div class="kpi-card bg-slate-50 border border-slate-200/60 p-5 rounded-xl text-center shadow-inner flex flex-col justify-center">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tổng Lượt Làm Bài</span>
-                    <div class="text-2xl font-black text-slate-800" id="kpi-total">0</div>
-                </div>
-                <div class="kpi-card bg-slate-50 border border-slate-200/60 p-5 rounded-xl text-center shadow-inner flex flex-col justify-center">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Điểm Số Trung Bình</span>
-                    <div class="text-2xl font-black text-slate-800" id="kpi-average">0.0</div>
-                </div>
-                <div class="kpi-card bg-slate-50 border border-slate-200/60 p-5 rounded-xl text-center shadow-inner flex flex-col justify-center">
-                    <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Tỷ Lệ Hoàn Thành Đạt</span>
-                    <div class="text-2xl font-black text-kvGreen" id="kpi-pass-rate">0%</div>
+        <!-- THẺ CHỈ SỐ KPI -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 text-center flex flex-col justify-center">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Tổng Lượt Chơi</span>
+                <span class="text-3xl font-black text-slate-800" id="kpi-total">0</span>
+            </div>
+            <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 text-center flex flex-col justify-center">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Điểm Số Trung Bình</span>
+                <span class="text-3xl font-black text-slate-800" id="kpi-average">0.0</span>
+            </div>
+            <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 text-center flex flex-col justify-center">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Tỷ Lệ Đạt (≥ 80%)</span>
+                <span class="text-3xl font-black text-kvBlue" id="kpi-pass-rate">0%</span>
+            </div>
+        </div>
+
+        <!-- PHẦN BIỂU ĐỒ TRỰC QUAN -->
+        <div id="charts-wrapper" class="grid grid-cols-1 lg:grid-cols-3 gap-6" style="display: none;">
+            <!-- Biểu đồ tỷ lệ Đạt/Chưa đạt -->
+            <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 flex flex-col items-center">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-4 self-start"><i class="fa-solid fa-chart-pie mr-1 text-kvBlue"></i> Tỷ Lệ Đạt</h3>
+                <div class="w-full max-w-[200px] h-[200px] flex items-center justify-center">
+                    <canvas id="pieChart"></canvas>
                 </div>
             </div>
-
-            <!-- Điều khiển bộ lọc -->
-            <div class="flex gap-3 mb-5 flex-wrap items-center">
-                <div class="relative flex-1 min-width-[280px]">
-                    <input type="text" id="search-box" class="search-input w-full bg-slate-50 text-slate-800 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-xs focus:outline-none focus:ring-2 focus:ring-kvGreen/20 transition-all" placeholder="Tìm kiếm theo họ tên học viên hoặc mã phòng..." oninput="onSearch()">
-                    <i class="fa-solid fa-search absolute left-4 top-3.5 text-slate-400"></i>
+            <!-- Biểu đồ điểm số trung bình theo phòng ban -->
+            <div class="glass rounded-2xl p-5 shadow-sm border border-slate-200/80 lg:col-span-2">
+                <h3 class="text-sm font-bold text-slate-700 uppercase tracking-wide mb-4"><i class="fa-solid fa-chart-column mr-1 text-kvBlue"></i> Điểm Trung Bình Theo Phòng Ban</h3>
+                <div class="w-full h-[200px]">
+                    <canvas id="barChart"></canvas>
                 </div>
-                <button class="btn btn-info flex items-center gap-1.5 py-2.5 px-4 text-xs font-bold rounded-xl shadow-sm" onclick="fetchResults()">
-                    <i class="fa-solid fa-arrows-rotate"></i> Làm mới dữ liệu
-                </button>
-                <button class="btn btn-success flex items-center gap-1.5 py-2.5 px-4 text-xs font-bold rounded-xl shadow-sm" onclick="exportToCSV()">
-                    <i class="fa-solid fa-file-excel"></i> Xuất báo cáo (CSV)
-                </button>
+            </div>
+        </div>
+
+        <!-- BỘ LỌC VÀ BẢNG BÁO CÁO -->
+        <div class="glass rounded-2xl p-6 shadow-sm border border-slate-200 flex flex-col gap-4">
+            
+            <!-- Điều khiển bộ lọc -->
+            <div class="flex flex-col lg:flex-row gap-3 justify-between items-stretch lg:items-center">
+                <div class="flex flex-wrap gap-2 flex-1 max-w-[900px]">
+                    <!-- Ô Tìm kiếm -->
+                    <div class="relative flex-1 min-w-[200px]">
+                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
+                            <i class="fa-solid fa-magnifying-glass text-sm"></i>
+                        </span>
+                        <input type="text" id="search-box" oninput="handleFilterChange()" class="w-full bg-slate-50 text-slate-800 border border-slate-200 rounded-xl pl-10 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-kvBlue/20 transition-all font-semibold" placeholder="Tìm theo tên học viên hoặc phòng ban...">
+                    </div>
+                    
+                    <!-- Dropdown Lọc Phòng ban (Tự sinh dữ liệu động) -->
+                    <div class="min-w-[140px]">
+                        <select id="filter-dept" onchange="handleFilterChange()" class="w-full bg-slate-50 text-slate-700 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-kvBlue/20">
+                            <option value="all">Tất cả phòng ban</option>
+                        </select>
+                    </div>
+
+                    <!-- Dropdown Lọc Trạng thái -->
+                    <div class="min-w-[140px]">
+                        <select id="filter-status" onchange="handleFilterChange()" class="w-full bg-slate-50 text-slate-700 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-kvBlue/20">
+                            <option value="all">Tất cả kết quả</option>
+                            <option value="ĐẠT">Đạt Chuẩn</option>
+                            <option value="CHƯA ĐẠT">Chưa Đạt</option>
+                        </select>
+                    </div>
+
+                    <!-- Dropdown số hiển thị trên 1 trang -->
+                    <div class="flex items-center gap-1.5 ml-1 text-xs text-slate-500 font-bold shrink-0 select-none">
+                        <span>Hiện:</span>
+                        <select id="items-per-page" onchange="handlePageLimitChange()" class="bg-slate-50 text-slate-700 border border-slate-200 rounded-lg px-2.5 py-1.5 text-xs font-bold focus:outline-none focus:ring-2 focus:ring-kvBlue/20">
+                            <option value="5">5</option>
+                            <option value="10" selected>10</option>
+                            <option value="20">20</option>
+                            <option value="-1">Tất cả</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Nút thao tác nhanh -->
+                <div class="flex gap-2 shrink-0">
+                    <button onclick="fetchResults()" class="btn-interact flex items-center justify-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm border border-slate-200">
+                        <i class="fa-solid fa-arrows-rotate"></i> Làm mới
+                    </button>
+                    <button onclick="exportToCSV()" class="btn-interact flex items-center justify-center gap-1.5 px-4 py-2.5 bg-kvBlue hover:bg-kvBlueHover text-white font-bold rounded-xl text-sm shadow-sm">
+                        <i class="fa-solid fa-file-excel"></i> Xuất CSV
+                    </button>
+                </div>
             </div>
 
             <!-- Bảng báo cáo kết quả -->
-            <div class="table-responsive bg-white rounded-xl shadow-inner border border-slate-200">
+            <div class="overflow-x-auto rounded-xl border border-slate-150 bg-white">
                 <table id="results-table" class="min-w-full divide-y divide-slate-200 hidden">
                     <thead>
-                        <tr class="bg-slate-50/50">
-                            <th class="px-5 py-3 text-left font-bold text-slate-600 cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Thời gian')">Thời gian ⇅</th>
-                            <th class="px-5 py-3 text-left font-bold text-slate-600 cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Họ tên')">Họ tên ⇅</th>
-                            <th class="px-5 py-3 text-left font-bold text-slate-600 cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Phòng ban')">Phòng ban ⇅</th>
-                            <th class="px-5 py-3 text-left font-bold text-slate-600 cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Số câu đúng')">Điểm số ⇅</th>
-                            <th class="px-5 py-3 text-left font-bold text-slate-600 cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Tỷ lệ')">Tỷ lệ đạt ⇅</th>
-                            <th class="px-5 py-3 text-left font-bold text-slate-600">Trạng thái</th>
+                        <tr class="bg-slate-50 text-slate-500 text-xs font-bold uppercase select-none">
+                            <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Thời gian')">Thời gian chơi <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Họ tên')">Học viên <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Phòng ban')">Phòng ban <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Số câu đúng')">Điểm <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="px-5 py-4 text-left cursor-pointer hover:bg-slate-100 transition-colors" onclick="sortTable('Tỷ lệ')">Tỷ Lệ Đúng <i class="fa-solid fa-sort ml-1"></i></th>
+                            <th class="px-5 py-4 text-left">Trạng thái</th>
                         </tr>
                     </thead>
-                    <tbody id="table-body" class="divide-y divide-slate-100 text-slate-700">
+                    <tbody id="table-body" class="divide-y divide-slate-100 text-slate-700 text-sm">
                     </tbody>
                 </table>
             </div>
 
-            <!-- Phân trang -->
-            <div class="pagination flex justify-between items-center mt-5" id="pagination-ctrl" style="display: none;">
-                <button class="btn btn-info py-2 px-3 text-xs font-bold rounded-lg disabled:opacity-50" id="btn-page-prev" onclick="changePage(-1)">Trang trước</button>
-                <span id="page-info" class="text-xs font-semibold text-slate-500">Trang 1 / 1</span>
-                <button class="btn btn-info py-2 px-3 text-xs font-bold rounded-lg disabled:opacity-50" id="btn-page-next" onclick="changePage(1)">Trang sau</button>
+            <!-- Phân trang thông minh -->
+            <div class="flex justify-between items-center mt-2 pt-4 border-t border-slate-100 flex-wrap gap-3" id="pagination-ctrl" style="display: none;">
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider" id="page-info">Hiển thị 0 - 0 trên 0 lượt chơi</span>
+                <div class="flex gap-1" id="pagination-btns"></div>
             </div>
 
-            <!-- Loader -->
-            <div id="loading-text" class="loading flex flex-col items-center justify-center py-10 gap-3">
-                <div class="w-8 h-8 border-3 border-slate-200 border-t-kvGreen rounded-full animate-spin"></div>
-                <div class="text-xs font-bold text-slate-400">Đang truy vấn cổng thông tin dữ liệu...</div>
+            <!-- Loader trạng thái tải dữ liệu -->
+            <div id="loading-text" class="flex flex-col items-center justify-center py-12 gap-3">
+                <div class="w-10 h-10 border-4 border-slate-200 border-t-kvBlue rounded-full animate-spin"></div>
+                <div class="text-sm font-bold text-slate-500">Đang đồng bộ kết nối dữ liệu từ Google Sheets...</div>
             </div>
         </div>
     </div>
@@ -135,14 +210,18 @@
         let allResults = [];
         let filteredResults = [];
         let currentIdx = 1;
-        const pageLimit = 10;
+        let pageLimit = 10;
         let currentSortColumn = "Thời gian";
         let isSortAscending = false;
+
+        let pieChart = null;
+        let barChart = null;
 
         function fetchResults() {
             document.getElementById('loading-text').style.display = 'flex';
             document.getElementById('results-table').style.display = 'none';
             document.getElementById('pagination-ctrl').style.display = 'none';
+            document.getElementById('charts-wrapper').style.display = 'none';
 
             fetch(`${SCRIPT_URL}?action=read`, { method: "GET", redirect: "follow" })
                 .then(res => {
@@ -152,21 +231,36 @@
                 .then(data => {
                     document.getElementById('loading-text').style.display = 'none';
                     if (data && data.status === "error") {
-                        document.getElementById('loading-text').innerHTML = `<span style="color:var(--danger-color); font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> Lỗi máy chủ: ${data.message}</span>`;
+                        document.getElementById('loading-text').innerHTML = `<span class="text-rose-500 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Lỗi hệ thống: ${data.message}</span>`;
                     } else if (data && data.length > 0) {
                         allResults = data;
                         filteredResults = [...data];
                         
-                        // Sắp xếp mặc định theo Thời gian giảm dần (mới nhất lên đầu)
+                        populateDeptFilter();
                         sortData(currentSortColumn, true);
+                        
                         document.getElementById('results-table').style.display = 'table';
+                        document.getElementById('charts-wrapper').style.display = 'grid';
                     } else {
-                        document.getElementById('loading-text').innerHTML = `<span class="text-xs font-bold text-slate-400"><i class="fa-solid fa-folder-open"></i> Hệ thống dữ liệu hiện chưa có ghi nhận nào.</span>`;
+                        document.getElementById('loading-text').innerHTML = `<span class="text-sm font-bold text-slate-400"><i class="fa-solid fa-folder-open"></i> Chưa ghi nhận lượt chơi nào trên hệ thống.</span>`;
                     }
                 })
                 .catch(err => {
-                    document.getElementById('loading-text').innerHTML = `<span style="color:var(--danger-color); font-weight:bold;"><i class="fa-solid fa-triangle-exclamation"></i> Lỗi kết nối dịch vụ: ${err.message}. Hãy kiểm tra lại cấu hình link Web App.</span>`;
+                    document.getElementById('loading-text').innerHTML = `<span class="text-rose-500 font-bold"><i class="fa-solid fa-triangle-exclamation"></i> Lỗi kết nối API: ${err.message}. Vui lòng thử tải lại trang.</span>`;
                 });
+        }
+
+        // Tự động khởi tạo danh sách lọc phòng ban động dựa trên dữ liệu Google Sheets trả về
+        function populateDeptFilter() {
+            const select = document.getElementById('filter-dept');
+            select.innerHTML = '<option value="all">Tất cả phòng ban</option>';
+            const depts = [...new Set(allResults.map(item => item["Phòng ban"]).filter(Boolean))];
+            depts.forEach(dept => {
+                const opt = document.createElement('option');
+                opt.value = dept;
+                opt.textContent = dept;
+                select.appendChild(opt);
+            });
         }
 
         function calculateKPIs(data) {
@@ -192,56 +286,217 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            const startIndex = (currentIdx - 1) * pageLimit;
-            const endIndex = startIndex + pageLimit;
+            const totalItems = filteredResults.length;
+            const limit = pageLimit === -1 ? totalItems : pageLimit;
+            const totalPages = Math.ceil(totalItems / limit) || 1;
+
+            if (currentIdx > totalPages) currentIdx = totalPages;
+
+            const startIndex = (currentIdx - 1) * limit;
+            const endIndex = pageLimit === -1 ? totalItems : Math.min(startIndex + limit, totalItems);
+
+            // Cập nhật thông số hiển thị chân trang
+            const infoText = totalItems > 0 
+                ? `Hiển thị ${startIndex + 1} - ${endIndex} trên ${totalItems} lượt chơi`
+                : `Hiển thị 0 - 0 trên 0 lượt chơi`;
+            document.getElementById('page-info').textContent = infoText;
+
+            // Render thanh phân trang
+            renderPaginationControls(totalPages);
+
+            if (totalItems === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="p-8 text-center text-slate-400 font-semibold"><i class="fa-solid fa-inbox block text-2xl mb-2"></i> Không tìm thấy kết quả phù hợp</td></tr>`;
+                return;
+            }
+
             const pageData = filteredResults.slice(startIndex, endIndex);
 
             pageData.forEach(row => {
                 const tr = document.createElement('tr');
                 const rate = parseInt(row["Tỷ lệ"]);
                 const isPassed = rate >= 80;
-                const badgeClass = isPassed ? 'badge-success' : 'badge-danger';
-                const statusLabel = isPassed ? 'ĐẠT' : 'CHƯA ĐẠT';
+                
+                // Nhãn badge thiết kế hình pill bo tròn tuyệt đẹp đồng bộ học viên
+                const badge = isPassed 
+                    ? `<span class="inline-flex items-center gap-1.5 bg-green-50 text-green-700 border border-green-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm"><i class="fa-solid fa-circle-check"></i> ĐẠT</span>`
+                    : `<span class="inline-flex items-center gap-1.5 bg-rose-50 text-rose-700 border border-rose-200 px-3 py-1 rounded-full text-xs font-bold shadow-sm"><i class="fa-solid fa-circle-xmark"></i> CHƯA ĐẠT</span>`;
 
+                tr.className = "hover:bg-blue-50/30 transition-colors border-b border-slate-100";
                 tr.innerHTML = `
-                    <td class="px-5 py-3.5 text-slate-500 whitespace-nowrap">${row["Thời gian"] || '-'}</td>
+                    <td class="px-5 py-3.5 font-semibold text-slate-500 whitespace-nowrap">${row["Thời gian"] || '-'}</td>
                     <td class="px-5 py-3.5 font-bold text-slate-800">${row["Họ tên"] || '-'}</td>
-                    <td class="px-5 py-3.5 font-semibold text-slate-500">${row["Phòng ban"] || '-'}</td>
-                    <td class="px-5 py-3.5 font-bold text-slate-700">${row["Số câu đúng"]}/${row["Tổng số câu"]}</td>
-                    <td class="px-5 py-3.5 font-bold text-slate-700">${row["Tỷ lệ"]}%</td>
-                    <td class="px-5 py-3.5"><span class="badge ${badgeClass}">${statusLabel}</span></td>
+                    <td class="px-5 py-3.5"><span class="bg-blue-50 text-kvBlue border border-blue-100 text-xs font-bold px-2.5 py-1 rounded-lg">${row["Phòng ban"] || '-'}</span></td>
+                    <td class="px-5 py-3.5 font-bold text-slate-800">${row["Số câu đúng"]}/${row["Tổng số câu"]}</td>
+                    <td class="px-5 py-3.5 font-extrabold text-slate-600">${row["Tỷ lệ"]}%</td>
+                    <td class="px-5 py-3.5">${badge}</td>
                 `;
                 tbody.appendChild(tr);
             });
 
             calculateKPIs(filteredResults);
-
-            const totalPages = Math.ceil(filteredResults.length / pageLimit) || 1;
-            document.getElementById('page-info').textContent = `Trang ${currentIdx} / ${totalPages}`;
-            document.getElementById('pagination-ctrl').style.display = totalPages > 1 ? 'flex' : 'none';
-            
-            document.getElementById('btn-page-prev').disabled = currentIdx === 1;
-            document.getElementById('btn-page-next').disabled = currentIdx === totalPages;
+            renderCharts(filteredResults);
         }
 
-        function changePage(direction) {
-            const totalPages = Math.ceil(filteredResults.length / pageLimit) || 1;
-            const target = currentIdx + direction;
-            if (target >= 1 && target <= totalPages) {
-                currentIdx = target;
-                renderTable();
+        // Tạo nút điều khiển phân trang động
+        function renderPaginationControls(totalPages) {
+            const container = document.getElementById('pagination-btns');
+            container.innerHTML = '';
+
+            if (totalPages <= 1) {
+                document.getElementById('pagination-ctrl').style.display = 'none';
+                return;
             }
+
+            document.getElementById('pagination-ctrl').style.display = 'flex';
+
+            // Nút "Trước"
+            const prevBtn = document.createElement('button');
+            prevBtn.className = `px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold transition-all ${
+                currentIdx === 1 
+                ? 'opacity-50 cursor-not-allowed bg-slate-50 text-slate-400' 
+                : 'bg-white hover:bg-slate-50 text-slate-700 hover:border-slate-300'
+            }`;
+            prevBtn.innerHTML = '<i class="fa-solid fa-chevron-left mr-1"></i> Trước';
+            prevBtn.disabled = (currentIdx === 1);
+            prevBtn.onclick = () => { currentIdx--; renderTable(); };
+            container.appendChild(prevBtn);
+
+            // Chỉ số trang [Trang hiện tại] / [Tổng số trang]
+            const indicator = document.createElement('span');
+            indicator.className = 'px-4 py-1.5 text-xs font-bold text-slate-700 bg-slate-100/80 rounded-xl flex items-center border border-slate-200/50';
+            indicator.textContent = `${currentIdx} / ${totalPages}`;
+            container.appendChild(indicator);
+
+            // Nút "Sau"
+            const nextBtn = document.createElement('button');
+            nextBtn.className = `px-3.5 py-1.5 rounded-xl border border-slate-200 text-xs font-bold transition-all ${
+                currentIdx === totalPages 
+                ? 'opacity-50 cursor-not-allowed bg-slate-50 text-slate-400' 
+                : 'bg-white hover:bg-slate-50 text-slate-700 hover:border-slate-300'
+            }`;
+            nextBtn.innerHTML = 'Sau <i class="fa-solid fa-chevron-right ml-1"></i>';
+            nextBtn.disabled = (currentIdx === totalPages);
+            nextBtn.onclick = () => { currentIdx++; renderTable(); };
+            container.appendChild(nextBtn);
         }
 
-        function onSearch() {
+        // Cập nhật số kết quả hiển thị trên trang
+        function handlePageLimitChange() {
+            const val = document.getElementById('items-per-page').value;
+            pageLimit = parseInt(val);
+            currentIdx = 1; // Reset về trang đầu
+            renderTable();
+        }
+
+        // Xử lý Lọc dữ liệu thông minh thời gian thực
+        function handleFilterChange() {
             const query = document.getElementById('search-box').value.trim().toLowerCase();
+            const deptValue = document.getElementById('filter-dept').value;
+            const statusValue = document.getElementById('filter-status').value;
+
             filteredResults = allResults.filter(row => {
                 const name = (row["Họ tên"] || '').toLowerCase();
                 const dept = (row["Phòng ban"] || '').toLowerCase();
-                return name.includes(query) || dept.includes(query);
+                const rate = parseFloat(row["Tỷ lệ"]) || 0;
+                const status = rate >= 80 ? "ĐẠT" : "CHƯA ĐẠT";
+
+                const matchSearch = name.includes(query) || dept.includes(query);
+                const matchDept = (deptValue === "all" || row["Phòng ban"] === deptValue);
+                const matchStatus = (statusValue === "all" || status === statusValue);
+
+                return matchSearch && matchDept && matchStatus;
             });
-            currentIdx = 1;
+
+            currentIdx = 1; // Reset về trang đầu
             renderTable();
+        }
+
+        function resetFilters() {
+            document.getElementById('search-box').value = "";
+            document.getElementById('filter-dept').value = "all";
+            document.getElementById('filter-status').value = "all";
+            document.getElementById('items-per-page').value = "10";
+            pageLimit = 10;
+            currentIdx = 1;
+            filteredResults = [...allResults];
+            renderTable();
+        }
+
+        // Vẽ biểu đồ động thông minh bằng Chart.js
+        function renderCharts(data) {
+            let passed = 0;
+            let failed = 0;
+            const deptScores = {};
+            const deptCounts = {};
+
+            data.forEach(row => {
+                const pct = parseFloat(row["Tỷ lệ"]) || 0;
+                const score = parseFloat(row["Số câu đúng"]) || 0;
+                const dept = row["Phòng ban"] || "Khác";
+
+                if (pct >= 80) passed++;
+                else failed++;
+
+                if (!deptScores[dept]) {
+                    deptScores[dept] = 0;
+                    deptCounts[dept] = 0;
+                }
+                deptScores[dept] += score;
+                deptCounts[dept]++;
+            });
+
+            // 1. Biểu đồ tròn Tỷ lệ Đạt
+            if (pieChart) pieChart.destroy();
+            const ctxPie = document.getElementById('pieChart').getContext('2d');
+            pieChart = new Chart(ctxPie, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Đạt', 'Chưa Đạt'],
+                    datasets: [{
+                        data: [passed, failed],
+                        backgroundColor: ['#10b981', '#f43f5e'],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 12, font: { weight: 'bold', size: 11 } } }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // 2. Biểu đồ cột phân bố điểm số trung bình theo Phòng ban
+            const depts = Object.keys(deptScores);
+            const deptAverages = depts.map(dept => (deptScores[dept] / deptCounts[dept]).toFixed(1));
+
+            if (barChart) barChart.destroy();
+            const ctxBar = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: depts,
+                    datasets: [{
+                        label: 'Điểm trung bình',
+                        data: deptAverages,
+                        backgroundColor: '#166def',
+                        borderRadius: 8,
+                        barThickness: 32
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, max: 30, grid: { color: '#f1f5f9' }, ticks: { font: { weight: 'bold' } } },
+                        x: { grid: { display: false }, ticks: { font: { weight: 'bold' } } }
+                    }
+                }
+            });
         }
 
         function sortTable(columnName) {
@@ -282,7 +537,7 @@
         function exportToCSV() {
             if (filteredResults.length === 0) return alert("Không có dữ liệu khả dụng để xuất file.");
             
-            let csvContent = "\uFEFF"; // Thêm BOM để hiển thị đúng ký tự tiếng Việt có dấu trong Microsoft Excel
+            let csvContent = "\uFEFF"; // BOM hỗ trợ hiển thị Tiếng Việt trong Microsoft Excel
             csvContent += "Thời gian,Họ tên,Phòng ban,Số câu đúng,Tổng số câu,Tỷ lệ,Trạng thái\n";
 
             filteredResults.forEach(row => {
@@ -294,7 +549,7 @@
             const link = document.createElement("a");
             const url = URL.createObjectURL(blob);
             link.setAttribute("href", url);
-            link.setAttribute("download", `Bao_Cao_Xep_Hang_${new Date().toISOString().slice(0,10)}.csv`);
+            link.setAttribute("download", `Bao_Cao_Thanh_Tich_${new Date().toISOString().slice(0,10)}.csv`);
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
