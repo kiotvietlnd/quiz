@@ -808,3 +808,71 @@
                             <div class="flex items-center justify-between p-3.5 rounded-xl border ${optC.cardClass} gap-3">
                                 <div class="flex items-center gap-3.5 flex-1 min-w-0">
                                     <span class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm border shrink-0 ${optC.prefixClass}">C</span>
+                                    <span class="text-sm sm:text-[15px] font-semibold ${optC.textClass} break-words">${item.options['C']}</span>
+                                </div>
+                                <div class="shrink-0">
+                                    ${optC.statusBadge}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                revContainer.appendChild(card);
+            });
+
+            filterReview('all', document.getElementById('filter-all'));
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleAccordion(btn) {
+            const content = btn.nextElementSibling;
+            const icon = btn.querySelector('.fa-chevron-down');
+            
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                if (icon) icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                if (icon) icon.classList.remove('rotate-180');
+            }
+        }
+
+        function filterReview(type, btnElement) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-4 py-1.5 rounded-lg text-slate-500 hover:text-kvBlue text-sm font-bold transition-all';
+            });
+            btnElement.className = 'filter-btn px-4 py-1.5 rounded-lg bg-white text-slate-800 shadow-sm text-sm font-bold transition-all';
+
+            const items = document.querySelectorAll('.review-item');
+            items.forEach(item => {
+                if (type === 'all') {
+                    item.classList.remove('hidden');
+                } else if (type === 'correct') {
+                    if (item.classList.contains('correct')) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                } else if (type === 'incorrect') {
+                    if (item.classList.contains('incorrect')) {
+                        item.classList.remove('hidden');
+                    } else {
+                        item.classList.add('hidden');
+                    }
+                }
+            });
+        }
+
+        function fireConfetti() {
+            const duration = 2.5 * 1000;
+            const end = Date.now() + duration;
+
+            (function frame() {
+                confetti({ particleCount: 4, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#166def', '#10b981', '#3b82f6'] });
+                confetti({ particleCount: 4, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#166def', '#10b981', '#3b82f6'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+    </script>
+</body>
+</html>
