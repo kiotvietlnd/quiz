@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm KiotViet Hotel</title>
+    <style>
+        :root {
+            --primary-color: #005a9e;
+            --primary-hover: #004578;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --neutral-dark: #1f2937;
+            --neutral-light: #f3f4f6;
+            --border-color: #e5e7eb;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: var(--neutral-dark);
+            line-height: 1.6;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Form đăng nhập ban đầu */
+        .auth-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            max-width: 500px;
+            margin: 4rem auto;
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-card h2 { margin-bottom: 1.5rem; color: var(--primary-color); text-align: center;}
+        .form-group { margin-bottom: 1.25rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-control {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        /* Giao diện làm bài */
+        .quiz-layout {
+            display: none; /* Ẩn ban đầu */
+            grid-template-columns: 280px 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .quiz-layout { grid-template-columns: 1fr; }
+        }
+
+        .sidebar {
+            background: white;
+            border-radius: 8px;
+            padding: 1.5rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            align-self: start;
+        }
+
+        .question-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .nav-btn {
+            background-color: var(--neutral-light);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 0.5rem 0;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .nav-btn.active { background-color: var(--primary-color); color: white; }
+        .nav-btn.answered { background-color: #dbeafe; color: var(--primary-color); }
+
+        .main-panel {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 400px;
+        }
+
+        .progress-container {
+            background: var(--neutral-light);
+            height: 8px;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .progress-bar { background: var(--primary-color); height: 100%; width: 0%; transition: width 0.3s; }
+        .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; }
+
+        .options-container { display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem; }
+        .option-card {
+            display: flex;
+            align-items: center;
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1rem;
+            cursor: pointer;
+        }
+
+        .option-card.selected { background: #eff6ff; border-color: #3b82f6; }
+        .option-prefix {
+            width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border-color);
+            display: flex; align-items: center; justify-content: center; margin-right: 1rem; font-weight: bold; background: white;
+        }
+        .option-card.selected .option-prefix { background: var(--primary-color); color: white; }
+
+        .action-container {
+            display: flex; justify-content: space-between; margin-top: auto; padding-top: 1rem; border-top: 1px solid var(--border-color);
+        }
+
+        .btn { padding: 0.75rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; }
+        .btn-primary { background: var(--primary-color); color: white; }
+        .btn-success { background: var(--success-color); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--border-color); }
+
+        /* Trạng thái lưu trữ kết quả */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            align-items: center; justify-content: center;
+            font-size: 1.5rem; font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Bài Trắc Nghiệm KiotViet Hotel</h1>
+    </header>
+
+    <div class="container">
+        <!-- Form đăng ký học viên -->
+        <div class="auth-card" id="auth-screen">
+            <h2>Thông tin học viên</h2>
+            <form id="auth-form" onsubmit="startQuiz(event)">
+                <div class="form-group">
+                    <label for="student-name">Họ và Tên <span style="color:red">*</span></label>
+                    <input type="text" id="student-name" class="form-control" required placeholder="Nguyễn Văn A">
+                </div>
+                <div class="form-group">
+                    <label for="student-dept">Phòng ban <span style="color:red">*</span></label>
+                    <input type="text" id="student-dept" class="form-control" required placeholder="Lễ tân / Buồng phòng...">
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Bắt đầu làm bài</button>
+            </form>
+        </div>
+
+        <!-- Giao diện làm bài -->
+        <div class="quiz-layout" id="quiz-screen">
+            <div class="sidebar">
+                <h3 id="sidebar-student-name">Học viên: -</h3>
+                <p id="sidebar-student-dept" style="font-size: 0.9rem; color: #64748b; margin-bottom: 1rem;">Phòng ban: -</p>
+                <hr>
+                <div class="question-grid" id="nav-grid"></div>
+            </div>
+
+            <div class="main-panel">
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div id="question-area">
+                    <div id="question-index" style="color: #64748b; font-size: 0.9rem; font-weight: bold; margin-bottom: 0.5rem;">CÂU HỎI 1</div>
+                    <div class="question-text" id="question-text">Đang tải câu hỏi...</div>
+                    <div class="options-container" id="options-container"></div>
+                </div>
+                <div class="action-container">
+                    <button class="btn btn-outline" id="btn-prev" onclick="navigate(-1)">Quay lại</button>
+                    <button class="btn btn-primary" id="btn-next" onclick="navigate(1)">Tiếp theo</button>
+                    <button class="btn btn-success" id="btn-submit" onclick="submitQuiz()" style="display: none;">Nộp bài</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giao diện hoàn tất bài làm -->
+        <div class="auth-card" id="result-screen" style="display: none; text-align: center;">
+            <h2 style="color: var(--success-color)">Nộp Bài Thành Công!</h2>
+            <p style="margin: 1rem 0; font-size: 1.1rem;">Kết quả của bạn đã được ghi nhận tự động vào hệ thống.</p>
+            <div style="font-size: 1.5rem; font-weight: bold; margin: 1.5rem 0;" id="score-display">0/30 câu đúng</div>
+            <p style="color: #64748b">Vui lòng liên hệ quản trị viên hoặc truy cập trang xem kết quả để kiểm tra điểm.</p>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loading">
+        Đang gửi kết quả lên hệ thống...
+    </div>
+
+    <script>
+        // CẤU HÌNH WEB APP URL TỪ GOOGLE APPS SCRIPT Ở BƯỚC 1
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqFBqnkI32xXYKP7Z7q3Qq13UA3-wCHeyuC-xDvx-0ur8dKr2p6Ee_2VhDQA3DMLs7tQ/exec";
+
+        // Danh sách câu hỏi dữ liệu trắc nghiệm
+        const questions = [
+            { id: 1, question: "Để sửa đổi thông tin người đại diện đặt phòng hoặc thay đổi kênh bán trên giao diện Web, lễ tân cần thực hiện thao tác nào trước tiên?", options: { A: "Hủy phiếu đặt phòng cũ để tạo lại phiếu đặt phòng mới hoàn toàn.", B: "Vào chi tiết hóa đơn thanh toán và bấm nút Hoàn tiền cho khách.", C: "Truy cập chi tiết phiếu đặt phòng từ Lịch đặt phòng và chọn nút Sửa đặt phòng." }, correct: "C" },
+            { id: 2, question: "Màn hình Tổng quan trên giao diện máy tính (Web) được phân bổ thành các khu vực chính nào?", options: { A: "Danh sách phòng trống bên trái, sơ đồ phòng ở giữa, báo cáo doanh thu bên phải.", B: "Biểu đồ thống kê bên trái, menu tính năng nhanh góc trên phải, lịch sử hoạt động góc dưới phải.", C: "Thiết lập giá phòng bên trái, danh sách hóa đơn ở giữa, thông tin khách hàng bên phải." }, correct: "B" },
+            { id: 3, question: "Quy trình trả phòng (check-out) trên phần mềm KiotViet Hotel được tối ưu hóa như thế nào?", options: { A: "Hệ thống tự động khóa thẻ từ của khách và gửi thông báo phạt tiền nếu trễ giờ.", B: "Tự động tính toán tiền phòng theo cấu hình biểu giá và cộng dồn các dịch vụ minibar đã sử dụng.", C: "Nhân viên phải nhập số tiền phòng ước tính bằng tay vào hệ thống trước khi in hóa đơn." }, correct: "B" },
+            { id: 4, question: "Khi khai báo một Hạng phòng mới (ví dụ: Standard), những thông tin cơ bản nào cần được nhập?", options: { A: "Danh sách tất cả khách hàng sẽ lưu trú trong năm.", B: "Tên hạng phòng, giá giờ, giá cả ngày, phụ thu quá giờ và sức chứa tối đa.", C: "Địa chỉ chi tiết và số điện thoại của nhà cung cấp nội thất phòng." }, correct: "B" },
+            { id: 5, question: "Quy trình chuẩn để truy cập vào danh sách khách lưu trú trên giao diện máy tính KiotViet Hotel là gì?", options: { A: "Vào mục Sổ quỹ, chọn danh mục Khách hàng rồi tìm kiếm thông tin khách lưu trú.", B: "Tại giao diện Báo cáo, truy cập nhóm báo cáo Khách hàng rồi chọn Khách lưu trú.", C: "Tại màn hình Lễ tân, nhấn vào biểu tượng tùy chọn ba dấu gạch rồi chọn mục Khách lưu trú." }, correct: "C" },
+            { id: 6, question: "Quy trình chuẩn để lễ tân kiểm tra chi tiết các đợt thanh toán nhỏ lẻ của một khách hàng trên màn hình Máy tính là gì?", options: { A: "Truy cập chi tiết hóa đơn và chọn tab Lịch sử thanh toán.", B: "Tạo một phiếu đặt phòng mới để hệ thống tự ghi nhận lại lịch sử cũ.", C: "Xuất file Excel chi tiết hóa đơn rồi tìm kiếm thủ công tên khách hàng." }, correct: "A" },
+            { id: 7, question: "Khi quầy lễ tân đông khách, nhân viên có thể sử dụng ứng dụng di động KiotViet Hotel để hỗ trợ thanh toán cho khách bằng cách nào?", options: { A: "Sử dụng tính năng quét barcode trên ứng dụng để tự động trừ tiền trong thẻ ngân hàng của khách.", B: "Chạm vào phòng trên sơ đồ, thực hiện trả phòng và hiển thị mã QR động ngay trên điện thoại.", C: "Yêu cầu khách hàng tự đăng nhập vào tài khoản KiotViet của khách sạn để tự thanh toán." }, correct: "B" },
+            { id: 8, question: "Khi người dùng thực hiện cập nhật hoặc xóa một bảng giá cũ trên KiotViet Hotel, thông tin của các hóa đơn lịch sử đã thanh toán sẽ bị ảnh hưởng như thế nào?", options: { A: "Vẫn giữ nguyên thông tin tên bảng giá và đơn giá cũ để đảm bảo tính toàn vẹn của dữ liệu báo cáo.", B: "Bị hệ thống xóa bỏ hoàn toàn khỏi lịch sử giao dịch của cửa hàng và không thể truy xuất lại.", C: "Tự động cập nhật theo đơn giá mới của bảng giá vừa sửa hoặc hiển thị báo lỗi mất dữ liệu." }, correct: "A" },
+            { id: 9, question: "Thao tác nào giúp sắp xếp nhanh danh sách khách hàng theo số nợ giảm dần để kiểm tra công nợ đối tác?", options: { A: "Vào phần báo cáo doanh thu ngày để dò tìm thủ công từng mã khách hàng phát sinh.", B: "Xuất file Excel tất cả hóa đơn đặt phòng rồi tính toán tổng nợ bằng công thức thủ công.", C: "Truy cập danh sách Khách hàng và nhấn trực tiếp vào tiêu đề cột Nợ hiện tại." }, correct: "C" },
+            { id: 10, question: "Lợi ích cốt lõi nào của tính năng Trả phòng giúp khách sạn hạn chế tối đa các sai sót về chi phí dịch vụ của khách?", options: { A: "Hệ thống tự động gửi tin nhắn nhắc nhở thanh toán đến số điện thoại của khách hàng sau mỗi 1 giờ.", B: "Phần mềm tự động khóa thẻ từ của phòng ngay khi hết giờ đặt phòng dự kiến trên hệ thống.", C: "Hệ thống tự động tổng hợp tiền phòng theo thời gian thực cùng các dịch vụ phát sinh trong suốt kỳ lưu trú." }, correct: "C" },
+            { id: 11, question: "Thao tác đầu tiên lễ tân cần thực hiện trên màn hình quản lý KiotViet Hotel để chuẩn bị thông tin đón đoàn khách sắp đến trong ngày là gì?", options: { A: "Vào phần Sổ quỹ để lập phiếu thu tiền đặt cọc trước của khách.", B: "Vào màn hình Lễ tân và chọn giao diện Lịch đặt phòng.", C: "Vào danh mục Hàng hóa để kiểm tra số lượng tồn kho của các dịch vụ buồng phòng." }, correct: "B" },
+            { id: 12, question: "Quy tắc gán mã khóa phòng trên KiotViet Hotel để hệ thống hoạt động chính xác là gì?", options: { A: "Mỗi mã khóa phòng chỉ được gán cho một phòng duy nhất và phải trùng khớp chính xác với mã trên phần mềm khóa.", B: "Mỗi phòng có thể dùng chung một mã khóa với các phòng khác cùng tầng.", C: "Hệ thống tự động gán mã khóa ngẫu nhiên mà không cần đối chiếu với phần mềm khóa từ." }, correct: "A" },
+            { id: 13, question: "Trên màn hình Sơ đồ phòng của lễ tân, thao tác nào dưới đây được sử dụng để cập nhật thủ công trạng thái dọn dẹp của một phòng cụ thể?", options: { A: "Nhấp chuột trực tiếp vào giữa ô phòng đó trên sơ đồ.", B: "Bấm vào biểu tượng ba dấu chấm tại phòng đó và chọn trạng thái mong muốn.", C: "Kéo thả ô phòng vào danh mục dọn dẹp ở góc màn hình." }, correct: "B" },
+            { id: 14, question: "Ràng buộc nào sau đây được áp dụng đối với các đặt phòng được đồng bộ tự động từ Channel Manager về sơ đồ phòng KiotViet?", options: { A: "Bắt buộc phải thực hiện ghép đoàn trước khi lễ tân làm thủ tục nhận phòng cho khách.", B: "Không cho phép sử dụng tính năng Ghép đoàn đối với các đặt phòng này.", C: "Chỉ cho phép ghép đoàn nếu đặt phòng đến từ kênh Agoda." }, correct: "B" },
+            { id: 15, question: "Trong quy trình thanh toán trả phòng, trường hợp số tiền khách đã đặt cọc lớn hơn tổng giá trị hóa đơn thực tế, hệ thống sẽ xử lý ra sao?", options: { A: "Tính toán và hiển thị rõ ràng số tiền thừa cần hoàn trả lại cho khách để lễ tân thực hiện trả lại tiền.", B: "Khóa tính năng thanh toán và yêu cầu lễ tân tạo một phiếu chi độc lập để cân bằng quỹ thủ công.", C: "Tự động tích lũy số tiền thừa vào điểm thành viên của khách hàng và không cho phép hoàn tiền mặt." }, correct: "A" },
+            { id: 16, question: "Lợi ích chính của tính năng thông báo đẩy trên ứng dụng KiotViet Hotel là gì?", options: { A: "Tự động cập nhật bảng giá phòng lên các kênh OTA khi có thay đổi.", B: "Tự động khóa phòng khi khách hàng không thanh toán đúng hạn.", C: "Giúp theo dõi sát sao biến động kinh doanh và trạng thái phòng theo thời gian thực mà không cần kiểm tra báo cáo thủ công." }, correct: "C" },
+            { id: 17, question: "Khi thực hiện thao tác hủy đặt phòng trên KiotViet Hotel, trạng thái của buồng phòng đó sẽ thay đổi như thế nào?", options: { A: "Tự động chuyển phòng sang trạng thái đang dọn dẹp để chờ nhân viên buồng phòng xác nhận.", B: "Chuyển ngay từ trạng thái đã đặt trước về phòng trống để sẵn sàng đón khách mới.", C: "Giữ nguyên trạng thái phòng đã đặt trước cho đến khi kết thúc ca làm việc." }, correct: "B" },
+            { id: 18, question: "Khi khách hàng muốn thay đổi ngày giờ nhận/trả phòng hoặc chuyển sang phòng khác đối với phiếu đặt trước, thao tác đúng là gì?", options: { A: "Nhấn vào chi tiết phiếu đặt phòng trên Lịch đặt phòng và chọn Sửa đặt phòng.", B: "Xóa hẳn phiếu đặt phòng cũ đi và lập lại phiếu mới từ đầu.", C: "Hệ thống sẽ tự động đổi phòng ngẫu nhiên mà không cần lễ tân can thiệp." }, correct: "A" },
+            { id: 19, question: "Trên ứng dụng di động KiotViet Hotel, bạn có thể thực hiện những hành động nào khi chọn sản phẩm cho hóa đơn bán lẻ?", options: { A: "Chọn phòng trước rồi mới được phép chọn danh mục sản phẩm tương ứng.", B: "Tìm kiếm sản phẩm hoặc chạm vào dấu cộng trực tiếp trên từng sản phẩm để thêm vào đơn.", C: "Bắt buộc quét mã số vạch của sản phẩm chứ không hỗ trợ tìm kiếm bằng tên." }, correct: "B" },
+            { id: 20, question: "Giá trị cốt lõi nhất mà tính năng Buồng phòng đem lại cho hoạt động vận hành của khách sạn là gì?", options: { A: "Đồng bộ tức thì thông tin trạng thái dọn dẹp phòng giữa buồng phòng và quầy lễ tân để kịp đón khách.", B: "Tự động gửi tin nhắn báo cáo doanh thu phòng hàng ngày cho chủ khách sạn.", C: "Tự động tính toán lượng hóa chất tiêu hao trong quá trình dọn dẹp phòng thực tế." }, correct: "A" },
+            { id: 21, question: "Trên ứng dụng KiotViet di động (Mobile App), nhân viên thực hiện thao tác đóng ca làm việc thông qua menu nào?", options: { A: "Menu Trợ giúp.", B: "Menu Giao dịch.", C: "Menu Nhiều hơn, chọn Đóng ca làm." }, correct: "C" },
+            { id: 22, question: "Hệ thống báo cáo của KiotViet Hotel hỗ trợ đắc lực nhất cho chủ khách sạn trong hoạt động nào sau đây?", options: { A: "Đánh giá hiệu quả kinh doanh, tối ưu hóa vận hành và kiểm soát minh bạch dòng tiền.", B: "Tự động thay đổi giá phòng trên các kênh OTA mà không cần thiết lập thủ công.", C: "Thay thế hoàn toàn vai trò của nhân viên lễ tân trong quy trình đón khách." }, correct: "A" },
+            { id: 23, question: "Khi chuyển trạng thái của một nhà cung cấp sang 'Ngừng hoạt động', dữ liệu của đối tác đó sẽ thay đổi thế nào?", options: { A: "Nhà cung cấp bị ẩn khỏi danh mục tìm kiếm phiếu mới nhưng giữ nguyên lịch sử công nợ cũ để đối soát.", B: "Nhà cung cấp vẫn hiển thị trong danh mục tìm kiếm khi tạo phiếu nhập hàng mới.", C: "Toàn bộ dữ liệu công nợ và lịch sử mua hàng liên quan bị xóa hoàn toàn khỏi phần mềm." }, correct: "A" },
+            { id: 24, question: "Để thiết lập trang Đặt phòng online ngay trên ứng dụng di động KiotViet Hotel, người dùng cần truy cập vào mục nào?", options: { A: "Menu Tổng quan, sau đó chọn mục Báo cáo doanh thu.", B: "Menu Lịch phòng, sau đó chọn mục Thiết lập sơ đồ phòng.", C: "Menu Nhiều hơn, sau đó chọn mục Đặt phòng online." }, correct: "C" },
+            { id: 25, question: "Để hệ thống tự động áp dụng bảng giá đã cài đặt cho một Phòng cụ thể mới được tạo, bạn cần thực hiện thao tác nào?", options: { A: "Chọn đúng Hạng phòng tương ứng của phòng đó trong phần thông tin khai báo.", B: "Nhập thủ công lại toàn bộ bảng giá phòng vào ô ghi chú thông tin.", C: "Tạo một mã giảm giá riêng biệt để liên kết phòng mới với sơ đồ lễ tân." }, correct: "A" },
+            { id: 26, question: "Đối với các phiếu thu chi tự động sinh ra từ giao dịch đặt phòng hoặc nhập hàng, hệ thống KiotViet cho phép người dùng chỉnh sửa những thông tin nào?", options: { A: "Chỉ sửa được phương thức thanh toán từ tiền mặt sang ngân hàng.", B: "Chỉ sửa được Ghi chú và Nhân viên thực hiện giao dịch.", C: "Cho phép thay đổi tùy ý giá trị số tiền thu hoặc chi." }, correct: "B" },
+            { id: 27, question: "Lợi ích chính của việc sử dụng các mẫu thiết kế có sẵn trong 'Kho giao diện' của KiotViet là gì?", options: { A: "Giúp người dùng thay đổi diện mạo trang web nhanh chóng, chuyên nghiệp mà không mất nhiều thời gian tự thiết kế.", B: "Cung cấp mã nguồn mở để người dùng tự do lập trình lại các tính năng thanh toán của website.", C: "Giúp khách sạn tự động đồng bộ giá phòng với tất cả các sàn thương mại điện tử lớn trên thị trường." }, correct: "A" },
+            { id: 28, question: "Quy trình chính xác để xem Báo cáo cuối ngày ngay tại màn hình Lễ tân trên máy tính là gì?", options: { A: "Vào màn hình Thiết lập -> chọn Quản lý phòng -> chọn Xem báo cáo cuối ngày.", B: "Vào màn hình Lễ tân -> kích biểu tượng ba dấu gạch -> chọn Xem báo cáo cuối ngày.", C: "Vào màn hình Quản lý -> chọn Giao dịch -> chọn Báo cáo cuối ca." }, correct: "B" },
+            { id: 29, question: "Khi khách hàng đã đặt phòng trước đến quầy, quy trình nhận phòng trên KiotViet Hotel bắt đầu bằng thao tác nào để tối ưu thời gian?", options: { A: "Nhấp trực tiếp vào phòng hiển thị màu cam trên sơ đồ lễ tân hoặc tìm kiếm nhanh theo mã/tên khách.", B: "Tạo mới một phiếu đặt phòng hoàn toàn mới từ đầu để ghi nhận thông tin.", C: "Yêu cầu khách hàng thanh toán toàn bộ chi phí trước rồi mới tìm kiếm phòng trên hệ thống." }, correct: "A" },
+            { id: 30, question: "Trên ứng dụng di động KiotViet Hotel, làm thế nào để nhân viên lễ tân tìm nhanh các phòng trống phù hợp cho khách đoàn?", options: { A: "Nhấn biểu tượng dấu (+) trên menu -> Chọn 'Tìm phòng trống' và điền thông tin lưu trú.", B: "Truy cập danh sách hóa đơn đã thanh toán rồi tạo phiếu chi tạm ứng.", C: "Gọi điện trực tiếp cho tổng đài hỗ trợ kỹ thuật của KiotViet để nhờ kiểm tra." }, correct: "A" }
+        ];
+
+        let currentIdx = 0;
+        let answers = {};
+        let studentName = "";
+        let studentDept = "";
+
+        // Chuyển sang màn hình làm bài
+        function startQuiz(event) {
+            event.preventDefault();
+            studentName = document.getElementById('student-name').value.trim();
+            studentDept = document.getElementById('student-dept').value.trim();
+
+            if (!studentName || !studentDept) return;
+
+            document.getElementById('sidebar-student-name').textContent = "Học viên: " + studentName;
+            document.getElementById('sidebar-student-dept').textContent = "Phòng ban: " + studentDept;
+
+            document.getElementById('auth-screen').style.display = 'none';
+            document.getElementById('quiz-screen').style.display = 'grid';
+
+            initNavGrid();
+            loadQuestion(0);
+        }
+
+        // Tạo bảng điều hướng câu hỏi bên trái
+        function initNavGrid() {
+            const grid = document.getElementById('nav-grid');
+            grid.innerHTML = '';
+            questions.forEach((_, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'nav-btn';
+                btn.id = `nav-btn-${idx}`;
+                btn.textContent = idx + 1;
+                btn.onclick = () => loadQuestion(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        // Tải câu hỏi hiện tại
+        function loadQuestion(idx) {
+            currentIdx = idx;
+            const q = questions[idx];
+
+            document.querySelectorAll('.nav-btn').forEach((btn, i) => {
+                btn.classList.remove('active');
+                if (i === idx) btn.classList.add('active');
+            });
+
+            document.getElementById('question-index').textContent = `CÂU HỎI ${idx + 1}`;
+            document.getElementById('question-text').textContent = q.question;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+
+            for (const [key, val] of Object.entries(q.options)) {
+                const card = document.createElement('div');
+                card.className = `option-card ${answers[idx] === key ? 'selected' : ''}`;
+                card.onclick = () => selectOption(key);
+                card.innerHTML = `
+                    <div class="option-prefix">${key}</div>
+                    <div class="option-text">${val}</div>
+                `;
+                container.appendChild(card);
+            }
+
+            document.getElementById('btn-prev').style.visibility = idx === 0 ? 'hidden' : 'visible';
+            if (idx === questions.length - 1) {
+                document.getElementById('btn-next').style.display = 'none';
+                document.getElementById('btn-submit').style.display = 'block';
+            } else {
+                document.getElementById('btn-next').style.display = 'block';
+                document.getElementById('btn-submit').style.display = 'none';
+            }
+
+            // Cập nhật thanh tiến độ
+            const percent = ((idx + 1) / questions.length) * 100;
+            document.getElementById('progress-bar').style.width = `${percent}%`;
+        }
+
+        function selectOption(key) {
+            answers[currentIdx] = key;
+            document.getElementById(`nav-btn-${currentIdx}`).classList.add('answered');
+            loadQuestion(currentIdx);
+        }
+
+        function navigate(dir) {
+            const target = currentIdx + dir;
+            if (target >= 0 && target < questions.length) {
+                loadQuestion(target);
+            }
+        }
+
+        // Tính điểm và gửi lên Google Sheets qua Apps Script
+        function submitQuiz() {
+            let correctCount = 0;
+            questions.forEach((q, idx) => {
+                if (answers[idx] === q.correct) correctCount++;
+            });
+
+            const percentVal = Math.round((correctCount / questions.length) * 100);
+
+            // Hiện loader chờ lưu kết quả
+            document.getElementById('loading').style.display = 'flex';
+
+            // Xây dựng URL API dạng GET chứa các tham số cần gửi
+            const url = `${SCRIPT_URL}?action=save`
+                + `&name=${encodeURIComponent(studentName)}`
+                + `&department=${encodeURIComponent(studentDept)}`
+                + `&score=${correctCount}`
+                + `&total=${questions.length}`
+                + `&percentage=${percentVal}`;
+
+            fetch(url)
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('loading').style.display = 'none';
+                    if (data.status === "success") {
+                        document.getElementById('quiz-screen').style.display = 'none';
+                        document.getElementById('score-display').textContent = `${correctCount}/${questions.length} câu đúng (${percentVal}%)`;
+                        document.getElementById('result-screen').style.display = 'block';
+                    } else {
+                        alert("Có lỗi xảy ra khi lưu kết quả. Vui lòng thử lại.");
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('loading').style.display = 'none';
+                    console.error(err);
+                    alert("Không thể kết nối đến hệ thống cơ sở dữ liệu. Hãy đảm bảo URL Apps Script đã được cấu hình đúng.");
+                });
+        }
+    </script>
+</body>
+</html>
