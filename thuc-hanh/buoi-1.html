@@ -129,9 +129,9 @@
     <script src="codelab-data.js"></script>
     <script>
         // ==========================================
-        const SESSION_ID = 'session_1'; 
+        const SESSION_ID = 'session_1';
         const STORAGE_KEY = 'kv_codelab_progress_b1';
-        const DATA_KEY = 'kv_codelab_data_b1'; 
+        const DATA_KEY = 'kv_codelab_data_b1';
         // ==========================================
 
         let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFiles = [];
@@ -144,7 +144,6 @@
 
             loadSessionData();
 
-            // SỰ KIỆN DÁN ẢNH (Ctrl + V)
             document.addEventListener('paste', function(e) {
                 let items = e.clipboardData.items;
                 for (let i = 0; i < items.length; i++) {
@@ -157,17 +156,14 @@
                     }
                 }
             });
-
             setTimeout(() => { fetchFeedback(false); }, 1500); 
         });
 
-        // HÀM LẤY NHẬN XÉT GIẢNG VIÊN TỪ GOOGLE SHEETS
         function fetchFeedback(isManualClick) {
             const apiUrl = APP_CONFIG.API_URL; if(!apiUrl) return;
             const profileRaw = localStorage.getItem('kv_trainer_profile'); if(!profileRaw) return;
             const profile = JSON.parse(profileRaw); const sessionName = document.getElementById('sessionTitle').innerText;
             if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Đang tải...";
-            
             fetch(`${apiUrl}?studentName=${encodeURIComponent(profile.name)}&session=${encodeURIComponent(sessionName)}`)
             .then(r => r.json()).then(res => {
                 if(res.status === 'success' && res.data) {
@@ -182,7 +178,7 @@
                         }
                     }
                     if(hasNew) { localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); renderSidebar(); goToStep(currentStepIndex); }
-                    if(isManualClick && !hasNew) alert("Chưa có nhận xét mới nào từ Giảng viên.");
+                    if(isManualClick && !hasNew) alert("Chưa có nhận xét mới nào.");
                 }
             }).finally(() => { if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Tải Nhận Xét"; updateGlobalNotification(); });
         }
@@ -199,7 +195,6 @@
             const dot = document.getElementById('globalNotificationDot'); if(hasAnyUnread) dot.classList.remove('hidden'); else dot.classList.add('hidden');
         }
 
-        // VẼ SIDEBAR BÊN TRÁI (Tích hợp Icon Cảnh báo Vàng / Tích Xanh)
         function renderSidebar() {
             const listUl = document.getElementById('stepList'); listUl.innerHTML = ''; let exerciseCounter = 1; 
             currentExercises.forEach((ex, index) => {
@@ -208,23 +203,16 @@
                 } else {
                     const li = document.createElement('li'); li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; li.onclick = () => goToStep(index);
                     const isSubmitted = stepDataStore[index] && stepDataStore[index].isSubmitted;
-                    
-                    // ICON CẢNH BÁO (VÀNG = CHƯA LÀM, XANH = ĐÃ LÀM)
-                    let statusIcon = isSubmitted 
-                        ? `<div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[11px] font-bold shadow"><i class="fas fa-check"></i></div>`
-                        : `<div class="w-6 h-6 rounded-full bg-amber-400 text-amber-900 flex items-center justify-center text-[10px] shadow-inner" title="Chưa nộp bài"><i class="fas fa-exclamation-triangle"></i></div>`;
-                    
+                    let statusIcon = isSubmitted ? `<div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shadow"><i class="fas fa-check"></i></div>` : `<div class="w-6 h-6 rounded-full bg-slate-800 text-amber-400 flex items-center justify-center text-[10px] border border-amber-500/50 shadow-inner"><i class="fas fa-exclamation-triangle"></i></div>`;
                     const hasFeedbackIcon = (stepDataStore[index] && stepDataStore[index].feedback) ? `<span title="Có nhận xét" class="ml-auto text-amber-400 text-sm"><i class="fas fa-comment-dots"></i></span>` : '';
                     const unreadBadge = (stepDataStore[index] && stepDataStore[index].isUnread) ? '<span class="notification-dot"></span>' : '';
-                    
-                    li.innerHTML = `<div class="relative shrink-0">${statusIcon}${unreadBadge}</div><div class="leading-snug text-[13px] flex-1 flex items-center pr-1 font-medium">${ex.title} ${hasFeedbackIcon}</div>`;
+                    li.innerHTML = `<div class="relative shrink-0">${statusIcon}${unreadBadge}</div><div class="leading-snug text-[13px] flex-1 flex items-center pr-2 font-medium">${ex.title} ${hasFeedbackIcon}</div>`;
                     listUl.appendChild(li); exerciseCounter++;
                 }
             });
             updateGlobalNotification();
         }
 
-        // HIỂN THỊ NỘI DUNG CỦA BÀI ĐANG CHỌN
         function goToStep(index) {
             saveDraft(); 
             if(index < 0 || index >= currentExercises.length || currentExercises[index].isGroupHeader) return;
@@ -239,101 +227,45 @@
 
             const contentDiv = document.getElementById('mainContent');
             const myData = stepDataStore[index] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
-            
-            // Render Tiêu đề
+            if(myData.text && (!myData.textAnswers || myData.textAnswers.length === 0)) myData.textAnswers = [myData.text];
+
             let html = `<div class="relative w-full pr-12 md:pr-36"><h1 class="text-2xl md:text-3xl font-black text-blue-700 mb-6 pb-4 border-b border-slate-200 tracking-tight">${ex.title}</h1>`;
 
-            // Render Nhận xét của Giảng viên (Kiểu Google Docs)
             if(myData.feedback) {
                 const pingHtml = myData.isUnread ? `<span id="pingDot_${index}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : '';
-                html += `<div class="absolute top-0 right-0 z-20">
-                    <button onclick="toggleFeedback(${index})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
-                        <i class="far fa-comment-dots text-sm"></i><span class="hidden sm:inline">Nhận xét</span>${pingHtml}
-                    </button>
-                    <div id="feedbackBox_${index}" class="hidden absolute top-12 right-0 w-72 md:w-80 bg-white border border-amber-200 shadow-2xl rounded-2xl p-5 z-40 transition origin-top-right">
-                        <div class="flex items-center justify-between mb-2.5 pb-2 border-b border-amber-100 font-black text-amber-800 text-xs tracking-wider uppercase"><p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p><button onclick="toggleFeedback(${index})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button></div>
-                        <p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${myData.feedback}</p>
-                    </div>
-                </div>`;
+                html += `<div class="absolute top-0 right-0 z-20"><button onclick="toggleFeedback(${index})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition"><i class="far fa-comment-dots text-sm"></i><span class="hidden sm:inline">Nhận xét</span>${pingHtml}</button><div id="feedbackBox_${index}" class="hidden absolute top-12 right-0 w-72 md:w-80 bg-white border border-amber-200 shadow-2xl rounded-2xl p-5 z-40 transition origin-top-right"><div class="flex items-center justify-between mb-2.5 pb-2 border-b border-amber-100 font-black text-amber-800 text-xs tracking-wider uppercase"><p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p><button onclick="toggleFeedback(${index})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button></div><p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${myData.feedback}</p></div></div>`;
             }
             html += `</div>`;
 
-            // RENDER HINTS (GỢI Ý) NẾU CÓ
-            if(ex.hints && ex.hints.length > 0) {
-                html += `<div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8 text-amber-900 text-sm leading-relaxed shadow-sm">
-                    ${ex.hints.map(h => {
-                        let parsedH = h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-                        return `<p class="mb-2 last:mb-0">${parsedH}</p>`;
-                    }).join('')}
-                </div>`;
-            }
+            if(ex.hints && ex.hints.length > 0) html += `<div class="bg-amber-50 border border-amber-200 rounded-2xl p-5 mb-8 text-amber-900 text-sm leading-relaxed shadow-sm">${ex.hints.map(h => `<p class="mb-2 last:mb-0">${h.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')}</p>`).join('')}</div>`;
 
-            // TÁCH CÂU HỎI LÝ THUYẾT: MỖI CÂU 1 Ô TEXTBOX
             if(ex.theory && ex.theory.length > 0) {
                 html += `<div class="mb-10"><p class="mb-4 text-blue-600 font-black text-base uppercase tracking-wider flex items-center gap-2"><i class="far fa-file-lines"></i> Phần A: Câu hỏi lý thuyết</p>`;
                 let answersArr = myData.textAnswers || [];
                 ex.theory.forEach((q, qIndex) => {
                     let ansVal = answersArr[qIndex] || '';
-                    html += `
-                        <div class="mb-5 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
-                            <div class="bg-blue-50/50 p-4 border-b border-slate-200">
-                                <p class="text-slate-800 font-bold text-sm leading-relaxed">${q}</p>
-                            </div>
-                            <textarea id="inpTextAnswer_${index}_${qIndex}" rows="3" class="w-full p-4 focus:ring-0 outline-none font-medium text-slate-700 text-sm transition-all resize-none bg-white" placeholder="Gõ câu trả lời của bạn..." oninput="saveDraft()">${ansVal}</textarea>
-                        </div>`;
+                    html += `<div class="mb-5 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm"><div class="bg-blue-50/50 p-4 border-b border-slate-200"><p class="text-slate-800 font-bold text-sm leading-relaxed">${q}</p></div><textarea id="inpTextAnswer_${index}_${qIndex}" rows="3" class="w-full p-4 focus:ring-0 outline-none font-medium text-slate-700 text-sm transition-all resize-none bg-white" placeholder="Gõ câu trả lời của bạn..." oninput="saveDraft()">${ansVal}</textarea></div>`;
                 });
                 html += `</div>`;
             }
 
-            // YÊU CẦU THỰC HÀNH
             if((ex.requirements && ex.requirements.length > 0) || (ex.instructions && ex.instructions.length > 0)) html += `<p class="mb-4 text-[#166def] font-black text-base uppercase tracking-wider flex items-center gap-2"><i class="fas fa-laptop-code"></i> Phần B: Bài tập thực hành</p>`;
             if(ex.requirements && ex.requirements.length > 0) html += `<div class="mb-6"><p class="mb-2.5 font-bold text-sm text-slate-500 uppercase tracking-widest">Yêu cầu:</p><ul class="space-y-2 text-sm text-slate-700 pl-4 border-l-4 border-orange-500 bg-orange-50 p-4 rounded-r-2xl">${ex.requirements.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
             if(ex.instructions && ex.instructions.length > 0) html += `<div class="mb-8"><p class="mb-2 font-bold text-sm text-slate-500 uppercase tracking-widest">Hướng dẫn thao tác:</p><div class="bg-slate-50 p-5 rounded-2xl font-mono text-sm text-slate-600 border border-slate-200 leading-relaxed space-y-3">${ex.instructions.map(i => `<p>${i}</p>`).join('')}</div></div>`;
 
-            // KHU VỰC CẢNH BÁO ĐỎ (Chưa nộp ảnh) / XANH (Đã nộp ảnh)
-            let uploadWarningHtml = "";
-            let btnText = "Lưu & Nộp toàn bộ bài này";
+            let uploadWarningHtml = ""; let btnText = "Lưu & Nộp toàn bộ bài này";
             if(myData.isSubmitted && myData.uploadedUrls && myData.uploadedUrls.length > 0) {
                 btnText = "Lưu & Nộp bổ sung";
-                uploadWarningHtml = `
-                    <div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl mb-4 flex items-start gap-3 shadow-sm">
-                        <i class="fas fa-check-circle text-emerald-500 text-xl mt-0.5"></i>
-                        <div>
-                            <p class="font-black text-emerald-800 text-sm mb-1">BẠN ĐÃ NỘP BÀI THÀNH CÔNG</p>
-                            <div class="flex flex-wrap gap-2">${myData.uploadedUrls.map((url, i) => `<a href="${url.replace('file/d/', 'uc?id=').replace('/view?usp=drivesdk', '')}" target="_blank" class="bg-white border border-emerald-200 px-2.5 py-1 rounded text-xs font-bold text-blue-600 hover:text-blue-800 transition shadow-sm"><i class="fas fa-image"></i> Xem ảnh đã nộp (${i+1})</a>`).join('')}</div>
-                        </div>
-                    </div>`;
+                uploadWarningHtml = `<div class="bg-emerald-50 border border-emerald-200 p-4 rounded-xl mb-4 flex items-start gap-3 shadow-sm"><i class="fas fa-check-circle text-emerald-500 text-xl mt-0.5"></i><div><p class="font-black text-emerald-800 text-sm mb-1">BẠN ĐÃ NỘP BÀI THÀNH CÔNG</p><div class="flex flex-wrap gap-2">${myData.uploadedUrls.map((url, i) => `<a href="${url.replace('file/d/', 'uc?id=').replace('/view?usp=drivesdk', '')}" target="_blank" class="bg-white border border-emerald-200 px-2.5 py-1 rounded text-xs font-bold text-blue-600 hover:text-blue-800 transition shadow-sm"><i class="fas fa-image"></i> Xem ảnh đã nộp (${i+1})</a>`).join('')}</div></div></div>`;
             } else {
-                uploadWarningHtml = `
-                    <div class="bg-red-50 border border-red-200 p-4 rounded-xl mb-4 flex items-start gap-3 shadow-sm">
-                        <i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5 animate-pulse"></i>
-                        <div>
-                            <p class="font-black text-red-800 text-sm mb-1">CHƯA NỘP ẢNH MINH CHỨNG</p>
-                            <p class="text-xs text-red-600 font-medium">Bắt buộc phải tải ảnh lên hệ thống mới được tính tiến độ hoàn thành.</p>
-                        </div>
-                    </div>`;
+                uploadWarningHtml = `<div class="bg-red-50 border border-red-200 p-4 rounded-xl mb-4 flex items-start gap-3 shadow-sm"><i class="fas fa-exclamation-circle text-red-500 text-xl mt-0.5 animate-pulse"></i><div><p class="font-black text-red-800 text-sm mb-1">CHƯA NỘP ẢNH MINH CHỨNG</p><p class="text-xs text-red-600 font-medium">Bắt buộc phải tải ảnh lên hệ thống mới tính là hoàn thành bài tập này.</p></div></div>`;
             }
 
-            // GỘP NÚT NỘP BÀI XUỐNG CUỐI CÙNG
-            html += `<div class="mt-8 border-t border-slate-200 pt-8">${uploadWarningHtml}
-                <div id="uploadArea" class="flex flex-col bg-slate-50 p-5 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl transition-all shadow-inner">
-                    <p class="text-slate-500 text-xs font-semibold mb-4 text-center">${ex.confirm ? ex.confirm : 'Bạn cần nộp ảnh để hoàn thành bài này.'}</p>
-                    <div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full">
-                        <div class="relative w-full md:w-auto shrink-0">
-                            <button class="w-full flex justify-center items-center gap-2 px-4 py-3 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition"><i class="fas fa-paperclip text-slate-500 text-base"></i> Chọn ảnh đính kèm</button>
-                            <input type="file" multiple accept="image/*" onchange="handleFileSelect(event)" class="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer">
-                        </div>
-                        <p class="text-sm text-slate-400 font-medium italic hidden md:block">...hoặc ấn <strong class="text-slate-500 font-bold">Ctrl + V</strong> để dán ảnh.</p>
-                        <button id="btnSubmitStep_${index}" onclick="uploadToGAS(${index}, '${ex.title}')" class="w-full md:w-auto ml-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg transition font-black text-sm flex items-center justify-center gap-2 shrink-0"><i class="fas fa-cloud-upload-alt"></i> <span id="btnSubmitText_${index}">${btnText}</span></button>
-                    </div>
-                    <div id="fileTags" class="mt-4 flex flex-wrap gap-2 empty:hidden"></div>
-                </div>
-            </div>`;
+            html += `<div class="mt-8 border-t border-slate-200 pt-8">${uploadWarningHtml}<div id="uploadArea" class="flex flex-col bg-slate-50 p-5 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl transition-all duration-300 shadow-inner"><div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full"><div class="relative w-full md:w-auto shrink-0"><button class="w-full flex justify-center items-center gap-2 px-4 py-3 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition"><i class="fas fa-paperclip text-slate-500 text-base"></i> Đính kèm ảnh</button><input type="file" multiple accept="image/*" onchange="handleFileSelect(event)" class="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"></div><p class="text-sm text-slate-400 font-medium italic hidden md:block">...hoặc ấn <strong class="text-slate-500 font-bold">Ctrl + V</strong> để dán nhanh.</p><button id="btnSubmitStep_${index}" onclick="uploadToGAS(${index}, '${ex.title}')" class="w-full md:w-auto ml-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg transition font-black text-sm flex items-center justify-center gap-2 shrink-0"><i class="fas fa-cloud-upload-alt"></i> <span id="btnSubmitText_${index}">${btnText}</span></button></div><div id="fileTags" class="mt-4 flex flex-wrap gap-2 empty:hidden"></div></div></div>`;
 
             contentDiv.innerHTML = html; updateBottomNav(); document.querySelector('main').scrollTo(0, 0); localStorage.setItem(STORAGE_KEY, currentStepIndex);
         }
 
-        // CÁC HÀM XỬ LÝ KHÁC (BẬT/TẮT NHẬN XÉT, QUẢN LÝ FILE)
         function toggleFeedback(index) {
             const box = document.getElementById(`feedbackBox_${index}`);
             if(box.classList.contains('hidden')) {
@@ -362,7 +294,6 @@
 
         function removeFile(index) { pendingFiles.splice(index, 1); renderFileTags(); }
 
-        // GOM LẠI THÀNH MẢNG CÂU TRẢ LỜI ĐỂ LƯU
         function saveDraft() {
             const index = currentStepIndex; const ex = currentExercises[index];
             if(!stepDataStore[index]) stepDataStore[index] = { textAnswers: [], uploadedUrls: [], isSubmitted: false, feedback: "" };
@@ -413,7 +344,7 @@
             }).then(r => r.json()).then(data => {
                 if(data.status === 'success') {
                     currentData.isSubmitted = true; if(data.urls) currentData.uploadedUrls = [...new Set([...currentData.uploadedUrls, ...data.urls])];
-                    localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); pendingFiles = []; alert("🎉 Đã nộp bài thành công!"); goToStep(index); renderSidebar(); 
+                    localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); pendingFiles = []; alert("🎉 Lưu & Nộp bài thành công!"); goToStep(index); renderSidebar(); 
                 } else alert("Lỗi server: " + data.message);
             }).catch(err => alert("Lỗi kết nối mạng: Vui lòng thử lại sau.")).finally(() => { btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = oldText; btnEl.disabled = false; });
         }
@@ -442,20 +373,21 @@
 
             if(nextIndex < currentExercises.length) { goToStep(nextIndex); } 
             else {
-                if(percent < 100) alert(`Bạn mới hoàn thành ${percent}%.\nVui lòng làm đủ các bài còn có biểu tượng Cảnh báo (⚠️) màu vàng và nộp ẢNH MINH CHỨNG trước khi Kết thúc.`);
-                else {
+                if(percent < 100) {
+                    alert(`Bạn mới hoàn thành ${percent}%.\nVui lòng làm đủ các bài chưa có tích Xanh (✅) và nộp ẢNH MINH CHỨNG trước khi Kết thúc.`);
+                } else {
                     const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
                     document.getElementById('certName').innerText = profile.name; document.getElementById('certDept').innerText = profile.dept;
                     document.getElementById('certSession').innerText = document.getElementById('sessionTitle').innerText;
-                    const now = new Date(); document.getElementById('certTime').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + " ngày " + now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
                     document.getElementById('certificateModal').classList.remove('hidden');
+                    document.getElementById('certificateModal').classList.add('flex'); // HIỂN THỊ ĐÚNG MODAL
                 }
             }
         }
 
         function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
 
-        // BẬT BẢNG REVIEW TRƯỚC KHI IN PDF
+        // MỞ BẢNG PREVIEW (XEM LẠI BÀI)
         function openReviewModal() {
             document.getElementById('certificateModal').classList.add('hidden');
             const reviewContainer = document.getElementById('reviewModalContent');
@@ -469,7 +401,6 @@
                 
                 reviewHtml += `<div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200"><h2 class="text-lg font-black text-blue-700 mb-4 pb-2 border-b border-slate-100">${ex.title}</h2>`;
                 
-                // Trực quan hóa câu hỏi đi liền câu trả lời
                 if(ex.theory && ex.theory.length > 0) {
                     reviewHtml += `<div class="mb-6"><h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fas fa-question-circle"></i> Trả lời tự luận:</h3>`;
                     let answersArr = data.textAnswers || [];
@@ -484,12 +415,15 @@
                 
                 if(data.uploadedUrls && data.uploadedUrls.length > 0) {
                     reviewHtml += `<div><h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp:</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
-                    data.uploadedUrls.forEach(url => { let directUrl = url; let fileIdMatch = url.match(/\/d\/(.+?)\//); if(fileIdMatch && fileIdMatch[1]) directUrl = `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; reviewHtml += `<img src="${directUrl}" class="w-full h-auto rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:opacity-90 transition" onclick="window.open('${url}', '_blank')">`; });
+                    data.uploadedUrls.forEach(url => {
+                        let directUrl = url; let fileIdMatch = url.match(/\/d\/(.+?)\//);
+                        if(fileIdMatch && fileIdMatch[1]) directUrl = `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
+                        reviewHtml += `<img src="${directUrl}" class="w-full h-auto rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:opacity-90 transition" onclick="window.open('${url}', '_blank')">`;
+                    });
                     reviewHtml += `</div></div>`;
                 } else reviewHtml += `<p class="text-red-500 font-bold italic text-sm"><i class="fas fa-exclamation-triangle"></i> Chưa có ảnh minh chứng</p>`;
                 reviewHtml += `</div>`;
             }
-            
             reviewHtml += `</div>`; reviewContainer.innerHTML = reviewHtml;
             document.getElementById('reviewModal').classList.remove('hidden'); document.getElementById('reviewModal').classList.add('flex');
             buildPrintTemplate();
@@ -497,7 +431,7 @@
 
         function closeReviewModal() { document.getElementById('reviewModal').classList.add('hidden'); document.getElementById('reviewModal').classList.remove('flex'); document.getElementById('certificateModal').classList.remove('hidden'); }
 
-        // BẢN IN PDF (Dùng window.print siêu nhẹ)
+        // BẢN IN PDF (Dùng window.print)
         function buildPrintTemplate() {
             const pdfContent = document.getElementById('pdf-content'); const profile = JSON.parse(localStorage.getItem('kv_trainer_profile')); const sessionName = document.getElementById('sessionTitle').innerText;
             let reportHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto;"><h1 style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-bottom: 20px;">Báo cáo bài tập - ${sessionName}</h1><div style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 30px;"><p style="margin: 0 0 8px 0; font-size: 16px;"><strong>Học viên:</strong> ${profile.name} - ${profile.dept}</p><p style="margin: 0; font-size: 16px;"><strong>Khóa học:</strong> ${APP_CONFIG.COURSE_NAME}</p></div>`;
