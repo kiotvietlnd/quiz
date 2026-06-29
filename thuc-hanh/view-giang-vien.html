@@ -281,35 +281,55 @@
             rawParsedEntries = [];
             rawData.forEach(row => {
                 const keys = Object.keys(row);
-                const timestamp = (row[keys[0]] || "").trim();
-                const name = (row[keys[1]] || "").trim();
-                const dept = (row[keys[2]] || "").trim();
-                const course = (row[keys[3]] || "").trim();
-                const session = (row[keys[4]] || "").trim();
-                const exerciseTitle = (row[keys[5]] || "").trim();
+                // Dùng Index hoặc Tiêu đề để lấy data an toàn
+                const timestamp = String(row["Ngày"] || row["Timestamp"] || row[keys[0]] || "").trim();
+                const name = String(row["Họ và Tên"] || row["Họ và tên"] || row["studentName"] || row[keys[1]] || "").trim();
+                const dept = String(row["Phòng ban"] || row["Phòng Ban"] || row[keys[2]] || "").trim();
+                const course = String(row["Khóa"] || row["Khoá"] || row[keys[3]] || "").trim();
+                const session = String(row["Buổi"] || row[keys[4]] || "").trim();
+                const exerciseTitle = String(row["Tên bài học"] || row[keys[5]] || "").trim();
                 
                 if (!name || ['họ và tên', 'studentname'].includes(name.toLowerCase()) || ['ngày', 'timestamp'].includes(timestamp.toLowerCase())) return;
 
                 let answerHtmlBlocks = []; let answerRawBlocks = [];
+                // BẮT BUỘC: LẤY ĐÚNG THEO DATA ĐƯỢC CHIA SẺ TRONG FILE CODELAB-DATA
+                let exStatic = null;
+                if(typeof SESSION_EXERCISES !== 'undefined') {
+                    exStatic = SESSION_EXERCISES.find(ex => ex.title === exerciseTitle);
+                }
+
+                // Quét 5 cột kế tiếp (Trả lời 1 -> 5) an toàn
                 for(let i = 0; i < 5; i++) {
                     let ansColName = keys[6 + i];
-                    let ans = ansColName ? (row[ansColName] || "").trim() : "";
+                    let ans = ansColName ? String(row[ansColName] || "").trim() : "";
+                    
                     if(ans) {
-                        answerHtmlBlocks.push(`<div class="mb-2"><p class="text-[11px] text-slate-500 font-bold mb-1">Câu ${i+1}:</p><p class="text-xs text-blue-800 bg-blue-50/50 p-2 rounded border border-blue-100 whitespace-pre-wrap">${ans}</p></div>`);
-                        answerRawBlocks.push(`Câu ${i+1}: ${ans}`);
+                        let qTitle = (exStatic && exStatic.theory && exStatic.theory[i]) ? exStatic.theory[i] : `Câu ${i+1}`;
+                        answerHtmlBlocks.push(`<div class="mb-2"><p class="text-[11px] text-slate-500 font-bold mb-1">Hỏi: ${qTitle}</p><p class="text-xs text-blue-800 bg-blue-50/50 p-2 rounded border border-blue-100 whitespace-pre-wrap">Đáp: ${ans}</p></div>`);
+                        answerRawBlocks.push(`Hỏi: ${qTitle}\nĐáp: ${ans}`);
                     }
                 }
                 const answerHtml = answerHtmlBlocks.join(''); const answerRaw = answerRawBlocks.join('\n\n');
-                const rawUrls = (keys.length > 11 ? row[keys[11]] : "").trim(); 
-                const feedback = (keys.length > 12 ? row[keys[12]] : "").trim(); 
+
+                // Dò tìm linh hoạt Cột Link và Cột Nhận Xét bằng chữ
+                let linkCol = keys.find(k => String(k).toLowerCase().includes('link'));
+                let fbCol = keys.find(k => String(k).toLowerCase().includes('nhận xét'));
+                
+                const rawUrls = linkCol ? String(row[linkCol] || "").trim() : (keys.length > 11 ? String(row[keys[11]] || "").trim() : "");
+                const feedback = fbCol ? String(row[fbCol] || "").trim() : (keys.length > 12 ? String(row[keys[12]] || "").trim() : "");
 
                 rawParsedEntries.push({ ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle, cauTraLoiHtml: answerHtml, cauTraLoiRaw: answerRaw, linkDrive: rawUrls, nhanXet: feedback });
             });
 
+            // Re-build filter options
             const uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort();
             const uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort();
             const uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
-            const uniqueLessons = [...new Set(rawParsedEntries.map(e => e.tenBaiHoc))].filter(Boolean).sort();
+            const foundLessons = [...new Set(rawParsedEntries.map(e => e.tenBaiHoc))].filter(Boolean);
+            
+            let staticLessons = [];
+            if(typeof SESSION_EXERCISES !== 'undefined') staticLessons = SESSION_EXERCISES.map(ex => ex.title);
+            const uniqueLessons = [...new Set([...staticLessons, ...foundLessons])].sort();
 
             populateDropdownOptions('filterClass', uniqueClasses, 'Tất cả Khóa');
             populateDropdownOptions('filterSession', uniqueSessions, 'Tất cả Buổi');
