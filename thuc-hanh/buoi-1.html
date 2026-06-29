@@ -11,8 +11,6 @@
     </script>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -22,12 +20,10 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* TONE MÀU XANH NAVY SOLID CHO SIDEBAR */
+        /* SIDEBAR SOLID NAVY THEME */
         #sidebar { background-color: #1e3a8a; } 
         #sidebarScroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
         
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
-
         .glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
         
         .step-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-radius: 12px; margin: 0 12px; border: 1px solid transparent; transition: all 0.2s ease; }
@@ -39,7 +35,6 @@
         .group-header { padding: 16px 16px 6px 24px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #93c5fd; margin-top: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-right: 12px; }
         .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid white; }
         
-        /* CHỈ ĐỊNH KHU VỰC IN PDF (Bỏ hết màu nền, chỉ lấy chữ và ảnh) */
         @media print {
             body * { visibility: hidden; }
             #pdf-content, #pdf-content * { visibility: visible; }
@@ -51,8 +46,6 @@
     </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200 selection:text-blue-900">
-
-    <div class="tech-bg"></div>
 
     <!-- MODAL 1: CHỨNG NHẬN HOÀN THÀNH -->
     <div id="certificateModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4 transition-all">
@@ -69,7 +62,7 @@
                 <p class="flex justify-between items-center"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">⏰ Thời gian:</span> <span id="certTime" class="text-slate-800 font-bold"></span></p>
             </div>
             
-            <div class="text-xs font-black text-red-600 bg-red-50 border border-red-200 p-3 rounded-xl mb-6"><i class="fas fa-exclamation-triangle"></i> CHỤP MÀN HÌNH VÀ GỬI ZALO TRƯỚC 16:00</div>
+            <div class="text-xs font-black text-red-600 bg-red-50 border border-red-200 p-3 rounded-xl mb-6"><i class="fas fa-exclamation-triangle"></i> CHỤP MÀN HÌNH NÀY VÀ GỬI ZALO TRƯỚC 16:00</div>
             
             <div class="flex flex-col gap-3 mt-6">
                 <button onclick="openReviewModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl transition flex justify-center items-center gap-2"><i class="fas fa-search"></i> Xem lại bài làm & Xuất PDF</button>
@@ -92,7 +85,6 @@
         </div>
         <div id="reviewModalContent" class="flex-1 overflow-y-auto p-4 md:p-8 bg-slate-100 custom-scrollbar"></div>
     </div>
-
 
     <!-- HEADER CHÍNH -->
     <header class="bg-white/90 backdrop-blur border-b border-slate-200 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0">
@@ -127,7 +119,6 @@
         <main class="flex-1 overflow-y-auto custom-scrollbar relative p-4 md:p-8 bg-slate-50 flex flex-col">
             <div id="mainContent" class="max-w-4xl mx-auto glass-panel border border-slate-200 rounded-3xl p-6 md:p-10 mb-24 w-full relative"></div>
             
-            <!-- BOTTOM BAR -->
             <div class="fixed bottom-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10">
                 <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2 text-sm text-slate-600 font-bold hover:text-blue-600 transition disabled:opacity-40"><i class="fas fa-chevron-left"></i> Trở lại</button>
                 <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-6 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition font-bold text-sm">Tiếp <i class="fas fa-chevron-right"></i></button>
@@ -141,9 +132,9 @@
     <script src="codelab-data.js"></script>
     <script>
         // ==========================================
-        const SESSION_ID = 'session_1';
-        const STORAGE_KEY = 'kv_codelab_progress_b1';
-        const DATA_KEY = 'kv_codelab_data_b1';
+        const SESSION_ID = 'session_1'; // SỬA THÀNH session_2, session_3 NẾU CẦN
+        const STORAGE_KEY = 'kv_codelab_progress_b1'; // SỬA THÀNH b2, b3
+        const DATA_KEY = 'kv_codelab_data_b1'; // SỬA THÀNH b2, b3
         // ==========================================
 
         let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFiles = [];
@@ -168,6 +159,7 @@
                     }
                 }
             });
+
             setTimeout(() => { fetchFeedback(false); }, 1500); 
         });
 
@@ -338,7 +330,7 @@
 
         function uploadToGAS(index, exerciseTitle) {
             saveDraft(); const currentData = stepDataStore[index];
-            if (pendingFiles.length === 0 && (!currentData.uploadedUrls || currentData.uploadedUrls.length === 0)) { alert("❌ LỖI: Bắt buộc phải có ảnh minh chứng. Vui lòng chọn ảnh hoặc dán ảnh vào khung."); return; }
+            if (pendingFiles.length === 0 && (!currentData.uploadedUrls || currentData.uploadedUrls.length === 0)) { alert("❌ LỖI: Bắt buộc phải tải ảnh lên để nộp bài!"); return; }
             
             const apiUrl = APP_CONFIG.API_URL; const courseName = APP_CONFIG.COURSE_NAME;
             if (!apiUrl) { alert("Lỗi Admin: Chưa cấu hình API URL!"); return; }
@@ -391,15 +383,16 @@
                     const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
                     document.getElementById('certName').innerText = profile.name; document.getElementById('certDept').innerText = profile.dept;
                     document.getElementById('certSession').innerText = document.getElementById('sessionTitle').innerText;
+                    const now = new Date(); document.getElementById('certTime').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + " ngày " + now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
+                    
                     document.getElementById('certificateModal').classList.remove('hidden');
-                    document.getElementById('certificateModal').classList.add('flex'); // HIỂN THỊ ĐÚNG MODAL
+                    document.getElementById('certificateModal').classList.add('flex');
                 }
             }
         }
 
         function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
 
-        // MỞ BẢNG PREVIEW (XEM LẠI BÀI)
         function openReviewModal() {
             document.getElementById('certificateModal').classList.add('hidden');
             const reviewContainer = document.getElementById('reviewModalContent');
@@ -443,7 +436,6 @@
 
         function closeReviewModal() { document.getElementById('reviewModal').classList.add('hidden'); document.getElementById('reviewModal').classList.remove('flex'); document.getElementById('certificateModal').classList.remove('hidden'); }
 
-        // BẢN IN PDF (Dùng window.print)
         function buildPrintTemplate() {
             const pdfContent = document.getElementById('pdf-content'); const profile = JSON.parse(localStorage.getItem('kv_trainer_profile')); const sessionName = document.getElementById('sessionTitle').innerText;
             let reportHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto;"><h1 style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-bottom: 20px;">Báo cáo bài tập - ${sessionName}</h1><div style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 30px;"><p style="margin: 0 0 8px 0; font-size: 16px;"><strong>Học viên:</strong> ${profile.name} - ${profile.dept}</p><p style="margin: 0; font-size: 16px;"><strong>Khóa học:</strong> ${APP_CONFIG.COURSE_NAME}</p></div>`;
@@ -482,114 +474,6 @@
 
         function generatePDF() { window.print(); }
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
-        // XỬ LÝ NÚT TIẾP TỤC / KẾT THÚC BUỔI HỌC
-        function nextStep() {
-            saveDraft();
-            let totalRealExercises = 0; let completedCount = 0;
-            for(let i=0; i<currentExercises.length; i++) { if(!currentExercises[i].isGroupHeader) { totalRealExercises++; if(stepDataStore[i] && stepDataStore[i].isSubmitted) completedCount++; } }
-            const percent = totalRealExercises === 0 ? 0 : Math.round((completedCount / totalRealExercises) * 100);
-            
-            let nextIndex = currentStepIndex + 1; while(nextIndex < currentExercises.length && currentExercises[nextIndex].isGroupHeader) nextIndex++;
-
-            if(nextIndex < currentExercises.length) { goToStep(nextIndex); } 
-            else {
-                if(percent < 100) {
-                    alert(`Bạn mới hoàn thành ${percent}%.\nVui lòng làm đủ các bài chưa có tích Xanh (✅) và nộp ẢNH MINH CHỨNG trước khi Kết thúc.`);
-                } else {
-                    const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
-                    document.getElementById('certName').innerText = profile.name; document.getElementById('certDept').innerText = profile.dept;
-                    document.getElementById('certSession').innerText = document.getElementById('sessionTitle').innerText;
-                    const now = new Date(); document.getElementById('certTime').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + " ngày " + now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
-                    
-                    document.getElementById('certificateModal').classList.remove('hidden');
-                    document.getElementById('certificateModal').classList.add('flex');
-                }
-            }
-        }
-
-        // MỞ BẢNG PREVIEW XEM LẠI BÀI 
-        function openReviewModal() {
-            document.getElementById('certificateModal').classList.add('hidden');
-            const reviewContainer = document.getElementById('reviewModalContent');
-            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile')); const sessionName = document.getElementById('sessionTitle').innerText;
-            
-            let reviewHtml = `<div class="max-w-4xl mx-auto space-y-6"><div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200"><h1 class="text-2xl font-black text-slate-800 mb-4">${sessionName}</h1><div class="flex flex-wrap gap-4"><span class="bg-blue-50 text-blue-700 px-3 py-1.5 rounded-lg text-sm font-bold">👤 Học viên: ${profile.name}</span><span class="bg-slate-100 text-slate-700 px-3 py-1.5 rounded-lg text-sm font-bold">🏢 Phòng ban: ${profile.dept}</span><span class="bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-lg text-sm font-bold">✅ Đã hoàn thành 100%</span></div></div>`;
-
-            for(let i=0; i<currentExercises.length; i++) {
-                if(currentExercises[i].isGroupHeader) continue;
-                const ex = currentExercises[i]; const data = stepDataStore[i] || {};
-                
-                reviewHtml += `<div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-200"><h2 class="text-lg font-black text-blue-700 mb-4 pb-2 border-b border-slate-100">${ex.title}</h2>`;
-                
-                if(ex.theory && ex.theory.length > 0) {
-                    reviewHtml += `<div class="mb-6"><h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fas fa-question-circle"></i> Trả lời tự luận:</h3>`;
-                    let answersArr = data.textAnswers || [];
-                    ex.theory.forEach((q, qIndex) => {
-                        let ans = answersArr[qIndex] || '<span class="text-red-500 italic">(Không trả lời)</span>';
-                        reviewHtml += `<div class="mb-3 bg-slate-50 p-4 rounded-xl border border-slate-200"><p class="font-bold text-slate-700 text-sm mb-2">Hỏi: ${q}</p><p class="text-blue-800 text-sm font-medium whitespace-pre-wrap"><i class="fas fa-comment-dots text-slate-400 mr-1"></i> Đáp: ${ans}</p></div>`;
-                    });
-                    reviewHtml += `</div>`;
-                }
-
-                if(data.feedback) reviewHtml += `<div class="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-xl mb-6"><h3 class="text-sm font-black text-amber-800 uppercase tracking-widest mb-2"><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</h3><p class="text-amber-900 text-sm whitespace-pre-wrap font-medium">${data.feedback}</p></div>`;
-                
-                if(data.uploadedUrls && data.uploadedUrls.length > 0) {
-                    reviewHtml += `<div><h3 class="text-sm font-black text-slate-400 uppercase tracking-widest mb-3"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp:</h3><div class="grid grid-cols-1 md:grid-cols-2 gap-4">`;
-                    data.uploadedUrls.forEach(url => {
-                        let directUrl = url; let fileIdMatch = url.match(/\/d\/(.+?)\//);
-                        if(fileIdMatch && fileIdMatch[1]) directUrl = `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
-                        reviewHtml += `<img src="${directUrl}" class="w-full h-auto rounded-xl border border-slate-200 shadow-sm cursor-pointer hover:opacity-90 transition" onclick="window.open('${url}', '_blank')">`;
-                    });
-                    reviewHtml += `</div></div>`;
-                } else reviewHtml += `<p class="text-red-500 font-bold italic text-sm"><i class="fas fa-exclamation-triangle"></i> Chưa có ảnh minh chứng</p>`;
-                reviewHtml += `</div>`;
-            }
-            reviewHtml += `</div>`; reviewContainer.innerHTML = reviewHtml;
-            document.getElementById('reviewModal').classList.remove('hidden'); document.getElementById('reviewModal').classList.add('flex');
-            buildPrintTemplate();
-        }
-
-        function closeReviewModal() { document.getElementById('reviewModal').classList.add('hidden'); document.getElementById('reviewModal').classList.remove('flex'); document.getElementById('certificateModal').classList.remove('hidden'); }
-
-        // BẢN IN PDF (Dùng window.print)
-        function buildPrintTemplate() {
-            const pdfContent = document.getElementById('pdf-content'); const profile = JSON.parse(localStorage.getItem('kv_trainer_profile')); const sessionName = document.getElementById('sessionTitle').innerText;
-            let reportHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto;"><h1 style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-bottom: 20px;">Báo cáo bài tập - ${sessionName}</h1><div style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 30px;"><p style="margin: 0 0 8px 0; font-size: 16px;"><strong>Học viên:</strong> ${profile.name} - ${profile.dept}</p><p style="margin: 0; font-size: 16px;"><strong>Khóa học:</strong> ${APP_CONFIG.COURSE_NAME}</p></div>`;
-
-            for(let i=0; i<currentExercises.length; i++) {
-                if(currentExercises[i].isGroupHeader) continue;
-                const ex = currentExercises[i]; const data = stepDataStore[i] || {};
-                
-                reportHtml += `<div class="print-page-break"><h2 style="font-size: 18px; font-weight: bold; color: #1a73e8; margin-bottom: 10px; border-bottom: 1px solid #eee; padding-bottom: 5px;">${ex.title}</h2>`;
-                
-                if(ex.theory && ex.theory.length > 0) {
-                    reportHtml += `<p style="font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #555;">Trả lời tự luận:</p>`;
-                    let answersArr = data.textAnswers || [];
-                    ex.theory.forEach((q, qIndex) => {
-                        let ans = answersArr[qIndex] || '<span style="color:#ef4444; font-style:italic;">(Chưa trả lời)</span>';
-                        reportHtml += `<div style="margin-bottom: 15px; background: #f8f9fa; border: 1px solid #eee; padding: 10px; border-radius: 6px;"><p style="font-size: 13px; color: #444; margin: 0 0 8px 0; font-weight: bold;">Hỏi: ${q}</p><div style="background: #e8f0fe; border-left: 3px solid #1a73e8; padding: 8px; font-size: 13px; white-space: pre-wrap;"><strong>Đáp:</strong> ${ans}</div></div>`;
-                    });
-                }
-
-                if(data.feedback) reportHtml += `<div style="background: #fffbeb; border-left: 4px solid #f59e0b; padding: 12px; margin-bottom: 15px;"><p style="font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #92400e;">💬 Nhận xét của Giảng viên:</p><p style="font-size: 14px; color: #333; white-space: pre-wrap;">${data.feedback}</p></div>`;
-                if(ex.requirements && ex.requirements.length > 0) reportHtml += `<p style="font-weight: bold; font-size: 14px; margin-bottom: 5px; color: #e67c73;">Yêu cầu thực hành:</p><ul style="font-size: 13px; margin-bottom: 10px; color: #444; padding-left: 20px;">${ex.requirements.map(r => `<li style="margin:2px 0;">${r}</li>`).join('')}</ul>`;
-                
-                if(data.uploadedUrls && data.uploadedUrls.length > 0) {
-                    reportHtml += `<p style="font-weight: bold; font-size: 14px; margin-bottom: 5px;">Ảnh minh chứng:</p><div style="display: flex; flex-direction: column; gap: 15px;">`;
-                    data.uploadedUrls.forEach(url => {
-                        let directUrl = url; let fileIdMatch = url.match(/\/d\/(.+?)\//);
-                        if(fileIdMatch && fileIdMatch[1]) directUrl = `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`;
-                        reportHtml += `<div style="text-align: center;"><img src="${directUrl}" style="max-width: 100%; border: 1px solid #ccc; border-radius: 4px;"></div>`;
-                    });
-                    reportHtml += `</div>`;
-                } else reportHtml += `<p style="color: #ef4444; font-weight: bold; font-style: italic;">Chưa nộp ảnh</p>`;
-                reportHtml += `</div><br>`;
-            }
-            pdfContent.innerHTML = reportHtml + `</div>`;
-        }
-
-        function generatePDF() { window.print(); }
-        function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
     </script>
 </body>
 </html>
