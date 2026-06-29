@@ -20,7 +20,6 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        #filterArea::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 4px; }
         
         .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
         .glow-blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 15s ease-in-out infinite; background: rgba(37, 99, 235, 0.08); }
@@ -29,9 +28,8 @@
 
         .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
         .glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
-        
-        #sidebar select option { background-color: #1e3a8a; color: #f8fafc; }
         select:focus { outline: none; box-shadow: none; }
+        #sidebar select option { background-color: #1e3a8a; color: #f8fafc; }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
@@ -46,47 +44,119 @@
         </div>
         
         <div id="filterArea" class="p-4 flex-1 overflow-y-auto flex flex-col scroll-smooth relative z-10 space-y-4">
+            
             <div class="pb-3 border-b border-white/10">
                 <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-2.5">Cấu hình nguồn</h2>
                 <div class="space-y-2">
                     <input type="text" id="sheetUrlInput" class="w-full bg-white/10 text-white placeholder-slate-400 text-xs rounded-xl p-2.5 h-[36px] focus:outline-none focus:ring-2 focus:ring-blue-400 border border-white/10 font-medium shadow-inner truncate" placeholder="Dán link chia sẻ Google Sheet...">
-                    <button onclick="fetchSheetData()" class="w-full h-9 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2"><i class="fas fa-sync-alt"></i> Đồng bộ dữ liệu</button>
+                    <button onclick="fetchSheetData()" class="w-full h-9 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
+                        <i class="fas fa-sync-alt"></i> Đồng bộ dữ liệu
+                    </button>
                 </div>
             </div>
 
             <div class="space-y-3.5">
                 <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-1.5">Bộ lọc hiển thị</h2>
+                
                 <div>
                     <label class="block text-[11px] font-bold text-yellow-300 mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
-                    <select id="filterStatus" onchange="onFilterChange('status')" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate"><option value="all">Tất cả bài nộp</option><option value="pending">🔴 Cần chấm (Chưa có nhận xét)</option><option value="graded">✅ Đã chấm (Có nhận xét)</option></select>
+                    <select id="filterStatus" onchange="onFilterChange('status')" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả bài nộp</option>
+                        <option value="pending">🔴 Cần chấm (Chưa có nhận xét)</option>
+                        <option value="graded">✅ Đã chấm (Có nhận xét)</option>
+                    </select>
                 </div>
-                <div><label class="block text-[11px] font-bold text-slate-200 mb-1">Khóa học</label><select id="filterClass" onchange="onFilterChange('khoa')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate"><option value="all">Tất cả Khóa</option></select></div>
-                <div><label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label><select id="filterSession" onchange="onFilterChange('buoi')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate"><option value="all">Tất cả Buổi</option></select></div>
-                <div><label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label><div class="flex items-stretch h-[34px] bg-white/10 rounded-lg border border-white/10 overflow-hidden shadow-inner"><button onclick="navigateSelect('filterStudent', -1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-left text-[10px]"></i></button><select id="filterStudent" onchange="onFilterChange('hoVaTen')" class="flex-1 w-full bg-transparent border-none text-white text-[11px] focus:ring-0 outline-none px-2 font-semibold cursor-pointer truncate"><option value="all">Tất cả Học viên</option></select><button onclick="navigateSelect('filterStudent', 1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-right text-[10px]"></i></button></div></div>
-                <div><label class="block text-[11px] font-bold text-slate-200 mb-1">Tên bài học</label><div class="flex items-stretch h-[34px] bg-white/10 rounded-lg border border-white/10 overflow-hidden shadow-inner"><button onclick="navigateSelect('filterLesson', -1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-left text-[10px]"></i></button><select id="filterLesson" onchange="onFilterChange('tenBaiHoc')" class="flex-1 w-full bg-transparent border-none text-white text-[11px] focus:ring-0 outline-none px-2 font-semibold cursor-pointer truncate"><option value="all">Tất cả Bài học</option></select><button onclick="navigateSelect('filterLesson', 1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-right text-[10px]"></i></button></div></div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Khóa học</label>
+                    <select id="filterClass" onchange="onFilterChange('khoa')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Khóa</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label>
+                    <select id="filterSession" onchange="onFilterChange('buoi')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Buổi</option>
+                    </select>
+                </div>
+
+                <!-- ĐÂY LÀ CÁI MENU PHÒNG BAN BỊ TÔI XÓA NHẦM LÚC TRƯỚC ĐÃ ĐƯỢC THÊM LẠI -->
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Phòng ban</label>
+                    <select id="filterDept" onchange="onFilterChange('phongBan')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Phòng ban</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label>
+                    <div class="flex items-stretch h-[34px] bg-white/10 rounded-lg border border-white/10 overflow-hidden shadow-inner">
+                        <button onclick="navigateSelect('filterStudent', -1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-left text-[10px]"></i></button>
+                        <select id="filterStudent" onchange="onFilterChange('hoVaTen')" class="flex-1 w-full bg-transparent border-none text-white text-[11px] focus:ring-0 outline-none px-2 font-semibold cursor-pointer truncate">
+                            <option value="all">Tất cả Học viên</option>
+                        </select>
+                        <button onclick="navigateSelect('filterStudent', 1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-right text-[10px]"></i></button>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Tên bài học</label>
+                    <div class="flex items-stretch h-[34px] bg-white/10 rounded-lg border border-white/10 overflow-hidden shadow-inner">
+                        <button onclick="navigateSelect('filterLesson', -1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-left text-[10px]"></i></button>
+                        <select id="filterLesson" onchange="onFilterChange('tenBaiHoc')" class="flex-1 w-full bg-transparent border-none text-white text-[11px] focus:ring-0 outline-none px-2 font-semibold cursor-pointer truncate">
+                            <option value="all">Tất cả Bài học</option>
+                        </select>
+                        <button onclick="navigateSelect('filterLesson', 1)" class="w-8 bg-blue-600 hover:bg-blue-700 text-white flex items-center justify-center transition-colors shrink-0"><i class="fas fa-chevron-right text-[10px]"></i></button>
+                    </div>
+                </div>
             </div>
+        </div>
+        <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md flex-shrink-0 flex flex-col gap-2 relative z-10">
+            <span class="text-[10px] text-slate-300 font-semibold text-center"><i class="fas fa-graduation-cap text-indigo-400 mr-1"></i> KiotViet Learning & Development</span>
         </div>
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10">
         <header class="glass-header h-16 flex items-center justify-between px-6 z-20 shrink-0 w-full">
-            <div class="flex items-center gap-4 flex-1"><button onclick="toggleSidebar()" class="text-slate-400 hover:text-blue-600 p-2 rounded-xl hover:bg-blue-50 transition-colors"><i class="fas fa-bars text-lg"></i></button><div class="flex items-center gap-2.5"><div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-chalkboard-teacher"></i></div><h1 class="text-sm md:text-base font-black text-slate-800 tracking-tight font-sans">TRUNG TÂM CHẤM BÀI TRỰC TUYẾN</h1></div></div>
-            <div class="text-right hidden sm:block"><span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Góc nhìn</span><span class="text-xs font-bold text-blue-600">Giảng Viên</span></div>
+            <div class="flex items-center gap-4 flex-1">
+                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-blue-600 p-2 rounded-xl hover:bg-blue-50 transition-colors"><i class="fas fa-bars text-lg"></i></button>
+                <div class="flex items-center gap-2.5">
+                    <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-chalkboard-teacher"></i></div>
+                    <h1 class="text-sm md:text-base font-black text-slate-800 tracking-tight font-sans">TRUNG TÂM CHẤM BÀI TRỰC TUYẾN</h1>
+                </div>
+            </div>
+            <div class="text-right hidden sm:block">
+                <span class="text-[10px] font-extrabold text-slate-400 uppercase tracking-wider block">Góc nhìn</span>
+                <span class="text-xs font-bold text-blue-600">Giảng Viên</span>
+            </div>
         </header>
 
         <div class="flex-1 overflow-auto p-4 md:p-6 lg:p-8 relative pb-28 custom-scrollbar" id="mainScrollArea">
             <div class="max-w-4xl mx-auto w-full">
                 
+                <!-- Bảng Thống kê -->
                 <div id="statsSummary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8 z-10 relative hidden">
-                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80"><div class="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-user-check"></i></div><div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Lọc Học Viên</p><p class="text-base font-black text-slate-800 truncate max-w-[200px]" id="selectedStudentName">-</p></div></div>
-                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80"><div class="h-12 w-12 rounded-xl bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-bell"></i></div><div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Chờ Giảng viên chấm</p><p class="text-base font-black text-red-600" id="statPending">0 bài</p></div></div>
-                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80"><div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-list-ol"></i></div><div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Bài Đang Hiện</p><p class="text-base font-black text-emerald-600" id="statProgress">0 bài</p></div></div>
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-user-check"></i></div>
+                        <div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Lọc Học Viên</p><p class="text-base font-black text-slate-800 truncate max-w-[200px]" id="selectedStudentName">-</p></div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-bell"></i></div>
+                        <div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Chờ Giảng viên chấm</p><p class="text-base font-black text-red-600" id="statPending">0 bài</p></div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-list-ol"></i></div>
+                        <div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Bài Đang Hiện</p><p class="text-base font-black text-emerald-600" id="statProgress">0 bài</p></div>
+                    </div>
                 </div>
 
+                <!-- Màn hình chờ Load Data -->
                 <div id="statusPlaceholder" class="glass-panel rounded-3xl p-12 text-center max-w-2xl mx-auto my-10 border border-white/80 shadow-md">
                     <div id="loadingSpinner" class="hidden flex flex-col items-center">
                         <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                        <p class="font-black text-slate-700 text-lg">Đang kết nối và tải dữ liệu...</p>
+                        <p class="font-black text-slate-700 text-lg">Đang tải và sắp xếp dữ liệu...</p>
                     </div>
                     <div id="welcomeMessage" class="text-slate-500">
                         <div class="w-16 h-16 bg-blue-50 text-blue-500 border border-blue-100 rounded-full flex items-center justify-center text-2xl mx-auto mb-4 shadow-sm"><i class="fas fa-cloud-download-alt"></i></div>
@@ -95,48 +165,101 @@
                     </div>
                 </div>
 
+                <!-- Nơi chứa các Card bài tập -->
                 <div id="exercisesContainer" class="space-y-8 hidden"></div>
 
                 <div id="globalActionArea" class="mt-8 flex flex-col sm:flex-row justify-center gap-4 hidden">
-                    <button onclick="openEvaluationTableModal()" class="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs md:text-sm rounded-2xl shadow-xl shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1"><i class="fas fa-table text-base"></i> Xem Bảng Đánh Giá & Xuất Excel</button>
+                    <button onclick="openEvaluationTableModal()" class="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs md:text-sm rounded-2xl shadow-xl shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <i class="fas fa-table text-base"></i> Xem Bảng Đánh Giá & Xuất Excel
+                    </button>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- Modal Fullscreen -->
+    <!-- FULLSCREEN ẢNH MODAL -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[150] hidden flex-col justify-between items-center p-4 transition-all">
-        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0"><span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span><div class="flex items-center gap-3"><a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Xem ảnh gốc</a><button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button></div></div>
-        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none"><button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button><img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg"><button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button></div>
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
+            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
+            <div class="flex items-center gap-3">
+                <a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Xem ảnh gốc</a>
+                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+        </div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
+            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button>
+            <img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg">
+            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
+        </div>
         <div class="h-8 shrink-0"></div>
     </div>
 
     <!-- TABLE EXPORT MODAL -->
     <div id="evaluationTableModal" class="fixed inset-0 z-[130] hidden flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
         <div class="bg-white rounded-3xl shadow-2xl w-full max-w-7xl max-h-[90vh] flex flex-col overflow-hidden border border-slate-200 transition-all">
-            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0 flex-wrap gap-3"><div class="flex items-center gap-2"><i class="fas fa-table text-emerald-600 text-lg"></i><h4 class="font-black text-slate-800 text-sm md:text-base">Bảng Dữ Liệu Đang Lọc</h4></div><div class="flex items-center gap-2"><button onclick="copyEvaluationToClipboard()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-md"><i class="fas fa-file-excel"></i> Copy Bảng sang Excel</button><button onclick="closeEvaluationTableModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors"><i class="fas fa-times text-sm"></i></button></div></div>
-            <div class="overflow-auto flex-1 bg-white"><table class="w-full text-left border-collapse text-xs"><thead class="bg-slate-100 border-b border-slate-200 text-slate-700 sticky top-0 z-10 font-bold uppercase tracking-wider text-[10px]"><tr><th class="px-4 py-3 border-r border-slate-200">Ngày</th><th class="px-4 py-3 border-r border-slate-200">Họ và Tên</th><th class="px-4 py-3 border-r border-slate-200">Phòng ban</th><th class="px-4 py-3 border-r border-slate-200">Khóa</th><th class="px-4 py-3 border-r border-slate-200">Buổi</th><th class="px-4 py-3 border-r border-slate-200">Tên bài học</th><th class="px-4 py-3 border-r border-slate-200">Câu trả lời tự luận</th><th class="px-4 py-3 border-r border-slate-200">Link Drive</th><th class="px-4 py-3">Nhận xét</th></tr></thead><tbody id="evaluationTableTbody" class="divide-y divide-slate-100"></tbody></table></div>
-            <div class="px-6 py-4 border-t border-slate-200 flex justify-between items-center bg-slate-50 shrink-0"><span class="text-xs font-bold text-slate-500">Tổng cộng: <span id="evalTotalRows" class="text-emerald-600">0</span> bản ghi.</span><button onclick="closeEvaluationTableModal()" class="px-5 py-2.5 text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-xl font-bold text-xs transition-colors">Đóng</button></div>
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0 flex-wrap gap-3">
+                <div class="flex items-center gap-2"><i class="fas fa-table text-emerald-600 text-lg"></i><h4 class="font-black text-slate-800 text-sm md:text-base">Bảng Dữ Liệu Đang Lọc</h4></div>
+                <div class="flex items-center gap-2">
+                    <button onclick="copyEvaluationToClipboard()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black transition-all flex items-center gap-1.5 shadow-md"><i class="fas fa-file-excel"></i> Copy Bảng sang Excel</button>
+                    <button onclick="closeEvaluationTableModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors"><i class="fas fa-times text-sm"></i></button>
+                </div>
+            </div>
+            <div class="overflow-auto flex-1 bg-white">
+                <table class="w-full text-left border-collapse text-xs">
+                    <thead class="bg-slate-100 border-b border-slate-200 text-slate-700 sticky top-0 z-10 font-bold uppercase tracking-wider text-[10px]">
+                        <tr>
+                            <th class="px-4 py-3 border-r border-slate-200">Ngày</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Họ và Tên</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Phòng ban</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Khóa</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Buổi</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Tên bài học</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Câu trả lời tự luận</th>
+                            <th class="px-4 py-3 border-r border-slate-200">Link Drive</th>
+                            <th class="px-4 py-3">Nhận xét</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evaluationTableTbody" class="divide-y divide-slate-100"></tbody>
+                </table>
+            </div>
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
+                <span class="text-xs font-bold text-slate-500">Tổng cộng: <span id="evalTotalRows" class="text-emerald-600">0</span> bản ghi.</span>
+                <button onclick="closeEvaluationTableModal()" class="px-5 py-2.5 text-slate-600 bg-slate-200 hover:bg-slate-300 rounded-xl font-bold text-xs transition-colors">Đóng</button>
+            </div>
         </div>
     </div>
 
-    <!-- TỰ ĐỘNG KÉO API TỪ FILE CHUNG -->
+    <!-- GỌI FILE DATA CHUNG -->
     <script src="codelab-data.js"></script>
 
     <script>
+        // Lấy danh sách câu hỏi tĩnh từ file codelab-data.js
         let SESSION_EXERCISES = [];
-        if (typeof CODELAB_DATA !== 'undefined') { CODELAB_DATA.forEach(session => { session.exercises.forEach(ex => { if (!ex.isGroupHeader) SESSION_EXERCISES.push(ex); }); }); }
+        if (typeof CODELAB_DATA !== 'undefined') {
+            CODELAB_DATA.forEach(session => {
+                session.exercises.forEach(ex => {
+                    if (!ex.isGroupHeader) SESSION_EXERCISES.push(ex);
+                });
+            });
+        }
 
-        let rawParsedEntries = []; let currentFilteredEntries = []; let currentSlideIndices = {}; let lastSelectedStudentKey = "";
-        let uniqueClasses = []; let uniqueSessions = []; let uniqueDepts = []; let uniqueLessons = [];
-        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        let rawParsedEntries = []; 
+        let currentFilteredEntries = [];
+        let currentSlideIndices = {}; 
+        let lastSelectedStudentKey = "";
 
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if (window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
         function convertUrlToCsv(url) { let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/); if (fileIdMatch && fileIdMatch[1]) return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`; return url; }
         function navigateSelect(selectId, dir) { const select = document.getElementById(selectId); if (!select) return; let newIdx = select.selectedIndex + dir; if (newIdx < 0) newIdx = 0; if (newIdx > select.options.length - 1) newIdx = select.options.length - 1; if (newIdx !== select.selectedIndex) { select.selectedIndex = newIdx; select.dispatchEvent(new Event('change')); } }
-        function parseDateString(dateStr) { const parts = dateStr.split(' '); if(parts.length !== 2) return new Date(0); const dParts = parts[0].split('/'); const tParts = parts[1].split(':'); if(dParts.length === 3 && tParts.length >= 2) { return new Date(dParts[2], dParts[1]-1, dParts[0], tParts[0], tParts[1], tParts[2]||0); } return new Date(0); }
+        
+        function parseDateString(dateStr) {
+            const parts = dateStr.split(' '); if(parts.length !== 2) return new Date(0);
+            const dParts = parts[0].split('/'); const tParts = parts[1].split(':');
+            if(dParts.length === 3 && tParts.length >= 2) return new Date(dParts[2], dParts[1]-1, dParts[0], tParts[0], tParts[1], tParts[2]||0);
+            return new Date(0);
+        }
 
-        // BẢN VÁ LỖI TẢI DỮ LIỆU BẰNG FETCH THAY VÌ PAPAPARSE DOWNLOAD ĐỂ TRÁNH ĐƠ
+        // BẮT LỖI TẢI DỮ LIỆU BẰNG FETCH
         async function fetchSheetData() {
             const rawUrl = document.getElementById('sheetUrlInput').value.trim();
             if(!rawUrl) { alert("Vui lòng nhập link Google Sheet!"); return; }
@@ -158,7 +281,7 @@
                     header: true, skipEmptyLines: true,
                     complete: function(results) { 
                         try { processData(results.data); } 
-                        catch(e) { alert("Lỗi đọc dữ liệu Cột: " + e.message); resetLoading(); }
+                        catch(e) { alert("Lỗi xử lý dữ liệu: Cột trong Google Sheets chưa đúng cấu trúc!"); resetLoading(); }
                     }
                 });
             } catch (error) {
@@ -172,12 +295,13 @@
             document.getElementById('welcomeMessage').classList.remove('hidden');
         }
 
+        // ĐỌC DỮ LIỆU 5 CỘT TỰ LUẬN TỪ FILE EXCEL
         function processData(rawData) {
             rawParsedEntries = [];
             rawData.forEach(row => {
                 if(!row || typeof row !== 'object') return;
                 const keys = Object.keys(row);
-                if(keys.length < 5) return; // Bỏ qua dòng rác
+                if(keys.length < 5) return; 
 
                 const timestamp = String(row["Ngày"] || row["Timestamp"] || row[keys[0]] || "").trim();
                 const name = String(row["Họ và Tên"] || row["Họ và tên"] || row["studentName"] || row[keys[1]] || "").trim();
@@ -192,6 +316,7 @@
                 let exStatic = null;
                 if(typeof SESSION_EXERCISES !== 'undefined') exStatic = SESSION_EXERCISES.find(ex => ex.title === exerciseTitle);
 
+                // Quét 5 cột kế tiếp (Index 6,7,8,9,10)
                 for(let i = 0; i < 5; i++) {
                     let ansColName = keys[6 + i];
                     let ans = ansColName ? String(row[ansColName] || "").trim() : "";
@@ -211,14 +336,19 @@
                 rawParsedEntries.push({ ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle, cauTraLoiHtml: answerHtml, cauTraLoiRaw: answerRaw, linkDrive: rawUrls, nhanXet: feedback });
             });
 
-            uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort();
-            uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort();
-            uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
+            const uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort();
+            const uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort();
+            const uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
             const foundLessons = [...new Set(rawParsedEntries.map(e => e.tenBaiHoc))].filter(Boolean);
+            
             let staticLessons = []; if(typeof SESSION_EXERCISES !== 'undefined') staticLessons = SESSION_EXERCISES.map(ex => ex.title);
-            uniqueLessons = [...new Set([...staticLessons, ...foundLessons])].sort();
+            const uniqueLessons = [...new Set([...staticLessons, ...foundLessons])].sort();
 
-            populateDropdownOptions('filterClass', uniqueClasses, 'Tất cả Khóa'); populateDropdownOptions('filterSession', uniqueSessions, 'Tất cả Buổi'); populateDropdownOptions('filterDept', uniqueDepts, 'Tất cả Phòng ban'); populateDropdownOptions('filterLesson', uniqueLessons, 'Tất cả Bài học');
+            populateDropdownOptions('filterClass', uniqueClasses, 'Tất cả Khóa');
+            populateDropdownOptions('filterSession', uniqueSessions, 'Tất cả Buổi');
+            populateDropdownOptions('filterDept', uniqueDepts, 'Tất cả Phòng ban');
+            populateDropdownOptions('filterLesson', uniqueLessons, 'Tất cả Bài học');
+            
             updateStudentDropdown();
         }
 
@@ -233,12 +363,14 @@
             
             const matchingStudents = [...new Set(filtered.map(e => `${e.hoVaTen} - ${e.phongBan}`))].filter(Boolean).sort();
             const select = document.getElementById('filterStudent'); let html = `<option value="all">Tất cả Học viên</option>`;
-            matchingStudents.forEach(stKey => { const parts = stKey.split(" - "); html += `<option value="${stKey}">${parts[0]} (${parts[1] || "Trống"})</option>`; });
-            select.innerHTML = html; select.selectedIndex = 0; onFilterChange('system');
+            matchingStudents.forEach(stKey => { const parts = stKey.split(" - "); html += `<option value="${stKey}">${parts[0]} (${parts[1] || "Chưa có"})</option>`; });
+            select.innerHTML = html; select.selectedIndex = 0; 
+            onFilterChange('system');
         }
 
         function onFilterChange(triggerSource) {
             if(triggerSource === 'khoa' || triggerSource === 'buoi' || triggerSource === 'phongBan') { updateStudentDropdown(); return; }
+
             const selectedClass = document.getElementById('filterClass').value; const selectedSession = document.getElementById('filterSession').value; const selectedDept = document.getElementById('filterDept').value; const selectedStudentKey = document.getElementById('filterStudent').value; const selectedLesson = document.getElementById('filterLesson').value; const selectedStatus = document.getElementById('filterStatus').value; 
 
             document.getElementById('statusPlaceholder').classList.add('hidden'); const container = document.getElementById('exercisesContainer'); container.innerHTML = ''; container.classList.remove('hidden'); document.getElementById('globalActionArea').classList.remove('hidden'); document.getElementById('statsSummary').classList.remove('hidden');
@@ -250,17 +382,21 @@
             if(selectedStudentKey !== 'all') { const parts = selectedStudentKey.split(" - "); filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]); }
             if(selectedLesson !== 'all') filtered = filtered.filter(e => e.tenBaiHoc === selectedLesson);
 
-            let entryMap = {}; filtered.forEach(sub => { let key = `${sub.hoVaTen}-${sub.phongBan}-${sub.tenBaiHoc}`; entryMap[key] = sub; });
+            let entryMap = {};
+            filtered.forEach(sub => { let key = `${sub.hoVaTen}-${sub.phongBan}-${sub.tenBaiHoc}`; entryMap[key] = sub; });
+            
             let latestEntries = []; for(let key in entryMap) latestEntries.push(entryMap[key]);
 
             if (selectedStatus === 'pending') { latestEntries = latestEntries.filter(e => !e.nhanXet || e.nhanXet.trim() === ""); } 
             else if (selectedStatus === 'graded') { latestEntries = latestEntries.filter(e => e.nhanXet && e.nhanXet.trim() !== ""); }
 
+            // Lật ngược thứ tự: Mới nộp lên đầu
             latestEntries.sort((a, b) => parseDateString(b.ngay) - parseDateString(a.ngay));
             currentFilteredEntries = latestEntries;
 
-            if(selectedStudentKey !== 'all') { const parts = selectedStudentKey.split(" - "); document.getElementById('selectedStudentName').innerText = parts[0]; document.getElementById('statDept').innerText = parts[1]; } 
-            else { document.getElementById('selectedStudentName').innerText = "Tất cả Học viên"; document.getElementById('statDept').innerText = selectedDept === 'all' ? "Tất cả Phòng ban" : selectedDept; }
+            if(selectedStudentKey !== 'all') {
+                const parts = selectedStudentKey.split(" - "); document.getElementById('selectedStudentName').innerText = parts[0]; 
+            } else { document.getElementById('selectedStudentName').innerText = "Tất cả Học viên"; }
             
             let pendingCount = 0; latestEntries.forEach(e => { if(!e.nhanXet || e.nhanXet.trim()==="") pendingCount++; });
             document.getElementById('statPending').innerText = `${pendingCount} bài`; document.getElementById('statProgress').innerText = `${latestEntries.length} bài`;
@@ -269,23 +405,28 @@
             latestEntries.forEach((sub, idx) => { renderCard(container, idx, sub); }); document.getElementById('mainScrollArea').scrollTo(0,0);
         }
 
+        // LƯU NHẬN XÉT GỌI API APP_CONFIG TỪ CODELAB-DATA.JS
         function saveFeedbackDirect(studentName, deptName, exTitle, sessionName) {
-            const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, ''); const val = document.getElementById(`feedback-${safeKey}`).value.trim(); const btn = document.getElementById(`btn-save-feedback-${safeKey}`);
+            const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, '');
+            const val = document.getElementById(`feedback-${safeKey}`).value.trim();
+            const btn = document.getElementById(`btn-save-feedback-${safeKey}`);
             
-            // XÓA LỖI HARDCODE API Ở ĐÂY BẰNG CÁCH DÙNG BIẾN APP_CONFIG CỦA BẠN
-            if(typeof APP_CONFIG === 'undefined' || !APP_CONFIG.API_URL || APP_CONFIG.API_URL.includes("DÁN_LINK")) { alert("Lỗi: Bạn chưa cấu hình Link API trong file codelab-data.js."); return; }
+            if(typeof APP_CONFIG === 'undefined' || !APP_CONFIG.API_URL || APP_CONFIG.API_URL.includes("DÁN_LINK")) { alert("Lỗi: Cấu hình Link API trong file codelab-data.js bị sai."); return; }
 
             const orig = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...'; btn.disabled = true;
 
             fetch(APP_CONFIG.API_URL, {
                 method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'update_feedback', studentName: studentName, session: sessionName, exerciseTitle: exTitle, feedback: val })
-            }).then(r => r.json()).then(data => {
+            })
+            .then(r => r.json()).then(data => {
                 if(data.status === 'success') {
                     btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu'; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
-                    const badge = document.getElementById(`badge-${safeKey}`); if(badge) { badge.className = "bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"; badge.innerHTML = `<i class="fas fa-check-circle"></i> ĐÃ CHẤM`; }
+                    const badge = document.getElementById(`badge-${safeKey}`);
+                    if(badge) { badge.className = "bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"; badge.innerHTML = `<i class="fas fa-check-circle"></i> ĐÃ CHẤM`; }
                 } else { alert("Lỗi lưu: " + data.message); btn.innerHTML = orig; }
-            }).catch(err => { alert("Lỗi kết nối mạng khi gọi API!"); btn.innerHTML = orig; }).finally(() => { setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled = false; }, 2000); });
+            }).catch(err => { alert("Lỗi kết nối API Google!"); btn.innerHTML = orig; })
+            .finally(() => { setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled = false; }, 2000); });
         }
 
         function insertQuickFeedbackDirect(studentName, deptName, exTitle, text, sessionName) {
@@ -293,22 +434,41 @@
             if (textarea) { let currentVal = textarea.value.trim(); textarea.value = currentVal ? currentVal + ", " + text : text; saveFeedbackDirect(studentName, deptName, exTitle, sessionName); }
         }
 
+        // CHỨC NĂNG XUẤT EXCEL 
         function openEvaluationTableModal() {
             if (currentFilteredEntries.length === 0) { alert("Không có dữ liệu trong bộ lọc hiện tại để xuất!"); return; }
             const tbody = document.getElementById('evaluationTableTbody'); tbody.innerHTML = '';
-            currentFilteredEntries.forEach(entry => { tbody.insertAdjacentHTML('beforeend', `<tr class="hover:bg-slate-50 border-b border-slate-200/50 text-slate-700 text-[11px]"><td class="px-4 py-3 font-mono text-[10px] whitespace-nowrap border-r border-slate-100">${entry.ngay}</td><td class="px-4 py-3 font-bold text-slate-800 border-r border-slate-100">${entry.hoVaTen}</td><td class="px-4 py-3 border-r border-slate-100">${entry.phongBan}</td><td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.khoa}</td><td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.buoi}</td><td class="px-4 py-3 font-semibold text-indigo-700 truncate max-w-[150px] border-r border-slate-100" title="${entry.tenBaiHoc}">${entry.tenBaiHoc}</td><td class="px-4 py-3 border-r border-slate-100"><div class="max-h-[80px] overflow-y-auto w-[250px] custom-scrollbar pr-2 leading-relaxed">${entry.cauTraLoiHtml}</div></td><td class="px-4 py-3 truncate max-w-[150px] border-r border-slate-100"><a href="${entry.linkDrive.split(/[\n,]+/)[0]}" target="_blank" class="text-blue-600 hover:underline">Link</a></td><td class="px-4 py-3 font-semibold text-emerald-700 max-w-[180px] truncate border-l border-slate-100" title="${entry.nhanXet}">${entry.nhanXet ? entry.nhanXet : '<span class="text-slate-300 italic font-normal">Trống</span>'}</td></tr>`); });
-            document.getElementById('evalTotalRows').innerText = currentFilteredEntries.length; document.getElementById('evaluationTableModal').classList.remove('hidden'); document.getElementById('evaluationTableModal').classList.add('flex');
+            
+            currentFilteredEntries.forEach(entry => {
+                tbody.insertAdjacentHTML('beforeend', `<tr class="hover:bg-slate-50 border-b border-slate-200/50 text-slate-700 text-[11px]"><td class="px-4 py-3 font-mono text-[10px] whitespace-nowrap border-r border-slate-100">${entry.ngay}</td><td class="px-4 py-3 font-bold text-slate-800 border-r border-slate-100">${entry.hoVaTen}</td><td class="px-4 py-3 border-r border-slate-100">${entry.phongBan}</td><td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.khoa}</td><td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.buoi}</td><td class="px-4 py-3 font-semibold text-indigo-700 truncate max-w-[150px] border-r border-slate-100" title="${entry.tenBaiHoc}">${entry.tenBaiHoc}</td><td class="px-4 py-3 border-r border-slate-100"><div class="max-h-[80px] overflow-y-auto w-[250px] custom-scrollbar pr-2 leading-relaxed">${entry.cauTraLoiHtml}</div></td><td class="px-4 py-3 truncate max-w-[150px] border-r border-slate-100"><a href="${entry.linkDrive.split(/[\n,]+/)[0]}" target="_blank" class="text-blue-600 hover:underline">Link</a></td><td class="px-4 py-3 font-semibold text-emerald-700 max-w-[180px] truncate border-l border-slate-100" title="${entry.nhanXet}">${entry.nhanXet ? entry.nhanXet : '<span class="text-slate-300 italic font-normal">Trống</span>'}</td></tr>`);
+            });
+            document.getElementById('evalTotalRows').innerText = currentFilteredEntries.length;
+            document.getElementById('evaluationTableModal').classList.remove('hidden'); document.getElementById('evaluationTableModal').classList.add('flex');
         }
 
         function closeEvaluationTableModal() { document.getElementById('evaluationTableModal').classList.add('hidden'); document.getElementById('evaluationTableModal').classList.remove('flex'); }
-        function escapeTsvCell(val) { if (!val) return ""; let clean = val.replace(/"/g, '""'); if (clean.includes('\n') || clean.includes('\r') || clean.includes('\t') || clean.includes('"')) return `"${clean}"`; return clean; }
-        function copyEvaluationToClipboard() {
-            if (currentFilteredEntries.length === 0) return; const headers = ["Ngày", "Họ và Tên", "Phòng ban", "Khóa", "Buổi", "Tên bài học", "Câu trả lời tự luận", "Link Drive", "Nhận xét"]; let tsvContent = headers.join("\t") + "\n";
-            currentFilteredEntries.forEach(entry => { const rowData = [ escapeTsvCell(entry.ngay), escapeTsvCell(entry.hoVaTen), escapeTsvCell(entry.phongBan), escapeTsvCell(entry.khoa), escapeTsvCell(entry.buoi), escapeTsvCell(entry.tenBaiHoc), escapeTsvCell(entry.cauTraLoiRaw), escapeTsvCell(entry.linkDrive), escapeTsvCell(entry.nhanXet) ]; tsvContent += rowData.join("\t") + "\n"; });
-            const tempTextarea = document.createElement('textarea'); tempTextarea.value = tsvContent; document.body.appendChild(tempTextarea); tempTextarea.select(); document.execCommand('copy'); document.body.removeChild(tempTextarea); alert(`Đã sao chép ${currentFilteredEntries.length} bản ghi (đang lọc) thành công! Hãy dán (Ctrl+V) vào Excel.`);
+
+        function escapeTsvCell(val) {
+            if (!val) return ""; let clean = val.replace(/"/g, '""');
+            if (clean.includes('\n') || clean.includes('\r') || clean.includes('\t') || clean.includes('"')) return `"${clean}"`; return clean;
         }
 
+        function copyEvaluationToClipboard() {
+            if (currentFilteredEntries.length === 0) return;
+            const headers = ["Ngày", "Họ và Tên", "Phòng ban", "Khóa", "Buổi", "Tên bài học", "Câu trả lời tự luận", "Link Drive", "Nhận xét"];
+            let tsvContent = headers.join("\t") + "\n";
+
+            currentFilteredEntries.forEach(entry => {
+                const rowData = [ escapeTsvCell(entry.ngay), escapeTsvCell(entry.hoVaTen), escapeTsvCell(entry.phongBan), escapeTsvCell(entry.khoa), escapeTsvCell(entry.buoi), escapeTsvCell(entry.tenBaiHoc), escapeTsvCell(entry.cauTraLoiRaw), escapeTsvCell(entry.linkDrive), escapeTsvCell(entry.nhanXet) ];
+                tsvContent += rowData.join("\t") + "\n";
+            });
+            const tempTextarea = document.createElement('textarea'); tempTextarea.value = tsvContent; document.body.appendChild(tempTextarea); tempTextarea.select(); document.execCommand('copy'); document.body.removeChild(tempTextarea);
+            alert(`Đã sao chép ${currentFilteredEntries.length} bản ghi (đang lọc) thành công! Hãy dán (Ctrl+V) vào Excel.`);
+        }
+
+        // FULLSCREEN ẢNH MODAL
         function getDirectImageUrl(url) { let fileIdMatch = url.match(/\/d\/(.+?)\//); if(!fileIdMatch) fileIdMatch = url.match(/id=(.+?)(&|$)/); if(fileIdMatch && fileIdMatch[1]) return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; return url; }
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
         function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
         function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
         function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
@@ -319,11 +479,16 @@
             const card = document.createElement('div'); card.className = "glass-panel p-6 md:p-8 rounded-3xl border border-white/60 hover:shadow-xl transition-all relative flex flex-col gap-5 mb-6";
             
             let statusBadge = '';
-            if(!sub.nhanXet || sub.nhanXet.trim() === '') { statusBadge = `<span id="badge-${safeKey}" class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`; } 
-            else { statusBadge = `<span id="badge-${safeKey}" class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`; }
+            if(!sub.nhanXet || sub.nhanXet.trim() === '') {
+                statusBadge = `<span id="badge-${safeKey}" class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
+            } else {
+                statusBadge = `<span id="badge-${safeKey}" class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`;
+            }
 
             let metaTags = `<span class="bg-indigo-50 text-indigo-700 border border-indigo-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${sub.khoa}</span><span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${sub.buoi}</span><span class="bg-slate-100 text-slate-500 border border-slate-200 text-[9px] px-2.5 py-1 rounded-lg font-bold shadow-sm">${sub.phongBan || "Trống"}</span>`;
+
             let headerBlock = `<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4"><div class="flex flex-col gap-1"><div class="flex items-center gap-3"><span class="bg-blue-600 text-white font-black rounded-xl w-8 h-8 flex items-center justify-center text-xs shrink-0">${idx+1}</span><h3 class="text-base font-black text-slate-800 tracking-tight">${sub.tenBaiHoc}</h3></div><p class="text-xs font-extrabold text-slate-500 ml-11"><i class="fas fa-user-circle mr-1 text-slate-400"></i>Học viên: <span class="text-slate-800">${sub.hoVaTen}</span> <span class="text-[10px] text-slate-400 font-normal ml-2"><i class="far fa-clock"></i> ${sub.ngay}</span></p></div><div class="flex flex-wrap items-center gap-1.5">${statusBadge}${metaTags}</div></div>`;
+            
             let theoryAnswerBlock = sub.cauTraLoiHtml ? `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 space-y-2"><span class="text-blue-500 block uppercase text-[9px] font-black"><i class="fas fa-user-edit mr-1.5"></i>Tự luận</span><div class="space-y-2">${sub.cauTraLoiHtml}</div></div>` : '';
             
             let screenshotsBlock = ``;
