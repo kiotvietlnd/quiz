@@ -264,8 +264,27 @@
         function processData(rawData) {
             rawParsedEntries = [];
             rawData.forEach(row => {
-                const timestamp = (row["Ngày"] || row["Timestamp"] || "").trim(); const name = (row["Họ và Tên"] || row["Họ và tên"] || "").trim(); const dept = (row["Phòng ban"] || row["Phòng Ban"] || "").trim(); const course = (row["Khóa"] || "").trim(); const session = (row["Buổi"] || "").trim(); const exerciseTitle = (row["Tên bài học"] || "").trim(); const answer = (row["Câu trả lời tự luận"] || "").trim(); const rawUrls = (row["Link Drive"] || row["Link drive"] || "").trim(); const feedback = (row["Nhận xét"] || row["Nhận Xét"] || "").trim();
+                const timestamp = (row["Ngày"] || row["Timestamp"] || "").trim();
+                const name = (row["Họ và Tên"] || row["studentName"] || "").trim();
+                const dept = (row["Phòng ban"] || "").trim();
+                const course = (row["Khóa"] || "").trim();
+                const session = (row["Buổi"] || "").trim();
+                const exerciseTitle = (row["Tên bài học"] || "").trim();
+                
+                // Gom 5 cột trả lời thành 1 chuỗi để hiển thị
+                let answerBlocks = [];
+                for(let i=1; i<=5; i++) {
+                    if(row[`Trả lời ${i}`] && row[`Trả lời ${i}`].trim() !== '') {
+                        answerBlocks.push(`Câu ${i}: ${row[`Trả lời ${i}`].trim()}`);
+                    }
+                }
+                const answer = answerBlocks.join('\n\n');
+                
+                const rawUrls = (row["Link Drive"] || "").trim();
+                const feedback = (row["Nhận xét"] || "").trim();
+
                 if (!name || ['họ và tên', 'studentname'].includes(name.toLowerCase()) || ['ngày', 'timestamp'].includes(timestamp.toLowerCase())) return;
+                
                 rawParsedEntries.push({ ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle, cauTraLoi: answer, linkDrive: rawUrls, nhanXet: feedback });
             });
 
