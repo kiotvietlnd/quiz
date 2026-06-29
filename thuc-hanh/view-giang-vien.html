@@ -46,6 +46,7 @@
         </div>
         
         <div id="filterArea" class="p-4 flex-1 overflow-y-auto flex flex-col scroll-smooth relative z-10 space-y-4">
+            <!-- Khu vực đồng bộ không hiển thị API url nữa, chỉ cần 1 nút bấm (vì nó lấy từ codelab-data.js) -->
             <div class="pb-3 border-b border-white/10">
                 <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-2.5">Cấu hình nguồn</h2>
                 <div class="space-y-2">
@@ -57,7 +58,6 @@
             <div class="space-y-3.5">
                 <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-1.5">Bộ lọc hiển thị</h2>
                 
-                <!-- BỘ LỌC MỚI: TRẠNG THÁI CHẤM -->
                 <div>
                     <label class="block text-[11px] font-bold text-yellow-300 mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
                     <select id="filterStatus" onchange="onFilterChange('status')" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
@@ -67,7 +67,6 @@
                     </select>
                 </div>
 
-                <!-- Các bộ lọc cũ -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-200 mb-1">Khóa học</label>
                     <select id="filterClass" onchange="onFilterChange('khoa')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate"><option value="all">Tất cả Khóa</option></select>
@@ -148,6 +147,9 @@
                 <div id="exercisesContainer" class="space-y-8 hidden"></div>
 
                 <div id="globalActionArea" class="mt-8 flex flex-col sm:flex-row justify-center gap-4 hidden">
+                    <button onclick="openSummaryCommentsModal()" class="px-6 py-4 bg-gradient-to-r from-indigo-600 to-indigo-700 hover:from-indigo-700 hover:to-indigo-800 text-white font-black text-xs md:text-sm rounded-2xl shadow-xl shadow-indigo-500/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1">
+                        <i class="fas fa-comment-dots text-base"></i> Xem Nhận Xét & Sửa Loạt
+                    </button>
                     <button onclick="openEvaluationTableModal()" class="px-6 py-4 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-black text-xs md:text-sm rounded-2xl shadow-xl shadow-emerald-500/20 transition-all flex items-center justify-center gap-2 transform hover:-translate-y-1">
                         <i class="fas fa-table text-base"></i> Xem Bảng Đánh Giá & Xuất Excel
                     </button>
@@ -157,7 +159,6 @@
         </div>
     </main>
 
-    <!-- Modal Fullscreen & Bảng Excel (Giữ nguyên) -->
     <!-- FULLSCREEN MODAL -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[150] hidden flex-col justify-between items-center p-4 transition-all">
         <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
@@ -173,6 +174,21 @@
             <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
         </div>
         <div class="h-8 shrink-0"></div>
+    </div>
+
+    <!-- SUMMARY COMMENTS MODAL -->
+    <div id="summaryCommentsModal" class="fixed inset-0 z-[140] hidden flex-col items-center justify-center bg-slate-950/60 backdrop-blur-sm p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col overflow-hidden border border-slate-200 transition-all">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 shrink-0">
+                <h4 class="font-black text-slate-800 text-sm md:text-base flex items-center gap-2"><i class="fas fa-comment-dots text-indigo-600"></i> Tổng Hợp Nhận Xét Của Học Viên</h4>
+                <button onclick="closeSummaryCommentsModal()" class="w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors"><i class="fas fa-times text-sm"></i></button>
+            </div>
+            <div id="summaryModalContent" class="p-6 overflow-y-auto flex-1 bg-slate-50/50 space-y-4"></div>
+            <div class="px-6 py-4 border-t border-slate-200 flex justify-end bg-white shrink-0 gap-3">
+                <button onclick="closeSummaryCommentsModal()" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl font-bold text-xs transition-colors">Hủy bỏ</button>
+                <button onclick="saveAllSummaryFeedbacks()" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-black text-xs transition-colors shadow-lg shadow-blue-500/20"><i class="fas fa-cloud-upload-alt"></i> Lưu Lên Hệ Thống</button>
+            </div>
+        </div>
     </div>
 
     <!-- TABLE EXPORT MODAL -->
@@ -214,37 +230,29 @@
         </div>
     </div>
 
-    <!-- SCRIPT CHÍNH -->
+    <!-- TỰ ĐỘNG KÉO DATA VÀ API TỪ FILE CHUNG -->
+    <script src="codelab-data.js"></script>
+
     <script>
-        // =======================================================
-        // QUAN TRỌNG: DÁN LINK API TỪ GOOGLE APPS SCRIPT VÀO ĐÂY
-        // =======================================================
-        const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
+        let SESSION_EXERCISES = [];
+        if (typeof CODELAB_DATA !== 'undefined') {
+            CODELAB_DATA.forEach(session => {
+                session.exercises.forEach(ex => {
+                    if (!ex.isGroupHeader) {
+                        SESSION_EXERCISES.push(ex);
+                    }
+                });
+            });
+        }
 
         let rawParsedEntries = []; 
         let currentFilteredEntries = [];
-        let currentSlideIndices = {};
+        let currentActiveVersions = {}; let currentSlideIndices = {}; let lastSelectedStudentKey = "";
 
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('hidden');
-            if (window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); }
-        }
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if (window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
+        function convertUrlToCsv(url) { let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/); if (fileIdMatch && fileIdMatch[1]) return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`; return url; }
+        function navigateSelect(selectId, dir) { const select = document.getElementById(selectId); if (!select) return; let newIdx = select.selectedIndex + dir; if (newIdx < 0) newIdx = 0; if (newIdx > select.options.length - 1) newIdx = select.options.length - 1; if (newIdx !== select.selectedIndex) { select.selectedIndex = newIdx; select.dispatchEvent(new Event('change')); } }
 
-        function convertUrlToCsv(url) {
-            let fileIdMatch = url.match(/\/d\/([a-zA-Z0-9-_]+)/);
-            if (fileIdMatch && fileIdMatch[1]) return `https://docs.google.com/spreadsheets/d/${fileIdMatch[1]}/export?format=csv&gid=0`;
-            return url;
-        }
-
-        function navigateSelect(selectId, dir) {
-            const select = document.getElementById(selectId); if (!select) return;
-            let newIdx = select.selectedIndex + dir;
-            if (newIdx < 0) newIdx = 0; if (newIdx > select.options.length - 1) newIdx = select.options.length - 1;
-            if (newIdx !== select.selectedIndex) { select.selectedIndex = newIdx; select.dispatchEvent(new Event('change')); }
-        }
-
-        // HÀM PARSE DATE ĐỂ SẮP XẾP MỚI NHẤT LÊN ĐẦU
         function parseDateString(dateStr) {
             const parts = dateStr.split(' '); if(parts.length !== 2) return new Date(0);
             const dParts = parts[0].split('/'); const tParts = parts[1].split(':');
@@ -259,21 +267,12 @@
             if(!rawUrl) { alert("Vui lòng nhập link Google Sheet!"); return; }
             const csvUrl = convertUrlToCsv(rawUrl);
             
-            document.getElementById('loadingSpinner').classList.remove('hidden'); 
-            document.getElementById('welcomeMessage').classList.add('hidden'); 
-            document.getElementById('statusPlaceholder').classList.remove('hidden'); 
-            document.getElementById('exercisesContainer').classList.add('hidden'); 
-            document.getElementById('statsSummary').classList.add('hidden'); 
-            document.getElementById('globalActionArea').classList.add('hidden');
+            document.getElementById('loadingSpinner').classList.remove('hidden'); document.getElementById('welcomeMessage').classList.add('hidden'); document.getElementById('statusPlaceholder').classList.remove('hidden'); document.getElementById('exercisesContainer').classList.add('hidden'); document.getElementById('statsSummary').classList.add('hidden'); document.getElementById('globalActionArea').classList.add('hidden');
 
             Papa.parse(csvUrl, {
                 download: true, header: true, skipEmptyLines: true,
                 complete: function(results) { processData(results.data); },
-                error: function(err) { 
-                    document.getElementById('loadingSpinner').classList.add('hidden');
-                    document.getElementById('welcomeMessage').classList.remove('hidden');
-                    alert("LỖI: Không thể đọc file! Hãy đảm bảo Google Sheets đã bật Share: 'Bất kỳ ai có liên kết'!"); 
-                }
+                error: function(err) { alert("LỖI: Không thể đọc file! Hãy đảm bảo Google Sheets đã bật Share: 'Bất kỳ ai có liên kết'!"); location.reload(); }
             });
         }
 
@@ -281,7 +280,6 @@
             rawParsedEntries = [];
             rawData.forEach(row => {
                 const keys = Object.keys(row);
-                // Dùng Index hoặc Tiêu đề để lấy data an toàn
                 const timestamp = String(row["Ngày"] || row["Timestamp"] || row[keys[0]] || "").trim();
                 const name = String(row["Họ và Tên"] || row["Họ và tên"] || row["studentName"] || row[keys[1]] || "").trim();
                 const dept = String(row["Phòng ban"] || row["Phòng Ban"] || row[keys[2]] || "").trim();
@@ -292,13 +290,9 @@
                 if (!name || ['họ và tên', 'studentname'].includes(name.toLowerCase()) || ['ngày', 'timestamp'].includes(timestamp.toLowerCase())) return;
 
                 let answerHtmlBlocks = []; let answerRawBlocks = [];
-                // BẮT BUỘC: LẤY ĐÚNG THEO DATA ĐƯỢC CHIA SẺ TRONG FILE CODELAB-DATA
                 let exStatic = null;
-                if(typeof SESSION_EXERCISES !== 'undefined') {
-                    exStatic = SESSION_EXERCISES.find(ex => ex.title === exerciseTitle);
-                }
+                if(typeof SESSION_EXERCISES !== 'undefined') exStatic = SESSION_EXERCISES.find(ex => ex.title === exerciseTitle);
 
-                // Quét 5 cột kế tiếp (Trả lời 1 -> 5) an toàn
                 for(let i = 0; i < 5; i++) {
                     let ansColName = keys[6 + i];
                     let ans = ansColName ? String(row[ansColName] || "").trim() : "";
@@ -311,7 +305,6 @@
                 }
                 const answerHtml = answerHtmlBlocks.join(''); const answerRaw = answerRawBlocks.join('\n\n');
 
-                // Dò tìm linh hoạt Cột Link và Cột Nhận Xét bằng chữ
                 let linkCol = keys.find(k => String(k).toLowerCase().includes('link'));
                 let fbCol = keys.find(k => String(k).toLowerCase().includes('nhận xét'));
                 
@@ -321,7 +314,6 @@
                 rawParsedEntries.push({ ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle, cauTraLoiHtml: answerHtml, cauTraLoiRaw: answerRaw, linkDrive: rawUrls, nhanXet: feedback });
             });
 
-            // Re-build filter options
             const uniqueClasses = [...new Set(rawParsedEntries.map(e => e.khoa))].filter(Boolean).sort();
             const uniqueSessions = [...new Set(rawParsedEntries.map(e => e.buoi))].filter(Boolean).sort();
             const uniqueDepts = [...new Set(rawParsedEntries.map(e => e.phongBan))].filter(Boolean).sort();
@@ -339,11 +331,7 @@
             updateStudentDropdown();
         }
 
-        function populateDropdownOptions(id, list, defaultLabel) {
-            const select = document.getElementById(id); let html = `<option value="all">${defaultLabel}</option>`;
-            list.forEach(item => { html += `<option value="${item}">${item}</option>`; });
-            select.innerHTML = html; select.selectedIndex = 0;
-        }
+        function populateDropdownOptions(id, list, defaultLabel) { const select = document.getElementById(id); let html = `<option value="all">${defaultLabel}</option>`; list.forEach(item => { html += `<option value="${item}">${item}</option>`; }); select.innerHTML = html; select.selectedIndex = 0; }
 
         function updateStudentDropdown() {
             const selectedClass = document.getElementById('filterClass').value; const selectedSession = document.getElementById('filterSession').value; const selectedDept = document.getElementById('filterDept').value;
@@ -359,7 +347,6 @@
             onFilterChange('system');
         }
 
-        // LỌC, SẮP XẾP (MỚI NHẤT LÊN ĐẦU) & RENDER
         function onFilterChange(triggerSource) {
             if(triggerSource === 'khoa' || triggerSource === 'buoi' || triggerSource === 'phongBan') { updateStudentDropdown(); return; }
 
@@ -368,7 +355,7 @@
             const selectedDept = document.getElementById('filterDept').value;
             const selectedStudentKey = document.getElementById('filterStudent').value;
             const selectedLesson = document.getElementById('filterLesson').value;
-            const selectedStatus = document.getElementById('filterStatus').value; // Trạng thái chấm
+            const selectedStatus = document.getElementById('filterStatus').value; 
 
             document.getElementById('statusPlaceholder').classList.add('hidden');
             const container = document.getElementById('exercisesContainer');
@@ -376,7 +363,6 @@
             document.getElementById('globalActionArea').classList.remove('hidden');
             document.getElementById('statsSummary').classList.remove('hidden');
 
-            // 1. Lọc dữ liệu thô
             let filtered = rawParsedEntries;
             if(selectedClass !== 'all') filtered = filtered.filter(e => e.khoa === selectedClass);
             if(selectedSession !== 'all') filtered = filtered.filter(e => e.buoi === selectedSession);
@@ -384,80 +370,53 @@
             if(selectedStudentKey !== 'all') { const parts = selectedStudentKey.split(" - "); filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]); }
             if(selectedLesson !== 'all') filtered = filtered.filter(e => e.tenBaiHoc === selectedLesson);
 
-            // 2. Gom nhóm lấy bản nộp mới nhất của từng người-từng bài
             let entryMap = {};
             filtered.forEach(sub => {
                 let key = `${sub.hoVaTen}-${sub.phongBan}-${sub.tenBaiHoc}`;
-                // Do data gốc đã từ trên xuống dưới (cũ đến mới), ghi đè sẽ lấy được cái mới nhất
                 entryMap[key] = sub; 
             });
 
             let latestEntries = [];
             for(let key in entryMap) latestEntries.push(entryMap[key]);
 
-            // 3. Lọc theo TRẠNG THÁI CHẤM
-            if (selectedStatus === 'pending') {
-                latestEntries = latestEntries.filter(e => !e.nhanXet || e.nhanXet.trim() === "");
-            } else if (selectedStatus === 'graded') {
-                latestEntries = latestEntries.filter(e => e.nhanXet && e.nhanXet.trim() !== "");
-            }
+            if (selectedStatus === 'pending') { latestEntries = latestEntries.filter(e => !e.nhanXet || e.nhanXet.trim() === ""); } 
+            else if (selectedStatus === 'graded') { latestEntries = latestEntries.filter(e => e.nhanXet && e.nhanXet.trim() !== ""); }
 
-            // 4. SẮP XẾP: BÀI NÀO NỘP MỚI NHẤT -> ĐẨY LÊN TRÊN CÙNG
             latestEntries.sort((a, b) => parseDateString(b.ngay) - parseDateString(a.ngay));
 
-            currentFilteredEntries = latestEntries; // Ghi nhận cho Export Excel
+            currentFilteredEntries = latestEntries;
 
-            // Cập nhật thống kê
             if(selectedStudentKey !== 'all') {
-                const parts = selectedStudentKey.split(" - ");
-                document.getElementById('selectedStudentName').innerText = parts[0]; document.getElementById('statDept').innerText = parts[1];
-            } else {
-                document.getElementById('selectedStudentName').innerText = "Tất cả Học viên"; document.getElementById('statDept').innerText = selectedDept === 'all' ? "Tất cả Phòng ban" : selectedDept;
-            }
+                const parts = selectedStudentKey.split(" - "); document.getElementById('selectedStudentName').innerText = parts[0]; document.getElementById('statDept').innerText = parts[1];
+            } else { document.getElementById('selectedStudentName').innerText = "Tất cả Học viên"; document.getElementById('statDept').innerText = selectedDept === 'all' ? "Tất cả Phòng ban" : selectedDept; }
             
-            // Đếm số bài đang chờ chấm
-            let pendingCount = 0;
-            latestEntries.forEach(e => { if(!e.nhanXet || e.nhanXet.trim()==="") pendingCount++; });
-            document.getElementById('statPending').innerText = `${pendingCount} bài`;
-            document.getElementById('statProgress').innerText = `${latestEntries.length} bài`;
+            let pendingCount = 0; latestEntries.forEach(e => { if(!e.nhanXet || e.nhanXet.trim()==="") pendingCount++; });
+            document.getElementById('statPending').innerText = `${pendingCount} bài`; document.getElementById('statProgress').innerText = `${latestEntries.length} bài`;
 
-            if(latestEntries.length === 0) { 
-                container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; 
-                return; 
-            }
-            
-            // 5. Render thẻ (Card)
+            if(latestEntries.length === 0) { container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; return; }
             latestEntries.forEach((sub, idx) => { renderCard(container, idx, sub); });
-
-            // Scroll lên đầu trang
             document.getElementById('mainScrollArea').scrollTo(0,0);
         }
 
-        // GỌI API LƯU NHẬN XÉT TRỰC TIẾP
+        // LƯU API: TỰ ĐỘNG TÌM API TỪ APP_CONFIG
         function saveFeedbackDirect(studentName, deptName, exTitle, sessionName) {
             const safeKey = (studentName + "-" + exTitle).replace(/[^a-zA-Z0-9]/g, '');
             const val = document.getElementById(`feedback-${safeKey}`).value.trim();
             const btn = document.getElementById(`btn-save-feedback-${safeKey}`);
             
-            if(!API_URL || API_URL.includes("DÁN_LINK")) { alert("Lỗi: Link API chưa được cấu hình."); return; }
+            if(!APP_CONFIG.API_URL || APP_CONFIG.API_URL.includes("DÁN_LINK")) { alert("Lỗi: Bạn chưa cấu hình Link API trong file codelab-data.js."); return; }
 
-            const orig = btn.innerHTML;
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...'; btn.disabled = true;
+            const orig = btn.innerHTML; btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu...'; btn.disabled = true;
 
-            fetch(API_URL, {
+            fetch(APP_CONFIG.API_URL, {
                 method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
                 body: JSON.stringify({ action: 'update_feedback', studentName: studentName, session: sessionName, exerciseTitle: exTitle, feedback: val })
             })
             .then(r => r.json()).then(data => {
                 if(data.status === 'success') {
-                    btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu';
-                    btn.classList.replace('bg-blue-600', 'bg-emerald-600');
-                    // Gắn nhãn Đã chấm ảo
+                    btn.innerHTML = '<i class="fas fa-check"></i> Đã lưu'; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
                     const badge = document.getElementById(`badge-${safeKey}`);
-                    if(badge) {
-                        badge.className = "bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm";
-                        badge.innerHTML = `<i class="fas fa-check-circle"></i> ĐÃ CHẤM`;
-                    }
+                    if(badge) { badge.className = "bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"; badge.innerHTML = `<i class="fas fa-check-circle"></i> ĐÃ CHẤM`; }
                 } else { alert("Lỗi lưu: " + data.message); btn.innerHTML = orig; }
             }).catch(err => { alert("Lỗi mạng!"); btn.innerHTML = orig; })
             .finally(() => { setTimeout(() => { btn.innerHTML = orig; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled = false; }, 2000); });
@@ -468,11 +427,81 @@
             if (textarea) { let currentVal = textarea.value.trim(); textarea.value = currentVal ? currentVal + ", " + text : text; saveFeedbackDirect(studentName, deptName, exTitle, sessionName); }
         }
 
-        // EXCEL EXPORT (Chỉ xuất danh sách đang được lọc trên màn hình)
+        function getFeedbackKey(studentKey) { return `kiot_feedback_${studentKey}`; }
+
+        function insertSummaryQuickFeedback(safeKey, text) {
+            const textarea = document.getElementById(`sum-feedback-${safeKey}`);
+            if (textarea) { let currentVal = textarea.value.trim(); textarea.value = currentVal ? currentVal + ", " + text : text; }
+        }
+
+        function openSummaryCommentsModal() {
+            const selectEl = document.getElementById('filterStudent'); const studentKey = selectEl.value;
+            if(studentKey === 'all') { alert("Vui lòng chọn 1 Học viên cụ thể ở bộ lọc thanh bên để tổng hợp nhận xét!"); return; }
+            
+            const matchedEntry = rawParsedEntries.find(e => `${e.hoVaTen} - ${e.phongBan}` === studentKey); const deptName = matchedEntry ? matchedEntry.phongBan : "";
+            const storageKey = getFeedbackKey(`${studentKey}`); const savedFeedbacks = JSON.parse(localStorage.getItem(storageKey)) || {};
+            const container = document.getElementById('summaryModalContent'); container.innerHTML = '';
+            
+            const studentSubs = rawParsedEntries.filter(e => `${e.hoVaTen} - ${e.phongBan}` === studentKey);
+            const uniqueTitles = [...new Set(studentSubs.map(e => e.tenBaiHoc))];
+
+            uniqueTitles.forEach((title, idx) => {
+                const val = savedFeedbacks[title] || ''; const safeKey = title.replace(/\s+/g, '');
+                container.insertAdjacentHTML('beforeend', `
+                    <div class="bg-white border border-slate-200 rounded-2xl p-4 space-y-3 shadow-sm">
+                        <span class="text-xs font-black text-slate-800 flex items-center gap-2"><span class="w-5 h-5 bg-indigo-50 text-indigo-600 rounded-lg flex items-center justify-center text-[10px] font-black">${idx+1}</span>${title}</span>
+                        <div class="flex flex-wrap gap-1.5 pt-1"><button onclick="insertSummaryQuickFeedback('${safeKey}', 'Hiểu sai')" class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-bold">Hiểu sai</button><button onclick="insertSummaryQuickFeedback('${safeKey}', 'Chưa đầy đủ')" class="px-2 py-0.5 bg-slate-100 text-slate-500 rounded text-[9px] font-bold">Chưa đầy đủ</button><button onclick="insertSummaryQuickFeedback('${safeKey}', 'Xuất sắc')" class="px-2 py-0.5 bg-emerald-50 text-emerald-600 rounded text-[9px] font-bold">Xuất sắc</button></div>
+                        <textarea id="sum-feedback-${safeKey}" data-title="${title}" class="w-full min-h-[70px] p-3 text-xs bg-slate-50 border rounded-xl focus:ring-2 focus:ring-blue-100 outline-none shadow-inner resize-none font-medium text-slate-700">${val}</textarea>
+                    </div>
+                `);
+            });
+            document.getElementById('summaryCommentsModal').classList.remove('hidden'); document.getElementById('summaryCommentsModal').classList.add('flex');
+        }
+
+        function closeSummaryCommentsModal() { document.getElementById('summaryCommentsModal').classList.add('hidden'); document.getElementById('summaryCommentsModal').classList.remove('flex'); }
+
+        // LƯU HÀNG LOẠT: SỬ DỤNG API TỪ APP_CONFIG
+        function saveAllSummaryFeedbacks() {
+            const studentKey = document.getElementById('filterStudent').value; if(studentKey === 'all') return;
+            const matchedEntry = rawParsedEntries.find(e => `${e.hoVaTen} - ${e.phongBan}` === studentKey);
+            const storageKey = getFeedbackKey(studentKey); const feedbacks = JSON.parse(localStorage.getItem(storageKey)) || {};
+            
+            const btn = document.querySelector('#summaryCommentsModal button.bg-blue-600'); const origText = btn.innerHTML;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Đang lưu lên hệ thống...'; btn.disabled = true;
+
+            let promises = [];
+            document.querySelectorAll('#summaryModalContent textarea').forEach(textarea => {
+                const title = textarea.getAttribute('data-title'); const val = textarea.value.trim(); const oldVal = feedbacks[title] || '';
+                if (val !== oldVal) {
+                    feedbacks[title] = val;
+                    const subData = rawParsedEntries.find(e => e.hoVaTen === matchedEntry.hoVaTen && e.tenBaiHoc === title);
+                    const sessionName = subData ? subData.buoi : "Unknown";
+
+                    const mainKey = (studentKey.split(" - ")[0] + "-" + title).replace(/[^a-zA-Z0-9]/g, '');
+                    const mainTextarea = document.getElementById(`feedback-${mainKey}`);
+                    if(mainTextarea) mainTextarea.value = val;
+
+                    promises.push(
+                        fetch(APP_CONFIG.API_URL, {
+                            method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+                            body: JSON.stringify({ action: 'update_feedback', studentName: matchedEntry.hoVaTen, session: sessionName, exerciseTitle: title, feedback: val })
+                        })
+                    );
+                }
+            });
+
+            localStorage.setItem(storageKey, JSON.stringify(feedbacks));
+            if(promises.length === 0) { alert("Bạn chưa thay đổi nhận xét nào."); btn.innerHTML = origText; btn.disabled = false; closeSummaryCommentsModal(); return; }
+
+            Promise.all(promises)
+            .then(() => { alert(`Đã lưu thành công ${promises.length} nhận xét lên Google Sheets!`); closeSummaryCommentsModal(); })
+            .catch(err => { alert("Có lỗi mạng khi lưu, vui lòng kiểm tra lại Google Sheets."); })
+            .finally(() => { btn.innerHTML = origText; btn.disabled = false; });
+        }
+
         function openEvaluationTableModal() {
             if (currentFilteredEntries.length === 0) { alert("Không có dữ liệu trong bộ lọc hiện tại để xuất!"); return; }
             const tbody = document.getElementById('evaluationTableTbody'); tbody.innerHTML = '';
-            
             currentFilteredEntries.forEach(entry => {
                 tbody.insertAdjacentHTML('beforeend', `<tr class="hover:bg-slate-50 border-b border-slate-200/50 text-slate-700 text-[11px]"><td class="px-4 py-3 font-mono text-[10px] whitespace-nowrap border-r border-slate-100">${entry.ngay}</td><td class="px-4 py-3 font-bold text-slate-800 border-r border-slate-100">${entry.hoVaTen}</td><td class="px-4 py-3 border-r border-slate-100">${entry.phongBan}</td><td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.khoa}</td><td class="px-4 py-3 font-medium text-slate-500 border-r border-slate-100">${entry.buoi}</td><td class="px-4 py-3 font-semibold text-indigo-700 truncate max-w-[150px] border-r border-slate-100" title="${entry.tenBaiHoc}">${entry.tenBaiHoc}</td><td class="px-4 py-3 border-r border-slate-100"><div class="max-h-[80px] overflow-y-auto w-[250px] custom-scrollbar pr-2 leading-relaxed">${entry.cauTraLoiHtml}</div></td><td class="px-4 py-3 truncate max-w-[150px] border-r border-slate-100"><a href="${entry.linkDrive.split(/[\n,]+/)[0]}" target="_blank" class="text-blue-600 hover:underline">Link</a></td><td class="px-4 py-3 font-semibold text-emerald-700 max-w-[180px] truncate border-l border-slate-100" title="${entry.nhanXet}">${entry.nhanXet ? entry.nhanXet : '<span class="text-slate-300 italic font-normal">Trống</span>'}</td></tr>`);
             });
@@ -491,7 +520,6 @@
             if (currentFilteredEntries.length === 0) return;
             const headers = ["Ngày", "Họ và Tên", "Phòng ban", "Khóa", "Buổi", "Tên bài học", "Câu trả lời tự luận", "Link Drive", "Nhận xét"];
             let tsvContent = headers.join("\t") + "\n";
-
             currentFilteredEntries.forEach(entry => {
                 const rowData = [ escapeTsvCell(entry.ngay), escapeTsvCell(entry.hoVaTen), escapeTsvCell(entry.phongBan), escapeTsvCell(entry.khoa), escapeTsvCell(entry.buoi), escapeTsvCell(entry.tenBaiHoc), escapeTsvCell(entry.cauTraLoiRaw), escapeTsvCell(entry.linkDrive), escapeTsvCell(entry.nhanXet) ];
                 tsvContent += rowData.join("\t") + "\n";
@@ -510,7 +538,6 @@
             const uniqueKey = `${sub.hoVaTen}-${sub.tenBaiHoc}`; const safeKey = uniqueKey.replace(/[^a-zA-Z0-9]/g, '');
             const card = document.createElement('div'); card.className = "glass-panel p-6 md:p-8 rounded-3xl border border-white/60 hover:shadow-xl transition-all relative flex flex-col gap-5 mb-6";
             
-            // NHÃN TRẠNG THÁI CHẤM
             let statusBadge = '';
             if(!sub.nhanXet || sub.nhanXet.trim() === '') {
                 statusBadge = `<span id="badge-${safeKey}" class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase tracking-wider shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
