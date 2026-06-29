@@ -54,7 +54,7 @@
             <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-left space-y-3 mb-6 text-xs md:text-sm">
                 <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">👤 Học viên:</span> <span id="certName" class="text-slate-800 font-black"></span></p>
                 <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">🏢 Phòng ban:</span> <span id="certDept" class="text-slate-800 font-black"></span></p>
-                <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">📚 Bài học:</span> <span id="certSession" class="text-slate-800 font-bold truncate max-w-[200px] text-right"></span></p>
+                <p class="flex justify-between items-start border-b border-slate-100 pb-2 gap-4"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px] shrink-0 mt-0.5">📚 Bài học:</span> <span id="certSession" class="text-slate-800 font-bold text-right text-sm leading-tight"></span></p>
                 <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">💯 Tiến độ:</span> <span class="text-emerald-600 font-extrabold flex items-center gap-1"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span></p>
                 <p class="flex justify-between items-center"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">⏰ Thời gian:</span> <span id="certTime" class="text-slate-800 font-bold"></span></p>
             </div>
@@ -417,6 +417,8 @@
                     const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
                     document.getElementById('certName').innerText = profile.name; document.getElementById('certDept').innerText = profile.dept;
                     document.getElementById('certSession').innerText = document.getElementById('sessionTitle').innerText;
+                    const now = new Date(); 
+                    document.getElementById('certTime').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + " ngày " + now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
                     document.getElementById('certificateModal').classList.remove('hidden');
                     document.getElementById('certificateModal').classList.add('flex'); // HIỂN THỊ ĐÚNG MODAL
                 }
