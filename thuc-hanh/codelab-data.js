@@ -1,8 +1,8 @@
 // CẤU HÌNH HỆ THỐNG DÀNH CHO ADMIN
 const APP_CONFIG = {
     // Dán link API của Google Apps Script vào đây
-    API_URL: "https://script.google.com/macros/s/AKfycbxsF85hgDOmwvQ_vFo4WpniH51nUhOJ0__Vail4p4JHJvl18g6-64w5eAQRLm4MBgXzLQ/exec", 
-    COURSE_NAME: "26KV00" 
+    API_URL: "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec", 
+    COURSE_NAME: "26KV15" 
 };
 
 // ============================================================================
