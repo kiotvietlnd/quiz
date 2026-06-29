@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Buổi 3 - Thực hành KiotViet</title>
+    <title>Buổi 1 - Thực hành KiotViet</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -11,8 +11,6 @@
     </script>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
@@ -22,12 +20,10 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        /* TONE MÀU XANH NAVY SOLID CHO SIDEBAR */
+        /* SIDEBAR SOLID NAVY THEME */
         #sidebar { background-color: #1e3a8a; } 
         #sidebarScroll::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
         
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
-
         .glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
         
         .step-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-radius: 12px; margin: 0 12px; border: 1px solid transparent; transition: all 0.2s ease; }
@@ -39,7 +35,6 @@
         .group-header { padding: 16px 16px 6px 24px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #93c5fd; margin-top: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-right: 12px; }
         .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid white; }
         
-        /* CHỈ ĐỊNH KHU VỰC IN PDF (Bỏ hết màu nền, chỉ lấy chữ và ảnh) */
         @media print {
             body * { visibility: hidden; }
             #pdf-content, #pdf-content * { visibility: visible; }
@@ -52,14 +47,23 @@
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200 selection:text-blue-900">
 
-    <div class="tech-bg"></div>
-
     <!-- MODAL 1: CHỨNG NHẬN HOÀN THÀNH -->
-    <div id="certificateModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4 transition-all">
+    <div id="certificateModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] hidden items-center justify-center p-4 transition-all">
         <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-lg w-full mx-auto text-center relative border-4 border-emerald-400">
             <h2 class="text-2xl md:text-3xl font-black text-slate-800 mb-1 uppercase tracking-tight">Hoàn Thành Bài Tập</h2>
             <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto my-4 shadow-lg"><i class="fas fa-award text-4xl"></i></div>
             <p class="text-slate-600 mb-4 text-sm font-semibold">Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc quay về trang chủ.</p>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 text-left space-y-3 mb-6 text-xs md:text-sm">
+                <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">👤 Học viên:</span> <span id="certName" class="text-slate-800 font-black"></span></p>
+                <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">🏢 Phòng ban:</span> <span id="certDept" class="text-slate-800 font-black"></span></p>
+                <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">📚 Bài học:</span> <span id="certSession" class="text-slate-800 font-bold"></span></p>
+                <p class="flex justify-between items-center border-b border-slate-100 pb-2"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">💯 Tiến độ:</span> <span class="text-emerald-600 font-extrabold flex items-center gap-1"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span></p>
+                <p class="flex justify-between items-center"><span class="text-slate-400 font-bold uppercase tracking-wider text-[10px]">⏰ Thời gian:</span> <span id="certTime" class="text-slate-800 font-bold"></span></p>
+            </div>
+            
+            <div class="text-xs font-black text-red-600 bg-red-50 border border-red-200 p-3 rounded-xl mb-6"><i class="fas fa-exclamation-triangle"></i> CHỤP MÀN HÌNH NÀY VÀ GỬI ZALO TRƯỚC 16:00</div>
+            
             <div class="flex flex-col gap-3 mt-6">
                 <button onclick="openReviewModal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl transition flex justify-center items-center gap-2"><i class="fas fa-search"></i> Xem lại bài làm & Xuất PDF</button>
                 <a href="index.html" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-black py-3 rounded-xl transition flex justify-center items-center">Về Trang chủ</a>
@@ -67,15 +71,15 @@
         </div>
     </div>
 
-    <!-- MODAL 2: BẢN PREVIEW REVIEW BÀI LÀM (Trực quan) -->
+    <!-- MODAL 2: BẢN PREVIEW XEM LẠI BÀI -->
     <div id="reviewModal" class="fixed inset-0 bg-slate-900/90 z-[110] hidden flex-col transition-all">
-        <div class="bg-white px-6 py-4 flex items-center justify-between shadow-md shrink-0">
+        <div class="bg-white px-4 md:px-6 py-4 flex items-center justify-between shadow-md shrink-0">
             <div>
-                <h2 class="text-lg font-black text-slate-800"><i class="fas fa-file-alt text-blue-600 mr-2"></i>Xem Lại Bài Làm</h2>
-                <p class="text-xs text-slate-500 font-medium mt-1">Vui lòng chụp màn hình hoặc tải PDF để gửi vào Group Zalo.</p>
+                <h2 class="text-base md:text-lg font-black text-slate-800"><i class="fas fa-file-alt text-blue-600 mr-2"></i>Xem Lại Bài Làm</h2>
+                <p class="text-[10px] md:text-xs text-slate-500 font-medium mt-1">Chụp màn hình hoặc tải PDF để nộp.</p>
             </div>
-            <div class="flex items-center gap-3">
-                <button onclick="generatePDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg font-bold text-sm shadow-md transition flex items-center gap-2"><i class="fas fa-print"></i> In / Lưu PDF</button>
+            <div class="flex items-center gap-2 md:gap-3">
+                <button onclick="generatePDF()" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 md:px-4 py-2 rounded-lg font-bold text-xs md:text-sm shadow-md transition flex items-center gap-2"><i class="fas fa-print"></i> In / Lưu PDF</button>
                 <button onclick="closeReviewModal()" class="w-10 h-10 bg-slate-100 hover:bg-red-100 hover:text-red-600 text-slate-600 rounded-full flex items-center justify-center transition"><i class="fas fa-times"></i></button>
             </div>
         </div>
@@ -115,7 +119,6 @@
         <main class="flex-1 overflow-y-auto custom-scrollbar relative p-4 md:p-8 bg-slate-50 flex flex-col">
             <div id="mainContent" class="max-w-4xl mx-auto glass-panel border border-slate-200 rounded-3xl p-6 md:p-10 mb-24 w-full relative"></div>
             
-            <!-- BOTTOM BAR -->
             <div class="fixed bottom-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10">
                 <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2 text-sm text-slate-600 font-bold hover:text-blue-600 transition disabled:opacity-40"><i class="fas fa-chevron-left"></i> Trở lại</button>
                 <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-6 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition font-bold text-sm">Tiếp <i class="fas fa-chevron-right"></i></button>
@@ -129,9 +132,9 @@
     <script src="codelab-data.js"></script>
     <script>
         // ==========================================
-        const SESSION_ID = 'session_3';
-        const STORAGE_KEY = 'kv_codelab_progress_b3';
-        const DATA_KEY = 'kv_codelab_data_b3';
+        const SESSION_ID = 'session_1'; // SỬA THÀNH session_2, session_3 NẾU CẦN
+        const STORAGE_KEY = 'kv_codelab_progress_b1'; // SỬA THÀNH b2, b3
+        const DATA_KEY = 'kv_codelab_data_b1'; // SỬA THÀNH b2, b3
         // ==========================================
 
         let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFiles = [];
@@ -156,6 +159,7 @@
                     }
                 }
             });
+
             setTimeout(() => { fetchFeedback(false); }, 1500); 
         });
 
@@ -326,7 +330,7 @@
 
         function uploadToGAS(index, exerciseTitle) {
             saveDraft(); const currentData = stepDataStore[index];
-            if (pendingFiles.length === 0 && (!currentData.uploadedUrls || currentData.uploadedUrls.length === 0)) { alert("❌ LỖI: Bắt buộc phải có ảnh minh chứng. Vui lòng chọn ảnh hoặc dán ảnh vào khung."); return; }
+            if (pendingFiles.length === 0 && (!currentData.uploadedUrls || currentData.uploadedUrls.length === 0)) { alert("❌ LỖI: Bắt buộc phải tải ảnh lên để nộp bài!"); return; }
             
             const apiUrl = APP_CONFIG.API_URL; const courseName = APP_CONFIG.COURSE_NAME;
             if (!apiUrl) { alert("Lỗi Admin: Chưa cấu hình API URL!"); return; }
@@ -379,15 +383,16 @@
                     const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
                     document.getElementById('certName').innerText = profile.name; document.getElementById('certDept').innerText = profile.dept;
                     document.getElementById('certSession').innerText = document.getElementById('sessionTitle').innerText;
+                    const now = new Date(); document.getElementById('certTime').innerText = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0') + " ngày " + now.getDate() + "/" + (now.getMonth()+1) + "/" + now.getFullYear();
+                    
                     document.getElementById('certificateModal').classList.remove('hidden');
-                    document.getElementById('certificateModal').classList.add('flex'); // HIỂN THỊ ĐÚNG MODAL
+                    document.getElementById('certificateModal').classList.add('flex');
                 }
             }
         }
 
         function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
 
-        // MỞ BẢNG PREVIEW (XEM LẠI BÀI)
         function openReviewModal() {
             document.getElementById('certificateModal').classList.add('hidden');
             const reviewContainer = document.getElementById('reviewModalContent');
@@ -431,7 +436,6 @@
 
         function closeReviewModal() { document.getElementById('reviewModal').classList.add('hidden'); document.getElementById('reviewModal').classList.remove('flex'); document.getElementById('certificateModal').classList.remove('hidden'); }
 
-        // BẢN IN PDF (Dùng window.print)
         function buildPrintTemplate() {
             const pdfContent = document.getElementById('pdf-content'); const profile = JSON.parse(localStorage.getItem('kv_trainer_profile')); const sessionName = document.getElementById('sessionTitle').innerText;
             let reportHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto;"><h1 style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-bottom: 20px;">Báo cáo bài tập - ${sessionName}</h1><div style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 30px;"><p style="margin: 0 0 8px 0; font-size: 16px;"><strong>Học viên:</strong> ${profile.name} - ${profile.dept}</p><p style="margin: 0; font-size: 16px;"><strong>Khóa học:</strong> ${APP_CONFIG.COURSE_NAME}</p></div>`;
