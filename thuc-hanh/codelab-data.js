@@ -11,7 +11,7 @@ const APP_CONFIG = {
 const CODELAB_DATA = [
   {
     id: "session_1",
-    title: "Buổi 1: Tổng quan các bước làm quen phần mềm",
+    title: "Buổi 1: Làm quen Phần mềm KiotViet",
     exercises: [
       {
         title: "Bài tập 1: Đăng ký gian hàng dùng thử",
@@ -79,7 +79,7 @@ const CODELAB_DATA = [
   },
   {
     id: "session_2",
-    title: "Buổi 2: Các câu hỏi thường gặp liên quan đến Bán hàng - Hàng hóa - Nhập hàng",
+    title: "Buổi 2: Trả lời câu hỏi thường gặp",
     exercises: [
       {
         title: "Bài tập 1: Thêm mới sản phẩm ngay trên màn hình bán hàng",
@@ -218,7 +218,7 @@ const CODELAB_DATA = [
   },
   {
     id: "session_3",
-    title: "Buổi 3: Quy trình quản lý bán hàng Mobile App & Thiết bị phần cứng",
+    title: "Buổi 3: Mobile App & Phần cứng",
     exercises: [
       { title: '📱 Thao tác trên Mobile App', isGroupHeader: true },
       {
