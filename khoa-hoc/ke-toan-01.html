@@ -1,211 +1,275 @@
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="vi" class="scroll-smooth h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Luyện thi Trắc nghiệm - Kế toán 01</title>
-    <!-- Tailwind CSS -->
+    
+    <!-- Tailwind CSS Configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse xử lý dữ liệu -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { 
+                extend: {
+                    colors: {
+                        kvBlue: '#166def',
+                        kvBlueHover: '#1259c7',
+                        themeAccent: '#14b8a6',
+                        themeAccentHover: '#0d9488'
+                    }
+                } 
+            }
         }
+    </script>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Thư viện xử lý CSV và Hiệu ứng -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <style>
+        body { font-family: 'Inter', sans-serif; font-size: 15px; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; }
+        @media (min-width: 1024px) { html, body { overflow: hidden; } }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #f0fdfa 0%, #f8fafc 50%, #f0f7ff 100%); }
+        
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in-stagger { animation: fadeInUp 0.4s ease-out forwards; opacity: 0; }
+        .btn-interact { transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.15s; }
+        .btn-interact:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        .btn-interact:active { transform: translateY(0) scale(0.97); }
     </style>
 </head>
-<body class="bg-[#f0f4f8] min-h-screen flex flex-col text-slate-800">
+<body class="text-slate-800 antialiased selection:bg-teal-100 selection:text-teal-900 flex flex-col h-screen bg-slate-50 overflow-hidden">
 
-    <!-- Header tối giản: Logo KiotViet và Tiêu đề mới, góc phải chứa 2 nút Khóa học LMS & Học liệu Github -->
-    <header class="bg-[#0052cc] shadow-sm sticky top-0 z-50 flex flex-col md:flex-row items-stretch border-b border-[#0040a3]">
-        <!-- Khung Logo màu trắng nổi bật -->
-        <div class="px-6 py-4 flex items-center justify-center shrink-0 bg-[#0052cc] md:bg-white md:border-r md:border-slate-100">
-            <div class="bg-white rounded-lg px-3 py-1.5 border border-white flex items-center justify-center shadow-sm">
-                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-6 object-contain">
+    <div class="tech-bg"></div>
+
+    <!-- Header Navbar -->
+    <header class="h-[72px] shrink-0 text-white shadow-md z-30 flex items-center" style="background: linear-gradient(135deg, #166def 0%, #166def 75%, #ffffff 85%, #14b8a6 100%);">
+        <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <button onclick="window.toggleSidebar()" class="lg:hidden w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center text-white text-lg shrink-0 transition-colors">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <div class="shrink-0 select-none bg-white p-1.5 rounded-lg flex items-center shadow-sm border border-white">
+                    <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-5">
+                </div>
+                <div class="hidden md:block border-l border-white/20 pl-3">
+                    <h1 class="text-sm font-bold tracking-tight text-white font-black">Luyện thi Trắc nghiệm - Kế toán 01</h1>
+                    <p class="text-[11px] text-white/80 font-bold tracking-wider uppercase">Dành cho Chuyên viên tư vấn KiotViet</p>
+                </div>
             </div>
-        </div>
-        <!-- Tiêu đề cổng luyện thi và 2 Button góc phải -->
-        <div class="flex-grow px-6 py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 text-white">
-            <div class="flex flex-col justify-center">
-                <h1 class="font-bold text-base md:text-lg tracking-tight leading-none">Luyện thi Trắc nghiệm - Kế toán 01</h1>
-                <p class="text-[9px] uppercase tracking-wider text-cyan-200 font-semibold mt-1">DÀNH CHO CHUYÊN VIÊN TƯ VẤN KIOTVIET</p>
-            </div>
-            <!-- Hai nút điều hướng bên phải Navbar -->
-            <div class="flex items-center space-x-2 md:space-x-3 text-xs shrink-0 w-full sm:w-auto">
-                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-[#10a34a] hover:bg-[#0e8f40] text-white font-semibold py-1.5 px-3 rounded-lg shadow-sm transition flex items-center space-x-1.5">
-                    <span>📖</span>
-                    <span>Khóa học LMS</span>
+
+            <!-- Các Nút Liên kết góc phải -->
+            <div class="flex items-center gap-2 sm:gap-3">
+                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-colors flex items-center gap-1.5">
+                    <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
                 </a>
-                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-white/15 border border-white/20 text-white font-semibold py-1.5 px-3 rounded-lg hover:bg-white/25 transition flex items-center space-x-1.5">
-                    <span>📁</span>
-                    <span>Học liệu Github</span>
-                </a>
+                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-slate-700 hover:bg-slate-800 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-colors flex items-center gap-1.5">
+    <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
+</a>
             </div>
         </div>
     </header>
 
-    <!-- Màn hình chờ kết nối dữ liệu -->
-    <div id="loading-screen" class="flex-grow flex flex-col items-center justify-center p-6">
-        <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-indigo-600 mb-4"></div>
-        <p class="text-slate-600 font-medium text-sm">Đang kết nối hệ thống dữ liệu...</p>
-    </div>
-
-    <!-- Màn hình báo lỗi kết nối -->
-    <div id="error-screen" class="hidden flex-grow flex flex-col items-center justify-center p-6 text-center">
-        <span class="text-3xl mb-3">⚠️</span>
-        <h2 class="text-base font-bold text-slate-900 mb-2">Không thể tải dữ liệu câu hỏi</h2>
-        <p id="error-message" class="text-slate-500 text-xs max-w-sm mb-6 leading-relaxed">Vui lòng kiểm tra lại kết nối mạng hoặc liên kết nguồn dữ liệu chính.</p>
-        <button onclick="location.reload()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-xl text-xs transition duration-150">
-            Thử lại 🔄
-        </button>
-    </div>
-
-    <!-- Khung làm việc Split-screen (Sidebar phẳng gắn liền hệ thống) -->
-    <div id="main-layout" class="hidden flex-grow flex flex-col md:flex-row w-full mx-auto">
+    <!-- Bố cục làm việc chính -->
+    <main class="flex flex-1 overflow-hidden relative">
         
-        <!-- Sidebar bên trái: Gắn liền, màu xanh Navy phẳng đậm -->
-        <aside class="w-full md:w-80 bg-[#002B5B] p-5 flex flex-col justify-between shrink-0 border-r border-[#001c3a]">
-            <div>
-                <!-- Danh mục chủ đề -->
-                <h2 class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3 px-1">Chủ đề chi tiết</h2>
-                <div id="category-sidebar-list" class="overflow-y-auto max-h-[300px] md:max-h-[calc(100vh-250px)] pr-1 space-y-2">
-                    <!-- Danh sách danh mục được nạp tự động -->
-                </div>
+        <!-- Sidebar điều hướng (Máy tính) -->
+        <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-blue-900/40 bg-[#073c6c] text-white relative z-20 shadow-lg justify-between h-full">
+            
+            <div class="p-5 border-b border-blue-900/40 bg-[#052d52] shrink-0">
+                <h2 class="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-layer-group"></i> Danh sách Bài học
+                </h2>
+            </div>
+            
+            <!-- Vùng chứa danh mục với thanh cuộn độc lập -->
+            <div class="flex-grow overflow-y-auto w-full p-3 space-y-1" id="category-sidebar-list">
+                <!-- Danh mục sẽ tự động nạp vào đây -->
             </div>
 
-            <!-- NÚT LUYỆN ĐỀ NGẪU NHIÊN: Đặt ở đáy sidebar, kế thừa thiết kế của nút LMS -->
-            <div class="mt-6 pt-4 border-t border-white/10">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-[#10a34a] hover:bg-[#0e8f40] text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center space-x-2 shadow-sm">
-                    <span>🎲</span>
-                    <span>Luyện đề ngẫu nhiên</span>
+            <!-- Nút Luyện đề ngẫu nhiên ở đáy sidebar -->
+            <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center btn-interact">
+                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
                 </button>
             </div>
         </aside>
 
-        <!-- Khu vực hiển thị trò chơi chính bên phải -->
-        <main class="flex-grow p-6 md:p-8 flex flex-col justify-center">
+        <!-- Khu vực hiển thị nội dung trung tâm -->
+        <div id="main-scroll-area" class="flex-1 overflow-y-auto px-4 md:px-8 py-6 pb-8 relative bg-slate-50 flex flex-col items-center justify-center">
             
-            <!-- 1. Màn hình Chào (Greeting Screen) -->
-            <div id="greeting-screen" class="w-full max-w-2xl mx-auto bg-white rounded-3xl p-8 shadow-sm border border-slate-200/60 text-center">
-                <span class="text-xs font-bold uppercase tracking-widest text-[#0066ff] bg-[#e0f2fe] px-3 py-1 rounded-full">E-Learning Portal</span>
-                <h2 class="text-2xl font-bold text-slate-900 mt-6 mb-3">Luyện thi Trắc nghiệm - Kế toán 01</h2>
-                <p class="text-xs text-slate-500 leading-relaxed mb-6 max-w-md mx-auto">
-                    Trang Web này là phần mở rộng trực quan giúp tra cứu và ôn tập nhanh các tình huống trắc nghiệm nghiệp vụ. Hãy chọn một chuyên đề bên trái để bắt đầu luyện tập ngay lập tức.
-                </p>
-                <div class="animate-pulse inline-flex items-center text-xs font-bold text-indigo-600 bg-indigo-50/70 px-4 py-2 rounded-full">
-                    ⬅️ Vui lòng chọn một chuyên đề bên thanh danh mục để bắt đầu làm bài
-                </div>
+            <!-- Màn hình chờ Load dữ liệu -->
+            <div id="loading-screen" class="w-full flex flex-col items-center justify-center p-6">
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-kvBlue mb-4"></div>
+                <p class="text-slate-600 font-medium text-sm">Đang nạp dữ liệu câu hỏi từ Google Sheets...</p>
             </div>
 
-            <!-- 2. Màn hình thiết lập Luyện đề ngẫu nhiên -->
-            <div id="general-config-screen" class="hidden w-full max-w-xl mx-auto bg-white rounded-3xl p-8 shadow-sm border border-slate-200/60">
-                <span class="text-xs font-bold uppercase tracking-widest text-[#0066ff] bg-[#e0f2fe] px-3 py-1 rounded-full">Đề ngẫu nhiên</span>
-                <h2 class="text-xl font-bold text-slate-900 mt-4 mb-2">🎲 Luyện đề ngẫu nhiên</h2>
-                <p class="text-xs text-slate-500 leading-relaxed mb-6">
-                    Hệ thống sẽ tổng hợp ngẫu nhiên các câu hỏi từ tất cả các chuyên mục hiện có trong cơ sở dữ liệu để tạo đề thi thử thách.
-                </p>
-                
-                <!-- Thiết lập số câu -->
-                <div class="mb-8">
-                    <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Lựa chọn số lượng câu hỏi:</label>
-                    <div class="grid grid-cols-3 gap-3">
-                        <label class="cursor-pointer">
-                            <input type="radio" name="general-count" value="5" checked class="sr-only peer">
-                            <div class="p-4 rounded-2xl border-2 border-slate-150 bg-white hover:bg-slate-50 peer-checked:border-[#0066ff] peer-checked:bg-[#e0f2fe]/40 transition text-center">
-                                <span class="block font-bold text-xs text-slate-800">Flash ⚡</span>
-                                <span class="block text-[10px] text-[#0066ff] font-bold mt-1">05 câu hỏi</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="general-count" value="10" class="sr-only peer">
-                            <div class="p-4 rounded-2xl border-2 border-slate-150 bg-white hover:bg-slate-50 peer-checked:border-[#0066ff] peer-checked:bg-[#e0f2fe]/40 transition text-center">
-                                <span class="block font-bold text-xs text-slate-800">Pro 🎯</span>
-                                <span class="block text-[10px] text-[#0066ff] font-bold mt-1">10 câu hỏi</span>
-                            </div>
-                        </label>
-                        <label class="cursor-pointer">
-                            <input type="radio" name="general-count" value="30" class="sr-only peer">
-                            <div class="p-4 rounded-2xl border-2 border-slate-150 bg-white hover:bg-slate-50 peer-checked:border-[#0066ff] peer-checked:bg-[#e0f2fe]/40 transition text-center">
-                                <span class="block font-bold text-xs text-slate-800">Ultra 🔥</span>
-                                <span class="block text-[10px] text-[#0066ff] font-bold mt-1">30 câu hỏi</span>
-                            </div>
-                        </label>
-                    </div>
-                </div>
-
-                <button onclick="startGeneralQuiz()" class="w-full bg-[#0066ff] hover:bg-[#0052cc] text-white font-bold py-3.5 px-6 rounded-full shadow-md hover:shadow-indigo-500/10 transition duration-150 text-xs uppercase tracking-wider">
-                    Bắt đầu chơi ngay ➔
+            <!-- Màn hình Lỗi -->
+            <div id="error-screen" class="hidden w-full flex flex-col items-center justify-center p-6 text-center">
+                <span class="text-3xl mb-3">⚠️</span>
+                <h2 class="text-base font-bold text-slate-900 mb-2">Không thể kết nối dữ liệu</h2>
+                <p id="error-message" class="text-slate-500 text-xs max-w-sm mb-6 leading-relaxed">Vui lòng kiểm tra lại kết nối mạng hoặc liên kết nguồn dữ liệu.</p>
+                <button onclick="location.reload()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-semibold py-2 px-6 rounded-xl text-xs transition duration-150">
+                    Thử lại 🔄
                 </button>
             </div>
 
-            <!-- 3. Màn hình làm bài thi (Quiz Screen) -->
-            <div id="quiz-screen" class="hidden w-full max-w-xl mx-auto flex flex-col">
-                <div class="w-full bg-slate-200 h-1 rounded-full overflow-hidden mb-6">
-                    <div id="progress-bar" class="bg-[#18b69b] h-full w-0 transition-all duration-300"></div>
-                </div>
+            <!-- Bố cục Container cho Nội dung -->
+            <div id="main-layout" class="hidden w-full max-w-3xl mx-auto flex-grow flex flex-col items-center justify-center">
                 
-                <div class="flex items-center justify-between mb-4 gap-2">
-                    <span id="question-index" class="text-xs font-bold text-indigo-600 shrink-0">Câu hỏi -- / --</span>
-                    <span id="question-category" class="text-[10px] bg-slate-100 text-slate-600 px-3 py-1 rounded-full font-semibold truncate max-w-[70%]">Chủ đề</span>
-                </div>
-                
-                <div class="bg-white rounded-3xl p-6 shadow-sm border border-slate-200/60 flex-grow flex flex-col justify-between min-h-[350px]">
-                    <div>
-                        <h3 id="question-text" class="text-sm font-bold text-slate-900 mb-6 leading-relaxed">Nội dung câu hỏi</h3>
-                        <div id="options-container" class="space-y-3"></div>
-                    </div>
+                <!-- A. Màn hình Chào (Greeting Screen) -->
+                <div id="greeting-screen" class="hidden w-full bg-white rounded-3xl shadow-sm p-8 md:p-10 relative overflow-hidden transition-opacity duration-500 fade-in-stagger border border-blue-100">
+                    <div class="absolute right-0 bottom-0 w-80 h-80 bg-blue-50/50 rounded-full blur-3xl pointer-events-none"></div>
                     
-                    <div class="mt-8 flex justify-end">
-                        <button id="next-btn" onclick="nextQuestion()" class="hidden bg-[#0066ff] hover:bg-[#0052cc] text-white font-bold py-2.5 px-6 rounded-full shadow-sm text-xs transition duration-150">
-                            Câu tiếp theo
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 4. Màn hình xem kết quả (Result Screen - Không có biểu đồ tròn) -->
-            <div id="result-screen" class="hidden w-full max-w-xl mx-auto flex flex-col">
-                <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-150 mb-6">
-                    <span class="text-xs font-bold uppercase tracking-widest text-[#0066ff] bg-[#e0f2fe] px-3 py-1 rounded-full">Lượt thi hoàn tất</span>
-                    <h2 class="text-lg font-bold text-slate-900 mt-4 mb-4">Kết quả làm bài</h2>
-                    
-                    <!-- Bảng chỉ số phẳng hiện đại -->
-                    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6">
-                        <div class="text-left border-r border-slate-200 pr-4">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Số câu chính xác</span>
-                            <span id="result-score" class="text-2xl font-black text-[#0066ff]">0/0 đúng</span>
-                        </div>
-                        <div class="text-left pl-4">
-                            <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tỉ lệ hoàn thành</span>
-                            <span id="result-percent" class="text-2xl font-black text-[#10a34a]">0%</span>
+                    <div class="relative z-10 text-center md:text-left">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-kvBlue/10 text-kvBlue text-xs font-bold rounded-full mb-5">
+                            <i class="fa-solid fa-ranking-star"></i> TRUNG TÂM LUYỆN THI
+                        </span>
+                        
+                        <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 mb-5 leading-snug">
+                            Chào mừng bạn đến với Trung tâm Luyện thi Trắc nghiệm của Khóa học Kế toán 01
+                        </h2>
+                        
+                        <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
+                            <p>Sau khi hoàn thành các nội dung bài học trên hệ thống <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn ôn tập củng cố kiến thức từng bài học và chuẩn bị cho bài test tổng hợp cuối khóa trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
+                            
+                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái để trải nghiệm, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn 5 câu, 10 câu, 30 câu.</p>
+                            
+                            <p class="text-themeAccent font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả, chuẩn bị tốt cho bài Test cuối trên hệ thống LMS! 🚀</p>
                         </div>
                     </div>
+                </div>
+
+                <!-- B. Màn hình cấu hình Luyện đề ngẫu nhiên -->
+                <div id="general-config-screen" class="hidden w-full max-w-xl mx-auto bg-white rounded-3xl p-8 md:p-10 shadow-md border border-slate-200/60 text-left fade-in-stagger">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-kvBlue/10 text-kvBlue text-xs font-bold rounded-full mb-4">
+                        <i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN
+                    </span>
+                    <h2 class="text-2xl font-black text-slate-900 mb-2">Luyện đề ngẫu nhiên</h2>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">
+                        Hệ thống sẽ tổng hợp và chọn ngẫu nhiên các câu hỏi từ tất cả các bài học trong cơ sở dữ liệu để tạo ra đề thi thử thách.
+                    </p>
                     
-                    <p id="result-feedback" class="text-slate-750 text-xs font-medium mb-6 leading-relaxed">Đang xử lý...</p>
+                    <div class="mb-8">
+                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Lựa chọn số lượng câu hỏi:</label>
+                        <div class="grid grid-cols-3 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="general-count" value="5" checked class="sr-only peer">
+                                <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition text-center">
+                                    <span class="block font-bold text-xs text-slate-800">Flash ⚡</span>
+                                    <span class="block text-[10px] text-[#166def] font-bold mt-1">05 câu</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="general-count" value="10" class="sr-only peer">
+                                <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition text-center">
+                                    <span class="block font-bold text-xs text-slate-800">Pro 🎯</span>
+                                    <span class="block text-[10px] text-[#166def] font-bold mt-1">10 câu</span>
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="general-count" value="30" class="sr-only peer">
+                                <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition text-center">
+                                    <span class="block font-bold text-xs text-slate-800">Ultra 🔥</span>
+                                    <span class="block text-[10px] text-[#166def] font-bold mt-1">30 câu</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button onclick="startGeneralQuiz()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3.5 px-6 rounded-full shadow-md transition duration-150 text-xs uppercase tracking-wider btn-interact">
+                        Bắt đầu làm bài ngay <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+
+                <!-- C. Màn hình làm bài (Quiz Screen) -->
+                <div id="quiz-screen" class="hidden w-full max-w-xl mx-auto flex flex-col fade-in-stagger">
+                    <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-6 shadow-inner">
+                        <div id="progress-bar" class="bg-gradient-to-r from-teal-500 to-[#14b8a6] h-full w-0 transition-all duration-300 rounded-full"></div>
+                    </div>
                     
-                    <div class="flex justify-center">
-                        <button id="replay-btn" onclick="playAgain()" class="bg-[#0066ff] hover:bg-[#0052cc] text-white font-bold py-2.5 px-6 rounded-full text-xs transition duration-150 shadow-sm">
-                            Chơi lại lượt thi này 🔄
-                        </button>
+                    <div class="flex items-center justify-between mb-4 gap-2">
+                        <span id="question-index" class="text-xs font-black text-kvBlue tracking-wide shrink-0">Câu hỏi -- / --</span>
+                        <span id="question-category" class="text-[10px] bg-teal-50 text-teal-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider shrink-0 border border-teal-100 truncate max-w-[65%]">Chủ đề</span>
+                    </div>
+                    
+                    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 flex-grow flex flex-col justify-between min-h-[350px]">
+                        <div>
+                            <h3 id="question-text" class="text-sm font-black text-slate-800 mb-6 leading-relaxed">Nội dung câu hỏi</h3>
+                            <div id="options-container" class="space-y-3"></div>
+                        </div>
+                        
+                        <div class="mt-8 flex justify-end">
+                            <button id="next-btn" onclick="nextQuestion()" class="hidden bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-2.5 px-6 rounded-full shadow-md text-xs transition duration-150 btn-interact">
+                                Câu tiếp theo <i class="fa-solid fa-chevron-right ml-1 text-[10px]"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
-                
-                <h3 class="font-bold text-slate-400 mb-3 px-1 text-[10px] uppercase tracking-wider">Đáp án bạn đã chọn:</h3>
-                <div id="review-container" class="space-y-4 mb-6"></div>
-            </div>
 
-        </main>
+                <!-- D. Màn hình xem kết quả (Result Screen) -->
+                <div id="result-screen" class="hidden w-full max-w-xl mx-auto flex flex-col fade-in-stagger">
+                    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-150 mb-6 text-center">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-full mb-2">
+                            <i class="fa-solid fa-circle-check"></i> Lượt thi hoàn tất
+                        </span>
+                        <h2 class="text-lg font-bold text-slate-900 mt-2 mb-5">Kết quả kiểm tra của bạn</h2>
+                        
+                        <!-- Khung kết quả hiển thị tối giản phẳng -->
+                        <div class="grid grid-cols-2 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-100 mb-6">
+                            <div class="text-center border-r border-slate-200">
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Số câu chính xác</span>
+                                <span id="result-score" class="text-2xl font-black text-kvBlue">0/0</span>
+                            </div>
+                            <div class="text-center">
+                                <span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Tỉ lệ hoàn thành</span>
+                                <span id="result-percent" class="text-2xl font-black text-teal-600">0%</span>
+                            </div>
+                        </div>
+                        
+                        <p id="result-feedback" class="text-slate-600 text-xs font-medium mb-6 leading-relaxed">Đang xử lý kết quả...</p>
+                        
+                        <div class="flex justify-center">
+                            <button id="replay-btn" onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-2.5 px-6 rounded-full text-xs transition duration-150 shadow-md btn-interact">
+                                <i class="fa-solid fa-rotate-right mr-1"></i> Chơi lại lượt thi này
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-bold text-slate-400 mb-3 px-1 text-[10px] uppercase tracking-wider">Đáp án bạn đã chọn:</h3>
+                    <div id="review-container" class="space-y-4 mb-6 w-full"></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Sidebar phụ trên nền thiết bị di động -->
+    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-[280px] bg-[#073c6c] text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col shadow-2xl h-full">
+        <div class="p-4 border-b border-blue-900/40 flex items-center justify-between shrink-0 bg-[#052d52]">
+            <span class="text-xs font-bold tracking-tight uppercase">Danh sách Bài học</span>
+            <button onclick="window.toggleSidebar()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-white">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
+        </div>
+        <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
+        <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+                <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+            </button>
+        </div>
     </div>
 
-    <!-- Footer -->
-    <footer class="bg-white border-t border-slate-200 py-4 text-center text-[10px] text-slate-400 mt-auto">
-        <p>© 2026 Hệ thống Luyện thi Trắc nghiệm - KiotViet</p>
-    </footer>
-
-    <!-- Logic Vận hành -->
+    <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
         const sheetId = '1ARXj7bDk46ectrlogTAkNOIeZPTF79aHbRDTkT8AavU';
         const gid = '1585971143';
@@ -222,36 +286,61 @@
 
         window.addEventListener('DOMContentLoaded', fetchData);
 
+        // Đóng mở Menu trên điện thoại
+        window.toggleSidebar = (forceState) => {
+            const sidebar = document.getElementById('mobile-sidebar');
+            if (!sidebar) return;
+            if (forceState !== undefined) {
+                if (forceState) sidebar.classList.remove('-translate-x-full');
+                else sidebar.classList.add('-translate-x-full');
+            } else {
+                sidebar.classList.toggle('-translate-x-full');
+            }
+        };
+
+        // Lấy dữ liệu từ Google Sheets
         async function fetchData() {
             try {
                 const response = await fetch(dataUrl);
-                if (!response.ok) throw new Error();
+                if (!response.ok) throw new Error("Lỗi đường truyền mạng");
                 const csvText = await response.text();
                 
                 Papa.parse(csvText, {
                     complete: function(results) {
-                        processQuizData(results.data);
+                        try {
+                            processQuizData(results.data);
+                        } catch (err) {
+                            showErrorScreen("Lỗi phân tích dữ liệu: " + err.message);
+                        }
                     },
                     error: function() {
-                        showErrorScreen("Có lỗi khi giải mã tập tin.");
+                        showErrorScreen("Không thể giải mã tệp dữ liệu trắc nghiệm.");
                     }
                 });
             } catch (error) {
-                showErrorScreen("Không kết nối được nguồn cấp dữ liệu chính.");
+                showErrorScreen("Không kết nối được nguồn cấp dữ liệu Google Sheets.");
             }
         }
 
+        // Xử lý dữ liệu câu hỏi (Tương thích mọi loại cột Option)
         function processQuizData(data) {
-            if (!data || data.length === 0) {
+            if (!data || data.length === 0 || !data[0]) {
                 showErrorScreen("Dữ liệu trống rỗng.");
                 return;
             }
 
+            // Thuật toán kiểm tra an toàn dòng Header nâng cao
             let startIndex = 0;
-            const checkFirstRowAns = data[0][5] ? data[0][5].trim().toUpperCase() : '';
-            const validKeys = ['A', 'B', 'C', 'D'];
+            const validKeys = ['A', 'B', 'C', 'D', 'E', 'F'];
+            
+            let firstRow = data[0];
+            let firstLastIdx = firstRow.length - 1;
+            while (firstLastIdx >= 2 && (!firstRow[firstLastIdx] || firstRow[firstLastIdx].trim() === '')) {
+                firstLastIdx--;
+            }
+            const checkFirstRowAns = firstRow[firstLastIdx] ? firstRow[firstLastIdx].trim().toUpperCase() : '';
             if (!validKeys.includes(checkFirstRowAns)) {
-                startIndex = 1; 
+                startIndex = 1; // Nếu cột cuối của hàng 1 không phải đáp án A/B/C/D -> Nó là Header
             }
 
             allQuestions = [];
@@ -260,27 +349,29 @@
 
             for (let i = startIndex; i < data.length; i++) {
                 const row = data[i];
+                // Bỏ qua dòng trống hoặc sai cấu trúc
                 if (!row || row.length < 4 || !row[1] || row[1].trim() === '') continue;
 
-                const category = row[0] ? row[0].trim() : 'Khác';
+                const category = row[0] ? row[0].trim() : 'Chủ đề khác';
                 const questionText = row[1].trim();
                 
+                // Tự động tìm vị trí của Đáp án Đúng
                 let lastIdx = row.length - 1;
                 while (lastIdx >= 2 && (!row[lastIdx] || row[lastIdx].trim() === '')) {
                     lastIdx--;
                 }
 
                 const rawAnsKey = row[lastIdx] ? row[lastIdx].trim().toUpperCase() : '';
-                const optionKeys = ['A', 'B', 'C', 'D', 'E', 'F'];
-                const correctIndex = optionKeys.indexOf(rawAnsKey);
+                const correctIndex = validKeys.indexOf(rawAnsKey);
 
                 if (correctIndex !== -1 && lastIdx >= 3) {
                     const options = [];
+                    // Lặp để lấy nội dung các đáp án nằm giữa Cột câu hỏi (1) và Cột đáp án (lastIdx)
                     for (let j = 2; j < lastIdx; j++) {
                         if (row[j] !== undefined && row[j].trim() !== '') {
                             options.push({
                                 text: row[j].trim(),
-                                key: optionKeys[j - 2]
+                                key: validKeys[j - 2]
                             });
                         }
                     }
@@ -299,35 +390,39 @@
             }
 
             if (allQuestions.length === 0) {
-                showErrorScreen("Kho cấu trúc đề thi rỗng.");
+                showErrorScreen("Không tìm thấy câu hỏi hợp lệ trong dữ liệu.");
                 return;
             }
 
+            // Gọi hàm sinh giao diện Sidebar
             buildCategorySidebar(Array.from(categories), categoryCounts);
 
             document.getElementById('loading-screen').classList.add('hidden');
             document.getElementById('main-layout').classList.remove('hidden');
+            document.getElementById('greeting-screen').classList.remove('hidden');
         }
 
+        // Tạo Sidebar Menu Bài học
         function buildCategorySidebar(categories, counts) {
             const container = document.getElementById('category-sidebar-list');
-            container.innerHTML = '';
-
+            const mobileContainer = document.getElementById('mobile-sidebar-nav-list');
+            
+            let listHtml = '';
             categories.forEach(cat => {
                 const qCount = counts[cat] || 0;
-                const btn = document.createElement('button');
-                btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white hover:bg-white/10 transition duration-150 flex items-center justify-between group";
-                btn.dataset.category = cat;
-                btn.innerHTML = `
-                    <span class="text-xs font-semibold truncate pr-2 group-hover:translate-x-1 transition-transform">${cat}</span>
-                    <span class="text-[9px] bg-white/10 text-slate-200 px-2 py-0.5 rounded-full shrink-0 font-bold">${qCount} câu</span>
+                listHtml += `
+                    <button class="category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-center justify-between text-xs font-semibold focus:outline-none" data-category="${cat}" onclick="selectCategory('${cat}'); toggleSidebar(false);">
+                        <span class="truncate mr-2">${cat}</span>
+                        <span class="text-[10px] bg-white/10 text-blue-100 px-2 py-0.5 rounded-full shrink-0 font-bold tabular-nums">${qCount} câu</span>
+                    </button>
                 `;
-                btn.onclick = () => selectCategory(cat);
-                container.appendChild(btn);
             });
+            
+            if (container) container.innerHTML = listHtml;
+            if (mobileContainer) mobileContainer.innerHTML = listHtml;
         }
 
-        // Chọn "Luyện đề ngẫu nhiên" từ đáy Sidebar
+        // Chọn chế độ Ngẫu nhiên
         function selectGeneralMode() {
             isGeneralMode = true;
             selectedCategory = 'all';
@@ -335,20 +430,18 @@
             document.getElementById('greeting-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.add('hidden');
-            
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            // Thêm viền trắng nổi bật khi đang ở chế độ Luyện đề ngẫu nhiên
-            genBtn.className = "w-full bg-[#10a34a] hover:bg-[#0e8f40] text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center space-x-2 shadow-sm ring-2 ring-white ring-offset-2 ring-offset-[#002B5B]";
+            genBtn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
-                btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white hover:bg-white/10 transition duration-150 flex items-center justify-between group";
+                btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-center justify-between text-xs font-semibold focus:outline-none";
             });
         }
 
-        // Bắt đầu Luyện đề ngẫu nhiên dựa trên cấu hình Flash/Pro/Ultra
+        // Bắt đầu chế độ Ngẫu nhiên
         function startGeneralQuiz() {
             const countSelect = document.querySelector('input[name="general-count"]:checked').value;
             
@@ -369,20 +462,20 @@
             loadQuestion();
         }
 
-        // Chọn một chủ đề cụ thể (Vào chơi ngay, không cấu hình)
+        // Chọn chủ đề cụ thể để học
         function selectCategory(category) {
             isGeneralMode = false;
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-[#10a34a] hover:bg-[#0e8f40] text-white font-bold py-2.5 px-4 rounded-xl text-xs transition flex items-center justify-center space-x-2 shadow-sm";
+            genBtn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
                 if (btn.dataset.category === category) {
-                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-[#18b69b] font-bold text-xs transition duration-150 flex items-center justify-between shadow-sm";
+                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent transition-all flex items-center justify-between text-xs font-bold focus:outline-none";
                 } else {
-                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white hover:bg-white/10 transition duration-150 flex items-center justify-between group";
+                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-center justify-between text-xs font-semibold focus:outline-none";
                 }
             });
 
@@ -433,14 +526,14 @@
             q.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "option-btn flex items-center w-full p-4 mb-3 text-left transition duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-400 focus:outline-none bg-white shadow-sm";
+                btn.className = "option-btn flex items-center w-full p-4 mb-3 text-left transition-all duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue focus:outline-none bg-white shadow-sm font-medium text-slate-700";
                 btn.dataset.index = index;
 
                 btn.innerHTML = `
-                    <span class="option-badge flex items-center justify-center w-8 h-8 mr-3 font-semibold text-xs rounded-full bg-slate-100 text-slate-600 shrink-0 border border-slate-200">
+                    <span class="option-badge flex items-center justify-center w-8 h-8 mr-3 font-bold text-xs rounded-full bg-slate-100 text-slate-600 shrink-0 border border-slate-200 transition-colors">
                         ${opt.key}
                     </span>
-                    <span class="text-xs font-semibold text-slate-700 leading-snug">${opt.text}</span>
+                    <span class="text-xs font-semibold leading-snug">${opt.text}</span>
                 `;
 
                 btn.addEventListener('click', () => handleOptionClick(index));
@@ -459,10 +552,10 @@
             optionBtns.forEach((btn, btnIdx) => {
                 const badge = btn.querySelector('.option-badge');
                 if (btnIdx === index) {
-                    btn.className = "option-btn flex items-center w-full p-4 mb-3 text-left transition duration-150 border-2 border-indigo-500 rounded-xl bg-indigo-50/50 text-indigo-950 focus:outline-none shadow-sm";
-                    badge.className = "option-badge flex items-center justify-center w-8 h-8 mr-3 font-bold text-xs rounded-full bg-[#0066ff] text-white shrink-0 shadow-sm";
+                    btn.className = "option-btn flex items-center w-full p-4 mb-3 text-left transition-all duration-150 border-2 border-kvBlue bg-blue-50/40 text-kvBlue focus:outline-none shadow-sm font-bold";
+                    badge.className = "option-badge flex items-center justify-center w-8 h-8 mr-3 font-bold text-xs rounded-full bg-kvBlue text-white shrink-0 shadow-sm border border-kvBlue";
                 } else {
-                    btn.className = "option-btn flex items-center w-full p-4 mb-3 text-left transition duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-indigo-400 focus:outline-none bg-white shadow-sm";
+                    btn.className = "option-btn flex items-center w-full p-4 mb-3 text-left transition-all duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue focus:outline-none bg-white shadow-sm font-medium text-slate-700";
                     badge.className = "option-badge flex items-center justify-center w-8 h-8 mr-3 font-semibold text-xs rounded-full bg-slate-100 text-slate-600 shrink-0 border border-slate-200";
                 }
             });
@@ -498,14 +591,10 @@
             const percent = Math.round((score / currentQuizSet.length) * 100);
 
             document.getElementById('result-percent').textContent = `${percent}%`;
-            document.getElementById('result-score').textContent = `${score}/${currentQuizSet.length} đúng`;
+            document.getElementById('result-score').textContent = `${score} đúng`;
 
             if (percent >= 80) {
-                confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
-                });
+                fireConfetti();
             }
 
             let message = '';
@@ -521,7 +610,7 @@
 
             userAnswers.forEach((ans, idx) => {
                 const card = document.createElement('div');
-                card.className = "p-5 rounded-2xl border border-slate-200 bg-white shadow-sm";
+                card.className = "p-5 rounded-2xl border border-slate-200 bg-white shadow-sm w-full text-left";
 
                 const chosenOption = ans.question.options[ans.selectedIdx];
                 const chosenText = chosenOption ? `${chosenOption.key}. ${chosenOption.text}` : "Chưa trả lời";
@@ -532,13 +621,15 @@
                         <span class="text-[10px] font-bold text-slate-400">Đã lưu bài</span>
                     </div>
                     <p class="font-bold text-slate-800 text-sm mb-3 leading-relaxed">${idx + 1}. ${ans.question.question}</p>
-                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-655">
+                    <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-100 text-xs text-slate-600">
                         <span class="font-semibold text-indigo-700 block mb-1">Đáp án bạn đã chọn:</span>
                         <span>${chosenText}</span>
                     </div>
                 `;
                 reviewContainer.appendChild(card);
             });
+            
+            document.getElementById('main-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function playAgain() {
@@ -548,6 +639,15 @@
             } else {
                 selectCategory(selectedCategory);
             }
+        }
+
+        function fireConfetti() {
+            var end = Date.now() + 1000;
+            (function frame() {
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#14b8a6', '#10b981'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#14b8a6', '#10b981'] });
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
         }
     </script>
 </body>
