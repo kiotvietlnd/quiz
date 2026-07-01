@@ -26,8 +26,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <!-- Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <!-- Confetti Library -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
     <style>
@@ -46,7 +45,6 @@
         .btn-interact:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
         .btn-interact:active { transform: translateY(0) scale(0.97); }
 
-        /* Animation cho nút Github */
         @keyframes pulse-gradient { 
             0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); } 
             50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); } 
@@ -75,12 +73,11 @@
                 </div>
             </div>
 
-            <!-- Nút liên kết góc phải Navbar -->
+            <!-- Nút liên kết góc phải Navbar (Đã thiết kế lại dạng Gradient cao cấp) -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-colors flex items-center gap-1.5">
+                <a href="https://daotao.kiotviet.vn/khoa-hoc/ke-toan-01/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
                 </a>
-                <!-- Nút Github sử dụng Gradient Công nghệ -->
                 <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 hover:opacity-90 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-opacity flex items-center gap-1.5">
                     <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
                 </a>
@@ -104,19 +101,22 @@
             </div>
 
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center btn-interact">
+                <!-- Nút Luyện đề ngẫu nhiên thiết kế lại với Gradient sinh động -->
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
                     <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
                 </button>
             </div>
         </aside>
 
-        <!-- Khu vực hiển thị nội dung trung tâm (Đã sửa lỗi đẩy lên trên) -->
+        <!-- Khu vực hiển thị nội dung trung tâm -->
         <div id="main-scroll-area" class="flex-1 overflow-y-auto px-3 md:px-8 py-8 md:py-10 relative bg-slate-50 flex flex-col items-center">
             
-            <!-- Màn hình chờ Load dữ liệu -->
-            <div id="loading-screen" class="w-full flex flex-col items-center justify-center p-6 my-auto">
+            <!-- Màn hình chờ Load dữ liệu (Đã đổi lời chào LND vui vẻ) -->
+            <div id="loading-screen" class="w-full flex flex-col items-center justify-center p-6 my-auto text-center max-w-md">
                 <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-kvBlue mb-4"></div>
-                <p class="text-slate-600 font-medium text-sm">Đang nạp dữ liệu câu hỏi từ Google Sheets...</p>
+                <p class="text-slate-600 font-bold text-sm leading-relaxed">
+                    Nội dung ôn tập trắc nghiệm đang được team LND ship hỏa tốc đến bạn, vui lòng chờ trong giây lát... 🚚💨⚡
+                </p>
             </div>
 
             <!-- Màn hình Lỗi -->
@@ -146,7 +146,7 @@
                         </h2>
                         
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
-                            <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
+                            <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/ke-toan-01/" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
                             
                             <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
                             
@@ -155,49 +155,49 @@
                     </div>
                 </div>
 
-                <!-- B. Màn hình cấu hình Luyện đề ngẫu nhiên -->
-                <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-10 shadow-md border border-slate-200/60 text-left fade-in-stagger mb-auto mt-auto">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-kvBlue/10 text-kvBlue text-xs font-bold rounded-full mb-4">
+                <!-- B. Màn hình cấu hình Luyện đề ngẫu nhiên (Đã tăng kích thước giao diện & Gradient cho nút) -->
+                <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left fade-in-stagger mb-auto mt-auto">
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-kvBlue/10 text-kvBlue text-xs font-black rounded-full mb-6">
                         <i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN
                     </span>
-                    <h2 class="text-2xl font-black text-slate-900 mb-2">Luyện đề ngẫu nhiên</h2>
-                    <p class="text-xs text-slate-500 leading-relaxed mb-6">
-                        Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề thi thử thách.
+                    <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Luyện đề ngẫu nhiên</h2>
+                    <p class="text-sm text-slate-500 leading-relaxed mb-8">
+                        Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề thi thử thách toàn diện.
                     </p>
                     
-                    <div class="mb-8">
-                        <label class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Lựa chọn số lượng câu hỏi:</label>
-                        <div class="grid grid-cols-3 gap-3">
+                    <div class="mb-10">
+                        <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-4">Lựa chọn số lượng câu hỏi:</label>
+                        <div class="grid grid-cols-3 gap-4">
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="5" checked class="sr-only peer">
-                                <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition text-center">
-                                    <span class="block font-bold text-xs text-slate-800">Flash ⚡</span>
-                                    <span class="block text-[10px] text-[#166def] font-bold mt-1">05 câu</span>
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                    <span class="block font-extrabold text-sm md:text-base text-slate-800">Flash ⚡</span>
+                                    <span class="block text-xs text-[#166def] font-black mt-2">05 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="10" class="sr-only peer">
-                                <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition text-center">
-                                    <span class="block font-bold text-xs text-slate-800">Pro 🎯</span>
-                                    <span class="block text-[10px] text-[#166def] font-bold mt-1">10 câu</span>
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                    <span class="block font-extrabold text-sm md:text-base text-slate-800">Pro 🎯</span>
+                                    <span class="block text-xs text-[#166def] font-black mt-2">10 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="30" class="sr-only peer">
-                                <div class="p-4 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition text-center">
-                                    <span class="block font-bold text-xs text-slate-800">Ultra 🔥</span>
-                                    <span class="block text-[10px] text-[#166def] font-bold mt-1">30 câu</span>
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                    <span class="block font-extrabold text-sm md:text-base text-slate-800">Ultra 🔥</span>
+                                    <span class="block text-xs text-[#166def] font-black mt-2">30 câu</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <button onclick="startGeneralQuiz()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3.5 px-6 rounded-full shadow-md transition duration-150 text-sm uppercase tracking-wider btn-interact">
-                        Bắt đầu làm bài ngay <i class="fa-solid fa-arrow-right ml-1"></i>
+                    <button onclick="startGeneralQuiz()" class="w-full bg-gradient-to-r from-kvBlue to-indigo-600 hover:from-kvBlueHover hover:to-indigo-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
+                        Bắt đầu làm bài ngay <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
 
-                <!-- C. Màn hình làm bài (Tự động chuyển câu, không cần nút bấm tiếp theo) -->
+                <!-- C. Màn hình làm bài -->
                 <div id="quiz-screen" class="hidden w-full max-w-3xl flex flex-col fade-in-stagger px-1 mt-4">
                     <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-6 shadow-inner">
                         <div id="progress-bar" class="bg-gradient-to-r from-teal-500 to-[#14b8a6] h-full w-0 transition-all duration-300 rounded-full"></div>
@@ -214,7 +214,7 @@
                     </div>
                 </div>
 
-                <!-- D. Màn hình xem kết quả (Fix lỗi đè lên trên) -->
+                <!-- D. Màn hình xem kết quả -->
                 <div id="result-screen" class="hidden w-full max-w-3xl flex flex-col fade-in-stagger px-1">
                     <div class="bg-white rounded-3xl p-6 md:p-10 shadow-md border border-slate-150 mb-8 text-center mt-2">
                         <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-green-50 text-green-600 text-sm font-bold rounded-full mb-3">
@@ -234,10 +234,8 @@
                             </div>
                         </div>
                         
-                        <!-- CỤM BUTTON NỔI BẬT Ở MÀN KẾT QUẢ -->
                         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-2">
-                            <!-- Nút Github Gradient -->
-                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 text-white font-bold py-3 px-6 rounded-full text-sm transition-opacity hover:opacity-90 shadow-lg btn-interact btn-attention flex items-center justify-center gap-2 border-0">
+                            <a href="https://daotao.kiotviet.vn/khoa-hoc/ke-toan-01/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm transition-opacity flex items-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md">
                                 <i class="fa-brands fa-github text-lg"></i> Học lại bài này trên Github
                             </a>
                             <button onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-6 rounded-full text-sm transition duration-150 shadow-md btn-interact flex items-center justify-center gap-2">
@@ -264,17 +262,17 @@
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
                 <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
             </button>
         </div>
     </div>
 
-    <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM ĐẢM BẢO HOẠT ĐỘNG 100% -->
+    <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
-        const sheetId = '1ARXj7bDk46ectrlogTAkNOIeZPTF79aHbRDTkT8AavU';
-        const gid = '1585971143';
-        const dataUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+        const gasAppUrl = 'https://script.google.com/macros/s/AKfycbwoH5H56nqpv8aCfT3G0InI1LYJQYTI97SWToCvdJUmoQ54AgInK4IhX4oaxoREj8A8/exec';
+        const sheetName = 'Kế toán 01'; 
+        const dataUrl = `${gasAppUrl}?sheetName=${encodeURIComponent(sheetName)}`;
 
         let allQuestions = [];
         let currentQuizSet = [];
@@ -298,80 +296,81 @@
             }
         };
 
-        // Hàm Tải Dữ liệu
         async function fetchData() {
             try {
-                const response = await fetch(dataUrl);
-                if (!response.ok) throw new Error("Fetch failed");
-                const csvText = await response.text();
+                if (gasAppUrl.includes('YOUR_DEPLOYED_GAS_WEB_APP_URL')) {
+                    throw new Error("Vui lòng cấu hình URL Google Apps Script thực tế vào biến 'gasAppUrl'.");
+                }
                 
-                Papa.parse(csvText, {
-                    complete: function(results) {
-                        try {
-                            processQuizData(results.data);
-                        } catch (err) {
-                            showErrorScreen("Có lỗi khi xử lý dữ liệu: " + err.message);
-                        }
-                    },
-                    error: function() {
-                        showErrorScreen("Có lỗi khi giải mã tệp dữ liệu trắc nghiệm.");
-                    }
-                });
+                const response = await fetch(dataUrl);
+                if (!response.ok) throw new Error("Yêu cầu mạng thất bại");
+                
+                const jsonResult = await response.json();
+                
+                if (jsonResult.error) {
+                    showErrorScreen("Lỗi cấu hình Sheet: " + jsonResult.error);
+                    return;
+                }
+                
+                processQuizData(jsonResult.data);
             } catch (error) {
-                showErrorScreen("Không kết nối được nguồn cấp dữ liệu Google Sheets.");
+                showErrorScreen("Không kết nối được nguồn cấp dữ liệu thông qua API bảo mật: " + error.message);
             }
         }
 
-        // Hàm xử lý dữ liệu
+        // PHÂN TÍCH THEO CHUẨN CỘT CỐ ĐỊNH MỚI (ĐÃ CHẶN ĐỌC THỪA CỘT J, K...)
         function processQuizData(data) {
             if (!data || data.length === 0 || !data[0]) {
-                showErrorScreen("Dữ liệu trống rỗng.");
+                showErrorScreen("Dữ liệu nhận về trống rỗng.");
                 return;
             }
 
-            let startIndex = 0;
             const validKeys = ['A', 'B', 'C', 'D', 'E', 'F'];
-            
-            let firstRow = data[0];
-            let firstLastIdx = firstRow.length - 1;
-            while (firstLastIdx >= 2 && (!firstRow[firstLastIdx] || firstRow[firstLastIdx].trim() === '')) {
-                firstLastIdx--;
-            }
-            const checkFirstRowAns = firstRow[firstLastIdx] ? firstRow[firstLastIdx].trim().toUpperCase() : '';
-            if (!validKeys.includes(checkFirstRowAns)) {
-                startIndex = 1; 
-            }
-
             allQuestions = [];
             const categories = new Set();
-            const categoryCounts = {}; 
+            const categoryCounts = {};
 
-            for (let i = startIndex; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 const row = data[i];
-                if (!row || row.length < 4 || !row[1] || row[1].trim() === '') continue;
+                if (!row || row.length < 7) continue;
 
-                const category = row[0] ? row[0].trim() : 'Chủ đề khác';
-                const questionText = row[1].trim();
-                
-                let lastIdx = row.length - 1;
-                while (lastIdx >= 2 && (!row[lastIdx] || row[lastIdx].trim() === '')) {
-                    lastIdx--;
+                const col0Val = row[0] ? row[0].toString().trim() : '';
+                const col3Val = row[3] ? row[3].toString().trim() : '';
+
+                // Bỏ qua dòng tiêu đề
+                if (col0Val === 'Ngành Hàng' || col3Val.includes('Tiêu đề câu hỏi')) {
+                    continue;
                 }
 
-                const rawAnsKey = row[lastIdx] ? row[lastIdx].trim().toUpperCase() : '';
+                // Cấu trúc cột mới của Google Sheet:
+                // Index 1 (Cột 2): Tên Tính Năng (Bài học) -> category
+                // Index 3 (Cột 4): Tiêu đề câu hỏi (*) -> questionText
+                const category = row[1] ? row[1].toString().trim() : 'Chủ đề khác';
+                const questionText = row[3] ? row[3].toString().trim() : '';
+                
+                if (questionText === '') continue;
+
+                // Index 5 (Cột 6): Đáp án đúng (chữ cái A, B, C...) -> rawAnsKey
+                const rawAnsKey = row[5] ? row[5].toString().trim().toUpperCase() : '';
                 const correctIndex = validKeys.indexOf(rawAnsKey);
 
-                if (correctIndex !== -1 && lastIdx >= 3) {
-                    const options = [];
-                    for (let j = 2; j < lastIdx; j++) {
-                        if (row[j] !== undefined && row[j].trim() !== '') {
-                            options.push({
-                                text: row[j].trim(),
-                                key: validKeys[j - 2]
-                            });
-                        }
+                // CHỈ LẶP TỪ INDEX 6 ĐẾN INDEX 8 (Cột G, H, I) để lấy đúng đáp án A, B, C. 
+                // Bỏ qua cột J (index 9) và K (index 10) để không bị nhận nhầm ghi chú thành phương án trả lời.
+                const options = [];
+                for (let j = 6; j <= 8; j++) {
+                    if (j >= row.length) break;
+                    const optionText = row[j] ? row[j].toString().trim() : '';
+                    const optionKey = validKeys[j - 6];
+                    
+                    if (optionText !== '' && optionKey) {
+                        options.push({
+                            text: optionText,
+                            key: optionKey
+                        });
                     }
+                }
 
+                if (correctIndex !== -1 && options.length >= 2) {
                     categories.add(category);
                     categoryCounts[category] = (categoryCounts[category] || 0) + 1;
 
@@ -386,7 +385,7 @@
             }
 
             if (allQuestions.length === 0) {
-                showErrorScreen("Kho cấu trúc dữ liệu không hợp lệ.");
+                showErrorScreen("Cấu trúc bảng dữ liệu không tương thích hoặc không tìm thấy câu hỏi hợp lệ.");
                 return;
             }
 
@@ -426,7 +425,7 @@
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -459,7 +458,7 @@
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center btn-interact";
+            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -533,13 +532,12 @@
         }
 
         function handleOptionClick(index) {
-            // Ngăn chặn click liên tiếp
             if(selectedOptionIndex !== null) return;
             selectedOptionIndex = index;
             
             const optionBtns = document.querySelectorAll('.option-btn');
             const container = document.getElementById('options-container');
-            container.classList.add('pointer-events-none'); // Khóa container không cho click nữa
+            container.classList.add('pointer-events-none'); 
 
             optionBtns.forEach((btn, btnIdx) => {
                 const badge = btn.querySelector('.option-badge');
@@ -552,7 +550,6 @@
                 }
             });
 
-            // Tự động chuyển câu sau 0.6 giây
             setTimeout(() => {
                 nextQuestion();
             }, 600);
@@ -579,6 +576,7 @@
             }
         }
 
+        // PHẦN XEM LẠI KẾT QUẢ ĐÃ ĐƯỢC TÔ MÀU XANH (ĐÚNG) VÀ ĐỎ (SAI)
         function showQuizResults() {
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
@@ -597,21 +595,53 @@
 
             userAnswers.forEach((ans, idx) => {
                 const card = document.createElement('div');
-                card.className = "p-5 md:p-6 rounded-2xl border border-slate-200 bg-white shadow-sm w-full text-left";
+                
+                let statusColorClasses = "";
+                let badgeHtml = "";
+                let feedbackHtml = "";
 
-                const chosenOption = ans.question.options[ans.selectedIdx];
-                const chosenText = chosenOption ? `${chosenOption.key}. ${chosenOption.text}` : "Chưa trả lời";
+                const correctOption = ans.question.options[ans.correctIdx];
+                const correctText = correctOption ? `${correctOption.key}. ${correctOption.text}` : "N/A";
+
+                if (ans.isCorrect) {
+                    statusColorClasses = "border-emerald-200 bg-emerald-50/35 text-slate-800 shadow-sm";
+                    badgeHtml = `<span class="text-[10px] md:text-xs bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-full font-black flex items-center gap-1"><i class="fa-solid fa-circle-check"></i> Chính xác</span>`;
+                    feedbackHtml = `
+                        <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800 mt-3">
+                            <span class="font-bold block mb-1">🎯 Bạn đã trả lời đúng:</span>
+                            <span class="font-semibold">${correctText}</span>
+                        </div>
+                    `;
+                } else {
+                    statusColorClasses = "border-rose-200 bg-rose-50/35 text-slate-800 shadow-sm";
+                    badgeHtml = `<span class="text-[10px] md:text-xs bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full font-black flex items-center gap-1"><i class="fa-solid fa-circle-xmark"></i> Chưa đúng</span>`;
+                    
+                    const chosenOption = ans.question.options[ans.selectedIdx];
+                    const chosenText = chosenOption ? `${chosenOption.key}. ${chosenOption.text}` : "Chưa trả lời";
+
+                    feedbackHtml = `
+                        <div class="space-y-2 mt-3">
+                            <div class="p-4 rounded-xl bg-rose-50 border border-rose-100 text-sm text-rose-800">
+                                <span class="font-bold block mb-1">❌ Đáp án bạn đã chọn:</span>
+                                <span class="font-semibold">${chosenText}</span>
+                            </div>
+                            <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-sm text-emerald-800">
+                                <span class="font-bold block mb-1">💡 Đáp án đúng phải là:</span>
+                                <span class="font-semibold">${correctText}</span>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                card.className = `p-5 md:p-6 rounded-2xl border ${statusColorClasses} w-full text-left transition-all duration-200 hover:shadow-md`;
 
                 card.innerHTML = `
                     <div class="flex justify-between items-center mb-3 gap-2">
-                        <span class="text-[10px] md:text-xs bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-bold truncate max-w-[70%]">${ans.question.category}</span>
-                        <span class="text-[10px] font-bold text-slate-400">Đã lưu bài</span>
+                        <span class="text-[10px] md:text-xs bg-slate-100 text-slate-500 px-2.5 py-1 rounded font-bold truncate max-w-[60%]">${ans.question.category}</span>
+                        ${badgeHtml}
                     </div>
                     <p class="font-black text-slate-800 text-sm md:text-base mb-4 leading-relaxed">${idx + 1}. ${ans.question.question}</p>
-                    <div class="p-4 rounded-xl bg-slate-50 border border-slate-100 text-sm text-slate-600">
-                        <span class="font-bold text-indigo-700 block mb-1">Đáp án bạn đã chọn:</span>
-                        <span class="font-medium">${chosenText}</span>
-                    </div>
+                    ${feedbackHtml}
                 `;
                 reviewContainer.appendChild(card);
             });
