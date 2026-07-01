@@ -101,7 +101,7 @@
             </div>
 
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-emerald-500 via-pink-500 to-cyan-500 hover:from-emerald-600 hover:via-pink-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
                     <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
                 </button>
             </div>
@@ -261,7 +261,7 @@
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-emerald-500 via-pink-500 to-cyan-500 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
                 <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
             </button>
         </div>
@@ -424,7 +424,7 @@
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-pink-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+            genBtn.className = "w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -459,7 +459,7 @@
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-pink-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+            genBtn.className = "w-full bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -499,6 +499,7 @@
             return array;
         }
 
+        // ... các phần code JavaScript còn lại được giữ nguyên ...
         function loadQuestion() {
             const q = currentQuizSet[currentIndex];
             selectedOptionIndex = null;
@@ -577,7 +578,6 @@
             }
         }
 
-        // Xem lại kết quả, tô màu Xanh/Đỏ chuẩn xác
         function showQuizResults() {
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.remove('hidden');
