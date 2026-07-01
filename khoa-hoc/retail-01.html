@@ -15,8 +15,8 @@
                     colors: {
                         kvBlue: '#166def',
                         kvBlueHover: '#1259c7',
-                        themeAccent: '#14b8a6',
-                        themeAccentHover: '#0d9488'
+                        themeAccent: '#06b6d4',
+                        themeAccentHover: '#0891b2'
                     }
                 } 
             }
@@ -37,7 +37,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #f0fdfa 0%, #f8fafc 50%, #f0f7ff 100%); }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #ecfeff 0%, #f8fafc 50%, #f0f7ff 100%); }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-stagger { animation: fadeInUp 0.4s ease-out forwards; opacity: 0; }
@@ -53,12 +53,12 @@
         .btn-attention:hover { animation-play-state: paused; }
     </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-teal-100 selection:text-teal-900 flex flex-col h-screen bg-slate-50 overflow-hidden">
+<body class="text-slate-800 antialiased selection:bg-cyan-100 selection:text-cyan-900 flex flex-col h-screen bg-slate-50 overflow-hidden">
 
     <div class="tech-bg"></div>
 
     <!-- Header Navbar -->
-    <header class="h-[72px] shrink-0 text-white shadow-md z-30 flex items-center" style="background: linear-gradient(135deg, #166def 0%, #166def 75%, #ffffff 85%, #14b8a6 100%);">
+    <header class="h-[72px] shrink-0 text-white shadow-md z-30 flex items-center" style="background: linear-gradient(135deg, #166def 0%, #166def 75%, #ffffff 85%, #06b6d4 100%);">
         <div class="w-full mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-3">
             <div class="flex items-center gap-3">
                 <button onclick="window.toggleSidebar()" class="lg:hidden w-10 h-10 rounded-full hover:bg-white/10 flex items-center justify-center text-white text-lg shrink-0 transition-colors">
@@ -73,12 +73,12 @@
                 </div>
             </div>
 
-            <!-- Nút liên kết góc phải Navbar (Dạng Gradient cao cấp) -->
+            <!-- Nút liên kết góc phải Navbar -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-01/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
                 </a>
-                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 hover:opacity-90 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-opacity flex items-center gap-1.5">
+                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 hover:opacity-90 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-opacity flex items-center gap-1.5">
                     <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
                 </a>
             </div>
@@ -101,7 +101,7 @@
             </div>
 
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 hover:from-emerald-600 hover:via-teal-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-500 hover:from-emerald-600 hover:via-cyan-600 hover:to-sky-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
                     <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
                 </button>
             </div>
@@ -133,10 +133,10 @@
                 
                 <!-- A. Màn hình Chào (Greeting Screen) -->
                 <div id="greeting-screen" class="hidden w-full max-w-3xl bg-white rounded-3xl shadow-sm p-8 md:p-10 relative overflow-hidden transition-opacity duration-500 fade-in-stagger border border-blue-100 mb-auto mt-auto">
-                    <div class="absolute right-0 bottom-0 w-80 h-80 bg-teal-50/50 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="absolute right-0 bottom-0 w-80 h-80 bg-blue-50/50 rounded-full blur-3xl pointer-events-none"></div>
                     
                     <div class="relative z-10 text-center md:text-left">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-teal-50 text-teal-600 text-xs font-bold rounded-full mb-5 uppercase tracking-wider border border-teal-100">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-kvBlue/10 text-kvBlue text-xs font-bold rounded-full mb-5 uppercase tracking-wider">
                             <i class="fa-solid fa-ranking-star"></i> CHUYÊN TRANG ÔN TẬP TRẮC NGHIỆM
                         </span>
                         
@@ -145,7 +145,7 @@
                         </h2>
                         
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
-                            <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/kho-hoc-dvkh/retail-01" target="_blank" class="text-teal-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-01/" target="_blank" class="text-emerald-600 font-bold hover:underline">LMS</a>.</p>
+                            <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/kho-hoc-dvkh/retail-01" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-01/" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
                             
                             <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
                             
@@ -199,12 +199,12 @@
                 <!-- C. Màn hình làm bài -->
                 <div id="quiz-screen" class="hidden w-full max-w-3xl flex flex-col fade-in-stagger px-1 mt-4">
                     <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-6 shadow-inner">
-                        <div id="progress-bar" class="bg-gradient-to-r from-teal-500 to-[#14b8a6] h-full w-0 transition-all duration-300 rounded-full"></div>
+                        <div id="progress-bar" class="bg-gradient-to-r from-cyan-500 to-[#06b6d4] h-full w-0 transition-all duration-300 rounded-full"></div>
                     </div>
                     
                     <div class="flex items-center justify-between mb-4 gap-2 px-2">
                         <span id="question-index" class="text-sm font-black text-kvBlue tracking-wide shrink-0">Câu hỏi -- / --</span>
-                        <span id="question-category" class="text-xs bg-teal-50 text-teal-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider shrink-0 border border-teal-100 truncate max-w-[65%]">Chủ đề</span>
+                        <span id="question-category" class="text-xs bg-cyan-50 text-cyan-600 px-3 py-1 rounded-full font-bold uppercase tracking-wider shrink-0 border border-cyan-100 truncate max-w-[65%]">Chủ đề</span>
                     </div>
                     
                     <div class="bg-white rounded-3xl p-6 md:p-10 shadow-md border border-slate-200/80 flex-grow flex flex-col min-h-[400px]">
@@ -229,12 +229,12 @@
                             </div>
                             <div class="text-center">
                                 <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Tỉ lệ hoàn thành</span>
-                                <span id="result-percent" class="text-3xl font-black text-teal-600">0%</span>
+                                <span id="result-percent" class="text-3xl font-black text-cyan-600">0%</span>
                             </div>
                         </div>
                         
                         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-2">
-                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm transition-opacity flex items-center justify-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md">
+                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm transition-opacity flex items-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md">
                                 <i class="fa-brands fa-github text-lg"></i> Học lại bài này trên Github
                             </a>
                             <button onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-6 rounded-full text-sm transition duration-150 shadow-md btn-interact flex items-center justify-center gap-2">
@@ -261,7 +261,7 @@
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-500 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
                 <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
             </button>
         </div>
@@ -297,10 +297,6 @@
 
         async function fetchData() {
             try {
-                if (gasAppUrl.includes('YOUR_DEPLOYED_GAS_WEB_APP_URL')) {
-                    throw new Error("Vui lòng cấu hình URL Google Apps Script thực tế vào biến 'gasAppUrl'.");
-                }
-                
                 const response = await fetch(dataUrl);
                 if (!response.ok) throw new Error("Yêu cầu mạng thất bại");
                 
@@ -317,7 +313,7 @@
             }
         }
 
-        // PHÂN TÍCH THEO CHUẨN CỘT CỐ ĐỊNH MỚI (ĐÃ CHẶN ĐỌC THỪA CỘT J, K...)
+        // PHÂN TÍCH THEO CHUẨN CỘT CỐ ĐỊNH MỚI
         function processQuizData(data) {
             if (!data || data.length === 0 || !data[0]) {
                 showErrorScreen("Dữ liệu nhận về trống rỗng.");
@@ -341,20 +337,20 @@
                     continue;
                 }
 
-                // Cấu trúc cột mới của Google Sheet:
-                // Index 1 (Cột 2): Tên Tính Năng (Bài học) -> category
-                // Index 3 (Cột 4): Tiêu đề câu hỏi (*) -> questionText
+                // Cấu trúc cột của Google Sheet:
+                // Index 1 (Cột B): Tên Tính Năng (Bài học) -> category
+                // Index 3 (Cột D): Tiêu đề câu hỏi (*) -> questionText
                 const category = row[1] ? row[1].toString().trim() : 'Chủ đề khác';
                 const questionText = row[3] ? row[3].toString().trim() : '';
                 
                 if (questionText === '') continue;
 
-                // Index 5 (Cột 6): Đáp án đúng (chữ cái A, B, C...) -> rawAnsKey
+                // Index 5 (Cột F): Đáp án đúng (chữ cái A, B, C...) -> rawAnsKey
                 const rawAnsKey = row[5] ? row[5].toString().trim().toUpperCase() : '';
                 const correctIndex = validKeys.indexOf(rawAnsKey);
 
                 // CHỈ LẶP TỪ INDEX 6 ĐẾN INDEX 8 (Cột G, H, I) để lấy đúng đáp án A, B, C. 
-                // Bỏ qua cột J (index 9) và K (index 10) để không bị nhận nhầm ghi chú thành phương án trả lời.
+                // Bỏ qua cột J (index 9) và K (index 10) để tránh nhận nhầm ghi chú thành phương án trả lời.
                 const options = [];
                 for (let j = 6; j <= 8; j++) {
                     if (j >= row.length) break;
@@ -424,7 +420,7 @@
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -457,7 +453,7 @@
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-cyan-500 to-sky-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -659,8 +655,8 @@
         function fireConfetti() {
             var end = Date.now() + 1000;
             (function frame() {
-                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#14b8a6', '#10b981'] });
-                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#14b8a6', '#10b981'] });
+                confetti({ particleCount: 3, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#06b6d4', '#0891b2'] });
+                confetti({ particleCount: 3, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#06b6d4', '#0891b2'] });
                 if (Date.now() < end) requestAnimationFrame(frame);
             }());
         }
