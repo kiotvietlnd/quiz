@@ -101,8 +101,8 @@
             </div>
 
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <!-- Nút Luyện đề ngẫu nhiên thiết kế màu cam năng động -->
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-emerald-500 via-orange-500 to-cyan-500 hover:from-emerald-600 hover:via-orange-600 hover:to-cyan-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                <!-- Nút Luyện đề ngẫu nhiên thiết kế màu cam gradient ấm áp -->
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
                     <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
                 </button>
             </div>
@@ -262,7 +262,8 @@
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-emerald-500 via-orange-500 to-cyan-500 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+            <!-- Nút Luyện đề di động đã đổi sang màu cam ấm áp -->
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center">
                 <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
             </button>
         </div>
@@ -318,7 +319,6 @@
             }
         }
 
-        // PHÂN TÍCH THEO CHUẨN CỘT CỐ ĐỊNH (ĐÃ CHẶN ĐỌC THỪA CỘT J, K...)
         function processQuizData(data) {
             if (!data || data.length === 0 || !data[0]) {
                 showErrorScreen("Dữ liệu nhận về trống rỗng.");
@@ -337,25 +337,18 @@
                 const col0Val = row[0] ? row[0].toString().trim() : '';
                 const col3Val = row[3] ? row[3].toString().trim() : '';
 
-                // Bỏ qua dòng tiêu đề
                 if (col0Val === 'Ngành Hàng' || col3Val.includes('Tiêu đề câu hỏi')) {
                     continue;
                 }
 
-                // Cấu trúc cột của Google Sheet:
-                // Index 1 (Cột 2): Tên Tính Năng (Bài học) -> category
-                // Index 3 (Cột 4): Tiêu đề câu hỏi (*) -> questionText
                 const category = row[1] ? row[1].toString().trim() : 'Chủ đề khác';
                 const questionText = row[3] ? row[3].toString().trim() : '';
                 
                 if (questionText === '') continue;
 
-                // Index 5 (Cột 6): Đáp án đúng (chữ cái A, B, C...) -> rawAnsKey
                 const rawAnsKey = row[5] ? row[5].toString().trim().toUpperCase() : '';
                 const correctIndex = validKeys.indexOf(rawAnsKey);
 
-                // CHỈ LẶP TỪ INDEX 6 ĐẾN INDEX 8 (Cột G, H, I) để lấy đúng đáp án A, B, C. 
-                // Bỏ qua cột J (index 9) và K (index 10) để không bị nhận nhầm ghi chú thành phương án trả lời.
                 const options = [];
                 for (let j = 6; j <= 8; j++) {
                     if (j >= row.length) break;
@@ -425,7 +418,8 @@
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-orange-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+            // Cập nhật màu nút desktop khi được chọn
+            genBtn.className = "w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -458,7 +452,8 @@
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-emerald-500 via-orange-500 to-cyan-500 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+            // Đảm bảo nút khôi phục lại cấu hình màu cam thuần ban đầu khi không được kích hoạt
+            genBtn.className = "w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
