@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luyện ôn tập Trắc nghiệm - FNB 01</title>
+    <title>Ôn tập Trắc nghiệm - FNB 01</title>
     
     <!-- Tailwind CSS Configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -37,7 +37,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #fff7ed 0%, #f0f6ff 50%, #e6f0ff 100%); }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #fff7ed 0%, #f8fafc 50%, #f0f7ff 100%); }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-stagger { animation: fadeInUp 0.4s ease-out forwards; opacity: 0; }
@@ -46,8 +46,8 @@
         .btn-interact:active { transform: translateY(0) scale(0.97); }
 
         @keyframes pulse-gradient { 
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); } 
-            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); } 
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(249, 115, 22, 0.4); } 
+            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(249, 115, 22, 0); } 
         }
         .btn-attention { animation: pulse-gradient 2.5s infinite ease-in-out; }
         .btn-attention:hover { animation-play-state: paused; }
@@ -68,16 +68,17 @@
                     <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-5">
                 </div>
                 <div class="hidden md:block border-l border-white/20 pl-3">
-                    <h1 class="text-sm font-bold tracking-tight text-white font-black">Luyện ôn tập Trắc nghiệm - FNB 01</h1>
+                    <h1 class="text-sm font-bold tracking-tight text-white font-black">Chuyên trang Ôn tập Trắc nghiệm - FNB 01</h1>
                     <p class="text-[11px] text-white/80 font-bold tracking-wider uppercase">Dành cho Chuyên viên tư vấn KiotViet</p>
                 </div>
             </div>
 
-            <!-- Nút liên kết góc phải Navbar -->
+            <!-- Nút liên kết góc phải Navbar (Đã gỡ nút bánh răng sang Sidebar) -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-fnb-01/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
                 </a>
+                <!-- Khôi phục dải màu gradient ban đầu của nút học liệu Github -->
                 <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/fnb-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-orange-500 to-purple-600 hover:opacity-90 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-opacity flex items-center gap-1.5">
                     <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
                 </a>
@@ -91,6 +92,7 @@
         <!-- Sidebar điều hướng -->
         <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-blue-900/40 bg-[#073c6c] text-white relative z-20 shadow-lg justify-between h-full">
             
+            <!-- Đặt nút cài đặt (Settings Gear) sang phía bên phải của tiêu đề Sidebar -->
             <div class="p-5 border-b border-blue-900/40 bg-[#052d52] shrink-0 flex items-center justify-between gap-2">
                 <h2 class="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2 select-none">
                     <i class="fa-solid fa-layer-group"></i> Danh sách Bài học
@@ -104,9 +106,10 @@
                 <!-- Danh mục sẽ tự động nạp vào đây -->
             </div>
 
+            <!-- Nút ôn tập ngẫu nhiên dạng Solid màu cam gốc ngành hàng FNB -->
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
-                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                    <i class="fa-solid fa-cube"></i> Ôn tập ngẫu nhiên
                 </button>
             </div>
         </aside>
@@ -141,7 +144,7 @@
                     
                     <div class="relative z-10 text-center md:text-left">
                         
-                        <!-- Nút làm tiếp bài cũ (Tính năng 3) -->
+                        <!-- Hệ thống tự động khôi phục dữ liệu lượt làm cũ -->
                         <div id="resume-container" class="hidden mb-6 p-4 rounded-2xl border border-amber-200 bg-amber-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div class="text-left">
                                 <span class="block font-black text-amber-800 text-sm">
@@ -165,21 +168,21 @@
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
                             <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/fnb-01" target="_blank" class="text-orange-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-fnb-01/" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
                             
-                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
+                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Ôn tập ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
                             
                             <p class="text-themeAccent font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao trong bài Test trên LMS! 🚀</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- B. Màn hình cấu hình Luyện đề ngẫu nhiên -->
+                <!-- B. Màn hình cấu hình Ôn tập ngẫu nhiên -->
                 <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left fade-in-stagger mb-auto mt-auto">
                     <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-kvBlue/10 text-kvBlue text-xs font-black rounded-full mb-6">
                         <i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN
                     </span>
-                    <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Luyện đề ngẫu nhiên</h2>
+                    <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Ôn tập ngẫu nhiên</h2>
                     <p class="text-sm text-slate-500 leading-relaxed mb-8">
-                        Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề thi thử thách toàn diện.
+                        Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra bài ôn tập thử thách toàn diện.
                     </p>
                     
                     <div class="mb-10">
@@ -187,30 +190,30 @@
                         <div class="grid grid-cols-3 gap-4">
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="5" checked class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#f97316] peer-checked:bg-orange-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Flash ⚡</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">05 câu</span>
+                                    <span class="block text-xs text-[#f97316] font-black mt-2">05 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="10" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#f97316] peer-checked:bg-orange-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Pro 🎯</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">10 câu</span>
+                                    <span class="block text-xs text-[#f97316] font-black mt-2">10 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="30" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#f97316] peer-checked:bg-orange-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Ultra 🔥</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">30 câu</span>
+                                    <span class="block text-xs text-[#f97316] font-black mt-2">30 câu</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <button onclick="startGeneralQuiz()" class="w-full bg-gradient-to-r from-kvBlue to-indigo-600 hover:from-kvBlueHover hover:to-indigo-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
-                        Bắt đầu làm bài ngay <i class="fa-solid fa-arrow-right"></i>
+                    <button onclick="startGeneralQuiz()" class="w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
+                        Bắt đầu ôn tập ngay <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
 
@@ -222,15 +225,18 @@
                     
                     <div class="flex items-center justify-between mb-4 gap-2 px-2">
                         <span id="question-index" class="text-sm font-black text-kvBlue tracking-wide shrink-0">Câu ôn tập -- / --</span>
+                        
+                        <!-- Tem nhãn bài học tự co giãn, không bị cắt chữ khi tên quá dài -->
                         <span id="question-category" class="text-[10px] sm:text-xs bg-orange-50 text-orange-600 px-3 py-1.5 rounded-2xl font-bold uppercase tracking-wider shrink-0 border border-orange-100 text-right leading-relaxed whitespace-normal break-words max-w-[65%] sm:max-w-[70%] shadow-sm">Chủ đề</span>
                     </div>
                     
-                    <!-- Chế độ hiển thị 1: Từng câu duy nhất (Co giãn proportional) -->
+                    <!-- Đồng bộ em cho toàn bộ khoảng cách để tương thích với cấu hình cỡ chữ -->
+                    <!-- Chế độ hiển thị 1: Từng câu lẻ tẻ -->
                     <div id="single-question-container" class="bg-white shadow-md border border-slate-200/80 flex-grow flex flex-col" style="padding: 2em; border-radius: 1.8em; min-height: 25em;">
                         <h3 id="question-text" class="text-[1.1em] font-black text-slate-800 leading-relaxed text-left" style="margin-bottom: 1.8em; min-height: 4.2em;">Nội dung câu hỏi</h3>
                         <div id="options-container" class="space-y-0"></div>
                         
-                        <!-- Hệ thống phím điều hướng thủ công -->
+                        <!-- Thanh điều hướng thủ công (Chỉ bật khi tắt tự động chuyển câu) -->
                         <div id="manual-nav-controls" class="flex justify-between items-center mt-6 pt-6 border-t border-slate-100 hidden shrink-0" style="margin-top: auto;">
                             <button id="prev-question-btn" onclick="prevQuestion()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-2 px-5 rounded-full text-xs shadow-sm transition-all shrink-0 disabled:opacity-50 flex items-center gap-1.5 focus:outline-none">
                                 <i class="fa-solid fa-arrow-left"></i> Câu trước
@@ -242,7 +248,7 @@
                         </div>
                     </div>
 
-                    <!-- Chế độ hiển thị 2: Toàn bộ danh sách câu hỏi cuộn dọc -->
+                    <!-- Chế độ hiển thị 2: Danh sách cuộn dọc đầy đủ -->
                     <div id="all-questions-container" class="hidden flex-grow flex flex-col">
                         <div id="all-questions-list" class="space-y-4"></div>
                         <button onclick="submitAllQuestions()" class="w-full bg-gradient-to-r from-kvBlue to-indigo-600 hover:from-kvBlueHover hover:to-indigo-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2 mt-6">
@@ -259,7 +265,7 @@
                         </span>
                         <h2 class="text-xl md:text-2xl font-bold text-slate-900 mt-2 mb-6">Kết quả ôn tập của bạn</h2>
                         
-                        <!-- Khung kết quả -->
+                        <!-- Khung hiển thị điểm -->
                         <div class="grid grid-cols-2 gap-4 bg-slate-50 p-6 rounded-2xl border border-slate-100 mb-8">
                             <div class="text-center border-r border-slate-200">
                                 <span class="block text-xs font-bold text-slate-400 uppercase tracking-wider mb-2">Số câu chính xác</span>
@@ -289,28 +295,24 @@
         </div>
     </main>
 
-    <!-- Sidebar phụ trên nền thiết bị di động -->
+    <!-- Sidebar phụ di động -->
     <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-[280px] bg-[#073c6c] text-white z-50 transform -translate-x-full transition-transform duration-300 ease-in-out lg:hidden flex flex-col shadow-2xl h-full">
         <div class="p-4 border-b border-blue-900/40 flex items-center justify-between shrink-0 bg-[#052d52]">
             <span class="text-xs font-bold tracking-tight uppercase">Danh sách Bài học</span>
-            <div class="flex items-center gap-2">
-                <button onclick="toggleSettingsModal(true)" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-blue-200 hover:text-white transition-colors focus:outline-none" title="Cài đặt ôn tập">
-                    <i class="fa-solid fa-gear text-sm"></i>
-                </button>
-                <button onclick="window.toggleSidebar(false)" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-white">
-                    <i class="fa-solid fa-xmark text-sm"></i>
-                </button>
-            </div>
+            <button onclick="window.toggleSidebar()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-white">
+                <i class="fa-solid fa-xmark text-sm"></i>
+            </button>
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center">
-                <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+            <!-- Đồng bộ màu cam solid gốc cho nút Ôn tập ngẫu nhiên phiên bản di động -->
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+                <i class="fa-solid fa-cube"></i> Ôn tập ngẫu nhiên
             </button>
         </div>
     </div>
 
-    <!-- Hộp thoại cài đặt ôn tập Settings Modal -->
+    <!-- Hộp thoại cài đặt ôn tập (Settings Modal) -->
     <div id="settings-modal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm">
         <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 transform scale-100 transition-all">
             <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
@@ -323,7 +325,7 @@
             </div>
 
             <div class="space-y-6 text-left">
-                <!-- Điều chỉnh cỡ chữ -->
+                <!-- Điều khiển Cỡ chữ -->
                 <div>
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Cỡ chữ</label>
                     <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-200">
@@ -350,7 +352,7 @@
                     </div>
                 </div>
 
-                <!-- Tự động chuyển câu -->
+                <!-- Tính năng tự động chuyển câu -->
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <label class="block text-xs font-black text-slate-400 uppercase tracking-wider">Tự động chuyển câu</label>
@@ -360,7 +362,7 @@
                         </label>
                     </div>
                     <p class="text-[11px] text-slate-500 leading-relaxed">
-                        Bật để tự động chuyển câu sau khi chọn đáp án. Tắt để sử dụng nút bấm chuyển câu hoặc phím mũi tên trái/phải trên bàn phím.
+                        Bật để tự động chuyển câu sau khi chọn đáp án. Tắt để sử dụng nút bấm chuyển câu hoặc phím mũi tên Trái/Phải trên bàn phím.
                     </p>
                 </div>
             </div>
@@ -378,12 +380,12 @@
         let currentIndex = 0;
         let score = 0;
         let userAnswers = []; 
-        let selectedCategory = 'all';
+        let selectedCategory = '';
         let isGeneralMode = false;
         
         let viewMode = 'single';
         let isAutoAdvance = localStorage.getItem('KiotViet_Auto_Advance') !== 'false';
-        let fontScale = parseFloat(localStorage.getItem('KiotViet_Font_Scale') || '0.9'); // Mặc định nhỏ hơn 10% (0.9)
+        let fontScale = parseFloat(localStorage.getItem('KiotViet_Font_Scale') || '0.9');
 
         let categoriesGlobal = [];
         let categoryCountsGlobal = {};
@@ -440,7 +442,6 @@
                 const col0Val = row[0] ? row[0].toString().trim() : '';
                 const col3Val = row[3] ? row[3].toString().trim() : '';
 
-                // Bỏ qua dòng tiêu đề
                 if (col0Val === 'Ngành Hàng' || col3Val.includes('Tiêu đề câu hỏi')) {
                     continue;
                 }
@@ -514,7 +515,7 @@
 
                 listHtml += `
                     <button class="category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none" data-category="${cat}" onclick="selectCategory('${cat}'); toggleSidebar(false);">
-                        <span class="whitespace-normal break-words mr-2 leading-relaxed text-left flex-grow">${cat}</span>
+                        <span class="whitespace-normal break-words mr-2 flex-grow text-left">${cat}</span>
                         <span class="text-[10px] ${badgeColor} px-2 py-0.5 rounded-full shrink-0 font-bold border tabular-nums">${qCount} câu</span>
                     </button>
                 `;
@@ -547,7 +548,7 @@
                     const state = JSON.parse(savedStateRaw);
                     if (state && state.currentQuizSet && state.currentQuizSet.length > 0) {
                         document.getElementById('resume-container').classList.remove('hidden');
-                        const topicName = state.isGeneralMode ? "Luyện đề ngẫu nhiên" : state.selectedCategory;
+                        const topicName = state.isGeneralMode ? "Ôn tập ngẫu nhiên" : state.selectedCategory;
                         const answered = state.userAnswers ? state.userAnswers.filter(ans => ans.selectedIdx !== null).length : 0;
                         document.getElementById('resume-info').textContent = `Chủ đề: ${topicName} | Tiến trình: ${answered}/${state.currentQuizSet.length} câu`;
                     }
@@ -556,6 +557,49 @@
                 }
             } else {
                 document.getElementById('resume-container').classList.add('hidden');
+            }
+        }
+
+        // Module đồng bộ hóa trạng thái chọn lựa trên thanh Sidebar
+        function updateSidebarSelectionUI() {
+            const genBtn = document.getElementById('general-mode-btn');
+            const mobileGenBtn = document.querySelector('#mobile-sidebar button[onclick*="selectGeneralMode"]');
+            const buttons = document.querySelectorAll('.category-btn');
+
+            if (isGeneralMode) {
+                if (genBtn) {
+                    genBtn.className = "w-full bg-[#f97316] text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+                }
+                if (mobileGenBtn) {
+                    mobileGenBtn.className = "w-full bg-[#f97316] text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+                }
+                buttons.forEach(btn => {
+                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
+                });
+            } else if (selectedCategory) {
+                if (genBtn) {
+                    genBtn.className = "w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+                }
+                if (mobileGenBtn) {
+                    mobileGenBtn.className = "w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center";
+                }
+                buttons.forEach(btn => {
+                    if (btn.dataset.category === selectedCategory) {
+                        btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent transition-all flex items-start justify-between text-xs font-bold focus:outline-none";
+                    } else {
+                        btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
+                    }
+                });
+            } else {
+                if (genBtn) {
+                    genBtn.className = "w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+                }
+                if (mobileGenBtn) {
+                    mobileGenBtn.className = "w-full bg-[#f97316] hover:bg-[#ea580c] text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center";
+                }
+                buttons.forEach(btn => {
+                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
+                });
             }
         }
 
@@ -572,25 +616,7 @@
                 userAnswers = state.userAnswers || [];
                 viewMode = state.viewMode || 'single';
 
-                if (!isGeneralMode) {
-                    const buttons = document.querySelectorAll('.category-btn');
-                    buttons.forEach(btn => {
-                        if (btn.dataset.category === selectedCategory) {
-                            btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent transition-all flex items-start justify-between text-xs font-bold focus:outline-none";
-                        } else {
-                            btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
-                        }
-                    });
-                    const genBtn = document.getElementById('general-mode-btn');
-                    if (genBtn) genBtn.className = "w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
-                } else {
-                    const genBtn = document.getElementById('general-mode-btn');
-                    if (genBtn) genBtn.className = "w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
-                    const buttons = document.querySelectorAll('.category-btn');
-                    buttons.forEach(btn => {
-                        btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
-                    });
-                }
+                updateSidebarSelectionUI();
 
                 document.getElementById('greeting-screen').classList.add('hidden');
                 document.getElementById('general-config-screen').classList.add('hidden');
@@ -696,20 +722,14 @@
 
         function selectGeneralMode() {
             isGeneralMode = true;
-            selectedCategory = 'all';
+            selectedCategory = '';
 
             document.getElementById('greeting-screen').classList.add('hidden');
             document.getElementById('quiz-screen').classList.add('hidden');
             document.getElementById('result-screen').classList.add('hidden');
             document.getElementById('general-config-screen').classList.remove('hidden');
 
-            const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
-
-            const buttons = document.querySelectorAll('.category-btn');
-            buttons.forEach(btn => {
-                btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
-            });
+            updateSidebarSelectionUI();
         }
 
         function startGeneralQuiz() {
@@ -734,17 +754,7 @@
             isGeneralMode = false;
             selectedCategory = category;
 
-            const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-gradient-to-r from-amber-500 via-orange-500 to-orange-600 hover:from-amber-600 hover:via-orange-600 hover:to-orange-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
-
-            const buttons = document.querySelectorAll('.category-btn');
-            buttons.forEach(btn => {
-                if (btn.dataset.category === category) {
-                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent transition-all flex items-start justify-between text-xs font-bold focus:outline-none";
-                } else {
-                    btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
-                }
-            });
+            updateSidebarSelectionUI();
 
             document.getElementById('greeting-screen').classList.add('hidden');
             document.getElementById('general-config-screen').classList.add('hidden');
@@ -803,6 +813,7 @@
                 btn.className = "option-btn flex items-center w-full text-left transition-all duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue focus:outline-none bg-white shadow-sm font-semibold text-[0.95em]";
                 btn.dataset.index = index;
                 
+                // Đồng bộ em cho kích thước các nút lựa chọn để tránh giật giao diện
                 btn.setAttribute('style', 'padding: 0.8em 1.2em; margin-bottom: 0.8em; border-radius: 0.9em; min-height: 3.8em; display: flex; align-items: center;');
 
                 const isSelected = (selectedOptionIndex === index);
@@ -831,9 +842,8 @@
 
         function handleOptionClick(index) {
             const currentAns = userAnswers[currentIndex];
-            if (!currentAns) return;
             
-            if (isAutoAdvance && currentAns.selectedIdx !== null) return; 
+            if (isAutoAdvance && currentAns && currentAns.selectedIdx !== null) return; 
             
             currentAns.selectedIdx = index;
             currentAns.isCorrect = (index === currentAns.correctIdx);
@@ -886,15 +896,14 @@
                 q.options.forEach((opt, optIdx) => {
                     const isSelected = (selectedIdx === optIdx);
                     const btnClass = isSelected 
-                        ? "flex items-center w-full text-left border-2 border-kvBlue bg-blue-50/40 text-kvBlue rounded-xl font-bold text-[0.95em]"
-                        : "flex items-center w-full text-left border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue bg-white font-medium text-[0.95em]";
+                        ? "option-btn flex items-center w-full text-left border-2 border-kvBlue bg-blue-50/40 text-kvBlue font-bold text-[0.95em]"
+                        : "option-btn flex items-center w-full text-left border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue bg-white font-semibold text-[0.95em]";
                     
-                    const badgeBg = isSelected ? "bg-kvBlue text-white" : "bg-slate-100 text-slate-600";
-                    const badgeBorder = isSelected ? "border-kvBlue" : "border-slate-200";
+                    const badgeBg = isSelected ? "bg-kvBlue text-white border-kvBlue" : "bg-slate-100 text-slate-600 border-slate-200";
 
                     optionsHtml += `
                         <button type="button" class="${btnClass}" style="padding: 0.8em 1.2em; margin-bottom: 0.8em; border-radius: 0.9em; min-height: 3.8em; display: flex; align-items: center;" onclick="selectOptionAllMode(${qIdx}, ${optIdx})">
-                            <span class="flex items-center justify-center w-8 h-8 mr-3 font-bold text-xs rounded-full ${badgeBg} ${badgeBorder} shrink-0 border">
+                            <span class="option-badge flex items-center justify-center w-8 h-8 mr-3 font-bold text-xs rounded-full ${badgeBg} shrink-0 border">
                                 ${opt.key}
                             </span>
                             <span class="leading-relaxed text-sm">${opt.text}</span>
@@ -1047,6 +1056,7 @@
             }());
         }
 
+        // Chặn menu chuột phải & Tổ hợp phím nhạy cảm
         document.addEventListener("contextmenu", function (e) {
             e.preventDefault();
         });
