@@ -46,8 +46,8 @@
         .btn-interact:active { transform: translateY(0) scale(0.97); }
 
         @keyframes pulse-gradient { 
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); } 
-            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); } 
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); } 
+            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); } 
         }
         .btn-attention { animation: pulse-gradient 2.5s infinite ease-in-out; }
         .btn-attention:hover { animation-play-state: paused; }
@@ -73,7 +73,7 @@
                 </div>
             </div>
 
-            <!-- Nút liên kết góc phải Navbar (Đã lược bỏ nút bánh răng cài đặt) -->
+            <!-- Nút liên kết góc phải Navbar -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-02/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
@@ -105,9 +105,9 @@
                 <!-- Danh mục bài học nạp tự động -->
             </div>
 
-            <!-- Sử dụng màu solid ngành hàng (emerald) thay vì kvBlue -->
+            <!-- Sử dụng màu solid ngành hàng (Cyan) -->
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
                     <i class="fa-solid fa-cube"></i> Ôn tập ngẫu nhiên
                 </button>
             </div>
@@ -167,7 +167,7 @@
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
                             <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-02" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-02/" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
                             
-                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-emerald-600 mx-1"></i>Ôn tập ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
+                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-cyan-600 mx-1"></i>Ôn tập ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
                             
                             <p class="text-themeAccent font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao trong bài Test trên LMS! 🚀</p>
                         </div>
@@ -176,7 +176,7 @@
 
                 <!-- B. Màn hình cấu hình Ôn tập ngẫu nhiên -->
                 <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left fade-in-stagger mb-auto mt-auto">
-                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-600 text-xs font-black rounded-full mb-6">
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-cyan-50 text-cyan-600 text-xs font-black rounded-full mb-6">
                         <i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN
                     </span>
                     <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Ôn tập ngẫu nhiên</h2>
@@ -189,29 +189,29 @@
                         <div class="grid grid-cols-3 gap-4">
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="5" checked class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-cyan-500 peer-checked:bg-cyan-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Flash ⚡</span>
-                                    <span class="block text-xs text-emerald-600 font-black mt-2">05 câu</span>
+                                    <span class="block text-xs text-cyan-600 font-black mt-2">05 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="10" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-cyan-500 peer-checked:bg-cyan-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Pro 🎯</span>
-                                    <span class="block text-xs text-emerald-600 font-black mt-2">10 câu</span>
+                                    <span class="block text-xs text-cyan-600 font-black mt-2">10 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="30" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-emerald-500 peer-checked:bg-emerald-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-cyan-500 peer-checked:bg-cyan-50/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Ultra 🔥</span>
-                                    <span class="block text-xs text-emerald-600 font-black mt-2">30 câu</span>
+                                    <span class="block text-xs text-cyan-600 font-black mt-2">30 câu</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <button onclick="startGeneralQuiz()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
+                    <button onclick="startGeneralQuiz()" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
                         Bắt đầu ôn tập ngay <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
@@ -303,8 +303,8 @@
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <!-- Sử dụng màu solid ngành hàng (emerald) cho mobile -->
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+            <!-- Sử dụng màu solid ngành hàng (Cyan) cho mobile -->
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
                 <i class="fa-solid fa-cube"></i> Ôn tập ngẫu nhiên
             </button>
         </div>
@@ -583,10 +583,10 @@
                         }
                     });
                     const genBtn = document.getElementById('general-mode-btn');
-                    if (genBtn) genBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+                    if (genBtn) genBtn.className = "w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
                 } else {
                     const genBtn = document.getElementById('general-mode-btn');
-                    if (genBtn) genBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+                    if (genBtn) genBtn.className = "w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
                     const buttons = document.querySelectorAll('.category-btn');
                     buttons.forEach(btn => {
                         btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
@@ -705,7 +705,7 @@
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+            genBtn.className = "w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -736,7 +736,7 @@
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+            genBtn.className = "w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -766,6 +766,7 @@
             errScreen.classList.remove('hidden');
         }
 
+        // Fisher-Yates Shuffle Algorithm
         function shuffle(array) {
             for (let i = array.length - 1; i > 0; i--) {
                 const j = Math.floor(Math.random() * (i + 1));
