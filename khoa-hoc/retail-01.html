@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luyện thi Trắc nghiệm - Retail 01</title>
+    <title>Ôn tập Trắc nghiệm - Retail 01</title>
     
     <!-- Tailwind CSS Configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,8 +46,8 @@
         .btn-interact:active { transform: translateY(0) scale(0.97); }
 
         @keyframes pulse-gradient { 
-            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); } 
-            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(139, 92, 246, 0); } 
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(6, 182, 212, 0.4); } 
+            50% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(6, 182, 212, 0); } 
         }
         .btn-attention { animation: pulse-gradient 2.5s infinite ease-in-out; }
         .btn-attention:hover { animation-play-state: paused; }
@@ -68,7 +68,7 @@
                     <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-5">
                 </div>
                 <div class="hidden md:block border-l border-white/20 pl-3">
-                    <h1 class="text-sm font-bold tracking-tight text-white font-black">Luyện thi Trắc nghiệm - Retail 01</h1>
+                    <h1 class="text-sm font-bold tracking-tight text-white font-black">Ôn tập Trắc nghiệm - Retail 01</h1>
                     <p class="text-[11px] text-white/80 font-bold tracking-wider uppercase">Dành cho Chuyên viên tư vấn KiotViet</p>
                 </div>
             </div>
@@ -91,7 +91,7 @@
         <!-- Sidebar điều hướng -->
         <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-blue-900/40 bg-[#073c6c] text-white relative z-20 shadow-lg justify-between h-full">
             
-            <!-- ĐƯA NÚT SETTINGS LÊN ĐÂY VÀ CĂN LỆCH PHẢI (MỤC 1) -->
+            <!-- VỊ TRÍ NÚT SETTINGS TRONG SIDEBAR TITLE (CĂN PHẢI) -->
             <div class="p-5 border-b border-blue-900/40 bg-[#052d52] shrink-0 flex items-center justify-between gap-2">
                 <h2 class="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2 select-none">
                     <i class="fa-solid fa-layer-group"></i> Danh sách Bài học
@@ -102,12 +102,13 @@
             </div>
             
             <div class="flex-grow overflow-y-auto w-full p-3 space-y-1" id="category-sidebar-list">
-                <!-- Danh mục sẽ tự động nạp vào đây -->
+                <!-- Danh mục bài học sẽ tự động nạp vào đây -->
             </div>
 
+            <!-- NÚT ÔN TẬP NGẪU NHIÊN SỬ DỤNG MÀU SOLID CYAN (themeAccent) -->
             <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
-                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-themeAccent hover:bg-themeAccentHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                    <i class="fa-solid fa-cube"></i> Ôn tập ngẫu nhiên
                 </button>
             </div>
         </aside>
@@ -142,11 +143,11 @@
                     
                     <div class="relative z-10 text-center md:text-left">
                         
-                        <!-- Nút làm tiếp bài cũ (Tính năng 3) -->
+                        <!-- Nút làm tiếp bài cũ (Tự động phục hồi trạng thái) -->
                         <div id="resume-container" class="hidden mb-6 p-4 rounded-2xl border border-amber-200 bg-amber-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div class="text-left">
                                 <span class="block font-black text-amber-800 text-sm">
-                                    <i class="fa-solid fa-clock-rotate-left"></i> Bạn có một lượt làm bài chưa hoàn thành!
+                                    <i class="fa-solid fa-clock-rotate-left"></i> Bạn có một lượt ôn tập chưa hoàn thành!
                                 </span>
                                 <span class="block text-xs text-amber-600 mt-1 animate-pulse" id="resume-info">Chủ đề: ... | Tiến trình: ...</span>
                             </div>
@@ -160,27 +161,27 @@
                         </span>
                         
                         <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 mb-5 leading-snug">
-                            Chào mừng bạn đến với chuyên trang Luyện thi của Khóa học Retail 01
+                            Chào mừng bạn đến với chuyên trang Ôn tập của Khóa học Retail 01
                         </h2>
                         
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
-                            <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-01" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-01/" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
+                            <p>Sau khi hoàn thành các nội dung bài học trên <a href="https://kiotvietlnd.github.io/elearning/kho-hoc-dvkh/retail-01" target="_blank" class="text-purple-600 font-bold hover:underline">Học liệu Github</a>, đây là nơi để bạn củng cố kiến thức từng bài học và chuẩn bị cho bài test trên <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-01/" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a>.</p>
                             
-                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
+                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-themeAccent mx-1"></i>Ôn tập ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
                             
-                            <p class="text-themeAccent font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao trong bài Test trên LMS! 🚀</p>
+                            <p class="text-themeAccent font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao trong bài ôn tập trên LMS! 🚀</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- B. Màn hình cấu hình Luyện đề ngẫu nhiên -->
+                <!-- B. Màn hình cấu hình Ôn tập ngẫu nhiên -->
                 <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left fade-in-stagger mb-auto mt-auto">
-                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-kvBlue/10 text-kvBlue text-xs font-black rounded-full mb-6">
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-cyan-50 text-themeAccent text-xs font-black rounded-full mb-6 border border-cyan-100">
                         <i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN
                     </span>
-                    <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Luyện đề ngẫu nhiên</h2>
+                    <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Ôn tập ngẫu nhiên</h2>
                     <p class="text-sm text-slate-500 leading-relaxed mb-8">
-                        Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề thi thử thách toàn diện.
+                        Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra bộ câu hỏi ôn tập toàn diện.
                     </p>
                     
                     <div class="mb-10">
@@ -188,30 +189,30 @@
                         <div class="grid grid-cols-3 gap-4">
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="5" checked class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-themeAccent peer-checked:bg-cyan-50/20 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Flash ⚡</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">05 câu</span>
+                                    <span class="block text-xs text-themeAccent font-black mt-2">05 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="10" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-themeAccent peer-checked:bg-cyan-50/20 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Pro 🎯</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">10 câu</span>
+                                    <span class="block text-xs text-themeAccent font-black mt-2">10 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="30" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 transition-all text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white hover:bg-slate-50 peer-checked:border-themeAccent peer-checked:bg-cyan-50/20 transition-all text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-sm md:text-base text-slate-800">Ultra 🔥</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">30 câu</span>
+                                    <span class="block text-xs text-themeAccent font-black mt-2">30 câu</span>
                                 </div>
                             </label>
                         </div>
                     </div>
 
-                    <button onclick="startGeneralQuiz()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
-                        Bắt đầu làm bài ngay <i class="fa-solid fa-arrow-right"></i>
+                    <button onclick="startGeneralQuiz()" class="w-full bg-themeAccent hover:bg-themeAccentHover text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg transition-all text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">
+                        Bắt đầu ôn tập ngay <i class="fa-solid fa-arrow-right"></i>
                     </button>
                 </div>
 
@@ -222,19 +223,18 @@
                     </div>
                     
                     <div class="flex items-center justify-between mb-4 gap-2 px-2">
-                        <span id="question-index" class="text-sm font-black text-kvBlue tracking-wide shrink-0">Câu hỏi -- / --</span>
+                        <span id="question-index" class="text-sm font-black text-kvBlue tracking-wide shrink-0">Câu ôn tập -- / --</span>
                         
-                        <!-- SỬA LỖI TRẮC NGHIỆM KHÔNG HIỂN THỊ ĐẦY ĐỦ TÊN BÀI DÀI (MỤC 4) -->
+                        <!-- NHÃN CHỦ ĐỀ CO GIÃN THÔNG MINH, TRÁNH TRUNCATE -->
                         <span id="question-category" class="text-[10px] sm:text-xs bg-cyan-50 text-cyan-600 px-3 py-1.5 rounded-2xl font-bold uppercase tracking-wider shrink-0 border border-cyan-100 text-right leading-relaxed whitespace-normal break-words max-w-[65%] sm:max-w-[70%] shadow-sm">Chủ đề</span>
                     </div>
                     
-                    <!-- CHUYỂN TOÀN BỘ SANG EM ĐỂ CO GIÃN ĐỒNG BỘ CẢ KHUNG LẪN CHỮ (MỤC 2 & MỤC 3) -->
-                    <!-- Chế độ hiển thị 1: Từng câu duy nhất -->
-                    <div id="single-question-container" class="bg-white shadow-md border border-slate-200/80 flex-grow flex flex-col" style="padding: 2em; border-radius: 1.8em; min-height: 25em;">
-                        <h3 id="question-text" class="text-[1.1em] font-black text-slate-800 leading-relaxed text-left" style="margin-bottom: 1.8em; min-height: 4.2em;">Nội dung câu hỏi</h3>
+                    <!-- BỐ CỤC ĐO EM CO GIÃN ĐỒNG BỘ CHO SINGLE-VIEW -->
+                    <div id="single-question-container" class="bg-white shadow-md border border-slate-200/80 flex-grow flex flex-col text-left" style="padding: 2em; border-radius: 1.8em; min-height: 25em;">
+                        <h3 id="question-text" class="text-[1.1em] font-black text-slate-800 leading-relaxed" style="margin-bottom: 1.8em; min-height: 4.2em;">Nội dung câu hỏi</h3>
                         <div id="options-container" class="space-y-0"></div>
                         
-                        <!-- Hệ thống phím điều hướng thủ công (Tính năng 7) -->
+                        <!-- Hệ thống phím điều hướng thủ công -->
                         <div id="manual-nav-controls" class="flex justify-between items-center mt-6 pt-6 border-t border-slate-100 hidden shrink-0" style="margin-top: auto;">
                             <button id="prev-question-btn" onclick="prevQuestion()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-extrabold py-2 px-5 rounded-full text-xs shadow-sm transition-all shrink-0 disabled:opacity-50 flex items-center gap-1.5 focus:outline-none">
                                 <i class="fa-solid fa-arrow-left"></i> Câu trước
@@ -276,16 +276,16 @@
                         </div>
                         
                         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-2">
-                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/retail-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm transition-opacity flex items-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md">
+                            <a href="https://kiotvietlnd.github.io/elearning/kho-hoc-dvkh/retail-01" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-cyan-500 to-purple-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm transition-opacity flex items-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md">
                                 <i class="fa-brands fa-github text-lg"></i> Học lại bài này trên Github
                             </a>
                             <button onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-6 rounded-full text-sm transition duration-150 shadow-md btn-interact flex items-center justify-center gap-2">
-                                <i class="fa-solid fa-rotate-right"></i> Chơi lại lượt ôn tập này
+                                <i class="fa-solid fa-rotate-right"></i> Ôn tập lại bài này
                             </button>
                         </div>
                     </div>
                     
-                    <h3 class="font-bold text-slate-400 mb-4 px-2 text-xs uppercase tracking-wider">Đáp án bạn đã chọn:</h3>
+                    <h3 class="font-bold text-slate-400 mb-4 px-2 text-xs uppercase tracking-wider text-left">Đáp án bạn đã chọn:</h3>
                     <div id="review-container" class="space-y-4 mb-6 w-full"></div>
                 </div>
 
@@ -303,8 +303,9 @@
         </div>
         <div id="mobile-sidebar-nav-list" class="flex-grow overflow-y-auto p-3 space-y-1"></div>
         <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0">
-            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
-                <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+            <!-- MOBILE BUTTON SỬ DỤNG MÀU SOLID CYAN (themeAccent) -->
+            <button onclick="selectGeneralMode(); toggleSidebar(false);" class="w-full bg-themeAccent hover:bg-themeAccentHover text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors text-xs shadow-md text-center">
+                <i class="fa-solid fa-cube"></i> Ôn tập ngẫu nhiên
             </button>
         </div>
     </div>
@@ -322,7 +323,7 @@
             </div>
 
             <div class="space-y-6 text-left">
-                <!-- SỬA TÊN THÀNH CỠ CHỮ (MỤC 2) -->
+                <!-- Cấu hình cỡ chữ (FontScale) -->
                 <div>
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Cỡ chữ</label>
                     <div class="flex items-center justify-between bg-slate-50 p-2 rounded-xl border border-slate-200">
@@ -336,7 +337,7 @@
                     </div>
                 </div>
 
-                <!-- Tùy chọn B: Chế độ hiển thị Từng câu / Tất cả -->
+                <!-- Chế độ hiển thị Từng câu / Tất cả -->
                 <div>
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Chế độ hiển thị</label>
                     <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
@@ -349,13 +350,13 @@
                     </div>
                 </div>
 
-                <!-- Tùy chọn C: Tự động chuyển câu -->
+                <!-- Tự động chuyển câu -->
                 <div>
                     <div class="flex items-center justify-between mb-2">
                         <label class="block text-xs font-black text-slate-400 uppercase tracking-wider">Tự động chuyển câu</label>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" id="auto-advance-toggle" class="sr-only peer" onchange="toggleAutoAdvanceSetting(this.checked)">
-                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white afternoon:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-kvBlue"></div>
+                            <div class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-kvBlue"></div>
                         </label>
                     </div>
                     <p class="text-[11px] text-slate-500 leading-relaxed">
@@ -380,9 +381,9 @@
         let selectedCategory = 'all';
         let isGeneralMode = false;
         
-        let viewMode = 'single';
+        let viewMode = localStorage.getItem('KiotViet_View_Mode') || 'single';
         let isAutoAdvance = localStorage.getItem('KiotViet_Auto_Advance') !== 'false';
-        let fontScale = parseFloat(localStorage.getItem('KiotViet_Font_Scale') || '0.9'); // Mặc định nhỏ hơn 10% (0.9)
+        let fontScale = parseFloat(localStorage.getItem('KiotViet_Font_Scale') || '0.9');
 
         let categoriesGlobal = [];
         let categoryCountsGlobal = {};
@@ -421,7 +422,6 @@
             }
         }
 
-        // PHÂN TÍCH THEO CHUẨN CỘT CỐ ĐỊNH MỚI
         function processQuizData(data) {
             if (!data || data.length === 0 || !data[0]) {
                 showErrorScreen("Dữ liệu nhận về trống rỗng.");
@@ -440,7 +440,6 @@
                 const col0Val = row[0] ? row[0].toString().trim() : '';
                 const col3Val = row[3] ? row[3].toString().trim() : '';
 
-                // Bỏ qua dòng tiêu đề
                 if (col0Val === 'Ngành Hàng' || col3Val.includes('Tiêu đề câu hỏi')) {
                     continue;
                 }
@@ -513,7 +512,7 @@
                     : "bg-white/10 text-blue-100 border-transparent";
 
                 listHtml += `
-                    <button class="category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none" data-category="${cat}" onclick="selectCategory('${cat}'); toggleSidebar(false);">
+                    <button class="category-btn w-full py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none" data-category="${cat}" onclick="selectCategory('${cat}'); toggleSidebar(false);">
                         <span class="whitespace-normal break-words mr-2 leading-relaxed text-left flex-grow">${cat}</span>
                         <span class="text-[10px] ${badgeColor} px-2 py-0.5 rounded-full shrink-0 font-bold border tabular-nums">${qCount} câu</span>
                     </button>
@@ -547,7 +546,7 @@
                     const state = JSON.parse(savedStateRaw);
                     if (state && state.currentQuizSet && state.currentQuizSet.length > 0) {
                         document.getElementById('resume-container').classList.remove('hidden');
-                        const topicName = state.isGeneralMode ? "Luyện đề ngẫu nhiên" : state.selectedCategory;
+                        const topicName = state.isGeneralMode ? "Ôn tập ngẫu nhiên" : state.selectedCategory;
                         const answered = state.userAnswers ? state.userAnswers.filter(ans => ans.selectedIdx !== null).length : 0;
                         document.getElementById('resume-info').textContent = `Chủ đề: ${topicName} | Tiến trình: ${answered}/${state.currentQuizSet.length} câu`;
                     }
@@ -576,16 +575,16 @@
                     const buttons = document.querySelectorAll('.category-btn');
                     buttons.forEach(btn => {
                         if (btn.dataset.category === selectedCategory) {
-                            btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent transition-all flex items-start justify-between text-xs font-bold focus:outline-none";
+                            btn.className = "category-btn w-full py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent transition-all flex items-start justify-between text-xs font-bold focus:outline-none";
                         } else {
-                            btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
+                            btn.className = "category-btn w-full py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
                         }
                     });
                     const genBtn = document.getElementById('general-mode-btn');
-                    if (genBtn) genBtn.className = "w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+                    if (genBtn) genBtn.className = "w-full bg-themeAccent hover:bg-themeAccentHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
                 } else {
                     const genBtn = document.getElementById('general-mode-btn');
-                    if (genBtn) genBtn.className = "w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+                    if (genBtn) genBtn.className = "w-full bg-themeAccent hover:bg-themeAccentHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
                     const buttons = document.querySelectorAll('.category-btn');
                     buttons.forEach(btn => {
                         btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
@@ -635,6 +634,7 @@
 
         function changeViewModeSetting(mode) {
             viewMode = mode;
+            localStorage.setItem('KiotViet_View_Mode', mode);
             saveQuizState();
             updateSettingsViewModeButtons();
             loadQuestion();
@@ -673,7 +673,6 @@
         function applyFontScale() {
             const quizScreen = document.getElementById('quiz-screen');
             if (quizScreen) {
-                // Tăng/giảm font-size tỷ lệ thuận kéo theo các giá trị em co giãn đồng đều (Mục 2)
                 quizScreen.style.fontSize = `${fontScale * 15}px`;
             }
             const scalePercent = Math.round(fontScale * 100);
@@ -685,7 +684,6 @@
             clearQuizState();
             currentIndex = 0;
             score = 0;
-            viewMode = 'single'; 
             userAnswers = currentQuizSet.map(q => ({
                 question: q,
                 selectedIdx: null,
@@ -705,11 +703,11 @@
             document.getElementById('general-config-screen').classList.remove('hidden');
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
+            genBtn.className = "w-full bg-themeAccent hover:bg-themeAccentHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center ring-2 ring-white ring-offset-2 ring-offset-[#073c6c]";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
-                btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
+                btn.className = "category-btn w-full py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white transition-all flex items-start justify-between text-xs font-semibold focus:outline-none";
             });
         }
 
@@ -736,7 +734,7 @@
             selectedCategory = category;
 
             const genBtn = document.getElementById('general-mode-btn');
-            genBtn.className = "w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
+            genBtn.className = "w-full bg-themeAccent hover:bg-themeAccentHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact";
 
             const buttons = document.querySelectorAll('.category-btn');
             buttons.forEach(btn => {
@@ -807,10 +805,10 @@
             q.options.forEach((opt, index) => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                btn.className = "option-btn flex items-center w-full text-left transition-all duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue focus:outline-none bg-white shadow-sm font-semibold text-[0.95em]";
+                btn.className = "option-btn flex items-center w-full text-left transition-all duration-150 border-2 border-slate-200 hover:bg-slate-50 hover:border-kvBlue focus:outline-none bg-white shadow-sm font-semibold text-[0.95em]";
                 btn.dataset.index = index;
                 
-                // Đồng bộ em cho kích thước các nút lựa chọn (Mục 2 & 3)
+                // Đồng bộ em cho kích thước các nút lựa chọn
                 btn.setAttribute('style', 'padding: 0.8em 1.2em; margin-bottom: 0.8em; border-radius: 0.9em; min-height: 3.8em; display: flex; align-items: center;');
 
                 const isSelected = (selectedOptionIndex === index);
@@ -822,10 +820,10 @@
                 const badgeBorder = isSelected ? "border-kvBlue" : "border-slate-200";
 
                 btn.innerHTML = `
-                    <span class="option-badge flex items-center justify-center w-10 h-10 mr-4 font-bold text-sm rounded-full ${badgeBg} ${badgeBorder} shrink-0 border transition-colors">
+                    <span class="option-badge flex items-center justify-center font-bold rounded-full ${badgeBg} ${badgeBorder} transition-colors" style="width: 2.5em; height: 2.5em; margin-right: 1em; font-size: 0.95em; flex-shrink: 0; border-width: 1px;">
                         ${opt.key}
                     </span>
-                    <span class="font-semibold leading-relaxed">${opt.text}</span>
+                    <span class="font-semibold leading-relaxed" style="font-size: 1em;">${opt.text}</span>
                 `;
 
                 btn.addEventListener('click', () => handleOptionClick(index));
@@ -850,10 +848,12 @@
                 const badge = btn.querySelector('.option-badge');
                 if (btnIdx === index) {
                     btn.className = "option-btn flex items-center w-full text-left transition-all duration-150 border-2 border-kvBlue bg-blue-50/40 text-kvBlue focus:outline-none shadow-sm font-bold text-[0.95em]";
-                    badge.className = "option-badge flex items-center justify-center w-10 h-10 mr-4 font-bold text-sm rounded-full bg-kvBlue text-white shrink-0 shadow-sm border border-kvBlue";
+                    badge.className = "option-badge flex items-center justify-center font-bold rounded-full bg-kvBlue text-white shrink-0 shadow-sm border border-kvBlue";
+                    badge.setAttribute('style', 'width: 2.5em; height: 2.5em; margin-right: 1em; font-size: 0.95em; flex-shrink: 0; border-width: 1px;');
                 } else {
-                    btn.className = "option-btn flex items-center w-full text-left transition-all duration-150 border-2 border-slate-200 rounded-xl hover:bg-slate-50 focus:outline-none bg-white shadow-sm font-medium text-[0.95em] opacity-60";
-                    badge.className = "option-badge flex items-center justify-center w-10 h-10 mr-4 font-bold text-sm rounded-full bg-slate-100 text-slate-600 shrink-0 border border-slate-200";
+                    btn.className = "option-btn flex items-center w-full text-left transition-all duration-150 border-2 border-slate-200 hover:bg-slate-50 focus:outline-none bg-white shadow-sm font-medium text-[0.95em] opacity-60";
+                    badge.className = "option-badge flex items-center justify-center font-bold rounded-full bg-slate-100 text-slate-600 shrink-0 border border-slate-200";
+                    badge.setAttribute('style', 'width: 2.5em; height: 2.5em; margin-right: 1em; font-size: 0.95em; flex-shrink: 0; border-width: 1px;');
                 }
             });
 
@@ -893,24 +893,24 @@
                 q.options.forEach((opt, optIdx) => {
                     const isSelected = (selectedIdx === optIdx);
                     const btnClass = isSelected 
-                        ? "flex items-center w-full text-left border-2 border-kvBlue bg-blue-50/40 text-kvBlue rounded-xl font-bold text-[0.95em]"
-                        : "flex items-center w-full text-left border-2 border-slate-200 rounded-xl hover:bg-slate-50 hover:border-kvBlue bg-white font-medium text-[0.95em]";
+                        ? "flex items-center w-full text-left border-2 border-kvBlue bg-blue-50/40 text-kvBlue font-bold text-[0.95em]"
+                        : "flex items-center w-full text-left border-2 border-slate-200 hover:bg-slate-50 hover:border-kvBlue bg-white font-medium text-[0.95em]";
                     
                     const badgeBg = isSelected ? "bg-kvBlue text-white" : "bg-slate-100 text-slate-600";
                     const badgeBorder = isSelected ? "border-kvBlue" : "border-slate-200";
 
                     optionsHtml += `
                         <button type="button" class="${btnClass}" style="padding: 0.8em 1.2em; margin-bottom: 0.8em; border-radius: 0.9em; min-height: 3.8em; display: flex; align-items: center;" onclick="selectOptionAllMode(${qIdx}, ${optIdx})">
-                            <span class="flex items-center justify-center w-8 h-8 mr-3 font-bold text-xs rounded-full ${badgeBg} ${badgeBorder} shrink-0 border">
+                            <span class="flex items-center justify-center font-bold rounded-full ${badgeBg} ${badgeBorder}" style="width: 2.5em; height: 2.5em; margin-right: 1em; font-size: 0.95em; flex-shrink: 0; border-width: 1px;">
                                 ${opt.key}
                             </span>
-                            <span class="leading-relaxed text-sm">${opt.text}</span>
+                            <span class="leading-relaxed text-sm" style="font-size: 1em;">${opt.text}</span>
                         </button>
                     `;
                 });
 
                 qCard.innerHTML = `
-                    <h4 class="text-sm font-black text-slate-800 mb-4 leading-relaxed">${qIdx + 1}. ${q.question}</h4>
+                    <h4 class="font-black text-slate-800 leading-relaxed" style="font-size: 1.1em; margin-bottom: 1.2em;">${qIdx + 1}. ${q.question}</h4>
                     <div class="space-y-2">${optionsHtml}</div>
                 `;
                 listContainer.appendChild(qCard);
@@ -928,7 +928,7 @@
 
         function submitAllQuestions() {
             const answeredCount = userAnswers.filter(ans => ans.selectedIdx !== null).length;
-            let message = `Bạn đã hoàn thành ${answeredCount} / ${currentQuizSet.length} câu. Bạn có chắc muốn nộp bài?`;
+            let message = `Bạn đã hoàn thành ${answeredCount} / ${currentQuizSet.length} câu. Bạn có chắc muốn nộp bài ôn tập?`;
             if (confirm(message)) {
                 score = userAnswers.filter(a => a.isCorrect).length;
                 showQuizResults();
@@ -1054,22 +1054,33 @@
             }());
         }
 
+        // Chống gian lận & bảo mật nâng cao cho cả Windows/Mac
         document.addEventListener("contextmenu", function (e) {
             e.preventDefault();
         });
 
         document.addEventListener("keydown", function (e) {
-            if (e.key === "F12") {
+            const isCtrlOrCmd = e.ctrlKey || e.metaKey;
+            
+            if (e.key === "F12" || e.keyCode === 123) {
                 e.preventDefault();
+                return false;
             }
-            if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "C" || e.key === "J")) {
+            if (isCtrlOrCmd && e.shiftKey && (e.key === "I" || e.key === "C" || e.key === "J" || e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) {
                 e.preventDefault();
+                return false;
             }
-            if (e.ctrlKey && e.key.toLowerCase() === "u") {
+            if (isCtrlOrCmd && e.altKey && (e.key === "I" || e.key === "C" || e.key === "J" || e.keyCode === 73 || e.keyCode === 67 || e.keyCode === 74)) {
                 e.preventDefault();
+                return false;
             }
-            if (e.ctrlKey && e.key.toLowerCase() === "s") {
+            if (isCtrlOrCmd && (e.key === "s" || e.key === "S" || e.keyCode === 83)) {
                 e.preventDefault();
+                return false;
+            }
+            if (isCtrlOrCmd && (e.key === "u" || e.key === "U" || e.keyCode === 85)) {
+                e.preventDefault();
+                return false;
             }
 
             const isQuizVisible = !document.getElementById('quiz-screen').classList.contains('hidden');
