@@ -32,8 +32,8 @@
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
         <div class="glass-panel rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-            <h2 class="text-2xl font-black text-slate-800 mb-1 text-center tracking-tight">ĐIỂM DANH ĐẦU GIỜ</h2>
-            <p class="text-xs text-blue-600 mb-6 text-center font-bold uppercase tracking-widest">Khóa học Kế Toán 01 (KiotViet)</p>
+            <h2 class="text-2xl font-black text-slate-800 mb-1 text-center tracking-tight">Đăng nhập hệ thống</h2>
+            <p class="text-xs text-blue-600 mb-6 text-center font-bold uppercase tracking-widest">Bài thực hành Kế Toán 01 (KiotViet)</p>
             <div class="space-y-4 relative z-10">
                 <div>
                     <label class="block text-xs font-black text-slate-400 uppercase mb-2">Họ và tên của bạn</label>
@@ -74,10 +74,10 @@
         // ==========================================
 
         const TASKS = [
-            { id: 'survey_start', title: "Khảo sát đầu giờ", desc: "Quét mã QR trên màn hình Zoom hoặc nhấn vào nút bên dưới để làm khảo sát đánh giá mức độ tự tin và vướng mắc thực tế.", link: "https://docs.google.com/forms/d/e/1FAIpQLScbcWV7eHhsRVVj7T3DKkHM5HkKIufDwM5pZpPzZLi7zwBa_Q/viewform?usp=sharing&ouid=114233827588486974210", btnText: "Làm Khảo Sát", requireUpload: false, isSpecial: true },
+            { id: 'survey_start', title: "Điểm danh đầu giờ", desc: "Quét mã QR trên màn hình Google Meet hoặc nhấn vào nút bên dưới để làm khảo sát đánh giá mức độ tự tin và vướng mắc thực tế.", link: "https://docs.google.com/forms/d/e/1FAIpQLScbcWV7eHhsRVVj7T3DKkHM5HkKIufDwM5pZpPzZLi7zwBa_Q/viewform?usp=sharing&ouid=114233827588486974210", btnText: "Làm Khảo Sát", requireUpload: false, isSpecial: true },
             
             { isHeader: true, title: "PHẦN 1: THIẾT LẬP HỒ SƠ KHAI THUẾ" },
-            { id: 1, title: "Nhiệm vụ 1: Tạo gian hàng & Import hàng hóa", desc: "Sử dụng tài khoản KiotViet tạo gian hàng dùng thử. Thực hiện import danh sách hàng hóa cơ bản.", requireUpload: true },
+            { id: 1, title: "Nhiệm vụ 1: Tạo gian hàng & Import hàng hóa", desc: "Sử dụng tài khoản KiotViet tạo gian hàng dùng thử. Bấm nút Tải File Excel Mẫu bên dưới và thực hiện import lên hệ thống.", link: "https://docs.google.com/spreadsheets/d/1njtTDgUILULm7fvqG1n7AVC7dCkyTejspVFeXTFIzhg/export?format=xlsx&gid=2116083325", btnText: "Tải File Excel Mẫu", requireUpload: true, isDownload: true },
             { id: 2, title: "Nhiệm vụ 2: Thiết lập Hồ sơ khai thuế (Nhóm 1)", desc: "Cài đặt nhóm thuế cho cửa hàng là Nhóm 1 (Miễn thuế).", requireUpload: true },
             { id: 3, title: "Nhiệm vụ 3: Kiểm tra Sổ kế toán & Tờ khai", desc: "Ra quầy bán 1 đơn hàng bất kỳ. Quay lại kiểm tra Sổ kế toán và Tờ khai thuế của Nhóm 1 xem số liệu đã nhảy chưa.", requireUpload: true },
             { id: 4, title: "Nhiệm vụ 4: Đổi thiết lập sang Nhóm 2", desc: "Vào thiết lập đổi cửa hàng sang Nhóm 2. Xem sự thay đổi mẫu sổ và tờ khai trên hệ thống.", requireUpload: true },
@@ -87,7 +87,7 @@
             { id: 6, title: "Nhiệm vụ 6: Kích hoạt Hóa đơn KiotViet", desc: "Kích hoạt dịch vụ Hóa đơn điện tử ngay trên phần mềm.", requireUpload: true },
             { id: 7, title: "Nhiệm vụ 7: Kết nối HĐĐT với phần mềm Bán hàng", desc: "Thực hiện nhập OTP để 2 hệ thống Bán hàng và Thuế kết nối thành công.", requireUpload: true },
 
-            { id: 'survey_end', title: "Khảo sát khóa học sau đào tạo", desc: "Hoàn thành khảo sát để đánh giá khóa học và nhận lộ trình thi chứng chỉ Kế toán 01.", link: "https://docs.google.com/forms/d/e/1FAIpQLSfUjSF4NzBAf9AQhWhs09eE-a7InRHjAFcc_ZdeqlQl3F7R0A/viewform", btnText: "Làm Khảo Sát Cuối Khóa", requireUpload: false, isSpecial: true }
+            { id: 'survey_end', title: "Khảo sát khóa học sau đào tạo", desc: "Hoàn thành khảo sát để đánh giá khóa học Kế toán 01.", link: "https://docs.google.com/forms/d/e/1FAIpQLSfUjSF4NzBAf9AQhWhs09eE-a7InRHjAFcc_ZdeqlQl3F7R0A/viewform", btnText: "Làm Khảo Sát Cuối Khóa", requireUpload: false, isSpecial: true }
         ];
 
         let pendingFiles = {}; 
@@ -140,7 +140,16 @@
                     `;
                 }
                 
-                let linkHtml = t.link ? `<a href="${t.link}" target="_blank" class="mt-3 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt"></i> ${t.btnText}</a>` : '';
+                let linkHtml = '';
+                if(t.link) {
+                    if(t.isDownload) {
+                        // Nút Tải file: Màu xanh lá cây (Excel), tải trực tiếp không mở tab mới
+                        linkHtml = `<a href="${t.link}" class="mt-3 inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm transition"><i class="fas fa-file-excel text-emerald-600"></i> ${t.btnText}</a>`;
+                    } else {
+                        // Nút Khảo sát: Màu xanh tím, mở tab mới
+                        linkHtml = `<a href="${t.link}" target="_blank" class="mt-3 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt"></i> ${t.btnText}</a>`;
+                    }
+                }
 
                 // Giao diện Khảo sát (Special) không có icon số đếm
                 let badgeHtml = t.isSpecial ? `<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 font-black flex items-center justify-center shrink-0 shadow-inner mt-0.5"><i class="fas fa-star"></i></div>` 
