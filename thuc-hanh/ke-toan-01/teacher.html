@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Giảng Viên - Kế Toán 01</title>
+    <title>Dashboard GV - Kế Toán 01</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -14,152 +14,240 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .student-item { transition: all 0.2s; cursor: pointer; }
-        .student-active { background-color: #eff6ff; border-right: 4px solid #3b82f6; }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
+        .glow-blob-1 { position: absolute; top: -20%; left: -10%; width: 60vw; height: 60vw; filter: blur(120px); border-radius: 50%; animation: float 20s ease-in-out infinite; background: rgba(59, 130, 246, 0.1); }
+        .glow-blob-2 { position: absolute; bottom: -20%; right: -10%; width: 50vw; height: 50vw; filter: blur(100px); border-radius: 50%; animation: float 15s ease-in-out infinite reverse; background: rgba(139, 92, 246, 0.1); }
+        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(40px) scale(1.05); } }
+
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 30px -5px rgba(0,0,0,0.08); }
+        .glass-header { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+        
+        .student-item { transition: all 0.2s; cursor: pointer; border-left: 4px solid transparent; }
+        .student-active { background-color: rgba(59, 130, 246, 0.08); border-left: 4px solid #3b82f6; }
+        
+        /* Animation quay random */
+        .random-spin { animation: highlight-pulse 0.1s infinite alternate; }
+        @keyframes highlight-pulse { from { background-color: transparent; } to { background-color: #dbeafe; border-left-color: #60a5fa; } }
     </style>
 </head>
-<body class="h-screen flex overflow-hidden">
+<body class="h-screen flex flex-col overflow-hidden selection:bg-blue-200">
 
-    <!-- SIDEBAR BÊN TRÁI: DANH SÁCH HỌC VIÊN -->
-    <aside class="w-80 bg-white border-r border-slate-200 flex flex-col shrink-0 z-20 shadow-lg">
-        <div class="h-16 flex items-center px-6 border-b border-slate-200 shrink-0 bg-blue-900 text-white justify-between">
-            <h1 class="font-black text-sm tracking-wider uppercase"><i class="fas fa-chalkboard-teacher text-blue-300 mr-2"></i>GV Kế Toán 01</h1>
-            <button onclick="fetchData()" class="text-blue-200 hover:text-white" title="Làm mới dữ liệu"><i class="fas fa-sync-alt"></i></button>
+    <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
+
+    <!-- TOP HEADER TỔNG CỦA GIẢNG VIÊN -->
+    <header class="glass-header h-16 flex items-center justify-between px-6 z-30 shrink-0 shadow-sm relative">
+        <div class="flex items-center gap-4">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-7">
+            <div class="h-5 w-px bg-slate-300 mx-1"></div>
+            <span class="font-black text-slate-700 tracking-tight"><i class="fas fa-chalkboard-teacher text-blue-500 mr-1.5"></i> PORTAL CHẤM BÀI</span>
         </div>
-        <div class="p-4 border-b border-slate-200 bg-slate-50 shrink-0">
-            <div class="relative">
-                <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
-                <input type="text" id="inpSearch" onkeyup="filterStudents()" class="w-full bg-white border border-slate-300 rounded-lg pl-9 pr-4 py-2 text-sm font-semibold focus:outline-none focus:border-blue-500" placeholder="Tìm tên học viên...">
+        
+        <!-- THANH CÔNG CỤ SIÊU TỐC TRÊN HEADER -->
+        <div class="flex items-center gap-4">
+            <div class="relative hidden md:flex items-center bg-slate-100 rounded-lg border border-slate-200 p-1">
+                <span class="text-xs font-bold text-slate-500 pl-3 pr-2 uppercase"><i class="fas fa-filter"></i> Lọc Bài:</span>
+                <select id="selTaskFilter" onchange="filterStudents()" class="bg-transparent text-sm font-black text-blue-700 focus:outline-none cursor-pointer pr-4 appearance-none">
+                    <option value="ALL">Hiển thị Tất cả</option>
+                    <!-- Sẽ render động list bài tập vào đây -->
+                </select>
+                <i class="fas fa-chevron-down text-blue-500 text-[10px] absolute right-3 pointer-events-none"></i>
             </div>
-        </div>
-        <div id="studentList" class="flex-1 overflow-y-auto bg-white flex flex-col">
-            <div class="p-8 text-center text-slate-400 text-sm font-semibold"><i class="fas fa-spinner fa-spin text-2xl mb-2 text-blue-500"></i><br>Đang tải dữ liệu...</div>
-        </div>
-    </aside>
 
-    <!-- MAIN BÊN PHẢI: CHI TIẾT BÀI LÀM -->
-    <main class="flex-1 overflow-y-auto bg-slate-50 p-6 md:p-10 relative">
-        <div id="mainContent" class="max-w-5xl mx-auto h-full flex flex-col items-center justify-center">
-            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-12 mb-6 opacity-30 grayscale">
-            <h2 class="text-xl font-black text-slate-400">Chọn 1 học viên bên trái để bắt đầu chấm bài</h2>
+            <button onclick="pickRandomStudent()" class="bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white px-4 py-2 rounded-lg text-sm font-black shadow-md shadow-orange-500/20 transition flex items-center gap-2 transform hover:scale-105 active:scale-95">
+                <i class="fas fa-dice"></i> Random Gọi Tên
+            </button>
+            <button onclick="fetchData()" class="w-10 h-10 bg-blue-50 hover:bg-blue-100 text-blue-600 border border-blue-200 rounded-lg flex items-center justify-center transition" title="Làm mới dữ liệu">
+                <i class="fas fa-sync-alt"></i>
+            </button>
         </div>
-    </main>
+    </header>
 
-    <!-- FULLSCREEN IMAGE MODAL -->
-    <div id="imgModal" class="fixed inset-0 bg-slate-950/95 z-[100] flex items-center justify-center hidden flex-col">
+    <div class="flex flex-1 overflow-hidden relative z-20">
+        <!-- SIDEBAR TRÁI: DANH SÁCH -->
+        <aside class="w-80 glass-panel border-r-0 border-r border-white/40 flex flex-col shrink-0">
+            <div class="p-4 border-b border-slate-200/60 shrink-0">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                    <input type="text" id="inpSearch" onkeyup="filterStudents()" class="w-full bg-white border border-slate-200 shadow-inner rounded-xl pl-9 pr-4 py-2.5 text-sm font-semibold focus:outline-none focus:border-blue-400 focus:ring-2 focus:ring-blue-100 transition" placeholder="Tìm Họ tên hoặc Phòng ban...">
+                </div>
+                <div class="flex justify-between items-center mt-3 px-1">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest" id="lblCount">0 Học viên</span>
+                </div>
+            </div>
+            
+            <div id="studentList" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col p-2 space-y-1">
+                <div class="p-8 text-center text-slate-400 text-sm font-semibold"><i class="fas fa-circle-notch fa-spin text-2xl mb-2 text-blue-500"></i><br>Đang kéo dữ liệu từ Google Sheet...</div>
+            </div>
+        </aside>
+
+        <!-- MAIN PHẢI: XEM CHI TIẾT -->
+        <main class="flex-1 overflow-y-auto p-6 md:p-8 relative custom-scrollbar">
+            <div id="mainContent" class="max-w-5xl mx-auto h-full flex flex-col items-center justify-center">
+                <div class="w-24 h-24 rounded-full bg-blue-50 flex items-center justify-center mb-6 shadow-inner border border-blue-100">
+                    <i class="fas fa-eye text-4xl text-blue-300"></i>
+                </div>
+                <h2 class="text-2xl font-black text-slate-400 tracking-tight text-center">Chế Độ Chấm Bài Nhanh</h2>
+                <p class="text-slate-400 text-sm mt-2 max-w-md text-center font-medium">Bấm vào tên học viên hoặc dùng nút <strong class="text-orange-500">Random Gọi Tên</strong> để kiểm tra kết quả ngay lập tức.</p>
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL XEM ẢNH FULLSCREEN -->
+    <div id="imgModal" class="fixed inset-0 bg-slate-950/95 backdrop-blur-md z-[100] flex items-center justify-center hidden flex-col">
         <div class="absolute top-4 right-6 flex gap-4">
-            <a id="btnRawImg" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Mở link gốc</a>
-            <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="w-10 h-10 bg-white/10 hover:bg-red-500/80 text-white rounded-xl flex items-center justify-center text-xl transition"><i class="fas fa-times"></i></button>
+            <a id="btnRawImg" href="#" target="_blank" class="px-5 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Mở link gốc</a>
+            <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="w-10 h-10 bg-white/10 hover:bg-red-500 text-white rounded-xl flex items-center justify-center text-xl transition"><i class="fas fa-times"></i></button>
         </div>
-        <img id="fullImg" src="" class="max-w-[95%] max-h-[90vh] object-contain rounded-lg shadow-2xl">
+        <img id="fullImg" src="" class="max-w-[95%] max-h-[90vh] object-contain rounded-xl shadow-2xl border border-white/10">
     </div>
 
     <script>
         // ============== CẤU HÌNH API ==============
-        // Phải giống với link trên trang Học viên
-        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvqEWis-OVNgN2HQs3PyVt8RZ0GoGIqjN19KejVUJgCAFT2k2kBdD8cgiOOw88MetH/exec"; 
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9-k7Z5e8A3xXz6c2D1vB0g4hFjKqL9mN8bV5c2D1vB0g4hFj/exec"; 
         // ==========================================
 
         let globalData = {}; 
+        let uniqueTasks = new Set();
 
         document.addEventListener('DOMContentLoaded', () => { fetchData(); });
 
         function fetchData() {
-            if(APP_SCRIPT_URL.includes("AKfycby9-k7Z")) return alert("LỖI: Hãy deploy mã nguồn GAS và dán link vào file HTML (biến APP_SCRIPT_URL) trước khi dùng!");
+            if(APP_SCRIPT_URL.includes("AKfycby9-k7Z")) return alert("LỖI: Chưa cập nhật link Web App Google Apps Script!");
             
             const listContainer = document.getElementById('studentList');
-            listContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-sm font-semibold"><i class="fas fa-spinner fa-spin text-2xl mb-2 text-blue-500"></i><br>Đang tải dữ liệu...</div>';
+            listContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-sm font-semibold"><i class="fas fa-circle-notch fa-spin text-2xl mb-2 text-blue-500"></i><br>Đang đồng bộ...</div>';
             
-            fetch(APP_SCRIPT_URL)
-            .then(r => r.json())
-            .then(res => {
+            fetch(APP_SCRIPT_URL).then(r => r.json()).then(res => {
                 if(res.status === 'success') {
                     globalData = res.data;
+                    extractUniqueTasks();
                     renderSidebar();
-                } else {
-                    listContainer.innerHTML = `<div class="p-8 text-center text-red-500 text-sm font-bold">Lỗi Server: ${res.message}</div>`;
-                }
-            })
-            .catch(err => { listContainer.innerHTML = `<div class="p-8 text-center text-red-500 text-sm font-bold">Lỗi kết nối mạng!</div>`; });
+                } else listContainer.innerHTML = `<div class="p-8 text-center text-red-500 text-sm font-bold">Lỗi Server: ${res.message}</div>`;
+            }).catch(err => { listContainer.innerHTML = `<div class="p-8 text-center text-red-500 text-sm font-bold">Lỗi kết nối mạng!</div>`; });
+        }
+
+        function extractUniqueTasks() {
+            uniqueTasks.clear();
+            Object.values(globalData).forEach(student => {
+                Object.keys(student.tasks).forEach(taskName => uniqueTasks.add(taskName));
+            });
+            const sel = document.getElementById('selTaskFilter');
+            let html = '<option value="ALL">Hiển thị Tất cả</option>';
+            Array.from(uniqueTasks).sort().forEach(t => html += `<option value="${t}">${t.split(': ')[0]}</option>`);
+            sel.innerHTML = html;
         }
 
         function renderSidebar() {
             const listContainer = document.getElementById('studentList');
-            let html = '';
+            const searchKeyword = document.getElementById('inpSearch').value.toLowerCase();
+            const taskFilter = document.getElementById('selTaskFilter').value;
+            
+            let html = ''; let count = 0;
             const studentNames = Object.keys(globalData).sort();
             
-            if(studentNames.length === 0) {
-                html = '<div class="p-8 text-center text-slate-400 text-sm font-semibold">Chưa có học viên nào nộp bài.</div>';
-            } else {
-                studentNames.forEach(name => {
-                    const student = globalData[name];
+            studentNames.forEach(name => {
+                const student = globalData[name];
+                
+                // Lọc theo Search (Tên hoặc Phòng ban)
+                let matchSearch = name.toLowerCase().includes(searchKeyword) || student.dept.toLowerCase().includes(searchKeyword);
+                
+                // Lọc theo Bài tập hiện tại (Chỉ hiện ai đã nộp bài này)
+                let matchTask = taskFilter === 'ALL' ? true : !!student.tasks[taskFilter];
+                
+                if(matchSearch && matchTask) {
+                    count++;
                     const taskCount = Object.keys(student.tasks).length;
+                    
+                    // Nếu đang lọc task, ta check mark để nhấn mạnh
+                    const statusBadge = taskFilter !== 'ALL' 
+                        ? `<span class="text-emerald-500 text-[11px] font-black"><i class="fas fa-check-circle"></i> Đã nộp</span>`
+                        : `<span class="bg-slate-100 text-slate-500 text-[10px] font-black px-2 py-0.5 rounded-md border border-slate-200">${taskCount} Bài</span>`;
+
                     html += `
-                        <div class="student-item p-4 border-b border-slate-100 hover:bg-slate-50 flex flex-col gap-1" data-name="${name.toLowerCase()}" onclick="viewStudent('${name}')">
+                        <div class="student-item bg-white/60 hover:bg-white rounded-xl p-3 shadow-sm border border-slate-100 flex flex-col gap-1" data-name="${name}" onclick="viewStudent('${name}')">
                             <div class="flex justify-between items-start">
-                                <h3 class="font-black text-slate-800 text-sm">${name}</h3>
-                                <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-md">${taskCount} Bài</span>
+                                <h3 class="font-black text-slate-800 text-sm truncate pr-2">${name}</h3>
+                                ${statusBadge}
                             </div>
-                            <p class="text-[11px] text-slate-500 font-semibold"><i class="fas fa-map-marker-alt"></i> ${student.dept}</p>
+                            <p class="text-[11px] text-slate-500 font-bold truncate"><i class="fas fa-map-marker-alt text-slate-300 mr-1"></i>${student.dept}</p>
                         </div>
                     `;
-                });
-            }
-            listContainer.innerHTML = html;
-        }
-
-        function filterStudents() {
-            const keyword = document.getElementById('inpSearch').value.toLowerCase();
-            document.querySelectorAll('.student-item').forEach(item => {
-                if(item.getAttribute('data-name').includes(keyword)) item.style.display = 'flex';
-                else item.style.display = 'none';
+                }
             });
+            
+            if(count === 0) html = '<div class="p-8 text-center text-slate-400 text-sm font-semibold border-2 border-dashed border-slate-200 rounded-xl mt-4 mx-2">Không tìm thấy dữ liệu phù hợp.</div>';
+            listContainer.innerHTML = html;
+            document.getElementById('lblCount').innerText = `${count} Học viên`;
         }
 
-        // Lấy link ảnh trực tiếp từ Google Drive để nhúng vào thẻ img
+        function filterStudents() { renderSidebar(); }
+
+        // Tính năng Random gọi tên
+        function pickRandomStudent() {
+            const visibleItems = document.querySelectorAll('.student-item');
+            if(visibleItems.length === 0) return alert("Không có học viên nào trong danh sách lọc!");
+            
+            let iterations = 0;
+            const maxIterations = 15;
+            const interval = setInterval(() => {
+                // Tắt highlight cũ
+                visibleItems.forEach(i => i.classList.remove('random-spin', 'bg-blue-50'));
+                
+                // Chọn random mới
+                const randIndex = Math.floor(Math.random() * visibleItems.length);
+                const target = visibleItems[randIndex];
+                target.classList.add('random-spin', 'bg-blue-50');
+                target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                
+                iterations++;
+                if(iterations >= maxIterations) {
+                    clearInterval(interval);
+                    target.classList.remove('random-spin');
+                    target.click(); // Tự động mở bài
+                }
+            }, 100);
+        }
+
         function getDirectImageUrl(url) { 
             let match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/); 
-            if(match && match[1]) return `https://lh3.googleusercontent.com/d/${match[1]}`; 
-            return url; 
+            if(match && match[1]) return `https://lh3.googleusercontent.com/d/${match[1]}`; return url; 
         }
 
         function viewStudent(name) {
-            // Đổi màu active trên sidebar
             document.querySelectorAll('.student-item').forEach(item => item.classList.remove('student-active'));
-            const activeEl = Array.from(document.querySelectorAll('.student-item')).find(el => el.getAttribute('data-name') === name.toLowerCase());
+            const activeEl = Array.from(document.querySelectorAll('.student-item')).find(el => el.getAttribute('data-name') === name);
             if(activeEl) activeEl.classList.add('student-active');
 
             const student = globalData[name];
+            const taskFilter = document.getElementById('selTaskFilter').value;
             const main = document.getElementById('mainContent');
             
             let html = `
-                <div class="w-full flex justify-between items-end mb-8 border-b border-slate-200 pb-4">
+                <div class="glass-panel p-6 rounded-2xl mb-6 flex justify-between items-center sticky top-0 z-10">
                     <div>
-                        <h1 class="text-3xl font-black text-blue-800 tracking-tight">${student.name}</h1>
-                        <p class="text-sm text-slate-500 font-bold mt-1"><i class="fas fa-building"></i> ${student.dept}</p>
-                    </div>
-                    <div class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-xl text-sm font-black border border-emerald-200 shadow-sm">
-                        Đã nộp: ${Object.keys(student.tasks).length} nhiệm vụ
+                        <h1 class="text-2xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600 tracking-tight">${student.name}</h1>
+                        <p class="text-xs text-slate-500 font-bold mt-1 uppercase tracking-widest"><i class="fas fa-briefcase text-slate-400"></i> ${student.dept}</p>
                     </div>
                 </div>
-                <div class="w-full space-y-6">
+                <div class="w-full space-y-6 pb-20">
             `;
 
-            // Lấy danh sách task và render
+            // Render tasks. Nếu đang dùng Bộ lọc (taskFilter != ALL), CHỈ render bài tập đang chọn.
             for(let taskName in student.tasks) {
-                const task = student.tasks[taskName];
+                if(taskFilter !== 'ALL' && taskName !== taskFilter) continue; 
                 
+                const task = student.tasks[taskName];
                 let imgHtml = '';
                 if(task.images && task.images.length > 0) {
-                    imgHtml = `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">`;
+                    imgHtml = `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">`;
                     task.images.forEach(url => {
                         if(url.trim() === '') return;
                         const directUrl = getDirectImageUrl(url);
                         imgHtml += `
-                            <div onclick="openImage('${directUrl}', '${url}')" class="relative group cursor-zoom-in aspect-video bg-slate-100 rounded-xl overflow-hidden border-2 border-slate-200 hover:border-blue-500 shadow-sm transition-all">
-                                <img src="${directUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                    <i class="fas fa-search-plus text-white text-2xl drop-shadow-md"></i>
+                            <div onclick="openImage('${directUrl}', '${url}')" class="relative group cursor-zoom-in aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all">
+                                <img src="${directUrl}" class="w-full h-full object-cover">
+                                <div class="absolute inset-0 bg-blue-900/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+                                    <i class="fas fa-expand text-white text-3xl drop-shadow-lg scale-50 group-hover:scale-100 transition-transform"></i>
                                 </div>
                             </div>
                         `;
@@ -168,10 +256,10 @@
                 }
 
                 html += `
-                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                        <div class="flex justify-between items-start mb-2">
-                            <h3 class="font-black text-slate-800 text-lg border-l-4 border-blue-500 pl-3 leading-tight">${taskName}</h3>
-                            <span class="text-[11px] text-slate-400 font-semibold bg-slate-100 px-2 py-1 rounded-md"><i class="far fa-clock"></i> Nộp lúc: ${task.time}</span>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 hover:border-blue-300 transition-colors">
+                        <div class="flex justify-between items-start mb-2 border-b border-slate-100 pb-3">
+                            <h3 class="font-black text-slate-800 text-lg border-l-4 border-indigo-500 pl-3 leading-tight">${taskName}</h3>
+                            <span class="text-[11px] text-slate-500 font-bold bg-slate-50 border border-slate-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-sm"><i class="fas fa-cloud-upload-alt text-blue-400"></i> ${task.time.split(' ')[1]}</span>
                         </div>
                         ${imgHtml}
                     </div>
@@ -179,7 +267,7 @@
             }
 
             html += `</div>`;
-            main.className = "max-w-5xl mx-auto h-full flex flex-col justify-start"; // Bỏ căn giữa
+            main.className = "max-w-5xl mx-auto h-full flex flex-col justify-start";
             main.innerHTML = html;
         }
 
