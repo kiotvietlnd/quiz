@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giảng Viên - Kế Toán 01</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        
+        .student-item { transition: all 0.2s; cursor: pointer; }
+        .student-active { background-color: #eff6ff; border-right: 4px solid #3b82f6; }
+    </style>
+</head>
+<body class="h-screen flex overflow-hidden">
+
+    <!-- SIDEBAR BÊN TRÁI: DANH SÁCH HỌC VIÊN -->
+    <aside class="w-80 bg-white border-r border-slate-200 flex flex-col shrink-0 z-20 shadow-lg">
+        <div class="h-16 flex items-center px-6 border-b border-slate-200 shrink-0 bg-blue-900 text-white justify-between">
+            <h1 class="font-black text-sm tracking-wider uppercase"><i class="fas fa-chalkboard-teacher text-blue-300 mr-2"></i>GV Kế Toán 01</h1>
+            <button onclick="fetchData()" class="text-blue-200 hover:text-white" title="Làm mới dữ liệu"><i class="fas fa-sync-alt"></i></button>
+        </div>
+        <div class="p-4 border-b border-slate-200 bg-slate-50 shrink-0">
+            <div class="relative">
+                <i class="fas fa-search absolute left-3 top-3 text-slate-400"></i>
+                <input type="text" id="inpSearch" onkeyup="filterStudents()" class="w-full bg-white border border-slate-300 rounded-lg pl-9 pr-4 py-2 text-sm font-semibold focus:outline-none focus:border-blue-500" placeholder="Tìm tên học viên...">
+            </div>
+        </div>
+        <div id="studentList" class="flex-1 overflow-y-auto bg-white flex flex-col">
+            <div class="p-8 text-center text-slate-400 text-sm font-semibold"><i class="fas fa-spinner fa-spin text-2xl mb-2 text-blue-500"></i><br>Đang tải dữ liệu...</div>
+        </div>
+    </aside>
+
+    <!-- MAIN BÊN PHẢI: CHI TIẾT BÀI LÀM -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-6 md:p-10 relative">
+        <div id="mainContent" class="max-w-5xl mx-auto h-full flex flex-col items-center justify-center">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-12 mb-6 opacity-30 grayscale">
+            <h2 class="text-xl font-black text-slate-400">Chọn 1 học viên bên trái để bắt đầu chấm bài</h2>
+        </div>
+    </main>
+
+    <!-- FULLSCREEN IMAGE MODAL -->
+    <div id="imgModal" class="fixed inset-0 bg-slate-950/95 z-[100] flex items-center justify-center hidden flex-col">
+        <div class="absolute top-4 right-6 flex gap-4">
+            <a id="btnRawImg" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Mở link gốc</a>
+            <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="w-10 h-10 bg-white/10 hover:bg-red-500/80 text-white rounded-xl flex items-center justify-center text-xl transition"><i class="fas fa-times"></i></button>
+        </div>
+        <img id="fullImg" src="" class="max-w-[95%] max-h-[90vh] object-contain rounded-lg shadow-2xl">
+    </div>
+
+    <script>
+        // ============== CẤU HÌNH API ==============
+        // Phải giống với link trên trang Học viên
+        const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycby9-k7Z5e8A3xXz6c2D1vB0g4hFjKqL9mN8bV5c2D1vB0g4hFj/exec"; 
+        // ==========================================
+
+        let globalData = {}; 
+
+        document.addEventListener('DOMContentLoaded', () => { fetchData(); });
+
+        function fetchData() {
+            if(APP_SCRIPT_URL.includes("AKfycby9-k7Z")) return alert("LỖI: Hãy deploy mã nguồn GAS và dán link vào file HTML (biến APP_SCRIPT_URL) trước khi dùng!");
+            
+            const listContainer = document.getElementById('studentList');
+            listContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-sm font-semibold"><i class="fas fa-spinner fa-spin text-2xl mb-2 text-blue-500"></i><br>Đang tải dữ liệu...</div>';
+            
+            fetch(APP_SCRIPT_URL)
+            .then(r => r.json())
+            .then(res => {
+                if(res.status === 'success') {
+                    globalData = res.data;
+                    renderSidebar();
+                } else {
+                    listContainer.innerHTML = `<div class="p-8 text-center text-red-500 text-sm font-bold">Lỗi Server: ${res.message}</div>`;
+                }
+            })
+            .catch(err => { listContainer.innerHTML = `<div class="p-8 text-center text-red-500 text-sm font-bold">Lỗi kết nối mạng!</div>`; });
+        }
+
+        function renderSidebar() {
+            const listContainer = document.getElementById('studentList');
+            let html = '';
+            const studentNames = Object.keys(globalData).sort();
+            
+            if(studentNames.length === 0) {
+                html = '<div class="p-8 text-center text-slate-400 text-sm font-semibold">Chưa có học viên nào nộp bài.</div>';
+            } else {
+                studentNames.forEach(name => {
+                    const student = globalData[name];
+                    const taskCount = Object.keys(student.tasks).length;
+                    html += `
+                        <div class="student-item p-4 border-b border-slate-100 hover:bg-slate-50 flex flex-col gap-1" data-name="${name.toLowerCase()}" onclick="viewStudent('${name}')">
+                            <div class="flex justify-between items-start">
+                                <h3 class="font-black text-slate-800 text-sm">${name}</h3>
+                                <span class="bg-blue-100 text-blue-700 text-[10px] font-black px-2 py-0.5 rounded-md">${taskCount} Bài</span>
+                            </div>
+                            <p class="text-[11px] text-slate-500 font-semibold"><i class="fas fa-map-marker-alt"></i> ${student.dept}</p>
+                        </div>
+                    `;
+                });
+            }
+            listContainer.innerHTML = html;
+        }
+
+        function filterStudents() {
+            const keyword = document.getElementById('inpSearch').value.toLowerCase();
+            document.querySelectorAll('.student-item').forEach(item => {
+                if(item.getAttribute('data-name').includes(keyword)) item.style.display = 'flex';
+                else item.style.display = 'none';
+            });
+        }
+
+        // Lấy link ảnh trực tiếp từ Google Drive để nhúng vào thẻ img
+        function getDirectImageUrl(url) { 
+            let match = url.match(/\/d\/(.+?)\//) || url.match(/id=(.+?)(&|$)/); 
+            if(match && match[1]) return `https://lh3.googleusercontent.com/d/${match[1]}`; 
+            return url; 
+        }
+
+        function viewStudent(name) {
+            // Đổi màu active trên sidebar
+            document.querySelectorAll('.student-item').forEach(item => item.classList.remove('student-active'));
+            const activeEl = Array.from(document.querySelectorAll('.student-item')).find(el => el.getAttribute('data-name') === name.toLowerCase());
+            if(activeEl) activeEl.classList.add('student-active');
+
+            const student = globalData[name];
+            const main = document.getElementById('mainContent');
+            
+            let html = `
+                <div class="w-full flex justify-between items-end mb-8 border-b border-slate-200 pb-4">
+                    <div>
+                        <h1 class="text-3xl font-black text-blue-800 tracking-tight">${student.name}</h1>
+                        <p class="text-sm text-slate-500 font-bold mt-1"><i class="fas fa-building"></i> ${student.dept}</p>
+                    </div>
+                    <div class="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-xl text-sm font-black border border-emerald-200 shadow-sm">
+                        Đã nộp: ${Object.keys(student.tasks).length} nhiệm vụ
+                    </div>
+                </div>
+                <div class="w-full space-y-6">
+            `;
+
+            // Lấy danh sách task và render
+            for(let taskName in student.tasks) {
+                const task = student.tasks[taskName];
+                
+                let imgHtml = '';
+                if(task.images && task.images.length > 0) {
+                    imgHtml = `<div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">`;
+                    task.images.forEach(url => {
+                        if(url.trim() === '') return;
+                        const directUrl = getDirectImageUrl(url);
+                        imgHtml += `
+                            <div onclick="openImage('${directUrl}', '${url}')" class="relative group cursor-zoom-in aspect-video bg-slate-100 rounded-xl overflow-hidden border-2 border-slate-200 hover:border-blue-500 shadow-sm transition-all">
+                                <img src="${directUrl}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <i class="fas fa-search-plus text-white text-2xl drop-shadow-md"></i>
+                                </div>
+                            </div>
+                        `;
+                    });
+                    imgHtml += `</div>`;
+                }
+
+                html += `
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-black text-slate-800 text-lg border-l-4 border-blue-500 pl-3 leading-tight">${taskName}</h3>
+                            <span class="text-[11px] text-slate-400 font-semibold bg-slate-100 px-2 py-1 rounded-md"><i class="far fa-clock"></i> Nộp lúc: ${task.time}</span>
+                        </div>
+                        ${imgHtml}
+                    </div>
+                `;
+            }
+
+            html += `</div>`;
+            main.className = "max-w-5xl mx-auto h-full flex flex-col justify-start"; // Bỏ căn giữa
+            main.innerHTML = html;
+        }
+
+        function openImage(directUrl, rawUrl) {
+            document.getElementById('fullImg').src = directUrl;
+            document.getElementById('btnRawImg').href = rawUrl;
+            document.getElementById('imgModal').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
