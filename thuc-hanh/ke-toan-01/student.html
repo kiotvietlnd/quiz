@@ -6,31 +6,29 @@
     <title>Học viên - Thực hành Kế Toán 01</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         
-        /* Hiệu ứng Nền Kỹ thuật số (Tech BG) */
         .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
         .glow-blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 15s ease-in-out infinite; background: rgba(37, 99, 235, 0.08); }
         .glow-blob-2 { position: absolute; bottom: -10%; right: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 18s ease-in-out infinite reverse; background: rgba(16, 185, 129, 0.08); }
         @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(30px) scale(1.05); } }
 
-        /* Kính mờ (Glassmorphism) */
-        .glass-panel { background: rgba(255, 255, 255, 0.75); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
-        .glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
         
-        .task-card { transition: all 0.3s ease; }
-        .task-card:focus-within { border-color: rgba(59, 130, 246, 0.5); box-shadow: 0 10px 30px -5px rgba(59, 130, 246, 0.15); transform: translateY(-2px); }
+        .task-card { transition: all 0.2s ease; }
+        .task-card:focus-within { border-color: rgba(59, 130, 246, 0.4); box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.1); transform: translateY(-2px); }
     </style>
 </head>
 <body class="relative min-h-screen selection:bg-blue-200 selection:text-blue-900">
 
     <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
 
-    <!-- MODAL ĐỊNH DANH (GLASS) -->
+    <!-- MODAL ĐỊNH DANH -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
         <div class="glass-panel rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
@@ -39,33 +37,33 @@
             <div class="space-y-4 relative z-10">
                 <div>
                     <label class="block text-xs font-black text-slate-400 uppercase mb-2">Họ và tên của bạn</label>
-                    <input type="text" id="inpName" class="w-full bg-white/80 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white shadow-inner transition" placeholder="VD: Nguyễn Văn A">
+                    <input type="text" id="inpName" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-inner transition" placeholder="VD: Nguyễn Văn A">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-slate-400 uppercase mb-2">Phòng ban (Khu vực)</label>
-                    <input type="text" id="inpDept" class="w-full bg-white/80 border-2 border-slate-200 rounded-xl px-4 py-3 font-bold text-slate-800 focus:outline-none focus:border-blue-500 focus:bg-white shadow-inner transition" placeholder="VD: Sales HCM 01">
+                    <label class="block text-xs font-black text-slate-400 uppercase mb-2">Phòng ban</label>
+                    <input type="text" id="inpDept" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-inner transition" placeholder="VD: LND">
                 </div>
-                <button onclick="saveProfile()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black py-3.5 rounded-xl transition shadow-lg shadow-blue-500/30 hover:-translate-y-0.5 mt-4">
+                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl transition shadow-lg shadow-blue-500/30 mt-4 text-sm">
                     VÀO LỚP HỌC <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- HEADER (GLASS) -->
+    <!-- HEADER -->
     <header class="glass-header sticky top-0 z-50 h-16 flex items-center justify-between px-4 md:px-8">
         <div class="flex items-center gap-3">
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-6 md:h-7">
             <div class="h-5 w-px bg-slate-300 mx-2"></div>
-            <span class="font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-700 to-indigo-600 hidden sm:block">Thực hành Kế Toán 01</span>
+            <span class="font-black text-slate-700 hidden sm:block">Thực hành Kế Toán 01</span>
         </div>
-        <div id="studentInfo" class="flex items-center gap-2 bg-white/50 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold border border-blue-200 cursor-pointer shadow-sm hidden hover:bg-blue-50 transition" onclick="document.getElementById('authModal').classList.remove('hidden')">
+        <div id="studentInfo" class="flex items-center gap-2 bg-slate-100 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold border border-slate-200 cursor-pointer hidden hover:bg-blue-50 transition" onclick="document.getElementById('authModal').classList.remove('hidden')">
             <i class="fas fa-user-circle text-base"></i> <span id="lblStudentName"></span>
         </div>
     </header>
 
     <!-- MAIN CONTENT -->
-    <main class="max-w-4xl mx-auto p-4 md:p-8 space-y-6 md:space-y-8 pb-24" id="taskListContainer">
+    <main class="max-w-3xl mx-auto p-4 md:p-8 space-y-6 md:space-y-8 pb-24" id="taskListContainer">
         <!-- Render bằng Javascript -->
     </main>
 
@@ -76,16 +74,20 @@
         // ==========================================
 
         const TASKS = [
-            { id: 1, title: "Nhiệm vụ 1: Khảo sát đầu giờ", desc: "Quét mã QR trên màn hình Zoom hoặc nhấn vào nút bên dưới để làm khảo sát.", link: "https://docs.google.com/forms/d/e/1FAIpQLScbcWV7eHhsRVVj7T3DKkHM5HkKIufDwM5pZpPzZLi7zwBa_Q/viewform?usp=sharing&ouid=114233827588486974210", btnText: "Làm Khảo Sát", requireUpload: false },
-            { id: 2, title: "Nhiệm vụ 2: Tạo gian hàng & Import hàng hóa", desc: "Tạo gian hàng dùng thử và import danh sách hàng hóa cơ bản.", requireUpload: true },
-            { id: 3, title: "Nhiệm vụ 3: Thiết lập Hồ sơ khai thuế (Nhóm 1)", desc: "Cài đặt nhóm thuế cho cửa hàng là Nhóm 1 (Miễn thuế).", requireUpload: true },
-            { id: 4, title: "Nhiệm vụ 4: Kiểm tra Sổ kế toán & Tờ khai", desc: "Ra quầy bán 1 đơn hàng. Kiểm tra Sổ kế toán và Tờ khai thuế xem số liệu đã nhảy chưa.", requireUpload: true },
-            { id: 5, title: "Nhiệm vụ 5: Đổi thiết lập sang Nhóm 2", desc: "Đổi thiết lập sang Nhóm 2. Xem sự thay đổi tự động của Sổ và Tờ khai.", requireUpload: true },
-            { id: 6, title: "Nhiệm vụ 6: Setup Hóa đơn điện tử (Bước 1 - 4)", desc: "Thực hiện cài đặt HĐĐT đến bước nộp tờ khai (Bước 4).", requireUpload: true },
-            { id: 7, title: "Nhiệm vụ 7: Tải Logo & Kết nối HĐĐT (Bước 5 - 6)", desc: "Tải Logo và điền mã OTP để kết nối HĐĐT thành công.", requireUpload: true },
-            { id: 8, title: "Nhiệm vụ 8: Thực hành trên LND - Phát hành HĐĐT", desc: "Đăng nhập tài khoản LND. Bán 1 đơn và test nút Phát hành HĐĐT trực tiếp.", requireUpload: true },
-            { id: 9, title: "Nhiệm vụ 9: Quản lý cuối ngày & Gửi CQT", desc: "Lọc các hóa đơn Chưa gửi CQT và thao tác gửi hàng loạt lên cơ quan thuế.", requireUpload: true },
-            { id: 10, title: "Nhiệm vụ 10: Khảo sát cuối khóa học", desc: "Hoàn thành khảo sát để đánh giá khóa học và nhận lộ trình thi.", link: "https://docs.google.com/forms/d/e/1FAIpQLSfUjSF4NzBAf9AQhWhs09eE-a7InRHjAFcc_ZdeqlQl3F7R0A/viewform", btnText: "Làm Khảo Sát Cuối Khóa", requireUpload: false }
+            { id: 'survey_start', title: "Khảo sát đầu giờ", desc: "Quét mã QR trên màn hình Zoom hoặc nhấn vào nút bên dưới để làm khảo sát đánh giá mức độ tự tin và vướng mắc thực tế.", link: "https://docs.google.com/forms/d/e/1FAIpQLScbcWV7eHhsRVVj7T3DKkHM5HkKIufDwM5pZpPzZLi7zwBa_Q/viewform?usp=sharing&ouid=114233827588486974210", btnText: "Làm Khảo Sát", requireUpload: false, isSpecial: true },
+            
+            { isHeader: true, title: "PHẦN 1: THIẾT LẬP HỒ SƠ KHAI THUẾ" },
+            { id: 1, title: "Nhiệm vụ 1: Tạo gian hàng & Import hàng hóa", desc: "Sử dụng tài khoản KiotViet tạo gian hàng dùng thử. Thực hiện import danh sách hàng hóa cơ bản.", requireUpload: true },
+            { id: 2, title: "Nhiệm vụ 2: Thiết lập Hồ sơ khai thuế (Nhóm 1)", desc: "Cài đặt nhóm thuế cho cửa hàng là Nhóm 1 (Miễn thuế).", requireUpload: true },
+            { id: 3, title: "Nhiệm vụ 3: Kiểm tra Sổ kế toán & Tờ khai", desc: "Ra quầy bán 1 đơn hàng bất kỳ. Quay lại kiểm tra Sổ kế toán và Tờ khai thuế của Nhóm 1 xem số liệu đã nhảy chưa.", requireUpload: true },
+            { id: 4, title: "Nhiệm vụ 4: Đổi thiết lập sang Nhóm 2", desc: "Vào thiết lập đổi cửa hàng sang Nhóm 2. Xem sự thay đổi mẫu sổ và tờ khai trên hệ thống.", requireUpload: true },
+
+            { isHeader: true, title: "PHẦN 2: QUY TRÌNH THIẾT LẬP HÓA ĐƠN ĐIỆN TỬ" },
+            { id: 5, title: "Nhiệm vụ 5: Thiết lập thuế GTGT", desc: "Tiến hành cài đặt Thuế GTGT trực tiếp và bật thiết lập Giảm thuế 204 (nếu có).", requireUpload: true },
+            { id: 6, title: "Nhiệm vụ 6: Kích hoạt Hóa đơn KiotViet", desc: "Kích hoạt dịch vụ Hóa đơn điện tử ngay trên phần mềm.", requireUpload: true },
+            { id: 7, title: "Nhiệm vụ 7: Kết nối HĐĐT với phần mềm Bán hàng", desc: "Thực hiện nhập OTP để 2 hệ thống Bán hàng và Thuế kết nối thành công.", requireUpload: true },
+
+            { id: 'survey_end', title: "Khảo sát khóa học sau đào tạo", desc: "Hoàn thành khảo sát để đánh giá khóa học và nhận lộ trình thi chứng chỉ Kế toán 01.", link: "https://forms.google.com/...", btnText: "Làm Khảo Sát Cuối Khóa", requireUpload: false, isSpecial: true }
         ];
 
         let pendingFiles = {}; 
@@ -113,36 +115,44 @@
         function renderTasks() {
             const container = document.getElementById('taskListContainer'); let html = '';
             TASKS.forEach(t => {
+                // Xử lý Render Tiêu đề Header
+                if (t.isHeader) {
+                    html += `<div class="mt-8 mb-4 border-b-2 border-blue-200 pb-2"><h2 class="text-sm font-black text-blue-800 uppercase tracking-widest"><i class="fas fa-layer-group mr-2"></i>${t.title}</h2></div>`;
+                    return;
+                }
+
                 pendingFiles[t.id] = []; let uploadHtml = '';
                 if(t.requireUpload) {
                     uploadHtml = `
-                        <div class="mt-5 p-4 bg-white/50 border border-dashed border-slate-300 hover:border-blue-400 rounded-xl transition">
-                            <div class="flex flex-col md:flex-row items-start md:items-center gap-3">
-                                <label class="bg-white border border-slate-200 text-slate-700 px-4 py-2.5 text-sm font-bold rounded-xl cursor-pointer hover:bg-slate-50 shadow-sm transition flex items-center gap-2 shrink-0">
-                                    <i class="fas fa-cloud-upload-alt text-blue-500 text-lg"></i> Tải ảnh lên
-                                    <input type="file" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, ${t.id})">
+                        <div class="mt-4 p-3 bg-slate-50 border border-dashed border-slate-300 hover:border-blue-400 rounded-xl transition">
+                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+                                <label class="bg-white border border-slate-200 text-slate-700 px-4 py-2 text-sm font-bold rounded-lg cursor-pointer hover:bg-slate-100 shadow-sm transition flex items-center gap-2 shrink-0">
+                                    <i class="fas fa-upload text-blue-500"></i> Tải ảnh lên
+                                    <input type="file" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, '${t.id}')">
                                 </label>
-                                <span class="text-[13px] text-slate-500 font-medium bg-slate-100/50 px-3 py-2 rounded-lg w-full md:w-auto">
-                                    <i class="fas fa-keyboard mr-1 opacity-50"></i> Click vào khung này, ấn <strong>Ctrl+V</strong> để dán ảnh
-                                </span>
+                                <span class="text-[12px] text-slate-500 font-medium">Hoặc click vào khung, ấn <strong>Ctrl+V</strong> dán ảnh màn hình.</span>
                             </div>
-                            <div id="tags_${t.id}" class="mt-4 flex flex-wrap gap-2 empty:hidden"></div>
+                            <div id="tags_${t.id}" class="mt-3 flex flex-wrap gap-2 empty:hidden"></div>
                         </div>
-                        <button id="btnSubmit_${t.id}" onclick="submitTask(${t.id}, '${t.title}')" class="mt-5 w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white font-black text-sm px-8 py-3 rounded-xl shadow-lg shadow-blue-500/20 transition flex items-center justify-center gap-2 ml-auto">
-                            <i class="fas fa-paper-plane"></i> Gửi kết quả
+                        <button id="btnSubmit_${t.id}" onclick="submitTask('${t.id}', '${t.title}')" class="mt-4 w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm px-6 py-2.5 rounded-xl shadow-md transition flex items-center justify-center gap-2 ml-auto">
+                            <i class="fas fa-paper-plane"></i> Nộp kết quả
                         </button>
                     `;
                 }
                 
-                let linkHtml = t.link ? `<a href="${t.link}" target="_blank" class="mt-4 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-black text-sm px-6 py-3 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt"></i> ${t.btnText}</a>` : '';
+                let linkHtml = t.link ? `<a href="${t.link}" target="_blank" class="mt-3 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-bold text-sm px-5 py-2.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt"></i> ${t.btnText}</a>` : '';
+
+                // Giao diện Khảo sát (Special) không có icon số đếm
+                let badgeHtml = t.isSpecial ? `<div class="w-10 h-10 rounded-full bg-amber-100 text-amber-600 font-black flex items-center justify-center shrink-0 shadow-inner mt-0.5"><i class="fas fa-star"></i></div>` 
+                                            : `<div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center shrink-0 shadow-inner mt-0.5">${t.id}</div>`;
 
                 html += `
-                    <div class="task-card glass-panel p-6 md:p-8 rounded-3xl" tabindex="0" data-task="${t.id}" onclick="setActiveTask(${t.id})">
+                    <div class="task-card glass-panel p-5 md:p-6 rounded-2xl" tabindex="0" data-task="${t.id}" onclick="setActiveTask('${t.id}')">
                         <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 font-black flex items-center justify-center shrink-0 shadow-inner mt-0.5">${t.id}</div>
+                            ${badgeHtml}
                             <div class="w-full">
-                                <h3 class="text-lg font-black text-slate-800 mb-1">${t.title.split(': ')[1] || t.title}</h3>
-                                <p class="text-[13px] text-slate-500 font-medium leading-relaxed">${t.desc}</p>
+                                <h3 class="text-base font-bold text-slate-800 mb-1">${t.title}</h3>
+                                <p class="text-sm text-slate-500 font-medium leading-relaxed">${t.desc}</p>
                                 ${linkHtml}
                                 ${uploadHtml}
                             </div>
@@ -159,7 +169,7 @@
         function setupGlobalPaste() {
             document.addEventListener('paste', function(e) {
                 if(!activeTaskId) { alert("💡 Bạn hãy click chuột vào khung Nhiệm vụ muốn nộp trước khi dán ảnh nhé!"); return; }
-                const task = TASKS.find(t => t.id === activeTaskId);
+                const task = TASKS.find(t => t.id == activeTaskId);
                 if(!task || !task.requireUpload) return;
 
                 let items = e.clipboardData.items;
@@ -183,7 +193,7 @@
             const tagContainer = document.getElementById(`tags_${taskId}`); let html = '';
             pendingFiles[taskId].forEach((file, index) => {
                 let name = file.name.length > 20 ? file.name.substring(0,20)+'...' : file.name;
-                html += `<span class="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-bold px-3 py-1.5 rounded-lg flex items-center gap-2 shadow-sm">🖼️ ${name} <button onclick="event.stopPropagation(); removeFile(${taskId}, ${index})" class="text-indigo-400 hover:text-red-500 bg-white rounded-full w-5 h-5 flex items-center justify-center transition focus:outline-none"><i class="fas fa-times"></i></button></span>`;
+                html += `<span class="bg-indigo-50 text-indigo-700 border border-indigo-200 text-xs font-semibold px-2.5 py-1 rounded-lg flex items-center gap-1 shadow-sm">🖼️ ${name} <button onclick="event.stopPropagation(); removeFile('${taskId}', ${index})" class="text-indigo-400 hover:text-red-500 bg-white rounded-full w-4 h-4 flex items-center justify-center transition focus:outline-none"><i class="fas fa-times text-[10px]"></i></button></span>`;
             });
             tagContainer.innerHTML = html;
         }
@@ -223,7 +233,7 @@
             }).then(r => r.json()).then(data => {
                 if(data.status === 'success') {
                     pendingFiles[taskId] = []; renderTags(taskId);
-                    btn.innerHTML = `<i class="fas fa-check-circle text-lg"></i> Đã Gửi Thành Công`;
+                    btn.innerHTML = `<i class="fas fa-check-circle"></i> Nộp Thành Công`;
                     btn.classList.replace('bg-slate-400', 'bg-emerald-500'); btn.classList.replace('text-white', 'text-white');
                 } else alert("Lỗi Server: " + data.message);
             }).catch(err => {
