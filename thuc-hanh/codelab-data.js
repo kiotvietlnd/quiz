@@ -2,7 +2,7 @@
 const APP_CONFIG = {
     // Dán link API của Google Apps Script vào đây
     API_URL: "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec", 
-    COURSE_NAME: "26KV15" 
+    COURSE_NAME: "26KV16" 
 };
 
 // ============================================================================
