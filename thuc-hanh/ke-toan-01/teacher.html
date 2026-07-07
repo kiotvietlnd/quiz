@@ -118,74 +118,82 @@
         const APP_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwvqEWis-OVNgN2HQs3PyVt8RZ0GoGIqjN19KejVUJgCAFT2k2kBdD8cgiOOw88MetH/exec"; 
         // ==========================================
 
-        let globalDataString = "{}"; // Lưu chuỗi JSON để so sánh sự thay đổi chính xác 100%
+        let globalDataString = "{}"; 
         let globalData = {}; 
         let uniqueTasks = new Set();
         let activeStudentName = null; 
-        let isFetching = false; // Cờ chống đụng độ mạng
+        let isFetching = false; 
 
         document.addEventListener('DOMContentLoaded', () => { 
             silentFetch(true); 
-            // Vòng lặp gọi ngầm an toàn (10 giây 1 lần)
             setInterval(() => { if(!isFetching) silentFetch(false); }, 10000);
         });
 
-        // Hàm fetch an toàn
+        function calculateTotalSubmissions(dataObj) {
+            let count = 0;
+            for(let key in dataObj) count += Object.keys(dataObj[key].tasks).length;
+            return count;
+        }
+
         async function silentFetch(isFirstLoad) {
             if(APP_SCRIPT_URL.includes("AKfycby9-k7Z") && isFirstLoad) return alert("LỖI: Chưa cập nhật APP_SCRIPT_URL!");
             
             isFetching = true;
             if(document.getElementById('syncIcon')) document.getElementById('syncIcon').classList.add('fa-spin');
             
+            const listContainer = document.getElementById('studentList');
             if(isFirstLoad) {
-                document.getElementById('studentList').innerHTML = '<div class="p-8 text-center text-slate-400 text-[13px] font-medium"><i class="fas fa-circle-notch fa-spin text-xl mb-2 text-blue-400"></i><br>Đang tải dữ liệu gốc...</div>';
+                listContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-[13px] font-medium"><i class="fas fa-circle-notch fa-spin text-xl mb-2 text-blue-400"></i><br>Đang tải dữ liệu gốc...</div>';
             }
 
             try {
                 let r = await fetch(APP_SCRIPT_URL);
+                if (!r.ok) throw new Error("Không thể kết nối đến Google Server. Vui lòng kiểm tra quyền Deploy (Anyone)!");
+                
                 let res = await r.json();
 
                 if(res.status === 'success') {
                     let newString = JSON.stringify(res.data);
-                    
-                    // So sánh: Nếu chuỗi JSON mới khác chuỗi cũ nghĩa là có người vừa nộp thêm bài HOẶC nộp lại bài
                     if(newString !== globalDataString) {
-                        if(!isFirstLoad) findAndShowNewTasks(globalData, res.data); // Hiện pop-up thông báo
+                        if(!isFirstLoad) findAndShowNewTasks(globalData, res.data); 
                         
                         globalDataString = newString;
                         globalData = res.data;
                         extractUniqueTasks();
                         renderSidebar();
                         
-                        // Tự động load lại ảnh bên màn hình chính nếu đang xem đúng bạn vừa nộp bài
                         if(activeStudentName && globalData[activeStudentName]) viewStudent(activeStudentName);
                     }
+                } else {
+                    // Hiển thị thẳng lỗi từ Server ra màn hình
+                    listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-[13px] font-bold border border-red-200 m-2">Lỗi GAS: ${res.message}</div>`;
                 }
             } catch (err) {
-                console.log("Lỗi mạng khi đồng bộ ngầm.");
+                console.log("Lỗi Fetch:", err);
+                if(isFirstLoad) {
+                    listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-[13px] font-bold border border-red-200 m-2">Lỗi kết nối!<br>1. Check lại Link API.<br>2. Đảm bảo Deploy "Anyone".<br>3. Mở GAS bấm Run 1 lần để cấp quyền.</div>`;
+                }
                 document.getElementById('syncStatusBadge').innerHTML = `<i class="fas fa-wifi text-red-500"></i> Offline`;
             } finally {
                 isFetching = false;
                 if(document.getElementById('syncIcon')) document.getElementById('syncIcon').classList.remove('fa-spin');
-                document.getElementById('syncStatusBadge').innerHTML = `<i class="fas fa-satellite-dish animate-pulse"></i> Live Sync`;
+                if(!document.getElementById('syncStatusBadge').innerHTML.includes('Offline')) {
+                    document.getElementById('syncStatusBadge').innerHTML = `<i class="fas fa-satellite-dish animate-pulse"></i> Live Sync`;
+                }
             }
         }
 
         function manualFetch() { silentFetch(false); }
 
-        // Hàm so sánh sâu để tìm ra BÀI TẬP nào vừa được nộp mới nhất
         function findAndShowNewTasks(oldData, newData) {
             let latestStudent = null; let latestTaskName = null;
-            
             for(let studentName in newData) {
                 const newTasks = newData[studentName].tasks;
                 const oldTasks = oldData[studentName] ? oldData[studentName].tasks : {};
                 
                 for(let taskName in newTasks) {
-                    // Nếu bài này chưa từng có, HOẶC thời gian nộp của bài này mới hơn bài cũ (Học viên nộp lại)
                     if(!oldTasks[taskName] || newTasks[taskName].time !== oldTasks[taskName].time) {
-                        latestStudent = studentName;
-                        latestTaskName = taskName.split(':')[0]; // Lấy chữ Nhiệm vụ 1, 2...
+                        latestStudent = studentName; latestTaskName = taskName.split(':')[0]; 
                     }
                 }
             }
@@ -197,18 +205,13 @@
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastName').innerText = name;
             document.getElementById('toastDesc').innerText = `Vừa nộp lại kết quả: ${taskDesc}`;
-            
-            toast.classList.remove('toast-enter');
-            toast.classList.add('toast-visible');
-            
-            clearTimeout(toastTimeout);
-            toastTimeout = setTimeout(() => { closeToast(); }, 6000);
+            toast.classList.remove('toast-enter'); toast.classList.add('toast-visible');
+            clearTimeout(toastTimeout); toastTimeout = setTimeout(() => { closeToast(); }, 6000);
         }
 
         function closeToast() {
             const toast = document.getElementById('toastNotification');
-            toast.classList.remove('toast-visible');
-            toast.classList.add('toast-enter');
+            toast.classList.remove('toast-visible'); toast.classList.add('toast-enter');
         }
 
         function extractUniqueTasks() {
@@ -240,11 +243,9 @@
                 if(matchSearch && matchTask) {
                     count++;
                     const taskCount = Object.keys(student.tasks).length;
-                    
                     const statusBadge = taskFilter !== 'ALL' 
                         ? `<span class="text-emerald-500 text-[10px] font-bold"><i class="fas fa-check-circle"></i> Xong</span>`
                         : `<span class="bg-slate-100 text-slate-500 text-[10px] font-bold px-1.5 py-0.5 rounded border border-slate-200">${taskCount} Bài</span>`;
-
                     const isActive = (name === activeStudentName) ? 'student-active' : '';
 
                     html += `
@@ -259,7 +260,7 @@
                 }
             });
             
-            if(count === 0) html = '<div class="p-6 text-center text-slate-400 text-[12px] font-medium mt-2">Không có dữ liệu.</div>';
+            if(count === 0) html = '<div class="p-6 text-center text-slate-400 text-[12px] font-medium mt-2">Chưa có học viên nào nộp bài.</div>';
             listContainer.innerHTML = html;
             document.getElementById('lblCount').innerText = `${count} Học viên`;
         }
@@ -273,7 +274,6 @@
             let iterations = 0; const maxIterations = 15;
             const interval = setInterval(() => {
                 visibleItems.forEach(i => i.classList.remove('random-spin', 'bg-blue-50'));
-                
                 const randIndex = Math.floor(Math.random() * visibleItems.length);
                 const target = visibleItems[randIndex];
                 target.classList.add('random-spin', 'bg-blue-50');
@@ -282,8 +282,7 @@
                 iterations++;
                 if(iterations >= maxIterations) {
                     clearInterval(interval);
-                    target.classList.remove('random-spin');
-                    target.click(); 
+                    target.classList.remove('random-spin'); target.click(); 
                 }
             }, 100);
         }
