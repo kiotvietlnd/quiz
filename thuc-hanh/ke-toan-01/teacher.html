@@ -27,9 +27,11 @@
         .random-spin { animation: highlight-pulse 0.1s infinite alternate; }
         @keyframes highlight-pulse { from { background-color: transparent; } to { background-color: #dbeafe; border-left-color: #60a5fa; } }
 
-        /* Animation cho Toast Notification */
         .toast-enter { transform: translateX(120%); opacity: 0; }
         .toast-visible { transform: translateX(0); opacity: 1; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        
+        /* Hiệu ứng Zoom ảnh Giảng viên */
+        .zoom-active { max-height: none !important; cursor: zoom-out !important; }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden selection:bg-blue-200">
@@ -105,12 +107,10 @@
     </div>
 
     <!-- MODAL XEM ẢNH -->
-    <div id="imgModal" class="fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-[100] flex items-center justify-center hidden flex-col">
-        <div class="absolute top-4 right-6 flex gap-4">
-            <a id="btnRawImg" href="#" target="_blank" class="px-4 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-[13px] font-bold transition flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Mở ảnh gốc</a>
-            <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="w-8 h-8 bg-white/10 hover:bg-red-500 text-white rounded-lg flex items-center justify-center transition"><i class="fas fa-times"></i></button>
-        </div>
-        <img id="fullImg" src="" class="max-w-[95%] max-h-[90vh] object-contain rounded-lg shadow-2xl border border-white/10">
+    <div id="imgModal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-[150] hidden flex-col overflow-auto p-4 items-center justify-center">
+        <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="fixed top-4 right-6 w-10 h-10 bg-white/10 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-xl transition z-50"><i class="fas fa-times"></i></button>
+        <p class="fixed top-4 left-6 text-white/50 text-sm font-bold bg-black/40 px-3 py-1 rounded-lg z-50 pointer-events-none"><i class="fas fa-search-plus"></i> Bấm vào ảnh để phóng to/thu nhỏ</p>
+        <img id="fullImg" src="" onclick="toggleZoom(this)" class="max-w-full max-h-[90vh] object-contain rounded shadow-2xl transition-all duration-300 cursor-zoom-in m-auto mt-16 mb-16 border border-white/10">
     </div>
 
     <script>
@@ -129,12 +129,6 @@
             setInterval(() => { if(!isFetching) silentFetch(false); }, 10000);
         });
 
-        function calculateTotalSubmissions(dataObj) {
-            let count = 0;
-            for(let key in dataObj) count += Object.keys(dataObj[key].tasks).length;
-            return count;
-        }
-
         async function silentFetch(isFirstLoad) {
             if(APP_SCRIPT_URL.includes("AKfycby9-k7Z") && isFirstLoad) return alert("LỖI: Chưa cập nhật APP_SCRIPT_URL!");
             
@@ -148,8 +142,7 @@
 
             try {
                 let r = await fetch(APP_SCRIPT_URL);
-                if (!r.ok) throw new Error("Không thể kết nối đến Google Server. Vui lòng kiểm tra quyền Deploy (Anyone)!");
-                
+                if (!r.ok) throw new Error("Mất kết nối Server");
                 let res = await r.json();
 
                 if(res.status === 'success') {
@@ -165,13 +158,12 @@
                         if(activeStudentName && globalData[activeStudentName]) viewStudent(activeStudentName);
                     }
                 } else {
-                    // Hiển thị thẳng lỗi từ Server ra màn hình
                     listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-[13px] font-bold border border-red-200 m-2">Lỗi GAS: ${res.message}</div>`;
                 }
             } catch (err) {
                 console.log("Lỗi Fetch:", err);
                 if(isFirstLoad) {
-                    listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-[13px] font-bold border border-red-200 m-2">Lỗi kết nối!<br>1. Check lại Link API.<br>2. Đảm bảo Deploy "Anyone".<br>3. Mở GAS bấm Run 1 lần để cấp quyền.</div>`;
+                    listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-[13px] font-bold border border-red-200 m-2">Lỗi kết nối!<br>Vui lòng kiểm tra lại.</div>`;
                 }
                 document.getElementById('syncStatusBadge').innerHTML = `<i class="fas fa-wifi text-red-500"></i> Offline`;
             } finally {
@@ -190,7 +182,6 @@
             for(let studentName in newData) {
                 const newTasks = newData[studentName].tasks;
                 const oldTasks = oldData[studentName] ? oldData[studentName].tasks : {};
-                
                 for(let taskName in newTasks) {
                     if(!oldTasks[taskName] || newTasks[taskName].time !== oldTasks[taskName].time) {
                         latestStudent = studentName; latestTaskName = taskName.split(':')[0]; 
@@ -260,7 +251,7 @@
                 }
             });
             
-            if(count === 0) html = '<div class="p-6 text-center text-slate-400 text-[12px] font-medium mt-2">Chưa có học viên nào nộp bài.</div>';
+            if(count === 0) html = '<div class="p-6 text-center text-slate-400 text-[12px] font-medium mt-2">Không có dữ liệu.</div>';
             listContainer.innerHTML = html;
             document.getElementById('lblCount').innerText = `${count} Học viên`;
         }
@@ -323,7 +314,7 @@
                         if(url.trim() === '') return;
                         const directUrl = getDirectImageUrl(url);
                         imgHtml += `
-                            <div onclick="openImage('${directUrl}', '${url}')" class="relative group cursor-zoom-in aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-200 hover:border-blue-400 transition-colors">
+                            <div onclick="openImage('${directUrl}')" class="relative group cursor-zoom-in aspect-video bg-slate-50 rounded-lg overflow-hidden border border-slate-200 hover:border-blue-400 transition-colors">
                                 <img src="${directUrl}" class="w-full h-full object-cover">
                                 <div class="absolute inset-0 bg-blue-900/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
                                     <i class="fas fa-expand text-white text-2xl drop-shadow-md"></i>
@@ -350,10 +341,15 @@
             main.innerHTML = html;
         }
 
-        function openImage(directUrl, rawUrl) {
-            document.getElementById('fullImg').src = directUrl;
-            document.getElementById('btnRawImg').href = rawUrl;
+        function openImage(url) {
+            document.getElementById('fullImg').src = url;
+            document.getElementById('fullImg').classList.remove('zoom-active'); // Đặt lại zoom
             document.getElementById('imgModal').classList.remove('hidden');
+            document.getElementById('imgModal').classList.add('flex');
+        }
+
+        function toggleZoom(imgEl) {
+            imgEl.classList.toggle('zoom-active');
         }
     </script>
 </body>
