@@ -402,8 +402,6 @@
 
         function submitTask(taskId, taskTitle) {
             if(!pendingFiles[taskId] || pendingFiles[taskId].length === 0) return alert("❌ Bạn chưa dán/upload ảnh mới nào!");
-            if(APP_SCRIPT_URL.includes("AKfycbyW79Xpr_j")) return alert("LỖI: Hãy thay đổi APP_SCRIPT_URL!");
-
             const profile = JSON.parse(localStorage.getItem('kt01_profile'));
             const btn = document.getElementById(`btnSubmit_${taskId}`); const oldHtml = btn.innerHTML;
             btn.innerHTML = `<i class="fas fa-circle-notch fa-spin"></i> Đang nộp bài...`;
