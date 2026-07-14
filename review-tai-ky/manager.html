@@ -84,7 +84,7 @@
     <!-- Main Container rộng toàn màn hình -->
     <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col space-y-8">
 
-        <!-- Banner cảnh báo Dữ liệu Minh họa (Mặc định ẩn) -->
+        <!-- Banner cảnh báo Dữ liệu Minh họa -->
         <div id="mock-data-warning" class="hidden w-full bg-amber-50 border border-amber-200 text-amber-800 px-6 py-4 rounded-2xl flex items-center justify-between text-xs font-semibold shadow-sm transition-all animate-pulse">
             <span class="flex items-center gap-3">
                 <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg"></i>
@@ -142,24 +142,23 @@
         <section class="glass-panel-ultra rounded-3xl p-6 shadow-md w-full space-y-4">
             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase flex items-center gap-2"><i class="fa-solid fa-filter text-[#166def]"></i> BỘ LỌC TÌM KIẾM PHÂN TÍCH CHI TIẾT</span>
             
-            <!-- Lưới bộ lọc thích ứng 9 trường thoáng đãng -->
             <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-5">
                 <!-- 1. Lọc tên học viên -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN HỌC VIÊN</label>
                     <input type="text" id="filter-rep" oninput="applyFilters()" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tìm theo tên học viên...">
                 </div>
-                <!-- 2. Lọc Người review mới thêm -->
+                <!-- 2. Lọc Người review -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGƯỜI REVIEW (TRAINER)</label>
                     <input type="text" id="filter-trainer" oninput="applyFilters()" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tìm theo tên Trainer...">
                 </div>
-                <!-- 3. Lọc Mã lớp mới thêm -->
+                <!-- 3. Lọc Mã lớp -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">MÃ LỚP</label>
                     <input type="text" id="filter-class-code" oninput="applyFilters()" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tìm kiếm theo mã lớp...">
                 </div>
-                <!-- 4. Lọc Ngành hàng mới thêm -->
+                <!-- 4. Lọc Ngành hàng -->
                 <div>
                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀNH HÀNG</label>
                     <select id="filter-industry" onchange="applyFilters()" class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white">
@@ -220,9 +219,9 @@
                 <span id="record-count" class="text-xs font-bold text-slate-400">Tìm thấy -- bản ghi</span>
             </div>
 
-            <!-- Bảng dữ liệu tương tác -->
+            <!-- Bảng dữ liệu tương tác hỗ trợ thêm các cột mới -->
             <div class="flex-grow overflow-x-auto custom-scroll">
-                <table class="w-full border-collapse text-left text-xs min-w-[1100px]">
+                <table class="w-full border-collapse text-left text-xs min-w-[1200px]">
                     <thead>
                         <tr class="border-b border-slate-200 text-slate-400 uppercase tracking-wider font-bold">
                             <th class="pb-3 pl-4">Học Viên (Lớp)</th>
@@ -232,14 +231,16 @@
                             <th class="pb-3">Người Review</th>
                             <th class="pb-3 text-center">Điểm Tự Tin</th>
                             <th class="pb-3 text-center">Bài tập</th>
+                            <!-- Thêm cột Nhận xét giảng viên [1] -->
+                            <th class="pb-3 max-w-[200px] min-w-[150px]">Nhận xét của Giảng viên</th>
                             <th class="pb-3 text-center">Xếp Loại</th>
                             <th class="pb-3 text-center pr-4">Hành động</th>
                         </tr>
                     </thead>
                     <tbody id="data-rows" class="divide-y divide-slate-100 text-slate-500">
-                        <!-- Trạng thái Loading ban đầu -->
+                        <!-- Trạng thái Loading ban đầu (Colspan cập nhật lên 10) -->
                         <tr>
-                            <td colspan="9" class="text-center py-12 text-slate-400">
+                            <td colspan="10" class="text-center py-12 text-slate-400">
                                 <i class="fa-solid fa-spinner animate-spin text-xl text-[#166def] block mb-2"></i>
                                 Đang đồng bộ hóa dữ liệu từ hệ thống...
                             </td>
@@ -251,27 +252,28 @@
 
     </main>
 
-    <!-- ================= MODAL XEM CHI TIẾT (POPUP) ================= -->
+    <!-- ================= MODAL XEM CHI TIẾT (POPUP TOÀN MÀN HÌNH SÁT LỀ) ================= -->
     <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
-        <div class="glass-panel-ultra rounded-3xl max-w-4xl w-full p-6 lg:p-8 shadow-2xl mx-4 border border-white flex flex-col max-h-[85vh]">
+        <!-- Đưa cấu trúc Modal về dạng toàn màn hình sát lề (rounded-none, w-screen, h-screen) [1] -->
+        <div class="glass-panel-ultra w-screen h-screen max-w-full max-h-screen p-6 lg:p-12 shadow-2xl flex flex-col justify-between overflow-hidden border-none rounded-none m-0">
             
             <!-- Header Modal -->
-            <div class="flex items-center justify-between border-b pb-4 mb-6 border-slate-100">
+            <div class="flex items-center justify-between border-b pb-4 mb-6 border-slate-200 flex-shrink-0">
                 <div class="flex items-center gap-3">
-                    <span class="w-9 h-9 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-circle-info"></i></span>
+                    <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#166def] flex items-center justify-center text-base"><i class="fa-solid fa-circle-info"></i></span>
                     <div>
-                        <h4 id="modal-title-rep" class="text-base font-black text-slate-800">Tên Học Viên</h4>
+                        <h4 id="modal-title-rep" class="text-lg font-black text-slate-800">Tên Học Viên</h4>
                         <p id="modal-title-session" class="text-xs text-slate-400 mt-0.5">Phiên review</p>
                     </div>
                 </div>
-                <button onclick="closeModal()" class="w-8 h-8 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-all"><i class="fa-solid fa-xmark"></i></button>
+                <button onclick="closeModal()" class="w-9 h-9 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-500 flex items-center justify-center transition-all"><i class="fa-solid fa-xmark"></i></button>
             </div>
 
             <!-- Body Modal -->
             <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
                 
-                <!-- Khung lưới thông tin tóm tắt bổ sung thêm Mã lớp và Ngành hàng [1] -->
-                <div class="grid grid-cols-2 sm:grid-cols-6 gap-4 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                <!-- Khung lưới thông tin tóm tắt -->
+                <div class="grid grid-cols-2 sm:grid-cols-6 gap-4 bg-slate-50 p-5 rounded-2xl border border-slate-200">
                     <div>
                         <span class="text-[10px] font-bold text-slate-400 tracking-wider block uppercase">Ngày Review</span>
                         <span id="modal-info-date" class="text-xs font-bold text-slate-700 mt-1 block">--</span>
@@ -299,10 +301,10 @@
                 </div>
 
                 <!-- Cột dọc nội dung chi tiết -->
-                <div class="space-y-4">
+                <div class="space-y-6">
                     
                     <!-- Self Check -->
-                    <div class="bg-blue-50/20 p-4 rounded-2xl border border-blue-100/30 space-y-3">
+                    <div class="bg-blue-50/20 p-5 rounded-2xl border border-blue-100/30 space-y-3">
                         <span class="text-xs font-black text-blue-800 tracking-wider block uppercase"><i class="fa-solid fa-comments"></i> Học viên Tự đánh giá (Self-Check)</span>
                         <div class="space-y-2 text-xs">
                             <p class="leading-relaxed">💡 <strong>Dễ hiểu nhất:</strong> <span id="modal-self-easy" class="text-slate-700">--</span></p>
@@ -312,18 +314,18 @@
                     </div>
 
                     <!-- Ghi nhận tình huống thực tế -->
-                    <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                         <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved"></i> Chi tiết tình huống phản xạ</span>
                         <p id="modal-scenario" class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">--</p>
                     </div>
 
                     <!-- Nhận xét chi tiết & Lộ trình rèn luyện -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical"></i> Trainer nhận xét</span>
                             <p id="modal-notes" class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">--</p>
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                        <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-clipboard-list"></i> Khuyến nghị hành động</span>
                             <p id="modal-action" class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">--</p>
                         </div>
@@ -333,9 +335,9 @@
 
             </div>
 
-            <!-- Footer Modal -->
-            <div class="mt-6 pt-4 border-t border-slate-100">
-                <button onclick="closeModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
+            <!-- Footer Modal cố định sát góc dưới toàn màn hình -->
+            <div class="mt-6 pt-4 border-t border-slate-200 flex-shrink-0">
+                <button onclick="closeModal()" class="w-full py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
                     ĐÓNG CỬA SỔ CHI TIẾT
                 </button>
             </div>
@@ -456,7 +458,7 @@
             
             tableBody.innerHTML = `
                 <tr>
-                    <td colspan="9" class="text-center py-12 text-slate-400">
+                    <td colspan="10" class="text-center py-12 text-slate-400">
                         <i class="fa-solid fa-spinner animate-spin text-xl text-[#166def] block mb-2"></i>
                         Đang đồng bộ hóa dữ liệu từ hệ thống...
                     </td>
@@ -520,7 +522,7 @@
             if (data.length === 0) {
                 tableBody.innerHTML = `
                     <tr>
-                        <td colspan="9" class="text-center py-12 text-slate-400">
+                        <td colspan="10" class="text-center py-12 text-slate-400">
                             <i class="fa-solid fa-folder-open text-xl block mb-2"></i>
                             Không tìm thấy kết quả phù hợp với các tiêu chí bộ lọc.
                         </td>
@@ -559,6 +561,10 @@
                             <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-100 border text-slate-600">
                                 ${escapeHtml(row.HomeworkStatus)}
                             </span>
+                        </td>
+                        <!-- Cột mới: Nhận xét của giảng viên (Bọc truncate giới hạn độ rộng để tránh nhảy dòng bảng) [1] -->
+                        <td class="py-4 max-w-[200px] truncate text-slate-500 font-medium" title="${escapeHtml(row.TrainerNotes || '')}">
+                            ${escapeHtml(row.TrainerNotes || 'Chưa có nhận xét')}
                         </td>
                         <td class="py-4 text-center">
                             <span class="inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-lg ${ratingClass}">
@@ -625,7 +631,7 @@
             renderTable(filtered);
         }
 
-        // Mở cửa sổ Modal xem chi tiết bản ghi
+        // Mở cửa sổ Modal xem chi tiết bản ghi (Toàn màn hình sát lề)
         function openModal(index) {
             const row = allRecords[index];
             if (!row) return;
