@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ thống Review 1:1 - Nhân viên Tái ký mới</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body { 
+            font-family: 'Inter', sans-serif;
+            font-size: 14px; 
+            -webkit-tap-highlight-color: transparent;
+            display: flex; flex-direction: column; min-height: 100vh;
+            color: #334155; background-color: #f0f4f8;
+            overflow-x: hidden;
+        }
+
+        /* Nền phát sáng chuyển động theo template */
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f0f4f8; }
+        .glow-blob-1, .glow-blob-2 { 
+            position: absolute; width: 45vw; height: 45vw; filter: blur(100px); border-radius: 50%; 
+            transition: background 1.2s ease-in-out; will-change: background, transform;
+        }
+        .glow-blob-1 { top: -10%; left: -10%; background: rgba(30, 58, 138, 0.08); } 
+        .glow-blob-2 { bottom: -10%; right: -10%; background: rgba(14, 165, 233, 0.08); }
+
+        /* Hiệu ứng Glassmorphism */
+        .glass-panel-ultra {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 1);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 1);
+        }
+
+        /* Chữ Gradient công nghệ */
+        .cyber-text-gradient {
+            background-size: 200% auto;
+            color: transparent;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(135deg, #1d4ed8 0%, #0284c7 50%, #16a34a 100%);
+        }
+
+        /* Nút Scifi chuẩn hóa màu sắc theo phiên */
+        .scifi-btn {
+            position: relative; display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 10px 16px; border-radius: 10px; font-weight: 700; font-size: 13px;
+            background: var(--bg-color); color: white;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+        }
+        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 20px -8px var(--shadow-hover); }
+        
+        .sc-blue { --bg-color: #0284c7; --shadow-hover: rgba(2, 132, 199, 0.4); } 
+        .sc-orange { --bg-color: #f97316; --shadow-hover: rgba(249, 115, 22, 0.4); }
+        .sc-green { --bg-color: #16a34a; --shadow-hover: rgba(22, 163, 74, 0.4); }
+
+        /* Tùy chỉnh thanh cuộn nhỏ cho các phân khu */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 2px; }
+
+        /* Màu xếp loại khi kích hoạt */
+        .rating-btn { transition: all 0.2s ease; border: 2px solid transparent; }
+        .rating-btn.active-chuadat { background-color: #fee2e2; border-color: #ef4444; color: #991b1b; }
+        .rating-btn.active-thaotac { background-color: #fef3c7; border-color: #f59e0b; color: #92400e; }
+        .rating-btn.active-ungdung { background-color: #dbeafe; border-color: #3b82f6; color: #1e40af; }
+        .rating-btn.active-tot { background-color: #dcfce7; border-color: #22c55e; color: #166534; }
+    </style>
+</head>
+<body class="text-slate-700 antialiased">
+
+    <!-- Nền sáng chuyển động mờ -->
+    <div class="tech-bg">
+        <div class="glow-blob-1"></div>
+        <div class="glow-blob-2"></div>
+    </div>
+
+    <!-- Header tối giản -->
+    <header class="sticky top-0 z-50 bg-white/70 backdrop-blur-xl border-b border-slate-900/10 px-5 lg:px-8 py-3 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-7">
+            <span class="h-5 w-[1px] bg-slate-300"></span>
+            <h1 class="text-sm font-extrabold text-slate-800 tracking-wider">HỆ THỐNG REVIEW ĐÀO TẠO TÁI KÝ</h1>
+        </div>
+        <div class="text-xs font-semibold text-slate-500 flex items-center gap-2">
+            <span class="inline-block w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+            Trainer Workspace (Q3-2026)
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 lg:px-6 py-6 w-full grid grid-cols-1 lg:grid-cols-12 gap-6">
+        
+        <!-- Cột trái (60%): Cẩm nang & Giáo trình tham khảo -->
+        <section class="lg:col-span-7 flex flex-col h-[calc(100vh-120px)] min-h-[500px]">
+            <!-- Thanh chọn Ngày/Phiên -->
+            <div class="flex gap-2 mb-4 bg-slate-200/60 p-1 rounded-xl">
+                <button onclick="switchTab('day1')" id="tab-day1" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all bg-white text-blue-600 shadow-sm">
+                    NGÀY 1: RETAIL NỀN TẢNG
+                </button>
+                <button onclick="switchTab('day2')" id="tab-day2" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all">
+                    NGÀY 2: RETAIL NÂNG CAO
+                </button>
+                <button onclick="switchTab('day3')" id="tab-day3" class="flex-1 py-2 text-xs font-bold rounded-lg text-slate-600 transition-all">
+                    NGÀY 3: THUẾ - KẾ TOÁN HỘ KD
+                </button>
+            </div>
+
+            <!-- Phân khu Giáo trình Tham chiếu -->
+            <div class="flex-grow glass-panel-ultra rounded-2xl p-5 overflow-y-auto custom-scroll shadow-md">
+                
+                <!-- GIÁO TRÌNH NGÀY 1 -->
+                <div id="content-day1" class="space-y-6">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <span class="w-8 h-8 rounded-lg bg-sky-100 text-sky-600 flex items-center justify-center"><i class="fa-solid fa-store text-sm"></i></span>
+                        <h2 class="text-base font-extrabold text-slate-800">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100">
+                            <span class="text-xs font-extrabold text-sky-600 uppercase">Sáng: Phân Loại Hàng Hóa</span>
+                            <p class="text-xs text-slate-500 mt-1">Sale phân biệt loại hàng hóa nào phù hợp với từng mô hình kinh doanh cụ thể.</p>
+                        </div>
+
+                        <!-- Accordion Tình huống Ngày 1 -->
+                        <div class="space-y-2">
+                            <!-- Scenario 1 -->
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3" open>
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 1: Shop mỹ phẩm & Hàng cận date</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách than quên hàng cận date, nhập nhiều đợt. Em gợi ý tính năng nào? Lợi ích ra sao?</p>
+                                    <p class="text-slate-700 bg-sky-50/50 p-2 rounded border border-sky-100"><strong>Kỳ vọng:</strong> Gợi ý <strong>Lô - Hạn sử dụng (HSD)</strong>. Giúp kiểm soát hạn dùng từng đợt hàng, cảnh báo để xuất bán trước, giảm thiểu hủy hàng cận date.</p>
+                                </div>
+                            </details>
+
+                            <!-- Scenario 2 -->
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 2: Cửa hàng điện thoại & Tra cứu bảo hành</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách bán điện thoại cần tra bảo hành theo IMEI. Có nên dùng hàng thường không?</p>
+                                    <p class="text-slate-700 bg-sky-50/50 p-2 rounded border border-sky-100"><strong>Kỳ vọng:</strong> Gợi ý <strong>Serial/IMEI</strong>. Không dùng hàng thường vì không theo dõi được lịch sử mua bán đích danh cho từng chiếc máy, gây khó khăn khi đối soát bảo hành.</p>
+                                </div>
+                            </details>
+
+                            <!-- Scenario 3 -->
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 3: Giỏ quà Tết thành phần</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khi bán 1 giỏ quà Tết, muốn tự trừ tồn các thành phần bên trong. Chọn combo hay sản xuất?</p>
+                                    <p class="text-slate-700 bg-sky-50/50 p-2 rounded border border-sky-100"><strong>Kỳ vọng:</strong> Chọn <strong>Combo - Đóng gói</strong>. Phù hợp vì chỉ gộp cơ học các sản phẩm có sẵn để bán chung, phần mềm tự trừ kho từng món khi phát hành hóa đơn.</p>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="bg-blue-50/50 p-3 rounded-xl border border-blue-100 mt-6">
+                            <span class="text-xs font-extrabold text-sky-600 uppercase">Chiều: Vận Hành Kho & Giá</span>
+                            <p class="text-xs text-slate-500 mt-1">Sale hiểu cách đầu vào kho, công nợ nhà cung cấp và thiết lập giá linh hoạt.</p>
+                        </div>
+
+                        <!-- Accordion Vận hành Kho -->
+                        <div class="space-y-2">
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 4: Nhiều nhà cung cấp, công nợ lộn xộn</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Nhập từ nhiều NCC, giá đổi liên tục, cuối tháng không rõ đang nợ ai. Em tư vấn gì?</p>
+                                    <p class="text-slate-700 bg-sky-50/50 p-2 rounded border border-sky-100"><strong>Kỳ vọng:</strong> Sử dụng <strong>Quản lý Nhập hàng & Công nợ NCC</strong>. Phần mềm tự lưu công nợ theo từng hóa đơn nhập, hỗ trợ đối soát minh bạch dòng tiền.</p>
+                                </div>
+                            </details>
+
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 5: Khách lệch tồn kho thường xuyên</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách thường xuyên lệch kho sau đợt bán hàng cao điểm. Tư vấn hướng nào?</p>
+                                    <p class="text-slate-700 bg-sky-50/50 p-2 rounded border border-sky-100"><strong>Kỳ vọng:</strong> Tư vấn tính năng <strong>Kiểm kho định kỳ</strong>. Kiểm tra lệch, tìm nguyên nhân (thất thoát, nhập sai), cân bằng dữ liệu giúp tồn kho luôn chính xác.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GIÁO TRÌNH NGÀY 2 -->
+                <div id="content-day2" class="space-y-6 hidden">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <span class="w-8 h-8 rounded-lg bg-orange-100 text-orange-600 flex items-center justify-center"><i class="fa-solid fa-cart-shopping text-sm"></i></span>
+                        <h2 class="text-base font-extrabold text-slate-800">PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-orange-50/50 p-3 rounded-xl border border-orange-100">
+                            <span class="text-xs font-extrabold text-orange-600 uppercase">Sáng: Quy Trình Tạo Doanh Thu</span>
+                            <p class="text-xs text-slate-500 mt-1">Sale hiểu cách quản lý đơn đặt hàng trước, thông tin lịch sử mua sắm và thanh toán nhanh.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3" open>
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 1: Nhận đơn đặt trước, quên giữ hàng</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách đặt hàng trước qua điện thoại, vài ngày sau mới lấy, nhân viên hay quên giữ hàng. Nên dùng phần nào?</p>
+                                    <p class="text-slate-700 bg-orange-50/50 p-2 rounded border border-orange-100"><strong>Kỳ vọng:</strong> Quy trình liên kết <strong>Đặt hàng &rarr; Hóa đơn</strong>. Hệ thống tự động ghi nhận đơn đặt, giữ trước tồn kho tương ứng, hạn chế bán chồng chéo.</p>
+                                </div>
+                            </details>
+
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 2: Đối soát thanh toán chuyển khoản mệt mỏi</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách trả qua chuyển khoản/QR thủ công, chủ shop mệt mỏi đối soát cuối ngày. Em gợi ý gì?</p>
+                                    <p class="text-slate-700 bg-orange-50/50 p-2 rounded border border-orange-100"><strong>Kỳ vọng:</strong> Tư vấn giải pháp <strong>Tích hợp QR động</strong>. QR tự động điền đúng số tiền, nhân viên không cần gõ thủ công, báo giao dịch thành công tức thời giúp giảm rủi ro.</p>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="bg-orange-50/50 p-3 rounded-xl border border-orange-100 mt-6">
+                            <span class="text-xs font-extrabold text-orange-600 uppercase">Chiều: Mở Rộng Hệ Thống & Quản Trị</span>
+                            <p class="text-xs text-slate-500 mt-1">Đồng bộ sàn TMĐT, phân quyền người dùng và khai thác sức mạnh báo cáo quản trị.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 3: Bán đa kênh bị lệch kho liên tục</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Shop bán cả ở cửa hàng và Shopee, tồn kho lệch khiến shop hay bị phạt. Gợi ý gì?</p>
+                                    <p class="text-slate-700 bg-orange-50/50 p-2 rounded border border-orange-100"><strong>Kỳ vọng:</strong> Gợi ý <strong>Kết nối đồng bộ sàn TMĐT</strong>. Đồng bộ tức thời tồn kho giữa offline và các gian hàng trực tuyến khi có giao dịch phát sinh.</p>
+                                </div>
+                            </details>
+
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 4: Doanh thu giảm không rõ nguyên nhân</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Doanh thu giảm nhưng chủ shop không biết tại sao (do hàng hóa, nhân viên, hay kênh nào?).</p>
+                                    <p class="text-slate-700 bg-orange-50/50 p-2 rounded border border-orange-100"><strong>Kỳ vọng:</strong> Dẫn về tính năng <strong>Hệ thống Báo cáo & Phân tích</strong>. Chỉ rõ mặt hàng bán chạy/tồn lâu, hiệu suất nhân viên để tối ưu vận hành.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- GIÁO TRÌNH NGÀY 3 -->
+                <div id="content-day3" class="space-y-6 hidden">
+                    <div class="flex items-center gap-3 border-b pb-3 border-slate-100">
+                        <span class="w-8 h-8 rounded-lg bg-green-100 text-green-600 flex items-center justify-center"><i class="fa-solid fa-calculator text-sm"></i></span>
+                        <h2 class="text-base font-extrabold text-slate-800">PHIÊN 3: THUẾ & KẾ TOÁN HỘ KINH DOANH</h2>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="bg-green-50/50 p-3 rounded-xl border border-green-100">
+                            <span class="text-xs font-extrabold text-green-600 uppercase">Sáng: HĐĐT máy tính tiền & Chữ ký số</span>
+                            <p class="text-xs text-slate-500 mt-1">Nắm vững quy định pháp lý bắt buộc về hóa đơn điện tử khởi tạo từ máy tính tiền.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3" open>
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 1: Hộ kinh doanh ngại xuất HĐĐT vì sợ chậm trễ</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Hộ kinh doanh tạp hóa lớn (>1 tỷ/năm) ngại xuất HĐĐT vì sợ khách phải đợi lâu tại quầy thu ngân.</p>
+                                    <p class="text-slate-700 bg-green-50/50 p-2 rounded border border-green-100"><strong>Kỳ vọng:</strong> Gợi ý <strong>KiotViet e-Invoice khởi tạo từ máy tính tiền</strong>. Không bắt buộc ký số tức thời trên từng đơn lẻ, xuất siêu tốc tại quầy và tự truyền dữ liệu lên cơ quan Thuế vào cuối ngày.</p>
+                                </div>
+                            </details>
+                        </div>
+
+                        <div class="bg-green-50/50 p-3 rounded-xl border border-green-100 mt-6">
+                            <span class="text-xs font-extrabold text-green-600 uppercase">Chiều: Sổ Sách TT88 & Tờ Khai Thuế TT40</span>
+                            <p class="text-xs text-slate-500 mt-1">Cách phần mềm tự động hóa 7 loại sổ kế toán bắt buộc giúp chủ shop tiết kiệm chi phí.</p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 2: Sợ tốn tiền thuê kế toán riêng khi chuyển phương pháp kê khai</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách chuyển từ thuế khoán sang kê khai, lo lắng tốn thêm chi phí thuê kế toán ngoài để làm 7 loại sổ bắt buộc.</p>
+                                    <p class="text-slate-700 bg-green-50/50 p-2 rounded border border-green-100"><strong>Kỳ vọng:</strong> Giới thiệu <strong>Phần mềm Kế toán KiotViet (TT88)</strong>. Mọi đơn hàng bán, phiếu thu chi, phiếu nhập đều tự động ghi nhận vào 7 loại sổ kế toán bắt buộc, không cần biết định khoản, giảm chi phí thuê ngoài.</p>
+                                </div>
+                            </details>
+
+                            <details class="group border border-slate-100 rounded-xl bg-white/50 p-3">
+                                <summary class="font-semibold text-xs text-slate-800 cursor-pointer list-none flex justify-between items-center">
+                                    <span>Tình huống 3: Sổ tay/Excel tự kê khai thuế</span>
+                                    <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-slate-400"></i></span>
+                                </summary>
+                                <div class="mt-3 text-xs space-y-2 border-t pt-2 border-slate-100/60">
+                                    <p class="text-slate-500"><strong>Câu hỏi:</strong> Khách nói tự ghi sổ tay hoặc dùng Excel khai thuế là được, không cần tính năng kế toán.</p>
+                                    <p class="text-slate-700 bg-green-50/50 p-2 rounded border border-green-100"><strong>Kỳ vọng:</strong> Nhấn mạnh rủi ro pháp lý. Ghi tay dễ lệch số liệu thực tế với hóa đơn đã xuất, dễ bị cơ quan thuế phạt nặng khi giải trình. KiotViet giúp dữ liệu khớp 100% tự động, dễ xuất file XML nộp online.</p>
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CÂU HỎI ĐÀO SÂU CHUNG (Luôn hiển thị ở cuối cột trái) -->
+                <div class="mt-8 border-t pt-5 border-slate-200">
+                    <span class="text-xs font-extrabold text-blue-600 uppercase flex items-center gap-2 mb-3">
+                        <i class="fa-solid fa-lightbulb"></i> BỘ CÂU HỎI ĐÀO SÂU DÀNH CHO TRAINER
+                    </span>
+                    <ul class="text-xs text-slate-600 list-disc pl-4 space-y-2">
+                        <li><em>“Nếu khách hàng dứt khoát dùng Excel, em sẽ đưa ra rủi ro gì lớn nhất về nhân lực và thất thoát?”</em></li>
+                        <li><em>“Nhóm tính năng này giải quyết nỗi đau tăng trưởng nào của chủ cửa hàng?”</em></li>
+                        <li><em>“Hãy thực hành nói một câu chuyển ý tự nhiên từ việc lắng nghe phàn nàn của khách hàng sang đề xuất giải pháp sản phẩm.”</em></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+        
+        <!-- Cột phải (40%): Form ghi nhận kết quả review -->
+        <section class="lg:col-span-5 h-[calc(100vh-120px)] min-h-[500px] flex flex-col">
+            <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full glass-panel-ultra rounded-2xl p-5 shadow-md">
+                
+                <h3 class="text-base font-extrabold text-slate-800 mb-4 pb-2 border-b flex items-center gap-2">
+                    <i class="fa-solid fa-file-signature text-blue-600"></i> PHIẾU ĐÁNH GIÁ KẾT QUẢ REVIEW
+                </h3>
+
+                <div class="flex-grow overflow-y-auto custom-scroll space-y-4 pr-1">
+                    
+                    <!-- Thông tin cơ bản -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">HỌ TÊN HỌC VIÊN *</label>
+                            <input type="text" id="repName" required class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Nguyễn Văn A">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">HỌ TÊN TRAINER *</label>
+                            <input type="text" id="trainerName" required class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Trainer B">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">PHIÊN REVIEW *</label>
+                            <select id="session" required class="w-full text-xs px-2.5 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option>
+                                <option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option>
+                                <option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">NGÀY REVIEW *</label>
+                            <input type="date" id="reviewDate" required class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">BÀI THỰC HÀNH *</label>
+                            <select id="homeworkStatus" required class="w-full text-xs px-2.5 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
+                                <option value="Đủ">Đủ</option>
+                                <option value="Thiếu">Thiếu</option>
+                                <option value="Cần làm lại">Cần làm lại</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">ĐIỂM TỰ TIN HỌC VIÊN (1-10) *</label>
+                            <div class="flex items-center gap-2">
+                                <input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-blue-600">
+                                <span id="scoreValue" class="text-xs font-bold text-blue-600 w-5">7</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Self-check và Phản hồi của học viên -->
+                    <div class="border-t pt-3 border-slate-100">
+                        <span class="text-xs font-extrabold text-slate-600 block mb-2"><i class="fa-solid fa-comments"></i> HỌC VIÊN TỰ ĐÁNH GIÁ (SELF-CHECK)</span>
+                        <div class="space-y-2">
+                            <textarea id="selfCheckEasy" rows="1" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Tính năng dễ hiểu nhất với học viên?"></textarea>
+                            <textarea id="selfCheckHard" rows="1" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
+                            <textarea id="selfCheckApply" rows="1" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Nội dung đã học áp dụng thế nào khi tư vấn tái ký?"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Hỏi đáp tình huống cụ thể -->
+                    <div class="border-t pt-3 border-slate-100">
+                        <span class="text-xs font-extrabold text-slate-600 block mb-2"><i class="fa-solid fa-question-circle"></i> ĐÁNH GIÁ PHẢN XẠ TÌNH HUỐNG THỰC TẾ</span>
+                        <textarea id="scenarioNotes" rows="2" required class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Mô tả ngắn gọn tình huống đưa ra & cách trả lời thực tế của học viên..."></textarea>
+                    </div>
+
+                    <!-- Xếp loại kết quả cuối buổi -->
+                    <div class="border-t pt-3 border-slate-100">
+                        <label class="block text-xs font-bold text-slate-500 mb-2">XẾP LOẠI NĂNG LỰC CUỐI BUỔI *</label>
+                        <div class="grid grid-cols-4 gap-2">
+                            <button type="button" onclick="selectRating('Chưa đạt', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">CHƯA ĐẠT</button>
+                            <button type="button" onclick="selectRating('Đạt thao tác', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">ĐẠT THAO TÁC</button>
+                            <button type="button" onclick="selectRating('Đạt ứng dụng', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">ĐẠT ỨNG DỤNG</button>
+                            <button type="button" onclick="selectRating('Tốt', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200">TỐT</button>
+                        </div>
+                        <input type="hidden" id="selectedRating" required value="">
+                    </div>
+
+                    <!-- Nhận xét chi tiết & Lộ trình hành động -->
+                    <div class="border-t pt-3 border-slate-100 grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">NHẬN XÉT CHI TIẾT CỦA TRAINER</label>
+                            <textarea id="trainerNotes" rows="2" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Điểm mạnh & Điểm cần sửa gấp..."></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">KHUYẾN NGHỊ HÀNH ĐỘNG</label>
+                            <textarea id="actionPlan" rows="2" class="w-full text-xs px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white/50" placeholder="Lộ trình luyện tập tiếp theo..."></textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Footer nút Gửi kết quả -->
+                <div class="mt-4 pt-3 border-t">
+                    <button type="submit" id="submitBtn" class="scifi-btn sc-blue w-full font-bold">
+                        <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
+                        <span id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i> Đang gửi dữ liệu...</span>
+                    </button>
+                </div>
+
+            </form>
+        </section>
+
+    </main>
+
+    <!-- Modal Thông báo kết quả -->
+    <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+        <div class="glass-panel-ultra rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
+            <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
+            <h4 id="modalTitle" class="text-base font-extrabold text-slate-800 mb-2">Tiêu đề</h4>
+            <p id="modalMessage" class="text-xs text-slate-500 mb-6">Mô tả thông điệp gửi thành công hoặc thất bại.</p>
+            <button onclick="closeModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-white rounded-lg text-xs font-bold transition-all shadow-md">
+                XÁC NHẬN
+            </button>
+        </div>
+    </div>
+
+    <!-- Script điều hướng & xử lý API -->
+    <script>
+        // Apps Script URL của bạn
+        const API_URL = "https://script.google.com/macros/s/AKfycbyTOCaMQaVouAwWX4QvWtzvGPPcIxRnIG8woZjWRNM3vDqcxJrFOt9ot_kJmVGOC4-FXA/exec";
+        const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
+
+        // Thiết lập ngày mặc định là hôm nay
+        document.getElementById('reviewDate').valueAsDate = new Date();
+
+        // Cập nhật text hiển thị điểm tự tin học viên
+        function updateScoreValue(val) {
+            document.getElementById('scoreValue').textContent = val;
+        }
+
+        // Chuyển đổi qua lại giữa các Tab giáo trình
+        function switchTab(day) {
+            // Danh sách tab & content
+            const tabs = ['day1', 'day2', 'day3'];
+            
+            tabs.forEach(item => {
+                const button = document.getElementById(`tab-${item}`);
+                const content = document.getElementById(`content-${item}`);
+                
+                if (item === day) {
+                    // Active style
+                    button.classList.add('bg-white', 'text-blue-600', 'shadow-sm');
+                    button.classList.remove('text-slate-600');
+                    content.classList.remove('hidden');
+                } else {
+                    // Normal style
+                    button.classList.remove('bg-white', 'text-blue-600', 'shadow-sm');
+                    button.classList.add('text-slate-600');
+                    content.classList.add('hidden');
+                }
+            });
+
+            // Đồng bộ selectbox "Phiên Review" khớp với ngày được chọn trong tab
+            const sessionSelect = document.getElementById('session');
+            if (day === 'day1') sessionSelect.value = "Phiên 1 (Cuối Ngày 1)";
+            if (day === 'day2') sessionSelect.value = "Phiên 2 (Cuối Ngày 2)";
+            if (day === 'day3') sessionSelect.value = "Phiên 3 (Cuối Ngày 3)";
+        }
+
+        // Đồng bộ ngược lại khi thay đổi Selectbox Phiên review thì chuyển tab giáo trình bên trái
+        document.getElementById('session').addEventListener('change', function(e) {
+            const val = e.target.value;
+            if (val === "Phiên 1 (Cuối Ngày 1)") switchTab('day1');
+            if (val === "Phiên 2 (Cuối Ngày 2)") switchTab('day2');
+            if (val === "Phiên 3 (Cuối Ngày 3)") switchTab('day3');
+        });
+
+        // Xử lý nút xếp loại màu sắc
+        function selectRating(rating, element) {
+            // Reset toàn bộ style class active
+            const buttons = document.querySelectorAll('.rating-btn');
+            buttons.forEach(btn => {
+                btn.className = "rating-btn py-2 text-[10px] font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200";
+            });
+
+            // Gán giá trị ẩn cho input
+            document.getElementById('selectedRating').value = rating;
+
+            // Kích hoạt màu chuyên biệt
+            if (rating === 'Chưa đạt') element.classList.add('active-chuadat');
+            if (rating === 'Đạt thao tác') element.classList.add('active-thaotac');
+            if (rating === 'Đạt ứng dụng') element.classList.add('active-ungdung');
+            if (rating === 'Tốt') element.classList.add('active-tot');
+        }
+
+        // Gửi dữ liệu form lên Google Apps Script
+        function submitForm(event) {
+            event.preventDefault();
+
+            const rating = document.getElementById('selectedRating').value;
+            if (!rating) {
+                showModal(false, "Thiếu xếp loại", "Vui lòng click chọn 1 trong 4 mức xếp loại năng lực cuối buổi.");
+                return;
+            }
+
+            // Chuẩn bị payload
+            const payload = {
+                token: SECURITY_TOKEN,
+                repName: document.getElementById('repName').value.trim(),
+                trainerName: document.getElementById('trainerName').value.trim(),
+                session: document.getElementById('session').value,
+                reviewDate: document.getElementById('reviewDate').value,
+                homeworkStatus: document.getElementById('homeworkStatus').value,
+                confidenceScore: parseInt(document.getElementById('confidenceScore').value),
+                selfCheckEasy: document.getElementById('selfCheckEasy').value.trim(),
+                selfCheckHard: document.getElementById('selfCheckHard').value.trim(),
+                selfCheckApply: document.getElementById('selfCheckApply').value.trim(),
+                scenarioNotes: document.getElementById('scenarioNotes').value.trim(),
+                rating: rating,
+                trainerNotes: document.getElementById('trainerNotes').value.trim(),
+                actionPlan: document.getElementById('actionPlan').value.trim()
+            };
+
+            // Trạng thái Loading
+            setLoadingState(true);
+
+            // Gửi request POST lên App Script
+            fetch(API_URL, {
+                method: "POST",
+                mode: "no-cors", // Tránh lỗi CORS của Google Web App Redirect [1]
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(() => {
+                // Do mode no-cors không thể đọc JSON response, nhưng nếu không lỗi nghĩa là dữ liệu đã được gửi đi [1]
+                setLoadingState(false);
+                showModal(true, "Gửi thành công", "Kết quả review đã được ghi nhận vào hệ thống quản lý.");
+                resetFormFields();
+            })
+            .catch(error => {
+                setLoadingState(false);
+                showModal(false, "Lỗi kết nối", "Không thể gửi dữ liệu. Vui lòng kiểm tra lại đường truyền mạng hoặc App Script URL.");
+                console.error("Error:", error);
+            });
+        }
+
+        // Bật tắt trạng thái Loading của nút Gửi
+        function setLoadingState(isLoading) {
+            const btn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const btnSpinner = document.getElementById('btnSpinner');
+
+            if (isLoading) {
+                btn.disabled = true;
+                btn.classList.add('opacity-70');
+                btnText.classList.add('hidden');
+                btnSpinner.classList.remove('hidden');
+            } else {
+                btn.disabled = false;
+                btn.classList.remove('opacity-70');
+                btnText.classList.remove('hidden');
+                btnSpinner.classList.add('hidden');
+            }
+        }
+
+        // Hiển thị Modal thông báo
+        function showModal(isSuccess, title, message) {
+            const modal = document.getElementById('statusModal');
+            const icon = document.getElementById('modalIcon');
+            const titleEl = document.getElementById('modalTitle');
+            const msgEl = document.getElementById('modalMessage');
+
+            titleEl.textContent = title;
+            msgEl.textContent = message;
+
+            if (isSuccess) {
+                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-green-100 text-green-600";
+                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
+            } else {
+                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-red-100 text-red-600";
+                icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        // Đóng Modal thông báo
+        function closeModal() {
+            document.getElementById('statusModal').classList.add('hidden');
+        }
+
+        // Xóa thông tin đã điền trong form ngoại trừ Tên Trainer và Ngày
+        function resetFormFields() {
+            document.getElementById('repName').value = "";
+            document.getElementById('homeworkStatus').selectedIndex = 0;
+            document.getElementById('confidenceScore').value = 7;
+            document.getElementById('scoreValue').textContent = "7";
+            document.getElementById('selfCheckEasy').value = "";
+            document.getElementById('selfCheckHard').value = "";
+            document.getElementById('selfCheckApply').value = "";
+            document.getElementById('scenarioNotes').value = "";
+            document.getElementById('trainerNotes').value = "";
+            document.getElementById('actionPlan').value = "";
+            
+            // Reset nút Rating
+            document.getElementById('selectedRating').value = "";
+            const buttons = document.querySelectorAll('.rating-btn');
+            buttons.forEach(btn => {
+                btn.className = "rating-btn py-2 text-[10px] font-bold rounded-lg bg-slate-100 text-slate-600 border border-slate-200";
+            });
+        }
+    </script>
+</body>
+</html>
