@@ -145,9 +145,7 @@
                         </div>
 
                         <!-- Khung kết quả hiển thị tình huống ngẫu nhiên -->
-                        <div id="random-scenario-box">
-                            <!-- JS tự động kết xuất dữ liệu ngẫu nhiên tại đây -->
-                        </div>
+                        <div id="random-scenario-box"></div>
                     </div>
 
                     <!-- KHU VỰC DANH SÁCH TÌNH HUỐNG KHÁC (Mặc định ẩn) -->
@@ -155,14 +153,12 @@
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-black text-slate-400 tracking-wider uppercase block">DANH SÁCH LƯU TRỮ TÌNH HUỐNG KHÁC</span>
                             <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-[#166def] hover:underline flex items-center gap-2">
-                                <i class="fa-solid fa-eye"></i> Xem các tình huống khác của ngày này
+                                <i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống
                             </button>
                         </div>
 
                         <!-- Khối chứa danh sách tình huống ẩn -->
-                        <div id="all-scenarios-list" class="space-y-4 hidden transition-all">
-                            <!-- JS tự động kết xuất danh sách tình huống tại đây -->
-                        </div>
+                        <div id="all-scenarios-list" class="space-y-4 hidden transition-all"></div>
                     </div>
 
                 </div>
@@ -179,9 +175,11 @@
 
                     <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
                         
-                        <!-- Block 1: Thông tin chung -->
+                        <!-- Block 1: Thông tin chung (Tái cấu trúc 2 cột x 4 dòng cân xứng) -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-[#166def] mr-1.5"></i> Thông Tin Chung</span>
+                            
+                            <!-- Hàng 1 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
@@ -193,6 +191,23 @@
                                 </div>
                             </div>
 
+                            <!-- Hàng 2: Mã lớp & Ngành hàng mới bổ sung -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">MÃ LỚP (ĐIỀN TỰ DO) *</label>
+                                    <input type="text" id="classCode" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ví dụ: TK-Q3-01">
+                                </div>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀNH HÀNG *</label>
+                                    <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white">
+                                        <option value="Retail">Retail (Bán lẻ)</option>
+                                        <option value="FNB">FNB (F&B)</option>
+                                        <option value="Booking">Booking (Dịch vụ)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Hàng 3 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">PHIÊN REVIEW *</label>
@@ -211,6 +226,7 @@
                                 </div>
                             </div>
 
+                            <!-- Hàng 4 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
@@ -364,7 +380,6 @@
                     <table class="w-full border-collapse text-left text-sm min-w-[700px]">
                         <thead>
                             <tr class="border-b border-slate-200">
-                                <!-- Thiết lập độ rộng cột cố định và ngăn nhảy dòng bằng css min-width và whitespace-nowrap -->
                                 <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px] whitespace-nowrap">HỌC PHẦN</th>
                                 <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px] min-w-[120px] whitespace-nowrap">THỜI LƯỢNG</th>
                                 <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th>
@@ -696,7 +711,9 @@
                 scenarioNotes: document.getElementById('scenarioNotes').value.trim(),
                 rating: rating,
                 trainerNotes: document.getElementById('trainerNotes').value.trim(),
-                actionPlan: document.getElementById('actionPlan').value.trim()
+                actionPlan: document.getElementById('actionPlan').value.trim(),
+                classCode: document.getElementById('classCode').value.trim(), // Mã lớp mới
+                industry: document.getElementById('industry').value // Ngành hàng mới
             };
 
             setLoadingState(true);
@@ -765,6 +782,7 @@
 
         function resetFormFields() {
             document.getElementById('repName').value = "";
+            document.getElementById('classCode').value = "";
             document.getElementById('homeworkStatus').selectedIndex = 0;
             document.getElementById('confidenceScore').value = 7;
             document.getElementById('scoreValue').textContent = "7";
