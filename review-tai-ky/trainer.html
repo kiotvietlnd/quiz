@@ -181,9 +181,13 @@
                             
                             <!-- Hàng 1 -->
                             <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
-                                    <input type="text" id="repName" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
+                                <div class="relative">
+                                    <label class="flex justify-between items-end text-[11px] font-bold text-slate-400 tracking-wider mb-1">
+                                        HỌ TÊN HỌC VIÊN *
+                                        <button type="button" id="btnCheckPractice" onclick="checkStudentPractice()" class="hidden text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 hover:bg-emerald-100 transition"><i class="fa-solid fa-images"></i> Xem bài TH</button>
+                                    </label>
+                                    <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
+                                    <span id="checkPracticeSpinner" class="hidden absolute right-3 top-9 text-blue-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
@@ -434,7 +438,7 @@
 
     <!-- Script điều hướng & xử lý API -->
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbyTOCaMQaVouAwWX4QvWtzvGPPcIxRnIG8woZjWRNM3vDqcxJrFOt9ot_kJmVGOC4-FXA/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxnolzGqm_UQcKcmdA0721T8nEMus3Ach7yQT2Q3Z6WkA45k50EkrH8MDRQBI0j7zRyhA/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
         // Khai báo đối tượng giáo trình rỗng, sẽ được load động từ Google Sheet [1]
@@ -872,6 +876,104 @@
                 .replace(/"/g, '&quot;')
                 .replace(/'/g, '&#39;');
         }
+    <!-- MODAL XEM BÀI THỰC HÀNH CỦA HỌC VIÊN -->
+    <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-2xl w-full max-h-[85vh] flex flex-col relative border border-slate-200">
+            <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-lg font-black text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <i class="fa-solid fa-laptop-code text-emerald-600"></i> BÀI THỰC HÀNH: <span id="practiceStudentName" class="text-[#166def]"></span>
+            </h2>
+            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-4 mt-4">
+                <!-- Nội dung bài thực hành sẽ render tại đây -->
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-100 flex-shrink-0">
+                <button type="button" onclick="closePracticeModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all shadow-sm">
+                    ĐÓNG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data toàn cục để lưu bài thực hành
+        let currentStudentPracticeData = [];
+
+        // Hàm kiểm tra bài thực hành khi Trainer gõ tên xong (blur ra khỏi ô input)
+        function checkStudentPractice() {
+            const studentName = document.getElementById('repName').value.trim();
+            const btn = document.getElementById('btnCheckPractice');
+            const spinner = document.getElementById('checkPracticeSpinner');
+            
+            if(!studentName) { btn.classList.add('hidden'); return; }
+
+            spinner.classList.remove('hidden');
+            btn.classList.add('hidden');
+
+            fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}`)
+            .then(res => res.json())
+            .then(data => {
+                spinner.classList.add('hidden');
+                if(data.status === 'success' && data.data && data.data.length > 0) {
+                    currentStudentPracticeData = data.data;
+                    btn.classList.remove('hidden');
+                    // Tự đổi trạng thái Bài tập thành "Đủ" nếu thấy có nộp
+                    document.getElementById('homeworkStatus').value = "Đủ"; 
+                } else {
+                    currentStudentPracticeData = [];
+                    btn.classList.add('hidden');
+                }
+            })
+            .catch(err => {
+                spinner.classList.add('hidden');
+                console.error("Check practice err:", err);
+            });
+        }
+
+        function closePracticeModal() {
+            document.getElementById('practiceModal').classList.add('hidden');
+        }
+
+        // Helper lấy link ảnh trực tiếp
+        function getDirectImageUrl(url) { 
+            let fileIdMatch = url.match(/\/d\/(.+?)\//); 
+            if(!fileIdMatch) fileIdMatch = url.match(/id=(.+?)(&|$)/); 
+            if(fileIdMatch && fileIdMatch[1]) return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; 
+            return url; 
+        }
+
+        // Mở Modal xem ảnh
+        document.getElementById('btnCheckPractice').addEventListener('click', function() {
+            document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value;
+            const container = document.getElementById('practiceContent');
+            
+            if(currentStudentPracticeData.length === 0) {
+                container.innerHTML = `<p class="text-sm text-slate-500 italic">Không tìm thấy dữ liệu thực hành.</p>`;
+            } else {
+                let html = '';
+                currentStudentPracticeData.forEach(item => {
+                    let links = item.links ? item.links.split('\n') : [];
+                    let imgHtml = links.map(link => {
+                        let directLink = getDirectImageUrl(link);
+                        return `<a href="${link}" target="_blank" class="block w-24 h-16 rounded-lg overflow-hidden border border-slate-200 hover:border-[#166def] transition group relative">
+                            <img src="${directLink}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center"><i class="fa-solid fa-up-right-from-square text-white text-xs"></i></div>
+                        </a>`;
+                    }).join('');
+
+                    html += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">${item.session}</p>
+                        <p class="text-sm font-black text-slate-800 mb-3">${item.exerciseTitle}</p>
+                        <div class="flex flex-wrap gap-2">${imgHtml}</div>
+                        <p class="text-[10px] text-slate-400 mt-2 text-right">${item.timestamp}</p>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            }
+            
+            document.getElementById('practiceModal').classList.remove('hidden');
+        });
     </script>
 </body>
 </html>
