@@ -175,7 +175,7 @@
 
                     <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
                         
-                        <!-- Block 1: Thông tin chung (Tái cấu trúc 2 cột x 4 dòng cân xứng) -->
+                        <!-- Block 1: Thông tin chung -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-[#166def] mr-1.5"></i> Thông Tin Chung</span>
                             
@@ -191,7 +191,7 @@
                                 </div>
                             </div>
 
-                            <!-- Hàng 2: Mã lớp & Ngành hàng mới bổ sung -->
+                            <!-- Hàng 2: Mã lớp & Ngành hàng -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">MÃ LỚP (ĐIỀN TỰ DO) *</label>
@@ -246,7 +246,7 @@
                             </div>
                         </div>
 
-                        <!-- Block 2: Self-check (Hiển thị tối đa 3 dòng trống - rows="3") -->
+                        <!-- Block 2: Self-check -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá (Self-Check)</span>
                             <div class="space-y-3">
@@ -256,13 +256,13 @@
                             </div>
                         </div>
 
-                        <!-- Block 3: Phản xạ tình huống thực tế (rows="3") -->
+                        <!-- Block 3: Phản xạ tình huống thực tế -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
                             <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp (Vấn đề -> Giải pháp -> Lợi ích)..."></textarea>
                         </div>
 
-                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi (rows="3") -->
+                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-[#166def] mr-1.5"></i> Đánh Giá Của Trainer</span>
                             
@@ -370,7 +370,7 @@
                 </div>
             </div>
 
-            <!-- Cấu trúc khung giờ của phiên review (Đã chỉnh sửa cố định độ rộng cột, chống nhảy dòng) -->
+            <!-- Cấu trúc khung giờ của phiên review -->
             <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                 <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                     <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
@@ -437,25 +437,34 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbyTOCaMQaVouAwWX4QvWtzvGPPcIxRnIG8woZjWRNM3vDqcxJrFOt9ot_kJmVGOC4-FXA/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
-        // Khai báo đối tượng giáo trình cẩm nang (Day 1 - 2 - 3) [1]
+        // TÍNH NĂNG MỚI: BỘ 21 TÌNH HUỐNG THỰC TẾ (CẬP NHẬT TỪ NOTEBOOKLM)
         const scenariosData = {
             day1: [
-                { id: 1, type: "morning", title: "Tình huống 1: Shop mỹ phẩm & Hàng cận date", question: "Khách than quên hàng cận date, nhập nhiều đợt. Em gợi ý tính năng nào? Lợi ích ra sao?", answer: "Gợi ý quản lý Lô - Hạn sử dụng (HSD). Lợi ích: Kiểm soát từng lô, biết lô nào gần hết hạn, ưu tiên bán trước, giảm tồn cận date." },
-                { id: 2, type: "morning", title: "Tình huống 2: Cửa hàng điện thoại & Tra cứu số máy", question: "Khách bán điện thoại, mỗi máy có mã IMEI riêng, khách hay cần tra lại máy đã bán để hỗ trợ bảo hành. Tính năng nào phù hợp? Vì sao không chỉ tạo hàng hóa thường?", answer: "Gợi ý Serial/IMEI. Lợi ích: Kiểm soát từng máy, bán đúng mã, tra lịch sử khi bảo hành/khiếu nại." },
-                { id: 3, type: "morning", title: "Tình huống 3: Giỏ quà Tết gộp nhiều món", question: "Khách bán giỏ quà Tết gồm nhiều sản phẩm thành phần. Khi bán 1 giỏ quà, khách muốn tự động trừ tồn từng món bên trong. Em chọn combo hay hàng sản xuất? Vì sao?", answer: "Combo - đóng gói nếu chỉ gộp nhiều sản phẩm để bán thành 1 bộ. Lợi ích: Bán nhanh theo combo, vẫn trừ tồn thành phần." },
-                { id: 4, type: "afternoon", title: "Tình huống 4: Nhiều nhà cung cấp, lộn xộn công nợ", question: "Khách nhập hàng từ nhiều nhà cung cấp, giá nhập mỗi lần khác nhau, cuối tháng không rõ đang nợ nhà cung cấp nào. Em sẽ hỏi thêm gì và gợi ý phần nào?", answer: "Hỏi về số lượng NCC, tần suất nhập, có theo dõi công nợ không. Gợi ý nhập hàng/nhà cung cấp/công nợ NCC nếu có." },
-                { id: 5, type: "afternoon", title: "Tình huống 5: Khách lệch tồn kho thường xuyên", question: "Khách hay bị lệch tồn giữa thực tế và phần mềm, đặc biệt sau các đợt bán cao điểm. Em sẽ tư vấn theo hướng nào?", answer: "Gợi ý kiểm kho định kỳ, đối soát tồn, tìm nguyên nhân lệch. Lợi ích: Giảm thất thoát và tăng độ tin cậy dữ liệu tồn." }
+                { id: 1, type: "morning", title: "1. Cửa hàng Tạp hóa lớn (Nhiều đơn vị tính)", question: "Nhà chị bán nước ngọt, nhập về theo thùng, bán lẻ theo chai hoặc lốc 6. Chị muốn khi bán 1 chai thì máy tự trừ vào thùng tương ứng để chị không phải đi đếm lẻ, em làm được không?", answer: "Dạ được chị ạ! Chị dùng tính năng Hàng hóa thường kết hợp Đơn vị tính. Chị chỉ cần tạo mã nước ngọt với đơn vị cơ bản là \"Chai\", sau đó thêm đơn vị \"Thùng\" với Giá trị quy đổi là 24. Khi chị bán bất kỳ đơn vị nào, KiotViet đều tự động quy đổi và trừ kho chuẩn xác vào tổng tồn kho của mã đó." },
+                { id: 2, type: "morning", title: "2. Shop Mẹ & Bé (Quản lý theo Lô-HSD)", question: "Chị bán sữa bột, sợ nhất là nhân viên không để ý để hàng hết date trên kệ. Máy em có nhắc chị cái nào sắp hết hạn không?", answer: "Chị dùng tính năng Hàng hóa Lô - Hạn sử dụng ạ. KiotViet áp dụng nguyên tắc FEFO (Hết hạn trước - Xuất trước), máy sẽ tự gợi ý lô gần date nhất để bán. Đặc biệt, trên màn hình Tổng quan, máy sẽ hiện cảnh báo màu vàng/đỏ cho những lô hàng sắp hết hạn trong 30-90 ngày tới để chị chủ động xả hàng sớm." },
+                { id: 3, type: "morning", title: "3. Cửa hàng Điện thoại/Laptop (Số Serial/IMEI)", question: "Mỗi cái iPhone chị nhập về đều có mã riêng, chị muốn biết đúng cái máy đó bán cho ai, ngày nào để làm bảo hành cho chuẩn.", answer: "Dạ, chị bật tính năng Quản lý theo Serial/IMEI nhé. Mỗi sản phẩm nhập về sẽ được gán một mã định danh duy nhất. Khi bán hàng, nhân viên phải quét đúng mã đó mới cho thanh toán. Sau này khách quay lại bảo hành, chị chỉ cần gõ số IMEI là máy hiện ra ngay lịch sử: Ngày nhập, nhà cung cấp và thông tin người mua." },
+                { id: 4, type: "morning", title: "4. Tiệm Bánh ngọt/Đồ ăn (Hàng sản xuất)", question: "Chị làm bánh kem, nhập bột, trứng, sữa về nhưng khi bán là bán ổ bánh. Làm sao biết một ổ bánh tốn bao nhiêu tiền vốn?", answer: "Chị dùng tính năng Hàng sản xuất ạ. Chị thiết lập Định mức nguyên liệu cho 1 ổ bánh. Khi chị bấm \"Hoàn thành sản xuất\", máy sẽ tự động lấy giá nhập của bột, trứng, sữa cộng lại để ra Giá vốn chính xác của cái bánh, đồng thời tự trừ kho nguyên liệu và cộng tồn kho bánh để chị bán hàng." },
+                { id: 5, type: "morning", title: "5. Shop Thời trang (Hàng Combo)", question: "Dịp lễ chị muốn bán Set quà tặng gồm 1 áo + 1 chân váy với giá ưu đãi. Làm sao để khi bán cả Set thì kho tự trừ 1 cái áo và 1 cái váy lẻ?", answer: "Chị dùng loại Hàng combo - đóng gói nhé. Chị chỉ cần chọn 2 mặt hàng thành phần vào mã Combo này. Khách mua 1 Set, KiotViet tự động \"xé lẻ\" để trừ kho áo và váy. Chị quản lý được tồn kho của từng món lẻ cực kỳ nhàn mà vẫn chạy được các chương trình khuyến mãi theo bộ." },
+                { id: 6, type: "afternoon", title: "6. Shop Vật liệu xây dựng (Giá sỉ & lẻ)", question: "Khách vãng lai chị bán giá khác, khách thợ hoặc chủ thầu chị bán giá chiết khấu riêng. Nhân viên chị hay nhầm giá của khách quen lắm.", answer: "Chị dùng tính năng Thiết lập giá ạ. Chị tạo sẵn một Bảng giá sỉ cho nhóm khách thợ. Khi nhân viên chọn tên khách hàng vào hóa đơn, máy sẽ tự động nhận diện nhóm khách và áp đúng mức giá ưu đãi chị đã cài sẵn, không bao giờ lo nhân viên quên giá hay bán nhầm." },
+                { id: 7, type: "afternoon", title: "7. Kiểm soát thất thoát (Kiểm kho)", question: "Chị thấy trên máy báo còn 5 cái áo nhưng thực tế trên kệ hết sạch rồi. Chị muốn tìm ra nhân viên nào làm mất hàng.", answer: "Chị dùng tính năng Kiểm kho kết hợp Lịch sử thao tác nhé. Chị chỉ cần cầm điện thoại quét mã từng sản phẩm trên kệ, máy tự tính số lệch. Khi chị nhấn \"Hoàn thành\", hệ thống lưu lại phiếu kiểm minh bạch: Ai kiểm? Lệch lúc nào? Chị có thể đối chiếu với camera để biết khâu nào gây thất thoát." }
             ],
             day2: [
-                { id: 1, type: "morning", title: "Tình huống 1: Khách đặt trước, nhân viên quên giữ hàng", question: "Khách thường nhận đơn trước qua điện thoại/Facebook, khách đặt xong vài ngày sau mới qua lấy. Nhân viên hay quên giữ hàng. Em gợi ý dùng phần nào?", answer: "Đặt hàng &rarr; hóa đơn. Lợi ích: Ghi nhận đơn trước, giữ lịch sử, tránh quên đơn/thất thoát doanh thu." },
-                { id: 2, type: "morning", title: "Tình huống 2: Mệt mỏi đối soát chuyển khoản cuối ngày", question: "Khách hay nhận chuyển khoản/QR, cuối ngày mất thời gian đối soát tiền. Em nói lợi ích thanh toán QR thế nào?", answer: "Thanh toán QR giúp giảm nhập sai số tiền, tăng tốc thanh toán, dễ đối soát hơn." },
-                { id: 3, type: "afternoon", title: "Tình huống 3: Bán đa kênh lệch kho liên tục", question: "Khách bán cả tại cửa hàng và trên sàn TMĐT, hay bị lệch tồn vì đơn sàn và đơn offline không đồng bộ. Em gợi ý gì?", answer: "Kết nối sàn TMĐT/KiotViet Web tùy kênh. Lợi ích: Đồng bộ đơn, tồn, giảm bán quá số lượng thực tế." },
-                { id: 4, type: "afternoon", title: "Tình huống 4: Không rõ lý do sụt giảm doanh thu", question: "Khách nói doanh thu tháng này giảm nhưng không biết giảm do mặt hàng nào, nhân viên nào, hay kênh nào. Em nên dẫn về tính năng nào?", answer: "Báo cáo/phân tích. Lợi ích: Nhìn doanh thu, hàng bán chạy/chậm, hiệu quả nhân viên/kênh để ra quyết định." }
+                { id: 1, type: "morning", title: "8. Quầy thu ngân đông khách (Thanh toán QR)", question: "Khách nhà chị giờ toàn quét mã ngân hàng, nhưng nhân viên hay bị lừa bằng ảnh chụp màn hình giả. Có cách nào tiền về chị mới biết không?", answer: "Chị dùng Thanh toán QR động tích hợp sâu với ngân hàng của KiotViet ạ. Khi nhân viên bấm thanh toán, máy tự hiện mã QR chứa đúng số tiền đơn hàng. Khách quét xong, tiền nổ về tài khoản là màn hình bán hàng báo \"Thành công\" và tự in bill luôn. Chị ở nhà cũng nhận thông báo \"Ting ting\" trên điện thoại, an tâm tuyệt đối." },
+                { id: 2, type: "morning", title: "9. Shop bán đa kênh (Kết nối Sàn TMĐT)", question: "Chị bán cả tại shop và trên TikTok, Shopee. Sợ nhất là khách trên sàn mua cái váy cuối cùng mà nhân viên tại shop cũng vừa bán xong, thế là bị sàn phạt vì không có hàng giao.", answer: "Giải pháp là Kết nối Sàn TMĐT của KiotViet ạ. Khi nhân viên tại quầy bán cái váy cuối cùng, phần mềm lập tức đẩy tín hiệu sang Shopee, TikTok để Đồng bộ tồn kho về 0 ngay tức thì. Chị không bao giờ lo bị \"oversell\" hay bị sàn đánh sao quả tạ nữa." },
+                { id: 3, type: "morning", title: "10. Shop nhiều nhân viên (Quản lý hoa hồng)", question: "Chị muốn mỗi bạn nhân viên bán được 1 cái áo thì hưởng 5.000đ để các bạn hăng hái bán hàng. Cuối tháng tính tay cho 10 đứa chị hoa hết cả mắt.", answer: "Chị thiết lập Bảng hoa hồng linh hoạt trên KiotViet thôi ạ. Mỗi hóa đơn nhân viên đứng tên, máy tự nhảy số tiền thưởng vào tài khoản của bạn đó. Cuối tháng, chị vào Quản lý tính lương, máy tự cộng Lương cứng + Hoa hồng để ra số tiền thực trả. Cực kỳ minh bạch, nhân viên nhìn vào đó cũng có động lực thi đua hơn." },
+                { id: 4, type: "morning", title: "11. Quản lý nhân viên từ xa (Chấm công GPS)", question: "Chị không hay ở shop, không biết nhân viên đi làm đúng giờ không, hay là nhờ người khác bấm vân tay hộ?", answer: "Chị dùng tính năng Quản lý chấm công qua Zalo (GPS) nhé. Nhân viên đến shop phải mở Zalo, máy bắt đúng vị trí GPS tại cửa hàng mới cho chấm công. Chị ở nhà mở điện thoại là thấy ngay hôm nay có ai đi muộn, về sớm. Không ai có thể chấm công hộ được vì mỗi tài khoản Zalo chỉ gắn với 1 điện thoại duy nhất." },
+                { id: 5, type: "afternoon", title: "12. Shop bán hàng Order (Đặt hàng)", question: "Khách muốn đặt đôi giày này nhưng size chị đang hết, 1 tuần nữa mới về. Chị muốn thu tiền cọc trước và lưu lại để khi hàng về giao cho họ.", answer: "Chị dùng phiếu Đặt hàng ạ. Chị vẫn lên đơn bình thường dù kho bằng 0, máy cho phép nhận Tiền đặt cọc và hẹn ngày giao. Khi giày về kho, chị chỉ cần chuyển phiếu Đặt hàng thành Hóa đơn, máy tự trừ tồn kho và nhắc số tiền khách còn nợ, quy trình cực kỳ chuyên nghiệp." },
+                { id: 6, type: "afternoon", title: "13. Chăm sóc khách cũ (Khách hàng)", question: "Làm sao chị biết ai là khách VIP mua nhiều để tặng quà sinh nhật hay ưu đãi riêng cho họ?", answer: "KiotViet tự động lưu Lịch sử mua hàng. Chị có thể thiết lập Nhóm khách hàng tự động (ví dụ: ai mua trên 10 triệu là khách VIP). Đến sinh nhật khách, máy sẽ báo tin để chị chủ động gửi tin nhắn chúc mừng hoặc ưu đãi, giúp khách luôn thấy mình được trân trọng và sẽ quay lại mua tiếp." },
+                { id: 7, type: "afternoon", title: "14. Xem hiệu quả kinh doanh (Báo cáo)", question: "Cuối tháng chị muốn biết thực sự mình lãi bao nhiêu sau khi trừ tiền thuê nhà, điện nước, lương nhân viên. Chứ nhìn doanh thu thì cao mà chả thấy tiền đâu.", answer: "Chị dùng Báo cáo Tài chính là thấy ngay bức tranh tổng thể ạ. Chị chỉ cần ghi nhận các khoản chi (điện, nước, lương) vào mục Sổ quỹ. Cuối tháng, máy tự lấy Doanh thu - Giá vốn - Chi phí để ra Lợi nhuận cuối cùng. Chị sẽ biết tiền của mình đang nằm ở hàng tồn kho hay đang nợ ở khách hàng." }
             ],
             day3: [
-                { id: 1, type: "morning", title: "Tình huống 1: Hộ kinh doanh lớn sợ chậm khi xuất HĐĐT", question: "Hộ kinh doanh tạp hóa lớn (>1 tỷ/năm) lo ngại thủ tục xuất HĐĐT phức tạp và làm chậm quá trình thanh toán của khách tại quầy.", answer: "Tư vấn giải pháp HĐĐT khởi tạo từ máy tính tiền. Không cần ký số từng hóa đơn, xuất siêu tốc tại quầy bán, tự động truyền dữ liệu lên cơ quan Thuế vào cuối ngày." },
-                { id: 2, type: "afternoon", title: "Tình huống 2: Sợ tốn tiền thuê dịch vụ kế toán", question: "Khách chuyển từ nộp thuế khoán sang kê khai, lo lắng tốn kém chi phí thuê kế toán ngoài để làm 7 loại sổ theo Thông tư 88.", answer: "Phần mềm Kế toán KiotViet. Tự động đồng bộ số liệu bán hàng để lập 7 loại sổ kế toán bắt buộc và tự tạo Tờ khai thuế 01/CNKD nộp online." },
-                { id: 3, type: "afternoon", title: "Tình huống 3: Sổ tay/Excel tự kê khai thuế", question: "Khách nói tự ghi sổ tay hoặc dùng Excel khai thuế là được, không cần mua thêm tính năng kế toán này.", answer: "Nhấn mạnh rủi ro pháp lý. Ghi tay rất dễ nhầm số liệu thực tế với hóa đơn đã xuất, dễ bị cơ quan thuế phạt nặng khi giải trình thanh kiểm tra. KiotViet tự động hóa 100%, bảo vệ an toàn dữ liệu thuế." }
+                { id: 1, type: "morning", title: "15. Hộ kinh doanh chuyển đổi (Thiết lập hồ sơ)", question: "Thuế bảo năm 2026 hộ kinh doanh phải tự khai tự nộp. Chị chả biết mình thuộc nhóm nào, đóng bao nhiêu tiền. Em hướng dẫn chị với.", answer: "Chị vào mục Thiết lập hồ sơ kê khai thuế trên KiotViet, máy dẫn dắt chị 4 bước cực dễ. Chị nhập doanh thu dự kiến, máy tự phân chị vào đúng Nhóm hộ kinh doanh (1-5) theo luật. Máy sẽ hiện rõ nghĩa vụ thuế của chị và tự động gán tỷ lệ thuế GTGT, TNCN cho từng mặt hàng dựa trên ngành nghề của chị luôn." },
+                { id: 2, type: "morning", title: "16. Hộ kinh doanh không có kế toán (Sổ kế toán)", question: "Thuế bắt chị làm bộ 4 sổ kế toán (doanh thu, chi phí, kho, tiền). Chị buôn bán bận tối ngày, không có kế toán thì làm sao ghi chép nổi?", answer: "Chị cứ bán hàng bình thường, việc làm sổ cứ để KiotViet lo! Toàn bộ hóa đơn bán, phiếu nhập hàng sẽ tự động đổ vào bộ Sổ kế toán TT152 (S2b, S2c, S2d, S2e). Chị chỉ cần mở máy ra là thấy sổ sách đã sẵn sàng, đúng mẫu Bộ Tài chính để giải trình với Thuế bất cứ lúc nào, không lo sai lệch." },
+                { id: 3, type: "morning", title: "17. Tạp hóa đông khách lẻ (HĐĐT máy tính tiền)", question: "Thuế bảo doanh thu trên 1 tỷ là bắt buộc dùng HĐĐT máy tính tiền. Mà khách nhà chị mua gói tăm cũng bắt chị ký số từng tờ thì chị bán hàng làm sao kịp?", answer: "Dạ, chị dùng HĐĐT khởi tạo từ máy tính tiền của KiotViet eInvoice là nhàn nhất. Loại này không bắt buộc ký số trên từng tờ hóa đơn in ra cho khách. Khách trả tiền xong là hóa đơn tự đẩy lên Thuế, chị in cái bill đưa khách là xong, tốc độ y như in hóa đơn bán hàng bình thường, không làm chậm việc buôn bán của chị." },
+                { id: 4, type: "morning", title: "18. Ký tờ khai/Hóa đơn (Chữ ký số IntrustCA)", question: "Chị thấy dùng cái USB chữ ký số lằng nhằng quá, lúc cần thì tìm không thấy, mà lại tốn thêm mấy triệu một năm mua cái đó à?", answer: "KiotViet tặng chị miễn phí Chữ ký số từ xa IntrustCA. Chị không cần mua USB cồng kềnh, chỉ cần dùng điện thoại xác thực là xong. Chị có thể ký nộp tờ khai hay xuất hóa đơn ngay trên điện thoại khi đang đi du lịch cũng được, vừa nhanh vừa tiết kiệm tiền triệu mỗi năm." },
+                { id: 5, type: "afternoon", title: "19. Đối soát doanh thu thuế (Báo cáo ngành nghề)", question: "Thuế kiểm tra hỏi sao doanh thu ngành bán lẻ của chị lại thấp thế, làm sao chị giải trình được trong cục tiền kia cái nào là bán đồ 1%, cái nào là dịch vụ 5%?", answer: "Trên tờ khai thuế của KiotViet, chị chỉ cần nhấn trực tiếp vào con số doanh thu. Máy hiện ngay Báo cáo chi tiết theo ngành nghề. Chị sẽ thấy rõ mặt hàng nào, hóa đơn nào thuộc ngành nào. Chị xuất file Excel này đưa cho cán bộ thuế là họ \"tâm phục khẩu phục\" luôn, cực kỳ minh bạch." },
+                { id: 6, type: "afternoon", title: "20. Khai báo số tài khoản (Mẫu 01/BK-STK)", question: "Nghe nói năm 2026 phải khai báo hết các số tài khoản ngân hàng dùng để nhận tiền khách với bên Thuế. Chị dùng mấy cái lận, khai báo thế nào cho tiện?", answer: "Chị chỉ cần khai báo các tài khoản này vào mục Sổ quỹ trên KiotViet một lần duy nhất. Đến kỳ kê khai, hệ thống tự động gom hết danh sách vào Bảng kê 01/BK-STK chuẩn mẫu. Chị chỉ việc tích chọn \"Khai lần đầu\" rồi nộp kèm tờ khai quý là xong, không phải gõ tay từng số tài khoản lên trang của Thuế." },
+                { id: 7, type: "afternoon", title: "21. Xử lý hóa đơn điện tử sai (Điều chỉnh/Thay thế)", question: "Hôm qua chị lỡ xuất hóa đơn bị sai tiền, giờ khách bắt sửa lại. Chị có xóa đi xuất lại tờ khác được không?", answer: "Dạ từ tháng 6/2025 theo quy định mới, mình không được tự ý xóa hóa đơn đã gửi khách ạ. Nhưng trên KiotViet, chị xử lý cực nhanh bằng nút Xử lý hóa đơn sai sót. Chị chọn Lập hóa đơn điều chỉnh hoặc Thay thế. Máy tự động tạo biên bản điện tử gửi khách ký và xuất tờ hóa đơn mới đúng luật 100%, chị không lo bị phạt hành chính." }
             ]
         };
 
@@ -558,10 +567,10 @@
             if (day === 'day2') sessionSelect.value = "Phiên 2 (Cuối Ngày 2)";
             if (day === 'day3') sessionSelect.value = "Phiên 3 (Cuối Ngày 3)";
 
-            // 1. Tự động chọn 1 tình huống ngẫu nhiên của ngày này và hiển thị lên khung chỉ định [1]
+            // 1. Tự động chọn 1 tình huống ngẫu nhiên của ngày này và hiển thị lên khung chỉ định
             triggerRandomScenario();
 
-            // 2. Đồng bộ danh sách các tình huống lưu trữ khác bên dưới (và mặc định ẩn đi) [1]
+            // 2. Đồng bộ danh sách các tình huống lưu trữ khác bên dưới (và mặc định ẩn đi)
             renderAllScenarios(day);
             hideAllScenariosList();
         }
@@ -633,7 +642,7 @@
             btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
         }
 
-        // Bật/tắt ẩn hiện danh sách tình huống lưu trữ [1]
+        // Bật/tắt ẩn hiện danh sách tình huống lưu trữ
         function toggleAllScenarios() {
             const list = document.getElementById('all-scenarios-list');
             const btn = document.getElementById('toggle-list-btn');
