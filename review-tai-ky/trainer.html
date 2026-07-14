@@ -46,15 +46,6 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1);
         }
 
-        /* Chữ Gradient công nghệ */
-        .cyber-text-gradient {
-            background-size: 200% auto;
-            color: transparent;
-            background-clip: text;
-            -webkit-background-clip: text;
-            background-image: linear-gradient(135deg, #166def 0%, #06b6d4 50%, #10b981 100%);
-        }
-
         /* Nút Scifi chuẩn hóa màu sắc theo phiên */
         .scifi-btn {
             position: relative; display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -90,16 +81,15 @@
         <div class="glow-blob-2" id="blob-2"></div>
     </div>
 
-    <!-- Header Navy rộng toàn màn hình -->
+    <!-- Header xanh thương hiệu (#166def) rộng toàn màn hình -->
     <header class="sticky top-0 z-50 bg-[#166def] border-b border-blue-600 px-6 lg:px-12 py-4 flex items-center justify-between shadow-md">
         <div class="flex items-center gap-4">
-            <!-- Logo màu trắng tương phản trên nền thương hiệu -->
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" alt="KiotViet Logo" class="h-8">
             <span class="h-6 w-[1px] bg-blue-400"></span>
             <h1 class="text-sm font-black text-white tracking-wider">Trang review Đào tạo Chuyên viên Tái ký mới</h1>
         </div>
         
-        <!-- Navigation Tabs chính dạng sáng tương phản -->
+        <!-- Navigation Tabs chính -->
         <div class="flex gap-2 bg-blue-800/40 p-1 rounded-xl border border-blue-400/40">
             <button onclick="switchMainTab('workspace')" id="main-tab-workspace" class="px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2">
                 <i class="fa-solid fa-laptop-code"></i> REVIEW WORKSPACE
@@ -108,14 +98,9 @@
                 <i class="fa-solid fa-graduation-cap"></i> QUY TRÌNH & KẾ HOẠCH
             </button>
         </div>
-
-        <div class="text-xs font-semibold text-blue-100 flex items-center gap-2">
-            <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            Trainer Workspace (Q3-2026)
-        </div>
     </header>
 
-    <!-- Main Container rộng 100% -->
+    <!-- Main Container rộng toàn màn hình -->
     <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col">
 
         <!-- ================= TAB 1: WORKSPACE (MÀN HÌNH REVIEW CHÍNH) ================= -->
@@ -137,271 +122,46 @@
                 </div>
 
                 <!-- Phân khu Giáo trình Tham chiếu -->
-                <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6">
+                <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6 flex flex-col">
                     
-                    <!-- GIÁO TRÌNH NGÀY 1 -->
-                    <div id="content-day1" class="space-y-8">
-                        <div class="flex items-center gap-4 border-b pb-4 border-slate-100">
-                            <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#166def] flex items-center justify-center text-lg"><i class="fa-solid fa-store"></i></span>
-                            <div>
-                                <h2 class="text-base font-black text-slate-800 tracking-wide">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
-                                <p class="text-xs text-slate-400 mt-0.5">Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.</p>
-                            </div>
-                        </div>
-
-                        <div class="space-y-6">
-                            
-                            <!-- Băng rôn phân cấp chuyên nghiệp - Học phần Sáng -->
-                            <div class="relative flex items-center justify-center my-8">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-slate-200"></div>
-                                </div>
-                                <div class="relative bg-blue-50 border border-blue-200 px-6 py-2 rounded-full shadow-sm text-center">
-                                    <span class="text-xs font-black text-[#166def] tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG: CÁC LOẠI HÀNG HÓA</span>
-                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">Mục tiêu: Đảm bảo nhân sự phân biệt chính xác loại hàng hóa phù hợp từng mô hình.</p>
-                                </div>
-                            </div>
-
-                            <!-- Accordion Tình huống Ngày 1 (Có màu nền nhạt riêng biệt, mở cái này đóng cái kia) -->
-                            <div class="space-y-4">
-                                <!-- Scenario 1 (Màu Hồng) -->
-                                <details name="scenarios-day1" class="group border border-rose-100 rounded-2xl bg-rose-50/50 p-4 transition-all hover:bg-rose-100/30" open>
-                                    <summary class="font-bold text-sm text-rose-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-rose-500"></i> Tình huống 1: Shop mỹ phẩm & Hàng cận date</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-rose-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-rose-200/50">
-                                        <p class="text-rose-700 leading-relaxed"><strong>Tình huống:</strong> Khách là shop mỹ phẩm, thường nhập nhiều đợt hàng có hạn sử dụng khác nhau, hay quên hàng cận date dẫn đến lãng phí.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-rose-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Gợi ý quản lý <strong>Lô - Hạn sử dụng (HSD)</strong>. Lợi ích: Kiểm soát chặt chẽ từng lô hàng nhập, hệ thống tự cảnh báo lô gần hết hạn để ưu tiên bán trước, giảm thiểu tồn kho cận date.</p>
-                                    </div>
-                                </details>
-
-                                <!-- Scenario 2 (Màu Lam nhạt) -->
-                                <details name="scenarios-day1" class="group border border-sky-100 rounded-2xl bg-sky-50/50 p-4 transition-all hover:bg-sky-100/30">
-                                    <summary class="font-bold text-sm text-sky-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-sky-500"></i> Tình huống 2: Cửa hàng điện thoại & Tra cứu số máy</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-sky-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-sky-200/50">
-                                        <p class="text-sky-700 leading-relaxed"><strong>Tình huống:</strong> Khách bán điện thoại, mỗi máy có mã IMEI riêng, cần tra cứu lịch sử mua bán để hỗ trợ bảo hành nhanh chóng.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-sky-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Tư vấn quản lý <strong>Serial/IMEI</strong>. Không dùng hàng thường vì hàng thường không phân biệt được lịch sử mua bán riêng của từng sản phẩm độc bản.</p>
-                                    </div>
-                                </details>
-
-                                <!-- Scenario 3 (Màu Hổ phách/Vàng) -->
-                                <details name="scenarios-day1" class="group border border-amber-100 rounded-2xl bg-amber-50/50 p-4 transition-all hover:bg-amber-100/30">
-                                    <summary class="font-bold text-sm text-amber-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-amber-600"></i> Tình huống 3: Giỏ quà Tết gộp nhiều món</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-amber-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-amber-200/50">
-                                        <p class="text-amber-700 leading-relaxed"><strong>Tình huống:</strong> Khách bán giỏ quà Tết gồm nhiều món thành phần. Muốn khi bán 1 giỏ quà, phần mềm tự trừ tồn các sản phẩm bên trong.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-amber-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Chọn <strong>Combo - Đóng gói</strong>. Phần mềm tự động hóa việc gộp sản phẩm bán chung, tự trừ kho thành phần khi in hóa đơn.</p>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <!-- Băng rôn phân cấp chuyên nghiệp - Học phần Chiều -->
-                            <div class="relative flex items-center justify-center my-8">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-slate-200"></div>
-                                </div>
-                                <div class="relative bg-blue-50 border border-blue-200 px-6 py-2 rounded-full shadow-sm text-center">
-                                    <span class="text-xs font-black text-[#166def] tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU: NHẬP HÀNG & KIỂM KHO</span>
-                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">Mục tiêu: Đảm bảo nhân sự nắm vững quy trình đầu vào, công nợ NCC và kiểm kho định kỳ.</p>
-                                </div>
-                            </div>
-
-                            <!-- Accordion Vận hành Kho -->
-                            <div class="space-y-4">
-                                <!-- Scenario 4 (Màu Tím) -->
-                                <details name="scenarios-day1" class="group border border-purple-100 rounded-2xl bg-purple-50/50 p-4 transition-all hover:bg-purple-100/30">
-                                    <summary class="font-bold text-sm text-purple-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-purple-500"></i> Tình huống 4: Nhiều nhà cung cấp, lộn xộn công nợ</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-purple-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-purple-200/50">
-                                        <p class="text-purple-700 leading-relaxed"><strong>Tình huống:</strong> Khách nhập từ nhiều NCC, giá mỗi lần nhập khác nhau, cuối tháng không nhớ rõ công nợ với từng bên.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-purple-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Sử dụng phân hệ <strong>Nhập hàng & Quản lý NCC</strong>. Hệ thống tự động ghi nhận công nợ khi phát sinh đơn nhập, hỗ trợ đối soát minh bạch dòng tiền.</p>
-                                    </div>
-                                </details>
-
-                                <!-- Scenario 5 (Màu Lục nhạt) -->
-                                <details name="scenarios-day1" class="group border border-emerald-100 rounded-2xl bg-emerald-50/50 p-4 transition-all hover:bg-emerald-100/30">
-                                    <summary class="font-bold text-sm text-emerald-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-emerald-600"></i> Tình huống 5: Khách lệch tồn kho thường xuyên</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-emerald-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-emerald-200/50">
-                                        <p class="text-emerald-700 leading-relaxed"><strong>Tình huống:</strong> Khách thường xuyên lệch kho giữa thực tế và phần mềm, nhất là sau các đợt bán cao điểm.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-emerald-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Tư vấn tính năng <strong>Kiểm kho định kỳ</strong>. Giúp tìm ra nguyên nhân lệch (bán nhầm, nhân viên gian lận) để cân bằng số liệu chính xác.</p>
-                                    </div>
-                                </details>
-                            </div>
+                    <!-- TIÊU ĐỀ PHIÊN HỌC -->
+                    <div class="flex items-center gap-4 border-b pb-4 border-slate-100 flex-shrink-0">
+                        <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#166def] flex items-center justify-center text-lg" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
+                        <div>
+                            <h2 class="text-base font-black text-slate-800 tracking-wide" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
+                            <p class="text-xs text-slate-400 mt-0.5" id="session-header-desc">Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.</p>
                         </div>
                     </div>
 
-                    <!-- GIÁO TRÌNH NGÀY 2 -->
-                    <div id="content-day2" class="space-y-8 hidden">
-                        <div class="flex items-center gap-4 border-b pb-4 border-slate-100">
-                            <span class="w-10 h-10 rounded-xl bg-orange-100 text-orange-600 flex items-center justify-center text-lg"><i class="fa-solid fa-cash-register"></i></span>
-                            <div>
-                                <h2 class="text-base font-black text-slate-800 tracking-wide">PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH</h2>
-                                <p class="text-xs text-slate-400 mt-0.5">Đặt - Bán - Trả hàng, tích hợp thanh toán nhanh, đồng bộ sàn TMĐT & khai thác báo cáo.</p>
-                            </div>
+                    <!-- KHU VỰC CHỈ ĐỊNH TÌNH HUỐNG NGẪU NHIÊN -->
+                    <div class="space-y-4 flex-shrink-0">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                            <span class="text-xs font-extrabold text-[#166def] uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG
+                            </span>
+                            <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-[#166def] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start">
+                                <i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN
+                            </button>
                         </div>
 
-                        <div class="space-y-6">
-                            
-                            <!-- Băng rôn phân cấp chuyên nghiệp - Học phần Sáng -->
-                            <div class="relative flex items-center justify-center my-8">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-slate-200"></div>
-                                </div>
-                                <div class="relative bg-orange-50 border border-orange-200 px-6 py-2 rounded-full shadow-sm text-center">
-                                    <span class="text-xs font-black text-orange-600 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG: BÁN HÀNG & CHĂM SÓC KHÁCH HÀNG</span>
-                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">Mục tiêu: Đảm bảo nhân sự nắm vững đặt đơn giữ hàng, quản trị lịch sử mua sắm và thanh toán.</p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <!-- Scenario 1 (Màu Chàm/Indigo) -->
-                                <details name="scenarios-day2" class="group border border-indigo-100 rounded-2xl bg-indigo-50/50 p-4 transition-all hover:bg-indigo-100/30" open>
-                                    <summary class="font-bold text-sm text-indigo-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-indigo-500"></i> Tình huống 1: Khách đặt trước, nhân viên quên giữ hàng</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-indigo-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-indigo-200/50">
-                                        <p class="text-indigo-700 leading-relaxed"><strong>Tình huống:</strong> Khách đặt hàng trước qua fanpage, hẹn vài ngày sau qua lấy nhưng nhân viên hay quên giữ hàng dẫn đến thiếu hàng cho khách đã đặt.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-indigo-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Quy trình liên kết <strong>Đặt hàng &rarr; Hóa đơn</strong>. Giúp hệ thống tự tạm giữ tồn kho, tránh bán chồng chéo, cải thiện dịch vụ khách hàng.</p>
-                                    </div>
-                                </details>
-
-                                <!-- Scenario 2 (Màu Cam) -->
-                                <details name="scenarios-day2" class="group border border-orange-100 rounded-2xl bg-orange-50/50 p-4 transition-all hover:bg-orange-100/30">
-                                    <summary class="font-bold text-sm text-orange-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-orange-500"></i> Tình huống 2: Mệt mỏi đối soát chuyển khoản cuối ngày</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-orange-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-orange-200/50">
-                                        <p class="text-orange-700 leading-relaxed"><strong>Tình huống:</strong> Shop nhận chuyển khoản nhiều, nhân viên nhập sai tiền, cuối ngày đối soát mệt mỏi và chậm trễ.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-orange-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Tích hợp **QR thanh toán động**. Tạo mã QR động tự động điền tiền mặt cần trả, xác nhận giao dịch thành công ngay tại màn hình bán.</p>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <!-- Băng rôn phân cấp chuyên nghiệp - Học phần Chiều -->
-                            <div class="relative flex items-center justify-center my-8">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-slate-200"></div>
-                                </div>
-                                <div class="relative bg-orange-50 border border-orange-200 px-6 py-2 rounded-full shadow-sm text-center">
-                                    <span class="text-xs font-black text-orange-600 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU: TRẢ HÀNG, PHÂN QUYỀN & BÁO CÁO</span>
-                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">Mục tiêu: Đảm bảo nhân sự nắm vững hệ thống mở rộng, bảo mật dữ liệu và kết nối đa kênh.</p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <!-- Scenario 3 (Màu Teal) -->
-                                <details name="scenarios-day2" class="group border border-teal-100 rounded-2xl bg-teal-50/50 p-4 transition-all hover:bg-teal-100/30">
-                                    <summary class="font-bold text-sm text-teal-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-teal-600"></i> Tình huống 3: Bán đa kênh lệch kho liên tục</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-teal-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-teal-200/50">
-                                        <p class="text-teal-700 leading-relaxed"><strong>Tình huống:</strong> Shop bán tại cửa hàng và Shopee, liên tục lệch tồn kho thực tế dẫn đến việc bị sàn hủy đơn phạt.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-teal-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Tư vấn **Kết nối đồng bộ sàn TMĐT**. Tự động cập nhật tồn kho tức thời khi có đơn mới phát sinh trên bất kỳ kênh bán nào.</p>
-                                    </div>
-                                </details>
-
-                                <!-- Scenario 4 (Màu Hỏa hoạn/Fuchsia) -->
-                                <details name="scenarios-day2" class="group border border-fuchsia-100 rounded-2xl bg-fuchsia-50/50 p-4 transition-all hover:bg-fuchsia-100/30">
-                                    <summary class="font-bold text-sm text-fuchsia-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-fuchsia-600"></i> Tình huống 4: Không rõ lý do sụt giảm doanh thu</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-fuchsia-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-fuchsia-200/50">
-                                        <p class="text-fuchsia-700 leading-relaxed"><strong>Tình huống:</strong> Doanh thu sụt giảm nhưng chủ shop không có báo cáo chi tiết để biết giảm ở sản phẩm nào, kênh nào.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-fuchsia-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Định hướng tính năng **Báo cáo & Phân tích chuyên sâu**. Cung cấp biểu đồ trực quan giúp chủ shop đưa ra quyết định nhập hàng/tối ưu chi phí chính xác.</p>
-                                    </div>
-                                </details>
-                            </div>
+                        <!-- Khung kết quả hiển thị tình huống ngẫu nhiên -->
+                        <div id="random-scenario-box">
+                            <!-- JS tự động kết xuất dữ liệu ngẫu nhiên tại đây -->
                         </div>
                     </div>
 
-                    <!-- GIÁO TRÌNH NGÀY 3 -->
-                    <div id="content-day3" class="space-y-8 hidden">
-                        <div class="flex items-center gap-4 border-b pb-4 border-slate-100">
-                            <span class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-lg"><i class="fa-solid fa-calculator"></i></span>
-                            <div>
-                                <h2 class="text-base font-black text-slate-800 tracking-wide">PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH</h2>
-                                <p class="text-xs text-slate-400 mt-0.5">Xuất hóa đơn từ máy tính tiền, hoàn thiện 7 loại sổ kế toán (TT88) & Tờ khai thuế (TT40).</p>
-                            </div>
+                    <!-- KHU VỰC DANH SÁCH TÌNH HUỐNG KHÁC (Mặc định ẩn) -->
+                    <div class="border-t pt-5 border-slate-100 flex-grow flex flex-col space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span class="text-xs font-black text-slate-400 tracking-wider uppercase block">DANH SÁCH LƯU TRỮ TÌNH HUỐNG KHÁC</span>
+                            <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-[#166def] hover:underline flex items-center gap-2">
+                                <i class="fa-solid fa-eye"></i> Xem các tình huống khác của ngày này
+                            </button>
                         </div>
 
-                        <div class="space-y-6">
-                            
-                            <!-- Băng rôn phân cấp chuyên nghiệp - Học phần Sáng -->
-                            <div class="relative flex items-center justify-center my-8">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-slate-200"></div>
-                                </div>
-                                <div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center">
-                                    <span class="text-xs font-black text-emerald-600 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG: HĐĐT TỪ MÁY TÍNH TIỀN</span>
-                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">Mục tiêu: Đảm bảo nhân sự hiểu quy định bắt buộc và quy trình phát hành hóa đơn tại quầy.</p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <!-- Scenario 1 (Màu Cyan) -->
-                                <details name="scenarios-day3" class="group border border-cyan-100 rounded-2xl bg-cyan-50/50 p-4 transition-all hover:bg-cyan-100/30" open>
-                                    <summary class="font-bold text-sm text-cyan-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-cyan-600"></i> Tình huống 1: Hộ kinh doanh lớn sợ chậm khi xuất HĐĐT</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-cyan-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-cyan-200/50">
-                                        <p class="text-cyan-700 leading-relaxed"><strong>Tình huống:</strong> Hộ kinh doanh lớn có doanh thu trên 1 tỷ/năm lo ngại thủ tục xuất HĐĐT phức tạp và làm chậm quá trình thanh toán của khách tại quầy.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-cyan-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Tư vấn giải pháp **HĐĐT khởi tạo từ máy tính tiền**. Không cần ký số từng hóa đơn, xuất siêu tốc tại quầy bán, tự động truyền dữ liệu lên cơ quan Thuế vào cuối ngày.</p>
-                                    </div>
-                                </details>
-                            </div>
-
-                            <!-- Băng rôn phân cấp chuyên nghiệp - Học phần Chiều -->
-                            <div class="relative flex items-center justify-center my-8">
-                                <div class="absolute inset-0 flex items-center" aria-hidden="true">
-                                    <div class="w-full border-t border-slate-200"></div>
-                                </div>
-                                <div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center">
-                                    <span class="text-xs font-black text-emerald-600 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU: SỔ SÁCH KẾ TOÁN TT88 & TỜ KHAI THUẾ TT40</span>
-                                    <p class="text-[11px] text-slate-500 font-medium mt-0.5">Mục tiêu: Giúp nhân sự nắm vững chế độ sổ sách và tờ khai hỗ trợ tối đa hộ kê khai.</p>
-                                </div>
-                            </div>
-
-                            <div class="space-y-4">
-                                <!-- Scenario 2 (Màu Lime) -->
-                                <details name="scenarios-day3" class="group border border-lime-100 rounded-2xl bg-lime-50/50 p-4 transition-all hover:bg-lime-100/30">
-                                    <summary class="font-bold text-sm text-lime-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-lime-700"></i> Tình huống 2: Sợ tốn tiền thuê dịch vụ kế toán</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-lime-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-lime-200/50">
-                                        <p class="text-lime-700 leading-relaxed"><strong>Tình huống:</strong> Khách chuyển từ nộp thuế khoán sang kê khai, lo lắng tốn kém chi phí thuê kế toán ngoài để làm 7 loại sổ theo Thông tư 88.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-lime-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Phần mềm **Kế toán KiotViet**. Tự động đồng bộ số liệu bán hàng để lập 7 loại sổ kế toán bắt buộc và tự tạo Tờ khai thuế 01/CNKD nộp online.</p>
-                                    </div>
-                                </details>
-
-                                <!-- Scenario 3 (Màu Violet) -->
-                                <details name="scenarios-day3" class="group border border-violet-100 rounded-2xl bg-violet-50/50 p-4 transition-all hover:bg-violet-100/30">
-                                    <summary class="font-bold text-sm text-violet-900 cursor-pointer list-none flex justify-between items-center">
-                                        <span class="flex items-center gap-2"><i class="fa-solid fa-circle-question text-violet-600"></i> Tình huống 3: Sổ tay/Excel tự kê khai thuế</span>
-                                        <span class="transition group-open:rotate-180"><i class="fa-solid fa-chevron-down text-xs text-violet-400"></i></span>
-                                    </summary>
-                                    <div class="mt-4 text-sm space-y-3 border-t pt-3 border-violet-200/50">
-                                        <p class="text-violet-700 leading-relaxed"><strong>Tình huống:</strong> Khách nói tự ghi sổ tay hoặc dùng Excel khai thuế là được, không cần mua thêm tính năng kế toán này.</p>
-                                        <p class="text-slate-700 bg-white p-3 rounded-xl border border-violet-100 leading-relaxed"><strong>Kỳ vọng trả lời:</strong> Nhấn mạnh rủi ro pháp lý. Ghi tay rất dễ nhầm số liệu thực tế với hóa đơn đã xuất, dễ bị cơ quan thuế phạt nặng khi giải trình thanh kiểm tra. KiotViet tự động hóa 100%, bảo vệ an toàn dữ liệu thuế.</p>
-                                    </div>
-                                </details>
-                            </div>
+                        <!-- Khối chứa danh sách tình huống ẩn -->
+                        <div id="all-scenarios-list" class="space-y-4 hidden transition-all">
+                            <!-- JS tự động kết xuất danh sách tình huống tại đây -->
                         </div>
                     </div>
 
@@ -410,7 +170,6 @@
             
             <!-- Cột phải (42%): Form ghi nhận kết quả review (Màu nền Blue nhạt #f0f6ff) -->
             <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
-                <!-- Nền form đổi sang màu xanh nhạt #f0f6ff theo quy định -->
                 <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-[#f0f6ff] border border-blue-200 rounded-3xl p-6 lg:p-8 shadow-lg">
                     
                     <h3 class="text-base font-black text-slate-800 mb-6 pb-3 border-b border-blue-100 flex items-center gap-3">
@@ -444,7 +203,6 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <!-- Nhập ngày dạng văn bản dd/mm/yyyy kèm icon lịch -->
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW (DD/MM/YYYY) *</label>
                                     <div class="relative">
                                         <input type="text" id="reviewDate" required class="w-full text-xs pl-3.5 pr-10 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="dd/mm/yyyy">
@@ -544,27 +302,27 @@
                 </div>
 
                 <!-- Mục tiêu Review 1:1 -->
-                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
+                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 shadow-sm bg-gradient-to-tr from-emerald-50/40 via-sky-50/20 to-purple-50/40 border border-slate-100">
                     <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                         <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-bullseye"></i></span>
                         MỤC TIÊU CỦA BUỔI REVIEW 1:1
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <span class="text-xs font-black text-[#166def] uppercase block mb-1">Hiểu Sâu Bản Chất</span>
-                            <p class="text-xs text-slate-500 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p>
+                        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
+                            <span class="text-xs font-black text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span>
+                            <p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p>
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <span class="text-xs font-black text-[#166def] uppercase block mb-1">Gắn Liền Ngành Hàng</span>
-                            <p class="text-xs text-slate-500 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể (mỹ phẩm, điện thoại, F&B, đa sàn,...).</p>
+                        <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl">
+                            <span class="text-xs font-black text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span>
+                            <p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể (mỹ phẩm, điện thoại, F&B, đa sàn,...).</p>
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <span class="text-xs font-black text-[#166def] uppercase block mb-1">Xoáy Sâu Lợi Ích</span>
-                            <p class="text-xs text-slate-500 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào "nỗi đau" (pain points) để đưa ra giải pháp (giảm thất thoát, tăng doanh thu).</p>
+                        <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl">
+                            <span class="text-xs font-black text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span>
+                            <p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào "nỗi đau" (pain points) để đưa ra giải pháp (giảm thất thoát, tăng doanh thu).</p>
                         </div>
-                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                            <span class="text-xs font-black text-[#166def] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span>
-                            <p class="text-xs text-slate-500 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục, chuẩn bị tốt nhất cho các cuộc gọi chăm sóc và tái ký.</p>
+                        <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
+                            <span class="text-xs font-black text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span>
+                            <p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục, chuẩn bị tốt nhất cho các cuộc gọi chăm sóc và tái ký.</p>
                         </div>
                     </div>
                 </div>
@@ -572,65 +330,69 @@
             </div>
 
             <!-- Quy trình triển khai chung -->
-            <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
+            <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-r from-blue-50/30 via-slate-50 to-indigo-50/30 border border-slate-100">
                 <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                     <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>
                     QUY TRÌNH TRIỂN KHAI CHUNG
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-500 leading-relaxed">
-                    <div class="space-y-1">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider">THỜI ĐIỂM THỰC HIỆN</span>
-                        <p class="text-slate-700 font-medium">Sau 03 ngày kể từ ngày nhân sự mới gia nhập hệ thống.</p>
+                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
+                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span>
+                        <p class="text-[#166def] font-bold">Sau 03 ngày</p>
+                        <p class="text-xs text-slate-400 mt-0.5">Kể từ ngày nhân sự mới gia nhập hệ thống.</p>
                     </div>
-                    <div class="space-y-1">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider">TẦN SUẤT & THỜI LƯỢNG</span>
-                        <p class="text-slate-700 font-medium">Mỗi ngày 01 phiên review 1:1, thời lượng cố định 45 phút/phiên.</p>
+                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
+                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span>
+                        <p class="text-[#166def] font-bold">Mỗi ngày 01 phiên review</p>
+                        <p class="text-xs text-slate-400 mt-0.5">Thời lượng cố định 45 phút/phiên.</p>
                     </div>
-                    <div class="space-y-1">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider">NHIỆM VỤ TRAINER</span>
-                        <p class="text-slate-700 font-medium">Phỏng vấn sâu tính năng, định hướng trọng tâm nghiệp vụ, hỗ trợ tâm lý.</p>
+                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
+                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span>
+                        <p class="text-[#166def] font-bold">Phỏng vấn sâu kiến thức</p>
+                        <p class="text-xs text-slate-400 mt-0.5">Định hướng trọng tâm nghiệp vụ và tháo gỡ lo ngại.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- Cấu trúc khung giờ của phiên review -->
+            <!-- Cấu trúc khung giờ của phiên review (Đã chỉnh sửa cố định độ rộng cột, chống nhảy dòng) -->
             <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                 <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                     <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
                     CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)
                 </h3>
                 <div class="overflow-x-auto">
-                    <table class="w-full border-collapse text-left text-sm">
+                    <table class="w-full border-collapse text-left text-sm min-w-[700px]">
                         <thead>
                             <tr class="border-b border-slate-200">
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">HỌC PHẦN</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">THỜI LƯỢNG</th>
+                                <!-- Thiết lập độ rộng cột cố định và ngăn nhảy dòng bằng css min-width và whitespace-nowrap -->
+                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px] whitespace-nowrap">HỌC PHẦN</th>
+                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px] min-w-[120px] whitespace-nowrap">THỜI LƯỢNG</th>
                                 <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th>
                                 <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN KHUYẾN NGHỊ</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-slate-100 text-slate-500">
                             <tr>
-                                <td class="py-4 font-bold text-slate-700">1. Self-check</td>
-                                <td class="py-4 text-[#166def] font-bold">5 phút</td>
+                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">1. Self-check</td>
+                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">5 phút</td>
                                 <td class="py-4">Đánh giá mức độ tự tin và nhận diện khó khăn ban đầu của nhân sự.</td>
                                 <td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất và tự chấm điểm trên thang 10.</td>
                             </tr>
                             <tr>
-                                <td class="py-4 font-bold text-slate-700">2. Kiểm tra bản chất</td>
-                                <td class="py-4 text-[#166def] font-bold">10 phút</td>
+                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">2. Kiểm tra bản chất</td>
+                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">10 phút</td>
                                 <td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ và tính năng đi kèm.</td>
                                 <td class="py-4">Đặt câu hỏi so sánh hoặc phân tích để phân biệt các tính năng tương đồng (Ví dụ: Combo vs Hàng sản xuất).</td>
                             </tr>
                             <tr>
-                                <td class="py-4 font-bold text-slate-700">3. Phản xạ tư vấn</td>
-                                <td class="py-4 text-[#166def] font-bold">15 - 20 phút</td>
+                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">3. Phản xạ tư vấn</td>
+                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">15 - 20 phút</td>
                                 <td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích thực tế cho khách.</td>
                                 <td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ theo cấu trúc: <strong>Vấn đề &rarr; Giải pháp &rarr; Lợi ích</strong>.</td>
                             </tr>
                             <tr>
-                                <td class="py-4 font-bold text-slate-700">4. Nhận xét & Định hướng</td>
-                                <td class="py-4 text-[#166def] font-bold">5 phút</td>
+                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">4. Nhận xét & Định hướng</td>
+                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">5 phút</td>
                                 <td class="py-4">Phản hồi nhanh kết quả buổi học và giao bài tập rèn luyện.</td>
                                 <td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy cho phiên tiếp theo.</td>
                             </tr>
@@ -660,22 +422,53 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbyTOCaMQaVouAwWX4QvWtzvGPPcIxRnIG8woZjWRNM3vDqcxJrFOt9ot_kJmVGOC4-FXA/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
-        // Hàm điền ngày hiện tại dưới dạng dd/mm/yyyy
+        // Khai báo đối tượng giáo trình cẩm nang (Day 1 - 2 - 3) [1]
+        const scenariosData = {
+            day1: [
+                { id: 1, type: "morning", title: "Tình huống 1: Shop mỹ phẩm & Hàng cận date", question: "Khách than quên hàng cận date, nhập nhiều đợt. Em gợi ý tính năng nào? Lợi ích ra sao?", answer: "Gợi ý quản lý Lô - Hạn sử dụng (HSD). Lợi ích: Kiểm soát từng lô, biết lô nào gần hết hạn, ưu tiên bán trước, giảm tồn cận date." },
+                { id: 2, type: "morning", title: "Tình huống 2: Cửa hàng điện thoại & Tra cứu số máy", question: "Khách bán điện thoại, mỗi máy có mã IMEI riêng, khách hay cần tra lại máy đã bán để hỗ trợ bảo hành. Tính năng nào phù hợp? Vì sao không chỉ tạo hàng hóa thường?", answer: "Gợi ý Serial/IMEI. Lợi ích: Kiểm soát từng máy, bán đúng mã, tra lịch sử khi bảo hành/khiếu nại." },
+                { id: 3, type: "morning", title: "Tình huống 3: Giỏ quà Tết gộp nhiều món", question: "Khách bán giỏ quà Tết gồm nhiều sản phẩm thành phần. Khi bán 1 giỏ quà, khách muốn tự động trừ tồn từng món bên trong. Em chọn combo hay hàng sản xuất? Vì sao?", answer: "Combo - đóng gói nếu chỉ gộp nhiều sản phẩm để bán thành 1 bộ. Lợi ích: Bán nhanh theo combo, vẫn trừ tồn thành phần." },
+                { id: 4, type: "afternoon", title: "Tình huống 4: Nhiều nhà cung cấp, lộn xộn công nợ", question: "Khách nhập hàng từ nhiều nhà cung cấp, giá nhập mỗi lần khác nhau, cuối tháng không rõ đang nợ nhà cung cấp nào. Em sẽ hỏi thêm gì và gợi ý phần nào?", answer: "Hỏi về số lượng NCC, tần suất nhập, có theo dõi công nợ không. Gợi ý nhập hàng/nhà cung cấp/công nợ NCC nếu có." },
+                { id: 5, type: "afternoon", title: "Tình huống 5: Khách lệch tồn kho thường xuyên", question: "Khách hay bị lệch tồn giữa thực tế và phần mềm, đặc biệt sau các đợt bán cao điểm. Em sẽ tư vấn theo hướng nào?", answer: "Gợi ý kiểm kho định kỳ, đối soát tồn, tìm nguyên nhân lệch. Lợi ích: Giảm thất thoát và tăng độ tin cậy dữ liệu tồn." }
+            ],
+            day2: [
+                { id: 1, type: "morning", title: "Tình huống 1: Khách đặt trước, nhân viên quên giữ hàng", question: "Khách thường nhận đơn trước qua điện thoại/Facebook, khách đặt xong vài ngày sau mới qua lấy. Nhân viên hay quên giữ hàng. Em gợi ý dùng phần nào?", answer: "Đặt hàng &rarr; hóa đơn. Lợi ích: Ghi nhận đơn trước, giữ lịch sử, tránh quên đơn/thất thoát doanh thu." },
+                { id: 2, type: "morning", title: "Tình huống 2: Mệt mỏi đối soát chuyển khoản cuối ngày", question: "Khách hay nhận chuyển khoản/QR, cuối ngày mất thời gian đối soát tiền. Em nói lợi ích thanh toán QR thế nào?", answer: "Thanh toán QR giúp giảm nhập sai số tiền, tăng tốc thanh toán, dễ đối soát hơn." },
+                { id: 3, type: "afternoon", title: "Tình huống 3: Bán đa kênh lệch kho liên tục", question: "Khách bán cả tại cửa hàng và trên sàn TMĐT, hay bị lệch tồn vì đơn sàn và đơn offline không đồng bộ. Em gợi ý gì?", answer: "Kết nối sàn TMĐT/KiotViet Web tùy kênh. Lợi ích: Đồng bộ đơn, tồn, giảm bán quá số lượng thực tế." },
+                { id: 4, type: "afternoon", title: "Tình huống 4: Không rõ lý do sụt giảm doanh thu", question: "Khách nói doanh thu tháng này giảm nhưng không biết giảm do mặt hàng nào, nhân viên nào, hay kênh nào. Em nên dẫn về tính năng nào?", answer: "Báo cáo/phân tích. Lợi ích: Nhìn doanh thu, hàng bán chạy/chậm, hiệu quả nhân viên/kênh để ra quyết định." }
+            ],
+            day3: [
+                { id: 1, type: "morning", title: "Tình huống 1: Hộ kinh doanh lớn sợ chậm khi xuất HĐĐT", question: "Hộ kinh doanh tạp hóa lớn (>1 tỷ/năm) lo ngại thủ tục xuất HĐĐT phức tạp và làm chậm quá trình thanh toán của khách tại quầy.", answer: "Tư vấn giải pháp HĐĐT khởi tạo từ máy tính tiền. Không cần ký số từng hóa đơn, xuất siêu tốc tại quầy bán, tự động truyền dữ liệu lên cơ quan Thuế vào cuối ngày." },
+                { id: 2, type: "afternoon", title: "Tình huống 2: Sợ tốn tiền thuê dịch vụ kế toán", question: "Khách chuyển từ nộp thuế khoán sang kê khai, lo lắng tốn kém chi phí thuê kế toán ngoài để làm 7 loại sổ theo Thông tư 88.", answer: "Phần mềm Kế toán KiotViet. Tự động đồng bộ số liệu bán hàng để lập 7 loại sổ kế toán bắt buộc và tự tạo Tờ khai thuế 01/CNKD nộp online." },
+                { id: 3, type: "afternoon", title: "Tình huống 3: Sổ tay/Excel tự kê khai thuế", question: "Khách nói tự ghi sổ tay hoặc dùng Excel khai thuế là được, không cần mua thêm tính năng kế toán này.", answer: "Nhấn mạnh rủi ro pháp lý. Ghi tay rất dễ nhầm số liệu thực tế với hóa đơn đã xuất, dễ bị cơ quan thuế phạt nặng khi giải trình thanh kiểm tra. KiotViet tự động hóa 100%, bảo vệ an toàn dữ liệu thuế." }
+            ]
+        };
+
+        // Lưu giữ tình huống ngẫu nhiên hiện tại của ngày được chọn
+        let currentDay = 'day1';
+        let currentRandomScenario = null;
+
+        // Điền ngày mặc định dd/mm/yyyy
         function setTodayDate() {
             const today = new Date();
             const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0'); // Tháng tính từ 0
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
             const yyyy = today.getFullYear();
             document.getElementById('reviewDate').value = `${dd}/${mm}/${yyyy}`;
         }
         setTodayDate();
+
+        // Load ban đầu
+        window.onload = function() {
+            switchSubTab('day1');
+        };
 
         // Cập nhật điểm tự tin
         function updateScoreValue(val) {
             document.getElementById('scoreValue').textContent = val;
         }
 
-        // Chuyển đổi qua lại giữa 2 Tab chính: WORKSPACE và HANDBOOK
+        // Chuyển đổi giữa WORKSPACE và HANDBOOK
         function switchMainTab(tab) {
             const workspaceBtn = document.getElementById('main-tab-workspace');
             const handbookBtn = document.getElementById('main-tab-handbook');
@@ -695,17 +488,18 @@
             }
         }
 
-        // Chuyển đổi tab con của giáo trình học
+        // Chuyển đổi Ngày review & Tự động reset trạng thái hiển thị của các tình huống
         function switchSubTab(day) {
+            currentDay = day;
             const tabs = ['day1', 'day2', 'day3'];
             const blob1 = document.getElementById('blob-1');
             const blob2 = document.getElementById('blob-2');
 
-            // Cập nhật background chuyển màu mờ theo từng phiên
+            // Cập nhật background glow chuyển động
             const bgGlows = {
-                day1: ["rgba(22, 109, 239, 0.08)", "rgba(16, 185, 129, 0.08)"], // Blue - Green
-                day2: ["rgba(249, 115, 22, 0.08)", "rgba(22, 109, 239, 0.08)"], // Orange - Blue
-                day3: ["rgba(16, 185, 129, 0.08)", "rgba(249, 115, 22, 0.08)"]  // Green - Orange
+                day1: ["rgba(22, 109, 239, 0.08)", "rgba(16, 185, 129, 0.08)"],
+                day2: ["rgba(249, 115, 22, 0.08)", "rgba(22, 109, 239, 0.08)"],
+                day3: ["rgba(16, 185, 129, 0.08)", "rgba(249, 115, 22, 0.08)"]
             };
 
             if (blob1 && blob2 && bgGlows[day]) {
@@ -715,27 +509,130 @@
             
             tabs.forEach(item => {
                 const button = document.getElementById(`sub-tab-${item}`);
-                const content = document.getElementById(`content-${item}`);
-                
                 if (item === day) {
                     button.classList.add('bg-white', 'text-[#166def]', 'shadow-sm');
                     button.classList.remove('text-slate-600');
-                    content.classList.remove('hidden');
                 } else {
                     button.classList.remove('bg-white', 'text-[#166def]', 'shadow-sm');
                     button.classList.add('text-slate-600');
-                    content.classList.add('hidden');
                 }
             });
 
-            // Đồng bộ Selectbox Phiên review tương ứng
+            // Đồng bộ dữ liệu Header
+            const headerIcon = document.getElementById('session-header-icon');
+            const headerTitle = document.getElementById('session-header-title');
+            const headerDesc = document.getElementById('session-header-desc');
+
+            if (day === 'day1') {
+                headerIcon.innerHTML = '<i class="fa-solid fa-store"></i>';
+                headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
+                headerDesc.textContent = "Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.";
+            } else if (day === 'day2') {
+                headerIcon.innerHTML = '<i class="fa-solid fa-cash-register"></i>';
+                headerTitle.textContent = "PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH";
+                headerDesc.textContent = "Đặt - Bán - Trả hàng, tích hợp thanh toán nhanh, đồng bộ sàn TMĐT & khai thác báo cáo.";
+            } else if (day === 'day3') {
+                headerIcon.innerHTML = '<i class="fa-solid fa-calculator"></i>';
+                headerTitle.textContent = "PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH";
+                headerDesc.textContent = "Xuất hóa đơn từ máy tính tiền, hoàn thiện 7 loại sổ kế toán (TT88) & Tờ khai thuế (TT40).";
+            }
+
+            // Đồng bộ Selectbox Phiên review tương ứng trên form bên phải
             const sessionSelect = document.getElementById('session');
             if (day === 'day1') sessionSelect.value = "Phiên 1 (Cuối Ngày 1)";
             if (day === 'day2') sessionSelect.value = "Phiên 2 (Cuối Ngày 2)";
             if (day === 'day3') sessionSelect.value = "Phiên 3 (Cuối Ngày 3)";
+
+            // 1. Tự động chọn 1 tình huống ngẫu nhiên của ngày này và hiển thị lên khung chỉ định [1]
+            triggerRandomScenario();
+
+            // 2. Đồng bộ danh sách các tình huống lưu trữ khác bên dưới (và mặc định ẩn đi) [1]
+            renderAllScenarios(day);
+            hideAllScenariosList();
         }
 
-        // Đồng bộ ngược lại khi đổi selectbox Phiên review sẽ đổi tab
+        // Chọn ngẫu nhiên tình huống và kết xuất ra khung giao diện riêng
+        function triggerRandomScenario() {
+            const list = scenariosData[currentDay];
+            const randomIndex = Math.floor(Math.random() * list.length);
+            currentRandomScenario = list[randomIndex];
+
+            const box = document.getElementById('random-scenario-box');
+            
+            // Định nghĩa màu sắc cố định theo yêu cầu: Sáng = Lục nhạt, Chiều = Tím nhạt
+            const isMorning = currentRandomScenario.type === 'morning';
+            const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-purple-50 border-purple-200 text-purple-950';
+            const icon = isMorning ? '<i class="fa-solid fa-sun text-emerald-600"></i>' : '<i class="fa-solid fa-moon text-purple-600"></i>';
+            const typeLabel = isMorning ? 'Học Phần Sáng' : 'Học Phần Chiều';
+
+            box.innerHTML = `
+                <div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white">
+                    <div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between border-b pb-2 border-current/10">
+                            <span class="text-xs font-black tracking-widest uppercase flex items-center gap-1.5">
+                                ${icon} ${typeLabel} - ĐƯỢC CHỈ ĐỊNH
+                            </span>
+                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/70 border border-current/10">Random Selected</span>
+                        </div>
+                        <h4 class="font-extrabold text-sm text-slate-800">${currentRandomScenario.title}</h4>
+                        <div class="text-xs space-y-3 pt-1">
+                            <p class="leading-relaxed text-slate-600"><strong>Yêu cầu tư vấn:</strong> ${currentRandomScenario.question}</p>
+                            <p class="leading-relaxed bg-white/90 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng trả lời:</strong> ${currentRandomScenario.answer}</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Kết xuất toàn bộ danh sách các tình huống lưu trữ khác dưới dạng details
+        function renderAllScenarios(day) {
+            const container = document.getElementById('all-scenarios-list');
+            const list = scenariosData[day];
+
+            container.innerHTML = list.map(item => {
+                const isMorning = item.type === 'morning';
+                // Thiết lập màu sắc: Sáng = Xanh lục nhạt, Chiều = Tím nhạt
+                const colorClass = isMorning ? 'bg-emerald-50/50 border-emerald-100 text-emerald-950 hover:bg-emerald-50' : 'bg-purple-50/50 border-purple-100 text-purple-950 hover:bg-purple-50';
+                const icon = isMorning ? 'fa-sun text-emerald-600' : 'fa-moon text-purple-600';
+
+                return `
+                    <details name="scenarios-${day}" class="group border border-slate-200/60 rounded-2xl ${colorClass} p-4 transition-all duration-200">
+                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center">
+                            <span class="flex items-center gap-2.5"><i class="fa-solid ${icon}"></i> ${item.title}</span>
+                            <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
+                        </summary>
+                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
+                            <p class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> ${item.question}</p>
+                            <p class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> ${item.answer}</p>
+                        </div>
+                    </details>
+                `;
+            }).join('');
+        }
+
+        // Ẩn danh sách lưu trữ tình huống khác
+        function hideAllScenariosList() {
+            const list = document.getElementById('all-scenarios-list');
+            const btn = document.getElementById('toggle-list-btn');
+            list.classList.add('hidden');
+            btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
+        }
+
+        // Bật/tắt ẩn hiện danh sách tình huống lưu trữ [1]
+        function toggleAllScenarios() {
+            const list = document.getElementById('all-scenarios-list');
+            const btn = document.getElementById('toggle-list-btn');
+
+            if (list.classList.contains('hidden')) {
+                list.classList.remove('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Ẩn các tình huống lưu trữ';
+            } else {
+                list.classList.add('hidden');
+                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
+            }
+        }
+
+        // Đồng bộ selectbox Phiên review khi đổi selectbox thì chuyển tab
         document.getElementById('session').addEventListener('change', function(e) {
             const val = e.target.value;
             if (val === "Phiên 1 (Cuối Ngày 1)") switchSubTab('day1');
@@ -743,18 +640,15 @@
             if (val === "Phiên 3 (Cuối Ngày 3)") switchSubTab('day3');
         });
 
-        // Xử lý nút chọn xếp hạng năng lực
+        // Chọn Rating năng lực
         function selectRating(rating, element) {
             const buttons = document.querySelectorAll('.rating-btn');
             buttons.forEach(btn => {
-                // Đưa các nút khác về trạng thái mặc định, loại bỏ tất cả các class màu sắc nổi bật
                 btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all";
             });
 
-            // Cập nhật giá trị đánh giá vào trường input ẩn
             document.getElementById('selectedRating').value = rating;
 
-            // Gán class màu sắc tương ứng (Sử dụng !important định nghĩa trong style để tránh bị Tailwind đè)
             if (rating === 'Chưa đạt') {
                 element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-chuadat transition-all";
             } else if (rating === 'Đạt thao tác') {
@@ -770,7 +664,7 @@
         function submitForm(event) {
             event.preventDefault();
 
-            // Kiểm tra định dạng dd/mm/yyyy
+            // Kiểm tra định dạng ngày dd/mm/yyyy
             const rawDate = document.getElementById('reviewDate').value.trim();
             const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
             if (!dateRegex.test(rawDate)) {
@@ -778,7 +672,7 @@
                 return;
             }
 
-            // Chuyển đổi định dạng từ dd/mm/yyyy sang yyyy-mm-dd để lưu trữ trong database đồng nhất
+            // Chuyển đổi định dạng ngày gửi lên sheet
             const parts = rawDate.split("/");
             const formattedDbDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
 
@@ -793,7 +687,7 @@
                 repName: document.getElementById('repName').value.trim(),
                 trainerName: document.getElementById('trainerName').value.trim(),
                 session: document.getElementById('session').value,
-                reviewDate: formattedDbDate, // Dữ liệu ngày gửi lên đã chuẩn hóa
+                reviewDate: formattedDbDate,
                 homeworkStatus: document.getElementById('homeworkStatus').value,
                 confidenceScore: parseInt(document.getElementById('confidenceScore').value),
                 selfCheckEasy: document.getElementById('selfCheckEasy').value.trim(),
