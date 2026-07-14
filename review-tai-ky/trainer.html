@@ -257,7 +257,7 @@
                             </div>
                         </div>
 
-                        <!-- Block 2: Self-check (Hiển thị tối đa 3 dòng trống) -->
+                        <!-- Block 2: Self-check (Hiển thị tối đa 3 dòng trống - rows="3") -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá (Self-Check)</span>
                             <div class="space-y-3">
@@ -267,13 +267,13 @@
                             </div>
                         </div>
 
-                        <!-- Block 3: Phản xạ tình huống thực tế -->
+                        <!-- Block 3: Phản xạ tình huống thực tế (rows="3") -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
                             <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp (Vấn đề -> Giải pháp -> Lợi ích)..."></textarea>
                         </div>
 
-                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi -->
+                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi (rows="3") -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-[#166def] mr-1.5"></i> Đánh Giá Của Trainer</span>
                             
@@ -445,15 +445,16 @@
 
     <!-- Script điều hướng & xử lý API -->
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbxTjExbb6bsrPNCPZlATFO-zKz8V9ONSzJiUR6henEZ_Typ20ORnj4gtpX7F-QMWhRL_Q/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbyTOCaMQaVouAwWX4QvWtzvGPPcIxRnIG8woZjWRNM3vDqcxJrFOt9ot_kJmVGOC4-FXA/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
+        // Khai báo đối tượng giáo trình rỗng, sẽ được load động từ Google Sheet [1]
         let scenariosData = {};
         let currentDay = 'day1';
         let currentRoadmap = 'Retail'; // Mặc định là Retail [1]
         let currentRandomScenario = null;
 
-        // Cẩm nang dự phòng offline phòng khi kết nối API lỗi [1]
+        // Danh sách tình huống dự phòng trường hợp kết nối API lỗi [1]
         const fallbackScenarios = {
             day1: [
                 { id: 1, type: "morning", roadmap: "Retail", title: "Tình huống 1: Shop thời trang online & Do dự gia hạn vì tự quản lý ship qua app ngoài", question: 'Khách hàng kinh doanh quần áo online chuẩn bị hết hạn hợp đồng bảo: "Em ơi, giờ chị quét QR ngân hàng cá nhân và tự lên đơn trên app Giao Hàng Tiết Kiệm cũng nhanh, đâu cần qua KiotViet làm gì cho tốn tiền gia hạn hàng năm." Em hãy thuyết phục khách gia hạn.', answer: 'Tư vấn QR động và Tích hợp hãng giao vận trực tiếp. QR tĩnh dễ bị giả hóa đơn, chuyển app thủ công dễ nhầm địa chỉ gây hoàn đơn. KiotViet tích hợp đẩy đơn 1 chạm giúp tiết kiệm 50% thời gian, quản lý đối soát COD tập trung và triệt tiêu hoàn toàn hóa đơn giả.' }
@@ -472,12 +473,12 @@
         }
         setTodayDate();
 
-        // Tự động tải tình huống động ngay khi khởi chạy trang [1]
+        // Tự động tải cẩm nang tình huống từ Google Sheet ngay khi mở trang [1]
         window.onload = function() {
             loadScenariosFromSheet();
         };
 
-        // Lấy cẩm nang tình huống động từ Google Sheets thông qua Apps Script [1]
+        // Hàm lấy danh sách tình huống cẩm nang từ API Google Sheet [1]
         function loadScenariosFromSheet() {
             const box = document.getElementById('random-scenario-box');
             box.innerHTML = `
@@ -487,6 +488,7 @@
                 </div>
             `;
 
+            // Gọi API đọc phân luồng lấy dữ liệu tình huống [1]
             fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
             .then(res => res.json())
             .then(response => {
@@ -494,15 +496,24 @@
                     scenariosData = { day1: [], day2: [], day3: [] };
                     
                     response.data.forEach(item => {
-                        const dayKey = item.Day; // day1, day2, day3
+                        // Tự động bỏ qua nếu dòng dữ liệu bị lặp lại các tiêu đề cột (Day, Type, Title,...) [1]
+                        if (
+                            !item.Day || 
+                            item.Day.toString().trim().toLowerCase() === "day" || 
+                            item.Title.toString().trim().toLowerCase() === "title"
+                        ) {
+                            return; // Bỏ qua dòng tiêu đề lặp lại [1]
+                        }
+
+                        const dayKey = item.Day.toString().trim(); // day1, day2, day3
                         if (scenariosData[dayKey]) {
                             scenariosData[dayKey].push({
                                 id: item.id || Math.random(),
-                                type: item.Type, // morning hoặc afternoon
+                                type: item.Type ? item.Type.toString().trim() : "",
                                 title: item.Title,
                                 question: item.Question,
                                 answer: item.Answer,
-                                roadmap: item.Roadmap // Gắn nhãn lộ trình (Retail hoặc FNB) [1]
+                                roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" // Gắn nhãn lộ trình [1]
                             });
                         }
                     });
@@ -510,7 +521,7 @@
                     // Khởi chạy đồng bộ hóa theo lộ trình mặc định ban đầu là Retail [1]
                     switchRoadmap('Retail');
                 } else {
-                    useFallbackData("Lỗi cấu trúc hoặc tệp rỗng. Kích hoạt cẩm nang dự phòng.");
+                    useFallbackData("Lỗi cấu trúc dữ liệu hoặc Sheet rỗng. Kích hoạt cẩm nang dự phòng.");
                 }
             })
             .catch(err => {
@@ -519,18 +530,19 @@
             });
         }
 
-        // Kích hoạt cẩm nang dự phòng offline
+        // Kích hoạt dữ liệu dự phòng offline (Được gán nhãn Roadmap Retail để chạy đồng bộ)
         function useFallbackData(logMessage) {
             scenariosData = fallbackScenarios;
             switchRoadmap('Retail');
             console.info(logMessage);
         }
 
-        // Quy tắc ngắt câu tự động kết xuất văn bản (Hết câu ngắt dòng + chèn 1 dòng trắng) [1]
+        // Quy tắc ngắt câu tự động kết xuất văn bản (Hết câu ngắt dòng + chèn 1 dòng trắng)
+        // Bổ sung Negative Lookbehind để bỏ qua các số thứ tự 1. 2. 3. không ngắt dòng [1]
         function formatSentences(text) {
             if (!text) return "";
-            // Tách câu bằng dấu chấm, dấu hỏi hoặc cảm thán phía sau có khoảng trắng, giữ nguyên dấu câu [1]
-            const sentences = text.split(/(?<=[.?!])\s+/);
+            // Tách các câu bằng dấu chấm, dấu hỏi hoặc cảm thán phía sau có khoảng trắng, loại trừ STT dạng "1.", "2." [1]
+            const sentences = text.split(/(?<!\b\d+\.)(?<=[.?!])\s+/);
             return sentences
                 .map(s => s.trim())
                 .filter(s => s.length > 0)
@@ -548,11 +560,11 @@
             if (roadmap === 'Retail') {
                 retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
                 fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
-                if (industrySelect) industrySelect.value = "Retail"; // Đồng bộ dropdown Ngành hàng bên phải [1]
+                if (industrySelect) industrySelect.value = "Retail"; // Tự động đồng bộ trường Ngành hàng bên phải sang Retail [1]
             } else {
                 retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
                 fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
-                if (industrySelect) industrySelect.value = "FNB"; // Đồng bộ dropdown Ngành hàng bên phải [1]
+                if (industrySelect) industrySelect.value = "FNB"; // Tự động đồng bộ trường Ngành hàng bên phải sang FNB [1]
             }
 
             // Đồng bộ tải lại danh sách của ngày hiện tại theo lộ trình mới
@@ -566,6 +578,7 @@
             const blob1 = document.getElementById('blob-1');
             const blob2 = document.getElementById('blob-2');
 
+            // Cập nhật background glow chuyển động
             const bgGlows = {
                 day1: ["rgba(22, 109, 239, 0.08)", "rgba(16, 185, 129, 0.08)"],
                 day2: ["rgba(249, 115, 22, 0.08)", "rgba(22, 109, 239, 0.08)"],
@@ -658,8 +671,8 @@
                         <h4 class="font-extrabold text-sm text-slate-800">${escapeHtml(currentRandomScenario.title)}</h4>
                         <div class="text-xs space-y-3 pt-1">
                             <!-- Chạy hàm formatSentences sau khi đã escape chuỗi an toàn -->
-                            <div class="leading-relaxed text-slate-600"><strong>Yêu cầu tư vấn:</strong> <p class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</p></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng trả lời:</strong> <p class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</p></div>
+                            <div class="leading-relaxed text-slate-600"><strong>Yêu cầu tư vấn:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div>
+                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng trả lời:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div>
                         </div>
                     </div>
                 </div>
@@ -678,7 +691,7 @@
                 return;
             }
 
-            // Định nghĩa các dải phân cách học phần Sáng và Chiều dạng băng rôn phân cấp [1]
+            // Băng rôn phân cấp Sáng và Chiều dạng cột ngang [1]
             const morningTitle = `
                 <div class="relative flex items-center justify-center my-6">
                     <div class="absolute inset-0 flex items-center" aria-hidden="true"><div class="w-full border-t border-slate-200"></div></div>
@@ -700,7 +713,7 @@
 
             let htmlContent = "";
 
-            // Thống nhất quy chế màu sắc: Sáng dùng 1 màu xanh lá nhạt, chiều các tình huống dùng màu tím nhạt [1]
+            // Thống nhất quy chế màu sắc: Sáng dùng 1 màu xanh lá nhạt, chiều dùng màu tím nhạt [1]
             if (morningItems.length > 0) {
                 htmlContent += morningTitle;
                 htmlContent += `<div class="space-y-4">` + morningItems.map(item => `
@@ -710,8 +723,8 @@
                             <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
                         </summary>
                         <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
-                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <p class="mt-1.5">${formatSentences(escapeHtml(item.question))}</p></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <p class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</p></div>
+                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div>
+                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div>
                         </div>
                     </details>
                 `).join('') + `</div>`;
@@ -726,8 +739,8 @@
                             <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
                         </summary>
                         <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
-                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <p class="mt-1.5">${formatSentences(escapeHtml(item.question))}</p></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <p class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</p></div>
+                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div>
+                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div>
                         </div>
                     </details>
                 `).join('') + `</div>`;
@@ -880,7 +893,7 @@
                 icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-emerald-100 text-emerald-600";
                 icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
             } else {
-                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-[#e11d48] text-white bg-rose-600";
+                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-rose-100 text-rose-600";
                 icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
             }
 
@@ -891,6 +904,7 @@
             document.getElementById('statusModal').classList.add('hidden');
         }
 
+        // Tự động khôi phục về trạng thái mặc định của lộ trình đang chọn khi lưu kết quả
         function resetFormFields() {
             document.getElementById('repName').value = "";
             document.getElementById('classCode').value = "";
