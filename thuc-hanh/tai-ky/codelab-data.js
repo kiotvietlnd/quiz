@@ -1,7 +1,7 @@
 // CẤU HÌNH HỆ THỐNG DÀNH CHO ADMIN
 const APP_CONFIG = {
     // Dán link API của Google Apps Script vào đây
-    API_URL: "https://script.google.com/macros/s/AKfycby6zGs6lK-GpdbKFR5uU3OdhsI4TKp2Jm_chgfKzOv6tzHdNv8qbqept0Nr0vfRYGFoAw/exec", 
+    API_URL: "https://script.google.com/macros/s/AKfycbyz9OcV5IlUy7yxLIwXkgcIU7Sc8HMzC7TDghmZYhFWFTRJpr8_woNfNPcQTef4Z8CUeg/exec", 
     COURSE_NAME: "KIOT_RENEWAL_Q3_2026" 
 };
 
