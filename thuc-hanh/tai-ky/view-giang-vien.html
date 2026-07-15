@@ -6,78 +6,162 @@
     <title>CHẤM BÀI THỰC HÀNH TÁI KÝ</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>body { font-family: 'Inter', sans-serif; background: #f8fafc; }</style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+        #sidebar select option { background-color: #1e3a8a; color: #f8fafc; }
+    </style>
 </head>
-<body class="h-screen flex flex-col">
+<body class="h-screen flex overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
 
-    <header class="bg-[#166def] text-white px-6 py-4 flex items-center justify-between shadow-md">
-        <h1 class="font-black tracking-wider"><i class="fa-solid fa-chalkboard-user mr-2"></i> TRUNG TÂM CHẤM BÀI TÁI KÝ</h1>
-        <button onclick="fetchPracticeData()" class="bg-blue-800/50 hover:bg-blue-700 px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-rotate"></i> Tải dữ liệu</button>
-    </header>
+    <!-- SIDEBAR BỘ LỌC (Màu Xanh Tím) -->
+    <aside id="sidebar" class="w-72 bg-gradient-to-b from-blue-900 via-indigo-800 to-purple-800 border-r border-white/10 flex flex-col z-30 transition-all duration-300 flex-shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden">
+        <div class="h-16 flex items-center px-4 border-b border-white/10 flex-shrink-0 justify-between relative z-10">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-7 brightness-0 invert drop-shadow-[0_2px_4px_rgba(0,0,0,0.3)]">
+        </div>
+        
+        <div class="p-4 flex-1 overflow-y-auto flex flex-col scroll-smooth relative z-10 space-y-4">
+            <div class="space-y-3.5">
+                <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-1.5">Bộ lọc hiển thị</h2>
+                
+                <div>
+                    <label class="block text-[11px] font-bold text-yellow-300 mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
+                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả bài nộp</option>
+                        <option value="pending" selected>🔴 Cần chấm (Chưa có nhận xét)</option>
+                        <option value="graded">✅ Đã chấm (Có nhận xét)</option>
+                    </select>
+                </div>
 
-    <div class="flex-1 flex overflow-hidden">
-        <!-- Sidebar Lọc -->
-        <aside class="w-72 bg-white border-r border-slate-200 p-5 flex flex-col gap-4 overflow-y-auto">
-            <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest border-b pb-2">Bộ Lọc Học Viên</h2>
-            
-            <div>
-                <label class="text-xs font-bold text-slate-600 block mb-1">Mã Lớp / Phòng Ban</label>
-                <select id="filterDept" onchange="updateStudentFilter()" class="w-full text-xs p-2 border rounded-lg bg-slate-50"><option value="all">Tất cả</option></select>
-            </div>
-            <div>
-                <label class="text-xs font-bold text-slate-600 block mb-1">Học Viên</label>
-                <select id="filterStudent" onchange="renderCards()" class="w-full text-xs p-2 border rounded-lg bg-slate-50"><option value="all">Tất cả</option></select>
-            </div>
-            <div>
-                <label class="text-xs font-bold text-slate-600 block mb-1">Trạng thái chấm</label>
-                <select id="filterStatus" onchange="renderCards()" class="w-full text-xs p-2 border rounded-lg bg-slate-50">
-                    <option value="all">Tất cả</option>
-                    <option value="pending" selected>Chưa chấm (Chờ feedback)</option>
-                    <option value="graded">Đã chấm</option>
-                </select>
-            </div>
-        </aside>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Mã Lớp / Phòng ban</label>
+                    <select id="filterDept" onchange="updateStudentFilter()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả</option>
+                    </select>
+                </div>
 
-        <!-- Main Content -->
-        <main class="flex-1 p-6 overflow-y-auto bg-slate-50" id="mainContainer">
-            <div id="loading" class="text-center py-20 text-blue-500 font-bold hidden"><i class="fa-solid fa-spinner fa-spin text-3xl mb-4 block"></i> Đang tải dữ liệu...</div>
-            <div id="cardsContainer" class="max-w-4xl mx-auto space-y-6"></div>
-        </main>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label>
+                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Học viên</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label>
+                    <select id="filterSession" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                        <option value="all">Tất cả Buổi</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md flex-shrink-0 flex flex-col gap-2 relative z-10">
+            <button onclick="fetchPracticeData()" class="w-full h-9 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 transition">
+                <i class="fas fa-sync-alt"></i> Tải lại dữ liệu
+            </button>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10">
+        <header class="glass-header h-16 flex items-center justify-between px-6 z-20 shrink-0 w-full">
+            <div class="flex items-center gap-2.5">
+                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-chalkboard-teacher"></i></div>
+                <h1 class="text-sm md:text-base font-black text-slate-800 tracking-tight font-sans">TRUNG TÂM CHẤM BÀI TRỰC TUYẾN TÁI KÝ</h1>
+            </div>
+        </header>
+
+        <div class="flex-1 overflow-auto p-4 md:p-8 relative pb-28 custom-scrollbar">
+            <div class="max-w-4xl mx-auto w-full">
+                
+                <!-- Bảng Thống kê -->
+                <div id="statsSummary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8 z-10 relative hidden">
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-user-check"></i></div>
+                        <div class="overflow-hidden"><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Học Viên</p><p class="text-base font-black text-slate-800 truncate" id="statStudentName">Tất cả</p></div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-red-400 to-red-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-bell"></i></div>
+                        <div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Chờ chấm</p><p class="text-base font-black text-red-600" id="statPending">0 bài</p></div>
+                    </div>
+                    <div class="glass-panel p-5 rounded-2xl flex items-center gap-4 border border-white/80">
+                        <div class="h-12 w-12 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-500 flex items-center justify-center text-white text-xl flex-shrink-0 shadow-lg"><i class="fas fa-list-ol"></i></div>
+                        <div><p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Bài Đang Hiện</p><p class="text-base font-black text-emerald-600" id="statProgress">0 bài</p></div>
+                    </div>
+                </div>
+
+                <!-- Chờ Load Data -->
+                <div id="loadingSpinner" class="flex flex-col items-center justify-center py-20 hidden">
+                    <div class="w-12 h-12 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                    <p class="font-black text-slate-700 text-lg">Đang tải và đồng bộ dữ liệu...</p>
+                </div>
+
+                <div id="exercisesContainer" class="space-y-6"></div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- FULLSCREEN ẢNH MODAL -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[150] hidden flex-col justify-between items-center p-4 transition-all">
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
+            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
+            <div class="flex items-center gap-3">
+                <a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Xem ảnh gốc</a>
+                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+        </div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
+            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button>
+            <img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg">
+            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
+        </div>
+        <div class="h-8 shrink-0"></div>
     </div>
 
-    <!-- Script Data & Logic -->
     <script src="codelab-data.js"></script>
     <script>
         let allData = [];
 
+        document.addEventListener('DOMContentLoaded', fetchPracticeData);
+
         function fetchPracticeData() {
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('cardsContainer').innerHTML = "";
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            document.getElementById('exercisesContainer').innerHTML = "";
+            document.getElementById('statsSummary').classList.add('hidden');
+            
             fetch(`${APP_CONFIG.API_URL}?action=getAllPracticeData`)
             .then(r => r.json()).then(res => {
-                allData = res.data.reverse(); // Đảo ngược để bài mới nộp lên đầu
-                initFilters();
-                document.getElementById('loading').classList.add('hidden');
-            });
+                if(res.status === 'success') {
+                    allData = res.data.reverse(); 
+                    initFilters();
+                }
+            }).catch(e => alert("Lỗi mạng!"))
+            .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
         }
 
         function initFilters() {
-            const depts = [...new Set(allData.map(e => e.phongBan))].filter(Boolean);
-            const deptSelect = document.getElementById('filterDept');
-            deptSelect.innerHTML = `<option value="all">Tất cả</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+            const depts = [...new Set(allData.map(e => e.phongBan))].filter(Boolean).sort();
+            const sessions = [...new Set(allData.map(e => e.buoi))].filter(Boolean).sort();
+            
+            document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+            document.getElementById('filterSession').innerHTML = `<option value="all">Tất cả Buổi</option>` + sessions.map(s => `<option value="${s}">${s}</option>`).join('');
+            
             updateStudentFilter();
         }
 
         function updateStudentFilter() {
             const selectedDept = document.getElementById('filterDept').value;
             let filtered = selectedDept === 'all' ? allData : allData.filter(e => e.phongBan === selectedDept);
-            const students = [...new Set(filtered.map(e => `${e.hoVaTen}|${e.phongBan}`))].filter(e => e !== "|");
+            const students = [...new Set(filtered.map(e => `${e.hoVaTen}|${e.phongBan}`))].filter(e => e !== "|").sort();
             
-            const stdSelect = document.getElementById('filterStudent');
-            stdSelect.innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
-                const parts = s.split('|');
-                return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
+            document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
+                const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
             }).join('');
             renderCards();
         }
@@ -87,70 +171,87 @@
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
         }
 
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
+
         function renderCards() {
-            const selectedDept = document.getElementById('filterDept').value;
-            const selectedStudent = document.getElementById('filterStudent').value;
-            const selectedStatus = document.getElementById('filterStatus').value;
+            const selDept = document.getElementById('filterDept').value;
+            const selStudent = document.getElementById('filterStudent').value;
+            const selSession = document.getElementById('filterSession').value;
+            const selStatus = document.getElementById('filterStatus').value;
 
             let filtered = allData;
-            if (selectedDept !== 'all') filtered = filtered.filter(e => e.phongBan === selectedDept);
-            if (selectedStudent !== 'all') {
-                const parts = selectedStudent.split('|');
-                filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]);
-            }
+            if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
+            if (selSession !== 'all') filtered = filtered.filter(e => e.buoi === selSession);
+            if (selStudent !== 'all') {
+                const parts = selStudent.split('|'); filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]);
+                document.getElementById('statStudentName').innerText = parts[0];
+            } else { document.getElementById('statStudentName').innerText = "Tất cả"; }
 
-            // Group by bài nộp mới nhất của từng phần
+            // Group để lấy bài nộp cuối cùng
             let mapUnique = {};
             filtered.forEach(e => {
                 let key = `${e.hoVaTen}-${e.phongBan}-${e.tenBaiHoc}`;
-                if (!mapUnique[key]) mapUnique[key] = e; // Lấy bản ghi đầu tiên (vì đã reverse mới nhất lên đầu)
+                if (!mapUnique[key]) mapUnique[key] = e; 
             });
             filtered = Object.values(mapUnique);
 
-            if (selectedStatus === 'pending') filtered = filtered.filter(e => !e.nhanXet || e.nhanXet.trim() === "");
-            if (selectedStatus === 'graded') filtered = filtered.filter(e => e.nhanXet && e.nhanXet.trim() !== "");
+            if (selStatus === 'pending') filtered = filtered.filter(e => !e.nhanXet || e.nhanXet.trim() === "");
+            if (selStatus === 'graded') filtered = filtered.filter(e => e.nhanXet && e.nhanXet.trim() !== "");
 
-            const container = document.getElementById('cardsContainer');
-            if(filtered.length === 0) {
-                container.innerHTML = `<p class="text-center text-slate-400 mt-10">Không có bài nộp nào phù hợp.</p>`; return;
-            }
+            document.getElementById('statProgress').innerText = `${filtered.length} bài`;
+            document.getElementById('statPending').innerText = `${filtered.filter(e => !e.nhanXet || e.nhanXet.trim()==="").length} bài`;
+            document.getElementById('statsSummary').classList.remove('hidden');
+
+            const container = document.getElementById('exercisesContainer');
+            if(filtered.length === 0) { container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; return; }
 
             container.innerHTML = filtered.map((item, idx) => {
-                let statusHtml = item.nhanXet ? `<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold">ĐÃ CHẤM</span>` : `<span class="bg-red-100 text-red-600 px-2 py-1 rounded text-[10px] font-bold animate-pulse">CHƯA CHẤM</span>`;
+                const safeKey = `card-${idx}`;
+                let statusBadge = item.nhanXet ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>` : `<span class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
                 
-                let imgLinks = item.linkDrive.split(/[\n,]+/).filter(l => l.trim() !== "");
-                let imgHtml = imgLinks.length > 0 ? imgLinks.map(link => `<a href="${link}" target="_blank"><img src="${getDirectImg(link)}" class="h-20 w-32 object-cover rounded-lg border hover:border-blue-500"></a>`).join('') : '<span class="text-red-500 text-xs">Không có ảnh</span>';
+                let theoryHtml = '';
+                if(item.ans1 || item.ans2) {
+                    theoryHtml = `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 mb-4 space-y-2"><span class="text-blue-500 block uppercase text-[9px] font-black"><i class="fas fa-user-edit mr-1.5"></i>Tự luận</span>`;
+                    for(let i=1; i<=5; i++) {
+                        if(item[`ans${i}`]) theoryHtml += `<div class="mb-2"><p class="text-xs text-blue-800 bg-blue-100/50 p-2 rounded border border-blue-100 whitespace-pre-wrap">Câu ${i}: ${item[`ans${i}`]}</p></div>`;
+                    }
+                    theoryHtml += `</div>`;
+                }
 
-                let safeName = item.hoVaTen.replace(/'/g, "\\'");
-                let safeDept = item.phongBan.replace(/'/g, "\\'");
-                let safeEx = item.tenBaiHoc.replace(/'/g, "\\'");
-                let safeSession = item.buoi.replace(/'/g, "\\'");
+                let imgUrls = item.linkDrive.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
+                let imgHtml = imgUrls.length > 0 ? `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 mb-4"><span class="text-blue-500 block uppercase text-[9px] font-black mb-2"><i class="fas fa-images mr-1.5"></i>Minh chứng</span><div class="flex flex-wrap gap-2">` + imgUrls.map((url, i) => `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${getDirectImg(url)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"><div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg"><i class="fas fa-search-plus text-white"></i></div></div>`).join('') + `</div></div>` : `<div class="bg-red-50 border border-red-200 p-3 text-center text-red-500 text-xs rounded-xl font-bold mb-4"><i class="fas fa-exclamation-triangle mr-1"></i> Không nộp ảnh</div>`;
+
+                let safeName = item.hoVaTen.replace(/'/g, "\\'"); let safeDept = item.phongBan.replace(/'/g, "\\'"); let safeEx = item.tenBaiHoc.replace(/'/g, "\\'"); let safeSession = item.buoi.replace(/'/g, "\\'");
 
                 return `
-                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
-                    <div class="flex justify-between items-start mb-4 border-b pb-3">
+                <div class="glass-panel p-6 rounded-3xl border border-white/60 shadow-sm relative flex flex-col">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4 mb-4">
                         <div>
-                            <h3 class="font-black text-lg text-slate-800">${item.tenBaiHoc}</h3>
-                            <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-user text-blue-500 mr-1"></i> ${item.hoVaTen} | <b>Mã Lớp:</b> ${item.phongBan} | <b>${item.buoi}</b> | ${item.ngay}</p>
+                            <h3 class="text-base font-black text-slate-800">${item.tenBaiHoc}</h3>
+                            <p class="text-xs font-extrabold text-slate-500 mt-1"><i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600">${item.hoVaTen}</span> (${item.phongBan || "Trống"}) | <i class="far fa-clock"></i> ${item.ngay}</p>
                         </div>
-                        ${statusHtml}
+                        <div class="flex items-center gap-1.5">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${item.buoi}</span></div>
                     </div>
-                    <div class="mb-4">
-                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-images text-blue-500"></i> Ảnh minh chứng</p>
-                        <div class="flex flex-wrap gap-2">${imgHtml}</div>
-                    </div>
-                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-4">
-                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block"><i class="fa-solid fa-comment-dots text-blue-500"></i> Ghi nhận xét</label>
-                        <textarea id="fb-${idx}" class="w-full text-sm p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" rows="3" placeholder="Gõ nhận xét vào đây...">${item.nhanXet}</textarea>
-                        <button onclick="saveFeedback(${idx}, '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${idx}" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all"><i class="fa-solid fa-paper-plane"></i> LƯU NHẬN XÉT</button>
+                    ${theoryHtml}
+                    ${imgHtml}
+                    <div class="pt-4 border-t border-slate-200/60">
+                        <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Ghi Nhận xét</label>
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[50px] p-3 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:border-blue-400 outline-none shadow-inner resize-none font-semibold text-slate-700" placeholder="Viết nhận xét...">${item.nhanXet}</textarea>
+                            <button onclick="saveFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${safeKey}" class="px-5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl shadow-md shrink-0 transition-colors"><i class="fas fa-paper-plane"></i> Lưu Web</button>
+                        </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        function saveFeedback(idx, name, dept, exTitle, session) {
-            const feedback = document.getElementById(`fb-${idx}`).value.trim();
-            const btn = document.getElementById(`btn-${idx}`);
+        function saveFeedback(key, name, dept, exTitle, session) {
+            const feedback = document.getElementById(`fb-${key}`).value.trim();
+            const btn = document.getElementById(`btn-${key}`);
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`; btn.disabled = true;
 
             fetch(APP_CONFIG.API_URL, {
@@ -158,13 +259,11 @@
                 body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
             }).then(r=>r.json()).then(res => {
                 if(res.status === 'success') {
-                    btn.innerHTML = `<i class="fa-solid fa-check"></i> ĐÃ LƯU`; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
-                    setTimeout(()=> { btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> LƯU NHẬN XÉT`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; }, 2000);
-                }
-            });
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> Đã lưu`; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
+                    setTimeout(()=> { btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Lưu Web`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; fetchPracticeData(); }, 1500);
+                } else alert("Lỗi lưu nhận xét!");
+            }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Lưu Web`; btn.disabled=false; });
         }
-        
-        window.onload = fetchPracticeData;
     </script>
 </body>
 </html>
