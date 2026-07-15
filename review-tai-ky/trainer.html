@@ -62,7 +62,7 @@
                 <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6 flex flex-col">
                     <div class="flex items-center gap-4 border-b pb-4 border-slate-100 flex-shrink-0">
                         <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#166def] flex items-center justify-center text-lg" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
-                        <div><h2 class="text-base font-black text-slate-800 tracking-wide" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2><p class="text-xs text-slate-400 mt-0.5" id="session-header-desc">Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.</p></div>
+                        <div><h2 class="text-base font-black text-slate-800 tracking-wide" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2><p class="text-xs text-slate-400 mt-0.5" id="session-header-desc">Các tính năng phần mềm bán hàng cơ bản</p></div>
                     </div>
 
                     <div class="space-y-4 flex-shrink-0">
@@ -390,15 +390,15 @@
             if (day === 'day1') {
                 headerIcon.innerHTML = '<i class="fa-solid fa-store"></i>';
                 headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
-                headerDesc.textContent = "Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.";
+                headerDesc.textContent = "Các tính năng phần mềm bán hàng cơ bản";
             } else if (day === 'day2') {
                 headerIcon.innerHTML = '<i class="fa-solid fa-cash-register"></i>';
                 headerTitle.textContent = "PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH";
-                headerDesc.textContent = "Đặt - Bán - Trả hàng, tích hợp thanh toán nhanh, đồng bộ sàn TMĐT & khai thác báo cáo.";
+                headerDesc.textContent = "Các tính năng phần mềm bán hàng cơ bản";
             } else if (day === 'day3') {
                 headerIcon.innerHTML = '<i class="fa-solid fa-calculator"></i>';
                 headerTitle.textContent = "PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH";
-                headerDesc.textContent = "Xuất hóa đơn từ máy tính tiền, hoàn thiện Sổ kế toán và Tờ khai thuế.";
+                headerDesc.textContent = "Xuất hóa đơn từ máy tính tiền, hoàn thiện Sổ kế toán và Tờ khai thuế. (Minh họa trên ngành Retail)";
             }
 
             triggerRandomScenario();
