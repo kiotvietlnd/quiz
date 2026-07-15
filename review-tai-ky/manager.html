@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
-<head> <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang Quản lý Đào tạo Chuyên viên Tái ký mới</title>
@@ -146,7 +146,7 @@
 
                     <!-- KHU VỰC HIỂN THỊ BÀI THỰC HÀNH TÍCH HỢP VÀO TRONG MODAL MANAGER -->
                     <div class="bg-white p-5 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                        <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-laptop-code text-[#166def] mr-1.5"></i> Chi tiết bài thực hành đã nộp</span>
+                        <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-laptop-code text-[#166def] mr-1.5"></i> Chi tiết bài thực hành đã nộp thuộc phiên này</span>
                         <div id="practiceContent" class="space-y-4 text-xs">
                             <div class="text-center py-4 text-slate-400"><i class="fa-solid fa-spinner animate-spin"></i> Đang tải dữ liệu thực hành...</div>
                         </div>
@@ -173,7 +173,7 @@
         </div>
     </div>
 
-    <!-- FULLSCREEN ẢNH MODAL (Zoom ảnh) -->
+    <!-- FULLSCREEN ẢNH MODAL (Zoom ảnh) cho Manager -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all">
         <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
             <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
@@ -192,7 +192,7 @@
 
     <!-- Script kết nối API & Xử lý lọc dữ liệu -->
     <script>
-        // BẠN ĐIỀN LINK WEB APP MỚI VÀO ĐÂY
+        // BẠN ĐIỀN LINK WEB APP MỚI NHẤT VÀO ĐÂY
         const API_URL = "https://script.google.com/macros/s/AKfycbzYRRgK_0naygfsG4AfoBccmcNdijROyT5tIooz_4kT1fys8jJF1-G3WvuBmHPz7bKl1A/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
@@ -212,7 +212,8 @@
                     document.getElementById('mock-data-warning').classList.add('hidden');
                     processAndDisplayData(allRecords);
                 }
-            }).catch(err => { console.warn("Lỗi:", err); });
+            })
+            .catch(err => { console.warn("Lỗi:", err); });
         }
 
         function processAndDisplayData(data) { renderDashboard(data); renderTable(data); }
@@ -251,7 +252,6 @@
                     displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
                 }
 
-                // Nút con mắt xem bài trực tiếp từ bảng (Thay cho nút CHI TIẾT)
                 return `
                     <tr class="hover:bg-slate-50/80 transition-all cursor-pointer" onclick="openModal(${index})">
                         <td class="py-4 pl-4 font-bold text-slate-800">${escapeHtml(row.RepName)}<span class="text-xs font-normal text-slate-400 block">${escapeHtml(row.ClassCode || 'N/A')}</span></td>
@@ -323,7 +323,7 @@
             }
         });
 
-        // VIEW BÀI THỰC HÀNH CỦA HỌC VIÊN TÍCH HỢP VÀO MODAL CHI TIẾT
+        // ================= HIỂN THỊ MODAL CHI TIẾT KÈM BÀI TẬP =================
         function openModal(index) {
             const row = allRecords[index];
             if (!row) return;
@@ -356,18 +356,29 @@
             document.getElementById('modal-notes').textContent = row.TrainerNotes || "Không có nhận xét chi tiết.";
             document.getElementById('modal-action').textContent = row.ActionPlan || "Không có khuyến nghị hành động tiếp theo.";
 
-            // Fetch bài thực hành
+            // Tự động fetch bài thực hành để gán vào Modal
             const container = document.getElementById('practiceContent');
             container.innerHTML = '<div class="text-center py-4 text-slate-400"><i class="fa-solid fa-spinner animate-spin"></i> Đang tải dữ liệu thực hành...</div>';
 
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(row.RepName)}&department=${encodeURIComponent(row.ClassCode)}`)
             .then(r=>r.json()).then(data => {
                 if(data.status === 'success' && data.data && data.data.length > 0) {
+                    
+                    let targetSessionTitle1 = ""; let targetSessionTitle2 = "";
+                    if(row.Session.includes("Phiên 1")) { targetSessionTitle1 = "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao"; targetSessionTitle2 = "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá"; }
+                    else if(row.Session.includes("Phiên 2")) { targetSessionTitle1 = "Buổi 3: Giao dịch & Quản lý Khách hàng"; targetSessionTitle2 = "Buổi 4: Mở rộng Bán hàng & Phân quyền"; }
+                    else if(row.Session.includes("Phiên 3")) { targetSessionTitle1 = "Buổi 5: Thuế & Kế toán"; }
+
+                    // Lọc chỉ lấy bài của phiên review hiện tại
+                    const sessionData = data.data.filter(p => p.session === targetSessionTitle1 || p.session === targetSessionTitle2);
+
+                    if(sessionData.length === 0) {
+                         container.innerHTML = `<div class="bg-orange-50 p-6 rounded-2xl text-center border border-orange-200"><i class="fa-solid fa-circle-info text-orange-500 text-3xl mb-2"></i><p class="text-orange-700 font-bold mt-2">Học viên chưa làm bài thực hành của ${row.Session}!</p></div>`;
+                         return;
+                    }
+
                     let html = ''; let grouped = {};
-                    data.data.forEach(p => {
-                        if(!grouped[p.session]) grouped[p.session] = {};
-                        grouped[p.session][p.exerciseTitle] = p; 
-                    });
+                    sessionData.forEach(p => { if(!grouped[p.session]) grouped[p.session] = {}; grouped[p.session][p.exerciseTitle] = p; });
 
                     for(let session in grouped) {
                         html += `<div class="mb-6"><h3 class="bg-[#166def] text-white px-4 py-2 rounded-t-xl font-bold uppercase tracking-wider text-[10px]">${session}</h3><div class="border border-[#166def]/20 border-t-0 rounded-b-xl p-4 space-y-4 bg-white">`;
@@ -400,7 +411,7 @@
                     }
                     container.innerHTML = html;
                 } else {
-                    container.innerHTML = `<p class="text-red-500 italic text-center p-4">Học viên này chưa nộp bài thực hành trên hệ thống.</p>`;
+                    container.innerHTML = `<p class="text-red-500 italic text-center">Học viên này chưa nộp bài thực hành trên hệ thống.</p>`;
                 }
             });
 
