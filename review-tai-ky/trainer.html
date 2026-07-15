@@ -9,8 +9,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Font Awesome CSS -->
@@ -29,16 +27,14 @@
             overflow-x: hidden;
         }
 
-        /* Nền phát sáng chuyển động mờ */
         .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; }
         .glow-blob-1, .glow-blob-2 { 
             position: absolute; width: 50vw; height: 50vw; filter: blur(140px); border-radius: 50%; 
-            transition: background 1.5s ease-in-out; will-change: background, transform;
+            transition: background 1.5s ease-in-out;
         }
         .glow-blob-1 { top: -15%; left: -10%; background: rgba(22, 109, 239, 0.08); } 
         .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.08); }
 
-        /* Tấm kính mờ siêu rộng */
         .glass-panel-ultra {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92));
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
@@ -46,42 +42,30 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1);
         }
 
-        /* Nút Scifi chuẩn hóa màu sắc theo phiên */
         .scifi-btn {
             position: relative; display: flex; align-items: center; justify-content: center; gap: 8px;
             padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px;
-            background: var(--bg-color); color: white;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            cursor: pointer;
+            background: #166def; color: white; transition: all 0.3s;
         }
-        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px var(--shadow-hover); }
+        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(22, 109, 239, 0.4); }
         
-        .sc-brand { --bg-color: #166def; --shadow-hover: rgba(22, 109, 239, 0.4); } 
-        .sc-orange { --bg-color: #f97316; --shadow-hover: rgba(249, 115, 22, 0.4); }
-        .sc-green { --bg-color: #10b981; --shadow-hover: rgba(16, 185, 129, 0.4); }
-
-        /* Tùy chỉnh thanh cuộn nhỏ cho các phân khu */
         .custom-scroll::-webkit-scrollbar { width: 5px; }
-        .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
 
-        /* Khắc phục lỗi màu xếp loại khi kích hoạt bằng thuộc tính !important */
         .rating-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
-        .active-chuadat { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
-        .active-thaotac { background-color: #fffbeb !important; border-color: #f59e0b !important; color: #b45309 !important; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
-        .active-ungdung { background-color: #eff6ff !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
-        .active-tot { background-color: #f0fdf4 !important; border-color: #22c55e !important; color: #15803d !important; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15); }
+        .active-chuadat { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+        .active-thaotac { background-color: #fffbeb !important; border-color: #f59e0b !important; color: #b45309 !important; }
+        .active-ungdung { background-color: #eff6ff !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; }
+        .active-tot { background-color: #f0fdf4 !important; border-color: #22c55e !important; color: #15803d !important; }
     </style>
 </head>
 <body class="text-slate-600 antialiased">
 
-    <!-- Nền sáng chuyển động mờ -->
     <div class="tech-bg">
         <div class="glow-blob-1" id="blob-1"></div>
         <div class="glow-blob-2" id="blob-2"></div>
     </div>
 
-    <!-- Header xanh thương hiệu (#166def) rộng toàn màn hình -->
     <header class="sticky top-0 z-50 bg-[#166def] border-b border-blue-600 px-6 lg:px-12 py-4 flex items-center justify-between shadow-md">
         <div class="flex items-center gap-4">
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" alt="KiotViet Logo" class="h-8">
@@ -89,7 +73,6 @@
             <h1 class="text-sm font-black text-white tracking-wider">Trang review Đào tạo Chuyên viên Tái ký mới</h1>
         </div>
         
-        <!-- Navigation Tabs chính -->
         <div class="flex gap-2 bg-blue-800/40 p-1 rounded-xl border border-blue-400/40">
             <button onclick="switchMainTab('workspace')" id="main-tab-workspace" class="px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2">
                 <i class="fa-solid fa-laptop-code"></i> REVIEW WORKSPACE
@@ -100,16 +83,11 @@
         </div>
     </header>
 
-    <!-- Main Container rộng toàn màn hình -->
     <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col">
 
-        <!-- ================= TAB 1: WORKSPACE (MÀN HÌNH REVIEW CHÍNH) ================= -->
         <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-stretch w-full flex-grow">
             
-            <!-- Cột trái (58%): Cẩm nang & Giáo trình tham khảo -->
             <section class="xl:col-span-7 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
-                
-                <!-- Hàng 1: CHỌN LỘ TRÌNH ĐÀO TẠO (Retail / FNB) - ĐỒNG BỘ FORM [1] -->
                 <div class="flex gap-2 mb-3 bg-indigo-50/50 p-1 rounded-2xl border border-indigo-100 flex-shrink-0">
                     <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-tags"></i> LỘ TRÌNH RETAIL (BÁN LẺ)
@@ -119,7 +97,6 @@
                     </button>
                 </div>
 
-                <!-- Hàng 2: Thanh chọn Ngày/Phiên -->
                 <div class="flex gap-2 mb-4 bg-slate-200/50 p-1.5 rounded-2xl flex-shrink-0">
                     <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2">
                         <i class="fa-solid fa-calendar-day"></i> NGÀY 1
@@ -132,10 +109,7 @@
                     </button>
                 </div>
 
-                <!-- Phân khu Giáo trình Tham chiếu -->
                 <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6 flex flex-col">
-                    
-                    <!-- TIÊU ĐỀ PHIÊN HỌC -->
                     <div class="flex items-center gap-4 border-b pb-4 border-slate-100 flex-shrink-0">
                         <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#166def] flex items-center justify-center text-lg" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
                         <div>
@@ -144,7 +118,6 @@
                         </div>
                     </div>
 
-                    <!-- KHU VỰC CHỈ ĐỊNH TÌNH HUỐNG NGẪU NHIÊN -->
                     <div class="space-y-4 flex-shrink-0">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <span class="text-xs font-extrabold text-[#166def] uppercase tracking-wider flex items-center gap-2">
@@ -154,12 +127,9 @@
                                 <i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN
                             </button>
                         </div>
-
-                        <!-- Khung kết quả hiển thị tình huống ngẫu nhiên -->
                         <div id="random-scenario-box"></div>
                     </div>
 
-                    <!-- KHU VỰC DANH SÁCH TÌNH HUỐNG KHÁC (Mặc định ẩn) -->
                     <div class="border-t pt-5 border-slate-100 flex-grow flex flex-col space-y-4">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-black text-slate-400 tracking-wider uppercase block">DANH SÁCH LƯU TRỮ TÌNH HUỐNG KHÁC</span>
@@ -167,15 +137,11 @@
                                 <i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống
                             </button>
                         </div>
-
-                        <!-- Khối chứa danh sách tình huống ẩn -->
                         <div id="all-scenarios-list" class="space-y-4 hidden transition-all"></div>
                     </div>
-
                 </div>
             </section>
             
-            <!-- Cột phải (42%): Form ghi nhận kết quả review -->
             <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
                 <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-[#f0f6ff] border border-blue-200 rounded-3xl p-6 lg:p-8 shadow-lg">
                     
@@ -185,16 +151,14 @@
                     </h3>
 
                     <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
-                        
-                        <!-- Block 1: Thông tin chung -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-[#166def] mr-1.5"></i> Thông Tin Chung</span>
                             
-                            <!-- Hàng 1 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative">
                                     <label class="flex justify-between items-end text-[11px] font-bold text-slate-400 tracking-wider mb-1">
                                         HỌ TÊN HỌC VIÊN *
+                                        <!-- Nút xem bài TH -->
                                         <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] text-white px-2 py-0.5 rounded shadow-sm transition"><i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span></button>
                                     </label>
                                     <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
@@ -206,10 +170,9 @@
                                 </div>
                             </div>
 
-                            <!-- Hàng 2: Mã lớp & Ngành hàng -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">MÃ LỚP (ĐIỀN TỰ DO) *</label>
+                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
                                     <input type="text" id="classCode" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ví dụ: TK-Q3-01">
                                 </div>
                                 <div>
@@ -222,26 +185,23 @@
                                 </div>
                             </div>
 
-                            <!-- Hàng 3 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">PHIÊN REVIEW *</label>
-                                    <select id="session" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white">
+                                    <select id="session" onchange="checkStudentPractice()" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white">
                                         <option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option>
                                         <option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option>
                                         <option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW (DD/MM/YYYY) *</label>
+                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW *</label>
                                     <div class="relative">
                                         <input type="text" id="reviewDate" required class="w-full text-xs pl-3.5 pr-10 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="dd/mm/yyyy">
-                                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"><i class="fa-regular fa-calendar-days"></i></span>
                                     </div>
                                 </div>
                             </div>
 
-                            <!-- Hàng 4 -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
@@ -261,7 +221,6 @@
                             </div>
                         </div>
 
-                        <!-- Block 2: Self-check -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá (Self-Check)</span>
                             <div class="space-y-3">
@@ -271,16 +230,13 @@
                             </div>
                         </div>
 
-                        <!-- Block 3: Phản xạ tình huống thực tế -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
-                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp (Vấn đề -> Giải pháp -> Lợi ích)..."></textarea>
+                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp..."></textarea>
                         </div>
 
-                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-[#166def] mr-1.5"></i> Đánh Giá Của Trainer</span>
-                            
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-2">XẾP LOẠI NĂNG LỰC CUỐI BUỔI *</label>
                                 <div class="grid grid-cols-4 gap-2">
@@ -297,766 +253,43 @@
                                 <textarea id="actionPlan" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Khuyến nghị lộ trình rèn luyện tiếp theo cho học viên..."></textarea>
                             </div>
                         </div>
-
                     </div>
 
-                    <!-- Nút gửi -->
                     <div class="mt-6 pt-4 border-t border-blue-100">
-                        <button type="submit" id="submitBtn" class="scifi-btn sc-brand w-full font-black tracking-wider shadow-lg">
+                        <button type="submit" id="submitBtn" class="scifi-btn w-full font-black tracking-wider shadow-lg">
                             <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
                             <span id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i> Đang gửi dữ liệu...</span>
                         </button>
                     </div>
-
                 </form>
             </section>
-
         </div>
 
-        <!-- ================= TAB 2: QUY TRÌNH & KẾ HOẠCH (DÀNH CHO TRAINER MỚI) ================= -->
         <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
-            
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
-                <!-- Bối cảnh vận hành -->
                 <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                     <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                         <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-briefcase"></i></span>
                         BỐI CẢNH VẬN HÀNH QUÝ 3 - 2026
                     </h3>
                     <div class="space-y-4 text-sm leading-relaxed text-slate-500">
-                        <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ trong thời gian dài hơn, tập trung vào hai mục tiêu cốt lõi: <strong>Giữ gói</strong> (duy trì sử dụng) và <strong>Nâng gói</strong> (upsell).</p>
-                        <p>📈 <strong>Quy mô tăng trưởng:</strong> Dự kiến bổ sung <strong>30 - 40 nhân sự mới</strong> trong Quý 3/2026, hình thức gia nhập cuốn chiếu theo từng tuần.</p>
-                        <p>⚡ <strong>Áp lực vận hành:</strong> Mỗi tháng hệ thống ghi nhận thêm khoảng <strong>2.400 khách hàng</strong>, mục tiêu duy trì <strong>MRR đạt 286</strong>. Trong khi đó, đội ngũ Coacher/Trainer đang gặp hạn chế về mặt thời gian để trực tiếp theo sát và đặt câu hỏi định hướng liên tục cho từng cá nhân.</p>
-                        <p>🎯 <strong>Yêu cầu thực tế:</strong> Cần đồng đều hóa năng lực chuyên môn của nhân sự mới một cách nhanh chóng, đảm bảo mọi nhân sự đều có thể tự tin tư vấn ngay sau khi kết thúc lộ trình hội nhập.</p>
-                    </div>
-                </div>
-
-                <!-- Mục tiêu Review 1:1 -->
-                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 shadow-sm bg-gradient-to-tr from-emerald-50/40 via-sky-50/20 to-purple-50/40 border border-slate-100">
-                    <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                        <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-bullseye"></i></span>
-                        MỤC TIÊU CỦA BUỔI REVIEW 1:1
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span>
-                            <p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p>
-                        </div>
-                        <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span>
-                            <p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể (mỹ phẩm, điện thoại, F&B, đa sàn,...).</p>
-                        </div>
-                        <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span>
-                            <p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào "nỗi đau" (pain points) để đưa ra giải pháp (giảm thất thoát, tăng doanh thu).</p>
-                        </div>
-                        <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span>
-                            <p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục, chuẩn bị tốt nhất cho các cuộc gọi chăm sóc và tái ký.</p>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- Quy trình triển khai chung -->
-            <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-r from-blue-50/30 via-slate-50 to-indigo-50/30 border border-slate-100">
-                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>
-                    QUY TRÌNH TRIỂN KHAI CHUNG
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-500 leading-relaxed">
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span>
-                        <p class="text-[#166def] font-bold">Sau 03 ngày</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Kể từ ngày nhân sự mới gia nhập hệ thống.</p>
-                    </div>
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span>
-                        <p class="text-[#166def] font-bold">Mỗi ngày 01 phiên review</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Thời lượng cố định 45 phút/phiên.</p>
-                    </div>
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span>
-                        <p class="text-[#166def] font-bold">Phỏng vấn sâu kiến thức</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Định hướng trọng tâm nghiệp vụ và tháo gỡ lo ngại.</p>
+                        <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ trong thời gian dài hơn.</p>
                     </div>
                 </div>
             </div>
-
-            <!-- Cấu trúc bảng kế hoạch -->
-            <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
-                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
-                    CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)
-                </h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse text-left text-sm min-w-[700px]">
-                        <thead>
-                            <tr class="border-b border-slate-200">
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px] whitespace-nowrap">HỌC PHẦN</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px] min-w-[120px] whitespace-nowrap">THỜI LƯỢNG</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN KHUYẾN NGHỊ</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 text-slate-500">
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">1. Self-check</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">5 phút</td>
-                                <td class="py-4">Đánh giá mức độ tự tin và nhận diện khó khăn ban đầu của nhân sự.</td>
-                                <td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất và tự chấm điểm trên thang 10.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">2. Kiểm tra bản chất</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">10 phút</td>
-                                <td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ và tính năng đi kèm.</td>
-                                <td class="py-4">Đặt câu hỏi so sánh hoặc phân tích để phân biệt các tính năng tương đồng (Ví dụ: Combo vs Hàng sản xuất).</td>
-                            </tr>
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">3. Phản xạ tư vấn</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">15 - 20 phút</td>
-                                <td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích thực tế cho khách.</td>
-                                <td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ theo cấu trúc: <strong>Vấn đề &rarr; Giải pháp &rarr; Lợi ích</strong>.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">4. Nhận xét & Định hướng</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">5 phút</td>
-                                <td class="py-4">Phản hồi nhanh kết quả buổi học và giao bài tập rèn luyện.</td>
-                                <td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy cho phiên tiếp theo.</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
-
     </main>
 
-    <!-- Modal Thông báo kết quả -->
     <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
         <div class="glass-panel-ultra rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
             <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
             <h4 id="modalTitle" class="text-base font-black text-slate-800 mb-2">Tiêu đề</h4>
-            <p id="modalMessage" class="text-xs text-slate-400 mb-6 leading-relaxed">Mô tả thông điệp gửi thành công hoặc thất bại.</p>
-            <button onclick="closeModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
-                XÁC NHẬN
-            </button>
+            <p id="modalMessage" class="text-xs text-slate-400 mb-6 leading-relaxed"></p>
+            <button onclick="closeModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">XÁC NHẬN</button>
         </div>
     </div>
 
-    <!-- MODAL XEM BÀI THỰC HÀNH CỦA HỌC VIÊN -->
-    <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-2xl w-full max-h-[85vh] flex flex-col relative border border-slate-200">
-            <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <h2 class="text-lg font-black text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <i class="fa-solid fa-laptop-code text-emerald-600"></i> BÀI THỰC HÀNH: <span id="practiceStudentName" class="text-[#166def]"></span>
-            </h2>
-            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-4 mt-4">
-                <!-- Nội dung bài thực hành sẽ render tại đây -->
-            </div>
-            <div class="mt-4 pt-4 border-t border-slate-100 flex-shrink-0">
-                <button type="button" onclick="closePracticeModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all shadow-sm">
-                    ĐÓNG
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Script điều hướng & xử lý API -->
-    <script>
-        // BẠN ĐIỀN LINK WEB APP MỚI VÀO ĐÂY NHÉ
-        const API_URL = "https://script.google.com/macros/s/AKfycby6zGs6lK-GpdbKFR5uU3OdhsI4TKp2Jm_chgfKzOv6tzHdNv8qbqept0Nr0vfRYGFoAw/exec";
-        const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
-
-        // Khai báo đối tượng giáo trình rỗng, sẽ được load động từ Google Sheet
-        let scenariosData = {};
-        let currentDay = 'day1';
-        let currentRoadmap = 'Retail'; // Mặc định là Retail
-        let currentRandomScenario = null;
-        let currentStudentPracticeData = []; // Data bài tập thực hành
-
-        // Danh sách tình huống dự phòng trường hợp kết nối API lỗi
-        const fallbackScenarios = {
-            day1: [
-                { id: 1, type: "morning", roadmap: "Retail", title: "Tình huống 1: Shop thời trang online & Do dự gia hạn vì tự quản lý ship qua app ngoài", question: 'Khách hàng kinh doanh quần áo online chuẩn bị hết hạn hợp đồng bảo: "Em ơi, giờ chị quét QR ngân hàng cá nhân và tự lên đơn trên app Giao Hàng Tiết Kiệm cũng nhanh, đâu cần qua KiotViet làm gì cho tốn tiền gia hạn hàng năm." Em hãy thuyết phục khách gia hạn.', answer: 'Tư vấn QR động và Tích hợp hãng giao vận trực tiếp. QR tĩnh dễ bị giả hóa đơn, chuyển app thủ công dễ nhầm địa chỉ gây hoàn đơn. KiotViet tích hợp đẩy đơn 1 chạm giúp tiết kiệm 50% thời gian, quản lý đối soát COD tập trung và triệt tiêu hoàn toàn hóa đơn giả.' }
-            ],
-            day2: [],
-            day3: []
-        };
-
-        // Điền ngày mặc định dd/mm/yyyy
-        function setTodayDate() {
-            const today = new Date();
-            const dd = String(today.getDate()).padStart(2, '0');
-            const mm = String(today.getMonth() + 1).padStart(2, '0');
-            const yyyy = today.getFullYear();
-            document.getElementById('reviewDate').value = `${dd}/${mm}/${yyyy}`;
-        }
-        setTodayDate();
-
-        // Tự động tải cẩm nang tình huống từ Google Sheet ngay khi mở trang
-        window.onload = function() {
-            loadScenariosFromSheet();
-        };
-
-        // Hàm lấy danh sách tình huống cẩm nang từ API Google Sheet
-        function loadScenariosFromSheet() {
-            const box = document.getElementById('random-scenario-box');
-            box.innerHTML = `
-                <div class="text-center py-8 text-slate-400">
-                    <i class="fa-solid fa-spinner animate-spin text-xl text-[#166def] block mb-2"></i>
-                    Đang tải cẩm nang tình huống từ Google Sheets...
-                </div>
-            `;
-
-            fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
-            .then(res => res.json())
-            .then(response => {
-                if (response.status === "success" && response.data && response.data.length > 0) {
-                    scenariosData = { day1: [], day2: [], day3: [] };
-                    
-                    response.data.forEach(item => {
-                        if (
-                            !item.Day || 
-                            item.Day.toString().trim().toLowerCase() === "day" || 
-                            item.Title.toString().trim().toLowerCase() === "title"
-                        ) {
-                            return; 
-                        }
-
-                        const dayKey = item.Day.toString().trim();
-                        if (scenariosData[dayKey]) {
-                            scenariosData[dayKey].push({
-                                id: item.id || Math.random(),
-                                type: item.Type ? item.Type.toString().trim() : "",
-                                title: item.Title,
-                                question: item.Question,
-                                answer: item.Answer,
-                                roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" 
-                            });
-                        }
-                    });
-                    switchRoadmap('Retail');
-                } else {
-                    useFallbackData("Lỗi cấu trúc dữ liệu hoặc Sheet rỗng. Kích hoạt cẩm nang dự phòng.");
-                }
-            })
-            .catch(err => {
-                console.warn("API load scenarios failed, loading offline handbook:", err);
-                useFallbackData("Lỗi kết nối. Kích hoạt cẩm nang offline.");
-            });
-        }
-
-        // Kích hoạt dữ liệu dự phòng offline
-        function useFallbackData(logMessage) {
-            scenariosData = fallbackScenarios;
-            switchRoadmap('Retail');
-            console.info(logMessage);
-        }
-
-        // Quy tắc ngắt câu tự động kết xuất văn bản
-        function formatSentences(text) {
-            if (!text) return "";
-            const sentences = text.split(/(?<!\b\d+\.)(?<=[.?!])\s+/);
-            return sentences
-                .map(s => s.trim())
-                .filter(s => s.length > 0)
-                .join('<br><br>');
-        }
-
-        // Cập nhật điểm tự tin
-        function updateScoreValue(val) {
-            document.getElementById('scoreValue').textContent = val;
-        }
-
-        // Chuyển đổi giữa WORKSPACE và HANDBOOK
-        function switchMainTab(tab) {
-            const workspaceBtn = document.getElementById('main-tab-workspace');
-            const handbookBtn = document.getElementById('main-tab-handbook');
-            const workspaceContent = document.getElementById('main-content-workspace');
-            const handbookContent = document.getElementById('main-content-handbook');
-
-            if (tab === 'workspace') {
-                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
-                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
-                workspaceContent.classList.remove('hidden');
-                handbookContent.classList.add('hidden');
-            } else {
-                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
-                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
-                workspaceContent.classList.add('hidden');
-                handbookContent.classList.remove('hidden');
-            }
-        }
-
-        // Chuyển đổi Lộ trình học (Retail <-> FNB)
-        function switchRoadmap(roadmap) {
-            currentRoadmap = roadmap;
-            
-            const retailBtn = document.getElementById('roadmap-Retail');
-            const fnbBtn = document.getElementById('roadmap-FNB');
-            const industrySelect = document.getElementById('industry');
-
-            if (roadmap === 'Retail') {
-                retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
-                fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
-                if (industrySelect) industrySelect.value = "Retail"; 
-            } else {
-                retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
-                fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
-                if (industrySelect) industrySelect.value = "FNB"; 
-            }
-
-            switchSubTab(currentDay);
-        }
-
-        // Chuyển đổi Ngày review
-        function switchSubTab(day) {
-            currentDay = day;
-            const tabs = ['day1', 'day2', 'day3'];
-            const blob1 = document.getElementById('blob-1');
-            const blob2 = document.getElementById('blob-2');
-
-            const bgGlows = {
-                day1: ["rgba(22, 109, 239, 0.08)", "rgba(16, 185, 129, 0.08)"],
-                day2: ["rgba(249, 115, 22, 0.08)", "rgba(22, 109, 239, 0.08)"],
-                day3: ["rgba(16, 185, 129, 0.08)", "rgba(249, 115, 22, 0.08)"]
-            };
-
-            if (blob1 && blob2 && bgGlows[day]) {
-                blob1.style.background = bgGlows[day][0];
-                blob2.style.background = bgGlows[day][1];
-            }
-            
-            tabs.forEach(item => {
-                const button = document.getElementById(`sub-tab-${item}`);
-                if (button) {
-                    if (item === day) {
-                        button.classList.add('bg-white', 'text-[#166def]', 'shadow-sm');
-                        button.classList.remove('text-slate-600');
-                    } else {
-                        button.classList.remove('bg-white', 'text-[#166def]', 'shadow-sm');
-                        button.classList.add('text-slate-600');
-                    }
-                }
-            });
-
-            // Đồng bộ dữ liệu Header
-            const headerIcon = document.getElementById('session-header-icon');
-            const headerTitle = document.getElementById('session-header-title');
-            const headerDesc = document.getElementById('session-header-desc');
-
-            if (day === 'day1') {
-                headerIcon.innerHTML = '<i class="fa-solid fa-store"></i>';
-                headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
-                headerDesc.textContent = "Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.";
-            } else if (day === 'day2') {
-                headerIcon.innerHTML = '<i class="fa-solid fa-cash-register"></i>';
-                headerTitle.textContent = "PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH";
-                headerDesc.textContent = "Đặt - Bán - Trả hàng, tích hợp thanh toán nhanh, đồng bộ sàn TMĐT & khai thác báo cáo.";
-            } else if (day === 'day3') {
-                headerIcon.innerHTML = '<i class="fa-solid fa-calculator"></i>';
-                headerTitle.textContent = "PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH";
-                headerDesc.textContent = "Xuất hóa đơn từ máy tính tiền, hoàn thiện 7 loại sổ kế toán (TT88) & Tờ khai thuế (TT40).";
-            }
-
-            // Đồng bộ Selectbox Phiên review tương ứng trên form bên phải
-            const sessionSelect = document.getElementById('session');
-            if (day === 'day1') sessionSelect.value = "Phiên 1 (Cuối Ngày 1)";
-            if (day === 'day2') sessionSelect.value = "Phiên 2 (Cuối Ngày 2)";
-            if (day === 'day3') sessionSelect.value = "Phiên 3 (Cuối Ngày 3)";
-
-            triggerRandomScenario();
-            renderAllScenarios(day);
-            hideAllScenariosList();
-        }
-
-        // Chọn ngẫu nhiên tình huống thuộc Lộ trình hiện tại
-        function triggerRandomScenario() {
-            const list = scenariosData[currentDay] 
-                ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) 
-                : [];
-
-            const box = document.getElementById('random-scenario-box');
-
-            if (!list || list.length === 0) {
-                box.innerHTML = `
-                    <p class="text-xs text-slate-400 py-6 text-center bg-white border border-dashed rounded-3xl">Lộ trình này chưa có dữ liệu tình huống chỉ định cho ngày hiện tại.</p>
-                `;
-                return;
-            }
-
-            const randomIndex = Math.floor(Math.random() * list.length);
-            currentRandomScenario = list[randomIndex];
-
-            const isMorning = currentRandomScenario.type === 'morning';
-            const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-purple-50 border-purple-200 text-purple-950';
-            const icon = isMorning ? '<i class="fa-solid fa-sun text-emerald-600"></i>' : '<i class="fa-solid fa-moon text-purple-600"></i>';
-            const typeLabel = isMorning ? 'Học Phần Sáng' : 'Học Phần Chiều';
-
-            box.innerHTML = `
-                <div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white animate-fade">
-                    <div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3">
-                        <div class="flex items-center justify-between border-b pb-2 border-current/10">
-                            <span class="text-xs font-black tracking-widest uppercase flex items-center gap-1.5">
-                                ${icon} ${typeLabel} - ĐƯỢC CHỈ ĐỊNH
-                            </span>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/70 border border-current/10">Random Selected</span>
-                        </div>
-                        <h4 class="font-extrabold text-sm text-slate-800">${escapeHtml(currentRandomScenario.title)}</h4>
-                        <div class="text-xs space-y-3 pt-1">
-                            <div class="leading-relaxed text-slate-600"><strong>Yêu cầu tư vấn:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng trả lời:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Kết xuất toàn bộ danh sách các tình huống lưu trữ khác
-        function renderAllScenarios(day) {
-            const container = document.getElementById('all-scenarios-list');
-            const list = scenariosData[day] 
-                ? scenariosData[day].filter(item => item.roadmap === currentRoadmap) 
-                : [];
-
-            if (!list || list.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Chưa có dữ liệu tình huống lưu trữ nào khác.</p>`;
-                return;
-            }
-
-            const morningTitle = `
-                <div class="relative flex items-center justify-center my-6">
-                    <div class="absolute inset-0 flex items-center" aria-hidden="true"><div class="w-full border-t border-slate-200"></div></div>
-                    <div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center">
-                        <span class="text-xs font-black text-emerald-700 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG</span>
-                    </div>
-                </div>`;
-
-            const afternoonTitle = `
-                <div class="relative flex items-center justify-center my-6">
-                    <div class="absolute inset-0 flex items-center" aria-hidden="true"><div class="w-full border-t border-slate-200"></div></div>
-                    <div class="relative bg-purple-50 border border-purple-200 px-6 py-2 rounded-full shadow-sm text-center">
-                        <span class="text-xs font-black text-purple-700 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU</span>
-                    </div>
-                </div>`;
-
-            const morningItems = list.filter(item => item.type === 'morning');
-            const afternoonItems = list.filter(item => item.type === 'afternoon');
-
-            let htmlContent = "";
-
-            if (morningItems.length > 0) {
-                htmlContent += morningTitle;
-                htmlContent += `<div class="space-y-4">` + morningItems.map(item => `
-                    <details name="scenarios-${day}" class="group border border-emerald-100 rounded-2xl bg-emerald-50/50 p-4 transition-all duration-200 hover:bg-emerald-50">
-                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center">
-                            <span class="flex items-center gap-2.5"><i class="fa-solid fa-sun text-emerald-600"></i> ${escapeHtml(item.title)}</span>
-                            <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
-                        </summary>
-                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
-                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div>
-                        </div>
-                    </details>
-                `).join('') + `</div>`;
-            }
-
-            if (afternoonItems.length > 0) {
-                htmlContent += afternoonTitle;
-                htmlContent += `<div class="space-y-4">` + afternoonItems.map(item => `
-                    <details name="scenarios-${day}" class="group border border-purple-100 rounded-2xl bg-purple-50/50 p-4 transition-all duration-200 hover:bg-purple-50">
-                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center">
-                            <span class="flex items-center gap-2.5"><i class="fa-solid fa-moon text-purple-600"></i> ${escapeHtml(item.title)}</span>
-                            <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
-                        </summary>
-                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
-                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div>
-                        </div>
-                    </details>
-                `).join('') + `</div>`;
-            }
-
-            container.innerHTML = htmlContent;
-        }
-
-        // Ẩn danh sách lưu trữ tình huống khác
-        function hideAllScenariosList() {
-            const list = document.getElementById('all-scenarios-list');
-            const btn = document.getElementById('toggle-list-btn');
-            list.classList.add('hidden');
-            btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
-        }
-
-        function toggleAllScenarios() {
-            const list = document.getElementById('all-scenarios-list');
-            const btn = document.getElementById('toggle-list-btn');
-
-            if (list.classList.contains('hidden')) {
-                list.classList.remove('hidden');
-                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Ẩn các tình huống lưu trữ';
-            } else {
-                list.classList.add('hidden');
-                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
-            }
-        }
-
-        // Đồng bộ selectbox Phiên review khi đổi selectbox thì chuyển tab
-        document.getElementById('session').addEventListener('change', function(e) {
-            const val = e.target.value;
-            if (val === "Phiên 1 (Cuối Ngày 1)") switchSubTab('day1');
-            if (val === "Phiên 2 (Cuối Ngày 2)") switchSubTab('day2');
-            if (val === "Phiên 3 (Cuối Ngày 3)") switchSubTab('day3');
-        });
-
-        // Chọn Rating năng lực
-        function selectRating(rating, element) {
-            const buttons = document.querySelectorAll('.rating-btn');
-            buttons.forEach(btn => {
-                btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all";
-            });
-
-            document.getElementById('selectedRating').value = rating;
-
-            if (rating === 'Chưa đạt') {
-                element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-chuadat transition-all";
-            } else if (rating === 'Đạt thao tác') {
-                element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-thaotac transition-all";
-            } else if (rating === 'Đạt ứng dụng') {
-                element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-ungdung transition-all";
-            } else if (rating === 'Tốt') {
-                element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
-            }
-        }
-
-        // Hàm kiểm tra bài thực hành khi Trainer gõ tên xong (blur ra khỏi ô input)
-        function checkStudentPractice() {
-            const studentName = document.getElementById('repName').value.trim();
-            const btn = document.getElementById('btnCheckPractice');
-            const spinner = document.getElementById('checkPracticeSpinner');
-            
-            if(!studentName) { btn.classList.add('hidden'); return; }
-
-            spinner.classList.remove('hidden');
-            btn.classList.add('hidden');
-
-            // Gọi API mới check bài
-            fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}`)
-            .then(res => res.json())
-            .then(data => {
-                spinner.classList.add('hidden');
-                if(data.status === 'success' && data.data && data.data.length > 0) {
-                    currentStudentPracticeData = data.data;
-                    btn.classList.remove('hidden');
-                    // Tự đổi trạng thái Bài tập thành "Đủ" nếu thấy có nộp
-                    document.getElementById('homeworkStatus').value = "Đủ"; 
-                } else {
-                    currentStudentPracticeData = [];
-                    btn.classList.add('hidden');
-                }
-            })
-            .catch(err => {
-                spinner.classList.add('hidden');
-                console.error("Check practice err:", err);
-            });
-        }
-
-        function closePracticeModal() {
-            document.getElementById('practiceModal').classList.add('hidden');
-        }
-
-        function getDirectImageUrl(url) { 
-            let fileIdMatch = url.match(/\/d\/(.+?)\//); 
-            if(!fileIdMatch) fileIdMatch = url.match(/id=(.+?)(&|$)/); 
-            if(fileIdMatch && fileIdMatch[1]) return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; 
-            return url; 
-        }
-
-        // Mở Modal xem ảnh
-        function openPracticeModal() {
-            document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value;
-            const container = document.getElementById('practiceContent');
-            
-            if(currentStudentPracticeData.length === 0) {
-                container.innerHTML = `<p class="text-sm text-slate-500 italic">Không tìm thấy dữ liệu thực hành.</p>`;
-            } else {
-                let html = '';
-                currentStudentPracticeData.forEach(item => {
-                    let links = item.links ? item.links.split('\n') : [];
-                    let imgHtml = links.map(link => {
-                        let directLink = getDirectImageUrl(link);
-                        return `<a href="${link}" target="_blank" class="block w-24 h-16 rounded-lg overflow-hidden border border-slate-200 hover:border-[#166def] transition group relative">
-                            <img src="${directLink}" class="w-full h-full object-cover">
-                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center"><i class="fa-solid fa-up-right-from-square text-white text-xs"></i></div>
-                        </a>`;
-                    }).join('');
-
-                    html += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">${item.session}</p>
-                        <p class="text-sm font-black text-slate-800 mb-3">${item.exerciseTitle}</p>
-                        <div class="flex flex-wrap gap-2">${imgHtml}</div>
-                        <p class="text-[10px] text-slate-400 mt-2 text-right">${item.timestamp}</p>
-                    </div>`;
-                });
-                container.innerHTML = html;
-            }
-            
-            document.getElementById('practiceModal').classList.remove('hidden');
-        }
-
-
-        // Gửi biểu mẫu lên Apps Script
-        function submitForm(event) {
-            event.preventDefault();
-
-            // Kiểm tra định dạng ngày dd/mm/yyyy
-            const rawDate = document.getElementById('reviewDate').value.trim();
-            const dateRegex = /^\d{2}\/\d{2}\/\d{4}$/;
-            if (!dateRegex.test(rawDate)) {
-                showModal(false, "Sai định dạng ngày", "Vui lòng nhập Ngày Review theo đúng định dạng dd/mm/yyyy (Ví dụ: 14/07/2026).");
-                return;
-            }
-
-            const parts = rawDate.split("/");
-            const formattedDbDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
-
-            const rating = document.getElementById('selectedRating').value;
-            if (!rating) {
-                showModal(false, "Thiếu xếp loại", "Vui lòng chọn 1 trong 4 mức xếp loại năng lực.");
-                return;
-            }
-
-            const payload = {
-                token: SECURITY_TOKEN,
-                repName: document.getElementById('repName').value.trim(),
-                trainerName: document.getElementById('trainerName').value.trim(),
-                session: document.getElementById('session').value,
-                reviewDate: formattedDbDate,
-                homeworkStatus: document.getElementById('homeworkStatus').value,
-                confidenceScore: parseInt(document.getElementById('confidenceScore').value),
-                selfCheckEasy: document.getElementById('selfCheckEasy').value.trim(),
-                selfCheckHard: document.getElementById('selfCheckHard').value.trim(),
-                selfCheckApply: document.getElementById('selfCheckApply').value.trim(),
-                scenarioNotes: document.getElementById('scenarioNotes').value.trim(),
-                rating: rating,
-                trainerNotes: document.getElementById('trainerNotes').value.trim(),
-                actionPlan: document.getElementById('actionPlan').value.trim(),
-                classCode: document.getElementById('classCode').value.trim(),
-                industry: document.getElementById('industry').value 
-            };
-
-            setLoadingState(true);
-
-            // Bỏ mode: 'no-cors' để nhận được phản hồi
-            fetch(API_URL, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "text/plain;charset=utf-8"
-                },
-                body: JSON.stringify(payload)
-            })
-            .then(res => res.json())
-            .then(data => {
-                setLoadingState(false);
-                if (data.status === "success") {
-                    showModal(true, "Gửi thành công", "Kết quả đã được cập nhật thành công lên Google Sheets của đội ngũ quản lý.");
-                    resetFormFields();
-                } else {
-                    showModal(false, "Lỗi phản hồi", "Server báo lỗi: " + data.message);
-                }
-            })
-            .catch(error => {
-                setLoadingState(false);
-                showModal(false, "Lỗi kết nối", "Không thể gửi dữ liệu. Vui lòng kiểm tra lại kết nối mạng hoặc liên hệ Admin.");
-                console.error("Error:", error);
-            });
-        }
-
-        function setLoadingState(isLoading) {
-            const btn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const btnSpinner = document.getElementById('btnSpinner');
-
-            if (isLoading) {
-                btn.disabled = true;
-                btn.classList.add('opacity-70');
-                btnText.classList.add('hidden');
-                btnSpinner.classList.remove('hidden');
-            } else {
-                btn.disabled = false;
-                btn.classList.remove('opacity-70');
-                btnText.classList.remove('hidden');
-                btnSpinner.classList.add('hidden');
-            }
-        }
-
-        function showModal(isSuccess, title, message) {
-            const modal = document.getElementById('statusModal');
-            const icon = document.getElementById('modalIcon');
-            const titleEl = document.getElementById('modalTitle');
-            const msgEl = document.getElementById('modalMessage');
-
-            titleEl.textContent = title;
-            msgEl.textContent = message;
-
-            if (isSuccess) {
-                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-emerald-100 text-emerald-600";
-                icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>';
-            } else {
-                icon.className = "w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl bg-rose-100 text-rose-600";
-                icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>';
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function closeModal() {
-            document.getElementById('statusModal').classList.add('hidden');
-        }
-
-        function resetFormFields() {
-            document.getElementById('repName').value = "";
-            document.getElementById('classCode').value = "";
-            document.getElementById('homeworkStatus').selectedIndex = 0;
-            document.getElementById('confidenceScore').value = 7;
-            document.getElementById('scoreValue').textContent = "7";
-            document.getElementById('selfCheckEasy').value = "";
-            document.getElementById('selfCheckHard').value = "";
-            document.getElementById('selfCheckApply').value = "";
-            document.getElementById('scenarioNotes').value = "";
-            document.getElementById('trainerNotes').value = "";
-            document.getElementById('actionPlan').value = "";
-            setTodayDate();
-            
-            document.getElementById('industry').value = currentRoadmap;
-
-            document.getElementById('selectedRating').value = "";
-            const buttons = document.querySelectorAll('.rating-btn');
-            buttons.forEach(btn => {
-                btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all";
-            });
-            
-            // Ẩn nút xem ảnh thực hành
-            document.getElementById('btnCheckPractice').classList.add('hidden');
-            currentStudentPracticeData = [];
-        }
-
-        function escapeHtml(string) {
-            if (!string) return "";
-            return String(string)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
-        }
-        <!-- Gọi file Data để biết cấu trúc bài tập -->
+    <!-- Gọi file Data để biết cấu trúc bài tập -->
     <script src="codelab-data.js"></script>
 
     <!-- MODAL XEM BÀI THỰC HÀNH CỦA HỌC VIÊN -->
@@ -1071,7 +304,94 @@
             </div>
         </div>
     </div>
-    // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ =====
+
+    <script>
+        const API_URL = APP_CONFIG.API_URL;
+        const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
+
+        let scenariosData = {};
+        let currentDay = 'day1';
+        let currentRoadmap = 'Retail'; 
+        let currentRandomScenario = null;
+
+        function setTodayDate() {
+            const today = new Date();
+            document.getElementById('reviewDate').value = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
+        }
+        setTodayDate();
+
+        window.onload = function() { loadScenariosFromSheet(); };
+
+        function loadScenariosFromSheet() {
+            fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
+            .then(res => res.json())
+            .then(response => {
+                if (response.status === "success" && response.data && response.data.length > 0) {
+                    scenariosData = { day1: [], day2: [], day3: [] };
+                    response.data.forEach(item => {
+                        if (!item.Day || item.Day.toString().trim().toLowerCase() === "day" || item.Title.toString().trim().toLowerCase() === "title") return; 
+                        const dayKey = item.Day.toString().trim();
+                        if (scenariosData[dayKey]) {
+                            scenariosData[dayKey].push({
+                                id: item.id || Math.random(), type: item.Type ? item.Type.toString().trim() : "",
+                                title: item.Title, question: item.Question, answer: item.Answer,
+                                roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" 
+                            });
+                        }
+                    });
+                    switchRoadmap('Retail');
+                }
+            });
+        }
+
+        function formatSentences(text) {
+            if (!text) return "";
+            const sentences = text.split(/(?<!\b\d+\.)(?<=[.?!])\s+/);
+            return sentences.map(s => s.trim()).filter(s => s.length > 0).join('<br><br>');
+        }
+
+        function switchRoadmap(roadmap) {
+            currentRoadmap = roadmap;
+            document.getElementById('industry').value = roadmap; 
+            switchSubTab(currentDay);
+        }
+
+        function switchSubTab(day) {
+            currentDay = day;
+            document.getElementById('session').value = day === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : day === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
+            triggerRandomScenario();
+            checkStudentPractice(); // Auto check khi đổi phiên
+        }
+
+        function triggerRandomScenario() {
+            const list = scenariosData[currentDay] ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) : [];
+            const box = document.getElementById('random-scenario-box');
+            if (!list || list.length === 0) { box.innerHTML = `<p class="text-xs py-6 text-center">Chưa có dữ liệu.</p>`; return; }
+            
+            currentRandomScenario = list[Math.floor(Math.random() * list.length)];
+            const isMorning = currentRandomScenario.type === 'morning';
+            const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-purple-50 border-purple-200 text-purple-950';
+
+            box.innerHTML = `<div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white animate-fade"><div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3"><h4 class="font-extrabold text-sm">${escapeHtml(currentRandomScenario.title)}</h4><div class="text-xs space-y-3 pt-1"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div></div></div></div>`;
+        }
+
+        document.getElementById('session').addEventListener('change', function(e) {
+            const val = e.target.value;
+            if (val === "Phiên 1 (Cuối Ngày 1)") switchSubTab('day1');
+            if (val === "Phiên 2 (Cuối Ngày 2)") switchSubTab('day2');
+            if (val === "Phiên 3 (Cuối Ngày 3)") switchSubTab('day3');
+        });
+
+        function selectRating(rating, element) {
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all");
+            document.getElementById('selectedRating').value = rating;
+            if (rating === 'Chưa đạt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-chuadat transition-all";
+            else if (rating === 'Đạt thao tác') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-thaotac transition-all";
+            else if (rating === 'Đạt ứng dụng') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-ungdung transition-all";
+            else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
+        }
+
+        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ =====
         let currentStudentPracticeData = [];
 
         function checkStudentPractice() {
@@ -1096,9 +416,8 @@
                     
                     // Tính % tiến độ dựa trên Buổi hiện tại đang Review
                     const sessionSelectVal = document.getElementById('session').value; // VD: "Phiên 1 (Cuối Ngày 1)"
-                    // Map phiên với Session ID trong file codelab-data.js
                     let targetSessionId = "";
-                    if(sessionSelectVal.includes("Phiên 1")) targetSessionId = "session_1"; // Tạm map Phiên 1 -> Buổi 1. Bạn có thể chỉnh lại cho khớp
+                    if(sessionSelectVal.includes("Phiên 1")) targetSessionId = "session_1"; 
                     else if(sessionSelectVal.includes("Phiên 2")) targetSessionId = "session_2";
                     else if(sessionSelectVal.includes("Phiên 3")) targetSessionId = "session_3";
 
@@ -1107,8 +426,11 @@
                         const sData = CODELAB_DATA.find(s => s.id === targetSessionId);
                         if(sData) {
                             totalExercises = sData.exercises.filter(e => !e.isGroupHeader).length;
-                            // Đếm số bài đã nộp thuộc Session này
-                            const submittedTitles = currentStudentPracticeData.filter(p => p.session.includes("Buổi " + targetSessionId.split('_')[1])).map(p => p.exerciseTitle);
+                            // Kiểm tra các bài đã nộp có thuộc Session ID này không
+                            const submittedTitles = currentStudentPracticeData.filter(p => {
+                                // Trong web học viên, p.session lưu "Buổi 1: Thiết lập...", sData.title cũng là "Buổi 1: Thiết lập..."
+                                return p.session === sData.title;
+                            }).map(p => p.exerciseTitle);
                             doneExercises = [...new Set(submittedTitles)].length;
                         }
                     }
@@ -1147,11 +469,10 @@
             if(currentStudentPracticeData.length === 0) {
                 container.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl text-center border border-red-200"><i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl mb-2"></i><p class="text-red-700 font-bold">Học viên này chưa nộp bài thực hành nào trên hệ thống!</p></div>`;
             } else {
-                // Nhóm theo Buổi
                 let html = ''; let grouped = {};
                 currentStudentPracticeData.forEach(p => {
                     if(!grouped[p.session]) grouped[p.session] = {};
-                    grouped[p.session][p.exerciseTitle] = p; // Đè bài mới nhất
+                    grouped[p.session][p.exerciseTitle] = p; // Lấy bài mới nhất
                 });
 
                 for(let session in grouped) {
@@ -1160,20 +481,25 @@
                     for(let exTitle in grouped[session]) {
                         let item = grouped[session][exTitle];
                         
-                        // Xử lý ảnh
-                        let links = item.links ? item.links.split('\n') : [];
-                        let imgHtml = links.map(link => {
-                            return `<a href="${link}" target="_blank" class="block w-32 h-20 rounded-lg overflow-hidden border border-slate-200 hover:border-[#166def] transition group relative"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-plus text-white text-lg"></i></div></a>`;
-                        }).join('');
+                        // Render câu trả lời (nếu có)
+                        let theoryHtml = '';
+                        if(item.ans1 || item.ans2) {
+                            theoryHtml = `<div class="bg-blue-50/50 p-3 rounded-xl mb-3"><p class="text-[10px] font-black text-blue-800 uppercase mb-1">TỰ LUẬN:</p>`;
+                            for(let i=1; i<=5; i++) { if(item[`ans${i}`]) theoryHtml += `<p class="text-xs text-blue-900 mb-1"><b>Câu ${i}:</b> ${item[`ans${i}`]}</p>`; }
+                            theoryHtml += `</div>`;
+                        }
 
-                        // Xử lý feedback
-                        let fbHtml = item.feedback ? `<div class="mt-3 bg-amber-50 p-3 rounded-xl border border-amber-200"><p class="text-[10px] font-black text-amber-700 uppercase mb-1"><i class="fa-solid fa-chalkboard-user"></i> Giảng viên nhận xét:</p><p class="text-sm font-medium text-amber-900">${item.feedback}</p></div>` : ``;
+                        let links = item.links ? item.links.split('\n') : [];
+                        let imgHtml = links.map(link => `<a href="${link}" target="_blank" class="block w-32 h-20 rounded-lg overflow-hidden border border-slate-200 hover:border-[#166def] transition group relative"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-plus text-white text-lg"></i></div></a>`).join('');
+
+                        let fbHtml = item.feedback ? `<div class="mt-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200"><p class="text-[10px] font-black text-emerald-700 uppercase mb-1"><i class="fa-solid fa-check-circle"></i> Giảng viên nhận xét:</p><p class="text-sm font-medium text-emerald-900">${item.feedback}</p></div>` : ``;
 
                         html += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
                             <div class="flex justify-between items-start mb-2 border-b border-slate-200 pb-2">
                                 <h4 class="text-sm font-black text-slate-800">${item.exerciseTitle}</h4>
                                 <span class="text-[10px] text-slate-400 bg-white px-2 py-1 border rounded shadow-sm">${item.timestamp}</span>
                             </div>
+                            ${theoryHtml}
                             <div class="flex flex-wrap gap-2 mt-3">${imgHtml}</div>
                             ${fbHtml}
                         </div>`;
@@ -1186,6 +512,77 @@
         }
 
         function closePracticeModal() { document.getElementById('practiceModal').classList.add('hidden'); }
+
+        function submitForm(event) {
+            event.preventDefault();
+            const rawDate = document.getElementById('reviewDate').value.trim();
+            const parts = rawDate.split("/");
+            const formattedDbDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+            const rating = document.getElementById('selectedRating').value;
+
+            const payload = {
+                token: SECURITY_TOKEN,
+                repName: document.getElementById('repName').value.trim(),
+                trainerName: document.getElementById('trainerName').value.trim(),
+                session: document.getElementById('session').value,
+                reviewDate: formattedDbDate,
+                homeworkStatus: document.getElementById('homeworkStatus').value,
+                confidenceScore: parseInt(document.getElementById('confidenceScore').value),
+                selfCheckEasy: document.getElementById('selfCheckEasy').value.trim(),
+                selfCheckHard: document.getElementById('selfCheckHard').value.trim(),
+                selfCheckApply: document.getElementById('selfCheckApply').value.trim(),
+                scenarioNotes: document.getElementById('scenarioNotes').value.trim(),
+                rating: rating,
+                trainerNotes: document.getElementById('trainerNotes').value.trim(),
+                actionPlan: document.getElementById('actionPlan').value.trim(),
+                classCode: document.getElementById('classCode').value.trim(), 
+                industry: document.getElementById('industry').value 
+            };
+
+            setLoadingState(true);
+            fetch(API_URL, {
+                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload)
+            }).then(res => res.json()).then(data => {
+                setLoadingState(false);
+                if (data.status === "success") { showModal(true, "Gửi thành công", "Kết quả đã được cập nhật."); resetFormFields(); } 
+                else { showModal(false, "Lỗi", "Server báo lỗi."); }
+            }).catch(error => { setLoadingState(false); showModal(false, "Lỗi mạng", "Vui lòng thử lại."); });
+        }
+
+        function setLoadingState(isLoading) {
+            const btn = document.getElementById('submitBtn'); const btnText = document.getElementById('btnText'); const btnSpinner = document.getElementById('btnSpinner');
+            if (isLoading) { btn.disabled = true; btn.classList.add('opacity-70'); btnText.classList.add('hidden'); btnSpinner.classList.remove('hidden'); } 
+            else { btn.disabled = false; btn.classList.remove('opacity-70'); btnText.classList.remove('hidden'); btnSpinner.classList.add('hidden'); }
+        }
+
+        function showModal(isSuccess, title, message) {
+            const modal = document.getElementById('statusModal'); const icon = document.getElementById('modalIcon');
+            document.getElementById('modalTitle').textContent = title; document.getElementById('modalMessage').textContent = message;
+            if (isSuccess) { icon.className = "w-12 h-12 rounded-full mx-auto mb-4 text-xl bg-emerald-100 text-emerald-600"; icon.innerHTML = '<i class="fa-solid fa-circle-check"></i>'; } 
+            else { icon.className = "w-12 h-12 rounded-full mx-auto mb-4 text-xl bg-rose-100 text-rose-600"; icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>'; }
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() { document.getElementById('statusModal').classList.add('hidden'); }
+
+        function resetFormFields() {
+            document.getElementById('repName').value = ""; document.getElementById('classCode').value = "";
+            document.getElementById('homeworkStatus').selectedIndex = 0; document.getElementById('confidenceScore').value = 7;
+            document.getElementById('scoreValue').textContent = "7"; document.getElementById('selfCheckEasy').value = "";
+            document.getElementById('selfCheckHard').value = ""; document.getElementById('selfCheckApply').value = "";
+            document.getElementById('scenarioNotes').value = ""; document.getElementById('trainerNotes').value = ""; document.getElementById('actionPlan').value = "";
+            setTodayDate(); document.getElementById('industry').value = currentRoadmap; document.getElementById('selectedRating').value = "";
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all");
+            document.getElementById('btnCheckPractice').classList.add('hidden'); currentStudentPracticeData = [];
+        }
+
+        function escapeHtml(string) {
+            if (!string) return "";
+            return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+        
+        function switchMainTab(tab) { /*...*/} // Giữ nguyên hàm UI cũ
     </script>
 </body>
 </html>
