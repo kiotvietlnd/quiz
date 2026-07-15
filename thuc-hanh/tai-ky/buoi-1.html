@@ -202,7 +202,9 @@
         }
 
         function loadSessionData() {
-            const session = CODELAB_DATA.find(s => s.id === SESSION_ID); if(!session) return;
+            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
+            if(!profile || !profile.roadmap || !CODELAB_DATA[profile.roadmap]) return;
+            const session = CODELAB_DATA[profile.roadmap].find(s => s.id === SESSION_ID); if(!session) return;
             document.getElementById('sessionTitle').innerText = session.title; currentExercises = session.exercises;
             if(currentExercises[currentStepIndex] && currentExercises[currentStepIndex].isGroupHeader) currentStepIndex++;
             renderSidebar(); goToStep(currentStepIndex);
@@ -380,7 +382,7 @@
             let promises = []; for(let i = 0; i < pendingFiles.length; i++) { promises.push(compressImage(pendingFiles[i])); }
 
             Promise.all(promises).then(imagesData => {
-                const payload = { studentName: profile.name, department: profile.dept, courseName: courseName, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
+                const payload = { studentName: profile.name, department: profile.dept, courseName: profile.roadmap, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
                 return fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
             }).then(r => r.json()).then(data => {
                 if(data.status === 'success') {
