@@ -321,7 +321,7 @@
         // ==========================================
         // DÁN ĐƯỜNG LINK API VÀO ĐÂY
         // ==========================================
-        const API_URL = "https://script.google.com/macros/s/AKfycbzYRRgK_0naygfsG4AfoBccmcNdijROyT5tIooz_4kT1fys8jJF1-G3WvuBmHPz7bKl1A/exec"; 
+        const API_URL = "https://script.google.com/macros/s/AKfycbw02rPVB0jTVQGvqVfJTYvoy3OjBz604srivuUOGmSHCdcnQ9tbHF4XI8zo32zxLz_S/exec"; 
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
         let scenariosData = {};
@@ -444,7 +444,7 @@
             else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
         }
 
-        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ THEO BUỔI =====
+        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ THEO BUỔI (CÓ AUTO DETECT) =====
         function checkStudentPractice() {
             const studentName = document.getElementById('repName').value.trim();
             const classCode = document.getElementById('classCode').value.trim();
@@ -463,7 +463,50 @@
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
+
+                    // --- SMART DETECT: TỰ ĐỘNG CHỌN NGÀNH HÀNG VÀ CHUYỂN TAB DỰA VÀO BÀI NỘP MỚI NHẤT ---
+                    const latestSubmission = data.data[data.data.length - 1]; // Lấy bài nộp gần nhất
                     
+                    // Detect Ngành (courseName sẽ được trả về từ API, tôi đã update trong code.gs)
+                    // (Nếu API cũ chưa có courseName, ta fallback dựa vào hàm match tự động)
+                    if (latestSubmission.courseName && latestSubmission.courseName !== currentRoadmap) {
+                        switchRoadmap(latestSubmission.courseName);
+                    }
+
+                    // Detect Phiên review (Day 1/2/3) dựa trên tên buổi
+                    let autoSelectDay = "";
+                    if (latestSubmission.session.includes("Buổi 1") || latestSubmission.session.includes("Buổi 2")) autoSelectDay = "day1";
+                    else if (latestSubmission.session.includes("Buổi 3") || latestSubmission.session.includes("Buổi 4")) autoSelectDay = "day2";
+                    else if (latestSubmission.session.includes("Buổi 5")) autoSelectDay = "day3";
+
+                    // Đổi tab nếu ngày khác biệt
+                    if (autoSelectDay && autoSelectDay !== currentDay) {
+                        // Gọi switchSubTab (lưu ý hàm này sẽ gọi lại triggerRandomScenario và checkStudentPractice)
+                        // Để tránh lặp vô tận, ta đổi UI trực tiếp thay vì gọi đệ quy
+                        currentDay = autoSelectDay;
+                        document.getElementById('session').value = autoSelectDay === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : autoSelectDay === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
+                        
+                        // Đổi màu nút Tab
+                        ['day1', 'day2', 'day3'].forEach(item => {
+                            const button = document.getElementById(`sub-tab-${item}`);
+                            if (button) {
+                                if (item === autoSelectDay) {
+                                    button.classList.add('bg-white', 'text-[#166def]', 'shadow-sm');
+                                    button.classList.remove('text-slate-600');
+                                } else {
+                                    button.classList.remove('bg-white', 'text-[#166def]', 'shadow-sm');
+                                    button.classList.add('text-slate-600');
+                                }
+                            }
+                        });
+
+                        // Cập nhật link
+                        updateDynamicLinks();
+                    }
+                    // --- END SMART DETECT ---
+
+                    
+                    // Tính % tiến độ dựa trên Buổi hiện tại đang Review
                     const sessionSelectVal = document.getElementById('session').value; 
                     let targetSessionId1 = ""; let targetSessionId2 = "";
                     if(sessionSelectVal.includes("Phiên 1")) { targetSessionId1 = "session_1"; targetSessionId2 = "session_2"; }
@@ -472,14 +515,14 @@
 
                     let totalExercises = 0; let doneExercises = 0;
                     if(typeof CODELAB_DATA !== 'undefined') {
-                        const sData1 = CODELAB_DATA.find(s => s.id === targetSessionId1);
+                        const sData1 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId1);
                         if(sData1) {
                             totalExercises += sData1.exercises.filter(e => !e.isGroupHeader).length;
                             const submittedTitles1 = currentStudentPracticeData.filter(p => p.session === sData1.title).map(p => p.exerciseTitle);
                             doneExercises += [...new Set(submittedTitles1)].length;
                         }
                         if (targetSessionId2) {
-                             const sData2 = CODELAB_DATA.find(s => s.id === targetSessionId2);
+                             const sData2 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId2);
                              if(sData2) {
                                 totalExercises += sData2.exercises.filter(e => !e.isGroupHeader).length;
                                 const submittedTitles2 = currentStudentPracticeData.filter(p => p.session === sData2.title).map(p => p.exerciseTitle);
