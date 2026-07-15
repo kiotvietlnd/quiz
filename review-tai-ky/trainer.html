@@ -381,7 +381,7 @@
                 </div>
             </div>
 
-            <!-- Cấu trúc bảng kế hoạch (Cố định độ rộng chống nhảy dòng) -->
+            <!-- Cấu trúc bảng kế hoạch -->
             <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                 <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                     <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
@@ -451,7 +451,7 @@
         // Khai báo đối tượng giáo trình rỗng, sẽ được load động từ Google Sheet [1]
         let scenariosData = {};
         let currentDay = 'day1';
-        let currentRoadmap = 'Retail'; // Mặc định là Retail [1]
+        let currentRoadmap = 'Retail'; // Mặc định lộ trình ban đầu là Retail [1]
         let currentRandomScenario = null;
 
         // Danh sách tình huống dự phòng trường hợp kết nối API lỗi [1]
@@ -768,6 +768,32 @@
             } else {
                 list.classList.add('hidden');
                 btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
+            }
+        }
+
+        // Chuyển đổi giữa WORKSPACE và HANDBOOK (Đã sửa lỗi ẩn hiện do độ ưu tiên class của Tailwind) [1]
+        function switchMainTab(tab) {
+            const workspaceBtn = document.getElementById('main-tab-workspace');
+            const handbookBtn = document.getElementById('main-tab-handbook');
+            const workspaceContent = document.getElementById('main-content-workspace');
+            const handbookContent = document.getElementById('main-content-handbook');
+
+            if (tab === 'workspace') {
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                
+                // Đồng thời loại bỏ hidden và thêm lại grid [1]
+                workspaceContent.classList.remove('hidden');
+                workspaceContent.classList.add('grid');
+                handbookContent.classList.add('hidden');
+            } else {
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                
+                // Đồng thời thêm hidden và gỡ grid để triệt tiêu display xung đột [1]
+                workspaceContent.classList.add('hidden');
+                workspaceContent.classList.remove('grid');
+                handbookContent.classList.remove('hidden');
             }
         }
 
