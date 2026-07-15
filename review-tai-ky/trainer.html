@@ -346,8 +346,9 @@
 
         function formatSentences(text) {
             if (!text) return "";
-            const sentences = text.split(/(?<!\b\d+\.)(?<=[.?!])\s+/);
-            return sentences.map(s => s.trim()).filter(s => s.length > 0).join('<br><br>');
+            // Tách câu an toàn 100%: Thay thế dấu chấm kèm khoảng trắng thành ngắt dòng
+            // Ngoại trừ các chữ số có dấu chấm (như 1. 2. 3.)
+            return text.replace(/([a-zA-Záàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ]\s*[.?!])\s+/gi, "$1<br><br>");
         }
 
         function switchRoadmap(roadmap) {
