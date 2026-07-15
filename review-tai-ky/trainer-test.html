@@ -383,25 +383,20 @@
                 html += `<a href="${courseLink}" target="_blank" class="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-blue-200"><i class="fa-solid fa-book"></i> E-learning Giáo trình</a>`;
             }
 
-            // 2. Link Bài tập thực hành
-            if (currentRoadmap === 'Retail') {
-                if (currentDay === 'day1') {
-                    html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/buoi-1.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 1</a>`;
-                    html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/buoi-2.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 2</a>`;
-                } else if (currentDay === 'day2') {
-                    html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/buoi-3.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 3</a>`;
-                    html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/buoi-4.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 4</a>`;
-                } else if (currentDay === 'day3') {
-                    html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/buoi-5.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 5</a>`;
-                }
-            } else if (currentRoadmap === 'FNB') {
-                if (currentDay === 'day3') {
-                    html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/buoi-5.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 5</a>`;
-                }
+            // 2. Link Bài tập thực hành (Đúng theo tên file mới)
+            let prefix = currentRoadmap.toLowerCase(); // 'retail' hoặc 'fnb'
+            if (currentDay === 'day1') {
+                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-1.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 1</a>`;
+                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-2.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 2</a>`;
+            } else if (currentDay === 'day2') {
+                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-3.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 3</a>`;
+                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-4.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 4</a>`;
+            } else if (currentDay === 'day3') {
+                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-5.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 5</a>`;
             }
 
             // 3. Link Chấm bài (Giảng viên)
-            html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien" target="_blank" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài thực hành</a>`;
+            html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien.html" target="_blank" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài thực hành</a>`;
 
             container.innerHTML = html;
         }
