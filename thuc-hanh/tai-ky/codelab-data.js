@@ -1,1601 +1,316 @@
 // CẤU HÌNH HỆ THỐNG DÀNH CHO ADMIN
 const APP_CONFIG = {
-    // Dán link API của Google Apps Script vào đây
-    API_URL: "https://script.google.com/macros/s/AKfycbzYRRgK_0naygfsG4AfoBccmcNdijROyT5tIooz_4kT1fys8jJF1-G3WvuBmHPz7bKl1A/exec", 
-    COURSE_NAME: "KIOT_RENEWAL_Q3_2026" 
+    // Dán link API của Google Apps Script vào đây (DÙNG CHUNG 1 LINK CHO TOÀN BỘ)
+    API_URL: "https://script.google.com/macros/s/AKfycbzYRRgK_0naygfsG4AfoBccmcNdijROyT5tIooz_4kT1fys8jJF1-G3WvuBmHPz7bKl1A/exec"
 };
 
 // ============================================================================
-// DỮ LIỆU BÀI TẬP THỰC HÀNH TÁI KÝ RETAIL (4 BUỔI)
+// DỮ LIỆU BÀI TẬP THỰC HÀNH TÁI KÝ (CHIA THEO NGÀNH HÀNG)
 // ============================================================================
-const CODELAB_DATA = [
-  {
-    id: "session_1",
-    title: "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao",
-    exercises: [
-      { title: "Danh mục Hàng hóa", isGroupHeader: true },
+const CODELAB_DATA = {
+  "Retail": [
       {
-        title: "Bài tập 1: Thiết lập danh mục cơ bản",
-        requirements: [
-          "1. Tạo Nhóm hàng mẹ tên là 'Áo Sơ Mi' và Nhóm hàng con là 'Áo Sơ Mi Nam'.",
-          "2. Thiết lập trước một Thương hiệu mới tên là 'Kiot-Fashion'.",
-          "3. Thiết lập trước một Vị trí trưng bày tên là 'Kệ A1'."
-        ],
-        instructions: [
-          "1. Tại menu Hàng hóa, chọn Danh sách hàng hóa. Ở cột Nhóm hàng bên trái, nhấn Tạo mới, nhập Tên nhóm 'Áo Sơ Mi' rồi nhấn Lưu.",
-          "2. Tiếp tục nhấn Tạo mới ở cột Nhóm hàng, nhập Tên nhóm 'Áo Sơ Mi Nam', tại mục Nhóm cha chọn 'Áo Sơ Mi', sau đó nhấn Lưu.",
-          "3. Nhấn nút + Tạo mới (Hàng hóa) ở góc phải màn hình. Tại form Thêm mới, tìm đến mục Thương hiệu, nhấn Tạo mới, nhập 'Kiot-Fashion' và nhấn Lưu.",
-          "4. Cũng tại form Thêm mới, tìm đến mục Vị trí, nhấn Tạo mới, nhập 'Kệ A1' và nhấn Lưu (Sau đó có thể tắt form Thêm mới này đi)."
-        ],
-        confirm: "Chụp ảnh màn hình hiển thị danh sách nhóm hàng bên trái có 'Áo Sơ Mi Nam' nằm thụt lề dưới 'Áo Sơ Mi'."
+        id: "session_1",
+        title: "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao",
+        desc: "Thực hành khởi tạo Danh mục hàng hóa, quản lý Hàng dịch vụ, Combo, Sản xuất, Lô HSD và Serial/IMEI.",
+        exercises: [
+          { title: "Danh mục Hàng hóa", isGroupHeader: true },
+          { title: "Bài tập 1: Thiết lập danh mục cơ bản", requirements: ["1. Tạo Nhóm hàng mẹ tên là 'Áo Sơ Mi' và Nhóm hàng con là 'Áo Sơ Mi Nam'.", "2. Thiết lập trước một Thương hiệu mới tên là 'Kiot-Fashion'.", "3. Thiết lập trước một Vị trí trưng bày tên là 'Kệ A1'."], instructions: ["1. Tại menu Hàng hóa, chọn Danh sách hàng hóa. Ở cột Nhóm hàng bên trái, nhấn Tạo mới, nhập Tên nhóm 'Áo Sơ Mi' rồi nhấn Lưu.", "2. Tiếp tục nhấn Tạo mới ở cột Nhóm hàng, nhập Tên nhóm 'Áo Sơ Mi Nam', tại mục Nhóm cha chọn 'Áo Sơ Mi', sau đó nhấn Lưu.", "3. Nhấn nút + Tạo mới (Hàng hóa) ở góc phải màn hình. Tại form Thêm mới, tìm đến mục Thương hiệu, nhấn Tạo mới, nhập 'Kiot-Fashion' và nhấn Lưu.", "4. Cũng tại form Thêm mới, tìm đến mục Vị trí, nhấn Tạo mới, nhập 'Kệ A1' và nhấn Lưu (Sau đó có thể tắt form Thêm mới này đi)."], confirm: "Chụp ảnh màn hình hiển thị danh sách nhóm hàng bên trái có 'Áo Sơ Mi Nam' nằm thụt lề dưới 'Áo Sơ Mi'." },
+          { title: "Bài tập 2: Thêm mới hàng hóa và tạo dữ liệu nháp", requirements: ["1. Thêm mới hàng hóa chính: 'Áo sơ mi nam lụa cao cấp', thuộc nhóm Áo Sơ Mi Nam, thương hiệu Kiot-Fashion, vị trí Kệ A1. Giá bán 350.000đ, Giá vốn 200.000đ, Tồn kho ban đầu là 50.", "2. Thêm mới một hàng hóa nháp: 'Sản phẩm Test 01', giá bán 10.000đ."], instructions: ["1. Tại màn hình Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Thêm Hàng hóa.", "2. Nhập Tên hàng: 'Áo sơ mi nam lụa cao cấp', chọn Nhóm hàng: 'Áo Sơ Mi Nam'.", "3. Điền Giá vốn: 200.000, Giá bán: 350.000, Tồn kho: 50.", "4. Ở các mục bên phải, chọn Thương hiệu: 'Kiot-Fashion' và Vị trí: 'Kệ A1', sau đó nhấn Lưu.", "5. Tiếp tục nhấn + Tạo mới -> Thêm Hàng hóa, nhập Tên hàng: 'Sản phẩm Test 01', Giá bán: 10.000, sau đó nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị thành công 2 sản phẩm vừa tạo." },
+          { title: "Bài tập 3: Cập nhật thông tin và sao chép hàng hóa", requirements: ["1. Cập nhật giá bán của 'Áo sơ mi nam lụa cao cấp' từ 350.000đ lên 399.000đ.", "2. Dùng tính năng Sao chép để tạo nhanh một sản phẩm mới dựa trên áo sơ mi lụa, đổi tên thành 'Áo sơ mi nam lụa cao cấp (Màu Đen)', tồn kho ban đầu là 30."], instructions: ["1. Tại Danh sách hàng hóa, tìm kiếm sản phẩm 'Áo sơ mi nam lụa cao cấp', nhấn nút Chỉnh sửa (biểu tượng cây bút).", "2. Đổi Giá bán thành 399.000 và nhấn Lưu.", "3. Tìm lại sản phẩm 'Áo sơ mi nam lụa cao cấp' vừa đổi giá, nhấn vào nút Sao chép (biểu tượng 2 tờ giấy) ở cuối dòng.", "4. Hệ thống mở form mới, bạn sửa Tên hàng thành 'Áo sơ mi nam lụa cao cấp (Màu Đen)', xóa Mã hàng cũ để hệ thống tự sinh mã mới, nhập Tồn kho: 30 và nhấn Lưu."], confirm: "Chụp ảnh màn hình cho thấy sản phẩm màu đen mới được tạo có giá 399.000đ." },
+          { title: "Bài tập 4: Quản lý trạng thái và xóa dữ liệu", requirements: ["1. Tạm thời ngừng kinh doanh sản phẩm 'Áo sơ mi nam lụa cao cấp (Màu Đen)', sau đó mở cho phép kinh doanh trở lại.", "2. Xóa vĩnh viễn 'Sản phẩm Test 01' ra khỏi hệ thống phần mềm."], instructions: ["1. Tại Danh sách hàng hóa, tích chọn vào ô vuông trước 'Áo sơ mi nam lụa cao cấp (Màu Đen)'.", "2. Nhấn nút Thao tác (biểu tượng 3 dấu chấm) -> Chọn Ngừng kinh doanh.", "3. Để mở lại, tại bộ lọc Trạng thái bên trái, chọn 'Ngừng kinh doanh'. Tích chọn lại vào sản phẩm đó -> Nhấn Thao tác -> Chọn Cho phép kinh doanh.", "4. Tìm kiếm 'Sản phẩm Test 01', tích chọn vào ô vuông trước tên sản phẩm.", "5. Nhấn Thao tác -> Chọn Xóa -> Nhấn Đồng ý để xác nhận xóa vĩnh viễn."], confirm: "Chụp ảnh màn hình lịch sử thao tác hoặc màn hình tìm kiếm không còn 'Sản phẩm Test 01'." },
+          { title: "Bài tập 5: Xem thẻ kho sản phẩm", requirements: ["1. Truy cập vào chi tiết sản phẩm 'Áo sơ mi nam lụa cao cấp' để kiểm tra lịch sử biến động số lượng.", "2. Xem giao dịch Khởi tạo tồn kho ban đầu của sản phẩm này."], instructions: ["1. Tại màn hình Danh sách hàng hóa, bấm trực tiếp vào dòng chữ tên sản phẩm 'Áo sơ mi nam lụa cao cấp'.", "2. Hệ thống hiển thị bảng thông tin chi tiết, bấm chuyển sang tab Thẻ kho.", "3. Quan sát các dòng lịch sử giao dịch ghi nhận số lượng nhập kho 50 cái từ lúc tạo mới."], confirm: "Chụp ảnh màn hình Thẻ kho của sản phẩm hiển thị giao dịch Khởi tạo." },
+          { title: "Hàng hóa thường", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới hàng hóa và tạo dữ liệu nháp", requirements: ["1. Thêm mới một sản phẩm kinh doanh: 'Nước khoáng Lavie 500ml', thuộc nhóm 'Nước giải khát' (có thể thêm mới nhóm nếu chưa có). Giá vốn: 4.000đ, Giá bán: 5.000đ, Tồn kho ban đầu: 100.", "2. Thêm mới một hàng hóa nháp: 'Sản phẩm Test 02', giá bán 1.000đ để dự phòng cho thao tác xóa sau này."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Danh sách hàng hóa.", "2. Nhấn vào nút + Tạo mới và chọn Hàng hóa.", "3. Nhập Tên hàng hóa: 'Nước khoáng Lavie 500ml', Nhóm hàng: 'Nước giải khát' (nhấn Tạo mới nếu chưa có).", "4. Điền Giá vốn: 4.000, Giá bán: 5.000, Tồn kho: 100. Sau đó nhấn Lưu.", "5. Lặp lại thao tác + Tạo mới để thêm 'Sản phẩm Test 02' với giá bán 1.000đ rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị thành công 2 sản phẩm vừa tạo." },
+          { title: "Bài tập 2: Cập nhật thông tin và xóa hàng hóa", requirements: ["1. Cập nhật giá bán của 'Nước khoáng Lavie 500ml' từ 5.000đ lên 6.000đ.", "2. Xóa vĩnh viễn 'Sản phẩm Test 02' ra khỏi hệ thống phần mềm."], instructions: ["1. Trong Danh sách hàng hóa, tìm kiếm sản phẩm 'Nước khoáng Lavie 500ml' và nhấn vào biểu tượng Chỉnh sửa (hình cây bút).", "2. Thay đổi Giá bán thành 6.000 và nhấn Lưu.", "3. Tìm đến 'Sản phẩm Test 02', tích chọn vào ô vuông đầu dòng.", "4. Nhấn Thao tác (biểu tượng 3 dấu chấm) -> Chọn Xóa -> chọn Đồng ý để xóa hoàn toàn."], confirm: "Chụp ảnh màn hình tìm kiếm không còn 'Sản phẩm Test 02' và Lavie đã cập nhật giá 6.000đ." },
+          { title: "Bài tập 3: Thiết lập và quản lý Đơn vị tính", requirements: ["1. Kích hoạt tính năng sử dụng Đơn vị tính trong hệ thống.", "2. Cập nhật sản phẩm 'Nước khoáng Lavie 500ml' để thêm đơn vị tính lớn là 'Thùng' (1 Thùng = 24 Chai), giá bán 1 Thùng là 130.000đ."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa.", "2. Kéo tìm dòng Đơn vị tính và chuyển từ Đang tắt sang bật xanh để kích hoạt tính năng.", "3. Quay lại menu Hàng hóa -> Danh sách hàng hóa, tìm và nhấn Chỉnh sửa sản phẩm 'Nước khoáng Lavie 500ml'.", "4. Cuộn xuống mục Quản lý theo đơn vị tính và thuộc tính, nhấn Thiết lập.", "5. Ở Đơn vị cơ bản (cấp 1) nhập 'Chai'. Ở dòng dưới (cấp 2) nhập 'Thùng', Giá trị quy đổi là 24, Giá bán nhập 130.000.", "6. Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình hiển thị sản phẩm Lavie có 2 đơn vị tính Chai và Thùng trong danh sách." },
+          { title: "Bài tập 4: Tìm kiếm, lọc và in tem mã vạch", requirements: ["1. Kích hoạt tính năng In tem mã vạch trong phần Thiết lập (nếu chưa bật).", "2. Lọc tìm sản phẩm 'Nước khoáng Lavie 500ml' và in 10 tem mã vạch cho sản phẩm này."], instructions: ["1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa -> Bật xanh tính năng In tem mã vạch.", "2. Quay lại màn hình Danh sách hàng hóa, sử dụng thanh tìm kiếm để tra cứu chữ 'Lavie'.", "3. Tích chọn vào ô vuông trước tên sản phẩm 'Nước khoáng Lavie 500ml'.", "4. Nhấn vào nút In tem mã (hoặc Thao tác -> In tem mã), nhập số lượng tem cho mỗi loại là 10.", "5. Nhấn tiếp nút In tem mã, chọn thông tin cần hiển thị và ấn Xem bản in để hoàn thành."], confirm: "Chụp ảnh màn hình cửa sổ xem trước bản in tem mã vạch của sản phẩm Lavie." },
+          { title: "Bài tập 5: Xem phân tích và ngừng kinh doanh", requirements: ["1. Tạm ngừng kinh doanh sản phẩm 'Nước khoáng Lavie 500ml' trên toàn hệ thống.", "2. Truy cập vào trang chi tiết của sản phẩm để xem phân tích hiệu quả kinh doanh."], instructions: ["1. Tại Danh sách hàng hóa, tích chọn sản phẩm 'Nước khoáng Lavie 500ml'.", "2. Nhấn Thao tác (biểu tượng 3 chấm) -> Chọn Ngừng kinh doanh.", "3. Mở bộ lọc Trạng thái hàng hóa ở cột trái, chọn 'Ngừng kinh doanh' để tìm lại sản phẩm vừa ẩn.", "4. Nhấn trực tiếp vào tên sản phẩm để vào trang chi tiết.", "5. Nhấn vào nút Xem phân tích để mở biểu đồ thống kê doanh thu, lợi nhuận."], confirm: "Chụp ảnh màn hình biểu đồ phân tích kinh doanh của sản phẩm Lavie." },
+          { title: "Hàng Dịch vụ", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới hàng dịch vụ và tạo dữ liệu nháp", requirements: ["1. Thêm mới một sản phẩm dịch vụ: 'Phí giao hàng và lắp đặt', thuộc nhóm 'Dịch vụ cộng thêm'. Giá bán: 150.000đ, cho phép bán trực tiếp.", "2. Thêm mới một dịch vụ nháp: 'Dịch vụ Test 03', giá bán 10.000đ để dự phòng xóa."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Danh sách hàng hóa.", "2. Nhấn vào nút + Tạo mới và chọn Dịch vụ.", "3. Nhập Tên hàng: 'Phí giao hàng và lắp đặt', Nhóm hàng: 'Dịch vụ cộng thêm' (nhấn Tạo mới nhóm nếu chưa có).", "4. Điền Giá bán: 150.000 và tích chọn ô 'Bán trực tiếp' để dịch vụ hiển thị trên màn hình Bán hàng. Sau đó nhấn Lưu.", "5. Lặp lại thao tác + Tạo mới -> Dịch vụ để thêm 'Dịch vụ Test 03' với giá bán 10.000đ rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị thành công 2 dịch vụ vừa tạo." },
+          { title: "Bài tập 2: Cập nhật thông tin và xóa hàng dịch vụ", requirements: ["1. Cập nhật giá bán của 'Phí giao hàng và lắp đặt' từ 150.000đ lên 200.000đ.", "2. Xóa vĩnh viễn 'Dịch vụ Test 03' ra khỏi hệ thống phần mềm."], instructions: ["1. Trong Danh sách hàng hóa, tìm kiếm tên 'Phí giao hàng và lắp đặt' và nhấn vào biểu tượng Chỉnh sửa (hình cây bút).", "2. Thay đổi Giá bán thành 200.000 và nhấn Lưu.", "3. Tìm đến 'Dịch vụ Test 03', tích chọn vào ô vuông ở đầu dòng của dịch vụ này.", "4. Nhấn nút Thao tác (biểu tượng 3 dấu chấm) -> Chọn Xóa -> chọn Đồng ý."], confirm: "Chụp ảnh màn hình tìm kiếm không còn 'Dịch vụ Test 03' và dịch vụ lắp đặt đã được cập nhật giá 200.000đ." },
+          { title: "Bài tập 3: Thêm dịch vụ vào hóa đơn bán hàng", requirements: ["1. Chuyển sang giao diện thu ngân để bán hàng.", "2. Thêm 'Phí giao hàng và lắp đặt' vào hóa đơn để chuẩn bị thanh toán cho khách."], instructions: ["1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).", "2. Tại ô tìm kiếm hàng hóa ở góc trên bên trái, nhập tên 'Phí giao hàng và lắp đặt'.", "3. Bấm chọn dịch vụ từ kết quả tìm kiếm để thêm dịch vụ này vào hóa đơn.", "4. Kiểm tra dịch vụ hiển thị với đúng mức giá 200.000đ đã cập nhật trên màn hình thu ngân."], confirm: "Chụp ảnh màn hình Bán hàng hiển thị 'Phí giao hàng và lắp đặt' nằm trong danh sách sản phẩm của hóa đơn." },
+          { title: "Hàng Combo - Đóng gói", isGroupHeader: true },
+          { title: "Bài tập 1: Chuẩn bị thành phần và tạo dữ liệu nháp", requirements: ["1. Tạo nhanh 2 hàng hóa thường: 'Hộp Bánh Danisa' (Giá vốn: 100.000đ, Tồn kho: 50) và 'Rượu Vang Đà Lạt' (Giá vốn: 150.000đ, Tồn kho: 50).", "2. Tạo mới một hàng Combo nháp: 'Combo Test 04' (không cần thiết lập thành phần) với giá bán 10.000đ."], instructions: ["1. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.", "2. Nhập thông tin cho 'Hộp Bánh Danisa' (Giá vốn: 100.000, Tồn kho: 50) rồi nhấn Lưu. Làm tương tự để tạo 'Rượu Vang Đà Lạt'.", "3. Tiếp tục nhấn + Tạo mới -> Chọn Combo - đóng gói.", "4. Nhập Tên hàng: 'Combo Test 04', nhập Giá bán: 10.000 rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị các sản phẩm vừa khởi tạo." },
+          { title: "Bài tập 2: Tạo mới hàng Combo - đóng gói chính thức", requirements: ["1. Tạo một sản phẩm Combo mới mang tên 'Giỏ quà Tết An Khang'.", "2. Gộp 2 thành phần vào Combo này: 1 'Hộp Bánh Danisa' và 1 'Rượu Vang Đà Lạt'. Đặt giá bán cho tổng thể giỏ quà là 350.000đ."], instructions: ["1. Tại màn hình Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Combo - đóng gói.", "2. Nhập Tên hàng: 'Giỏ quà Tết An Khang'.", "3. Tại mục Hàng thành phần, tìm kiếm và chọn 'Hộp Bánh Danisa' (số lượng 1) và 'Rượu Vang Đà Lạt' (số lượng 1).", "4. Cuộn xuống dưới nhập Giá bán: 350.000 và nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình chi tiết của 'Giỏ quà Tết An Khang' cho thấy rõ 2 hàng thành phần bên trong." },
+          { title: "Bài tập 3: Cập nhật thông tin và xóa hàng Combo", requirements: ["1. Cập nhật giá bán của 'Giỏ quà Tết An Khang' từ 350.000đ lên 399.000đ.", "2. Xóa vĩnh viễn 'Combo Test 04' ra khỏi hệ thống phần mềm."], instructions: ["1. Trong Danh sách hàng hóa, tìm kiếm tên 'Giỏ quà Tết An Khang' và nhấn vào biểu tượng Chỉnh sửa.", "2. Thay đổi Giá bán thành 399.000 và nhấn Lưu.", "3. Tìm đến 'Combo Test 04', tích chọn vào ô vuông ở đầu dòng của combo này.", "4. Nhấn nút Thao tác (biểu tượng 3 dấu chấm) -> Chọn Xóa -> chọn Đồng ý."], confirm: "Chụp ảnh màn hình tìm kiếm không còn 'Combo Test 04' và 'Giỏ quà Tết An Khang' đã được cập nhật giá 399.000đ." },
+          { title: "Bài tập 4: Bán Combo và kiểm tra tồn kho thành phần", requirements: ["1. Chuyển sang giao diện thu ngân để bán 'Giỏ quà Tết An Khang' cho khách.", "2. Quay lại màn hình quản lý, kiểm tra tồn kho và thẻ kho của 'Hộp Bánh Danisa' để xác nhận hệ thống đã tự động trừ tồn kho."], instructions: ["1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).", "2. Tại ô tìm kiếm hàng hóa, nhập tên 'Giỏ quà Tết An Khang', thêm vào hóa đơn và thực hiện Thanh toán.", "3. Quay lại màn hình Quản lý -> Hàng hóa -> Danh sách hàng hóa.", "4. Bấm trực tiếp vào tên 'Hộp Bánh Danisa', chuyển sang tab Thẻ kho để quan sát lịch sử hệ thống tự động trừ đi 1 số lượng."], confirm: "Chụp ảnh màn hình Thẻ kho của 'Hộp Bánh Danisa' hiển thị giao dịch bán hàng." },
+          { title: "Hàng Sản xuất", isGroupHeader: true },
+          { title: "Bài tập 1: Kích hoạt tính năng và chuẩn bị nguyên liệu", requirements: ["1. Bật tính năng Sản xuất hàng hóa trong hệ thống để quản lý quá trình lắp ráp.", "2. Tạo 2 hàng hóa thường đóng vai trò nguyên vật liệu: 'Mặt bàn gỗ sồi' (Giá vốn: 500.000đ, Tồn kho: 20) và 'Bộ chân bàn sắt' (Giá vốn: 400.000đ, Tồn kho: 20).", "3. Tạo một hàng sản xuất nháp: 'Bàn Test 05' (không cần khai báo thành phần) với giá bán 100.000đ."], instructions: ["1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa, tìm và bật xanh tính năng Sản xuất hàng hóa.", "2. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.", "3. Nhập thông tin cho 'Mặt bàn gỗ sồi' (Giá vốn: 500.000, Tồn kho: 20) rồi nhấn Lưu. Làm tương tự để tạo 'Bộ chân bàn sắt'.", "4. Tiếp tục nhấn + Tạo mới -> Chọn Hàng sản xuất. Nhập Tên hàng: 'Bàn Test 05', nhập Giá bán: 100.000 rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị các nguyên liệu và sản phẩm nháp vừa khởi tạo." },
+          { title: "Bài tập 2: Khai báo hàng sản xuất chính thức", requirements: ["1. Tạo một sản phẩm Hàng sản xuất mới mang tên 'Bàn làm việc gỗ sồi'.", "2. Cấu hình định mức nguyên liệu gồm: 1 'Mặt bàn gỗ sồi' và 1 'Bộ chân bàn sắt'. Đặt giá bán cho thành phẩm là 1.500.000đ."], instructions: ["1. Tại màn hình Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng sản xuất.", "2. Nhập Tên hàng: 'Bàn làm việc gỗ sồi'.", "3. Tại mục Hàng thành phần, tìm kiếm và chọn 'Mặt bàn gỗ sồi' (số lượng 1) và 'Bộ chân bàn sắt' (số lượng 1).", "4. Cuộn xuống dưới nhập Giá bán: 1.500.000 và nhấn Lưu để hoàn tất. Hệ thống sẽ tự động tính giá vốn là 900.000đ."], confirm: "Chụp ảnh màn hình chi tiết của 'Bàn làm việc gỗ sồi' hiển thị rõ 2 linh kiện thành phần bên trong." },
+          { title: "Bài tập 3: Thực hiện sản xuất hàng hóa", requirements: ["1. Tạo một phiếu sản xuất cho mặt hàng 'Bàn làm việc gỗ sồi' để ghi nhận số lượng bàn đã được xưởng lắp ráp hoàn thiện.", "2. Số lượng thành phẩm cần sản xuất (lắp ráp) là 5 chiếc."], instructions: ["1. Vào menu Hàng hóa -> chọn Sản xuất.", "2. Nhấn nút + Sản xuất ở góc trên bên phải màn hình.", "3. Tại ô Sản xuất mặt hàng, tìm kiếm và chọn sản phẩm 'Bàn làm việc gỗ sồi'.", "4. Nhập Số lượng: 5. (Hệ thống sẽ tự động hiển thị số lượng nguyên vật liệu cần tiêu hao tương ứng).", "5. Nhấn Hoàn thành để lưu phiếu sản xuất."], confirm: "Chụp ảnh màn hình Phiếu sản xuất vừa tạo thành công hiển thị số lượng thành phẩm là 5." },
+          { title: "Bài tập 4: Kiểm tra tồn kho và xóa dữ liệu nháp", requirements: ["1. Kiểm tra thẻ kho của nguyên liệu 'Mặt bàn gỗ sồi' để xác nhận hệ thống đã tự động trừ đi 5 tấm.", "2. Xóa vĩnh viễn sản phẩm 'Bàn Test 05' ra khỏi hệ thống phần mềm."], instructions: ["1. Quay lại màn hình Hàng hóa -> Danh sách hàng hóa.", "2. Bấm trực tiếp vào tên 'Mặt bàn gỗ sồi', chuyển sang tab Thẻ kho để quan sát lịch sử trừ số lượng.", "3. Quay ra lại Danh sách hàng hóa, tìm đến 'Bàn Test 05', tích chọn vào ô vuông ở đầu dòng của sản phẩm này.", "4. Nhấn nút Thao tác -> Chọn Xóa -> chọn Đồng ý."], confirm: "Chụp ảnh màn hình Thẻ kho của 'Mặt bàn gỗ sồi' hiển thị dòng lịch sử Phiếu sản xuất với số lượng -5." },
+          { title: "Hàng hóa Lô - Hạn sử dụng", isGroupHeader: true },
+          { title: "Bài tập 1: Kích hoạt tính năng và thêm mới hàng hóa", requirements: ["1. Kích hoạt tính năng Quản lý tồn kho theo Lô, hạn sử dụng trên hệ thống.", "2. Thêm mới một sản phẩm: 'Kem chống nắng La Roche-Posay' (Giá vốn: 300.000đ, Giá bán: 450.000đ) và BẮT BUỘC thiết lập tính năng quản lý theo lô.", "3. Thêm mới một sản phẩm nháp: 'Sản phẩm Test 06' với giá bán 10.000đ (không quản lý lô)."], instructions: ["1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa, bật xanh tính năng Quản lý tồn kho theo Lô, hạn sử dụng.", "2. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.", "3. Nhập Tên hàng: 'Kem chống nắng La Roche-Posay', nhập Giá vốn: 300.000, Giá bán: 450.000.", "4. Tích chọn 'Có' ở mục Quản lý theo lô, hạn sử dụng, sau đó nhấn Lưu.", "5. Tiếp tục nhấn + Tạo mới -> Chọn Hàng hóa để thêm 'Sản phẩm Test 06' (Giá bán: 10.000đ) rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị sản phẩm 'Kem chống nắng La Roche-Posay' có biểu tượng quản lý lô." },
+          { title: "Bài tập 2: Nhập hàng theo Lô và xóa dữ liệu nháp", requirements: ["1. Nhập hàng cho 'Kem chống nắng La Roche-Posay' chia thành 2 lô khác nhau: Lô 'L01' (HSD: 30/12/2026, Số lượng: 20) và Lô 'L02' (HSD: 30/06/2027, Số lượng: 30).", "2. Xóa vĩnh viễn 'Sản phẩm Test 06' ra khỏi hệ thống phần mềm."], instructions: ["1. Vào menu Mua hàng -> chọn Nhập hàng, nhấn nút + Nhập hàng.", "2. Tại ô tìm kiếm hàng hóa, tìm và chọn sản phẩm 'Kem chống nắng La Roche-Posay'.", "3. Trên dòng sản phẩm vừa thêm, nhấn vào Thêm mới lô, hạn sử dụng. Nhập tên Lô: 'L01', chọn HSD: '30/12/2026', nhập Số lượng: '20' và nhấn Thêm.", "4. Tiếp tục nhấn Thêm mới lô, hạn sử dụng để nhập thông tin Lô: 'L02', chọn HSD: '30/06/2027', nhập Số lượng: '30' và nhấn Thêm. Sau đó nhấn Hoàn thành phiếu nhập.", "5. Quay lại menu Hàng hóa -> Danh sách hàng hóa, tìm đến 'Sản phẩm Test 06', xóa khỏi hệ thống."], confirm: "Chụp ảnh màn hình Chi tiết sản phẩm Kem chống nắng ở tab Tồn kho hiển thị đủ thông tin 2 lô L01 và L02." },
+          { title: "Bài tập 3: Bán hàng theo lô (Nguyên tắc FEFO)", requirements: ["1. Chuyển sang giao diện thu ngân để tạo hóa đơn bán 1 hộp 'Kem chống nắng La Roche-Posay'.", "2. Quan sát và xác nhận hệ thống tự động gợi ý xuất bán từ Lô 'L01' (lô có hạn sử dụng gần nhất theo nguyên tắc FEFO)."], instructions: ["1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).", "2. Tại ô tìm kiếm hàng hóa, nhập tên 'Kem chống nắng La Roche-Posay' và click chọn sản phẩm để đưa vào hóa đơn.", "3. Quan sát trên dòng sản phẩm, hệ thống sẽ tự động gắn kèm tag tên lô là 'L01' (do L01 hết hạn trước L02).", "4. Thực hiện thao tác Thanh toán để hoàn tất hóa đơn này."], confirm: "Chụp ảnh màn hình Bán hàng hiển thị rõ sản phẩm đang được tự động chọn xuất từ lô 'L01'." },
+          { title: "Bài tập 4: Xem báo cáo Hạn sử dụng", requirements: ["1. Truy cập vào hệ thống báo cáo để xem danh sách chi tiết các lô hàng đang quản lý và cảnh báo hạn sử dụng."], instructions: ["1. Quay lại màn hình Quản lý, vào menu Phân tích -> chọn Hàng hóa.", "2. Ở góc trên bên trái màn hình báo cáo, nhấp vào menu thả xuống (Mối quan tâm) và chọn 'Hạn sử dụng'.", "3. Quan sát danh sách thống kê các lô hàng, hệ thống sẽ tự động bôi màu cảnh báo đối với các lô sắp hết hạn."], confirm: "Chụp ảnh màn hình Báo cáo Hạn sử dụng hiển thị các thông tin lô của sản phẩm Kem chống nắng." },
+          { title: "Hàng hóa Serial/IMEI", isGroupHeader: true },
+          { title: "Bài tập 1: Kích hoạt tính năng và thêm mới hàng hóa", requirements: ["1. Kích hoạt tính năng Quản lý tồn kho theo Serial/IMEI trên hệ thống.", "2. Thêm mới sản phẩm: 'iPhone 16 Pro Max 256GB' (Giá vốn: 28.000.000đ, Giá bán: 30.000.000đ) và BẮT BUỘC thiết lập tính năng quản lý theo Serial/IMEI.", "3. Thêm mới một sản phẩm nháp: 'Điện thoại Test 07' với giá bán 10.000đ (không quản lý IMEI)."], instructions: ["1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa, bật xanh tính năng Quản lý tồn kho theo Serial/IMEI.", "2. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.", "3. Nhập Tên hàng: 'iPhone 16 Pro Max 256GB', nhập Giá vốn: 28.000.000, Giá bán: 30.000.000.", "4. Tích chọn 'Có' ở mục Quản lý theo Serial/IMEI, sau đó nhấn Lưu.", "5. Tiếp tục nhấn nút + Tạo mới -> Chọn Hàng hóa để thêm 'Điện thoại Test 07' (Giá bán: 10.000đ) rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị sản phẩm 'iPhone 16 Pro Max 256GB' có biểu tượng quản lý Serial/IMEI." },
+          { title: "Bài tập 2: Nhập hàng theo IMEI và xóa dữ liệu nháp", requirements: ["1. Nhập kho cho 'iPhone 16 Pro Max 256GB' với số lượng 2 chiếc, tương ứng với 2 mã IMEI là: 'IMEI001' và 'IMEI002'.", "2. Xóa vĩnh viễn 'Điện thoại Test 07' ra khỏi hệ thống phần mềm."], instructions: ["1. Vào menu Mua hàng -> chọn Nhập hàng, nhấn nút + Nhập hàng.", "2. Tại ô tìm kiếm hàng hóa, tìm và chọn sản phẩm 'iPhone 16 Pro Max 256GB'.", "3. Màn hình sẽ hiện ra ô Nhập số Serial/Imei. Nhập 'IMEI001' rồi ấn Enter, tiếp tục nhập 'IMEI002' rồi ấn Enter. Nhấn Hoàn thành phiếu nhập.", "4. Quay lại menu Hàng hóa -> Danh sách hàng hóa, tìm đến 'Điện thoại Test 07', xóa khỏi hệ thống."], confirm: "Chụp ảnh màn hình Chi tiết sản phẩm iPhone ở tab Tồn kho hiển thị tồn kho bằng 2." },
+          { title: "Bài tập 3: Bán hàng theo Serial/IMEI", requirements: ["1. Chuyển sang giao diện thu ngân để tạo hóa đơn bán 1 chiếc 'iPhone 16 Pro Max 256GB'.", "2. Khách hàng chọn mua máy có mã là 'IMEI001', yêu cầu xuất bán đúng mã này trên hệ thống."], instructions: ["1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).", "2. Tại ô tìm kiếm hàng hóa, nhập tên 'iPhone 16 Pro Max 256GB' và click chọn sản phẩm.", "3. Hệ thống sẽ bật lên cửa sổ yêu cầu chọn Serial/IMEI. Bạn tích chọn vào mã 'IMEI001' (hoặc dùng súng bắn mã vạch quét mã này).", "4. Thực hiện thao tác Thanh toán để hoàn tất hóa đơn giao dịch."], confirm: "Chụp ảnh màn hình Bán hàng hiển thị rõ sản phẩm iPhone đang được chọn kèm dòng chữ mã IMEI001 phía dưới." }
+        ]
       },
       {
-        title: "Bài tập 2: Thêm mới hàng hóa và tạo dữ liệu nháp",
-        requirements: [
-          "1. Thêm mới hàng hóa chính: 'Áo sơ mi nam lụa cao cấp', thuộc nhóm Áo Sơ Mi Nam, thương hiệu Kiot-Fashion, vị trí Kệ A1. Giá bán 350.000đ, Giá vốn 200.000đ, Tồn kho ban đầu là 50.",
-          "2. Thêm mới một hàng hóa nháp: 'Sản phẩm Test 01', giá bán 10.000đ."
-        ],
-        instructions: [
-          "1. Tại màn hình Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Thêm Hàng hóa.",
-          "2. Nhập Tên hàng: 'Áo sơ mi nam lụa cao cấp', chọn Nhóm hàng: 'Áo Sơ Mi Nam'.",
-          "3. Điền Giá vốn: 200.000, Giá bán: 350.000, Tồn kho: 50.",
-          "4. Ở các mục bên phải, chọn Thương hiệu: 'Kiot-Fashion' và Vị trí: 'Kệ A1', sau đó nhấn Lưu.",
-          "5. Tiếp tục nhấn + Tạo mới -> Thêm Hàng hóa, nhập Tên hàng: 'Sản phẩm Test 01', Giá bán: 10.000, sau đó nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị thành công 2 sản phẩm vừa tạo."
+        id: "session_2",
+        title: "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá",
+        desc: "Quy trình Nhập hàng, Kiểm kho, thiết lập Bảng giá sỉ, theo dõi công nợ Nhà cung cấp.",
+        exercises: [
+          { title: "Nhập hàng", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo mới hàng hóa và lập phiếu nhập hàng", requirements: ["1. Tạo mới Nhà cung cấp có tên 'Tổng kho Thời trang An Đông'.", "2. Thực hiện nhập kho lô hàng mới gồm: 50 'Áo sơ mi nam Oxford' (Giá nhập: 150,000đ, Giá bán: 350,000đ) và 30 'Quần Tây Âu Slimfit' (Giá nhập: 220,000đ, Giá bán: 480,000đ).", "3. Tạo thêm 1 mã hàng mồi tên là 'Sản phẩm Test 01' (Số lượng 1, Giá nhập 10,000đ).", "4. Thanh toán trước cho Nhà cung cấp 5,000,000đ, phần còn lại ghi nhận công nợ."], instructions: ["1. Tại màn hình Quản lý, vào menu Mua hàng -> chọn Nhập hàng.", "2. Nhấn nút + Nhập hàng.", "3. Tại ô tìm kiếm, nhấn dấu + để thêm mới nhanh 3 sản phẩm trên với đầy đủ thông tin giá nhập, giá bán và nhóm hàng tương ứng.", "4. Tại mục Nhà cung cấp, nhấn dấu + để thêm 'Tổng kho Thời trang An Đông'.", "5. Tại phần Thanh toán, nhập số 5,000,000 vào ô 'Tiền trả NCC'.", "6. Nhấn nút Hoàn thành."], confirm: "Chụp ảnh màn hình chi tiết phiếu nhập vừa tạo, hiển thị rõ danh sách hàng và phần nợ cần trả NCC." },
+          { title: "Bài tập 2: Quản lý chi phí nhập hàng và tùy chọn hiển thị", requirements: ["1. Thiết lập hệ thống để quản lý thêm 'Chi phí vận chuyển' vào giá vốn sản phẩm.", "2. Sao chép phiếu nhập ở Bài tập 1 thành một phiếu mới, sau đó bổ sung Chi phí vận chuyển là 200,000đ (do NCC thu).", "3. Tùy chỉnh màn hình nhập hàng để ẩn cột 'Ảnh hàng hóa' và hiện cột 'Giá vốn'."], instructions: ["1. Vào Thiết lập -> Hàng hóa -> Bật xanh 'Quản lý chi phí nhập hàng' và tạo loại chi phí 'Vận chuyển'.", "2. Quay lại menu Nhập hàng, chọn phiếu đã tạo ở Bài 1 và nhấn 'Sao chép'.", "3. Tìm mục 'Chi phí nhập hàng', chọn 'Vận chuyển' và nhập số tiền 200,000đ.", "4. Nhấn vào biểu tượng 'Con mắt' (Tùy chọn hiển thị) để tắt 'Ảnh hàng hóa'.", "5. Nhấn Hoàn thành cho phiếu sao chép này."], confirm: "Chụp ảnh màn hình danh sách phiếu nhập, hiển thị cột Chi phí nhập hàng và giao diện đã ẩn ảnh sản phẩm." },
+          { title: "Bài tập 3: Thực hiện trả hàng nhập và kiểm tra lịch sử", requirements: ["1. Phát hiện 05 sản phẩm 'Áo sơ mi nam Oxford' trong lô hàng ở Bài tập 1 bị lỗi đường chỉ, thực hiện trả lại hàng cho 'Tổng kho Thời trang An Đông'.", "2. Kiểm tra lại lịch sử thanh toán của phiếu nhập gốc để xem biến động công nợ sau khi trả hàng."], instructions: ["1. Vào danh sách Nhập hàng, tìm và mở chi tiết phiếu nhập ở Bài tập 1.", "2. Nhấn nút 'Trả hàng nhập'.", "3. Nhập số lượng 5 vào dòng 'Áo sơ mi nam Oxford'.", "4. Nhấn Hoàn thành để hệ thống tự trừ công nợ và hoàn kho.", "5. Quay lại phiếu nhập gốc, chọn tab 'Lịch sử thanh toán' để xem các chứng từ liên quan."], confirm: "Chụp ảnh màn hình Phiếu trả hàng nhập với trạng thái Đã hoàn thành." },
+          { title: "Bài tập 4: In tem mã vạch và xuất file đối soát", requirements: ["1. Thực hiện in tem mã vạch cho toàn bộ số lượng 'Quần Tây Âu Slimfit' vừa nhập để dán lên sản phẩm trước khi đưa ra quầy kệ.", "2. Xuất file Excel chi tiết phiếu nhập ở Bài tập 1 để gửi cho bộ phận kế toán kho."], instructions: ["1. Trong danh sách Nhập hàng, chọn phiếu nhập ở Bài tập 1.", "2. Nhấn nút 'In tem mã'. Hệ thống sẽ tự liệt kê danh sách hàng và số lượng tương ứng trong phiếu.", "3. Chọn khổ giấy in phù hợp và nhấn In.", "4. Quay lại chi tiết phiếu, nhấn biểu tượng 3 chấm (...) và chọn 'Xuất file'."], confirm: "Chụp ảnh màn hình bản xem trước khi In tem mã vạch." },
+          { title: "Bài tập 5: Dọn dẹp dữ liệu (Thực hành hủy phiếu)", requirements: ["1. Thực hiện hủy vĩnh viễn phiếu nhập có chứa 'Sản phẩm Test 01' đã tạo ở Bài tập 1 (phiếu nháp hoặc phiếu sai) để làm sạch dữ liệu báo cáo."], instructions: ["1. Tìm phiếu nhập có chứa sản phẩm 'Sản phẩm Test 01' trong danh sách.", "2. Nhấn vào mã phiếu để xem chi tiết.", "3. Nhấn nút 'Hủy'.", "4. Chọn 'Đồng ý' khi hệ thống yêu cầu xác nhận."], confirm: "Chụp ảnh màn hình danh sách phiếu nhập với phiếu vừa chọn hiển thị trạng thái 'Đã hủy'." },
+          { title: "Nhà cung cấp", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới và phân loại Nhà cung cấp", requirements: ["1. Tạo một Nhóm nhà cung cấp mới có tên là 'Nhóm Hàng May Mặc'.", "2. Thêm mới nhà cung cấp 'Xưởng may mặc Hữu Nghị' (SĐT: 0912345678, Địa chỉ: Quận Tân Bình, TP.HCM) và đưa vào nhóm vừa tạo.", "3. Tạo thêm một nhà cung cấp mồi tên là 'NCC Test Hệ Thống' để dành cho bài tập xóa dữ liệu."], instructions: ["1. Tại màn hình Quản lý, chọn menu Mua hàng -> Nhà cung cấp.", "2. Tại cột bên trái mục Nhóm nhà cung cấp, nhấn dấu + (Tạo mới) để thêm nhóm 'Nhóm Hàng May Mặc'.", "3. Nhấn nút + Nhà cung cấp.", "4. Nhập Tên, Số điện thoại, Địa chỉ và chọn đúng Nhóm vừa tạo.", "5. Nhấn Lưu. Lặp lại thao tác để tạo 'NCC Test Hệ Thống'."], confirm: "Chụp ảnh màn hình danh sách Nhà cung cấp, hiển thị rõ cột Nhóm và Nhà cung cấp vừa tạo." },
+          { title: "Bài tập 2: Cập nhật thông tin và theo dõi lịch sử giao dịch", requirements: ["1. Nhà cung cấp 'Tổng kho Thời trang An Đông' (đã tạo ở bài trước) thay đổi địa chỉ sang 'Số 10 Hùng Vương, Quận 5'. Hãy cập nhật thông tin này.", "2. Kiểm tra lại lịch sử nhập hàng để xác nhận các phiếu nhập từ bài thực hành trước đã được ghi nhận đúng."], instructions: ["1. Tại màn hình Nhà cung cấp, tìm và chọn 'Tổng kho Thời trang An Đông'.", "2. Nhấn nút Chỉnh sửa.", "3. Thay đổi thông tin tại ô Địa chỉ và nhấn Lưu.", "4. Nhấn vào tab Lịch sử nhập/trả hàng để xem danh sách các phiếu nhập đã thực hiện."], confirm: "Chụp ảnh màn hình tab Lịch sử nhập/trả hàng của nhà cung cấp An Đông." },
+          { title: "Bài tập 3: Thanh toán công nợ và chiết khấu thanh toán", requirements: ["1. Thực hiện trả nợ cho 'Tổng kho Thời trang An Đông' số tiền 2,000,000đ bằng hình thức Chuyển khoản.", "2. Do thanh toán sớm, bạn được NCC chiết khấu thêm 100,000đ. Hãy ghi nhận khoản chiết khấu này để giảm nợ."], instructions: ["1. Trong chi tiết nhà cung cấp An Đông, chọn tab Công nợ.", "2. Nhấn nút Thanh toán. Nhập số tiền 2,000,000, chọn phương thức Chuyển khoản và nhấn Tạo phiếu chi.", "3. Tiếp tục nhấn nút Chiết khấu thanh toán.", "4. Nhập số tiền 100,000, chọn 'Phân bổ vào phiếu nhập hàng' và nhấn Tạo phiếu."], confirm: "Chụp ảnh màn hình tab Công nợ sau khi đã thực hiện thanh toán và chiết khấu, hiển thị giá trị Nợ cần trả đã giảm xuống." },
+          { title: "Bài tập 4: Điều chỉnh công nợ thủ công", requirements: ["1. Giả định có sai lệch nhỏ 5,000đ trong quá trình đối soát với 'Xưởng may mặc Hữu Nghị'. Hãy thực hiện điều chỉnh tăng nợ thêm 5,000đ mà không tạo phiếu nhập hàng."], instructions: ["1. Tìm và chọn nhà cung cấp 'Xưởng may mặc Hữu Nghị'.", "2. Vào tab Công nợ, nhấn nút Điều chỉnh.", "3. Tại ô 'Giá trị nợ điều chỉnh', nhập số tiền nợ thực tế sau khi đã cộng thêm 5,000đ.", "4. Nhập mô tả: 'Điều chỉnh sai lệch đối soát' và nhấn Chỉnh sửa."], confirm: "Chụp ảnh màn hình Phiếu điều chỉnh công nợ trong tab Công nợ." },
+          { title: "Bài tập 5: Dọn dẹp danh sách (Ngừng hoạt động & Xóa)", requirements: ["1. Thực hiện Xóa vĩnh viễn nhà cung cấp 'NCC Test Hệ Thống' đã tạo ở Bài 1.", "2. Chuyển trạng thái nhà cung cấp 'Xưởng may mặc Hữu Nghị' sang 'Ngừng hoạt động' (giả định tạm dừng hợp tác)."], instructions: ["1. Tìm 'NCC Test Hệ Thống', nhấn vào tên để xem chi tiết, chọn nút Xóa và xác nhận Đồng ý.", "2. Tìm 'Xưởng may mặc Hữu Nghị', nhấn nút Ngừng hoạt động và xác nhận Đồng ý.", "3. Kiểm tra lại bằng cách lọc danh sách 'Ngừng hoạt động' để tìm lại NCC này."], confirm: "Chụp ảnh màn hình bộ lọc Trạng thái: 'Ngừng hoạt động' có hiển thị Xưởng may mặc Hữu Nghị." },
+          { title: "Thiết lập giá", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo mới bảng giá theo chính sách", requirements: ["1. Giả định bạn đã có 2 sản phẩm trên hệ thống: 'Nước giặt OMO 3kg' (Giá chung: 150,000đ, Giá vốn: 120,000đ) và 'Nước xả Downy 2L' (Giá chung: 120,000đ, Giá vốn: 90,000đ).", "2. Tạo một bảng giá mới có tên 'Bảng giá Sỉ Đại Lý' áp dụng trên toàn hệ thống với trạng thái Đang áp dụng.", "3. Tạo thêm một bảng giá mồi có tên 'Bảng giá Test 01'."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Thiết lập giá.", "2. Nhấn vào nút + Tạo mới.", "3. Tại tab Thông tin, nhập Tên bảng giá là 'Bảng giá Sỉ Đại Lý'.", "4. Đảm bảo trạng thái đang chọn là 'Áp dụng' và nhấn Lưu.", "5. Lặp lại các bước 2, 3, 4 để tạo 'Bảng giá Test 01'."], confirm: "Chụp ảnh màn hình danh sách các bảng giá vừa được tạo thành công ở cột bên trái." },
+          { title: "Bài tập 2: Thêm hàng hóa và thiết lập công thức giá hàng loạt", requirements: ["1. Thêm 2 mặt hàng 'Nước giặt OMO 3kg' và 'Nước xả Downy 2L' vào 'Bảng giá Sỉ Đại Lý'.", "2. Thiết lập mức giá sỉ tự động thấp hơn 10% so với giá bán lẻ thông thường (Bảng giá chung) và làm tròn đến hàng nghìn."], instructions: ["1. Nhấn chọn 'Bảng giá Sỉ Đại Lý' để mở giao diện chi tiết.", "2. Tại ô tìm kiếm, gõ tên để thêm lần lượt 'Nước giặt OMO 3kg' và 'Nước xả Downy 2L' vào danh sách.", "3. Nhấn trực tiếp vào ô giá của sản phẩm Nước giặt OMO để mở pop-up Thiết lập công thức.", "4. Tại mục Tính giá dựa trên, chọn 'Bảng giá chung', chọn phép tính trừ (-) và điền '10%'.", "5. Tại mục Làm tròn, chọn làm tròn đến 1.000.", "6. Tích chọn 'Áp dụng công thức này cho tất cả hàng hóa trong Bảng giá', sau đó nhấn Xong -> Đồng ý."], confirm: "Chụp ảnh màn hình chi tiết Bảng giá Sỉ Đại Lý, hiển thị rõ cột Giá mới đã được tự động giảm 10%." },
+          { title: "Bài tập 3: Kiểm soát lợi nhuận (So sánh giá bán và giá vốn)", requirements: ["1. Sau khi giảm 10%, bạn cần kiểm tra xem trong 'Bảng giá Sỉ Đại Lý' có mặt hàng nào bị giảm giá xuống thấp hơn Giá vốn hay không, nhằm tránh rủi ro bán lỗ."], instructions: ["1. Đảm bảo bạn đang đứng ở màn hình chi tiết của 'Bảng giá Sỉ Đại Lý'.", "2. Ở thanh công cụ bên trái, tìm đến mục bộ lọc 'Giá bán'.", "3. Chọn toán tử so sánh là 'Nhỏ hơn' (<).", "4. Tại ô chọn loại giá đối chiếu, chọn 'Giá vốn'.", "5. Xem kết quả hệ thống lọc ra (Nếu danh sách trống, tức là giá sỉ vẫn đang cao hơn giá vốn, đảm bảo có lãi)."], confirm: "Chụp ảnh màn hình kết quả sau khi áp dụng bộ lọc Giá bán < Giá vốn." },
+          { title: "Bài tập 4: So sánh nhiều bảng giá và xuất dữ liệu", requirements: ["1. Thực hiện xem đối chiếu trực quan 2 mức giá: Bảng giá chung và Bảng giá Sỉ Đại Lý trên cùng một màn hình.", "2. Xuất file Excel dữ liệu bảng giá sỉ để gửi cho đối tác/đại lý."], instructions: ["1. Tại màn hình Thiết lập giá, nhìn lên phía trên danh sách hàng hóa, nhấn vào ô 'Chọn bảng giá'.", "2. Tích chọn vào 2 ô: 'Bảng giá chung' và 'Bảng giá Sỉ Đại Lý'.", "3. Quan sát hệ thống hiển thị song song 2 cột giá cho từng sản phẩm.", "4. Sau đó, nhấn vào nút 'Xuất file' góc trên bên phải để tải dữ liệu về máy tính."], confirm: "Chụp ảnh màn hình giao diện hệ thống đang hiển thị song song 2 cột giá của 2 bảng giá khác nhau." },
+          { title: "Bài tập 5: Dọn dẹp dữ liệu (Xóa bảng giá)", requirements: ["1. Thực hiện xóa vĩnh viễn 'Bảng giá Test 01' đã tạo ở Bài 1 để giữ cho danh sách bảng giá của cửa hàng được gọn gàng."], instructions: ["1. Tại cột danh sách bảng giá bên trái, tìm đến 'Bảng giá Test 01'.", "2. Đưa chuột (hoặc nhấn) vào biểu tượng cây bút (Chỉnh sửa) bên cạnh tên bảng giá đó.", "3. Trong cửa sổ hiện ra, nhấn vào nút 'Xóa' ở góc dưới.", "4. Chọn 'Đồng ý' để xác nhận xóa vĩnh viễn."], confirm: "Chụp ảnh màn hình cột danh sách bảng giá bên trái sau khi đã xóa thành công." },
+          { title: "Kiểm kho", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo phiếu kiểm kho (Lưu tạm) và tạo dữ liệu mồi", requirements: ["1. Tạo một phiếu kiểm kho cho Khu vực kệ hàng A: 'Nước giặt OMO 3kg' (Thực tế: 45) và 'Nước xả Downy 2L' (Thực tế: 30). Chỉ Lưu tạm.", "2. Tạo một phiếu kiểm kho mồi chứa 'Sản phẩm Test 01' (Thực tế: 10). Nhấn Hoàn thành để cân bằng kho ngay."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Kiểm kho.", "2. Nhấn vào nút + Kiểm kho.", "3. Tại ô tìm kiếm, thêm lần lượt 'Nước giặt OMO 3kg' và 'Nước xả Downy 2L'.", "4. Nhập số lượng đếm được vào cột Thực tế (OMO: 45, Downy: 30). Nhấn Lưu tạm.", "5. Tiếp tục nhấn + Kiểm kho để tạo phiếu mới, thêm 'Sản phẩm Test 01', nhập số lượng thực tế là 10.", "6. Nhấn nút Hoàn thành."], confirm: "Chụp ảnh màn hình danh sách phiếu kiểm kho hiển thị 1 phiếu trạng thái 'Phiếu tạm' và 1 phiếu trạng thái 'Đã cân bằng kho'." },
+          { title: "Bài tập 2: Tạo phiếu mới và thực hiện gộp phiếu", requirements: ["1. Tạo thêm 1 phiếu kiểm kho Lưu tạm cho Khu vực kệ hàng B: 'Áo sơ mi nam Oxford' (Thực tế: 20).", "2. Thực hiện gộp phiếu kiểm kho của Khu vực A và Khu vực B thành một phiếu kiểm kho tổng hợp duy nhất."], instructions: ["1. Nhấn + Kiểm kho để tạo phiếu cho khu vực B.", "2. Thêm 'Áo sơ mi nam Oxford', nhập cột Thực tế là 20 và nhấn Lưu tạm.", "3. Quay ra màn hình danh sách phiếu Kiểm kho.", "4. Tích chọn vào ô vuông đầu dòng của 2 phiếu ở trạng thái 'Phiếu tạm' (Khu vực A và B).", "5. Nhấn nút Gộp phiếu vừa xuất hiện ở thanh menu nằm ngang phía trên danh sách.", "6. Chọn Đồng ý để xác nhận."], confirm: "Chụp ảnh màn hình chi tiết phiếu kiểm kho tổng sau khi đã gộp, hiển thị đủ 3 mặt hàng OMO, Downy và Áo sơ mi." },
+          { title: "Bài tập 3: Chốt cân bằng kho và xuất file báo cáo", requirements: ["1. Mở phiếu kiểm kho tổng hợp vừa gộp để kiểm tra lại số liệu chênh lệch.", "2. Thực hiện chốt số liệu để hệ thống tự động điều chỉnh Cân bằng kho cho các sản phẩm này.", "3. Xuất file Excel chi tiết của phiếu này để gửi báo cáo cho quản lý cửa hàng."], instructions: ["1. Tại danh sách phiếu kiểm kho, nhấn vào mã phiếu của phiếu tổng hợp đang ở trạng thái 'Phiếu tạm'.", "2. Kiểm tra lại thông tin số lượng tại các cột Tồn kho, Thực tế và Chênh lệch.", "3. Nhấn nút Hoàn thành. Hệ thống sẽ tự động cập nhật lại số lượng tồn kho.", "4. Tại giao diện chi tiết phiếu vừa cân bằng xong, nhấn nút Xuất file (hoặc biểu tượng 3 chấm chọn Xuất file) để tải dữ liệu về máy."], confirm: "Chụp ảnh màn hình phiếu kiểm kho tổng hợp sau khi đã chuyển sang trạng thái 'Đã cân bằng kho'." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy phiếu kiểm kho)", requirements: ["1. Do có sai sót trong quá trình kiểm hàng nháp, hãy tìm lại phiếu kiểm kho của 'Sản phẩm Test 01'.", "2. Thực hiện Hủy phiếu kiểm kho này để khôi phục lại số lượng tồn kho ban đầu của sản phẩm mồi."], instructions: ["1. Tại màn hình danh sách Kiểm kho, sử dụng ô Tìm kiếm để tìm phiếu có chứa 'Sản phẩm Test 01'.", "2. Nhấn vào mã phiếu để xem chi tiết.", "3. Nhấn nút Hủy bỏ.", "4. Chọn Đồng ý để xác nhận. Số lượng tồn kho của mặt hàng này sẽ được hệ thống hoàn trả lại."], confirm: "Chụp ảnh màn hình hiển thị phiếu kiểm kho chứa 'Sản phẩm Test 01' đang nằm ở trạng thái 'Đã hủy'." }
+        ]
       },
       {
-        title: "Bài tập 3: Cập nhật thông tin và sao chép hàng hóa",
-        requirements: [
-          "1. Cập nhật giá bán của 'Áo sơ mi nam lụa cao cấp' từ 350.000đ lên 399.000đ.",
-          "2. Dùng tính năng Sao chép để tạo nhanh một sản phẩm mới dựa trên áo sơ mi lụa, đổi tên thành 'Áo sơ mi nam lụa cao cấp (Màu Đen)', tồn kho ban đầu là 30."
-        ],
-        instructions: [
-          "1. Tại Danh sách hàng hóa, tìm kiếm sản phẩm 'Áo sơ mi nam lụa cao cấp', nhấn nút Chỉnh sửa (biểu tượng cây bút).",
-          "2. Đổi Giá bán thành 399.000 và nhấn Lưu.",
-          "3. Tìm lại sản phẩm 'Áo sơ mi nam lụa cao cấp' vừa đổi giá, nhấn vào nút Sao chép (biểu tượng 2 tờ giấy) ở cuối dòng.",
-          "4. Hệ thống mở form mới, bạn sửa Tên hàng thành 'Áo sơ mi nam lụa cao cấp (Màu Đen)', xóa Mã hàng cũ để hệ thống tự sinh mã mới, nhập Tồn kho: 30 và nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình cho thấy sản phẩm màu đen mới được tạo có giá 399.000đ."
+        id: "session_3",
+        title: "Buổi 3: Giao dịch & Quản lý Khách hàng",
+        desc: "Thực hành Đặt hàng, Bán hàng, thanh toán QR, điểm tích lũy và thiết lập cấp độ VIP Khách hàng.",
+        exercises: [
+          { title: "Đặt hàng", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo mới Đơn đặt hàng (Pre-order) và dữ liệu mồi", requirements: ["1. Tạo một đơn đặt hàng cho khách hàng 'Chị Lan Phương' mua 5 'Áo sơ mi nam Oxford' với thời gian giao hàng dự kiến là ngày mai. Khách thực hiện đặt cọc trước 500,000đ.", "2. Tạo thêm một đơn đặt hàng nháp chứa mặt hàng 'Sản phẩm Test 01' (không cần thông tin khách hàng) để làm dữ liệu mồi."], instructions: ["1. Trên màn hình Bán hàng, nhấn vào biểu tượng mũi tên cạnh tab Hóa đơn và chọn 'Thêm mới đặt hàng'.", "2. Tìm và chọn sản phẩm 'Áo sơ mi nam Oxford', điền số lượng là 5.", "3. Tại ô Tìm khách hàng (F4), nhấn dấu '+' để thêm mới khách hàng 'Chị Lan Phương'.", "4. Tại ô Khách thanh toán, nhập số tiền 500,000 để ghi nhận cọc. Sau đó chọn Thời gian giao hàng dự kiến là ngày mai.", "5. Nhấn nút Đặt hàng (F9) để lưu phiếu.", "6. Lặp lại thao tác mở tab Đặt hàng mới, thêm 'Sản phẩm Test 01' và nhấn Đặt hàng."], confirm: "Chụp ảnh màn hình danh sách phiếu Đặt hàng (bên màn hình Quản lý) hiển thị 2 phiếu vừa tạo." },
+          { title: "Bài tập 2: Tạo thêm đơn và thực hiện gộp phiếu đặt hàng", requirements: ["1. Khách hàng 'Chị Lan Phương' muốn mua thêm 2 'Quần Tây Âu Slimfit' và yêu cầu giao cùng đợt. Hãy tạo một đơn đặt hàng thứ hai (không cần đặt cọc thêm).", "2. Thực hiện thao tác gộp 2 đơn đặt hàng của 'Chị Lan Phương' thành một đơn tổng hợp duy nhất."], instructions: ["1. Trên màn hình Bán hàng, tiếp tục mở một tab 'Thêm mới đặt hàng' khác.", "2. Chọn sản phẩm 'Quần Tây Âu Slimfit' với số lượng là 2.", "3. Tại ô khách hàng, tìm và chọn đúng tên 'Chị Lan Phương' rồi nhấn Đặt hàng (F9).", "4. Chuyển sang màn hình Quản lý, vào menu Giao dịch -> Đặt hàng.", "5. Tích chọn vào ô vuông đầu dòng của 2 phiếu đặt hàng của 'Chị Lan Phương'.", "6. Nhấn nút Gộp đơn vừa xuất hiện -> Chọn Đồng ý."], confirm: "Chụp ảnh màn hình chi tiết phiếu đặt hàng tổng hợp sau khi gộp, hiển thị đầy đủ cả Áo sơ mi và Quần Tây Âu." },
+          { title: "Bài tập 3: Xử lý đơn đặt hàng (Chuyển thành hóa đơn)", requirements: ["1. Xử lý phiếu đặt hàng gộp của 'Chị Lan Phương' thành Hóa đơn bán hàng.", "2. Thu nốt số tiền còn lại của khách sau khi đã trừ đi 500,000đ tiền cọc ban đầu."], instructions: ["1. Tại danh sách Đặt hàng trên màn hình Quản lý, tìm và mở chi tiết phiếu đặt hàng tổng hợp của 'Chị Lan Phương'.", "2. Nhấn nút 'Tạo hóa đơn' (hoặc Xử lý đặt hàng).", "3. Kiểm tra lại danh sách hàng hóa và xác nhận số tiền khách đã đặt cọc được hệ thống tự động trừ đi.", "4. Nhập số tiền khách thanh toán nốt vào ô Khách thanh toán.", "5. Nhấn nút Thanh toán để xuất hóa đơn và kết thúc giao dịch."], confirm: "Chụp ảnh màn hình Hóa đơn bán hàng vừa được tạo thành công với trạng thái 'Hoàn thành'." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy phiếu đặt hàng)", requirements: ["1. Thực hiện Hủy bỏ phiếu đặt hàng nháp chứa 'Sản phẩm Test 01' đã tạo ở Bài tập 1 để làm sạch dữ liệu hệ thống."], instructions: ["1. Tại màn hình Quản lý, vào danh sách Đặt hàng.", "2. Sử dụng ô tìm kiếm để tìm phiếu đặt hàng có chứa 'Sản phẩm Test 01'.", "3. Nhấn vào mã phiếu để mở chi tiết.", "4. Nhấn nút Hủy bỏ.", "5. Chọn Đồng ý để xác nhận."], confirm: "Chụp ảnh màn hình hiển thị phiếu đặt hàng của 'Sản phẩm Test 01' đang nằm ở trạng thái 'Đã hủy'." },
+          { title: "Bán hàng", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo hóa đơn bán hàng và áp dụng giảm giá", requirements: ["1. Tạo một hóa đơn cho khách hàng 'Anh Hoàng' mua 2 'Áo sơ mi nam Oxford' và 1 'Quần Tây Âu Slimfit'.", "2. Thực hiện giảm giá 5% trên tổng hóa đơn. Khách thanh toán bằng Tiền mặt.", "3. Tạo thêm một hóa đơn nháp chỉ chứa 'Sản phẩm Test 01' (Thanh toán tiền mặt) để làm dữ liệu mồi."], instructions: ["1. Tại màn hình Quản lý, nhấn vào nút 'Bán hàng' ở thanh menu trên cùng để mở màn hình thu ngân.", "2. Tìm và thêm 2 'Áo sơ mi nam Oxford' và 1 'Quần Tây Âu Slimfit' vào đơn hàng.", "3. Tại ô tìm kiếm khách hàng (F4), nhấn dấu + để thêm mới khách hàng 'Anh Hoàng'.", "4. Tại ô Giảm giá ở khu vực thanh toán, nhập số '5' và chọn biểu tượng '%'.", "5. Nhấn nút Thanh toán (F9) để hoàn tất.", "6. Tiếp tục tạo một hóa đơn mới, chọn 'Sản phẩm Test 01', nhấn Thanh toán ngay."], confirm: "Chụp ảnh màn hình chi tiết Hóa đơn của Anh Hoàng trên màn hình Quản lý, hiển thị rõ phần giảm giá 5%." },
+          { title: "Bài tập 2: Sao chép và chỉnh sửa hóa đơn", requirements: ["1. Sao chép hóa đơn của 'Anh Hoàng' cho một khách hàng mới nhưng yêu cầu thanh toán bằng hình thức Chuyển khoản."], instructions: ["1. Trở lại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn.", "2. Tìm và mở chi tiết hóa đơn của 'Anh Hoàng' vừa tạo ở Bài 1.", "3. Nhấn vào nút 'Sao chép' (hệ thống sẽ tự động chuyển sang màn hình Bán hàng với giỏ hàng tương tự).", "4. Tại ô khách hàng, xóa tên 'Anh Hoàng' (để thành Khách lẻ).", "5. Tại khu vực thanh toán, chọn phương thức 'Chuyển khoản'.", "6. Nhấn Thanh toán."], confirm: "Chụp ảnh màn hình chi tiết Hóa đơn mới được sao chép, hiển thị phương thức thanh toán là Chuyển khoản." },
+          { title: "Bài tập 3: Tạo mã QR thu nợ hóa đơn", requirements: ["1. Khách hàng 'Chị Lan Phương' mua thêm 3 'Áo sơ mi nam Oxford' nhưng chỉ mang theo một phần tiền mặt, phần còn lại xin ghi nợ.", "2. Thực hiện tạo hóa đơn ghi nợ, sau đó tạo mã QR thu nợ để gửi cho khách chuyển khoản phần tiền còn thiếu."], instructions: ["1. Tại màn hình Bán hàng, tạo đơn với 3 'Áo sơ mi nam Oxford', chọn khách hàng 'Chị Lan Phương'.", "2. Tại ô Khách thanh toán, nhập số tiền nhỏ hơn tổng giá trị đơn hàng (Ví dụ: 500,000đ) và nhấn Thanh toán (hệ thống tự động ghi nhận nợ).", "3. Quay lại màn hình Quản lý, vào Giao dịch -> Hóa đơn, tìm và mở hóa đơn vừa tạo.", "4. Nhấn nút 'Tạo QR'.", "5. Chọn số Tài khoản nhận, hệ thống sẽ tự động điền Số tiền thanh toán tương ứng với khoản nợ."], confirm: "Chụp ảnh màn hình popup chứa Mã QR thu nợ vừa được tạo ra." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy hóa đơn)", requirements: ["1. Tìm và Hủy bỏ hóa đơn chứa 'Sản phẩm Test 01' đã tạo ở Bài tập 1 để trả lại tồn kho."], instructions: ["1. Tại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn.", "2. Sử dụng thanh tìm kiếm để tìm hóa đơn có chứa mặt hàng 'Sản phẩm Test 01'.", "3. Nhấn vào mã hóa đơn để mở chi tiết.", "4. Nhấn nút Hủy bỏ.", "5. Chọn Đồng ý để xác nhận hủy."], confirm: "Chụp ảnh màn hình danh sách hóa đơn, hiển thị hóa đơn chứa Sản phẩm Test 01 đang ở trạng thái 'Đã hủy'." },
+          { title: "Thanh toán", isGroupHeader: true },
+          { title: "Bài tập 1: Thanh toán đa phương thức và tạo dữ liệu mồi", requirements: ["1. Khách hàng 'Anh Minh' mua 2 hộp 'Sữa bột Ensure Gold 850g' (Giá: 850,000đ/hộp, tổng 1,700,000đ).", "2. Khách yêu cầu thanh toán chia làm 2 phần: 700,000đ bằng Tiền mặt và 1,000,000đ bằng Chuyển khoản.", "3. Tạo thêm một hóa đơn nháp mua 'Sản phẩm Test 02' để dành cho bài tập hủy dữ liệu ở cuối."], instructions: ["1. Tại màn hình Bán hàng, tìm và thêm 2 'Sữa bột Ensure Gold 850g' vào đơn. Tại ô tìm kiếm khách hàng, nhấn '+' để thêm 'Anh Minh'.", "2. Tại khu vực thanh toán, nhấn vào biểu tượng 'Đa phương thức' (hình thẻ và tiền mặt).", "3. Trong cửa sổ hiện ra, nhập 700,000 vào ô Tiền mặt và 1,000,000 vào ô Chuyển khoản.", "4. Nhấn Xong, sau đó nhấn Thanh toán (F9) để hoàn tất.", "5. Mở một đơn mới, chọn 'Sản phẩm Test 02', nhấn Thanh toán ngay bằng tiền mặt."], confirm: "Chụp ảnh màn hình chi tiết Hóa đơn của Anh Minh trên màn hình Quản lý, hiển thị rõ 2 dòng phương thức thanh toán Tiền mặt và Chuyển khoản." },
+          { title: "Bài tập 2: Thanh toán bằng quét mã QR động", requirements: ["1. Khách hàng 'Chị Nga' mua 1 'Thùng sữa tươi Vinamilk' (Giá: 350,000đ).", "2. Khách muốn thanh toán toàn bộ hóa đơn bằng cách quét mã QR chuyển khoản để đúng khớp số tiền."], instructions: ["1. Tại màn hình Bán hàng, thêm 'Thùng sữa tươi Vinamilk' vào đơn và chọn tên khách hàng 'Chị Nga'.", "2. Tại khu vực thanh toán, chọn phương thức thanh toán là 'Chuyển khoản'.", "3. Hệ thống sẽ tự động sinh ra một mã QR động chứa thông tin tài khoản và đúng số tiền cần thanh toán là 350,000đ.", "4. Nhấn Thanh toán (F9) để hoàn thành giao dịch."], confirm: "Chụp ảnh màn hình Bán hàng đang hiển thị mã QR động với số tiền 350,000đ." },
+          { title: "Bài tập 3: Thiết lập và thanh toán bằng điểm tích lũy", requirements: ["1. Thiết lập tính năng Tích điểm: Tỷ lệ 100,000đ = 1 điểm; Cho phép thanh toán 1 điểm = 1,000đ.", "2. Khách hàng 'Chị Lan' mua đơn hàng 500,000đ thanh toán bằng tiền mặt để hệ thống tự động tích 5 điểm.", "3. 'Chị Lan' mua tiếp 1 'Lốc sữa chua Vinamilk' (Giá: 30,000đ) và yêu cầu dùng 5 điểm vừa có để giảm trừ thanh toán. Phần còn lại trả bằng Tiền mặt."], instructions: ["1. Tại màn hình Quản lý, vào Thiết lập -> Khách hàng -> Bật xanh 'Tích điểm'. Nhập tỷ lệ 100,000 = 1 điểm. Tích ô 'Cho phép thanh toán bằng điểm' và nhập 1 điểm = 1,000đ -> Nhấn Lưu.", "2. Sang màn hình Bán hàng, tạo hóa đơn 500,000đ cho 'Chị Lan', nhấn Thanh toán (Tiền mặt) để tích điểm.", "3. Tạo tiếp hóa đơn mới, thêm 'Lốc sữa chua Vinamilk' và chọn đúng khách hàng 'Chị Lan'.", "4. Bật công tắc màu xanh ở mục 'Điểm'. Hệ thống tự quy đổi 5 điểm thành 5,000đ để giảm trừ.", "5. Số tiền 25,000đ còn lại hệ thống tự điền vào Tiền mặt. Nhấn Thanh toán (F9) để kết thúc."], confirm: "Chụp ảnh màn hình Bán hàng ở hóa đơn thứ 2 của Chị Lan, hiển thị mục Điểm đã được bật xanh và tự động quy đổi thành tiền giảm trừ." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy hóa đơn)", requirements: ["1. Tìm và hủy bỏ hóa đơn nháp chứa 'Sản phẩm Test 02' đã tạo ở Bài tập 1 để làm sạch dữ liệu."], instructions: ["1. Quay trở lại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn.", "2. Sử dụng thanh tìm kiếm để lọc ra hóa đơn có chứa 'Sản phẩm Test 02'.", "3. Nhấn vào mã hóa đơn để xem chi tiết.", "4. Nhấn nút Hủy bỏ và chọn Đồng ý để xác nhận."], confirm: "Chụp ảnh màn hình danh sách hóa đơn, hiển thị hóa đơn chứa Sản phẩm Test 02 đang nằm ở trạng thái 'Đã hủy'." },
+          { title: "Thanh toán qua QR", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm tài khoản ngân hàng và tìm hiểu đăng ký dịch vụ", requirements: ["1. Thêm tài khoản ngân hàng Vietcombank (STK: 0123456789, Tên chủ TK: NGUYEN VAN A) vào hệ thống để chuẩn bị nhận tiền chuyển khoản từ khách.", "2. Truy cập vào giao diện đăng ký dịch vụ thông báo thanh toán QR nâng cao cho tài khoản Vietcombank (Chỉ thao tác mở màn hình, KHÔNG thực hiện đăng ký thật).", "3. Tạo thêm một tài khoản ngân hàng mồi có tên 'Ngân hàng Test' (STK: 111111)."], instructions: ["1. Tại màn hình Bán hàng, chọn phương thức thanh toán là Chuyển khoản, sau đó nhấn vào nút 'Thêm tài khoản'.", "2. Chọn ngân hàng Vietcombank, điền số tài khoản 0123456789, tên NGUYEN VAN A và nhấn Lưu.", "3. Lặp lại thao tác để tạo 'Ngân hàng Test' với số tài khoản 111111.", "4. Tại màn hình Quản lý, chọn menu 'Thanh toán' ở cột bên trái.", "5. Tìm thẻ ngân hàng Vietcombank vừa thêm, nhấn 'Đăng ký'. Dừng lại ở bước hệ thống hiển thị cửa sổ yêu cầu xác thực hoặc điền thông tin."], confirm: "Chụp ảnh màn hình cửa sổ Đăng ký dịch vụ của Vietcombank để chứng minh đã biết cách truy cập vào tính năng này." },
+          { title: "Bài tập 2: Bán hàng và tạo mã QR động", requirements: ["1. Khách hàng 'Chị Mai' mua 1 'Sữa rửa mặt Cetaphil' (Giá: 300,000đ) và 1 'Nước tẩy trang Bioderma' (Giá: 400,000đ). Tổng hóa đơn là 700,000đ.", "2. Khách yêu cầu thanh toán toàn bộ hóa đơn bằng cách quét mã QR.", "3. Tạo thêm một hóa đơn nháp mua 'Sản phẩm Test 03' (Thanh toán bằng Tiền mặt) để làm dữ liệu mồi."], instructions: ["1. Tại màn hình Bán hàng, tìm và thêm 'Sữa rửa mặt Cetaphil' và 'Nước tẩy trang Bioderma' vào đơn.", "2. Tại ô tìm kiếm khách hàng, nhấn dấu '+' để thêm khách hàng 'Chị Mai'.", "3. Tại khu vực thanh toán, chọn phương thức 'Chuyển khoản'.", "4. Chọn đúng tài khoản Vietcombank đã thiết lập ở Bài 1. Hệ thống sẽ sinh ra một mã QR động.", "5. Nhấn 'Hiện mã QR' để phóng to cho khách quét. Chờ thông báo thành công (giả định) rồi nhấn Thanh toán (F9).", "6. Mở một hóa đơn mới, chọn 'Sản phẩm Test 03', chọn phương thức Tiền mặt và nhấn Thanh toán ngay."], confirm: "Chụp ảnh màn hình Bán hàng đang hiển thị mã QR động đã được phóng to, bao gồm đầy đủ số tiền 700,000đ." },
+          { title: "Bài tập 3: Tìm kiếm tài liệu hướng dẫn liên kết ngân hàng", requirements: ["1. Tìm bài viết Hướng dẫn sử dụng chi tiết về cách liên kết tính năng thanh toán QR nâng cao với ngân hàng Sacombank trên trang chủ KiotViet."], instructions: ["1. Mở thẻ trình duyệt mới và truy cập vào website chính thức: kiotviet.vn.", "2. Tìm và nhấn vào mục 'Hỗ trợ' trên thanh menu ở đầu trang.", "3. Tại thanh tìm kiếm của trang Hỗ trợ, nhập từ khóa 'Sacombank' và nhấn phím Enter.", "4. Nhấp vào bài viết hướng dẫn liên kết thanh toán QR với Sacombank trong danh sách kết quả để xem nội dung."], confirm: "Chụp ảnh màn hình giao diện nội dung bài viết Hướng dẫn sử dụng liên kết ngân hàng Sacombank trên trang Hỗ trợ." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác", requirements: ["1. Tìm và hủy bỏ hóa đơn nháp chứa 'Sản phẩm Test 03' để hoàn lại tồn kho.", "2. Xóa bỏ tài khoản 'Ngân hàng Test' đã tạo ở Bài tập 1 để làm sạch danh sách sổ quỹ."], instructions: ["1. Tại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn. Tìm hóa đơn chứa 'Sản phẩm Test 03', mở chi tiết, nhấn Hủy bỏ và chọn Đồng ý.", "2. Vào menu Sổ quỹ.", "3. Tìm đến tài khoản 'Ngân hàng Test', chọn thao tác Xóa (hoặc Ngừng hoạt động).", "4. Chọn Đồng ý để xác nhận dọn dẹp dữ liệu."], confirm: "Chụp ảnh màn hình danh sách Hóa đơn hiển thị phiếu của Sản phẩm Test 03 ở trạng thái 'Đã hủy'." },
+          { title: "Khách hàng", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo nhóm Khách hàng VIP (Có ràng buộc điều kiện tự động)", requirements: ["1. Tạo nhóm khách hàng 'Nhóm VIP' với ưu đãi tự động giảm giá 5% cho tất cả các hóa đơn mua hàng.", "2. Thiết lập điều kiện nâng cao: Bất kỳ khách hàng nào có 'Tổng bán (trừ trả hàng)' lớn hơn hoặc bằng 3,000,000đ sẽ được hệ thống tự động thêm vào 'Nhóm VIP'.", "3. Tạo sẵn một khách hàng nháp tên 'Khách hàng Test 01' (Số điện thoại: 0999888777)."], instructions: ["1. Tại màn hình Quản lý, vào menu Khách hàng -> chọn Khách hàng.", "2. Ở cột bên trái phần Nhóm khách hàng, nhấn nút dấu '+' (Tạo mới).", "3. Tại tab Thông tin, nhập Tên nhóm là 'Nhóm VIP' và điền Giảm giá là '5%'.", "4. Chuyển sang tab 'Thiết lập nâng cao', nhấn chọn dòng '+ Thêm điều kiện'.", "5. Chọn tiêu chí 'Tổng bán (trừ trả hàng)', chọn toán tử lớn hơn hoặc bằng (>=) và nhập số tiền 3,000,000.", "6. Tích chọn 'Cập nhật lại danh sách theo điều kiện' và tích chọn ô 'Hệ thống thực hiện tự động'. Sau đó nhấn Lưu.", "7. Nhấn nút '+ Khách hàng' ở góc trên bên phải màn hình, điền thông tin 'Khách hàng Test 01' rồi nhấn Lưu."], confirm: "Chụp ảnh màn hình bảng Thiết lập nâng cao của Nhóm VIP, hiển thị rõ điều kiện >= 3,000,000 và các ô tự động đã được tích chọn." },
+          { title: "Bài tập 2: Kích hoạt điều kiện và kiểm tra quyền lợi Nhóm VIP", requirements: ["1. Bán một đơn hàng trị giá 5,000,000đ cho khách hàng mới tên 'Quốc Quý' để khách hàng này thỏa mãn điều kiện và được tự động đưa vào nhóm VIP.", "2. Bán tiếp một hóa đơn thứ 2 cho 'Quốc Quý' để kiểm chứng xem hệ thống có tự động áp dụng mức giảm giá 5% cho thành viên Nhóm VIP hay không."], instructions: ["1. Mở màn hình Bán hàng, chọn một vài sản phẩm và sửa số lượng/giá bán để tổng tiền đạt 5,000,000đ.", "2. Tại ô tìm kiếm khách hàng, nhấn dấu '+' để thêm mới khách hàng 'Quốc Quý' và nhấn Thanh toán (F9).", "3. Bắt đầu một hóa đơn mới, thêm 1 sản phẩm bất kỳ vào giỏ hàng.", "4. Tại ô tìm khách hàng, gõ và chọn lại tên 'Quốc Quý'.", "5. Quan sát ô Giảm giá ở khu vực thanh toán, hệ thống sẽ tự động hiển thị mức giảm 5%. Nhấn Thanh toán (F9) để hoàn thành."], confirm: "Chụp ảnh màn hình giao diện Bán hàng ở hóa đơn thứ 2 của Quốc Quý, hiển thị rõ khách hàng này đã được áp dụng tự động Giảm giá 5%." },
+          { title: "Bài tập 3: Thiết lập Cảnh báo Công nợ", requirements: ["1. Kích hoạt tính năng cảnh báo công nợ cho toàn hệ thống.", "2. Thiết lập hạn mức 'Số tiền nợ tối đa' là 5,000,000đ. (Chỉ bật cảnh báo, vẫn cho phép khách nợ thêm)."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> chọn Khách hàng.", "2. Tìm và bật công tắc màu xanh ở dòng 'Cảnh báo công nợ khách hàng'.", "3. Trong pop-up hiện ra, tại ô 'Số tiền nợ tối đa', nhập vào số 5,000,000.", "4. Tích chọn ô 'Cho phép khách hàng nợ thêm' và nhấn Lưu."], confirm: "Chụp ảnh màn hình giao diện Thiết lập Khách hàng đang hiển thị phần Cảnh báo công nợ đã được bật và cài mức 5,000,000đ." },
+          { title: "Bài tập 4: Phát sinh công nợ và xem lịch sử", requirements: ["1. Khách hàng 'Anh Hoàng' tới mua 20 'Áo thun Cotton' (Giả định tổng hóa đơn là 2,000,000đ). Khách yêu cầu ghi nợ toàn bộ.", "2. Kiểm tra lại tab Công nợ của khách hàng này để xác nhận hệ thống đã ghi nhận khoản nợ cần thu là 2,000,000đ."], instructions: ["1. Mở màn hình Bán hàng, chọn 'Áo thun Cotton', sửa số lượng và giá để tổng tiền là 2,000,000đ.", "2. Tại ô Tìm khách hàng, thêm mới và chọn tên 'Anh Hoàng'.", "3. Tại ô Khách thanh toán, nhập số 0. Nhấn Thanh toán (F9) để hoàn thành (Hệ thống sẽ ghi nhận nợ).", "4. Quay lại màn hình Quản lý -> Khách hàng -> Khách hàng.", "5. Tìm và nhấn vào tên 'Anh Hoàng'. Chọn tab 'Nợ cần thu từ khách'."], confirm: "Chụp ảnh màn hình tab 'Nợ cần thu từ khách' của Anh Hoàng, hiển thị rõ dòng giá trị Nợ hiện tại là 2,000,000đ." },
+          { title: "Bài tập 5: Thanh toán công nợ và Chiết khấu", requirements: ["1. Hôm sau, 'Anh Hoàng' đến cửa hàng trả nợ số tiền 1,900,000đ bằng Tiền mặt.", "2. Chủ cửa hàng quyết định giảm (chiết khấu) luôn 100,000đ tiền nợ còn lại lẻ tẻ cho khách để làm tròn công nợ về 0đ."], instructions: ["1. Vẫn ở tab 'Nợ cần thu từ khách' của 'Anh Hoàng', nhấn nút 'Thanh toán'.", "2. Tại ô Thu từ khách, nhập số tiền 1,900,000đ, chọn phương thức Tiền mặt và nhấn 'Tạo phiếu thu'.", "3. Tiếp tục nhấn nút 'Chiết khấu thanh toán' ở kế bên.", "4. Nhập số tiền 100,000đ, thêm ghi chú 'Làm tròn nợ cho khách sỉ' và nhấn 'Tạo phiếu'."], confirm: "Chụp ảnh màn hình tab Nợ cần thu từ khách của Anh Hoàng, hiển thị Nợ hiện tại đã trở về mức 0 và có các phiếu thu/chiết khấu tương ứng bên dưới." },
+          { title: "Bài tập 6: Dọn dẹp dữ liệu rác (Xóa Khách hàng)", requirements: ["1. Thực hiện thao tác dọn dẹp hệ thống: Tìm và xóa vĩnh viễn 'Khách hàng Test 01' đã tạo ở Bài tập 1."], instructions: ["1. Tại màn hình Khách hàng, sử dụng ô tìm kiếm để tìm 'Khách hàng Test 01'.", "2. Nhấn vào tên khách hàng để mở trang chi tiết.", "3. Nhấn vào nút 'Xóa' (hoặc biểu tượng 3 chấm -> Xóa).", "4. Chọn 'Đồng ý' để xác nhận việc xóa hoàn toàn khỏi hệ thống."], confirm: "Chụp ảnh màn hình danh sách Khách hàng sau khi tìm kiếm 'Khách hàng Test 01' trả về kết quả trống." }
+        ]
       },
       {
-        title: "Bài tập 4: Quản lý trạng thái và xóa dữ liệu",
-        requirements: [
-          "1. Tạm thời ngừng kinh doanh sản phẩm 'Áo sơ mi nam lụa cao cấp (Màu Đen)', sau đó mở cho phép kinh doanh trở lại.",
-          "2. Xóa vĩnh viễn 'Sản phẩm Test 01' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Tại Danh sách hàng hóa, tích chọn vào ô vuông trước 'Áo sơ mi nam lụa cao cấp (Màu Đen)'.",
-          "2. Nhấn nút Thao tác (biểu tượng 3 dấu chấm) -> Chọn Ngừng kinh doanh.",
-          "3. Để mở lại, tại bộ lọc Trạng thái bên trái, chọn 'Ngừng kinh doanh'. Tích chọn lại vào sản phẩm đó -> Nhấn Thao tác -> Chọn Cho phép kinh doanh.",
-          "4. Tìm kiếm 'Sản phẩm Test 01', tích chọn vào ô vuông trước tên sản phẩm.",
-          "5. Nhấn Thao tác -> Chọn Xóa -> Nhấn Đồng ý để xác nhận xóa vĩnh viễn."
-        ],
-        confirm: "Chụp ảnh màn hình lịch sử thao tác hoặc màn hình tìm kiếm không còn 'Sản phẩm Test 01'."
+        id: "session_4",
+        title: "Buổi 4: Mở rộng Bán hàng & Phân quyền",
+        desc: "Nghiệp vụ Trả hàng, Quản lý Nhân sự - Tính lương, Khởi tạo KiotViet Web và Sàn TMĐT.",
+        exercises: [
+          { title: "Trả hàng", isGroupHeader: true },
+          { title: "Bài tập 1: Thiết lập giới hạn thời gian trả hàng", requirements: ["1. Thiết lập chính sách chỉ cho phép khách hàng trả hàng trong vòng 3 ngày kể từ ngày mua.", "2. Cửa hàng muốn nhân viên vẫn có thể linh động xử lý trả hàng quá hạn trong các trường hợp đặc biệt (hệ thống chỉ hiển thị cảnh báo, không chặn hoàn toàn thao tác)."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> chọn Đơn hàng.", "2. Tìm đến tính năng 'Giới hạn thời gian trả hàng' và bật công tắc sang màu xanh.", "3. Tại phần 'Kể từ ngày mua, khách hàng được trả hàng trong vòng', nhập số '3' ngày.", "4. Tại mục 'Xử lý khi trả hàng quá hạn', tích chọn 'Hiển thị cảnh báo khi trả hàng' để đảm bảo tính linh hoạt cho nhân viên.", "5. Đóng cửa sổ thiết lập, hệ thống sẽ tự động lưu lại cấu hình của bạn."], confirm: "Chụp ảnh màn hình giao diện Thiết lập Đơn hàng đã bật tính năng giới hạn 3 ngày và chọn Hiển thị cảnh báo." },
+          { title: "Bài tập 2: Tạo dữ liệu mồi và Trả hàng theo hóa đơn", requirements: ["1. Bán 1 'Sản phẩm Test 04' (Thanh toán bằng Tiền mặt) để tạo một hóa đơn nháp.", "2. Khách hàng mang hóa đơn của 'Sản phẩm Test 04' quay lại trả hàng. Thực hiện thao tác 'Trả hàng theo hóa đơn' và hoàn lại tiền mặt cho khách."], instructions: ["1. Tại màn hình Bán hàng, tìm 'Sản phẩm Test 04', nhấn Thanh toán (F9) để tạo hóa đơn.", "2. Vẫn ở màn hình Bán hàng, nhấn vào biểu tượng 3 dấu gạch ngang (Tùy chọn) ở góc trên bên phải -> Chọn 'Chọn hóa đơn trả hàng'.", "3. Trong cửa sổ hiện ra, tìm hóa đơn của 'Sản phẩm Test 04' vừa tạo và nhấn nút Chọn.", "4. Tại giao diện Trả hàng, kiểm tra Số lượng trả là 1, kiểm tra số Tiền trả khách và nhấn Trả hàng (F9) để hoàn tất."], confirm: "Chụp ảnh màn hình chi tiết Phiếu trả hàng của Sản phẩm Test 04 vừa tạo trên màn hình Quản lý." },
+          { title: "Bài tập 3: Trả hàng nhanh (Không cần hóa đơn gốc)", requirements: ["1. Khách hàng mang đến 1 'Quần Jean Nam' (Giả định giá: 450,000đ) bị lỗi chỉ muốn trả lại lấy tiền mặt. Khách đã làm mất hóa đơn và không nhớ số điện thoại mua hàng.", "2. Thực hiện thao tác Trả hàng nhanh cho trường hợp này."], instructions: ["1. Tại màn hình Bán hàng, mở menu Tùy chọn (3 gạch ngang) -> Chọn 'Chọn hóa đơn trả hàng'.", "2. Tại pop-up Chọn hóa đơn trả hàng, nhấn vào nút 'Trả nhanh'.", "3. Tại ô tìm kiếm, gõ và chọn sản phẩm 'Quần Jean Nam', nhập số lượng trả là 1.", "4. Kiểm tra phần Tiền trả khách hệ thống tính toán là 450,000đ (chọn phương thức Tiền mặt) và nhấn Trả hàng (F9) để hoàn thành."], confirm: "Chụp ảnh màn hình giao diện Trả hàng hiển thị sản phẩm Quần Jean Nam và phần Tiền trả khách là 450,000đ trước khi bấm hoàn tất." },
+          { title: "Bài tập 4: Nghiệp vụ Đổi trả hàng (Trả cũ đổi mới)", requirements: ["1. Khách hàng 'Chị Lan' mang trả lại 1 'Áo sơ mi nữ' (Giá: 250,000đ) nhưng không muốn nhận lại tiền mặt mà muốn đổi sang 1 'Áo khoác gió' (Giá: 400,000đ).", "2. Thực hiện thao tác đổi trả hàng ngay trong một giao dịch (dùng Trả hàng nhanh) và thu thêm phần tiền chênh lệch của khách là 150,000đ."], instructions: ["1. Tiếp tục mở màn hình 'Trả nhanh' như đã thực hiện ở Bài tập 3.", "2. Tại phần Hàng trả lại, thêm sản phẩm 'Áo sơ mi nữ' với số lượng là 1.", "3. Tại ô tìm kiếm hàng hóa (hoặc nhấn phím F7), gõ và chọn sản phẩm khách muốn mua mới là 'Áo khoác gió'.", "4. Hệ thống sẽ tự động đối trừ. Tại ô Khách thanh toán, nhập số tiền chênh lệch 150,000đ mà khách cần bù thêm.", "5. Nhấn nút Trả hàng (F9) để hoàn tất quy trình đổi trả trong cùng một phiếu."], confirm: "Chụp ảnh màn hình giao diện Đổi trả hàng, hiển thị rõ cả dòng sản phẩm trả lại (Áo sơ mi) và dòng sản phẩm mua mới (Áo khoác) cùng phần chênh lệch." },
+          { title: "Bài tập 5: Quản lý và Hủy Phiếu trả hàng (Dọn dẹp dữ liệu)", requirements: ["1. Tìm lại phiếu trả hàng của 'Sản phẩm Test 04' đã thực hiện ở Bài tập 2.", "2. Thực hiện Hủy phiếu trả hàng này để phục hồi tồn kho và làm sạch dữ liệu hệ thống."], instructions: ["1. Tại màn hình Quản lý, vào menu Đơn hàng -> chọn Trả hàng.", "2. Tìm phiếu trả hàng có chứa mặt hàng 'Sản phẩm Test 04' và nhấn vào mã phiếu để xem chi tiết.", "3. Nhấn vào nút Hủy (hoặc Hủy bỏ).", "4. Chọn Đồng ý để xác nhận hệ thống cập nhật lại tồn kho và hủy chứng từ."], confirm: "Chụp ảnh màn hình danh sách Trả hàng, hiển thị rõ phiếu trả hàng của Sản phẩm Test 04 đang ở trạng thái 'Đã hủy'." },
+          { title: "Quản lý Người dùng", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo vai trò mới và phân quyền", requirements: ["1. Tạo một vai trò mới trên hệ thống với tên gọi là 'Nhân viên Thu ngân Ca đêm'.", "2. Thiết lập quyền hạn cho vai trò này: Chỉ được phép 'Xem hàng hóa', 'Tạo hóa đơn' và 'Thanh toán'. Không được phép xem giá vốn hay báo cáo lợi nhuận."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> chọn Cửa hàng.", "2. Ở menu bên trái, nhấn chọn Quản lý người dùng -> Quản lý vai trò.", "3. Nhấn nút '+ Tạo vai trò'.", "4. Đặt tên vai trò là 'Nhân viên Thu ngân Ca đêm'.", "5. Trong danh sách phân quyền bên dưới, tìm và đánh dấu tích vào các ô tương ứng với quyền Xem hàng hóa, Tạo hóa đơn, Thanh toán (Bỏ qua các quyền liên quan đến báo cáo, giá vốn).", "6. Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình danh sách Quản lý vai trò hiển thị vai trò 'Nhân viên Thu ngân Ca đêm' vừa được tạo." },
+          { title: "Bài tập 2: Tạo mới tài khoản người dùng và giới hạn truy cập", requirements: ["1. Cửa hàng tuyển mới nhân viên 'Lê Văn B'. Hãy tạo một tài khoản đăng nhập cho nhân viên này.", "2. Gán nhân viên Lê Văn B vào vai trò 'Nhân viên Thu ngân Ca đêm'.", "3. Thiết lập giới hạn thời gian truy cập cho tài khoản này: Chỉ được phép đăng nhập vào hệ thống trong khung giờ từ 20:00 đến 06:00 sáng hôm sau, áp dụng cho tất cả các ngày trong tuần.", "4. Tạo thêm một tài khoản mồi có tên đăng nhập là 'test_xoa'."], instructions: ["1. Tại menu Quản lý người dùng, chuyển sang tab Tài khoản người dùng.", "2. Nhấn nút '+ Tạo tài khoản'.", "3. Điền Tên hiển thị là 'Lê Văn B', đặt Tên đăng nhập và Mật khẩu theo ý muốn.", "4. Tại phần Chi nhánh & Vai trò, chọn vai trò là 'Nhân viên Thu ngân Ca đêm'.", "5. Kéo xuống phần Thời gian truy cập, chọn 'Chỉ phép truy cập trong khung giờ cố định'. Tích chọn tất cả các ngày trong tuần và thiết lập khung giờ từ 20:00 đến 06:00.", "6. Nhấn Lưu.", "7. Lặp lại thao tác tạo tài khoản để tạo 'test_xoa' (không cần thiết lập giới hạn thời gian)."], confirm: "Chụp ảnh màn hình thông tin chi tiết của tài khoản Lê Văn B, hiển thị rõ phần phân quyền vai trò và giới hạn khung giờ truy cập." },
+          { title: "Bài tập 3: Sao chép người dùng để tạo tài khoản nhanh", requirements: ["1. Cửa hàng tuyển thêm nhân viên 'Trần Thị C' làm cùng ca đêm với 'Lê Văn B'.", "2. Thay vì tạo mới từ đầu, hãy sử dụng tính năng sao chép để tạo nhanh tài khoản cho 'Trần Thị C' với toàn bộ quyền hạn và giới hạn thời gian giống hệt 'Lê Văn B'."], instructions: ["1. Tại danh sách Tài khoản người dùng, tìm và nhấn chọn vào tài khoản của 'Lê Văn B'.", "2. Nhấn nút 'Sao chép' (Thường nằm ở góc hoặc trong menu tùy chọn).", "3. Màn hình tạo mới sẽ hiện ra nhưng giữ nguyên các thiết lập phân quyền và thời gian.", "4. Đổi Tên hiển thị thành 'Trần Thị C', điền Tên đăng nhập và Mật khẩu mới cho nhân viên này.", "5. Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình danh sách người dùng hiển thị cả hai tài khoản Lê Văn B và Trần Thị C có cùng một Vai trò." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác (Ngừng hoạt động và Xóa tài khoản)", requirements: ["1. Nhân viên có tài khoản 'test_xoa' đã nghỉ việc. Hãy khóa (Ngừng hoạt động) tài khoản này để ngăn chặn truy cập.", "2. Sau khi đã xác nhận không cần giữ lại thông tin, hãy Xóa vĩnh viễn tài khoản 'test_xoa' khỏi hệ thống."], instructions: ["1. Tại danh sách Tài khoản người dùng, tìm đến tài khoản 'test_xoa'.", "2. Nhấn chọn tài khoản đó để xem chi tiết.", "3. Nhấn nút 'Ngừng hoạt động' và chọn Đồng ý.", "4. Tiếp tục nhấn nút 'Xóa' trên chính tài khoản đó (hoặc từ danh sách).", "5. Chọn 'Xóa' một lần nữa để xác nhận thao tác dọn dẹp hệ thống."], confirm: "Chụp ảnh màn hình danh sách tài khoản người dùng sau khi đã tìm kiếm 'test_xoa' và trả về kết quả trống." },
+          { title: "Quản lý Nhân viên", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo mới phòng ban và chức danh", requirements: ["1. Tạo một phòng ban mới với tên gọi 'Khối Cửa Hàng'.", "2. Tạo hai chức danh mới là 'Cửa hàng trưởng' và 'Nhân viên Bán hàng'.", "3. Tạo thêm một phòng ban mồi tên là 'Phòng Test 01'."], instructions: ["1. Tại màn hình Quản lý, chọn menu Nhân viên -> chọn Danh sách nhân viên.", "2. Tại cột bộ lọc bên trái, tìm mục 'Phòng ban', nhấn vào biểu tượng dấu '+' bên cạnh.", "3. Nhập Tên phòng ban là 'Khối Cửa Hàng' và nhấn Lưu. Lặp lại thao tác này để tạo 'Phòng Test 01'.", "4. Tương tự, tại mục 'Chức danh' ở cột bộ lọc, nhấn biểu tượng dấu '+' để thêm lần lượt 'Cửa hàng trưởng' và 'Nhân viên Bán hàng'."], confirm: "Chụp ảnh màn hình cột bộ lọc bên trái, hiển thị rõ các Phòng ban và Chức danh vừa được tạo thành công." },
+          { title: "Bài tập 2: Thêm mới nhân viên và tạo dữ liệu mồi", requirements: ["1. Thêm mới nhân viên 'Nguyễn Thị Lan' (Số điện thoại: 0988111222).", "2. Gán nhân viên Lan vào phòng ban 'Khối Cửa Hàng' với chức danh 'Nhân viên Bán hàng'.", "3. Tạo thêm một nhân viên nháp tên 'Nhân viên Test 01' (Số điện thoại: 0999000111)."], instructions: ["1. Tại màn hình Danh sách nhân viên, nhấn vào nút '+ Nhân viên' ở góc trên bên phải.", "2. Điền thông tin bắt buộc: Tên nhân viên là 'Nguyễn Thị Lan', Số điện thoại là '0988111222'.", "3. Chọn Chi nhánh làm việc hiện tại, chọn Phòng ban là 'Khối Cửa Hàng' và Chức danh là 'Nhân viên Bán hàng'.", "4. Nhấn Lưu để ghi nhận.", "5. Lặp lại các bước trên để thêm 'Nhân viên Test 01'."], confirm: "Chụp ảnh màn hình Danh sách nhân viên, hiển thị rõ tên của Nguyễn Thị Lan và Nhân viên Test 01 cùng các thông tin tương ứng." },
+          { title: "Bài tập 3: Cập nhật thông tin nhân viên", requirements: ["1. Do có thành tích xuất sắc, nhân viên 'Nguyễn Thị Lan' được thăng chức. Hãy cập nhật chức danh của nhân viên này thành 'Cửa hàng trưởng'."], instructions: ["1. Tại màn hình Danh sách nhân viên, tìm và kích chuột vào dòng chứa tên 'Nguyễn Thị Lan' để mở thông tin chi tiết.", "2. Nhấn nút 'Cập nhật'.", "3. Tại trường thông tin Chức danh, đổi từ 'Nhân viên Bán hàng' sang 'Cửa hàng trưởng'.", "4. Nhấn Lưu để ghi nhận thay đổi."], confirm: "Chụp ảnh màn hình chi tiết của nhân viên Nguyễn Thị Lan sau khi đã được cập nhật chức danh thành Cửa hàng trưởng." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác (Ngừng làm việc và Xóa)", requirements: ["1. Thao tác cho 'Nhân viên Test 01' ngừng làm việc trên hệ thống do nhân viên nháp này không còn hoạt động.", "2. Xóa vĩnh viễn 'Phòng Test 01' đã tạo ở Bài tập 1 để làm sạch danh mục phòng ban."], instructions: ["1. Tại Danh sách nhân viên, tìm và kích vào tên 'Nhân viên Test 01'.", "2. Nhấn nút 'Ngừng làm việc' và chọn Đồng ý để xác nhận.", "3. Nhìn sang cột bộ lọc bên trái, tìm mục Phòng ban và di chuột tới 'Phòng Test 01'.", "4. Kích vào biểu tượng cây bút (Chỉnh sửa) bên cạnh tên phòng ban này.", "5. Kích nút 'Xóa' và chọn Đồng ý để xóa vĩnh viễn."], confirm: "Chụp ảnh màn hình Danh sách nhân viên sau khi lọc trạng thái 'Ngừng hoạt động' hiển thị Nhân viên Test 01." },
+          { title: "Quản lý Chấm công", isGroupHeader: true },
+          { title: "Bài tập 1: Thiết lập ca làm việc và tạo dữ liệu mồi", requirements: ["1. Định nghĩa các khung giờ chuẩn cho cửa hàng bằng cách tạo 2 ca làm việc: 'Ca Sáng' (08:00 - 12:00) và 'Ca Chiều' (13:00 - 17:00).", "2. Tạo thêm một ca làm việc mồi có tên là 'Ca Test 01' (18:00 - 22:00) để dành riêng cho thao tác xóa dữ liệu."], instructions: ["1. Tại màn hình Quản lý, vào menu Nhân viên -> Thiết lập chung -> Ca làm việc.", "2. Nhấn vào nút '+ Thêm ca làm việc'.", "3. Nhập Tên ca là 'Ca Sáng', chọn Giờ làm việc từ 08:00 đến 12:00. Nhấn Lưu để hoàn tất.", "4. Lặp lại thao tác thêm ca làm việc để tạo tiếp 'Ca Chiều' và 'Ca Test 01' với thời gian tương ứng."], confirm: "Chụp ảnh màn hình danh sách Ca làm việc, hiển thị rõ 3 ca vừa được tạo thành công." },
+          { title: "Bài tập 2: Đặt lịch làm việc lặp lại", requirements: ["1. Thực hiện xếp lịch làm việc cho một nhân viên bất kỳ trong cửa hàng (Ví dụ: 'Nguyễn Thị Lan') vào 'Ca Sáng'.", "2. Thiết lập quy tắc để lịch làm việc này lặp lại hàng tuần từ Thứ 2 đến Thứ 6."], instructions: ["1. Tại màn hình Quản lý, vào menu Nhân viên -> chọn Lịch làm việc.", "2. Ở góc trên, chọn kiểu hiển thị là 'Xem theo ca'.", "3. Nhấn vào nút 'Thêm nhân viên' nằm trên dòng của 'Ca Sáng'.", "4. Tích chọn tên nhân viên (Ví dụ: Nguyễn Thị Lan).", "5. Bật công tắc xanh ở mục 'Lặp lại hàng tuần', tích chọn các ngày từ Thứ 2 đến Thứ 6 và nhấn Lưu."], confirm: "Chụp ảnh màn hình Lịch làm việc, hiển thị rõ nhân viên đã được xếp lịch trải đều vào các ngày trong tuần ở Ca Sáng." },
+          { title: "Bài tập 3: Chấm công thủ công và ghi nhận phạt vi phạm", requirements: ["1. Nhân viên ở Bài tập 2 quên chấm công và đi làm muộn 15 phút. Quản lý cần thực hiện chấm công thủ công (Đi làm) cho ca làm việc ngày hôm nay.", "2. Ghi nhận thêm lỗi vi phạm 'Đi muộn' với mức phạt 50,000đ trực tiếp vào lịch làm việc vừa chấm công để trừ vào lương cuối kỳ."], instructions: ["1. Tại màn hình Quản lý, vào menu Nhân viên -> chọn Bảng chấm công. (Chọn kiểu hiển thị Xem theo ca).", "2. Kích chuột vào ô lịch làm việc ngày hôm nay của nhân viên đó tại dòng 'Ca Sáng'.", "3. Tại mục Loại, đảm bảo đang chọn 'Đi làm'. Tích chọn vào cả 2 ô Vào và Ra.", "4. Nhập Giờ vào thực tế là '08:15' (muộn 15 phút) và Giờ ra là '12:00'.", "5. Chuyển sang tab 'Phạt vi phạm' ngay trong pop-up đó, nhấn '+ Thêm loại vi phạm'.", "6. Nhập Tên vi phạm là 'Đi muộn', Mức áp dụng là 50,000đ và nhấn Lưu.", "7. Sau đó nhấn nút 'Thêm vi phạm', chọn loại 'Đi muộn', nhập số lần vi phạm là 1 và nhấn Lưu để hoàn tất quy trình chấm công."], confirm: "Chụp ảnh màn hình chi tiết Bảng chấm công của nhân viên, hiển thị rõ giờ vào lúc 08:15 và có ghi nhận số tiền Phạt vi phạm là 50,000đ." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác (Xóa ca làm việc)", requirements: ["1. Thực hiện dọn dẹp hệ thống: Tìm và xóa vĩnh viễn 'Ca Test 01' đã tạo ở Bài tập 1 do không có nhu cầu sử dụng thực tế."], instructions: ["1. Tại màn hình Quản lý, quay lại menu Nhân viên -> Thiết lập chung -> Ca làm việc.", "2. Tìm đến dòng chứa 'Ca Test 01'.", "3. Kích chuột vào biểu tượng thùng rác (Xóa) ở bên cạnh tên ca làm việc.", "4. Chọn Đồng ý để xác nhận xóa vĩnh viễn khỏi danh sách."], confirm: "Chụp ảnh màn hình danh sách Ca làm việc sau khi đã dọn dẹp, không còn hiển thị Ca Test 01." },
+          { title: "Quản lý Hoa hồng", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới bảng hoa hồng và tạo dữ liệu mồi", requirements: ["1. Tạo một bảng hoa hồng mới có tên 'Hoa hồng Mỹ phẩm' áp dụng cho Toàn hệ thống để chuẩn bị chạy chương trình thưởng cho nhân viên.", "2. Tạo thêm một bảng hoa hồng nháp có tên 'Bảng Test 01' để dành riêng cho thao tác xóa dữ liệu ở bài tập cuối."], instructions: ["1. Tại màn hình Quản lý, chọn menu Nhân viên -> Bảng hoa hồng.", "2. Nhấn nút 'Thêm bảng' ở khu vực danh sách bên trái màn hình.", "3. Nhập Tên là 'Hoa hồng Mỹ phẩm', chọn Phạm vi áp dụng là 'Toàn hệ thống' và nhấn Lưu.", "4. Lặp lại thao tác từ bước 2 để tạo thêm 'Bảng Test 01'."], confirm: "Chụp ảnh màn hình danh sách Bảng hoa hồng ở cột bên trái, hiển thị rõ 2 bảng vừa tạo thành công." },
+          { title: "Bài tập 2: Thêm hàng hóa và thiết lập hoa hồng hàng loạt", requirements: ["1. Thêm 2 sản phẩm 'Kem chống nắng Vichy' và 'Nước tẩy trang L'Oreal' vào bảng 'Hoa hồng Mỹ phẩm'.", "2. Áp dụng mức hoa hồng hàng loạt là 5% trên doanh thu cho tất cả các sản phẩm vừa thêm vào bảng này."], instructions: ["1. Tại danh sách bên trái, nhấn chọn đúng bảng 'Hoa hồng Mỹ phẩm'.", "2. Ở màn hình bên phải, nhấn nút 'Thêm hàng hóa', gõ tìm kiếm và tích chọn 'Kem chống nắng Vichy' cùng 'Nước tẩy trang L'Oreal'.", "3. Kích chuột vào ô mức hoa hồng của một sản phẩm bất kỳ trong danh sách vừa thêm để mở pop-up thiết lập.", "4. Nhập giá trị là '5' và chọn loại đơn vị là '%'.", "5. Tích chọn vào ô 'Áp dụng cho hàng hóa, nhóm hàng trong bảng hoa hồng' và nhấn Đồng ý."], confirm: "Chụp ảnh màn hình bảng Hoa hồng Mỹ phẩm hiển thị cả 2 sản phẩm đều đã được cập nhật mức hoa hồng là 5%." },
+          { title: "Bài tập 3: Cập nhật mức hoa hồng cố định cho từng sản phẩm", requirements: ["1. Cửa hàng thay đổi chính sách thưởng: Sản phẩm 'Nước tẩy trang L'Oreal' sẽ nhận mức thưởng cố định là 10,000đ/sản phẩm.", "2. Thực hiện cập nhật lại mức hoa hồng cho riêng mặt hàng này."], instructions: ["1. Đảm bảo bạn đang mở chi tiết bảng 'Hoa hồng Mỹ phẩm'.", "2. Tìm đến dòng sản phẩm 'Nước tẩy trang L'Oreal'.", "3. Kích trực tiếp vào ô giá trị hoa hồng của sản phẩm này.", "4. Nhập số tiền là '10,000' và bấm chọn loại tính từ '%' chuyển sang 'VNĐ'.", "5. Bấm chuột ra ngoài khoảng trống (hoặc nhấn Enter) để hệ thống tự động lưu lại."], confirm: "Chụp ảnh màn hình chi tiết bảng Hoa hồng Mỹ phẩm, hiển thị sản phẩm Nước tẩy trang L'Oreal đã được đổi sang mức hoa hồng là 10,000 VNĐ." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác (Xóa bảng hoa hồng)", requirements: ["1. Thực hiện thao tác dọn dẹp hệ thống bằng cách xóa vĩnh viễn 'Bảng Test 01' do không có nhu cầu sử dụng thực tế."], instructions: ["1. Tại cột danh sách Bảng hoa hồng bên trái, tìm và nhấn chọn vào tên 'Bảng Test 01'.", "2. Nhấn vào biểu tượng chỉnh sửa (hình cây bút) nằm ngay bên cạnh tên bảng.", "3. Nhấn nút 'Xóa' ở góc dưới của cửa sổ thông tin.", "4. Chọn 'Đồng ý' để xác nhận thao tác xóa vĩnh viễn."], confirm: "Chụp ảnh màn hình danh sách Bảng hoa hồng ở cột bên trái sau khi đã làm sạch, không còn hiển thị Bảng Test 01." },
+          { title: "Quản lý Tính lương", isGroupHeader: true },
+          { title: "Bài tập 1: Thiết lập tính lương và kết nối dữ liệu nhân viên", requirements: ["1. Cài đặt quy tắc tính lương chung: Ngày bắt đầu kỳ lương là Ngày 1 hàng tháng và bật Tự động tạo bảng lương.", "2. Thiết lập lương cho nhân viên 'Nguyễn Thị Lan' (đã tạo ở chuyên đề Quản lý Nhân viên) với mức lương Cố định là 6,000,000đ/tháng.", "3. Áp dụng bảng 'Hoa hồng Mỹ phẩm' cho nhân viên này.", "4. Thiết lập khoản Giảm trừ 'Đi muộn' để hệ thống tự động trừ khoản phạt 50,000đ (đã ghi nhận ở chuyên đề Chấm công) vào lương cuối kỳ."], instructions: ["1. Tại màn hình Quản lý, vào menu Nhân viên -> Thiết lập nhân viên -> chọn tab Tính lương. Tại mục Ngày tính lương, chọn 'Ngày 1' và nhấn Lưu. Bật xanh mục 'Tự động tạo bảng lương'.", "2. Vào menu Nhân viên -> Danh sách nhân viên, tìm nhân viên 'Nguyễn Thị Lan', nhấn Cập nhật -> chuyển sang tab Thiết lập lương.", "3. Chọn loại Lương chính là 'Cố định', nhập 6,000,000.", "4. Kéo xuống mục Hoa hồng, bật công tắc xanh, chọn đúng bảng 'Hoa hồng Mỹ phẩm'.", "5. Kéo xuống mục Giảm trừ, bật công tắc xanh, chọn loại giảm trừ 'Đi muộn' (đảm bảo hệ thống sẽ lấy dữ liệu từ bảng chấm công). Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình tab Thiết lập lương của nhân viên Nguyễn Thị Lan, hiển thị rõ đã cài đặt Lương cố định, áp dụng bảng Hoa hồng Mỹ phẩm và Giảm trừ đi muộn." },
+          { title: "Bài tập 2: Tạo bảng lương, kiểm tra đối trừ và chốt lương", requirements: ["1. Tạo bảng tính lương của tháng hiện tại cho nhân viên 'Nguyễn Thị Lan'.", "2. Kiểm tra kỹ chi tiết phiếu lương để xem hệ thống đã tự động tính toán Lương chính và tự động trừ đi 50,000đ tiền phạt Đi muộn từ dữ liệu Chấm công hay chưa, sau đó thực hiện Chốt lương.", "3. Tạo thêm một bảng lương nháp của tháng trước có tên 'Bảng lương Test 01'."], instructions: ["1. Tại màn hình Quản lý, vào menu Nhân viên -> Bảng lương.", "2. Nhấn nút '+ Bảng tính lương'. Chọn Kỳ hạn trả lương của tháng hiện tại và nhấn Lưu.", "3. Trong danh sách, nhấn 'Xem bảng lương' để kiểm tra chi tiết lương của 'Nguyễn Thị Lan'.", "4. Kích vào tên Nguyễn Thị Lan để mở Phiếu lương chi tiết. Xác nhận trong phần Giảm trừ đã hiển thị số tiền phạt đi muộn (đồng bộ từ Bảng chấm công).", "5. Nhấn nút 'Chốt lương' (Bảng lương chuyển sang trạng thái Đã chốt).", "6. Quay lại danh sách Bảng lương, nhấn '+ Bảng tính lương', chọn Kỳ làm việc lùi lại tháng trước để tạo bảng nháp 'Bảng lương Test 01'."], confirm: "Chụp 2 ảnh: 1 ảnh chi tiết Phiếu lương hiển thị khoản trừ Đi muộn và 1 ảnh danh sách Bảng lương có 1 bảng 'Đã chốt lương'." },
+          { title: "Bài tập 3: Thanh toán lương cho nhân viên", requirements: ["1. Thực hiện thanh toán phần lương thực nhận của tháng này cho nhân viên 'Nguyễn Thị Lan' từ bảng lương đã chốt.", "2. Phương thức thanh toán lương là Chuyển khoản."], instructions: ["1. Tại danh sách Bảng lương, nhấn vào bảng lương của tháng hiện tại (trạng thái Đã chốt lương).", "2. Chuyển sang tab 'Phiếu lương'.", "3. Nhấn nút 'Thanh toán' nằm trên dòng tên của nhân viên 'Nguyễn Thị Lan'.", "4. Trong cửa sổ pop-up Thanh toán lương, chọn phương thức thanh toán là 'Chuyển khoản'.", "5. Kiểm tra số tiền trả và nhấn nút 'Tạo phiếu chi' để ghi nhận thanh toán."], confirm: "Chụp ảnh màn hình tab Phiếu lương trong Bảng lương, hiển thị trạng thái lương của Nguyễn Thị Lan là 'Đã thanh toán' hoặc Nợ cần trả = 0." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác (Hủy bảng lương nháp)", requirements: ["1. Tìm và Hủy bỏ 'Bảng lương Test 01' đang ở trạng thái Tạm tính để dọn dẹp dữ liệu rác trên hệ thống."], instructions: ["1. Tại danh sách Bảng lương, tìm bảng lương nháp của tháng trước (đang ở trạng thái Tạm tính).", "2. Nhấn vào mã bảng lương để mở xem chi tiết.", "3. Nhấn nút 'Hủy bỏ'.", "4. Chọn Đồng ý để xác nhận xóa bảng lương này khỏi hệ thống."], confirm: "Chụp ảnh màn hình danh sách Bảng lương hiển thị bảng nháp của tháng trước đã được chuyển sang trạng thái 'Đã hủy'." },
+          { title: "KiotViet Web", isGroupHeader: true },
+          { title: "Bài tập 1: Khởi tạo Website và thiết lập đồng bộ", requirements: ["1. Khởi tạo một Website bán hàng mới cho cửa hàng với tên hiển thị là 'Mỹ Phẩm Chính Hãng'.", "2. Thiết lập đồng bộ dữ liệu: Chọn Chi nhánh đồng bộ là chi nhánh hiện tại của bạn và Bảng giá bán là 'Bảng giá chung'.", "3. Tạo thêm một danh mục nháp có tên 'Danh mục Test 01' hiển thị trên web."], instructions: ["1. Tại màn hình Quản lý, kích vào menu 'Bán Online' ở thanh trên cùng -> 'Website bán hàng' -> chọn 'Tạo website'.", "2. Nhập Tên cửa hàng là 'Mỹ Phẩm Chính Hãng', nhấn Tiếp theo, chọn một giao diện bất kỳ và kích Xong.", "3. Khi hệ thống chuyển đến màn hình 'Website của tôi', chọn mục 'Thiết lập đồng bộ'.", "4. Chọn Chi nhánh và chọn Bảng giá bán tương ứng, sau đó lưu lại thiết lập.", "5. Quay lại menu Website của tôi, chọn mục 'Hàng hóa' -> chuyển sang tab 'Danh mục nổi bật'.", "6. Chọn 'Tạo danh mục', điền tên là 'Danh mục Test 01', thêm tạm 1 sản phẩm bất kỳ và kích Xác nhận."], confirm: "Chụp ảnh màn hình giao diện Website của tôi, hiển thị rõ phần Thiết lập đồng bộ đã được chọn đúng Chi nhánh và Bảng giá." },
+          { title: "Bài tập 2: Cài đặt hiển thị và Xuất bản Website", requirements: ["1. Cài đặt thông tin liên hệ cho Website: Nhập Số điện thoại Hotline là '0909123456' và liên kết đường dẫn Zalo của cửa hàng.", "2. Đảm bảo bật cả 2 hình thức giao nhận: 'Giao hàng tận nơi' và 'Nhận tại cửa hàng'.", "3. Thực hiện thao tác 'Xuất bản Website' để trang web chính thức đi vào hoạt động."], instructions: ["1. Trong mục Thiết lập website ở cột bên trái, chọn 'Cài đặt hiển thị'.", "2. Tại mục Thông tin cửa hàng, điền '0909123456' vào Số điện thoại.", "3. Tại mục Liên kết chat, bật công tắc Zalo và nhập số điện thoại/link Zalo vào ô trống.", "4. Kiểm tra mục Hình thức bán hàng, đảm bảo công tắc 'Giao hàng tận nơi' và 'Nhận tại cửa hàng' đều đang bật xanh. Kích Lưu thay đổi.", "5. Trở lại trang chủ 'Website của tôi', kích vào nút 'Xuất bản Website' ở góc trên bên phải màn hình."], confirm: "Chụp ảnh màn hình Cài đặt hiển thị đã lưu thành công số Hotline, Zalo và các hình thức bán hàng." },
+          { title: "Bài tập 3: Xử lý đơn đặt hàng từ KiotViet Web", requirements: ["1. Giả định có một khách hàng vừa truy cập website và đặt mua 1 'Kem chống nắng La Roche-Posay' (Giả định giá: 450,000đ).", "2. Hệ thống KiotViet Web đã tự động đẩy đơn hàng này về phần mềm. Bạn hãy tìm đơn đặt hàng đó và xử lý chuyển thành Hóa đơn bán hàng để giao cho khách."], instructions: ["1. (Tạo dữ liệu giả định): Mở màn hình Bán hàng, tạo một phiếu Đặt hàng mới cho 1 'Kem chống nắng La Roche-Posay'. Chọn Khách lẻ, ghi chú là 'Đơn từ Website' và nhấn Đặt hàng (Lưu thành phiếu tạm).", "2. Trở lại màn hình Quản lý, vào menu Đơn hàng -> chọn Đặt hàng.", "3. Tìm và kích vào mã phiếu đặt hàng vừa tạo (Đóng vai trò là đơn hàng mang mã DHMK đồng bộ từ Web về).", "4. Nhấn nút 'Tạo hóa đơn' (hoặc Xử lý đặt hàng).", "5. Hệ thống chuyển sang màn hình thu ngân, kiểm tra thông tin và nhấn 'Thanh toán' để hoàn tất việc xuất kho giao hàng."], confirm: "Chụp ảnh màn hình Hóa đơn vừa được xử lý thành công từ phiếu đặt hàng, trạng thái Hoàn thành." },
+          { title: "Bài tập 4: Dọn dẹp dữ liệu rác (Ngừng xuất bản và xóa danh mục)", requirements: ["1. Thực hiện thao tác Ngừng xuất bản website để tạm thời bảo trì hệ thống.", "2. Tìm và Xóa bỏ 'Danh mục Test 01' đã tạo ở Bài tập 1 để làm sạch giao diện web."], instructions: ["1. Tại màn hình 'Website của tôi', kích chọn biểu tượng cài đặt (hình bánh răng) ở khu vực phía trên bên phải.", "2. Chọn 'Ngừng xuất bản' và xác nhận Đồng ý.", "3. Ở cột menu trái, chọn 'Hàng hóa' -> chuyển sang tab 'Danh mục nổi bật'.", "4. Tìm đến 'Danh mục Test 01', kích vào biểu tượng Xóa (thùng rác) và chọn Xác nhận để dọn dẹp dữ liệu."], confirm: "Chụp ảnh màn hình danh sách Danh mục nổi bật sau khi đã xóa thành công Danh mục Test 01." },
+          { title: "Sàn TMĐT", isGroupHeader: true },
+          { title: "Bài tập 1: Thiết lập chi nhánh và cấu hình đơn hàng trên sàn", requirements: ["1. Đăng nhập vào gian hàng thực hành và truy cập vào khu vực thiết lập kênh Thương mại điện tử.", "2. Kiểm tra và xác định 'Chi nhánh đồng bộ' hiện tại của gian hàng Shopee/TikTok Shop.", "3. Kiểm tra cấu hình Đơn hàng: Xác định 'Nhân viên xử lý đơn hàng' đang được chỉ định là ai và tính năng 'Đồng bộ đơn hàng' đang ở trạng thái nào."], instructions: ["1. Tại thanh Sidebar bên trái của màn hình Quản lý, chọn menu 'Bán Online' -> 'Thương mại điện tử'.", "2. Chọn mục 'Thiết lập' -> 'Thiết lập kênh'.", "3. Tại danh sách các gian hàng, chọn một gian hàng đang hoạt động và nhấn nút 'Thiết lập'.", "4. Tại tab 'Thông tin', quan sát mục 'Chi nhánh đồng bộ'.", "5. Chuyển sang tab 'Đơn hàng', kiểm tra mục 'Đồng bộ đơn hàng' và 'Nhân viên xử lý đơn hàng'."], confirm: "Chụp ảnh màn hình popup Thiết lập, hiển thị rõ tab Đơn hàng và tên nhân viên xử lý." },
+          { title: "Bài tập 2: Thiết lập quy tắc đồng bộ Tồn kho và Giá bán", requirements: ["1. Trong giao diện thiết lập gian hàng, truy cập vào tab Hàng hóa.", "2. Kiểm tra 'Công thức đồng bộ số lượng bán' đang được thiết lập là gì (Ví dụ: Tồn kho - Đặt hàng).", "3. Kiểm tra 'Bảng giá bán' đang được chọn để đồng bộ lên sàn là bảng giá nào."], instructions: ["1. Tại popup Thiết lập gian hàng (đã mở ở Bài 1), nhấn chọn tab 'Hàng hóa'.", "2. Tìm mục 'Đồng bộ tồn kho' và quan sát dòng 'Công thức đồng bộ số lượng bán'.", "3. Tìm mục 'Đồng bộ giá bán' và xác định tên của 'Bảng giá bán' đang được liên kết."], confirm: "Chụp ảnh màn hình tab Hàng hóa trong popup Thiết lập, hiển thị rõ công thức đồng bộ và bảng giá bán." },
+          { title: "Bài tập 3: Thiết lập quy tắc liên kết hàng hóa tự động", requirements: ["1. Kiểm tra cấu hình liên kết tự động giữa sàn và KiotViet.", "2. Xác định xem tính năng 'Tự động liên kết hàng hóa nếu trùng mã hàng (SKU)' và 'Tự động sao chép hàng hóa mới' đang được bật hay tắt."], instructions: ["1. Vẫn tại tab 'Hàng hóa' của popup Thiết lập gian hàng.", "2. Kéo xuống dưới cùng để tìm các tùy chọn về liên kết hàng hóa.", "3. Quan sát trạng thái các nút gạt của: 'Tự động liên kết hàng hoá nếu trùng mã hàng (SKU)' và 'Tự động sao chép và liên kết hàng hóa mới tạo trên sàn về KiotViet'."], confirm: "Chụp ảnh màn hình phần dưới cùng của tab Hàng hóa hiển thị các tùy chọn liên kết tự động." },
+          { title: "Bài tập 4: Nhận diện danh sách hàng hóa trên sàn", requirements: ["1. Truy cập vào mục quản lý danh sách hàng hóa của phân hệ Bán Online.", "2. Sử dụng bộ lọc để hiển thị danh sách các sản phẩm đang có trạng thái 'Đã liên kết' trên gian hàng sàn mẫu."], instructions: ["1. Tại thanh Sidebar bên trái, vào 'Bán Online' -> 'Thương mại điện tử' -> 'Hàng hóa'.", "2. Tại bộ lọc phía trên, chọn Sàn và Gian hàng muốn xem.", "3. Tại bộ lọc trạng thái bên trái, tích chọn 'Đã liên kết'.", "4. Quan sát danh sách các sản phẩm KiotViet đã được nối với sản phẩm trên sàn."], confirm: "Chụp ảnh màn hình danh sách hàng hóa sau khi đã lọc theo trạng thái Đã liên kết." },
+          { title: "Bài tập 5: Nhận diện màn hình quản lý đơn hàng TMĐT", requirements: ["1. Truy cập vào màn hình quản lý đơn hàng tập trung từ các sàn.", "2. Tìm tab 'Chờ xử lý' và chụp lại giao diện nơi hiển thị các đơn hàng mới đồng bộ về để xử lý."], instructions: ["1. Tại thanh Sidebar bên trái, vào 'Bán Online' -> 'Thương mại điện tử' -> 'Đơn hàng'.", "2. Quan sát các tab trạng thái đơn hàng ở phía trên danh sách.", "3. Nhấn vào tab 'Chờ xử lý'."], confirm: "Chụp ảnh màn hình tab Chờ xử lý của mục Đơn hàng." }
+        ]
       },
       {
-        title: "Bài tập 5: Xem thẻ kho sản phẩm",
-        requirements: [
-          "1. Truy cập vào chi tiết sản phẩm 'Áo sơ mi nam lụa cao cấp' để kiểm tra lịch sử biến động số lượng.",
-          "2. Xem giao dịch Khởi tạo tồn kho ban đầu của sản phẩm này."
-        ],
-        instructions: [
-          "1. Tại màn hình Danh sách hàng hóa, bấm trực tiếp vào dòng chữ tên sản phẩm 'Áo sơ mi nam lụa cao cấp'.",
-          "2. Hệ thống hiển thị bảng thông tin chi tiết, bấm chuyển sang tab Thẻ kho.",
-          "3. Quan sát các dòng lịch sử giao dịch ghi nhận số lượng nhập kho 50 cái từ lúc tạo mới."
-        ],
-        confirm: "Chụp ảnh màn hình Thẻ kho của sản phẩm hiển thị giao dịch Khởi tạo."
-      },
-      
-      { title: "Hàng hóa thường", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thêm mới hàng hóa và tạo dữ liệu nháp",
-        requirements: [
-          "1. Thêm mới một sản phẩm kinh doanh: 'Nước khoáng Lavie 500ml', thuộc nhóm 'Nước giải khát' (có thể thêm mới nhóm nếu chưa có). Giá vốn: 4.000đ, Giá bán: 5.000đ, Tồn kho ban đầu: 100.",
-          "2. Thêm mới một hàng hóa nháp: 'Sản phẩm Test 02', giá bán 1.000đ để dự phòng cho thao tác xóa sau này."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Danh sách hàng hóa.",
-          "2. Nhấn vào nút + Tạo mới và chọn Hàng hóa.",
-          "3. Nhập Tên hàng hóa: 'Nước khoáng Lavie 500ml', Nhóm hàng: 'Nước giải khát' (nhấn Tạo mới nếu chưa có).",
-          "4. Điền Giá vốn: 4.000, Giá bán: 5.000, Tồn kho: 100. Sau đó nhấn Lưu.",
-          "5. Lặp lại thao tác + Tạo mới để thêm 'Sản phẩm Test 02' với giá bán 1.000đ rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị thành công 2 sản phẩm vừa tạo."
-      },
-      {
-        title: "Bài tập 2: Cập nhật thông tin và xóa hàng hóa",
-        requirements: [
-          "1. Cập nhật giá bán của 'Nước khoáng Lavie 500ml' từ 5.000đ lên 6.000đ.",
-          "2. Xóa vĩnh viễn 'Sản phẩm Test 02' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Trong Danh sách hàng hóa, tìm kiếm sản phẩm 'Nước khoáng Lavie 500ml' và nhấn vào biểu tượng Chỉnh sửa (hình cây bút).",
-          "2. Thay đổi Giá bán thành 6.000 và nhấn Lưu.",
-          "3. Tìm đến 'Sản phẩm Test 02', tích chọn vào ô vuông đầu dòng.",
-          "4. Nhấn Thao tác (biểu tượng 3 dấu chấm) -> Chọn Xóa -> chọn Đồng ý để xóa hoàn toàn."
-        ],
-        confirm: "Chụp ảnh màn hình tìm kiếm không còn 'Sản phẩm Test 02' và Lavie đã cập nhật giá 6.000đ."
-      },
-      {
-        title: "Bài tập 3: Thiết lập và quản lý Đơn vị tính",
-        requirements: [
-          "1. Kích hoạt tính năng sử dụng Đơn vị tính trong hệ thống.",
-          "2. Cập nhật sản phẩm 'Nước khoáng Lavie 500ml' để thêm đơn vị tính lớn là 'Thùng' (1 Thùng = 24 Chai), giá bán 1 Thùng là 130.000đ."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa.",
-          "2. Kéo tìm dòng Đơn vị tính và chuyển từ Đang tắt sang bật xanh để kích hoạt tính năng.",
-          "3. Quay lại menu Hàng hóa -> Danh sách hàng hóa, tìm và nhấn Chỉnh sửa sản phẩm 'Nước khoáng Lavie 500ml'.",
-          "4. Cuộn xuống mục Quản lý theo đơn vị tính và thuộc tính, nhấn Thiết lập.",
-          "5. Ở Đơn vị cơ bản (cấp 1) nhập 'Chai'. Ở dòng dưới (cấp 2) nhập 'Thùng', Giá trị quy đổi là 24, Giá bán nhập 130.000.",
-          "6. Nhấn Lưu để hoàn tất."
-        ],
-        confirm: "Chụp ảnh màn hình hiển thị sản phẩm Lavie có 2 đơn vị tính Chai và Thùng trong danh sách."
-      },
-      {
-        title: "Bài tập 4: Tìm kiếm, lọc và in tem mã vạch",
-        requirements: [
-          "1. Kích hoạt tính năng In tem mã vạch trong phần Thiết lập (nếu chưa bật).",
-          "2. Lọc tìm sản phẩm 'Nước khoáng Lavie 500ml' và in 10 tem mã vạch cho sản phẩm này."
-        ],
-        instructions: [
-          "1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa -> Bật xanh tính năng In tem mã vạch.",
-          "2. Quay lại màn hình Danh sách hàng hóa, sử dụng thanh tìm kiếm để tra cứu chữ 'Lavie'.",
-          "3. Tích chọn vào ô vuông trước tên sản phẩm 'Nước khoáng Lavie 500ml'.",
-          "4. Nhấn vào nút In tem mã (hoặc Thao tác -> In tem mã), nhập số lượng tem cho mỗi loại là 10.",
-          "5. Nhấn tiếp nút In tem mã, chọn thông tin cần hiển thị và ấn Xem bản in để hoàn thành."
-        ],
-        confirm: "Chụp ảnh màn hình cửa sổ xem trước bản in tem mã vạch của sản phẩm Lavie."
-      },
-      {
-        title: "Bài tập 5: Xem phân tích và ngừng kinh doanh",
-        requirements: [
-          "1. Tạm ngừng kinh doanh sản phẩm 'Nước khoáng Lavie 500ml' trên toàn hệ thống.",
-          "2. Truy cập vào trang chi tiết của sản phẩm để xem phân tích hiệu quả kinh doanh."
-        ],
-        instructions: [
-          "1. Tại Danh sách hàng hóa, tích chọn sản phẩm 'Nước khoáng Lavie 500ml'.",
-          "2. Nhấn Thao tác (biểu tượng 3 chấm) -> Chọn Ngừng kinh doanh.",
-          "3. Mở bộ lọc Trạng thái hàng hóa ở cột trái, chọn 'Ngừng kinh doanh' để tìm lại sản phẩm vừa ẩn.",
-          "4. Nhấn trực tiếp vào tên sản phẩm để vào trang chi tiết.",
-          "5. Nhấn vào nút Xem phân tích để mở biểu đồ thống kê doanh thu, lợi nhuận."
-        ],
-        confirm: "Chụp ảnh màn hình biểu đồ phân tích kinh doanh của sản phẩm Lavie."
-      },
-
-      { title: "Hàng Dịch vụ", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thêm mới hàng dịch vụ và tạo dữ liệu nháp",
-        requirements: [
-          "1. Thêm mới một sản phẩm dịch vụ: 'Phí giao hàng và lắp đặt', thuộc nhóm 'Dịch vụ cộng thêm'. Giá bán: 150.000đ, cho phép bán trực tiếp.",
-          "2. Thêm mới một dịch vụ nháp: 'Dịch vụ Test 03', giá bán 10.000đ để dự phòng xóa."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Danh sách hàng hóa.",
-          "2. Nhấn vào nút + Tạo mới và chọn Dịch vụ.",
-          "3. Nhập Tên hàng: 'Phí giao hàng và lắp đặt', Nhóm hàng: 'Dịch vụ cộng thêm' (nhấn Tạo mới nhóm nếu chưa có).",
-          "4. Điền Giá bán: 150.000 và tích chọn ô 'Bán trực tiếp' để dịch vụ hiển thị trên màn hình Bán hàng. Sau đó nhấn Lưu.",
-          "5. Lặp lại thao tác + Tạo mới -> Dịch vụ để thêm 'Dịch vụ Test 03' với giá bán 10.000đ rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị thành công 2 dịch vụ vừa tạo."
-      },
-      {
-        title: "Bài tập 2: Cập nhật thông tin và xóa hàng dịch vụ",
-        requirements: [
-          "1. Cập nhật giá bán của 'Phí giao hàng và lắp đặt' từ 150.000đ lên 200.000đ.",
-          "2. Xóa vĩnh viễn 'Dịch vụ Test 03' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Trong Danh sách hàng hóa, tìm kiếm tên 'Phí giao hàng và lắp đặt' và nhấn vào biểu tượng Chỉnh sửa (hình cây bút).",
-          "2. Thay đổi Giá bán thành 200.000 và nhấn Lưu.",
-          "3. Tìm đến 'Dịch vụ Test 03', tích chọn vào ô vuông ở đầu dòng của dịch vụ này.",
-          "4. Nhấn nút Thao tác (biểu tượng 3 dấu chấm) -> Chọn Xóa -> chọn Đồng ý."
-        ],
-        confirm: "Chụp ảnh màn hình tìm kiếm không còn 'Dịch vụ Test 03' và dịch vụ lắp đặt đã được cập nhật giá 200.000đ."
-      },
-      {
-        title: "Bài tập 3: Thêm dịch vụ vào hóa đơn bán hàng",
-        requirements: [
-          "1. Chuyển sang giao diện thu ngân để bán hàng.",
-          "2. Thêm 'Phí giao hàng và lắp đặt' vào hóa đơn để chuẩn bị thanh toán cho khách."
-        ],
-        instructions: [
-          "1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).",
-          "2. Tại ô tìm kiếm hàng hóa ở góc trên bên trái, nhập tên 'Phí giao hàng và lắp đặt'.",
-          "3. Bấm chọn dịch vụ từ kết quả tìm kiếm để thêm dịch vụ này vào hóa đơn.",
-          "4. Kiểm tra dịch vụ hiển thị với đúng mức giá 200.000đ đã cập nhật trên màn hình thu ngân."
-        ],
-        confirm: "Chụp ảnh màn hình Bán hàng hiển thị 'Phí giao hàng và lắp đặt' nằm trong danh sách sản phẩm của hóa đơn."
-      },
-
-      { title: "Hàng Combo - Đóng gói", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Chuẩn bị thành phần và tạo dữ liệu nháp",
-        requirements: [
-          "1. Tạo nhanh 2 hàng hóa thường: 'Hộp Bánh Danisa' (Giá vốn: 100.000đ, Tồn kho: 50) và 'Rượu Vang Đà Lạt' (Giá vốn: 150.000đ, Tồn kho: 50).",
-          "2. Tạo mới một hàng Combo nháp: 'Combo Test 04' (không cần thiết lập thành phần) với giá bán 10.000đ."
-        ],
-        instructions: [
-          "1. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.",
-          "2. Nhập thông tin cho 'Hộp Bánh Danisa' (Giá vốn: 100.000, Tồn kho: 50) rồi nhấn Lưu. Làm tương tự để tạo 'Rượu Vang Đà Lạt'.",
-          "3. Tiếp tục nhấn + Tạo mới -> Chọn Combo - đóng gói.",
-          "4. Nhập Tên hàng: 'Combo Test 04', nhập Giá bán: 10.000 rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị các sản phẩm vừa khởi tạo."
-      },
-      {
-        title: "Bài tập 2: Tạo mới hàng Combo - đóng gói chính thức",
-        requirements: [
-          "1. Tạo một sản phẩm Combo mới mang tên 'Giỏ quà Tết An Khang'.",
-          "2. Gộp 2 thành phần vào Combo này: 1 'Hộp Bánh Danisa' và 1 'Rượu Vang Đà Lạt'. Đặt giá bán cho tổng thể giỏ quà là 350.000đ."
-        ],
-        instructions: [
-          "1. Tại màn hình Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Combo - đóng gói.",
-          "2. Nhập Tên hàng: 'Giỏ quà Tết An Khang'.",
-          "3. Tại mục Hàng thành phần, tìm kiếm và chọn 'Hộp Bánh Danisa' (số lượng 1) và 'Rượu Vang Đà Lạt' (số lượng 1).",
-          "4. Cuộn xuống dưới nhập Giá bán: 350.000 và nhấn Lưu để hoàn tất."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết của 'Giỏ quà Tết An Khang' cho thấy rõ 2 hàng thành phần bên trong."
-      },
-      {
-        title: "Bài tập 3: Cập nhật thông tin và xóa hàng Combo",
-        requirements: [
-          "1. Cập nhật giá bán của 'Giỏ quà Tết An Khang' từ 350.000đ lên 399.000đ.",
-          "2. Xóa vĩnh viễn 'Combo Test 04' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Trong Danh sách hàng hóa, tìm kiếm tên 'Giỏ quà Tết An Khang' và nhấn vào biểu tượng Chỉnh sửa.",
-          "2. Thay đổi Giá bán thành 399.000 và nhấn Lưu.",
-          "3. Tìm đến 'Combo Test 04', tích chọn vào ô vuông ở đầu dòng của combo này.",
-          "4. Nhấn nút Thao tác (biểu tượng 3 dấu chấm) -> Chọn Xóa -> chọn Đồng ý."
-        ],
-        confirm: "Chụp ảnh màn hình tìm kiếm không còn 'Combo Test 04' và 'Giỏ quà Tết An Khang' đã được cập nhật giá 399.000đ."
-      },
-      {
-        title: "Bài tập 4: Bán Combo và kiểm tra tồn kho thành phần",
-        requirements: [
-          "1. Chuyển sang giao diện thu ngân để bán 'Giỏ quà Tết An Khang' cho khách.",
-          "2. Quay lại màn hình quản lý, kiểm tra tồn kho và thẻ kho của 'Hộp Bánh Danisa' để xác nhận hệ thống đã tự động trừ tồn kho."
-        ],
-        instructions: [
-          "1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).",
-          "2. Tại ô tìm kiếm hàng hóa, nhập tên 'Giỏ quà Tết An Khang', thêm vào hóa đơn và thực hiện Thanh toán.",
-          "3. Quay lại màn hình Quản lý -> Hàng hóa -> Danh sách hàng hóa.",
-          "4. Bấm trực tiếp vào tên 'Hộp Bánh Danisa', chuyển sang tab Thẻ kho để quan sát lịch sử hệ thống tự động trừ đi 1 số lượng."
-        ],
-        confirm: "Chụp ảnh màn hình Thẻ kho của 'Hộp Bánh Danisa' hiển thị giao dịch bán hàng."
-      },
-
-      { title: "Hàng Sản xuất", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Kích hoạt tính năng và chuẩn bị nguyên liệu",
-        requirements: [
-          "1. Bật tính năng Sản xuất hàng hóa trong hệ thống để quản lý quá trình lắp ráp.",
-          "2. Tạo 2 hàng hóa thường đóng vai trò nguyên vật liệu: 'Mặt bàn gỗ sồi' (Giá vốn: 500.000đ, Tồn kho: 20) và 'Bộ chân bàn sắt' (Giá vốn: 400.000đ, Tồn kho: 20).",
-          "3. Tạo một hàng sản xuất nháp: 'Bàn Test 05' (không cần khai báo thành phần) với giá bán 100.000đ."
-        ],
-        instructions: [
-          "1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa, tìm và bật xanh tính năng Sản xuất hàng hóa.",
-          "2. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.",
-          "3. Nhập thông tin cho 'Mặt bàn gỗ sồi' (Giá vốn: 500.000, Tồn kho: 20) rồi nhấn Lưu. Làm tương tự để tạo 'Bộ chân bàn sắt'.",
-          "4. Tiếp tục nhấn + Tạo mới -> Chọn Hàng sản xuất. Nhập Tên hàng: 'Bàn Test 05', nhập Giá bán: 100.000 rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị các nguyên liệu và sản phẩm nháp vừa khởi tạo."
-      },
-      {
-        title: "Bài tập 2: Khai báo hàng sản xuất chính thức",
-        requirements: [
-          "1. Tạo một sản phẩm Hàng sản xuất mới mang tên 'Bàn làm việc gỗ sồi'.",
-          "2. Cấu hình định mức nguyên liệu gồm: 1 'Mặt bàn gỗ sồi' và 1 'Bộ chân bàn sắt'. Đặt giá bán cho thành phẩm là 1.500.000đ."
-        ],
-        instructions: [
-          "1. Tại màn hình Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng sản xuất.",
-          "2. Nhập Tên hàng: 'Bàn làm việc gỗ sồi'.",
-          "3. Tại mục Hàng thành phần, tìm kiếm và chọn 'Mặt bàn gỗ sồi' (số lượng 1) và 'Bộ chân bàn sắt' (số lượng 1).",
-          "4. Cuộn xuống dưới nhập Giá bán: 1.500.000 và nhấn Lưu để hoàn tất. Hệ thống sẽ tự động tính giá vốn là 900.000đ."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết của 'Bàn làm việc gỗ sồi' hiển thị rõ 2 linh kiện thành phần bên trong."
-      },
-      {
-        title: "Bài tập 3: Thực hiện sản xuất hàng hóa",
-        requirements: [
-          "1. Tạo một phiếu sản xuất cho mặt hàng 'Bàn làm việc gỗ sồi' để ghi nhận số lượng bàn đã được xưởng lắp ráp hoàn thiện.",
-          "2. Số lượng thành phẩm cần sản xuất (lắp ráp) là 5 chiếc."
-        ],
-        instructions: [
-          "1. Vào menu Hàng hóa -> chọn Sản xuất.",
-          "2. Nhấn nút + Sản xuất ở góc trên bên phải màn hình.",
-          "3. Tại ô Sản xuất mặt hàng, tìm kiếm và chọn sản phẩm 'Bàn làm việc gỗ sồi'.",
-          "4. Nhập Số lượng: 5. (Hệ thống sẽ tự động hiển thị số lượng nguyên vật liệu cần tiêu hao tương ứng).",
-          "5. Nhấn Hoàn thành để lưu phiếu sản xuất."
-        ],
-        confirm: "Chụp ảnh màn hình Phiếu sản xuất vừa tạo thành công hiển thị số lượng thành phẩm là 5."
-      },
-      {
-        title: "Bài tập 4: Kiểm tra tồn kho và xóa dữ liệu nháp",
-        requirements: [
-          "1. Kiểm tra thẻ kho của nguyên liệu 'Mặt bàn gỗ sồi' để xác nhận hệ thống đã tự động trừ đi 5 tấm.",
-          "2. Xóa vĩnh viễn sản phẩm 'Bàn Test 05' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Quay lại màn hình Hàng hóa -> Danh sách hàng hóa.",
-          "2. Bấm trực tiếp vào tên 'Mặt bàn gỗ sồi', chuyển sang tab Thẻ kho để quan sát lịch sử trừ số lượng.",
-          "3. Quay ra lại Danh sách hàng hóa, tìm đến 'Bàn Test 05', tích chọn vào ô vuông ở đầu dòng của sản phẩm này.",
-          "4. Nhấn nút Thao tác -> Chọn Xóa -> chọn Đồng ý."
-        ],
-        confirm: "Chụp ảnh màn hình Thẻ kho của 'Mặt bàn gỗ sồi' hiển thị dòng lịch sử Phiếu sản xuất với số lượng -5."
-      },
-
-      { title: "Hàng hóa Lô - Hạn sử dụng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Kích hoạt tính năng và thêm mới hàng hóa",
-        requirements: [
-          "1. Kích hoạt tính năng Quản lý tồn kho theo Lô, hạn sử dụng trên hệ thống.",
-          "2. Thêm mới một sản phẩm: 'Kem chống nắng La Roche-Posay' (Giá vốn: 300.000đ, Giá bán: 450.000đ) và BẮT BUỘC thiết lập tính năng quản lý theo lô.",
-          "3. Thêm mới một sản phẩm nháp: 'Sản phẩm Test 06' với giá bán 10.000đ (không quản lý lô)."
-        ],
-        instructions: [
-          "1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa, bật xanh tính năng Quản lý tồn kho theo Lô, hạn sử dụng.",
-          "2. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.",
-          "3. Nhập Tên hàng: 'Kem chống nắng La Roche-Posay', nhập Giá vốn: 300.000, Giá bán: 450.000.",
-          "4. Tích chọn 'Có' ở mục Quản lý theo lô, hạn sử dụng, sau đó nhấn Lưu.",
-          "5. Tiếp tục nhấn + Tạo mới -> Chọn Hàng hóa để thêm 'Sản phẩm Test 06' (Giá bán: 10.000đ) rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị sản phẩm 'Kem chống nắng La Roche-Posay' có biểu tượng quản lý lô."
-      },
-      {
-        title: "Bài tập 2: Nhập hàng theo Lô và xóa dữ liệu nháp",
-        requirements: [
-          "1. Nhập hàng cho 'Kem chống nắng La Roche-Posay' chia thành 2 lô khác nhau: Lô 'L01' (HSD: 30/12/2026, Số lượng: 20) và Lô 'L02' (HSD: 30/06/2027, Số lượng: 30).",
-          "2. Xóa vĩnh viễn 'Sản phẩm Test 06' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Vào menu Mua hàng -> chọn Nhập hàng, nhấn nút + Nhập hàng.",
-          "2. Tại ô tìm kiếm hàng hóa, tìm và chọn sản phẩm 'Kem chống nắng La Roche-Posay'.",
-          "3. Trên dòng sản phẩm vừa thêm, nhấn vào Thêm mới lô, hạn sử dụng. Nhập tên Lô: 'L01', chọn HSD: '30/12/2026', nhập Số lượng: '20' và nhấn Thêm.",
-          "4. Tiếp tục nhấn Thêm mới lô, hạn sử dụng để nhập thông tin Lô: 'L02', chọn HSD: '30/06/2027', nhập Số lượng: '30' và nhấn Thêm. Sau đó nhấn Hoàn thành phiếu nhập.",
-          "5. Quay lại menu Hàng hóa -> Danh sách hàng hóa, tìm đến 'Sản phẩm Test 06', xóa khỏi hệ thống."
-        ],
-        confirm: "Chụp ảnh màn hình Chi tiết sản phẩm Kem chống nắng ở tab Tồn kho hiển thị đủ thông tin 2 lô L01 và L02."
-      },
-      {
-        title: "Bài tập 3: Bán hàng theo lô (Nguyên tắc FEFO)",
-        requirements: [
-          "1. Chuyển sang giao diện thu ngân để tạo hóa đơn bán 1 hộp 'Kem chống nắng La Roche-Posay'.",
-          "2. Quan sát và xác nhận hệ thống tự động gợi ý xuất bán từ Lô 'L01' (lô có hạn sử dụng gần nhất theo nguyên tắc FEFO)."
-        ],
-        instructions: [
-          "1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).",
-          "2. Tại ô tìm kiếm hàng hóa, nhập tên 'Kem chống nắng La Roche-Posay' và click chọn sản phẩm để đưa vào hóa đơn.",
-          "3. Quan sát trên dòng sản phẩm, hệ thống sẽ tự động gắn kèm tag tên lô là 'L01' (do L01 hết hạn trước L02).",
-          "4. Thực hiện thao tác Thanh toán để hoàn tất hóa đơn này."
-        ],
-        confirm: "Chụp ảnh màn hình Bán hàng hiển thị rõ sản phẩm đang được tự động chọn xuất từ lô 'L01'."
-      },
-      {
-        title: "Bài tập 4: Xem báo cáo Hạn sử dụng",
-        requirements: [
-          "1. Truy cập vào hệ thống báo cáo để xem danh sách chi tiết các lô hàng đang quản lý và cảnh báo hạn sử dụng."
-        ],
-        instructions: [
-          "1. Quay lại màn hình Quản lý, vào menu Phân tích -> chọn Hàng hóa.",
-          "2. Ở góc trên bên trái màn hình báo cáo, nhấp vào menu thả xuống (Mối quan tâm) và chọn 'Hạn sử dụng'.",
-          "3. Quan sát danh sách thống kê các lô hàng, hệ thống sẽ tự động bôi màu cảnh báo đối với các lô sắp hết hạn."
-        ],
-        confirm: "Chụp ảnh màn hình Báo cáo Hạn sử dụng hiển thị các thông tin lô của sản phẩm Kem chống nắng."
-      },
-
-      { title: "Hàng hóa Serial/IMEI", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Kích hoạt tính năng và thêm mới hàng hóa",
-        requirements: [
-          "1. Kích hoạt tính năng Quản lý tồn kho theo Serial/IMEI trên hệ thống.",
-          "2. Thêm mới sản phẩm: 'iPhone 16 Pro Max 256GB' (Giá vốn: 28.000.000đ, Giá bán: 30.000.000đ) và BẮT BUỘC thiết lập tính năng quản lý theo Serial/IMEI.",
-          "3. Thêm mới một sản phẩm nháp: 'Điện thoại Test 07' với giá bán 10.000đ (không quản lý IMEI)."
-        ],
-        instructions: [
-          "1. Vào menu Thiết lập -> Thiết lập cửa hàng -> Hàng hóa, bật xanh tính năng Quản lý tồn kho theo Serial/IMEI.",
-          "2. Vào menu Hàng hóa -> Danh sách hàng hóa, nhấn nút + Tạo mới -> Chọn Hàng hóa.",
-          "3. Nhập Tên hàng: 'iPhone 16 Pro Max 256GB', nhập Giá vốn: 28.000.000, Giá bán: 30.000.000.",
-          "4. Tích chọn 'Có' ở mục Quản lý theo Serial/IMEI, sau đó nhấn Lưu.",
-          "5. Tiếp tục nhấn nút + Tạo mới -> Chọn Hàng hóa để thêm 'Điện thoại Test 07' (Giá bán: 10.000đ) rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách hàng hóa hiển thị sản phẩm 'iPhone 16 Pro Max 256GB' có biểu tượng quản lý Serial/IMEI."
-      },
-      {
-        title: "Bài tập 2: Nhập hàng theo IMEI và xóa dữ liệu nháp",
-        requirements: [
-          "1. Nhập kho cho 'iPhone 16 Pro Max 256GB' với số lượng 2 chiếc, tương ứng với 2 mã IMEI là: 'IMEI001' và 'IMEI002'.",
-          "2. Xóa vĩnh viễn 'Điện thoại Test 07' ra khỏi hệ thống phần mềm."
-        ],
-        instructions: [
-          "1. Vào menu Mua hàng -> chọn Nhập hàng, nhấn nút + Nhập hàng.",
-          "2. Tại ô tìm kiếm hàng hóa, tìm và chọn sản phẩm 'iPhone 16 Pro Max 256GB'.",
-          "3. Màn hình sẽ hiện ra ô Nhập số Serial/Imei. Nhập 'IMEI001' rồi ấn Enter, tiếp tục nhập 'IMEI002' rồi ấn Enter. Nhấn Hoàn thành phiếu nhập.",
-          "4. Quay lại menu Hàng hóa -> Danh sách hàng hóa, tìm đến 'Điện thoại Test 07', xóa khỏi hệ thống."
-        ],
-        confirm: "Chụp ảnh màn hình Chi tiết sản phẩm iPhone ở tab Tồn kho hiển thị tồn kho bằng 2."
-      },
-      {
-        title: "Bài tập 3: Bán hàng theo Serial/IMEI",
-        requirements: [
-          "1. Chuyển sang giao diện thu ngân để tạo hóa đơn bán 1 chiếc 'iPhone 16 Pro Max 256GB'.",
-          "2. Khách hàng chọn mua máy có mã là 'IMEI001', yêu cầu xuất bán đúng mã này trên hệ thống."
-        ],
-        instructions: [
-          "1. Từ màn hình Quản lý, nhấn sang tab Bán hàng (hoặc truy cập màn hình Bán hàng).",
-          "2. Tại ô tìm kiếm hàng hóa, nhập tên 'iPhone 16 Pro Max 256GB' và click chọn sản phẩm.",
-          "3. Hệ thống sẽ bật lên cửa sổ yêu cầu chọn Serial/IMEI. Bạn tích chọn vào mã 'IMEI001' (hoặc dùng súng bắn mã vạch quét mã này).",
-          "4. Thực hiện thao tác Thanh toán để hoàn tất hóa đơn giao dịch."
-        ],
-        confirm: "Chụp ảnh màn hình Bán hàng hiển thị rõ sản phẩm iPhone đang được chọn kèm dòng chữ mã IMEI001 phía dưới."
+          id: "session_5",
+          title: "Buổi 5: Thuế & Kế toán (Đang cập nhật)",
+          desc: "Nghiệp vụ xuất hóa đơn từ máy tính tiền, hệ thống sổ sách theo Thông tư 88 & Tờ khai thuế.",
+          exercises: []
       }
-    ]
-  },
-  {
-    id: "session_2",
-    title: "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá",
-    exercises: [
-      { title: "Nhập hàng", isGroupHeader: true },
+  ],
+  "FNB": [
       {
-        title: "Bài tập 1: Tạo mới hàng hóa và lập phiếu nhập hàng",
-        requirements: [
-          "1. Tạo mới Nhà cung cấp có tên 'Tổng kho Thời trang An Đông'.",
-          "2. Thực hiện nhập kho lô hàng mới gồm: 50 'Áo sơ mi nam Oxford' (Giá nhập: 150,000đ, Giá bán: 350,000đ) và 30 'Quần Tây Âu Slimfit' (Giá nhập: 220,000đ, Giá bán: 480,000đ).",
-          "3. Tạo thêm 1 mã hàng mồi tên là 'Sản phẩm Test 01' (Số lượng 1, Giá nhập 10,000đ).",
-          "4. Thanh toán trước cho Nhà cung cấp 5,000,000đ, phần còn lại ghi nhận công nợ."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Mua hàng -> chọn Nhập hàng.",
-          "2. Nhấn nút + Nhập hàng.",
-          "3. Tại ô tìm kiếm, nhấn dấu + để thêm mới nhanh 3 sản phẩm trên với đầy đủ thông tin giá nhập, giá bán và nhóm hàng tương ứng.",
-          "4. Tại mục Nhà cung cấp, nhấn dấu + để thêm 'Tổng kho Thời trang An Đông'.",
-          "5. Tại phần Thanh toán, nhập số 5,000,000 vào ô 'Tiền trả NCC'.",
-          "6. Nhấn nút Hoàn thành."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết phiếu nhập vừa tạo, hiển thị rõ danh sách hàng và phần nợ cần trả NCC."
+        id: "session_1",
+        title: "Buổi 1: Thiết lập Thực đơn & Quản lý Kho",
+        desc: "Thực hành khởi tạo Món thường, Dịch vụ, Combo Cố định và quản lý Kho hàng ngành F&B.",
+        exercises: [
+          { title: "Danh sách món trong Thực đơn", isGroupHeader: true },
+          { title: "Bài tập 1: Khởi tạo món mới và dữ liệu nháp", requirements: ["1. Thêm một món mới vào thực đơn là 'Cà phê muối', giá bán 35.000đ.", "2. Tạo một món nháp tên là 'Sản phẩm Test 01', giá bán 1.000đ để sử dụng cho bài tập xóa sau này."], instructions: ["1. Tại màn hình Quản lý, truy cập menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Món thường (hoặc loại món phù hợp).", "3. Nhập thông tin cho món thứ nhất: Tên món là 'Cà phê muối', giá bán '35.000'. Nhấn Lưu.", "4. Lặp lại bước 2 và 3 để tạo món thứ hai: Tên món là 'Sản phẩm Test 01', giá bán '1.000'. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa 'Cà phê muối' và 'Sản phẩm Test 01' vừa tạo" },
+          { title: "Bài tập 2: Tìm kiếm, bộ lọc và xem chi tiết món", requirements: ["1. Tìm kiếm món 'Cà phê muối' vừa tạo.", "2. Xem chi tiết thông tin của món 'Cà phê muối'."], instructions: ["1. Tại màn hình Danh sách Món, sử dụng thanh tìm kiếm phía trên, nhập từ khóa 'Cà phê muối'.", "2. Nhấn vào dòng chứa món 'Cà phê muối' trên danh sách kết quả tìm kiếm để mở màn hình chi tiết món."], confirm: "Chụp ảnh màn hình hiển thị trang chi tiết của món 'Cà phê muối'" },
+          { title: "Bài tập 3: Thiết lập Tag món", requirements: ["1. Gắn Tag 'Món bán chạy' cho món 'Cà phê muối'."], instructions: ["1. Tại màn hình chi tiết món 'Cà phê muối' (đang mở ở bài 2), nhấn Cập nhật (hoặc biểu tượng chỉnh sửa).", "2. Tìm đến phần Tag món, nhấn Chọn tag món.", "3. Nhấn + Tạo mới, nhập tên tag là 'Món bán chạy', chọn biểu tượng phù hợp (nếu có) -> nhấn Lưu.", "4. Tích chọn tag 'Món bán chạy' vừa tạo -> nhấn Xong.", "5. Nhấn Lưu để hoàn tất chỉnh sửa món 'Cà phê muối'."], confirm: "Chụp ảnh màn hình hiển thị chi tiết món 'Cà phê muối' có chứa tag 'Món bán chạy'" },
+          { title: "Bài tập 4: Thao tác hàng loạt và xóa dữ liệu nháp", requirements: ["1. Ngừng kinh doanh món 'Cà phê muối'.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01'."], instructions: ["1. Quay lại màn hình Danh sách Món. Tìm kiếm món 'Cà phê muối'.", "2. Tích chọn vào ô vuông đầu dòng của món 'Cà phê muối'.", "3. Nhấn vào biểu tượng 3 chấm phía trên danh sách -> chọn Ngừng kinh doanh -> xác nhận Ngừng kinh doanh.", "4. Tiếp tục tìm kiếm món 'Sản phẩm Test 01'.", "5. Tích chọn vào ô vuông đầu dòng của món 'Sản phẩm Test 01'.", "6. Nhấn vào biểu tượng 3 chấm phía trên danh sách -> chọn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình hiển thị danh sách món (đã xóa thanh tìm kiếm) để chứng minh món 'Sản phẩm Test 01' đã bị xóa" },
+          { title: "Món thường", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới món thường có quản lý tồn kho và dữ liệu nháp", requirements: ["1. Thêm một món đồ uống đóng chai mới là 'Bia Heineken', giá bán 25.000đ, số lượng tồn kho ban đầu là 120 lon. Món này cần quản lý tồn kho để theo dõi số lượng.", "2. Tạo một món nháp tên là 'Sản phẩm Test 01', loại món thường, giá bán 1.000đ, không cần quản lý tồn kho để sử dụng cho bài tập xóa sau này."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào + Món mới -> chọn Món.", "3. Nhập thông tin cho món thứ nhất: Tên món là 'Bia Heineken', Nhóm món 'Đồ uống đóng chai'.", "4. Tại khu vực Chọn loại món, chọn Món thường.", "5. Bật xanh Quản lý tồn tại Kho hàng -> nhập số lượng Tồn kho là '120'. Nhấn Lưu.", "6. Lặp lại bước 2 và 3 để tạo món thứ hai: Tên món là 'Sản phẩm Test 01'.", "7. Tại khu vực Chọn loại món, chọn Món thường.", "8. Tắt Quản lý tồn tại Kho hàng. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa 'Bia Heineken' (có hiển thị tồn kho) và 'Sản phẩm Test 01' vừa tạo" },
+          { title: "Bài tập 2: Thêm mới món thường không quản lý tồn kho", requirements: ["1. Quán cần thêm món pha chế 'Trà chanh giã tay', giá bán 35.000đ. Món này không cần quản lý chi tiết nguyên liệu tồn kho lúc này, chỉ cần hiện trên menu để thu ngân chọn tính tiền."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào + Món mới -> chọn Món.", "3. Điền các thông tin cơ bản: Tên món là 'Trà chanh giã tay', Giá bán '35.000', Nhóm món 'Trà hoa quả'.", "4. Tại khu vực Chọn loại món, chọn Món thường.", "5. Tắt Quản lý tồn tại Kho hàng. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị trang chi tiết của món 'Trà chanh giã tay' cho thấy trạng thái không quản lý tồn kho" },
+          { title: "Bài tập 3: Quản lý món có thuộc tính (Size)", requirements: ["1. Thiết lập 2 kích cỡ (Size M, Size L) cho món 'Trà chanh giã tay' vừa tạo ở Bài 2.", "2. Cập nhật giá bán: Size M giá 35.000đ, Size L giá 45.000đ."], instructions: ["1. Tại màn hình Quản lý -> nhấn Thiết lập -> Thiết lập cửa hàng -> Hàng hóa -> bật tính năng Hàng hóa có thuộc tính.", "2. Quay lại menu Thực đơn -> Món, tìm món 'Trà chanh giã tay' và nhấn Chỉnh sửa.", "3. Kéo xuống khu vực Quản lý theo đơn vị tính và thuộc tính -> nhấn Thiết lập.", "4. Chọn thuộc tính Size (hoặc nhấn + Thêm mới nếu chưa có).", "5. Nhập các giá trị thuộc tính là 'M', 'L' và nhấn Enter.", "6. Tại bảng Hàng cùng loại bên dưới, điều chỉnh giá bán tương ứng: Size M '35.000', Size L '45.000' -> nhấn Xong. Nhấn Lưu để hoàn tất chỉnh sửa món."], confirm: "Chụp ảnh màn hình chi tiết món 'Trà chanh giã tay' hiển thị rõ 2 phiên bản thuộc tính Size M và Size L" },
+          { title: "Bài tập 4: Quản lý món thêm (Topping)", requirements: ["1. Tạo món thêm (Topping) là 'Trân châu trắng', giá bán 10.000đ.", "2. Gắn món thêm 'Trân châu trắng' này vào món 'Trà chanh giã tay'."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào + Món mới -> chọn Topping (Món thêm).", "3. Nhập thông tin: Tên món 'Trân châu trắng', Giá bán '10.000'.", "4. Kéo xuống khu vực Gắn món -> bật xanh và tìm chọn món 'Trà chanh giã tay' để cho phép bán kèm -> nhấn Lưu."], confirm: "Chụp ảnh màn hình chi tiết Topping 'Trân châu trắng' hiển thị phần Gắn món có chứa 'Trà chanh giã tay'" },
+          { title: "Bài tập 5: Thêm món vào đơn hàng (Màn hình Thu ngân)", requirements: ["1. Khách hàng đến quầy gọi 1 lon 'Bia Heineken' (đã tạo ở Bài 1) và 1 ly 'Trà chanh giã tay' Size L thêm 'Trân châu trắng' (đã tạo ở Bài 3, 4).", "2. Thêm các món này vào đơn hàng để chuẩn bị thanh toán."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Tìm kiếm hoặc chọn từ thực đơn món 'Bia Heineken'.", "3. Tiếp tục tìm chọn món 'Trà chanh giã tay', hệ thống sẽ bật popup chọn thuộc tính và topping.", "4. Chọn Size 'L' và chọn món thêm 'Trân châu trắng' -> Xong."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị rõ giỏ hàng chứa 'Bia Heineken' và 'Trà chanh giã tay (Size L)' có kèm dòng ghi chú Topping 'Trân châu trắng'" },
+          { title: "Bài tập 6: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Món 'Bia Heineken' hiện đang hết hàng, cần tạm ngừng bán trên hệ thống.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01' đã tạo ở Bài tập 1."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm kiếm món 'Bia Heineken', mở chi tiết món, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán (hoặc thao tác tương ứng theo giao diện) -> nhấn Lưu.", "3. Tiếp tục tìm kiếm món 'Sản phẩm Test 01'.", "4. M mở chi tiết món 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị 'Bia Heineken' ở trạng thái Ngừng bán và chứng minh không còn 'Sản phẩm Test 01' trong danh sách" },
+          { title: "Dịch vụ", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới dịch vụ và dữ liệu nháp", requirements: ["1. Thêm một dịch vụ thông thường là 'Phí trang trí tiệc', giá bán 500.000đ.", "2. Thêm một dịch vụ tính giờ là 'Giờ hát Karaoke', giá bán 150.000đ.", "3. Tạo một dịch vụ nháp tên là 'Sản phẩm Test 01', giá bán 1.000đ để sử dụng cho bài tập xóa sau này."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào + Món mới -> chọn Dịch vụ.", "3. Nhập thông tin cho dịch vụ thứ nhất: Tên dịch vụ là 'Phí trang trí tiệc', Giá bán '500.000'. Nhấn Lưu.", "4. Lặp lại bước 2 để tạo dịch vụ thứ hai: Tên dịch vụ là 'Giờ hát Karaoke', Giá bán '150.000'. Tích chọn Tính phí theo giờ. Nhấn Lưu.", "5. Lặp lại bước 2 để tạo dịch vụ thứ ba: Tên dịch vụ là 'Sản phẩm Test 01', Giá bán '1.000'. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa 'Phí trang trí tiệc', 'Giờ hát Karaoke' và 'Sản phẩm Test 01' vừa tạo" },
+          { title: "Bài tập 2: Thiết lập bảng giá tính giờ vắt khung", requirements: ["1. Thiết lập bảng giá 'Giờ vàng' cho dịch vụ 'Giờ hát Karaoke' (đã tạo ở Bài 1).", "2. Khung giờ áp dụng: Từ 09:00 đến 12:00, giá 100.000đ/giờ."], instructions: ["1. Tại màn hình Quản lý, vào menu Thực đơn -> chọn Thiết lập giá.", "2. Nhấn biểu tượng + Thêm bảng giá.", "3. Đặt Tên bảng giá là 'Giờ vàng'.", "4. Tại phần Thời gian áp dụng, nhập Từ 09:00 Đến 12:00.", "5. Đảm bảo bảng giá ở trạng thái Kích hoạt -> nhấn Lưu.", "6. Thêm hàng hóa dịch vụ 'Giờ hát Karaoke' vào bảng giá này và điền Giá mới là '100.000'."], confirm: "Chụp ảnh màn hình Bảng giá 'Giờ vàng' hiển thị rõ khung giờ áp dụng và giá mới của 'Giờ hát Karaoke'" },
+          { title: "Bài tập 3: Thiết lập thuộc tính cho dịch vụ", requirements: ["1. Thiết lập 3 mức thuộc tính cho dịch vụ 'Phí trang trí tiệc' (đã tạo ở Bài 1): Cơ bản (500.000đ), Nâng cao (1.000.000đ), VIP (2.000.000đ)."], instructions: ["1. Tại màn hình Quản lý, vào menu Thực đơn -> chọn Món, tìm và mở chi tiết dịch vụ 'Phí trang trí tiệc', nhấn Chỉnh sửa.", "2. Kéo xuống khu vực Quản lý theo đơn vị tính và thuộc tính -> nhấn Thiết lập.", "3. Thêm đơn vị cơ bản là 'Gói'.", "4. Chọn thuộc tính 'Loại' (hoặc Thêm mới nếu chưa có) và nhập các giá trị: 'Cơ bản', 'Nâng cao', 'VIP'.", "5. Tại bảng danh sách hàng cùng loại bên dưới, cập nhật giá bán: Cơ bản '500.000', Nâng cao '1.000.000', VIP '2.000.000' -> nhấn Xong.", "6. Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình chi tiết dịch vụ 'Phí trang trí tiệc' hiển thị rõ 3 gói Cơ bản, Nâng cao, VIP" },
+          { title: "Bài tập 4: Thêm dịch vụ vào đơn hàng và tính tiền", requirements: ["1. Khách hàng sử dụng dịch vụ 'Giờ hát Karaoke' và chọn gói 'Phí trang trí tiệc' mức VIP.", "2. Thêm các dịch vụ này vào đơn hàng trên màn hình Thu ngân và thực hiện dừng tính giờ, thanh toán."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Tìm kiếm và chọn dịch vụ 'Phí trang trí tiệc', chọn mức 'VIP'.", "3. Tiếp tục tìm chọn dịch vụ 'Giờ hát Karaoke'. (Hệ thống sẽ bắt đầu tự động tính giờ).", "4. Giả lập khách hàng thanh toán: Bấm vào biểu tượng dừng tính trên ô thời gian của dịch vụ 'Giờ hát Karaoke'.", "5. Nhấn Thanh toán."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị rõ giỏ hàng chứa 'Phí trang trí tiệc (VIP)' và 'Giờ hát Karaoke' đang ở trạng thái dừng tính giờ trước khi thanh toán" },
+          { title: "Bài tập 5: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Tạm ngừng kinh doanh dịch vụ 'Phí trang trí tiệc'.", "2. Xóa vĩnh viễn dịch vụ nháp 'Sản phẩm Test 01' đã tạo ở Bài tập 1."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm kiếm dịch vụ 'Phí trang trí tiệc', mở chi tiết dịch vụ, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán -> nhấn Lưu.", "3. Tiếp tục tìm kiếm dịch vụ 'Sản phẩm Test 01'.", "4. Mở chi tiết dịch vụ 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị 'Phí trang trí tiệc' ở trạng thái Ngừng bán và chứng minh không còn 'Sản phẩm Test 01' trong danh sách" },
+          { title: "Combo Cố định", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo các món thành phần (Bước chuẩn bị) và dữ liệu nháp", requirements: ["1. Để chuẩn bị tạo 'Combo Trưa Tiết Kiệm', bạn cần tạo trước 3 món thành phần: 'Cơm sườn', 'Canh rong biển', và 'Trà đá'.", "2. Tạo thêm một món nháp tên là 'Sản phẩm Test 01', loại món thường, giá bán 1.000đ để sử dụng cho bài tập xóa sau này."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Món.", "3. Khai báo thông tin cho món thứ nhất: Tên món là 'Cơm sườn', giá bán '35.000'.", "4. Nhấn Lưu & Tạo thêm món để tạo tiếp 'Canh rong biển' (giá 10.000đ).", "5. Nhấn Lưu & Tạo thêm món để tạo tiếp 'Trà đá' (giá 5.000đ).", "6. Nhấn Lưu & Tạo thêm món để tạo tiếp 'Sản phẩm Test 01' (giá 1.000đ) -> nhấn Lưu ở món cuối cùng."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa đủ 4 món vừa tạo: 'Cơm sườn', 'Canh rong biển', 'Trà đá' và 'Sản phẩm Test 01'" },
+          { title: "Bài tập 2: Tạo mới Combo cố định", requirements: ["1. Tạo gói 'Combo Trưa Tiết Kiệm' với giá bán 45.000đ (Rẻ hơn so với mua lẻ từng món là 50.000đ).", "2. Thành phần combo gồm: 1 Cơm sườn, 1 Canh rong biển, 1 Trà đá (đã tạo ở Bài 1)."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Combo, buffet.", "3. Chọn loại Combo cố định -> nhấn Tiếp tục.", "4. Điền các thông tin chung: Tên món 'Combo Trưa Tiết Kiệm', Giá bán '45.000'.", "5. Tại khu vực Chi tiết món trong combo cố định, tìm kiếm và thêm các món: 'Cơm sườn' (Số lượng 1), 'Canh rong biển' (Số lượng 1), 'Trà đá' (Số lượng 1).", "6. Nhấn Lưu để hoàn tất việc tạo combo."], confirm: "Chụp ảnh màn hình trang chi tiết của 'Combo Trưa Tiết Kiệm' hiển thị rõ 3 món thành phần và giá bán 45.000đ" },
+          { title: "Bài tập 3: Thêm Combo vào đơn hàng", requirements: ["1. Khách hàng đến quầy và gọi 1 phần 'Combo Trưa Tiết Kiệm' vừa tạo.", "2. Thêm combo này vào đơn hàng để chuẩn bị thanh toán."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Tìm kiếm hoặc chọn từ thực đơn món 'Combo Trưa Tiết Kiệm' để thêm vào hóa đơn.", "3. Quan sát giỏ hàng để thấy hệ thống đã ghi nhận combo với giá 45.000đ."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị rõ giỏ hàng chứa 'Combo Trưa Tiết Kiệm' đang chờ thanh toán" },
+          { title: "Bài tập 4: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Hết giờ nghỉ trưa, cần tạm ngừng bán 'Combo Trưa Tiết Kiệm' trên hệ thống.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01' đã tạo ở Bài tập 1."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm kiếm món 'Combo Trưa Tiết Kiệm', mở chi tiết món, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán -> nhấn Lưu.", "3. Tiếp tục tìm kiếm món 'Sản phẩm Test 01'.", "4. Mở chi tiết món 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị 'Combo Trưa Tiết Kiệm' ở trạng thái Ngừng bán và chứng minh không còn 'Sản phẩm Test 01' trong danh sách" },
+          { title: "Hàng hóa trong Kho hàng", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo mới Nguyên vật liệu và Công cụ dụng cụ", requirements: ["1. Quán của bạn cần theo dõi tồn kho cho các nguyên liệu pha chế. Hãy tạo Nguyên vật liệu 'Sữa tươi không đường' (Đơn vị tính: Hộp, Giá vốn: 30.000đ, Tồn kho: 50 hộp).", "2. Tạo thêm một Công cụ dụng cụ là 'Ly thủy tinh cổ cao' (Đơn vị tính: Cái, Giá vốn: 15.000đ, Tồn kho: 100 cái).", "3. Tạo thêm một nguyên vật liệu nháp tên là 'Sản phẩm Test 01' để dành cho bài tập xóa."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Kho hàng -> chọn Danh sách hàng hóa.", "2. Đưa trỏ chuột vào nút + Thêm mới -> chọn Nguyên vật liệu.", "3. Nhập Tên hàng 'Sữa tươi không đường', khai báo Giá vốn '30.000'.", "4. Đảm bảo tính năng Quản lý tồn tại Kho hàng đang bật xanh, nhập Tồn kho là '50' -> nhấn Lưu.", "5. Đưa trỏ chuột vào nút + Thêm mới -> chọn Công cụ dụng cụ.", "6. Nhập Tên hàng 'Ly thủy tinh cổ cao', khai báo Giá vốn '15.000', Tồn kho '100' -> nhấn Lưu.", "7. Lặp lại thao tác thêm mới để tạo 'Sản phẩm Test 01' -> nhấn Lưu."], confirm: "Chụp ảnh màn hình Kho hàng hiển thị danh sách có chứa 'Sữa tươi không đường', 'Ly thủy tinh cổ cao' và 'Sản phẩm Test 01' kèm số lượng tồn kho tương ứng" },
+          { title: "Bài tập 2: Tạo mới món từ màn hình Kho hàng", requirements: ["1. Trong lúc đang kiểm kho, bạn phát hiện quán vừa nhập một loại nước giải khát mới là 'Nước ép cam đóng chai' để bán trực tiếp.", "2. Hãy tạo món này ngay trên màn hình Kho hàng mà không cần chuyển sang menu Thực đơn (Giá bán: 25.000đ, Tồn kho: 40 chai)."], instructions: ["1. Vẫn đang ở màn hình Kho hàng -> Danh sách hàng hóa.", "2. Đưa trỏ chuột vào nút + Thêm mới -> chọn Món.", "3. Nhập thông tin: Tên món 'Nước ép cam đóng chai', Giá bán '25.000'.", "4. Chọn loại món là Món thường, bật Quản lý tồn tại Kho hàng và nhập số lượng '40' -> nhấn Lưu."], confirm: "Chụp ảnh màn hình Kho hàng (sau khi load lại) hiển thị 'Nước ép cam đóng chai' vừa tạo" },
+          { title: "Bài tập 3: Chỉnh sửa thông tin và xóa dữ liệu nháp", requirements: ["1. Bạn cần điều chỉnh lại giá vốn của 'Ly thủy tinh cổ cao' từ 15.000đ xuống còn 14.000đ.", "2. Thực hiện xóa vĩnh viễn 'Sản phẩm Test 01' do nhập sai."], instructions: ["1. Tại danh sách Kho hàng, tìm đến hàng hóa 'Ly thủy tinh cổ cao'.", "2. Bấm vào tên hàng hóa để mở chi tiết, nhấn Chỉnh sửa.", "3. Tìm đến ô Giá vốn, nhập lại thành '14.000' -> nhấn Lưu.", "4. Tìm đến hàng hóa 'Sản phẩm Test 01'.", "5. Mở chi tiết 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa hàng."], confirm: "Chụp ảnh màn hình chi tiết 'Ly thủy tinh cổ cao' hiển thị giá vốn mới là 14.000đ và ảnh danh sách chứng minh không còn 'Sản phẩm Test 01'" },
+          { title: "Bài tập 4: Thao tác hàng loạt trên Kho hàng", requirements: ["1. Quán cần dán tem mã vạch lên các hộp 'Sữa tươi không đường' và chai 'Nước ép cam đóng chai' để tiện quản lý.", "2. Sử dụng tính năng thao tác hàng loạt để mở màn hình in mã vạch cho 2 mặt hàng này cùng lúc."], instructions: ["1. Tại màn hình Kho hàng -> Danh sách hàng hóa.", "2. Sử dụng thanh tìm kiếm hoặc bộ lọc để tìm 'Sữa tươi không đường' và 'Nước ép cam đóng chai'.", "3. Tích chọn vào ô vuông đầu dòng của cả 2 mặt hàng này.", "4. Nhấn vào biểu tượng In mã vạch (hình mã vạch) phía trên danh sách.", "5. Màn hình chọn số lượng tem in hiện ra, bạn nhấn In mã vạch để sang bước Xem bản in."], confirm: "Chụp ảnh màn hình popup 'Xem bản in' hiển thị rõ mẫu tem của 'Sữa tươi không đường' và 'Nước ép cam đóng chai'" }
+        ]
       },
       {
-        title: "Bài tập 2: Quản lý chi phí nhập hàng và tùy chọn hiển thị",
-        requirements: [
-          "1. Thiết lập hệ thống để quản lý thêm 'Chi phí vận chuyển' vào giá vốn sản phẩm.",
-          "2. Sao chép phiếu nhập ở Bài tập 1 thành một phiếu mới, sau đó bổ sung Chi phí vận chuyển là 200,000đ (do NCC thu).",
-          "3. Tùy chỉnh màn hình nhập hàng để ẩn cột 'Ảnh hàng hóa' và hiện cột 'Giá vốn'."
-        ],
-        instructions: [
-          "1. Vào Thiết lập -> Hàng hóa -> Bật xanh 'Quản lý chi phí nhập hàng' và tạo loại chi phí 'Vận chuyển'.",
-          "2. Quay lại menu Nhập hàng, chọn phiếu đã tạo ở Bài 1 và nhấn 'Sao chép'.",
-          "3. Tìm mục 'Chi phí nhập hàng', chọn 'Vận chuyển' và nhập số tiền 200,000đ.",
-          "4. Nhấn vào biểu tượng 'Con mắt' (Tùy chọn hiển thị) để tắt 'Ảnh hàng hóa'.",
-          "5. Nhấn Hoàn thành cho phiếu sao chép này."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách phiếu nhập, hiển thị cột Chi phí nhập hàng và giao diện đã ẩn ảnh sản phẩm."
+        id: "session_2",
+        title: "Buổi 2: Tùy biến Thực đơn nâng cao",
+        desc: "Thực hành thiết lập Combo tùy chọn, Combo tính giờ, Buffet gọi món và Món chế biến chuyên sâu.",
+        exercises: [
+          { title: "Combo tùy chọn", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo các món thành phần và dữ liệu nháp", requirements: ["1. Để chuẩn bị cho gói 'Combo Tự Chọn 199K', cần tạo trước các món thành phần. Nhóm Đồ uống: 'Trà đào', 'Trà vải' (Giá bán: 35.000đ).", "2. Nhóm Bánh ngọt: 'Bánh Tiramisu', 'Bánh Su Kem' (Giá bán: 45.000đ).", "3. Tạo thêm một món nháp tên là 'Sản phẩm Test 01', giá 1.000đ để dùng cho bài tập xóa."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Món.", "3. Tạo món 'Trà đào', giá bán '35.000', nhóm món 'Đồ uống'. Nhấn Lưu & Tạo thêm món.", "4. Tạo món 'Trà vải', giá bán '35.000', nhóm món 'Đồ uống'. Nhấn Lưu & Tạo thêm món.", "5. Tạo món 'Bánh Tiramisu', giá bán '45.000', nhóm món 'Bánh ngọt'. Nhấn Lưu & Tạo thêm món.", "6. Tạo món 'Bánh Su Kem', giá bán '45.000', nhóm món 'Bánh ngọt'. Nhấn Lưu & Tạo thêm món.", "7. Tạo món 'Sản phẩm Test 01', giá bán '1.000'. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa các món vừa tạo: Trà đào, Trà vải, Bánh Tiramisu, Bánh Su Kem và Sản phẩm Test 01" },
+          { title: "Bài tập 2: Tạo mới Combo tùy chọn", requirements: ["1. Tạo gói 'Combo Tự Chọn 199K' với giá bán 199.000đ.", "2. Thiết lập 2 nhóm tùy chọn: Nhóm 'Đồ uống' (Khách được chọn tối đa 1 món trong số Trà đào, Trà vải). Nhóm 'Bánh ngọt' (Khách được chọn tối đa 2 món trong số Bánh Tiramisu, Bánh Su Kem)."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Combo, buffet.", "3. Chọn loại Combo tùy chọn -> nhấn Tiếp tục.", "4. Điền thông tin chung: Tên món 'Combo Tự Chọn 199K', Giá bán '199.000'.", "5. Tại khu vực Chi tiết món trong combo tùy chọn, nhập Tên nhóm đầu tiên là 'Đồ uống', Giới hạn chọn món nhập '1'.", "6. Ở phần Thêm món trong nhóm, tìm và chọn 'Trà đào', 'Trà vải'.", "7. Nhấn + Tạo nhóm mới. Nhập Tên nhóm là 'Bánh ngọt', Giới hạn chọn món nhập '2'.", "8. Tìm và chọn 'Bánh Tiramisu', 'Bánh Su Kem'.", "9. Nhấn Lưu để hoàn tất tạo combo."], confirm: "Chụp ảnh màn hình chi tiết 'Combo Tự Chọn 199K' hiển thị rõ 2 nhóm tùy chọn Đồ uống (Giới hạn 1) và Bánh ngọt (Giới hạn 2)" },
+          { title: "Bài tập 3: Thêm Combo tùy chọn vào đơn hàng", requirements: ["1. Khách hàng gọi 1 phần 'Combo Tự Chọn 199K'.", "2. Khách chọn cụ thể: 1 Trà đào và 2 Bánh Tiramisu. Thêm vào hóa đơn để thanh toán."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Tìm kiếm và chọn 'Combo Tự Chọn 199K'. Màn hình tùy chọn sẽ hiện ra.", "3. Tại nhóm Đồ uống, chọn 1 'Trà đào'.", "4. Tại nhóm Bánh ngọt, chọn 2 'Bánh Tiramisu'.", "5. Nhấn Xác nhận (hoặc Xong) để đưa combo đã chọn chi tiết vào giỏ hàng."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị giỏ hàng chứa 'Combo Tự Chọn 199K', bên dưới có ghi chú rõ các món thành phần khách đã chọn: Trà đào, Bánh Tiramisu" },
+          { title: "Bài tập 4: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Tạm ngừng kinh doanh 'Combo Tự Chọn 199K' trên hệ thống.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01'."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm 'Combo Tự Chọn 199K', mở chi tiết món, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán -> nhấn Lưu.", "3. Tìm kiếm món 'Sản phẩm Test 01'.", "4. Mở chi tiết món 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị 'Combo Tự Chọn 199K' đang ở trạng thái Ngừng bán và không còn 'Sản phẩm Test 01' trong danh sách" },
+          { title: "Combo tính giờ", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo dịch vụ tính giờ và các món thành phần (Bước chuẩn bị)", requirements: ["1. Để chuẩn bị tạo gói 'Combo 2h chơi bida + 2 nước', cần thiết lập trước các dịch vụ và mặt hàng lẻ. Tạo dịch vụ tính giờ 'Giờ chơi Bida', giá 50.000đ/giờ.", "2. Tạo 2 món thường (nước) dùng làm tùy chọn: 'Trà chanh' (20.000đ), 'Nước khoáng' (10.000đ).", "3. Tạo thêm một món nháp tên 'Sản phẩm Test 01', giá 1.000đ để dùng cho bài tập xóa."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào + Món mới -> chọn Dịch vụ.", "3. Nhập Tên dịch vụ 'Giờ chơi Bida', Giá bán '50.000', tích chọn Tính phí theo giờ. Nhấn Lưu.", "4. Đưa trỏ chuột vào + Món mới -> chọn Món (Món thường).", "5. Tạo món 'Trà chanh', giá '20.000'. Nhấn Lưu & Tạo thêm món.", "6. Tạo món 'Nước khoáng', giá '10.000'. Nhấn Lưu & Tạo thêm món.", "7. Tạo món 'Sản phẩm Test 01', giá '1.000'. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa 'Giờ chơi Bida', 'Trà chanh', 'Nước khoáng' và 'Sản phẩm Test 01'" },
+          { title: "Bài tập 2: Tạo mới Combo tính giờ", requirements: ["1. Tạo 'Combo 2h chơi bida + 2 nước' với mức giá trọn gói 150.000đ.", "2. Gói combo này bao gồm 2 giờ chơi bida miễn phí. Nếu khách chơi quá 2 giờ, hệ thống sẽ tự động tính phí thêm.", "3. Khách được chọn tối đa 2 món nước trong nhóm đồ uống (Trà chanh, Nước khoáng)."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Combo, buffet.", "3. Chọn loại Combo tùy chọn -> nhấn Tiếp tục.", "4. Điền thông tin chung: Tên món 'Combo 2h chơi bida + 2 nước', Giá bán '150.000'.", "5. Tích chọn Combo chứa hàng tính giờ.", "6. Tại phần Chọn hàng tính giờ, tìm và chọn dịch vụ 'Giờ chơi Bida'. Nhập Giờ trong combo là '2' (giờ) '0' (phút).", "7. Kéo xuống khu vực Chi tiết món trong combo tùy chọn, nhập Tên nhóm đầu tiên là 'Nước'.", "8. Nhập Giới hạn chọn món là '2'.", "9. Ở phần Thêm món trong nhóm, tìm và chọn 'Trà chanh', 'Nước khoáng'.", "10. Nhấn Lưu để hoàn tất tạo combo."], confirm: "Chụp ảnh màn hình chi tiết 'Combo 2h chơi bida + 2 nước' hiển thị rõ dịch vụ Giờ chơi Bida được tặng 2 giờ và nhóm Nước có giới hạn chọn là 2" },
+          { title: "Bài tập 3: Thêm Combo tính giờ vào đơn hàng", requirements: ["1. Khách hàng đến mở bàn và gọi 'Combo 2h chơi bida + 2 nước'.", "2. Khách chọn 2 ly Trà chanh. Ghi nhận vào hệ thống để bắt đầu tính giờ chơi.", "3. Kiểm tra chi tiết bảng tính phí để xem phần giờ miễn phí."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Chọn một phòng/bàn trống, tìm kiếm và chọn 'Combo 2h chơi bida + 2 nước'. Màn hình tùy chọn sẽ hiện ra.", "3. Tại nhóm Nước, chọn 2 'Trà chanh' -> nhấn Xác nhận.", "4. Tại giỏ hàng bên phải, hệ thống đã bắt đầu tính giờ cho 'Combo 2h chơi bida + 2 nước'.", "5. Nhấp trực tiếp vào dòng dịch vụ đang chạy giờ trên giỏ hàng để xem bảng tính phí chi tiết (Thấy dòng ghi chú số giờ nằm trong combo có đơn giá bằng 0). Nhấn Đóng."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị giỏ hàng chứa combo đang chạy giờ, bên dưới có ghi chú 2 ly Trà chanh" },
+          { title: "Bài tập 4: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Tạm ngừng kinh doanh 'Combo 2h chơi bida + 2 nước' trên hệ thống.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01'."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm 'Combo 2h chơi bida + 2 nước', mở chi tiết món, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán -> nhấn Lưu.", "3. Tìm kiếm món 'Sản phẩm Test 01'.", "4. Mở chi tiết món 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị combo vừa tạo đang ở trạng thái Ngừng bán và không còn 'Sản phẩm Test 01'" },
+          { title: "Buffet gọi món", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo các món thành phần (Bước chuẩn bị) và dữ liệu nháp", requirements: ["1. Để cấu hình cho gói 'Buffet Mỹ Vị Nhân Gian', bạn cần tạo trước các món lẻ. Tạo nhóm Salad: 'Salad cá hồi' (Giá bán: 50.000đ).", "2. Tạo nhóm Nướng: 'Thịt ba chỉ nướng' (Giá bán: 80.000đ).", "3. Tạo thêm một món nháp tên là 'Sản phẩm Test 01', giá 1.000đ để dùng cho bài tập xóa sau này."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Món.", "3. Tạo món 'Salad cá hồi', nhóm món 'Salad', giá bán '50.000'. Nhấn Lưu & Tạo thêm món.", "4. Tạo món 'Thịt ba chỉ nướng', nhóm món 'Nướng', giá bán '80.000'. Nhấn Lưu & Tạo thêm món.", "5. Tạo món 'Sản phẩm Test 01', giá bán '1.000'. Nhấn Lưu."], confirm: "Chụp ảnh màn hình hiển thị danh sách món có chứa 'Salad cá hồi', 'Thịt ba chỉ nướng' và 'Sản phẩm Test 01'" },
+          { title: "Bài tập 2: Tạo mới Buffet gọi món", requirements: ["1. Thiết lập gói 'Buffet Mỹ Vị Nhân Gian' với giá vé 300.000đ/người.", "2. Phân chia thành 2 nhóm món: Nhóm 'Salad' (Khách được gọi tối đa 2 đĩa/người). Nhóm 'Nướng' (Khách được gọi không giới hạn)."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Combo, buffet.", "3. Chọn loại Buffet -> nhấn Tiếp tục.", "4. Điền thông tin chung: Tên món 'Buffet Mỹ Vị Nhân Gian', Giá bán '300.000'.", "5. Kéo xuống phần Chi tiết món trong buffet, nhập Tên nhóm đầu tiên là 'Salad'.", "6. Nhập Giới hạn chọn món là '2'. Ở phần Thêm món trong nhóm, tìm và chọn 'Salad cá hồi'.", "7. Nhấn + Tạo nhóm mới. Nhập Tên nhóm là 'Nướng'.", "8. Bỏ trống ô Giới hạn chọn món (để gọi không giới hạn). Ở phần Thêm món trong nhóm, tìm và chọn 'Thịt ba chỉ nướng'.", "9. Nhấn Lưu để hoàn tất tạo buffet."], confirm: "Chụp ảnh màn hình chi tiết 'Buffet Mỹ Vị Nhân Gian' hiển thị rõ 2 nhóm Salad (giới hạn 2) và Nướng (không giới hạn)" },
+          { title: "Bài tập 3: Thêm Buffet gọi món vào đơn hàng", requirements: ["1. Khách hàng vào bàn và mua 2 vé 'Buffet Mỹ Vị Nhân Gian'.", "2. Ghi nhận lượt gọi món đầu tiên: Khách gọi 1 đĩa Salad cá hồi và 2 đĩa Thịt ba chỉ nướng."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Chọn một phòng/bàn trống, tìm kiếm và chọn 'Buffet Mỹ Vị Nhân Gian'.", "3. Nhập số lượng vé là '2' -> chọn Gọi món trong Buffet ngay.", "4. Màn hình chọn món hiện ra, tại nhóm Salad, chọn 1 'Salad cá hồi'.", "5. Tại nhóm Nướng, tăng số lượng lên 2 cho 'Thịt ba chỉ nướng'.", "6. Nhấn Xác nhận để đưa thông tin gọi món vào giỏ hàng."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị giỏ hàng chứa vé 'Buffet Mỹ Vị Nhân Gian' kèm danh sách các món thành phần vừa gọi bên dưới" },
+          { title: "Bài tập 4: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Tạm ngừng kinh doanh vé 'Buffet Mỹ Vị Nhân Gian' trên hệ thống.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01'."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm 'Buffet Mỹ Vị Nhân Gian', mở chi tiết món, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán -> nhấn Lưu.", "3. Tìm kiếm món 'Sản phẩm Test 01'.", "4. Mở chi tiết món 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị 'Buffet Mỹ Vị Nhân Gian' ở trạng thái Ngừng bán và chứng minh không còn 'Sản phẩm Test 01' trong danh sách" },
+          { title: "Món chế biến", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo các nguyên vật liệu thành phần (Bước chuẩn bị) và dữ liệu nháp", requirements: ["1. Để chuẩn bị tạo món 'Cà phê sữa đá', bạn cần nhập kho các nguyên vật liệu cấu thành. Tạo nguyên vật liệu 'Bột cà phê' (Đơn vị tính: gr, Tồn kho: 5000gr).", "2. Tạo tiếp nguyên vật liệu 'Sữa đặc' (Đơn vị tính: ml, Tồn kho: 3000ml).", "3. Tạo thêm một món nháp tên là 'Sản phẩm Test 01', loại món thường, giá bán 1.000đ để dùng cho bài tập xóa sau này."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Kho hàng -> chọn Danh sách hàng hóa.", "2. Đưa trỏ chuột vào nút + Thêm mới -> chọn + Nguyên vật liệu.", "3. Khai báo: Tên là 'Bột cà phê', Đơn vị tính là 'gr', nhập Tồn kho là '5000'.", "4. Nhấn Lưu & Tạo thêm để tạo tiếp 'Sữa đặc' (Đơn vị tính: 'ml', Tồn kho: '3000') -> Nhấn Lưu.", "5. Chuyển sang menu Thực đơn -> Món, đưa trỏ chuột vào + Món mới -> chọn Món.", "6. Tạo món thường 'Sản phẩm Test 01', giá bán '1.000'. Nhấn Lưu."], confirm: "Chụp ảnh màn hình Kho hàng hiển thị 'Bột cà phê', 'Sữa đặc' và ảnh màn hình Thực đơn hiển thị 'Sản phẩm Test 01'" },
+          { title: "Bài tập 2: Tạo mới món chế biến có định lượng", requirements: ["1. Tạo món 'Cà phê sữa đá' hiển thị trên thực đơn với giá bán 35.000đ.", "2. Thiết lập công thức định lượng cho món này gồm: 20gr Bột cà phê và 30ml Sữa đặc (đã tạo ở Bài 1) để hệ thống tự động trừ kho khi bán."], instructions: ["1. Tại màn hình Quản lý, truy cập vào menu Thực đơn -> chọn Món.", "2. Đưa trỏ chuột vào nút + Món mới -> chọn Món.", "3. Điền các thông tin cơ bản: Tên món 'Cà phê sữa đá', Nhóm món 'Đồ uống', Giá bán '35.000'.", "4. Tại khu vực Chọn loại món, bạn chọn Món chế biến.", "5. Kéo xuống khu vực Thành phần nguyên liệu, tìm kiếm và thêm 'Bột cà phê', nhập định lượng '20' (gr).", "6. Tiếp tục tìm kiếm và thêm 'Sữa đặc', nhập định lượng '30' (ml).", "7. Nhấn Lưu để hoàn tất quá trình tạo món."], confirm: "Chụp ảnh màn hình chi tiết món 'Cà phê sữa đá' hiển thị rõ phần Thành phần nguyên liệu gồm Bột cà phê (20gr) và Sữa đặc (30ml)" },
+          { title: "Bài tập 3: Thêm món chế biến vào đơn hàng", requirements: ["1. Khách hàng gọi 1 ly 'Cà phê sữa đá'.", "2. Thêm món này vào hóa đơn và thực hiện thanh toán để kiểm tra việc hệ thống tự động trừ kho nguyên vật liệu."], instructions: ["1. Chuyển sang màn hình Thu ngân.", "2. Tìm và chọn món 'Cà phê sữa đá' để đưa vào giỏ hàng.", "3. Nhấn Thanh toán để hoàn tất giao dịch (hệ thống sẽ tự động bóc tách trừ 20gr bột cà phê và 30ml sữa đặc dưới nền)."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị giỏ hàng đã thêm 'Cà phê sữa đá' trước khi bấm Thanh toán" },
+          { title: "Bài tập 4: Cập nhật trạng thái và xóa dữ liệu nháp", requirements: ["1. Quán tạm thời hết nguyên liệu, cần tạm ngừng kinh doanh món 'Cà phê sữa đá' trên thực đơn.", "2. Xóa vĩnh viễn món nháp 'Sản phẩm Test 01'."], instructions: ["1. Quay lại màn hình Quản lý -> menu Thực đơn -> Món.", "2. Tìm kiếm món 'Cà phê sữa đá', mở chi tiết món, nhấn Ngừng bán. Bỏ tích trên chi nhánh ngừng bán -> nhấn Lưu.", "3. Tiếp tục tìm kiếm món 'Sản phẩm Test 01'.", "4. Mở chi tiết món 'Sản phẩm Test 01', nhấn Xóa -> xác nhận Xóa món."], confirm: "Chụp ảnh màn hình danh sách món hiển thị 'Cà phê sữa đá' ở trạng thái Ngừng bán và chứng minh không còn 'Sản phẩm Test 01' trong danh sách" }
+        ]
       },
       {
-        title: "Bài tập 3: Thực hiện trả hàng nhập và kiểm tra lịch sử",
-        requirements: [
-          "1. Phát hiện 05 sản phẩm 'Áo sơ mi nam Oxford' trong lô hàng ở Bài tập 1 bị lỗi đường chỉ, thực hiện trả lại hàng cho 'Tổng kho Thời trang An Đông'.",
-          "2. Kiểm tra lại lịch sử thanh toán của phiếu nhập gốc để xem biến động công nợ sau khi trả hàng."
-        ],
-        instructions: [
-          "1. Vào danh sách Nhập hàng, tìm và mở chi tiết phiếu nhập ở Bài tập 1.",
-          "2. Nhấn nút 'Trả hàng nhập'.",
-          "3. Nhập số lượng 5 vào dòng 'Áo sơ mi nam Oxford'.",
-          "4. Nhấn Hoàn thành để hệ thống tự trừ công nợ và hoàn kho.",
-          "5. Quay lại phiếu nhập gốc, chọn tab 'Lịch sử thanh toán' để xem các chứng từ liên quan."
-        ],
-        confirm: "Chụp ảnh màn hình Phiếu trả hàng nhập với trạng thái Đã hoàn thành."
+        id: "session_3",
+        title: "Buổi 3: Nghiệp vụ Thu ngân & Giao dịch",
+        desc: "Thực hành Gọi món, Tách/Gộp/Chuyển bàn, Hủy món, Thông báo bếp, Thanh toán đa phương thức.",
+        exercises: [
+          { title: "Gọi món", isGroupHeader: true },
+          { title: "Bài tập 1: Thêm mới và gọi món cơ bản", requirements: ["1. Mở một phòng/bàn trống (Ví dụ: Bàn 1), tạo nhanh một hàng hóa nháp có tên 'Món Nháp Test' ngay trên màn hình thu ngân để phục vụ thao tác hủy ở bài tập sau.", "2. Chọn món 'Phở Bò Kobe' từ thực đơn để đưa vào đơn hàng và điều chỉnh số lượng lên 2 bát."], instructions: ["1. Tại màn hình Thu ngân, chọn 'Bàn 1' ở danh sách phòng bàn bên trái.", "2. Nhấn vào biểu tượng dấu + (Thêm món mới chưa có trong danh mục), nhập tên 'Món Nháp Test', thiết lập giá bán và nhấn Lưu lại.", "3. Chuyển sang tab Thực đơn ở cột trái, tìm và kích chọn món 'Phở Bò Kobe' để đưa vào đơn hàng.", "4. Tại dòng món 'Phở Bò Kobe' trên giỏ hàng, nhấn vào biểu tượng dấu + hoặc gõ trực tiếp vào ô số lượng để tăng lên thành 2."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị Bàn 1 đang có Món Nháp Test và 2 bát Phở Bò Kobe" },
+          { title: "Bài tập 2: Thêm Topping, ghi chú và hủy món", requirements: ["1. Xóa (hủy) 'Món Nháp Test' ra khỏi đơn hàng để tránh rác dữ liệu.", "2. Gọi thêm 1 ly 'Trà sữa', kèm theo món thêm (topping) là 'Trân châu trắng' và ghi chú riêng 'Ít đá'.", "3. Cập nhật thông tin chung của đơn hàng: Đặt số lượng khách tại bàn là 2 người."], instructions: ["1. Tại đơn hàng của Bàn 1, nhấn vào biểu tượng thùng rác bên cạnh 'Món Nháp Test' để hủy món này khỏi đơn.", "2. Tìm và chọn món 'Trà sữa' từ thực đơn.", "3. Di chuột xuống dưới tên Trà sữa, nhấn vào mục Ghi chú/Món thêm. Tích chọn topping 'Trân châu trắng' và gõ chữ 'Ít đá' vào ô ghi chú.", "4. Ở góc dưới bên phải màn hình, nhấn vào biểu tượng hình người (Số lượng khách), nhập số '2' và nhấn Xong."], confirm: "Chụp ảnh màn hình đơn hàng hiển thị Trà sữa có chứa dòng topping Trân châu trắng, ghi chú Ít đá và số lượng khách là 2" },
+          { title: "Bài tập 3: Cập nhật giá niêm yết và đặt ưu tiên chế biến", requirements: ["1. Đánh dấu ưu tiên chế biến cho ly 'Trà sữa' để gửi yêu cầu bếp làm trước cho khách.", "2. Phát hiện giá món 'Phở Bò Kobe' đang bị sai, hãy cập nhật giá bán niêm yết của món này từ 50.000đ lên 55.000đ ngay trên màn hình Thu ngân."], instructions: ["1. Di chuột vào dòng món 'Trà sữa' trên đơn hàng, kích vào biểu tượng ngôi sao (ưu tiên chế biến).", "2. Nhấn nút Thông báo (hoặc phím F9) để gửi yêu cầu làm món xuống khu vực Bar/Bếp.", "3. Nhấn vào phần giá tiền của món 'Phở Bò Kobe' trên giỏ hàng.", "4. Tại cửa sổ hiển thị, tìm dòng Giá bán và nhấn vào dòng chữ Sửa giá bán.", "5. Hệ thống mở ra màn hình Cập nhật bảng giá, nhập 55,000 vào ô Giá bán mới, nhấn Cập nhật và Xác nhận."], confirm: "Chụp ảnh màn hình hiển thị hộp thoại Cập nhật bảng giá của món Phở Bò Kobe" },
+          { title: "Bài tập 4: Thiết lập món mặc định và quản lý ghi chú (Nâng cao)", requirements: ["1. Thiết lập tính năng để hệ thống tự động thêm 1 'Khăn lạnh' vào hóa đơn mỗi khi mở một bàn mới.", "2. Tạo sẵn mẫu ghi chú '30% Đường' và gắn cố định cho mặt hàng 'Trà sữa' để thu ngân có thể thao tác chọn nhanh trong các lần bán sau."], instructions: ["1. Tại màn hình Thu ngân, kích vào biểu tượng tùy chọn (3 dấu gạch ngang) ở góc trên bên phải -> chọn Món có sẵn trong đơn.", "2. Tìm kiếm món 'Khăn lạnh', nhập số lượng mặc định là 1 và nhấn Lưu lại.", "3. Trở về màn hình Quản lý, vào menu Thiết lập -> Quản lý ghi chú món.", "4. Kích nút + Ghi chú món, điền tên ghi chú là '30% Đường', tạo nhóm ghi chú 'Độ ngọt'.", "5. Kích vào nút + Thêm hàng, tìm chọn món 'Trà sữa' và nhấn Lưu để hoàn tất."], confirm: "Chụp 2 ảnh: Ảnh 1 cấu hình món có sẵn Khăn lạnh; Ảnh 2 giao diện thêm mới Ghi chú món 30% Đường" },
+          { title: "Thông báo chế biến", isGroupHeader: true },
+          { title: "Bài tập 1: Gửi thông báo order món tới bếp", requirements: ["1. Thêm một món ăn nháp mang tên 'Món Nháp Test' và 2 ly 'Cà phê muối' vào đơn hàng của một phòng/bàn bất kỳ.", "2. Thực hiện thao tác gửi thông báo yêu cầu chế biến các món này xuống khu vực Bar/Bếp."], instructions: ["1. Tại màn hình Thu ngân, chọn một phòng/bàn trống (Ví dụ: Bàn 2) ở danh sách bên trái.", "2. Thêm nhanh 'Món Nháp Test' và chọn món 'Cà phê muối' (điều chỉnh số lượng lên 2) vào đơn hàng.", "3. Tại khu vực góc dưới cùng của đơn hàng, nhấn vào nút Thông báo (hoặc bấm phím tắt F9) để gửi lệnh in báo bếp."], confirm: "Chụp ảnh màn hình Thu ngân sau khi đã bấm Thông báo, hiển thị các món đã được ghi nhận gửi bếp" },
+          { title: "Bài tập 2: Cảnh báo khi có thay đổi đơn hàng", requirements: ["1. Thực hiện xóa (hủy) 'Món Nháp Test' ra khỏi đơn hàng để bảo vệ dữ liệu hệ thống.", "2. Gọi thêm 1 phần 'Bánh sừng bò' cho bàn này.", "3. Kích hoạt tính năng cảnh báo của hệ thống bằng cách cố tình bỏ qua thao tác 'Thông báo'."], instructions: ["1. Tại đơn hàng Bàn 2, nhấn vào biểu tượng thùng rác bên cạnh 'Món Nháp Test' để hủy món (chọn lý do hủy nếu hệ thống yêu cầu).", "2. Tìm và kích chọn thêm món 'Bánh sừng bò' vào đơn hàng.", "3. Tuyệt đối KHÔNG bấm nút Thông báo. Hãy thử chuyển sang click chọn một Bàn khác hoặc bấm nút Thanh toán.", "4. Hệ thống sẽ tự động hiển thị một bảng Cảnh báo nhắc nhở rằng có những thay đổi trên đơn hàng chưa được gửi đi."], confirm: "Chụp ảnh màn hình hiển thị hộp thoại Cảnh báo của hệ thống do chưa gửi thông báo bếp" },
+          { title: "Bài tập 3: Xem lịch sử báo bếp và xử lý lỗi in (Nâng cao)", requirements: ["1. Hoàn tất việc gửi thông báo cho các thay đổi ở Bài 2.", "2. Truy cập vào phần Lịch sử báo bếp để kiểm tra lại toàn bộ danh sách các món đã báo.", "3. Thao tác chức năng 'In lại' để dự phòng cho các trường hợp máy in bếp bị lỗi (kẹt giấy, mất mạng)."], instructions: ["1. Quay lại Bàn 2, nhấn nút Thông báo để gửi lệnh cập nhật thay đổi (hủy món nháp, thêm bánh) xuống bếp.", "2. Nhấn vào nút Lịch sử báo bếp (biểu tượng chiếc đồng hồ/máy in) trên giao diện thu ngân.", "3. Màn hình Lịch sử báo bếp hiện ra, nhấn vào từng món để xem chi tiết thời gian báo bếp và trạng thái lệnh in.", "4. Giả định có sự cố máy in (hoặc thấy biểu tượng lỗi in màu đỏ), hãy nhấn vào nút In lại tương ứng với món đó để đẩy lại lệnh xuống bếp.", "5. Nhấn nút X ở góc trên bên phải để tắt màn hình lịch sử."], confirm: "Chụp ảnh màn hình giao diện Lịch sử báo bếp hiển thị chi tiết trạng thái in của các món" },
+          { title: "Cập nhật đơn", isGroupHeader: true },
+          { title: "Bài tập 1: Chuyển bàn và tạo dữ liệu nháp", requirements: ["1. Mở Bàn 1, thêm nhanh một món mang tên 'Món Nháp Test' và chọn thêm 1 'Lẩu Thái' vào đơn hàng.", "2. Khách hàng đổi ý muốn chuyển sang khu vực rộng hơn. Hãy thực hiện chuyển toàn bộ đơn hàng từ Bàn 1 sang Bàn 3."], instructions: ["1. Tại màn hình Thu ngân, chọn Bàn 1 ở danh sách bên trái. Thêm 'Món Nháp Test' và 'Lẩu Thái' vào giỏ hàng.", "2. Nhấn vào chữ 'Bàn 1' (Tên bàn) ở góc trên bên phải của đơn hàng hiện tại.", "3. Tại cửa sổ mới, chọn Loại đơn hàng là 'Ngồi tại bàn'.", "4. Ở mục Chọn phòng/bàn, tìm và chọn 'Bàn 3'.", "5. Nhấn nút Cập nhật để hoàn tất việc chuyển bàn."], confirm: "Chụp ảnh màn hình hiển thị đơn hàng Lẩu Thái và Món Nháp Test đã được chuyển thành công sang Bàn 3" },
+          { title: "Bài tập 2: Gộp bàn và xóa dữ liệu nháp", requirements: ["1. Tại đơn hàng Bàn 3, thực hiện xóa bỏ 'Món Nháp Test' ra khỏi đơn để dọn dẹp dữ liệu.", "2. Nhóm khách Bàn 3 phát hiện bạn bè đang ngồi ở Bàn 2 (đã gọi sẵn 2 'Pepsi'). Hãy thao tác gộp Bàn 3 vào Bàn 2 để họ ngồi chung."], instructions: ["1. Đang ở màn hình Bàn 3, nhấn vào biểu tượng thùng rác bên cạnh 'Món Nháp Test' để xóa món này đi.", "2. Mở Bàn 2 lên, chọn 2 'Pepsi' vào đơn hàng để thiết lập kịch bản.", "3. Nhấn vào Tên bàn (chữ Bàn 2) ở góc trên đơn hàng.", "4. Chọn Loại đơn hàng là 'Ngồi tại bàn', sau đó tích chọn vào 'Bàn 3' ở danh sách các bàn cần gộp bên dưới.", "5. Nhấn nút Cập nhật. Hệ thống sẽ hiển thị thông báo do Bàn 3 đang có món, hãy nhấn nút Đồng ý để ghép chung các món vào nhau."], confirm: "Chụp ảnh màn hình Bàn 2 hiển thị có icon đa bàn (gộp bàn) và danh sách món gồm cả Lẩu Thái và Pepsi" },
+          { title: "Bài tập 3: Ghép đơn (Gộp hóa đơn)", requirements: ["1. Khách ở Bàn 4 gọi 'Đĩa Trái Cây', sau đó muốn ghép hóa đơn của mình vào nhóm Bàn 2 để nhóm Bàn 2 thanh toán hộ tất cả."], instructions: ["1. Mở Bàn 4, chọn món 'Đĩa Trái Cây' vào đơn hàng.", "2. Tại màn hình Thu ngân, nhấn vào nút Tách ghép đơn (biểu tượng 2 mũi tên ngược chiều) ở phía dưới bên phải màn hình.", "3. Chọn mục Ghép đơn.", "4. Chọn bàn cần Ghép đến là 'Bàn 2'.", "5. Chọn hóa đơn của 'Bàn 4' (hiển thị Đĩa Trái Cây) và nhấn nút Thực hiện."], confirm: "Chụp ảnh màn hình Bàn 2 sau khi đã được ghép thành công thêm món Đĩa Trái Cây từ Bàn 4" },
+          { title: "Bài tập 4: Tách đơn (Tách món sang đơn mới)", requirements: ["1. Một khách trong nhóm Bàn 2 có việc phải về trước, yêu cầu tách riêng 2 'Pepsi' sang một bàn mới (Ví dụ: Bàn 5) để thanh toán độc lập."], instructions: ["1. Mở đơn hàng của Bàn 2, nhấn lại vào nút Tách ghép đơn ở góc dưới bên phải.", "2. Chọn mục Tách đơn.", "3. Trên ô Ghép đến: Chọn 'Tạo đơn mới', sau đó nhấp vào Chọn phòng/bàn và chọn 'Bàn 5'.", "4. Ở danh sách các món ăn bên dưới, tìm đến dòng 'Pepsi' và nhập số '2' vào ô số lượng cần tách.", "5. Nhấn nút Thực hiện để hoàn tất thao tác."], confirm: "Chụp ảnh màn hình thao tác Tách đơn, hiển thị rõ số lượng Pepsi cần tách và mục tiêu là Tạo đơn mới ở Bàn 5" },
+          { title: "Hủy món", isGroupHeader: true },
+          { title: "Bài tập 1: Thiết lập lý do hủy và tạo đơn hàng mới", requirements: ["1. Thiết lập trước một lý do hủy món mang tên 'Khách đợi lâu' để sử dụng cho các thao tác sau.", "2. Tại màn hình Thu ngân, mở một bàn trống (Ví dụ: Bàn 1), thêm 1 'Món Nháp Test', 2 'Trà chanh' và 1 'Trà sữa' vào đơn hàng."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> Quản lý lý do hủy món.", "2. Kích vào biểu tượng + Lý do hủy, nhập nội dung 'Khách đợi lâu' và nhấn Lưu.", "3. Chuyển sang màn hình Thu ngân, chọn Bàn 1.", "4. Thêm món mới 'Món Nháp Test' vào đơn hàng.", "5. Tìm và chọn thêm 2 'Trà chanh' và 1 'Trà sữa' vào giỏ hàng (Lưu ý: Chưa bấm Thông báo bếp vội)."], confirm: "Chụp ảnh màn hình Thu ngân hiển thị Bàn 1 đang có Món Nháp Test, 2 Trà chanh và 1 Trà sữa" },
+          { title: "Bài tập 2: Giảm số lượng và xóa món chưa báo bếp", requirements: ["1. Khách đổi ý uống ít đi, hãy giảm số lượng 'Trà chanh' từ 2 xuống còn 1 ly.", "2. Xóa hoàn toàn 'Món Nháp Test' ra khỏi đơn hàng để dọn dẹp dữ liệu thừa trước khi gửi order xuống bếp."], instructions: ["1. Tại đơn hàng Bàn 1, ở dòng món 'Trà chanh', nhấn vào biểu tượng dấu trừ (-) để giảm số lượng xuống còn 1.", "2. Tại dòng 'Món Nháp Test', nhấn vào biểu tượng thùng rác để xóa hoàn toàn món này khỏi đơn."], confirm: "Chụp ảnh màn hình đơn hàng Bàn 1 lúc này chỉ còn lại 1 Trà chanh và 1 Trà sữa" },
+          { title: "Bài tập 3: Hủy món sau khi đã thông báo bếp", requirements: ["1. Thực hiện 'Thông báo' các món còn lại xuống bếp.", "2. Khách không muốn uống Trà sữa nữa do đợi quá lâu. Hãy hủy món 'Trà sữa' và chọn lý do hủy đã được thiết lập ở Bài tập 1."], instructions: ["1. Nhấn nút Thông báo (hoặc bấm phím F9) để gửi lệnh chế biến Trà chanh và Trà sữa xuống khu vực Bar/Bếp.", "2. Sau khi đã báo bếp, nhấn vào biểu tượng thùng rác trên dòng món 'Trà sữa' để hủy.", "3. Hệ thống hiển thị popup xác nhận, bạn chọn Lý do hủy là 'Khách đợi lâu'.", "4. Nhấn nút Chắc chắn để hoàn tất hủy món và gửi Phiếu hủy món xuống bếp."], confirm: "Chụp ảnh màn hình hiển thị popup yêu cầu chọn Lý do hủy khi thao tác xóa món Trà sữa" },
+          { title: "Bài tập 4: Hủy toàn bộ đơn hàng", requirements: ["1. Khách hàng có việc gấp phải rời đi nên muốn hủy toàn bộ đơn hàng (hủy nốt ly Trà chanh còn lại)."], instructions: ["1. Tại đơn hàng Bàn 1, tiếp tục nhấn vào biểu tượng thùng rác ở dòng món 'Trà chanh' (là món duy nhất còn lại trong đơn).", "2. Hệ thống sẽ nhận diện đơn trống và hiển thị popup xác nhận hủy toàn bộ đơn hàng.", "3. Chọn Lý do hủy tương ứng trong danh sách.", "4. Nhấn nút Đồng ý để hoàn tất việc hủy bỏ toàn bộ đơn."], confirm: "Chụp ảnh màn hình popup xác nhận hủy toàn bộ đơn hàng do hệ thống hiển thị" },
+          { title: "Ứng dụng KiotViet Thu ngân (Máy tính)", isGroupHeader: true },
+          { title: "Bài tập 1: Tải, cài đặt ứng dụng và tạo dữ liệu mồi", requirements: ["1. Tải bộ cài đặt Ứng dụng KiotViet Thu ngân bản PC từ màn hình Quản lý trên Web và cài đặt vào máy.", "2. Trong lúc chờ cài đặt, tạo một hàng hóa nháp trên Web mang tên 'Món Nháp Test LAN' để chuẩn bị kiểm tra tính năng đồng bộ ở bài sau."], instructions: ["1. Đăng nhập vào màn hình Quản lý của KiotViet trên trình duyệt web.", "2. Nhấn vào mục Hỗ trợ ở menu -> chọn Tải KiotViet Thu ngân.", "3. Mở file vừa tải về (Ví dụ: KiotViet_Thungan.exe) và thao tác theo hướng dẫn trên màn hình để cài đặt.", "4. Mở tab Hàng hóa -> Danh mục trên trình duyệt Web, nhấn Thêm mới hàng hóa.", "5. Đặt tên là 'Món Nháp Test LAN', thiết lập giá 10,000đ và nhấn Lưu."], confirm: "Chụp ảnh màn hình Desktop hiển thị icon ứng dụng KiotViet Thu ngân đã được cài đặt thành công" },
+          { title: "Bài tập 2: Đăng nhập và đồng bộ dữ liệu", requirements: ["1. Mở ứng dụng PC vừa cài đặt và tiến hành đăng nhập vào gian hàng.", "2. Thao tác 'Đồng bộ dữ liệu' để kéo 'Món Nháp Test LAN' từ Cloud (Web) xuống máy tính nội bộ (LAN)."], instructions: ["1. Mở ứng dụng KiotViet Thu ngân trên máy tính.", "2. Nhập thôngত্তি Tên gian hàng, Tên đăng nhập, Mật khẩu và bấm Đăng nhập.", "3. Tại giao diện Thu ngân của ứng dụng, kích vào biểu tượng tùy chọn (3 dấu gạch ngang) ở góc trên bên phải màn hình.", "4. Nhấn chọn nút Đồng bộ dữ liệu để hệ thống làm mới.", "5. Chuyển sang tab Thực đơn ở cột trái, gõ tìm 'Món Nháp Test LAN' để đảm bảo món đã được tải về máy tính."], confirm: "Chụp ảnh màn hình ứng dụng PC hiển thị menu tùy chọn có nút Đồng bộ dữ liệu và thực đơn đã có Món Nháp Test LAN" },
+          { title: "Bài tập 3: Thay đổi chi nhánh và xóa món nháp", requirements: ["1. Thực hành thao tác đổi chi nhánh làm việc trực tiếp trên App PC (không cần thoát ra ngoài).", "2. Xóa vĩnh viễn 'Món Nháp Test LAN' để dọn dẹp hệ thống."], instructions: ["1. Vẫn tại màn hình ứng dụng Thu ngân PC, kích vào biểu tượng tùy chọn (3 dấu gạch ngang).", "2. Kích trực tiếp vào tên Chi nhánh hiện tại.", "3. Chọn một chi nhánh khác (Ví dụ: Chi nhánh 2) để ứng dụng tự động load lại dữ liệu phòng bàn của chi nhánh đó.", "4. Quay trở lại màn hình Quản lý trên trình duyệt Web, tìm kiếm 'Món Nháp Test LAN'.", "5. Nhấn vào tên món, chọn Xóa và Đồng ý để xóa vĩnh viễn dữ liệu nháp."], confirm: "Chụp ảnh màn hình ứng dụng PC tại thời điểm bấm vào tên chi nhánh để hiển thị danh sách các chi nhánh có thể chọn" },
+          { title: "Bài tập 4: Thao tác bán hàng qua App PC", requirements: ["1. Trải nghiệm tốc độ của ứng dụng PC bằng cách mở bàn và lên một đơn hàng gồm 2 'Cà phê đen' và 1 'Bánh sừng bò'.", "2. Tiến hành báo bếp để kiểm thử độ ổn định qua mạng LAN nội bộ."], instructions: ["1. Tại ứng dụng KiotViet Thu ngân (Máy tính), kích chọn Bàn 1.", "2. Tìm kiếm trên thực đơn và thêm 2 'Cà phê đen', 1 'Bánh sừng bò' vào giỏ hàng.", "3. Nhấn nút Thông báo (hoặc F9) để đẩy lệnh in chế biến.", "4. Bấm Thanh toán để hoàn tất chu trình trải nghiệm ứng dụng."], confirm: "Chụp ảnh màn hình ứng dụng PC hiển thị đơn hàng Bàn 1 đã được thanh toán thành công" },
+          { title: "Thanh toán", isGroupHeader: true },
+          { title: "Bài tập 1: Tạo dữ liệu nháp và thanh toán một phương thức", requirements: ["1. Mở Bàn 1, thêm một dữ liệu nháp có tên 'Món Nháp Test' cùng với 2 bát 'Phở bò' và 2 ly 'Trà đá' vào đơn hàng.", "2. Thực hiện xóa vĩnh viễn 'Món Nháp Test' để bảo vệ dữ liệu hệ thống trước khi tính tiền.", "3. Thanh toán đơn hàng này cho khách bằng phương thức Tiền mặt."], instructions: ["1. Tại màn hình Thu ngân, chọn Bàn 1, tìm và thêm 'Món Nháp Test', 'Phở bò' (SL: 2), 'Trà đá' (SL: 2) vào giỏ hàng.", "2. Nhấn vào biểu tượng thùng rác trên dòng 'Món Nháp Test' để xóa món này khỏi đơn.", "3. Sau khi xác nhận đơn đã chuẩn, nhấn nút Thanh toán (hoặc phím F8).", "4. Tại cửa sổ thanh toán, nhập số tiền khách đưa vào ô Khách thanh toán.", "5. Chọn phương thức Tiền mặt (hệ thống sẽ tự tính Tiền thừa trả khách).", "6. Nhấn nút Thanh toán để hoàn tất giao dịch."], confirm: "Chụp ảnh màn hình lịch sử hóa đơn hiển thị đơn hàng Bàn 1 đã được thanh toán thành công bằng Tiền mặt" },
+          { title: "Bài tập 2: Thanh toán bằng nhiều phương thức (Chia tiền)", requirements: ["1. Tại Bàn 2, khách gọi 'Lẩu Thái Hải Sản' và 'Trái Cây Đĩa' (giá trị lớn).", "2. Nhóm khách muốn chia hóa đơn: trả 500.000đ bằng Tiền mặt, số tiền còn lại thanh toán bằng hình thức Chuyển khoản."], instructions: ["1. Chọn Bàn 2 ở màn hình Thu ngân, tìm và thêm 'Lẩu Thái Hải Sản', 'Trái Cây Đĩa' vào đơn hàng.", "2. Nhấn nút Thanh toán.", "3. Tại khu vực phương thức thanh toán, nhấn vào biểu tượng 3 chấm (...) để mở cửa sổ kết hợp thanh toán.", "4. Tích chọn ô Tiền mặt và gõ '500,000' vào ô số tiền.", "5. Tích chọn thêm ô Chuyển khoản và gõ nốt số tiền còn lại của hóa đơn.", "6. Nhấn Xác nhận, sau đó bấm Thanh toán để kết thúc."], confirm: "Chụp ảnh màn hình cửa sổ thanh toán đang hiển thị việc chia tiền giữa Tiền mặt và Chuyển khoản" },
+          { title: "Bài tập 3: Thanh toán bằng Điểm và Voucher (Nâng cao)", requirements: ["1. Khách hàng thân thiết đến Bàn 3 và gọi 'Combo Cua Hoàng Đế'.", "2. Khách muốn áp dụng một mã Voucher giảm giá và sử dụng Điểm tích lũy để trừ bớt tiền thanh toán."], instructions: ["1. Chọn Bàn 3, thêm 'Combo Cua Hoàng Đế' vào đơn hàng.", "2. Ở góc phải màn hình, nhấp vào biểu tượng Khách hàng để tìm và chọn thông tin Khách hàng thành viên.", "3. Nhấn nút Thanh toán.", "4. Bật xanh tùy chọn Thanh toán bằng điểm và nhập số tiền (số điểm) muốn quy đổi để trừ vào hóa đơn.", "5. Tại mục Voucher, bấm chọn chương trình khuyến mại, nhập mã voucher của khách và nhấn Áp dụng.", "6. Chọn phương thức thanh toán cho phần tiền còn lại và nhấn Thanh toán để hoàn tất."], confirm: "Chụp ảnh hóa đơn hoặc màn hình thanh toán hiển thị số tiền đã được giảm trừ từ Voucher và Điểm" },
+          { title: "Bài tập 4: Thiết lập tự động hóa thanh toán QR (Nâng cao)", requirements: ["1. Để tối ưu tốc độ phục vụ, hãy thiết lập tính năng tự động thanh toán hóa đơn và phát âm báo bằng loa khi khách quét mã VietQR chuyển tiền thành công."], instructions: ["1. Ngay trên màn hình Thu ngân, nhấn vào biểu tượng tùy chọn (3 gạch ngang) ở góc trên bên phải màn hình.", "2. Chọn mục Cài đặt chung.", "3. Tìm và bật xanh (ON) tùy chọn 'Tự động thanh toán khi chuyển khoản thành công'.", "4. Tiếp tục bật xanh tùy chọn 'Đọc số tiền chuyển khoản thành công qua loa thiết bị'.", "5. Đóng cửa sổ thiết lập để hệ thống ghi nhận và lưu lại."], confirm: "Chụp ảnh màn hình bảng Cài đặt chung hiển thị 2 tính năng thanh toán QR tự động đã được bật xanh" },
+          { title: "Thanh toán qua QR", isGroupHeader: true },
+          { title: "Bài tập 1: Kích hoạt VietQR và thêm tài khoản ngân hàng", requirements: ["1. Kích hoạt tính năng 'Thanh toán qua VietQR' trong hệ thống quản lý của quán.", "2. Thêm thông tin tài khoản ngân hàng của quán (Ví dụ: Vietcombank hoặc MB Bank) vào Sổ quỹ để làm cơ sở tạo mã QR."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> Thiết lập cửa hàng.", "2. Tìm đến khối Tích hợp thanh toán -> Tích hợp VietQR, nhấp chọn Kích hoạt.", "3. Chuyển sang menu Sổ quỹ, chọn tab Ngân hàng/ Ví điện tử.", "4. Nhấn vào biểu tượng dấu cộng (+), chọn ngân hàng tương ứng và điền đầy đủ thông tin số tài khoản của quán.", "5. Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình Sổ quỹ hiển thị thông tin tài khoản Ngân hàng vừa được thêm thành công" },
+          { title: "Bài tập 2: Tạo mã QR thanh toán tại quầy (Có dữ liệu nháp)", requirements: ["1. Tại màn hình Thu ngân, mở Bàn 1 và thêm 'Món Nháp Test QR' cùng với 1 'Trà đào cam sả' và 1 'Bánh Tiramisu' vào đơn hàng.", "2. Xóa vĩnh viễn 'Món Nháp Test QR' để dọn rác dữ liệu trước khi tính tiền.", "3. Tiến hành thanh toán và tạo mã QR động ngay trên màn hình Thu ngân."], instructions: ["1. Truy cập màn hình Thu ngân, chọn Bàn 1.", "2. Tìm và thêm lần lượt 'Món Nháp Test QR', 'Trà đào cam sả', 'Bánh Tiramisu' vào giỏ hàng.", "3. Nhấn vào biểu tượng thùng rác trên dòng 'Món Nháp Test QR' để xóa món này.", "4. Nhấn nút Thanh toán (hoặc phím F8).", "5. Tại cửa sổ thanh toán, nhấp chọn phương thức Chuyển khoản và chọn tài khoản ngân hàng vừa thêm ở Bài 1.", "6. Khi mã QR động xuất hiện, nhấn Hiện mã QR để phóng to cho khách quét."], confirm: "Chụp ảnh màn hình cửa sổ thanh toán đang hiển thị mã QR động của đơn hàng" },
+          { title: "Bài tập 3: Thêm mã QR vào mẫu in hóa đơn (Nâng cao)", requirements: ["1. Cấu hình chèn mã QR trực tiếp lên mẫu in Hóa đơn giấy để khách có thể quét tự thanh toán tại bàn mà không cần ra quầy."], instructions: ["1. Tại màn hình Quản lý, vào menu Thiết lập -> Quản lý mẫu in.", "2. Chọn tab Hóa đơn và nhấn Sửa vào mẫu in đang sử dụng.", "3. Tìm vị trí phù hợp ở cuối hóa đơn, gõ hoặc dán chính xác token {Ma_QR_Thanh_Toan} vào.", "4. Nhấn Lưu để ghi nhận thay đổi trên hệ thống."], confirm: "Chụp ảnh màn hình cấu hình mẫu in Hóa đơn hiển thị rõ token mã QR vừa được chèn" },
+          { title: "Bài tập 4: Đăng ký nhận thông báo tự động (Nâng cao)", requirements: ["1. Khởi tạo quy trình đăng ký dịch vụ nhận thông báo tự động với ngân hàng để phần mềm tự chốt hóa đơn khi khách chuyển tiền thành công."], instructions: ["1. Tại màn hình Quản lý, vào menu Thanh toán.", "2. Chọn thẻ của ngân hàng (Ví dụ: Vietcombank, MB Bank) hoặc ví điện tử mà quán đang sử dụng thực tế.", "3. Nhấn nút Đăng ký.", "4. Chọn tài khoản, điền thông tin và quan sát các bước xác thực theo yêu cầu của hệ thống (Nhập OTP hoặc qua App ngân hàng)."], confirm: "Chụp ảnh màn hình giao diện Đăng ký liên kết dịch vụ Thanh toán của KiotViet với Ngân hàng" }
+        ]
       },
       {
-        title: "Bài tập 4: In tem mã vạch và xuất file đối soát",
-        requirements: [
-          "1. Thực hiện in tem mã vạch cho toàn bộ số lượng 'Quần Tây Âu Slimfit' vừa nhập để dán lên sản phẩm trước khi đưa ra quầy kệ.",
-          "2. Xuất file Excel chi tiết phiếu nhập ở Bài tập 1 để gửi cho bộ phận kế toán kho."
-        ],
-        instructions: [
-          "1. Trong danh sách Nhập hàng, chọn phiếu nhập ở Bài tập 1.",
-          "2. Nhấn nút 'In tem mã'. Hệ thống sẽ tự liệt kê danh sách hàng và số lượng tương ứng trong phiếu.",
-          "3. Chọn khổ giấy in phù hợp và nhấn In.",
-          "4. Quay lại chi tiết phiếu, nhấn biểu tượng 3 chấm (...) và chọn 'Xuất file'."
-        ],
-        confirm: "Chụp ảnh màn hình bản xem trước khi In tem mã vạch."
+        id: "session_4",
+        title: "Buổi 4: Vận hành POS & In ấn chế biến",
+        desc: "Làm quen với Máy POS, thiết lập Máy In Hóa Đơn, In Bar/Bếp và In tem nhãn ngành F&B.",
+        exercises: [
+          { title: "Máy POS Android", isGroupHeader: true },
+          { title: "Bài tập 1: Tìm kiếm tài liệu Hướng dẫn sử dụng phần cứng", requirements: ["1. Tìm kiếm bài viết Hướng dẫn sử dụng phần cứng (Máy POS Android) trên trang Hỗ trợ của KiotViet.", "2. Tìm kiếm link video Hướng dẫn sử dụng thiết bị này trên kênh YouTube chính thức của KiotViet.", "3. Dán các đường link vừa tìm được vào phiếu bài tập để lưu trữ và tham khảo."], instructions: ["1. Mở một tab mới trên trình duyệt, truy cập trực tiếp vào Trang Hỗ trợ của KiotViet tại địa chỉ: https://www.kiotviet.vn/ho-tro.", "2. Tại ô tìm kiếm của trang Hỗ trợ, gõ từ khóa 'Máy POS Android', nhấp vào bài viết hướng dẫn chi tiết tương ứng và copy đường link trên thanh địa chỉ.", "3. Truy cập Kênh YouTube chính thức của KiotViet tại địa chỉ: https://www.youtube.com/@HDSDPhanmemKiotViet, tìm video hướng dẫn về thiết bị Máy POS và copy đường link video.", "4. Dán hai đường link vừa copy vào khu vực xác nhận bên dưới."], confirm: "Học viên dán link bài viết HDSD, link video YouTube và chụp ảnh màn hình bài viết đang mở trên trang Hỗ trợ" },
+          { title: "Bài tập 2: Tạo dữ liệu nháp và truy cập thiết lập", requirements: ["1. Tạo một dữ liệu mồi mang tên 'Món Nháp POS Test' để phục vụ cho thao tác dọn dẹp hệ thống ở bài tập cuối.", "2. Truy cập vào giao diện quản lý Màn hình phụ của máy POS trên nền tảng Website KiotViet."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> Danh mục, chọn Thêm mới hàng hóa.", "2. Nhập tên hàng 'Món Nháp POS Test', giá bán '10,000' và nhấn Lưu.", "3. Tiếp tục vào menu Thiết lập (biểu tượng bánh răng) -> chọn Thiết lập cửa hàng.", "4. Tìm và chọn tab Màn hình phụ để chuẩn bị cấu hình hình ảnh hiển thị cho khách hàng."], confirm: "Chụp ảnh màn hình giao diện Thiết lập Màn hình phụ đang trống trên máy tính" },
+          { title: "Bài tập 3: Thiết lập hình ảnh màn hình chờ", requirements: ["1. Khi máy POS đang ở trạng thái rảnh (chưa lên đơn), màn hình phụ hướng về phía khách sẽ chiếu hình ảnh quảng cáo. Hãy tải lên các Banner chương trình khuyến mãi của quán."], instructions: ["1. Tại mục 'Thiết lập Màn hình chờ', nhấn vào nút tải ảnh.", "2. Tải lên ảnh thứ nhất mang tên 'Banner_Khai_Truong_Giam_20.jpg' (nhớ chọn ảnh có tỷ lệ phù hợp 1280x730).", "3. Tiếp tục tải lên ảnh thứ hai mang tên 'Combo_Lau_Nuong_99K.png'.", "4. Kiểm tra lại thứ tự hiển thị của các ảnh vừa tải."], confirm: "Chụp ảnh màn hình khối Thiết lập Màn hình chờ đã có chứa 2 ảnh quảng cáo" },
+          { title: "Bài tập 4: Thiết lập màn hình thông tin đơn hàng (Upsell)", requirements: ["1. Trong lúc thu ngân đang nhập order món ăn, bạn muốn hiển thị hình ảnh các món nước giải khát ở nửa bên của màn hình phụ để kích thích khách gọi thêm."], instructions: ["1. Kéo xuống mục 'Thiết lập Màn hình thông tin đơn hàng và thông tin thanh toán'.", "2. Nhấn nút tải ảnh và chọn tệp 'Menu_Tra_Sua_Kem_Cheese.png' (kích thước đề xuất 600x680).", "3. Tải thêm ảnh 'Tra_Trai_Cay_Nhiet_Doi.jpg' để làm slide chạy luân phiên.", "4. Nhấn nút Lưu ở góc trên cùng (hoặc dưới cùng) của màn hình để hệ thống ghi nhận toàn bộ cấu hình hiển thị đẩy xuống máy POS."], confirm: "Chụp ảnh màn hình đã lưu thành công các hình ảnh nước uống ở phần thông tin đơn hàng" },
+          { title: "Bài tập 5: Xóa dữ liệu nháp", requirements: ["1. Hoàn tất quá trình thiết lập và tiến hành xóa vĩnh viễn 'Món Nháp POS Test' để đảm bảo nguyên tắc không để lại dữ liệu rác trên hệ thống nhà hàng."], instructions: ["1. Quay trở lại menu Hàng hóa -> Danh mục.", "2. Tìm kiếm từ khóa 'Món Nháp POS Test'.", "3. Kích vào chi tiết hàng hóa, nhấn nút Xóa và chọn Đồng ý.", "4. Kiểm tra lại danh mục để đảm bảo hàng hóa đã bị xóa."], confirm: "Chụp ảnh màn hình lịch sử thao tác hoặc danh mục xác nhận món nháp đã bị xóa vĩnh viễn" },
+          { title: "Máy In Hóa Đơn", isGroupHeader: true },
+          { title: "Bài tập 1: Tìm kiếm tài liệu hướng dẫn sử dụng phần cứng", requirements: ["1. Truy cập trang Hỗ trợ của KiotViet để tìm bài viết chi tiết về Máy in hóa đơn KV804.", "2. Truy cập kênh YouTube chính thức của KiotViet để tìm video hướng dẫn lắp đặt máy in hóa đơn K80.", "3. Dán các đường link tìm được vào phiếu bài tập để phục vụ tra cứu sau này."], instructions: ["1. Mở trình duyệt, truy cập trực tiếp vào Trang Hỗ trợ của KiotViet tại địa chỉ: https://www.kiotviet.vn/ho-tro. Tìm từ khóa 'Máy in KV804' và copy link bài viết chi tiết.", "2. Truy cập Kênh YouTube chính thức của KiotViet tại địa chỉ: https://www.youtube.com/@HDSDPhanmemKiotViet. Tìm video 'Hướng dẫn lắp đặt máy in hóa đơn' và copy link video.", "3. Dán hai đường link vừa copy vào khu vực xác nhận bên dưới."], confirm: "Học viên dán link bài viết HDSD, link video YouTube và chụp ảnh màn hình bài viết đang mở trên trang Hỗ trợ" },
+          { title: "Bài tập 2: Thao tác lắp đặt và tạo dữ liệu mồi", requirements: ["1. Thực hiện lắp giấy in nhiệt K80 vào máy in đúng chiều và thực hiện in Test phần cứng (Self-test).", "2. Tại màn hình Quản lý trên Website, tạo một hàng hóa nháp mang tên 'Món Nháp In Bill' và hàng hóa chính 'Lẩu Nấm Chim Kê' để thực hành."], instructions: ["1. Mở nắp máy in, đặt cuộn giấy K80 sao cho mặt ngoài hướng xuống dưới, kéo một đoạn thừa ra ngoài và đóng nắp.", "2. Tắt nguồn máy in, giữ nút Feed và bật lại nguồn cho đến khi đèn nháy thì thả tay để máy in ra phiếu thông số kỹ thuật (Self-test).", "3. Tại màn hình Quản lý Website, vào menu Hàng hóa -> Danh mục.", "4. Nhấn Thêm mới hàng hóa 'Món Nháp In Bill' (giá 1,000đ) và 'Lẩu Nấm Chim Kê' (giá 450,000đ). Nhấn Lưu."], confirm: "Chụp ảnh phiếu in Self-test từ máy in và màn hình danh mục hàng hóa vừa tạo" },
+          { title: "Bài tập 3: Cài đặt Driver USB và kiểm tra cổng kết nối", requirements: ["1. Cài đặt Driver máy in BP-T3 (K80) trên máy tính Windows qua cổng USB.", "2. Thực hiện thao tác 'Check USB Port' để xác định chính xác cổng kết nối của máy in."], instructions: ["1. Chạy file cài đặt Driver, chọn phiên bản Windows tương ứng.", "2. Tại mục Printer Interface, chọn USB. Tại mục Printer, chọn BP-T3.", "3. Nhấn nút Check USB Port. Máy in sẽ tự động in ra một phiếu nhỏ ghi thông tin cổng (Ví dụ: USB001).", "4. Nhấn Install Now để hoàn tất cài đặt driver vào máy tính."], confirm: "Chụp ảnh màn hình cửa sổ POS Printer Driver hiển thị trạng thái đã cài đặt và phiếu nhỏ ghi cổng USB vừa in ra" },
+          { title: "Bài tập 4: Tối ưu khổ giấy và cấu hình in tự động (Nâng cao)", requirements: ["1. Thực hiện thanh toán món 'Lẩu Nấm Chim Kê', cấu hình tối ưu khổ giấy (bỏ lề, bỏ Header/Footer) trong cửa sổ xem trước.", "2. Thiết lập tính năng 'In tự động - Kiosk Printing' trên trình duyệt để bỏ qua bước xem trước khi in hóa đơn."], instructions: ["1. Tại màn hình Thu ngân, chọn món 'Lẩu Nấm Chim Kê' và nhấn Thanh toán.", "2. Trong cửa sổ in, nhấn 'Chế độ cài đặt khác', chọn Lề là 'Không' (None) và bỏ tích ở 'Đầu trang và chân trang'. Nhấn In.", "3. Tắt hoàn toàn trình duyệt Chrome. Chuột phải vào biểu tượng Chrome trên Desktop -> Chọn Properties.", "4. Tại ô Target, chèn thêm đoạn mã --kiosk-printing (có dấu cách ở phía trước) vào cuối dòng. Nhấn Apply và OK."], confirm: "Chụp ảnh màn hình cửa sổ Properties của Chrome hiển thị đoạn mã vừa chèn và một hóa đơn đã in ra chuẩn khổ" },
+          { title: "Bài tập 5: Xóa dữ liệu nháp và kiểm tra", requirements: ["1. Thực hiện xóa vĩnh viễn 'Món Nháp In Bill' để dọn dẹp hệ thống sau khi hoàn tất chu trình thực hành phần cứng."], instructions: ["1. Quay lại màn hình Hàng hóa -> Danh mục trên Website Quản lý.", "2. Tìm kiếm món 'Món Nháp In Bill'.", "3. Nhấn vào chi tiết món, chọn nút Xóa và xác nhận Đồng ý để xóa vĩnh viễn khỏi danh mục kinh doanh."], confirm: "Chụp ảnh màn hình danh mục hàng hóa xác nhận món nháp đã được xóa" },
+          { title: "Máy In Chế Biến", isGroupHeader: true },
+          { title: "Bài tập 1: Tìm kiếm tài liệu hướng dẫn sử dụng phần cứng", requirements: ["1. Truy cập trang Hỗ trợ của KiotViet để tìm bài viết chi tiết về Máy in chế biến KV838.", "2. Truy cập kênh YouTube chính thức của KiotViet để tìm video hướng dẫn lắp đặt máy in K80.", "3. Dán các đường link tìm được vào phiếu bài tập để phục vụ tra cứu sau này."], instructions: ["1. Mở trình duyệt, truy cập trang Hỗ trợ: https://www.kiotviet.vn/ho-tro. Tìm từ khóa 'Máy in KV838' và copy link bài viết.", "2. Truy cập Kênh YouTube: https://www.youtube.com/@HDSDPhanmemKiotViet. Tìm video 'Hướng dẫn lắp đặt máy in chế biến' và copy link video.", "3. Dán link bài viết và link video vào phần xác nhận bên dưới."], confirm: "Học viên dán các link đã tìm được và chụp ảnh màn hình bài viết HDSD trên trình duyệt" },
+          { title: "Bài tập 2: Thiết lập tính năng trên Website quản lý", requirements: ["1. Tạo một dữ liệu mồi mang tên 'Món Nháp In Bếp' và món chính 'Lẩu Thái Hải Sản' để thực hành.", "2. Bật tính năng sử dụng máy in chế biến trên hệ thống và cấu hình phương thức in qua máy tính."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> Danh mục. Nhấn Thêm mới hàng hóa 'Món Nháp In Bếp' (giá 10k) và 'Lẩu Thái Hải Sản' (giá 350k). Nhấn Lưu.", "2. Vào menu Thiết lập -> Thiết lập cửa hàng -> Chọn tab Giao dịch.", "3. Tìm mục 'Dùng máy in chế biến tem nhãn' và bật xanh tính năng này.", "4. Đảm bảo TẮT tùy chọn “Cho phép in bar, bếp trực tiếp từ điện thoại” (để máy tính làm trung tâm xử lý in).", "5. Nhấn Xong để lưu thiết lập."], confirm: "Chụp ảnh màn hình tab Giao dịch sau khi đã bật tính năng Dùng máy in chế biến" },
+          { title: "Bài tập 3: Cài đặt Driver và cấu hình App Kết Nối (In USB)", requirements: ["1. Thực hiện cài đặt Driver máy in BP-T3 (K80) trên Windows.", "2. Cấu hình App KiotViet Kết Nối để máy in phụ trách in phiếu cho nhóm hàng 'Món chính'."], instructions: ["1. Chạy file cài đặt Driver K80, tại cửa sổ cấu hình chọn Interface là USB, Printer là BP-T3 và nhấn Install Now.", "2. Mở App KiotViet Kết Nối trên máy tính và đăng nhập.", "3. Tại mục Máy in bar bếp, nhấn Cập nhật.", "4. Chọn tên máy in là 'BP-T3', chọn khổ in 'Chế biến K80'.", "5. Tại phần nhóm hàng, tích chọn nhóm 'Món chính' (nhóm chứa món Lẩu Thái đã tạo).", "6. Nhấn Áp dụng và Xong."], confirm: "Chụp ảnh màn hình App KiotViet Kết Nối hiển thị rõ máy in BP-T3 đã được gán nhóm hàng" },
+          { title: "Bài tập 4: Thiết lập IP Tĩnh cho máy in LAN (Nâng cao)", requirements: ["1. Thực hành các bước xác định dải IP mạng LAN để chuẩn bị cấu hình máy in đặt trong bếp.", "2. Cấu hình Port cho máy in trên Windows theo địa chỉ IP giả định 192.168.0.220."], instructions: ["1. Bấm phím Windows, gõ 'CMD', nhập lệnh 'ipconfig' để xem địa chỉ IPv4 Address của máy tính (xác định dải mạng).", "2. Vào Control Panel -> View devices and printers. Chuột phải vào máy in BP-T3 -> Printer Properties.", "3. Chuyển sang tab Ports -> Add Port -> Standard TCP/IP Port -> New Port.", "4. Nhập địa chỉ IP: 192.168.0.220 và nhấn Next cho đến khi hoàn tất.", "5. Nhấn Apply để máy in nhận cổng kết nối mạng LAN."], confirm: "Chụp ảnh màn hình tab Ports của máy in hiển thị cổng Standard TCP/IP với địa chỉ IP vừa nhập" },
+          { title: "Bài tập 5: Xóa dữ liệu nháp và kiểm tra", requirements: ["1. Thực hiện xóa vĩnh viễn dữ liệu 'Món Nháp In Bếp' để dọn dẹp hệ thống sau khi kết thúc buổi thực hành phần cứng."], instructions: ["1. Quay lại màn hình Hàng hóa -> Danh mục.", "2. Tìm kiếm món 'Món Nháp In Bếp'.", "3. Kích vào chi tiết món, nhấn nút Xóa và xác nhận Đồng ý.", "4. Kiểm tra danh mục để đảm bảo món đã biến mất hoặc có hậu tố {DEL}."], confirm: "Chụp ảnh màn hình lịch sử thao tác xác nhận đã xóa hàng hóa thành công" },
+          { title: "Máy in tem nhãn", isGroupHeader: true },
+          { title: "Bài tập 1: Tìm kiếm tài liệu hướng dẫn sử dụng phần cứng", requirements: ["1. Truy cập trang Hỗ trợ của KiotViet để tìm bài viết chi tiết về Máy in tem nhãn 365B.", "2. Truy cập kênh YouTube chính thức của KiotViet để tìm video hướng dẫn lắp đặt máy in tem nhãn.", "3. Dán các đường link tìm được vào phiếu bài tập để phục vụ tra cứu sau này."], instructions: ["1. Mở trình duyệt, truy cập trực tiếp vào Trang Hỗ trợ của KiotViet tại địa chỉ: https://www.kiotviet.vn/ho-tro. Tìm từ khóa 'Máy in 365B' và copy link bài viết chi tiết.", "2. Truy cập Kênh YouTube chính thức của KiotViet tại địa chỉ: https://www.youtube.com/@HDSDPhanmemKiotViet. Tìm video 'Hướng dẫn lắp đặt máy in tem nhãn' và copy link video.", "3. Dán hai đường link vừa copy vào khu vực xác nhận bên dưới."], confirm: "Học viên dán link bài viết HDSD, link video YouTube và chụp ảnh màn hình bài viết đang mở trên trang Hỗ trợ" },
+          { title: "Bài tập 2: Thiết lập tính năng trên website và tạo dữ liệu mồi", requirements: ["1. Tạo một dữ liệu mồi mang tên 'Món Nháp In Tem' và hàng hóa chính 'Trà Sữa Trân Châu Đường Đen' để thực hành.", "2. Bật tính năng sử dụng máy in tem nhãn trên hệ thống Website Quản lý."], instructions: ["1. Tại màn hình Quản lý, vào menu Hàng hóa -> Danh mục. Nhấn Thêm mới hàng hóa 'Món Nháp In Tem' (giá 10k) và 'Trà Sữa Trân Châu Đường Đen' (giá 45k). Nhấn Lưu.", "2. Vào menu Thiết lập -> Thiết lập cửa hàng -> Chọn tab Giao dịch.", "3. Tìm mục 'Dùng máy in chế biến tem nhãn' và bật xanh tính năng này.", "4. Đảm bảo TẮT tùy chọn “Cho phép in bar, bếp trực tiếp từ điện thoại” (để máy tính tại quầy làm trung tâm xử lý lệnh in).", "5. Nhấn Lưu để hoàn tất."], confirm: "Chụp ảnh màn hình tab Giao dịch hiển thị rõ tính năng Dùng máy in chế biến đã được bật và tính năng in trực tiếp từ điện thoại đã được tắt" },
+          { title: "Bài tập 3: Thiết lập khổ giấy và cấu hình App Kết Nối (In USB)", requirements: ["1. Thực hiện thiết lập khổ giấy tem nhãn 50x30mm trên Windows.", "2. Cấu hình App KiotViet Kết Nối để máy in 365B phụ trách in tem cho nhóm hàng 'Trà sữa'."], instructions: ["1. Vào Control Panel -> View devices and printers. Chuột phải vào máy in 365B (đã cài driver), chọn Printer Properties -> General -> Preferences -> Page Setup.", "2. Nhấn New, đặt tên khổ giấy 'Tem trà sữa 50x30mm', nhập Width '50mm' và Height '30mm'. Nhấn OK và Apply.", "3. Mở App KiotViet Kết Nối trên máy tính và đăng nhập.", "4. Tại mục Máy in bar bếp, nhấn Cập nhật. Chọn máy in là '4BARCODE 3B-365B', khổ in là 'Tem nhãn 50x30mm'.", "5. Tại phần nhóm hàng, tích chọn nhóm 'Trà sữa' (nhóm chứa món Trà sữa vừa tạo).", "6. Nhấn Áp dụng và Lưu."], confirm: "Chụp ảnh màn hình giao diện Page Setup trên Windows và giao diện cấu hình của App KiotViet Kết Nối" },
+          { title: "Bài tập 4: Thiết lập IP tĩnh và cổng LAN cho máy in (Nâng cao)", requirements: ["1. Xác định địa chỉ IP của máy tính để chuẩn bị cấu hình mạng cho máy in tem đặt xa quầy.", "2. Cấu hình Port Standard TCP/IP cho máy in 365B theo địa chỉ IP giả định 192.168.0.220."], instructions: ["1. Bấm phím Windows, gõ 'CMD', nhập lệnh 'ipconfig' để xem Ipv4 Address của mạng LAN.", "2. Vào Control Panel -> View devices and printers. Chuột phải vào máy in 365B -> Printer Properties.", "3. Chuyển sang tab Ports -> Add Port -> Standard TCP/IP Port -> New Port.", "4. Nhập địa chỉ IP cố định của máy in: 192.168.0.220.", "5. Nhấn Next cho đến khi Finish và nhấn Apply để máy in nhận cổng mạng LAN."], confirm: "Chụp ảnh màn hình tab Ports của máy in 365B hiển thị rõ cổng IP 192.168.0.220" },
+          { title: "Bài tập 5: Xóa dữ liệu nháp và kiểm tra tồn kho", requirements: ["1. Thực hiện xóa vĩnh viễn 'Món Nháp In Tem' để dọn dẹp hệ thống sau buổi thực hành phần cứng."], instructions: ["1. Quay lại màn hình Hàng hóa -> Danh mục.", "2. Tìm kiếm món 'Món Nháp In Tem'.", "3. Kích vào chi tiết hàng hóa, nhấn nút Xóa và chọn Đồng ý.", "4. Kiểm tra danh mục để đảm bảo món đã biến mất hoặc có hậu tố {DEL}."], confirm: "Chụp ảnh màn hình danh mục hàng hóa sau khi đã xóa thành công món nháp" }
+        ]
       },
       {
-        title: "Bài tập 5: Dọn dẹp dữ liệu (Thực hành hủy phiếu)",
-        requirements: [
-          "1. Thực hiện hủy vĩnh viễn phiếu nhập có chứa 'Sản phẩm Test 01' đã tạo ở Bài tập 1 (phiếu nháp hoặc phiếu sai) để làm sạch dữ liệu báo cáo."
-        ],
-        instructions: [
-          "1. Tìm phiếu nhập có chứa sản phẩm 'Sản phẩm Test 01' trong danh sách.",
-          "2. Nhấn vào mã phiếu để xem chi tiết.",
-          "3. Nhấn nút 'Hủy'.",
-          "4. Chọn 'Đồng ý' khi hệ thống yêu cầu xác nhận."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách phiếu nhập với phiếu vừa chọn hiển thị trạng thái 'Đã hủy'."
-      },
-
-      { title: "Nhà cung cấp", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thêm mới và phân loại Nhà cung cấp",
-        requirements: [
-          "1. Tạo một Nhóm nhà cung cấp mới có tên là 'Nhóm Hàng May Mặc'.",
-          "2. Thêm mới nhà cung cấp 'Xưởng may mặc Hữu Nghị' (SĐT: 0912345678, Địa chỉ: Quận Tân Bình, TP.HCM) và đưa vào nhóm vừa tạo.",
-          "3. Tạo thêm một nhà cung cấp mồi tên là 'NCC Test Hệ Thống' để dành cho bài tập xóa dữ liệu."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, chọn menu Mua hàng -> Nhà cung cấp.",
-          "2. Tại cột bên trái mục Nhóm nhà cung cấp, nhấn dấu + (Tạo mới) để thêm nhóm 'Nhóm Hàng May Mặc'.",
-          "3. Nhấn nút + Nhà cung cấp.",
-          "4. Nhập Tên, Số điện thoại, Địa chỉ và chọn đúng Nhóm vừa tạo.",
-          "5. Nhấn Lưu. Lặp lại thao tác để tạo 'NCC Test Hệ Thống'."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Nhà cung cấp, hiển thị rõ cột Nhóm và Nhà cung cấp vừa tạo."
-      },
-      {
-        title: "Bài tập 2: Cập nhật thông tin và theo dõi lịch sử giao dịch",
-        requirements: [
-          "1. Nhà cung cấp 'Tổng kho Thời trang An Đông' (đã tạo ở bài trước) thay đổi địa chỉ sang 'Số 10 Hùng Vương, Quận 5'. Hãy cập nhật thông tin này.",
-          "2. Kiểm tra lại lịch sử nhập hàng để xác nhận các phiếu nhập từ bài thực hành trước đã được ghi nhận đúng."
-        ],
-        instructions: [
-          "1. Tại màn hình Nhà cung cấp, tìm và chọn 'Tổng kho Thời trang An Đông'.",
-          "2. Nhấn nút Chỉnh sửa.",
-          "3. Thay đổi thông tin tại ô Địa chỉ và nhấn Lưu.",
-          "4. Nhấn vào tab Lịch sử nhập/trả hàng để xem danh sách các phiếu nhập đã thực hiện."
-        ],
-        confirm: "Chụp ảnh màn hình tab Lịch sử nhập/trả hàng của nhà cung cấp An Đông."
-      },
-      {
-        title: "Bài tập 3: Thanh toán công nợ và chiết khấu thanh toán",
-        requirements: [
-          "1. Thực hiện trả nợ cho 'Tổng kho Thời trang An Đông' số tiền 2,000,000đ bằng hình thức Chuyển khoản.",
-          "2. Do thanh toán sớm, bạn được NCC chiết khấu thêm 100,000đ. Hãy ghi nhận khoản chiết khấu này để giảm nợ."
-        ],
-        instructions: [
-          "1. Trong chi tiết nhà cung cấp An Đông, chọn tab Công nợ.",
-          "2. Nhấn nút Thanh toán. Nhập số tiền 2,000,000, chọn phương thức Chuyển khoản và nhấn Tạo phiếu chi.",
-          "3. Tiếp tục nhấn nút Chiết khấu thanh toán.",
-          "4. Nhập số tiền 100,000, chọn 'Phân bổ vào phiếu nhập hàng' và nhấn Tạo phiếu."
-        ],
-        confirm: "Chụp ảnh màn hình tab Công nợ sau khi đã thực hiện thanh toán và chiết khấu, hiển thị giá trị Nợ cần trả đã giảm xuống."
-      },
-      {
-        title: "Bài tập 4: Điều chỉnh công nợ thủ công",
-        requirements: [
-          "1. Giả định có sai lệch nhỏ 5,000đ trong quá trình đối soát với 'Xưởng may mặc Hữu Nghị'. Hãy thực hiện điều chỉnh tăng nợ thêm 5,000đ mà không tạo phiếu nhập hàng."
-        ],
-        instructions: [
-          "1. Tìm và chọn nhà cung cấp 'Xưởng may mặc Hữu Nghị'.",
-          "2. Vào tab Công nợ, nhấn nút Điều chỉnh.",
-          "3. Tại ô 'Giá trị nợ điều chỉnh', nhập số tiền nợ thực tế sau khi đã cộng thêm 5,000đ.",
-          "4. Nhập mô tả: 'Điều chỉnh sai lệch đối soát' và nhấn Chỉnh sửa."
-        ],
-        confirm: "Chụp ảnh màn hình Phiếu điều chỉnh công nợ trong tab Công nợ."
-      },
-      {
-        title: "Bài tập 5: Dọn dẹp danh sách (Ngừng hoạt động & Xóa)",
-        requirements: [
-          "1. Thực hiện Xóa vĩnh viễn nhà cung cấp 'NCC Test Hệ Thống' đã tạo ở Bài 1.",
-          "2. Chuyển trạng thái nhà cung cấp 'Xưởng may mặc Hữu Nghị' sang 'Ngừng hoạt động' (giả định tạm dừng hợp tác)."
-        ],
-        instructions: [
-          "1. Tìm 'NCC Test Hệ Thống', nhấn vào tên để xem chi tiết, chọn nút Xóa và xác nhận Đồng ý.",
-          "2. Tìm 'Xưởng may mặc Hữu Nghị', nhấn nút Ngừng hoạt động và xác nhận Đồng ý.",
-          "3. Kiểm tra lại bằng cách lọc danh sách 'Ngừng hoạt động' để tìm lại NCC này."
-        ],
-        confirm: "Chụp ảnh màn hình bộ lọc Trạng thái: 'Ngừng hoạt động' có hiển thị Xưởng may mặc Hữu Nghị."
-      },
-
-      { title: "Thiết lập giá", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo mới bảng giá theo chính sách",
-        requirements: [
-          "1. Giả định bạn đã có 2 sản phẩm trên hệ thống: 'Nước giặt OMO 3kg' (Giá chung: 150,000đ, Giá vốn: 120,000đ) và 'Nước xả Downy 2L' (Giá chung: 120,000đ, Giá vốn: 90,000đ).",
-          "2. Tạo một bảng giá mới có tên 'Bảng giá Sỉ Đại Lý' áp dụng trên toàn hệ thống với trạng thái Đang áp dụng.",
-          "3. Tạo thêm một bảng giá mồi có tên 'Bảng giá Test 01'."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Thiết lập giá.",
-          "2. Nhấn vào nút + Tạo mới.",
-          "3. Tại tab Thông tin, nhập Tên bảng giá là 'Bảng giá Sỉ Đại Lý'.",
-          "4. Đảm bảo trạng thái đang chọn là 'Áp dụng' và nhấn Lưu.",
-          "5. Lặp lại các bước 2, 3, 4 để tạo 'Bảng giá Test 01'."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách các bảng giá vừa được tạo thành công ở cột bên trái."
-      },
-      {
-        title: "Bài tập 2: Thêm hàng hóa và thiết lập công thức giá hàng loạt",
-        requirements: [
-          "1. Thêm 2 mặt hàng 'Nước giặt OMO 3kg' và 'Nước xả Downy 2L' vào 'Bảng giá Sỉ Đại Lý'.",
-          "2. Thiết lập mức giá sỉ tự động thấp hơn 10% so với giá bán lẻ thông thường (Bảng giá chung) và làm tròn đến hàng nghìn."
-        ],
-        instructions: [
-          "1. Nhấn chọn 'Bảng giá Sỉ Đại Lý' để mở giao diện chi tiết.",
-          "2. Tại ô tìm kiếm, gõ tên để thêm lần lượt 'Nước giặt OMO 3kg' và 'Nước xả Downy 2L' vào danh sách.",
-          "3. Nhấn trực tiếp vào ô giá của sản phẩm Nước giặt OMO để mở pop-up Thiết lập công thức.",
-          "4. Tại mục Tính giá dựa trên, chọn 'Bảng giá chung', chọn phép tính trừ (-) và điền '10%'.",
-          "5. Tại mục Làm tròn, chọn làm tròn đến 1.000.",
-          "6. Tích chọn 'Áp dụng công thức này cho tất cả hàng hóa trong Bảng giá', sau đó nhấn Xong -> Đồng ý."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết Bảng giá Sỉ Đại Lý, hiển thị rõ cột Giá mới đã được tự động giảm 10%."
-      },
-      {
-        title: "Bài tập 3: Kiểm soát lợi nhuận (So sánh giá bán và giá vốn)",
-        requirements: [
-          "1. Sau khi giảm 10%, bạn cần kiểm tra xem trong 'Bảng giá Sỉ Đại Lý' có mặt hàng nào bị giảm giá xuống thấp hơn Giá vốn hay không, nhằm tránh rủi ro bán lỗ."
-        ],
-        instructions: [
-          "1. Đảm bảo bạn đang đứng ở màn hình chi tiết của 'Bảng giá Sỉ Đại Lý'.",
-          "2. Ở thanh công cụ bên trái, tìm đến mục bộ lọc 'Giá bán'.",
-          "3. Chọn toán tử so sánh là 'Nhỏ hơn' (<).",
-          "4. Tại ô chọn loại giá đối chiếu, chọn 'Giá vốn'.",
-          "5. Xem kết quả hệ thống lọc ra (Nếu danh sách trống, tức là giá sỉ vẫn đang cao hơn giá vốn, đảm bảo có lãi)."
-        ],
-        confirm: "Chụp ảnh màn hình kết quả sau khi áp dụng bộ lọc Giá bán < Giá vốn."
-      },
-      {
-        title: "Bài tập 4: So sánh nhiều bảng giá và xuất dữ liệu",
-        requirements: [
-          "1. Thực hiện xem đối chiếu trực quan 2 mức giá: Bảng giá chung và Bảng giá Sỉ Đại Lý trên cùng một màn hình.",
-          "2. Xuất file Excel dữ liệu bảng giá sỉ để gửi cho đối tác/đại lý."
-        ],
-        instructions: [
-          "1. Tại màn hình Thiết lập giá, nhìn lên phía trên danh sách hàng hóa, nhấn vào ô 'Chọn bảng giá'.",
-          "2. Tích chọn vào 2 ô: 'Bảng giá chung' và 'Bảng giá Sỉ Đại Lý'.",
-          "3. Quan sát hệ thống hiển thị song song 2 cột giá cho từng sản phẩm.",
-          "4. Sau đó, nhấn vào nút 'Xuất file' góc trên bên phải để tải dữ liệu về máy tính."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện hệ thống đang hiển thị song song 2 cột giá của 2 bảng giá khác nhau."
-      },
-      {
-        title: "Bài tập 5: Dọn dẹp dữ liệu (Xóa bảng giá)",
-        requirements: [
-          "1. Thực hiện xóa vĩnh viễn 'Bảng giá Test 01' đã tạo ở Bài 1 để giữ cho danh sách bảng giá của cửa hàng được gọn gàng."
-        ],
-        instructions: [
-          "1. Tại cột danh sách bảng giá bên trái, tìm đến 'Bảng giá Test 01'.",
-          "2. Đưa chuột (hoặc nhấn) vào biểu tượng cây bút (Chỉnh sửa) bên cạnh tên bảng giá đó.",
-          "3. Trong cửa sổ hiện ra, nhấn vào nút 'Xóa' ở góc dưới.",
-          "4. Chọn 'Đồng ý' để xác nhận xóa vĩnh viễn."
-        ],
-        confirm: "Chụp ảnh màn hình cột danh sách bảng giá bên trái sau khi đã xóa thành công."
-      },
-
-      { title: "Kiểm kho", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo phiếu kiểm kho (Lưu tạm) và tạo dữ liệu mồi",
-        requirements: [
-          "1. Tạo một phiếu kiểm kho cho Khu vực kệ hàng A: 'Nước giặt OMO 3kg' (Thực tế: 45) và 'Nước xả Downy 2L' (Thực tế: 30). Chỉ Lưu tạm.",
-          "2. Tạo một phiếu kiểm kho mồi chứa 'Sản phẩm Test 01' (Thực tế: 10). Nhấn Hoàn thành để cân bằng kho ngay."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Hàng hóa -> chọn Kiểm kho.",
-          "2. Nhấn vào nút + Kiểm kho.",
-          "3. Tại ô tìm kiếm, thêm lần lượt 'Nước giặt OMO 3kg' và 'Nước xả Downy 2L'.",
-          "4. Nhập số lượng đếm được vào cột Thực tế (OMO: 45, Downy: 30). Nhấn Lưu tạm.",
-          "5. Tiếp tục nhấn + Kiểm kho để tạo phiếu mới, thêm 'Sản phẩm Test 01', nhập số lượng thực tế là 10.",
-          "6. Nhấn nút Hoàn thành."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách phiếu kiểm kho hiển thị 1 phiếu trạng thái 'Phiếu tạm' và 1 phiếu trạng thái 'Đã cân bằng kho'."
-      },
-      {
-        title: "Bài tập 2: Tạo phiếu mới và thực hiện gộp phiếu",
-        requirements: [
-          "1. Tạo thêm 1 phiếu kiểm kho Lưu tạm cho Khu vực kệ hàng B: 'Áo sơ mi nam Oxford' (Thực tế: 20).",
-          "2. Thực hiện gộp phiếu kiểm kho của Khu vực A và Khu vực B thành một phiếu kiểm kho tổng hợp duy nhất."
-        ],
-        instructions: [
-          "1. Nhấn + Kiểm kho để tạo phiếu cho khu vực B.",
-          "2. Thêm 'Áo sơ mi nam Oxford', nhập cột Thực tế là 20 và nhấn Lưu tạm.",
-          "3. Quay ra màn hình danh sách phiếu Kiểm kho.",
-          "4. Tích chọn vào ô vuông đầu dòng của 2 phiếu ở trạng thái 'Phiếu tạm' (Khu vực A và B).",
-          "5. Nhấn nút Gộp phiếu vừa xuất hiện ở thanh menu nằm ngang phía trên danh sách.",
-          "6. Chọn Đồng ý để xác nhận."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết phiếu kiểm kho tổng sau khi đã gộp, hiển thị đủ 3 mặt hàng OMO, Downy và Áo sơ mi."
-      },
-      {
-        title: "Bài tập 3: Chốt cân bằng kho và xuất file báo cáo",
-        requirements: [
-          "1. Mở phiếu kiểm kho tổng hợp vừa gộp để kiểm tra lại số liệu chênh lệch.",
-          "2. Thực hiện chốt số liệu để hệ thống tự động điều chỉnh Cân bằng kho cho các sản phẩm này.",
-          "3. Xuất file Excel chi tiết của phiếu này để gửi báo cáo cho quản lý cửa hàng."
-        ],
-        instructions: [
-          "1. Tại danh sách phiếu kiểm kho, nhấn vào mã phiếu của phiếu tổng hợp đang ở trạng thái 'Phiếu tạm'.",
-          "2. Kiểm tra lại thông tin số lượng tại các cột Tồn kho, Thực tế và Chênh lệch.",
-          "3. Nhấn nút Hoàn thành. Hệ thống sẽ tự động cập nhật lại số lượng tồn kho.",
-          "4. Tại giao diện chi tiết phiếu vừa cân bằng xong, nhấn nút Xuất file (hoặc biểu tượng 3 chấm chọn Xuất file) để tải dữ liệu về máy."
-        ],
-        confirm: "Chụp ảnh màn hình phiếu kiểm kho tổng hợp sau khi đã chuyển sang trạng thái 'Đã cân bằng kho'."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy phiếu kiểm kho)",
-        requirements: [
-          "1. Do có sai sót trong quá trình kiểm hàng nháp, hãy tìm lại phiếu kiểm kho của 'Sản phẩm Test 01'.",
-          "2. Thực hiện Hủy phiếu kiểm kho này để khôi phục lại số lượng tồn kho ban đầu của sản phẩm mồi."
-        ],
-        instructions: [
-          "1. Tại màn hình danh sách Kiểm kho, sử dụng ô Tìm kiếm để tìm phiếu có chứa 'Sản phẩm Test 01'.",
-          "2. Nhấn vào mã phiếu để xem chi tiết.",
-          "3. Nhấn nút Hủy bỏ.",
-          "4. Chọn Đồng ý để xác nhận. Số lượng tồn kho của mặt hàng này sẽ được hệ thống hoàn trả lại."
-        ],
-        confirm: "Chụp ảnh màn hình hiển thị phiếu kiểm kho chứa 'Sản phẩm Test 01' đang nằm ở trạng thái 'Đã hủy'."
+          id: "session_5",
+          title: "Buổi 5: Thuế & Kế toán (Đang cập nhật)",
+          desc: "Nghiệp vụ xuất hóa đơn từ máy tính tiền, hệ thống sổ sách theo Thông tư 88 & Tờ khai thuế.",
+          exercises: []
       }
-    ]
-  },
-  {
-    id: "session_3",
-    title: "Buổi 3: Giao dịch & Quản lý Khách hàng",
-    exercises: [
-      { title: "Đặt hàng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo mới Đơn đặt hàng (Pre-order) và dữ liệu mồi",
-        requirements: [
-          "1. Tạo một đơn đặt hàng cho khách hàng 'Chị Lan Phương' mua 5 'Áo sơ mi nam Oxford' với thời gian giao hàng dự kiến là ngày mai. Khách thực hiện đặt cọc trước 500,000đ.",
-          "2. Tạo thêm một đơn đặt hàng nháp chứa mặt hàng 'Sản phẩm Test 01' (không cần thông tin khách hàng) để làm dữ liệu mồi."
-        ],
-        instructions: [
-          "1. Trên màn hình Bán hàng, nhấn vào biểu tượng mũi tên cạnh tab Hóa đơn và chọn 'Thêm mới đặt hàng'.",
-          "2. Tìm và chọn sản phẩm 'Áo sơ mi nam Oxford', điền số lượng là 5.",
-          "3. Tại ô Tìm khách hàng (F4), nhấn dấu '+' để thêm mới khách hàng 'Chị Lan Phương'.",
-          "4. Tại ô Khách thanh toán, nhập số tiền 500,000 để ghi nhận cọc. Sau đó chọn Thời gian giao hàng dự kiến là ngày mai.",
-          "5. Nhấn nút Đặt hàng (F9) để lưu phiếu.",
-          "6. Lặp lại thao tác mở tab Đặt hàng mới, thêm 'Sản phẩm Test 01' và nhấn Đặt hàng."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách phiếu Đặt hàng (bên màn hình Quản lý) hiển thị 2 phiếu vừa tạo."
-      },
-      {
-        title: "Bài tập 2: Tạo thêm đơn và thực hiện gộp phiếu đặt hàng",
-        requirements: [
-          "1. Khách hàng 'Chị Lan Phương' muốn mua thêm 2 'Quần Tây Âu Slimfit' và yêu cầu giao cùng đợt. Hãy tạo một đơn đặt hàng thứ hai (không cần đặt cọc thêm).",
-          "2. Thực hiện thao tác gộp 2 đơn đặt hàng của 'Chị Lan Phương' thành một đơn tổng hợp duy nhất."
-        ],
-        instructions: [
-          "1. Trên màn hình Bán hàng, tiếp tục mở một tab 'Thêm mới đặt hàng' khác.",
-          "2. Chọn sản phẩm 'Quần Tây Âu Slimfit' với số lượng là 2.",
-          "3. Tại ô khách hàng, tìm và chọn đúng tên 'Chị Lan Phương' rồi nhấn Đặt hàng (F9).",
-          "4. Chuyển sang màn hình Quản lý, vào menu Giao dịch -> Đặt hàng.",
-          "5. Tích chọn vào ô vuông đầu dòng của 2 phiếu đặt hàng của 'Chị Lan Phương'.",
-          "6. Nhấn nút Gộp đơn vừa xuất hiện -> Chọn Đồng ý."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết phiếu đặt hàng tổng hợp sau khi gộp, hiển thị đầy đủ cả Áo sơ mi và Quần Tây Âu."
-      },
-      {
-        title: "Bài tập 3: Xử lý đơn đặt hàng (Chuyển thành hóa đơn)",
-        requirements: [
-          "1. Xử lý phiếu đặt hàng gộp của 'Chị Lan Phương' thành Hóa đơn bán hàng.",
-          "2. Thu nốt số tiền còn lại của khách sau khi đã trừ đi 500,000đ tiền cọc ban đầu."
-        ],
-        instructions: [
-          "1. Tại danh sách Đặt hàng trên màn hình Quản lý, tìm và mở chi tiết phiếu đặt hàng tổng hợp của 'Chị Lan Phương'.",
-          "2. Nhấn nút 'Tạo hóa đơn' (hoặc Xử lý đặt hàng).",
-          "3. Kiểm tra lại danh sách hàng hóa và xác nhận số tiền khách đã đặt cọc được hệ thống tự động trừ đi.",
-          "4. Nhập số tiền khách thanh toán nốt vào ô Khách thanh toán.",
-          "5. Nhấn nút Thanh toán để xuất hóa đơn và kết thúc giao dịch."
-        ],
-        confirm: "Chụp ảnh màn hình Hóa đơn bán hàng vừa được tạo thành công với trạng thái 'Hoàn thành'."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy phiếu đặt hàng)",
-        requirements: [
-          "1. Thực hiện Hủy bỏ phiếu đặt hàng nháp chứa 'Sản phẩm Test 01' đã tạo ở Bài tập 1 để làm sạch dữ liệu hệ thống."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào danh sách Đặt hàng.",
-          "2. Sử dụng ô tìm kiếm để tìm phiếu đặt hàng có chứa 'Sản phẩm Test 01'.",
-          "3. Nhấn vào mã phiếu để mở chi tiết.",
-          "4. Nhấn nút Hủy bỏ.",
-          "5. Chọn Đồng ý để xác nhận."
-        ],
-        confirm: "Chụp ảnh màn hình hiển thị phiếu đặt hàng của 'Sản phẩm Test 01' đang nằm ở trạng thái 'Đã hủy'."
-      },
-
-      { title: "Bán hàng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo hóa đơn bán hàng và áp dụng giảm giá",
-        requirements: [
-          "1. Tạo một hóa đơn cho khách hàng 'Anh Hoàng' mua 2 'Áo sơ mi nam Oxford' và 1 'Quần Tây Âu Slimfit'.",
-          "2. Thực hiện giảm giá 5% trên tổng hóa đơn. Khách thanh toán bằng Tiền mặt.",
-          "3. Tạo thêm một hóa đơn nháp chỉ chứa 'Sản phẩm Test 01' (Thanh toán tiền mặt) để làm dữ liệu mồi."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, nhấn vào nút 'Bán hàng' ở thanh menu trên cùng để mở màn hình thu ngân.",
-          "2. Tìm và thêm 2 'Áo sơ mi nam Oxford' và 1 'Quần Tây Âu Slimfit' vào đơn hàng.",
-          "3. Tại ô tìm kiếm khách hàng (F4), nhấn dấu + để thêm mới khách hàng 'Anh Hoàng'.",
-          "4. Tại ô Giảm giá ở khu vực thanh toán, nhập số '5' và chọn biểu tượng '%'.",
-          "5. Nhấn nút Thanh toán (F9) để hoàn tất.",
-          "6. Tiếp tục tạo một hóa đơn mới, chọn 'Sản phẩm Test 01', nhấn Thanh toán ngay."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết Hóa đơn của Anh Hoàng trên màn hình Quản lý, hiển thị rõ phần giảm giá 5%."
-      },
-      {
-        title: "Bài tập 2: Sao chép và chỉnh sửa hóa đơn",
-        requirements: [
-          "1. Sao chép hóa đơn của 'Anh Hoàng' cho một khách hàng mới nhưng yêu cầu thanh toán bằng hình thức Chuyển khoản."
-        ],
-        instructions: [
-          "1. Trở lại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn.",
-          "2. Tìm và mở chi tiết hóa đơn của 'Anh Hoàng' vừa tạo ở Bài 1.",
-          "3. Nhấn vào nút 'Sao chép' (hệ thống sẽ tự động chuyển sang màn hình Bán hàng với giỏ hàng tương tự).",
-          "4. Tại ô khách hàng, xóa tên 'Anh Hoàng' (để thành Khách lẻ).",
-          "5. Tại khu vực thanh toán, chọn phương thức 'Chuyển khoản'.",
-          "6. Nhấn Thanh toán."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết Hóa đơn mới được sao chép, hiển thị phương thức thanh toán là Chuyển khoản."
-      },
-      {
-        title: "Bài tập 3: Tạo mã QR thu nợ hóa đơn",
-        requirements: [
-          "1. Khách hàng 'Chị Lan Phương' mua thêm 3 'Áo sơ mi nam Oxford' nhưng chỉ mang theo một phần tiền mặt, phần còn lại xin ghi nợ.",
-          "2. Thực hiện tạo hóa đơn ghi nợ, sau đó tạo mã QR thu nợ để gửi cho khách chuyển khoản phần tiền còn thiếu."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, tạo đơn với 3 'Áo sơ mi nam Oxford', chọn khách hàng 'Chị Lan Phương'.",
-          "2. Tại ô Khách thanh toán, nhập số tiền nhỏ hơn tổng giá trị đơn hàng (Ví dụ: 500,000đ) và nhấn Thanh toán (hệ thống tự động ghi nhận nợ).",
-          "3. Quay lại màn hình Quản lý, vào Giao dịch -> Hóa đơn, tìm và mở hóa đơn vừa tạo.",
-          "4. Nhấn nút 'Tạo QR'.",
-          "5. Chọn số Tài khoản nhận, hệ thống sẽ tự động điền Số tiền thanh toán tương ứng với khoản nợ."
-        ],
-        confirm: "Chụp ảnh màn hình popup chứa Mã QR thu nợ vừa được tạo ra."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy hóa đơn)",
-        requirements: [
-          "1. Tìm và Hủy bỏ hóa đơn chứa 'Sản phẩm Test 01' đã tạo ở Bài tập 1 để trả lại tồn kho."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn.",
-          "2. Sử dụng thanh tìm kiếm để tìm hóa đơn có chứa mặt hàng 'Sản phẩm Test 01'.",
-          "3. Nhấn vào mã hóa đơn để mở chi tiết.",
-          "4. Nhấn nút Hủy bỏ.",
-          "5. Chọn Đồng ý để xác nhận hủy."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách hóa đơn, hiển thị hóa đơn chứa Sản phẩm Test 01 đang ở trạng thái 'Đã hủy'."
-      },
-
-      { title: "Thanh toán", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thanh toán đa phương thức và tạo dữ liệu mồi",
-        requirements: [
-          "1. Khách hàng 'Anh Minh' mua 2 hộp 'Sữa bột Ensure Gold 850g' (Giá: 850,000đ/hộp, tổng 1,700,000đ).",
-          "2. Khách yêu cầu thanh toán chia làm 2 phần: 700,000đ bằng Tiền mặt và 1,000,000đ bằng Chuyển khoản.",
-          "3. Tạo thêm một hóa đơn nháp mua 'Sản phẩm Test 02' để dành cho bài tập hủy dữ liệu ở cuối."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, tìm và thêm 2 'Sữa bột Ensure Gold 850g' vào đơn. Tại ô tìm kiếm khách hàng, nhấn '+' để thêm 'Anh Minh'.",
-          "2. Tại khu vực thanh toán, nhấn vào biểu tượng 'Đa phương thức' (hình thẻ và tiền mặt).",
-          "3. Trong cửa sổ hiện ra, nhập 700,000 vào ô Tiền mặt và 1,000,000 vào ô Chuyển khoản.",
-          "4. Nhấn Xong, sau đó nhấn Thanh toán (F9) để hoàn tất.",
-          "5. Mở một đơn mới, chọn 'Sản phẩm Test 02', nhấn Thanh toán ngay bằng tiền mặt."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết Hóa đơn của Anh Minh trên màn hình Quản lý, hiển thị rõ 2 dòng phương thức thanh toán Tiền mặt và Chuyển khoản."
-      },
-      {
-        title: "Bài tập 2: Thanh toán bằng quét mã QR động",
-        requirements: [
-          "1. Khách hàng 'Chị Nga' mua 1 'Thùng sữa tươi Vinamilk' (Giá: 350,000đ).",
-          "2. Khách muốn thanh toán toàn bộ hóa đơn bằng cách quét mã QR chuyển khoản để đúng khớp số tiền."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, thêm 'Thùng sữa tươi Vinamilk' vào đơn và chọn tên khách hàng 'Chị Nga'.",
-          "2. Tại khu vực thanh toán, chọn phương thức thanh toán là 'Chuyển khoản'.",
-          "3. Hệ thống sẽ tự động sinh ra một mã QR động chứa thông tin tài khoản và đúng số tiền cần thanh toán là 350,000đ.",
-          "4. Nhấn Thanh toán (F9) để hoàn thành giao dịch."
-        ],
-        confirm: "Chụp ảnh màn hình Bán hàng đang hiển thị mã QR động với số tiền 350,000đ."
-      },
-      {
-        title: "Bài tập 3: Thiết lập và thanh toán bằng điểm tích lũy",
-        requirements: [
-          "1. Thiết lập tính năng Tích điểm: Tỷ lệ 100,000đ = 1 điểm; Cho phép thanh toán 1 điểm = 1,000đ.",
-          "2. Khách hàng 'Chị Lan' mua đơn hàng 500,000đ thanh toán bằng tiền mặt để hệ thống tự động tích 5 điểm.",
-          "3. 'Chị Lan' mua tiếp 1 'Lốc sữa chua Vinamilk' (Giá: 30,000đ) và yêu cầu dùng 5 điểm vừa có để giảm trừ thanh toán. Phần còn lại trả bằng Tiền mặt."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào Thiết lập -> Khách hàng -> Bật xanh 'Tích điểm'. Nhập tỷ lệ 100,000 = 1 điểm. Tích ô 'Cho phép thanh toán bằng điểm' và nhập 1 điểm = 1,000đ -> Nhấn Lưu.",
-          "2. Sang màn hình Bán hàng, tạo hóa đơn 500,000đ cho 'Chị Lan', nhấn Thanh toán (Tiền mặt) để tích điểm.",
-          "3. Tạo tiếp hóa đơn mới, thêm 'Lốc sữa chua Vinamilk' và chọn đúng khách hàng 'Chị Lan'.",
-          "4. Bật công tắc màu xanh ở mục 'Điểm'. Hệ thống tự quy đổi 5 điểm thành 5,000đ để giảm trừ.",
-          "5. Số tiền 25,000đ còn lại hệ thống tự điền vào Tiền mặt. Nhấn Thanh toán (F9) để kết thúc."
-        ],
-        confirm: "Chụp ảnh màn hình Bán hàng ở hóa đơn thứ 2 của Chị Lan, hiển thị mục Điểm đã được bật xanh và tự động quy đổi thành tiền giảm trừ."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu (Hủy hóa đơn)",
-        requirements: [
-          "1. Tìm và hủy bỏ hóa đơn nháp chứa 'Sản phẩm Test 02' đã tạo ở Bài tập 1 để làm sạch dữ liệu."
-        ],
-        instructions: [
-          "1. Quay trở lại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn.",
-          "2. Sử dụng thanh tìm kiếm để lọc ra hóa đơn có chứa 'Sản phẩm Test 02'.",
-          "3. Nhấn vào mã hóa đơn để xem chi tiết.",
-          "4. Nhấn nút Hủy bỏ và chọn Đồng ý để xác nhận."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách hóa đơn, hiển thị hóa đơn chứa Sản phẩm Test 02 đang nằm ở trạng thái 'Đã hủy'."
-      },
-
-      { title: "Thanh toán qua QR", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thêm tài khoản ngân hàng và tìm hiểu đăng ký dịch vụ",
-        requirements: [
-          "1. Thêm tài khoản ngân hàng Vietcombank (STK: 0123456789, Tên chủ TK: NGUYEN VAN A) vào hệ thống để chuẩn bị nhận tiền chuyển khoản từ khách.",
-          "2. Truy cập vào giao diện đăng ký dịch vụ thông báo thanh toán QR nâng cao cho tài khoản Vietcombank (Chỉ thao tác mở màn hình, KHÔNG thực hiện đăng ký thật).",
-          "3. Tạo thêm một tài khoản ngân hàng mồi có tên 'Ngân hàng Test' (STK: 111111)."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, chọn phương thức thanh toán là Chuyển khoản, sau đó nhấn vào nút 'Thêm tài khoản'.",
-          "2. Chọn ngân hàng Vietcombank, điền số tài khoản 0123456789, tên NGUYEN VAN A và nhấn Lưu.",
-          "3. Lặp lại thao tác để tạo 'Ngân hàng Test' với số tài khoản 111111.",
-          "4. Tại màn hình Quản lý, chọn menu 'Thanh toán' ở cột bên trái.",
-          "5. Tìm thẻ ngân hàng Vietcombank vừa thêm, nhấn 'Đăng ký'. Dừng lại ở bước hệ thống hiển thị cửa sổ yêu cầu xác thực hoặc điền thông tin."
-        ],
-        confirm: "Chụp ảnh màn hình cửa sổ Đăng ký dịch vụ của Vietcombank để chứng minh đã biết cách truy cập vào tính năng này."
-      },
-      {
-        title: "Bài tập 2: Bán hàng và tạo mã QR động",
-        requirements: [
-          "1. Khách hàng 'Chị Mai' mua 1 'Sữa rửa mặt Cetaphil' (Giá: 300,000đ) và 1 'Nước tẩy trang Bioderma' (Giá: 400,000đ). Tổng hóa đơn là 700,000đ.",
-          "2. Khách yêu cầu thanh toán toàn bộ hóa đơn bằng cách quét mã QR.",
-          "3. Tạo thêm một hóa đơn nháp mua 'Sản phẩm Test 03' (Thanh toán bằng Tiền mặt) để làm dữ liệu mồi."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, tìm và thêm 'Sữa rửa mặt Cetaphil' và 'Nước tẩy trang Bioderma' vào đơn.",
-          "2. Tại ô tìm kiếm khách hàng, nhấn dấu '+' để thêm khách hàng 'Chị Mai'.",
-          "3. Tại khu vực thanh toán, chọn phương thức 'Chuyển khoản'.",
-          "4. Chọn đúng tài khoản Vietcombank đã thiết lập ở Bài 1. Hệ thống sẽ sinh ra một mã QR động.",
-          "5. Nhấn 'Hiện mã QR' để phóng to cho khách quét. Chờ thông báo thành công (giả định) rồi nhấn Thanh toán (F9).",
-          "6. Mở một hóa đơn mới, chọn 'Sản phẩm Test 03', chọn phương thức Tiền mặt và nhấn Thanh toán ngay."
-        ],
-        confirm: "Chụp ảnh màn hình Bán hàng đang hiển thị mã QR động đã được phóng to, bao gồm đầy đủ số tiền 700,000đ."
-      },
-      {
-        title: "Bài tập 3: Tìm kiếm tài liệu hướng dẫn liên kết ngân hàng",
-        requirements: [
-          "1. Tìm bài viết Hướng dẫn sử dụng chi tiết về cách liên kết tính năng thanh toán QR nâng cao với ngân hàng Sacombank trên trang chủ KiotViet."
-        ],
-        instructions: [
-          "1. Mở thẻ trình duyệt mới và truy cập vào website chính thức: kiotviet.vn.",
-          "2. Tìm và nhấn vào mục 'Hỗ trợ' trên thanh menu ở đầu trang.",
-          "3. Tại thanh tìm kiếm của trang Hỗ trợ, nhập từ khóa 'Sacombank' và nhấn phím Enter.",
-          "4. Nhấp vào bài viết hướng dẫn liên kết thanh toán QR với Sacombank trong danh sách kết quả để xem nội dung."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện nội dung bài viết Hướng dẫn sử dụng liên kết ngân hàng Sacombank trên trang Hỗ trợ."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác",
-        requirements: [
-          "1. Tìm và hủy bỏ hóa đơn nháp chứa 'Sản phẩm Test 03' để hoàn lại tồn kho.",
-          "2. Xóa bỏ tài khoản 'Ngân hàng Test' đã tạo ở Bài tập 1 để làm sạch danh sách sổ quỹ."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Giao dịch -> Hóa đơn. Tìm hóa đơn chứa 'Sản phẩm Test 03', mở chi tiết, nhấn Hủy bỏ và chọn Đồng ý.",
-          "2. Vào menu Sổ quỹ.",
-          "3. Tìm đến tài khoản 'Ngân hàng Test', chọn thao tác Xóa (hoặc Ngừng hoạt động).",
-          "4. Chọn Đồng ý để xác nhận dọn dẹp dữ liệu."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Hóa đơn hiển thị phiếu của Sản phẩm Test 03 ở trạng thái 'Đã hủy'."
-      },
-
-      { title: "Khách hàng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo nhóm Khách hàng VIP (Có ràng buộc điều kiện tự động)",
-        requirements: [
-          "1. Tạo nhóm khách hàng 'Nhóm VIP' với ưu đãi tự động giảm giá 5% cho tất cả các hóa đơn mua hàng.",
-          "2. Thiết lập điều kiện nâng cao: Bất kỳ khách hàng nào có 'Tổng bán (trừ trả hàng)' lớn hơn hoặc bằng 3,000,000đ sẽ được hệ thống tự động thêm vào 'Nhóm VIP'.",
-          "3. Tạo sẵn một khách hàng nháp tên 'Khách hàng Test 01' (Số điện thoại: 0999888777)."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Khách hàng -> chọn Khách hàng.",
-          "2. Ở cột bên trái phần Nhóm khách hàng, nhấn nút dấu '+' (Tạo mới).",
-          "3. Tại tab Thông tin, nhập Tên nhóm là 'Nhóm VIP' và điền Giảm giá là '5%'.",
-          "4. Chuyển sang tab 'Thiết lập nâng cao', nhấn chọn dòng '+ Thêm điều kiện'.",
-          "5. Chọn tiêu chí 'Tổng bán (trừ trả hàng)', chọn toán tử lớn hơn hoặc bằng (>=) và nhập số tiền 3,000,000.",
-          "6. Tích chọn 'Cập nhật lại danh sách theo điều kiện' và tích chọn ô 'Hệ thống thực hiện tự động'. Sau đó nhấn Lưu.",
-          "7. Nhấn nút '+ Khách hàng' ở góc trên bên phải màn hình, điền thông tin 'Khách hàng Test 01' rồi nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình bảng Thiết lập nâng cao của Nhóm VIP, hiển thị rõ điều kiện >= 3,000,000 và các ô tự động đã được tích chọn."
-      },
-      {
-        title: "Bài tập 2: Kích hoạt điều kiện và kiểm tra quyền lợi Nhóm VIP",
-        requirements: [
-          "1. Bán một đơn hàng trị giá 5,000,000đ cho khách hàng mới tên 'Quốc Quý' để khách hàng này thỏa mãn điều kiện và được tự động đưa vào nhóm VIP.",
-          "2. Bán tiếp một hóa đơn thứ 2 cho 'Quốc Quý' để kiểm chứng xem hệ thống có tự động áp dụng mức giảm giá 5% cho thành viên Nhóm VIP hay không."
-        ],
-        instructions: [
-          "1. Mở màn hình Bán hàng, chọn một vài sản phẩm và sửa số lượng/giá bán để tổng tiền đạt 5,000,000đ.",
-          "2. Tại ô tìm kiếm khách hàng, nhấn dấu '+' để thêm mới khách hàng 'Quốc Quý' và nhấn Thanh toán (F9).",
-          "3. Bắt đầu một hóa đơn mới, thêm 1 sản phẩm bất kỳ vào giỏ hàng.",
-          "4. Tại ô tìm khách hàng, gõ và chọn lại tên 'Quốc Quý'.",
-          "5. Quan sát ô Giảm giá ở khu vực thanh toán, hệ thống sẽ tự động hiển thị mức giảm 5%. Nhấn Thanh toán (F9) để hoàn thành."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện Bán hàng ở hóa đơn thứ 2 của Quốc Quý, hiển thị rõ khách hàng này đã được áp dụng tự động Giảm giá 5%."
-      },
-      {
-        title: "Bài tập 3: Thiết lập Cảnh báo Công nợ",
-        requirements: [
-          "1. Kích hoạt tính năng cảnh báo công nợ cho toàn hệ thống.",
-          "2. Thiết lập hạn mức 'Số tiền nợ tối đa' là 5,000,000đ. (Chỉ bật cảnh báo, vẫn cho phép khách nợ thêm)."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Thiết lập -> chọn Khách hàng.",
-          "2. Tìm và bật công tắc màu xanh ở dòng 'Cảnh báo công nợ khách hàng'.",
-          "3. Trong pop-up hiện ra, tại ô 'Số tiền nợ tối đa', nhập vào số 5,000,000.",
-          "4. Tích chọn ô 'Cho phép khách hàng nợ thêm' và nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện Thiết lập Khách hàng đang hiển thị phần Cảnh báo công nợ đã được bật và cài mức 5,000,000đ."
-      },
-      {
-        title: "Bài tập 4: Phát sinh công nợ và xem lịch sử",
-        requirements: [
-          "1. Khách hàng 'Anh Hoàng' tới mua 20 'Áo thun Cotton' (Giả định tổng hóa đơn là 2,000,000đ). Khách yêu cầu ghi nợ toàn bộ.",
-          "2. Kiểm tra lại tab Công nợ của khách hàng này để xác nhận hệ thống đã ghi nhận khoản nợ cần thu là 2,000,000đ."
-        ],
-        instructions: [
-          "1. Mở màn hình Bán hàng, chọn 'Áo thun Cotton', sửa số lượng và giá để tổng tiền là 2,000,000đ.",
-          "2. Tại ô Tìm khách hàng, thêm mới và chọn tên 'Anh Hoàng'.",
-          "3. Tại ô Khách thanh toán, nhập số 0. Nhấn Thanh toán (F9) để hoàn thành (Hệ thống sẽ ghi nhận nợ).",
-          "4. Quay lại màn hình Quản lý -> Khách hàng -> Khách hàng.",
-          "5. Tìm và nhấn vào tên 'Anh Hoàng'. Chọn tab 'Nợ cần thu từ khách'."
-        ],
-        confirm: "Chụp ảnh màn hình tab 'Nợ cần thu từ khách' của Anh Hoàng, hiển thị rõ dòng giá trị Nợ hiện tại là 2,000,000đ."
-      },
-      {
-        title: "Bài tập 5: Thanh toán công nợ và Chiết khấu",
-        requirements: [
-          "1. Hôm sau, 'Anh Hoàng' đến cửa hàng trả nợ số tiền 1,900,000đ bằng Tiền mặt.",
-          "2. Chủ cửa hàng quyết định giảm (chiết khấu) luôn 100,000đ tiền nợ còn lại lẻ tẻ cho khách để làm tròn công nợ về 0đ."
-        ],
-        instructions: [
-          "1. Vẫn ở tab 'Nợ cần thu từ khách' của 'Anh Hoàng', nhấn nút 'Thanh toán'.",
-          "2. Tại ô Thu từ khách, nhập số tiền 1,900,000đ, chọn phương thức Tiền mặt và nhấn 'Tạo phiếu thu'.",
-          "3. Tiếp tục nhấn nút 'Chiết khấu thanh toán' ở kế bên.",
-          "4. Nhập số tiền 100,000đ, thêm ghi chú 'Làm tròn nợ cho khách sỉ' và nhấn 'Tạo phiếu'."
-        ],
-        confirm: "Chụp ảnh màn hình tab Nợ cần thu từ khách của Anh Hoàng, hiển thị Nợ hiện tại đã trở về mức 0 và có các phiếu thu/chiết khấu tương ứng bên dưới."
-      },
-      {
-        title: "Bài tập 6: Dọn dẹp dữ liệu rác (Xóa Khách hàng)",
-        requirements: [
-          "1. Thực hiện thao tác dọn dẹp hệ thống: Tìm và xóa vĩnh viễn 'Khách hàng Test 01' đã tạo ở Bài tập 1."
-        ],
-        instructions: [
-          "1. Tại màn hình Khách hàng, sử dụng ô tìm kiếm để tìm 'Khách hàng Test 01'.",
-          "2. Nhấn vào tên khách hàng để mở trang chi tiết.",
-          "3. Nhấn vào nút 'Xóa' (hoặc biểu tượng 3 chấm -> Xóa).",
-          "4. Chọn 'Đồng ý' để xác nhận việc xóa hoàn toàn khỏi hệ thống."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Khách hàng sau khi tìm kiếm 'Khách hàng Test 01' trả về kết quả trống."
-      }
-    ]
-  },
-  {
-    id: "session_4",
-    title: "Buổi 4: Mở rộng Bán hàng & Phân quyền",
-    exercises: [
-      { title: "Trả hàng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thiết lập giới hạn thời gian trả hàng",
-        requirements: [
-          "1. Thiết lập chính sách chỉ cho phép khách hàng trả hàng trong vòng 3 ngày kể từ ngày mua.",
-          "2. Cửa hàng muốn nhân viên vẫn có thể linh động xử lý trả hàng quá hạn trong các trường hợp đặc biệt (hệ thống chỉ hiển thị cảnh báo, không chặn hoàn toàn thao tác)."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Thiết lập -> chọn Đơn hàng.",
-          "2. Tìm đến tính năng 'Giới hạn thời gian trả hàng' và bật công tắc sang màu xanh.",
-          "3. Tại phần 'Kể từ ngày mua, khách hàng được trả hàng trong vòng', nhập số '3' ngày.",
-          "4. Tại mục 'Xử lý khi trả hàng quá hạn', tích chọn 'Hiển thị cảnh báo khi trả hàng' để đảm bảo tính linh hoạt cho nhân viên.",
-          "5. Đóng cửa sổ thiết lập, hệ thống sẽ tự động lưu lại cấu hình của bạn."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện Thiết lập Đơn hàng đã bật tính năng giới hạn 3 ngày và chọn Hiển thị cảnh báo."
-      },
-      {
-        title: "Bài tập 2: Tạo dữ liệu mồi và Trả hàng theo hóa đơn",
-        requirements: [
-          "1. Bán 1 'Sản phẩm Test 04' (Thanh toán bằng Tiền mặt) để tạo một hóa đơn nháp.",
-          "2. Khách hàng mang hóa đơn của 'Sản phẩm Test 04' quay lại trả hàng. Thực hiện thao tác 'Trả hàng theo hóa đơn' và hoàn lại tiền mặt cho khách."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, tìm 'Sản phẩm Test 04', nhấn Thanh toán (F9) để tạo hóa đơn.",
-          "2. Vẫn ở màn hình Bán hàng, nhấn vào biểu tượng 3 dấu gạch ngang (Tùy chọn) ở góc trên bên phải -> Chọn 'Chọn hóa đơn trả hàng'.",
-          "3. Trong cửa sổ hiện ra, tìm hóa đơn của 'Sản phẩm Test 04' vừa tạo và nhấn nút Chọn.",
-          "4. Tại giao diện Trả hàng, kiểm tra Số lượng trả là 1, kiểm tra số Tiền trả khách và nhấn Trả hàng (F9) để hoàn tất."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết Phiếu trả hàng của Sản phẩm Test 04 vừa tạo trên màn hình Quản lý."
-      },
-      {
-        title: "Bài tập 3: Trả hàng nhanh (Không cần hóa đơn gốc)",
-        requirements: [
-          "1. Khách hàng mang đến 1 'Quần Jean Nam' (Giả định giá: 450,000đ) bị lỗi chỉ muốn trả lại lấy tiền mặt. Khách đã làm mất hóa đơn và không nhớ số điện thoại mua hàng.",
-          "2. Thực hiện thao tác Trả hàng nhanh cho trường hợp này."
-        ],
-        instructions: [
-          "1. Tại màn hình Bán hàng, mở menu Tùy chọn (3 gạch ngang) -> Chọn 'Chọn hóa đơn trả hàng'.",
-          "2. Tại pop-up Chọn hóa đơn trả hàng, nhấn vào nút 'Trả nhanh'.",
-          "3. Tại ô tìm kiếm, gõ và chọn sản phẩm 'Quần Jean Nam', nhập số lượng trả là 1.",
-          "4. Kiểm tra phần Tiền trả khách hệ thống tính toán là 450,000đ (chọn phương thức Tiền mặt) và nhấn Trả hàng (F9) để hoàn thành."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện Trả hàng hiển thị sản phẩm Quần Jean Nam và phần Tiền trả khách là 450,000đ trước khi bấm hoàn tất."
-      },
-      {
-        title: "Bài tập 4: Nghiệp vụ Đổi trả hàng (Trả cũ đổi mới)",
-        requirements: [
-          "1. Khách hàng 'Chị Lan' mang trả lại 1 'Áo sơ mi nữ' (Giá: 250,000đ) nhưng không muốn nhận lại tiền mặt mà muốn đổi sang 1 'Áo khoác gió' (Giá: 400,000đ).",
-          "2. Thực hiện thao tác đổi trả hàng ngay trong một giao dịch (dùng Trả hàng nhanh) và thu thêm phần tiền chênh lệch của khách là 150,000đ."
-        ],
-        instructions: [
-          "1. Tiếp tục mở màn hình 'Trả nhanh' như đã thực hiện ở Bài tập 3.",
-          "2. Tại phần Hàng trả lại, thêm sản phẩm 'Áo sơ mi nữ' với số lượng là 1.",
-          "3. Tại ô tìm kiếm hàng hóa (hoặc nhấn phím F7), gõ và chọn sản phẩm khách muốn mua mới là 'Áo khoác gió'.",
-          "4. Hệ thống sẽ tự động đối trừ. Tại ô Khách thanh toán, nhập số tiền chênh lệch 150,000đ mà khách cần bù thêm.",
-          "5. Nhấn nút Trả hàng (F9) để hoàn tất quy trình đổi trả trong cùng một phiếu."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện Đổi trả hàng, hiển thị rõ cả dòng sản phẩm trả lại (Áo sơ mi) và dòng sản phẩm mua mới (Áo khoác) cùng phần chênh lệch."
-      },
-      {
-        title: "Bài tập 5: Quản lý và Hủy Phiếu trả hàng (Dọn dẹp dữ liệu)",
-        requirements: [
-          "1. Tìm lại phiếu trả hàng của 'Sản phẩm Test 04' đã thực hiện ở Bài tập 2.",
-          "2. Thực hiện Hủy phiếu trả hàng này để phục hồi tồn kho và làm sạch dữ liệu hệ thống."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Đơn hàng -> chọn Trả hàng.",
-          "2. Tìm phiếu trả hàng có chứa mặt hàng 'Sản phẩm Test 04' và nhấn vào mã phiếu để xem chi tiết.",
-          "3. Nhấn vào nút Hủy (hoặc Hủy bỏ).",
-          "4. Chọn Đồng ý để xác nhận hệ thống cập nhật lại tồn kho và hủy chứng từ."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Trả hàng, hiển thị rõ phiếu trả hàng của Sản phẩm Test 04 đang ở trạng thái 'Đã hủy'."
-      },
-
-      { title: "Quản lý Người dùng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo vai trò mới và phân quyền",
-        requirements: [
-          "1. Tạo một vai trò mới trên hệ thống với tên gọi là 'Nhân viên Thu ngân Ca đêm'.",
-          "2. Thiết lập quyền hạn cho vai trò này: Chỉ được phép 'Xem hàng hóa', 'Tạo hóa đơn' và 'Thanh toán'. Không được phép xem giá vốn hay báo cáo lợi nhuận."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Thiết lập -> chọn Cửa hàng.",
-          "2. Ở menu bên trái, nhấn chọn Quản lý người dùng -> Quản lý vai trò.",
-          "3. Nhấn nút '+ Tạo vai trò'.",
-          "4. Đặt tên vai trò là 'Nhân viên Thu ngân Ca đêm'.",
-          "5. Trong danh sách phân quyền bên dưới, tìm và đánh dấu tích vào các ô tương ứng với quyền Xem hàng hóa, Tạo hóa đơn, Thanh toán (Bỏ qua các quyền liên quan đến báo cáo, giá vốn).",
-          "6. Nhấn Lưu để hoàn tất."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Quản lý vai trò hiển thị vai trò 'Nhân viên Thu ngân Ca đêm' vừa được tạo."
-      },
-      {
-        title: "Bài tập 2: Tạo mới tài khoản người dùng và giới hạn truy cập",
-        requirements: [
-          "1. Cửa hàng tuyển mới nhân viên 'Lê Văn B'. Hãy tạo một tài khoản đăng nhập cho nhân viên này.",
-          "2. Gán nhân viên Lê Văn B vào vai trò 'Nhân viên Thu ngân Ca đêm'.",
-          "3. Thiết lập giới hạn thời gian truy cập cho tài khoản này: Chỉ được phép đăng nhập vào hệ thống trong khung giờ từ 20:00 đến 06:00 sáng hôm sau, áp dụng cho tất cả các ngày trong tuần.",
-          "4. Tạo thêm một tài khoản mồi có tên đăng nhập là 'test_xoa'."
-        ],
-        instructions: [
-          "1. Tại menu Quản lý người dùng, chuyển sang tab Tài khoản người dùng.",
-          "2. Nhấn nút '+ Tạo tài khoản'.",
-          "3. Điền Tên hiển thị là 'Lê Văn B', đặt Tên đăng nhập và Mật khẩu theo ý muốn.",
-          "4. Tại phần Chi nhánh & Vai trò, chọn vai trò là 'Nhân viên Thu ngân Ca đêm'.",
-          "5. Kéo xuống phần Thời gian truy cập, chọn 'Chỉ phép truy cập trong khung giờ cố định'. Tích chọn tất cả các ngày trong tuần và thiết lập khung giờ từ 20:00 đến 06:00.",
-          "6. Nhấn Lưu.",
-          "7. Lặp lại thao tác tạo tài khoản để tạo 'test_xoa' (không cần thiết lập giới hạn thời gian)."
-        ],
-        confirm: "Chụp ảnh màn hình thông tin chi tiết của tài khoản Lê Văn B, hiển thị rõ phần phân quyền vai trò và giới hạn khung giờ truy cập."
-      },
-      {
-        title: "Bài tập 3: Sao chép người dùng để tạo tài khoản nhanh",
-        requirements: [
-          "1. Cửa hàng tuyển thêm nhân viên 'Trần Thị C' làm cùng ca đêm với 'Lê Văn B'.",
-          "2. Thay vì tạo mới từ đầu, hãy sử dụng tính năng sao chép để tạo nhanh tài khoản cho 'Trần Thị C' với toàn bộ quyền hạn và giới hạn thời gian giống hệt 'Lê Văn B'."
-        ],
-        instructions: [
-          "1. Tại danh sách Tài khoản người dùng, tìm và nhấn chọn vào tài khoản của 'Lê Văn B'.",
-          "2. Nhấn nút 'Sao chép' (Thường nằm ở góc hoặc trong menu tùy chọn).",
-          "3. Màn hình tạo mới sẽ hiện ra nhưng giữ nguyên các thiết lập phân quyền và thời gian.",
-          "4. Đổi Tên hiển thị thành 'Trần Thị C', điền Tên đăng nhập và Mật khẩu mới cho nhân viên này.",
-          "5. Nhấn Lưu để hoàn tất."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách người dùng hiển thị cả hai tài khoản Lê Văn B và Trần Thị C có cùng một Vai trò."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác (Ngừng hoạt động và Xóa tài khoản)",
-        requirements: [
-          "1. Nhân viên có tài khoản 'test_xoa' đã nghỉ việc. Hãy khóa (Ngừng hoạt động) tài khoản này để ngăn chặn truy cập.",
-          "2. Sau khi đã xác nhận không cần giữ lại thông tin, hãy Xóa vĩnh viễn tài khoản 'test_xoa' khỏi hệ thống."
-        ],
-        instructions: [
-          "1. Tại danh sách Tài khoản người dùng, tìm đến tài khoản 'test_xoa'.",
-          "2. Nhấn chọn tài khoản đó để xem chi tiết.",
-          "3. Nhấn nút 'Ngừng hoạt động' và chọn Đồng ý.",
-          "4. Tiếp tục nhấn nút 'Xóa' trên chính tài khoản đó (hoặc từ danh sách).",
-          "5. Chọn 'Xóa' một lần nữa để xác nhận thao tác dọn dẹp hệ thống."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách tài khoản người dùng sau khi đã tìm kiếm 'test_xoa' và trả về kết quả trống."
-      },
-
-      { title: "Quản lý Nhân viên", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Tạo mới phòng ban và chức danh",
-        requirements: [
-          "1. Tạo một phòng ban mới với tên gọi 'Khối Cửa Hàng'.",
-          "2. Tạo hai chức danh mới là 'Cửa hàng trưởng' và 'Nhân viên Bán hàng'.",
-          "3. Tạo thêm một phòng ban mồi tên là 'Phòng Test 01'."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, chọn menu Nhân viên -> chọn Danh sách nhân viên.",
-          "2. Tại cột bộ lọc bên trái, tìm mục 'Phòng ban', nhấn vào biểu tượng dấu '+' bên cạnh.",
-          "3. Nhập Tên phòng ban là 'Khối Cửa Hàng' và nhấn Lưu. Lặp lại thao tác này để tạo 'Phòng Test 01'.",
-          "4. Tương tự, tại mục 'Chức danh' ở cột bộ lọc, nhấn biểu tượng dấu '+' để thêm lần lượt 'Cửa hàng trưởng' và 'Nhân viên Bán hàng'."
-        ],
-        confirm: "Chụp ảnh màn hình cột bộ lọc bên trái, hiển thị rõ các Phòng ban và Chức danh vừa được tạo thành công."
-      },
-      {
-        title: "Bài tập 2: Thêm mới nhân viên và tạo dữ liệu mồi",
-        requirements: [
-          "1. Thêm mới nhân viên 'Nguyễn Thị Lan' (Số điện thoại: 0988111222).",
-          "2. Gán nhân viên Lan vào phòng ban 'Khối Cửa Hàng' với chức danh 'Nhân viên Bán hàng'.",
-          "3. Tạo thêm một nhân viên nháp tên 'Nhân viên Test 01' (Số điện thoại: 0999000111)."
-        ],
-        instructions: [
-          "1. Tại màn hình Danh sách nhân viên, nhấn vào nút '+ Nhân viên' ở góc trên bên phải.",
-          "2. Điền thông tin bắt buộc: Tên nhân viên là 'Nguyễn Thị Lan', Số điện thoại là '0988111222'.",
-          "3. Chọn Chi nhánh làm việc hiện tại, chọn Phòng ban là 'Khối Cửa Hàng' và Chức danh là 'Nhân viên Bán hàng'.",
-          "4. Nhấn Lưu để ghi nhận.",
-          "5. Lặp lại các bước trên để thêm 'Nhân viên Test 01'."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách nhân viên, hiển thị rõ tên của Nguyễn Thị Lan và Nhân viên Test 01 cùng các thông tin tương ứng."
-      },
-      {
-        title: "Bài tập 3: Cập nhật thông tin nhân viên",
-        requirements: [
-          "1. Do có thành tích xuất sắc, nhân viên 'Nguyễn Thị Lan' được thăng chức. Hãy cập nhật chức danh của nhân viên này thành 'Cửa hàng trưởng'."
-        ],
-        instructions: [
-          "1. Tại màn hình Danh sách nhân viên, tìm và kích chuột vào dòng chứa tên 'Nguyễn Thị Lan' để mở thông tin chi tiết.",
-          "2. Nhấn nút 'Cập nhật'.",
-          "3. Tại trường thông tin Chức danh, đổi từ 'Nhân viên Bán hàng' sang 'Cửa hàng trưởng'.",
-          "4. Nhấn Lưu để ghi nhận thay đổi."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết của nhân viên Nguyễn Thị Lan sau khi đã được cập nhật chức danh thành Cửa hàng trưởng."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác (Ngừng làm việc và Xóa)",
-        requirements: [
-          "1. Thao tác cho 'Nhân viên Test 01' ngừng làm việc trên hệ thống do nhân viên nháp này không còn hoạt động.",
-          "2. Xóa vĩnh viễn 'Phòng Test 01' đã tạo ở Bài tập 1 để làm sạch danh mục phòng ban."
-        ],
-        instructions: [
-          "1. Tại Danh sách nhân viên, tìm và kích vào tên 'Nhân viên Test 01'.",
-          "2. Nhấn nút 'Ngừng làm việc' và chọn Đồng ý để xác nhận.",
-          "3. Nhìn sang cột bộ lọc bên trái, tìm mục Phòng ban và di chuột tới 'Phòng Test 01'.",
-          "4. Kích vào biểu tượng cây bút (Chỉnh sửa) bên cạnh tên phòng ban này.",
-          "5. Kích nút 'Xóa' và chọn Đồng ý để xóa vĩnh viễn."
-        ],
-        confirm: "Chụp ảnh màn hình Danh sách nhân viên sau khi lọc trạng thái 'Ngừng hoạt động' hiển thị Nhân viên Test 01."
-      },
-
-      { title: "Quản lý Chấm công", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thiết lập ca làm việc và tạo dữ liệu mồi",
-        requirements: [
-          "1. Định nghĩa các khung giờ chuẩn cho cửa hàng bằng cách tạo 2 ca làm việc: 'Ca Sáng' (08:00 - 12:00) và 'Ca Chiều' (13:00 - 17:00).",
-          "2. Tạo thêm một ca làm việc mồi có tên là 'Ca Test 01' (18:00 - 22:00) để dành riêng cho thao tác xóa dữ liệu."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Nhân viên -> Thiết lập chung -> Ca làm việc.",
-          "2. Nhấn vào nút '+ Thêm ca làm việc'.",
-          "3. Nhập Tên ca là 'Ca Sáng', chọn Giờ làm việc từ 08:00 đến 12:00. Nhấn Lưu để hoàn tất.",
-          "4. Lặp lại thao tác thêm ca làm việc để tạo tiếp 'Ca Chiều' và 'Ca Test 01' với thời gian tương ứng."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Ca làm việc, hiển thị rõ 3 ca vừa được tạo thành công."
-      },
-      {
-        title: "Bài tập 2: Đặt lịch làm việc lặp lại",
-        requirements: [
-          "1. Thực hiện xếp lịch làm việc cho một nhân viên bất kỳ trong cửa hàng (Ví dụ: 'Nguyễn Thị Lan') vào 'Ca Sáng'.",
-          "2. Thiết lập quy tắc để lịch làm việc này lặp lại hàng tuần từ Thứ 2 đến Thứ 6."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Nhân viên -> chọn Lịch làm việc.",
-          "2. Ở góc trên, chọn kiểu hiển thị là 'Xem theo ca'.",
-          "3. Nhấn vào nút 'Thêm nhân viên' nằm trên dòng của 'Ca Sáng'.",
-          "4. Tích chọn tên nhân viên (Ví dụ: Nguyễn Thị Lan).",
-          "5. Bật công tắc xanh ở mục 'Lặp lại hàng tuần', tích chọn các ngày từ Thứ 2 đến Thứ 6 và nhấn Lưu."
-        ],
-        confirm: "Chụp ảnh màn hình Lịch làm việc, hiển thị rõ nhân viên đã được xếp lịch trải đều vào các ngày trong tuần ở Ca Sáng."
-      },
-      {
-        title: "Bài tập 3: Chấm công thủ công và ghi nhận phạt vi phạm",
-        requirements: [
-          "1. Nhân viên ở Bài tập 2 quên chấm công và đi làm muộn 15 phút. Quản lý cần thực hiện chấm công thủ công (Đi làm) cho ca làm việc ngày hôm nay.",
-          "2. Ghi nhận thêm lỗi vi phạm 'Đi muộn' với mức phạt 50,000đ trực tiếp vào lịch làm việc vừa chấm công để trừ vào lương cuối kỳ."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Nhân viên -> chọn Bảng chấm công. (Chọn kiểu hiển thị Xem theo ca).",
-          "2. Kích chuột vào ô lịch làm việc ngày hôm nay của nhân viên đó tại dòng 'Ca Sáng'.",
-          "3. Tại mục Loại, đảm bảo đang chọn 'Đi làm'. Tích chọn vào cả 2 ô Vào và Ra.",
-          "4. Nhập Giờ vào thực tế là '08:15' (muộn 15 phút) và Giờ ra là '12:00'.",
-          "5. Chuyển sang tab 'Phạt vi phạm' ngay trong pop-up đó, nhấn '+ Thêm loại vi phạm'.",
-          "6. Nhập Tên vi phạm là 'Đi muộn', Mức áp dụng là 50,000đ và nhấn Lưu.",
-          "7. Sau đó nhấn nút 'Thêm vi phạm', chọn loại 'Đi muộn', nhập số lần vi phạm là 1 và nhấn Lưu để hoàn tất quy trình chấm công."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết Bảng chấm công của nhân viên, hiển thị rõ giờ vào lúc 08:15 và có ghi nhận số tiền Phạt vi phạm là 50,000đ."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác (Xóa ca làm việc)",
-        requirements: [
-          "1. Thực hiện dọn dẹp hệ thống: Tìm và xóa vĩnh viễn 'Ca Test 01' đã tạo ở Bài tập 1 do không có nhu cầu sử dụng thực tế."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, quay lại menu Nhân viên -> Thiết lập chung -> Ca làm việc.",
-          "2. Tìm đến dòng chứa 'Ca Test 01'.",
-          "3. Kích chuột vào biểu tượng thùng rác (Xóa) ở bên cạnh tên ca làm việc.",
-          "4. Chọn Đồng ý để xác nhận xóa vĩnh viễn khỏi danh sách."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Ca làm việc sau khi đã dọn dẹp, không còn hiển thị Ca Test 01."
-      },
-
-      { title: "Quản lý Hoa hồng", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thêm mới bảng hoa hồng và tạo dữ liệu mồi",
-        requirements: [
-          "1. Tạo một bảng hoa hồng mới có tên 'Hoa hồng Mỹ phẩm' áp dụng cho Toàn hệ thống để chuẩn bị chạy chương trình thưởng cho nhân viên.",
-          "2. Tạo thêm một bảng hoa hồng nháp có tên 'Bảng Test 01' để dành riêng cho thao tác xóa dữ liệu ở bài tập cuối."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, chọn menu Nhân viên -> Bảng hoa hồng.",
-          "2. Nhấn nút 'Thêm bảng' ở khu vực danh sách bên trái màn hình.",
-          "3. Nhập Tên là 'Hoa hồng Mỹ phẩm', chọn Phạm vi áp dụng là 'Toàn hệ thống' và nhấn Lưu.",
-          "4. Lặp lại thao tác từ bước 2 để tạo thêm 'Bảng Test 01'."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Bảng hoa hồng ở cột bên trái, hiển thị rõ 2 bảng vừa tạo thành công."
-      },
-      {
-        title: "Bài tập 2: Thêm hàng hóa và thiết lập hoa hồng hàng loạt",
-        requirements: [
-          "1. Thêm 2 sản phẩm 'Kem chống nắng Vichy' và 'Nước tẩy trang L'Oreal' vào bảng 'Hoa hồng Mỹ phẩm'.",
-          "2. Áp dụng mức hoa hồng hàng loạt là 5% trên doanh thu cho tất cả các sản phẩm vừa thêm vào bảng này."
-        ],
-        instructions: [
-          "1. Tại danh sách bên trái, nhấn chọn đúng bảng 'Hoa hồng Mỹ phẩm'.",
-          "2. Ở màn hình bên phải, nhấn nút 'Thêm hàng hóa', gõ tìm kiếm và tích chọn 'Kem chống nắng Vichy' cùng 'Nước tẩy trang L'Oreal'.",
-          "3. Kích chuột vào ô mức hoa hồng của một sản phẩm bất kỳ trong danh sách vừa thêm để mở pop-up thiết lập.",
-          "4. Nhập giá trị là '5' và chọn loại đơn vị là '%'.",
-          "5. Tích chọn vào ô 'Áp dụng cho hàng hóa, nhóm hàng trong bảng hoa hồng' và nhấn Đồng ý."
-        ],
-        confirm: "Chụp ảnh màn hình bảng Hoa hồng Mỹ phẩm hiển thị cả 2 sản phẩm đều đã được cập nhật mức hoa hồng là 5%."
-      },
-      {
-        title: "Bài tập 3: Cập nhật mức hoa hồng cố định cho từng sản phẩm",
-        requirements: [
-          "1. Cửa hàng thay đổi chính sách thưởng: Sản phẩm 'Nước tẩy trang L'Oreal' sẽ nhận mức thưởng cố định là 10,000đ/sản phẩm.",
-          "2. Thực hiện cập nhật lại mức hoa hồng cho riêng mặt hàng này."
-        ],
-        instructions: [
-          "1. Đảm bảo bạn đang mở chi tiết bảng 'Hoa hồng Mỹ phẩm'.",
-          "2. Tìm đến dòng sản phẩm 'Nước tẩy trang L'Oreal'.",
-          "3. Kích trực tiếp vào ô giá trị hoa hồng của sản phẩm này.",
-          "4. Nhập số tiền là '10,000' và bấm chọn loại tính từ '%' chuyển sang 'VNĐ'.",
-          "5. Bấm chuột ra ngoài khoảng trống (hoặc nhấn Enter) để hệ thống tự động lưu lại."
-        ],
-        confirm: "Chụp ảnh màn hình chi tiết bảng Hoa hồng Mỹ phẩm, hiển thị sản phẩm Nước tẩy trang L'Oreal đã được đổi sang mức hoa hồng là 10,000 VNĐ."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác (Xóa bảng hoa hồng)",
-        requirements: [
-          "1. Thực hiện thao tác dọn dẹp hệ thống bằng cách xóa vĩnh viễn 'Bảng Test 01' do không có nhu cầu sử dụng thực tế."
-        ],
-        instructions: [
-          "1. Tại cột danh sách Bảng hoa hồng bên trái, tìm và nhấn chọn vào tên 'Bảng Test 01'.",
-          "2. Nhấn vào biểu tượng chỉnh sửa (hình cây bút) nằm ngay bên cạnh tên bảng.",
-          "3. Nhấn nút 'Xóa' ở góc dưới của cửa sổ thông tin.",
-          "4. Chọn 'Đồng ý' để xác nhận thao tác xóa vĩnh viễn."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Bảng hoa hồng ở cột bên trái sau khi đã làm sạch, không còn hiển thị Bảng Test 01."
-      },
-
-      { title: "Quản lý Tính lương", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thiết lập tính lương và kết nối dữ liệu nhân viên",
-        requirements: [
-          "1. Cài đặt quy tắc tính lương chung: Ngày bắt đầu kỳ lương là Ngày 1 hàng tháng và bật Tự động tạo bảng lương.",
-          "2. Thiết lập lương cho nhân viên 'Nguyễn Thị Lan' (đã tạo ở chuyên đề Quản lý Nhân viên) với mức lương Cố định là 6,000,000đ/tháng.",
-          "3. Áp dụng bảng 'Hoa hồng Mỹ phẩm' cho nhân viên này.",
-          "4. Thiết lập khoản Giảm trừ 'Đi muộn' để hệ thống tự động trừ khoản phạt 50,000đ (đã ghi nhận ở chuyên đề Chấm công) vào lương cuối kỳ."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Nhân viên -> Thiết lập nhân viên -> chọn tab Tính lương. Tại mục Ngày tính lương, chọn 'Ngày 1' và nhấn Lưu. Bật xanh mục 'Tự động tạo bảng lương'.",
-          "2. Vào menu Nhân viên -> Danh sách nhân viên, tìm nhân viên 'Nguyễn Thị Lan', nhấn Cập nhật -> chuyển sang tab Thiết lập lương.",
-          "3. Chọn loại Lương chính là 'Cố định', nhập 6,000,000.",
-          "4. Kéo xuống mục Hoa hồng, bật công tắc xanh, chọn đúng bảng 'Hoa hồng Mỹ phẩm'.",
-          "5. Kéo xuống mục Giảm trừ, bật công tắc xanh, chọn loại giảm trừ 'Đi muộn' (đảm bảo hệ thống sẽ lấy dữ liệu từ bảng chấm công). Nhấn Lưu để hoàn tất."
-        ],
-        confirm: "Chụp ảnh màn hình tab Thiết lập lương của nhân viên Nguyễn Thị Lan, hiển thị rõ đã cài đặt Lương cố định, áp dụng bảng Hoa hồng Mỹ phẩm và Giảm trừ đi muộn."
-      },
-      {
-        title: "Bài tập 2: Tạo bảng lương, kiểm tra đối trừ và chốt lương",
-        requirements: [
-          "1. Tạo bảng tính lương của tháng hiện tại cho nhân viên 'Nguyễn Thị Lan'.",
-          "2. Kiểm tra kỹ chi tiết phiếu lương để xem hệ thống đã tự động tính toán Lương chính và tự động trừ đi 50,000đ tiền phạt Đi muộn từ dữ liệu Chấm công hay chưa, sau đó thực hiện Chốt lương.",
-          "3. Tạo thêm một bảng lương nháp của tháng trước có tên 'Bảng lương Test 01'."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, vào menu Nhân viên -> Bảng lương.",
-          "2. Nhấn nút '+ Bảng tính lương'. Chọn Kỳ hạn trả lương của tháng hiện tại và nhấn Lưu.",
-          "3. Trong danh sách, nhấn 'Xem bảng lương' để kiểm tra chi tiết lương của 'Nguyễn Thị Lan'.",
-          "4. Kích vào tên Nguyễn Thị Lan để mở Phiếu lương chi tiết. Xác nhận trong phần Giảm trừ đã hiển thị số tiền phạt đi muộn (đồng bộ từ Bảng chấm công).",
-          "5. Nhấn nút 'Chốt lương' (Bảng lương chuyển sang trạng thái Đã chốt).",
-          "6. Quay lại danh sách Bảng lương, nhấn '+ Bảng tính lương', chọn Kỳ làm việc lùi lại tháng trước để tạo bảng nháp 'Bảng lương Test 01'."
-        ],
-        confirm: "Chụp 2 ảnh: 1 ảnh chi tiết Phiếu lương hiển thị khoản trừ Đi muộn và 1 ảnh danh sách Bảng lương có 1 bảng 'Đã chốt lương'."
-      },
-      {
-        title: "Bài tập 3: Thanh toán lương cho nhân viên",
-        requirements: [
-          "1. Thực hiện thanh toán phần lương thực nhận của tháng này cho nhân viên 'Nguyễn Thị Lan' từ bảng lương đã chốt.",
-          "2. Phương thức thanh toán lương là Chuyển khoản."
-        ],
-        instructions: [
-          "1. Tại danh sách Bảng lương, nhấn vào bảng lương của tháng hiện tại (trạng thái Đã chốt lương).",
-          "2. Chuyển sang tab 'Phiếu lương'.",
-          "3. Nhấn nút 'Thanh toán' nằm trên dòng tên của nhân viên 'Nguyễn Thị Lan'.",
-          "4. Trong cửa sổ pop-up Thanh toán lương, chọn phương thức thanh toán là 'Chuyển khoản'.",
-          "5. Kiểm tra số tiền trả và nhấn nút 'Tạo phiếu chi' để ghi nhận thanh toán."
-        ],
-        confirm: "Chụp ảnh màn hình tab Phiếu lương trong Bảng lương, hiển thị trạng thái lương của Nguyễn Thị Lan là 'Đã thanh toán' hoặc Nợ cần trả = 0."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác (Hủy bảng lương nháp)",
-        requirements: [
-          "1. Tìm và Hủy bỏ 'Bảng lương Test 01' đang ở trạng thái Tạm tính để dọn dẹp dữ liệu rác trên hệ thống."
-        ],
-        instructions: [
-          "1. Tại danh sách Bảng lương, tìm bảng lương nháp của tháng trước (đang ở trạng thái Tạm tính).",
-          "2. Nhấn vào mã bảng lương để mở xem chi tiết.",
-          "3. Nhấn nút 'Hủy bỏ'.",
-          "4. Chọn Đồng ý để xác nhận xóa bảng lương này khỏi hệ thống."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Bảng lương hiển thị bảng nháp của tháng trước đã được chuyển sang trạng thái 'Đã hủy'."
-      },
-
-      { title: "KiotViet Web", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Khởi tạo Website và thiết lập đồng bộ",
-        requirements: [
-          "1. Khởi tạo một Website bán hàng mới cho cửa hàng với tên hiển thị là 'Mỹ Phẩm Chính Hãng'.",
-          "2. Thiết lập đồng bộ dữ liệu: Chọn Chi nhánh đồng bộ là chi nhánh hiện tại của bạn và Bảng giá bán là 'Bảng giá chung'.",
-          "3. Tạo thêm một danh mục nháp có tên 'Danh mục Test 01' hiển thị trên web."
-        ],
-        instructions: [
-          "1. Tại màn hình Quản lý, kích vào menu 'Bán Online' ở thanh trên cùng -> 'Website bán hàng' -> chọn 'Tạo website'.",
-          "2. Nhập Tên cửa hàng là 'Mỹ Phẩm Chính Hãng', nhấn Tiếp theo, chọn một giao diện bất kỳ và kích Xong.",
-          "3. Khi hệ thống chuyển đến màn hình 'Website của tôi', chọn mục 'Thiết lập đồng bộ'.",
-          "4. Chọn Chi nhánh và chọn Bảng giá bán tương ứng, sau đó lưu lại thiết lập.",
-          "5. Quay lại menu Website của tôi, chọn mục 'Hàng hóa' -> chuyển sang tab 'Danh mục nổi bật'.",
-          "6. Chọn 'Tạo danh mục', điền tên là 'Danh mục Test 01', thêm tạm 1 sản phẩm bất kỳ và kích Xác nhận."
-        ],
-        confirm: "Chụp ảnh màn hình giao diện Website của tôi, hiển thị rõ phần Thiết lập đồng bộ đã được chọn đúng Chi nhánh và Bảng giá."
-      },
-      {
-        title: "Bài tập 2: Cài đặt hiển thị và Xuất bản Website",
-        requirements: [
-          "1. Cài đặt thông tin liên hệ cho Website: Nhập Số điện thoại Hotline là '0909123456' và liên kết đường dẫn Zalo của cửa hàng.",
-          "2. Đảm bảo bật cả 2 hình thức giao nhận: 'Giao hàng tận nơi' và 'Nhận tại cửa hàng'.",
-          "3. Thực hiện thao tác 'Xuất bản Website' để trang web chính thức đi vào hoạt động."
-        ],
-        instructions: [
-          "1. Trong mục Thiết lập website ở cột bên trái, chọn 'Cài đặt hiển thị'.",
-          "2. Tại mục Thông tin cửa hàng, điền '0909123456' vào Số điện thoại.",
-          "3. Tại mục Liên kết chat, bật công tắc Zalo và nhập số điện thoại/link Zalo vào ô trống.",
-          "4. Kiểm tra mục Hình thức bán hàng, đảm bảo công tắc 'Giao hàng tận nơi' và 'Nhận tại cửa hàng' đều đang bật xanh. Kích Lưu thay đổi.",
-          "5. Trở lại trang chủ 'Website của tôi', kích vào nút 'Xuất bản Website' ở góc trên bên phải màn hình."
-        ],
-        confirm: "Chụp ảnh màn hình Cài đặt hiển thị đã lưu thành công số Hotline, Zalo và các hình thức bán hàng."
-      },
-      {
-        title: "Bài tập 3: Xử lý đơn đặt hàng từ KiotViet Web",
-        requirements: [
-          "1. Giả định có một khách hàng vừa truy cập website và đặt mua 1 'Kem chống nắng La Roche-Posay' (Giả định giá: 450,000đ).",
-          "2. Hệ thống KiotViet Web đã tự động đẩy đơn hàng này về phần mềm. Bạn hãy tìm đơn đặt hàng đó và xử lý chuyển thành Hóa đơn bán hàng để giao cho khách."
-        ],
-        instructions: [
-          "1. (Tạo dữ liệu giả định): Mở màn hình Bán hàng, tạo một phiếu Đặt hàng mới cho 1 'Kem chống nắng La Roche-Posay'. Chọn Khách lẻ, ghi chú là 'Đơn từ Website' và nhấn Đặt hàng (Lưu thành phiếu tạm).",
-          "2. Trở lại màn hình Quản lý, vào menu Đơn hàng -> chọn Đặt hàng.",
-          "3. Tìm và kích vào mã phiếu đặt hàng vừa tạo (Đóng vai trò là đơn hàng mang mã DHMK đồng bộ từ Web về).",
-          "4. Nhấn nút 'Tạo hóa đơn' (hoặc Xử lý đặt hàng).",
-          "5. Hệ thống chuyển sang màn hình thu ngân, kiểm tra thông tin và nhấn 'Thanh toán' để hoàn tất việc xuất kho giao hàng."
-        ],
-        confirm: "Chụp ảnh màn hình Hóa đơn vừa được xử lý thành công từ phiếu đặt hàng, trạng thái Hoàn thành."
-      },
-      {
-        title: "Bài tập 4: Dọn dẹp dữ liệu rác (Ngừng xuất bản và xóa danh mục)",
-        requirements: [
-          "1. Thực hiện thao tác Ngừng xuất bản website để tạm thời bảo trì hệ thống.",
-          "2. Tìm và Xóa bỏ 'Danh mục Test 01' đã tạo ở Bài tập 1 để làm sạch giao diện web."
-        ],
-        instructions: [
-          "1. Tại màn hình 'Website của tôi', kích chọn biểu tượng cài đặt (hình bánh răng) ở khu vực phía trên bên phải.",
-          "2. Chọn 'Ngừng xuất bản' và xác nhận Đồng ý.",
-          "3. Ở cột menu trái, chọn 'Hàng hóa' -> chuyển sang tab 'Danh mục nổi bật'.",
-          "4. Tìm đến 'Danh mục Test 01', kích vào biểu tượng Xóa (thùng rác) và chọn Xác nhận để dọn dẹp dữ liệu."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách Danh mục nổi bật sau khi đã xóa thành công Danh mục Test 01."
-      },
-
-      { title: "Sàn TMĐT", isGroupHeader: true },
-      {
-        title: "Bài tập 1: Thiết lập chi nhánh và cấu hình đơn hàng trên sàn",
-        requirements: [
-          "1. Đăng nhập vào gian hàng thực hành và truy cập vào khu vực thiết lập kênh Thương mại điện tử.",
-          "2. Kiểm tra và xác định 'Chi nhánh đồng bộ' hiện tại của gian hàng Shopee/TikTok Shop.",
-          "3. Kiểm tra cấu hình Đơn hàng: Xác định 'Nhân viên xử lý đơn hàng' đang được chỉ định là ai và tính năng 'Đồng bộ đơn hàng' đang ở trạng thái nào."
-        ],
-        instructions: [
-          "1. Tại thanh Sidebar bên trái của màn hình Quản lý, chọn menu 'Bán Online' -> 'Thương mại điện tử'.",
-          "2. Chọn mục 'Thiết lập' -> 'Thiết lập kênh'.",
-          "3. Tại danh sách các gian hàng, chọn một gian hàng đang hoạt động và nhấn nút 'Thiết lập'.",
-          "4. Tại tab 'Thông tin', quan sát mục 'Chi nhánh đồng bộ'.",
-          "5. Chuyển sang tab 'Đơn hàng', kiểm tra mục 'Đồng bộ đơn hàng' và 'Nhân viên xử lý đơn hàng'."
-        ],
-        confirm: "Chụp ảnh màn hình popup Thiết lập, hiển thị rõ tab Đơn hàng và tên nhân viên xử lý."
-      },
-      {
-        title: "Bài tập 2: Thiết lập quy tắc đồng bộ Tồn kho và Giá bán",
-        requirements: [
-          "1. Trong giao diện thiết lập gian hàng, truy cập vào tab Hàng hóa.",
-          "2. Kiểm tra 'Công thức đồng bộ số lượng bán' đang được thiết lập là gì (Ví dụ: Tồn kho - Đặt hàng).",
-          "3. Kiểm tra 'Bảng giá bán' đang được chọn để đồng bộ lên sàn là bảng giá nào."
-        ],
-        instructions: [
-          "1. Tại popup Thiết lập gian hàng (đã mở ở Bài 1), nhấn chọn tab 'Hàng hóa'.",
-          "2. Tìm mục 'Đồng bộ tồn kho' và quan sát dòng 'Công thức đồng bộ số lượng bán'.",
-          "3. Tìm mục 'Đồng bộ giá bán' và xác định tên của 'Bảng giá bán' đang được liên kết."
-        ],
-        confirm: "Chụp ảnh màn hình tab Hàng hóa trong popup Thiết lập, hiển thị rõ công thức đồng bộ và bảng giá bán."
-      },
-      {
-        title: "Bài tập 3: Thiết lập quy tắc liên kết hàng hóa tự động",
-        requirements: [
-          "1. Kiểm tra cấu hình liên kết tự động giữa sàn và KiotViet.",
-          "2. Xác định xem tính năng 'Tự động liên kết hàng hóa nếu trùng mã hàng (SKU)' và 'Tự động sao chép hàng hóa mới' đang được bật hay tắt."
-        ],
-        instructions: [
-          "1. Vẫn tại tab 'Hàng hóa' của popup Thiết lập gian hàng.",
-          "2. Kéo xuống dưới cùng để tìm các tùy chọn về liên kết hàng hóa.",
-          "3. Quan sát trạng thái các nút gạt của: 'Tự động liên kết hàng hoá nếu trùng mã hàng (SKU)' và 'Tự động sao chép và liên kết hàng hóa mới tạo trên sàn về KiotViet'."
-        ],
-        confirm: "Chụp ảnh màn hình phần dưới cùng của tab Hàng hóa hiển thị các tùy chọn liên kết tự động."
-      },
-      {
-        title: "Bài tập 4: Nhận diện danh sách hàng hóa trên sàn",
-        requirements: [
-          "1. Truy cập vào mục quản lý danh sách hàng hóa của phân hệ Bán Online.",
-          "2. Sử dụng bộ lọc để hiển thị danh sách các sản phẩm đang có trạng thái 'Đã liên kết' trên gian hàng sàn mẫu."
-        ],
-        instructions: [
-          "1. Tại thanh Sidebar bên trái, vào 'Bán Online' -> 'Thương mại điện tử' -> 'Hàng hóa'.",
-          "2. Tại bộ lọc phía trên, chọn Sàn và Gian hàng muốn xem.",
-          "3. Tại bộ lọc trạng thái bên trái, tích chọn 'Đã liên kết'.",
-          "4. Quan sát danh sách các sản phẩm KiotViet đã được nối với sản phẩm trên sàn."
-        ],
-        confirm: "Chụp ảnh màn hình danh sách hàng hóa sau khi đã lọc theo trạng thái Đã liên kết."
-      },
-      {
-        title: "Bài tập 5: Nhận diện màn hình quản lý đơn hàng TMĐT",
-        requirements: [
-          "1. Truy cập vào màn hình quản lý đơn hàng tập trung từ các sàn.",
-          "2. Tìm tab 'Chờ xử lý' và chụp lại giao diện nơi hiển thị các đơn hàng mới đồng bộ về để xử lý."
-        ],
-        instructions: [
-          "1. Tại thanh Sidebar bên trái, vào 'Bán Online' -> 'Thương mại điện tử' -> 'Đơn hàng'.",
-          "2. Quan sát các tab trạng thái đơn hàng ở phía trên danh sách.",
-          "3. Nhấn vào tab 'Chờ xử lý'."
-        ],
-        confirm: "Chụp ảnh màn hình tab Chờ xử lý của mục Đơn hàng."
-      }
-    ]
-  }
-];
+  ]
+};
