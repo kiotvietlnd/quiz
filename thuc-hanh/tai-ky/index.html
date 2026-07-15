@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
-<head> <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Đào Tạo Tái Ký KiotViet (Retail)</title>
+    <title>Cổng Đào Tạo Tái Ký KiotViet</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -39,53 +39,33 @@
 
     <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
 
-    <!-- SIDEBAR HƯỚNG DẪN (ĐƯA TỪ NGOÀI VÀO) -->
+    <!-- SIDEBAR HƯỚNG DẪN -->
     <aside id="sidebar" class="w-80 bg-[#1e3a8a] border-r border-white/10 flex flex-col z-30 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex">
-        
         <div class="h-16 flex items-center px-5 border-b border-white/10 shrink-0 justify-between relative z-10 md:hidden">
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-7 brightness-0 invert">
             <button onclick="toggleSidebar()" class="text-white/50 hover:text-red-400 p-1 transition-colors"><i class="fas fa-times"></i></button>
         </div>
-        
         <div id="filterArea" class="p-5 flex-1 overflow-y-auto flex flex-col scroll-smooth relative z-10 space-y-5" id="sidebarScroll">
-            <h2 class="text-xs font-extrabold text-blue-200/80 uppercase tracking-widest flex items-center gap-2">
-                <i class="fas fa-info-circle text-blue-300"></i> Hướng Dẫn Thực Hành
-            </h2>
-
+            <h2 class="text-xs font-extrabold text-blue-200/80 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-info-circle text-blue-300"></i> Hướng Dẫn Thực Hành</h2>
             <div class="space-y-4 text-white/90">
                 <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
                     <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">1</span>
-                    <p class="text-xs leading-relaxed">
-                        <strong class="text-blue-200">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-200">Họ tên, Phòng ban</em> trước khi làm.
-                    </p>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-200">Họ tên, Mã Lớp, Lộ trình</em> trước khi làm.</p>
                 </div>
-                
                 <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
                     <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">2</span>
-                    <p class="text-xs leading-relaxed">
-                        <strong class="text-blue-200">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán/Tải lên và nhấn <em class="not-italic text-blue-200">Nộp bài</em> để lưu tiến độ.
-                    </p>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán/Tải lên và nhấn <em class="not-italic text-blue-200">Nộp bài</em> để lưu tiến độ.</p>
                 </div>
-
                 <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
                     <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">3</span>
-                    <p class="text-xs leading-relaxed">
-                        <strong class="text-blue-200">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận từ hệ thống.
-                    </p>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận từ hệ thống.</p>
                 </div>
             </div>
-
-            <!-- Khung Deadline -->
             <div class="bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl shadow-inner mt-4">
-                <div class="flex items-center gap-2 text-amber-400 font-extrabold text-xs mb-1.5 uppercase tracking-wide">
-                    <i class="fas fa-clock"></i> Hạn Chót
-                </div>
-                <p class="text-[11px] text-amber-200 font-medium leading-relaxed">
-                    Hoàn thành bài tập và gửi ảnh Xác Nhận hoàn thành lên Group Zalo trước 16:00 ngày hôm nay.
-                </p>
+                <div class="flex items-center gap-2 text-amber-400 font-extrabold text-xs mb-1.5 uppercase tracking-wide"><i class="fas fa-clock"></i> Hạn Chót</div>
+                <p class="text-[11px] text-amber-200 font-medium leading-relaxed">Hoàn thành bài tập và gửi ảnh Xác Nhận hoàn thành lên Group Zalo trước 16:00 ngày hôm nay.</p>
             </div>
         </div>
-        
         <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md shrink-0 flex flex-col gap-2 relative z-10 text-center">
             <span class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">KiotViet Learning & Development</span>
         </div>
@@ -94,30 +74,21 @@
     <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10">
         
-        <!-- HEADER KÍNH MỜ (GLASS) -->
         <header class="glass-header h-16 flex items-center justify-between px-6 z-20 shrink-0 w-full sticky top-0">
             <div class="flex items-center gap-4">
-                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-blue-600 p-2 rounded-xl hover:bg-blue-50 transition-colors">
-                    <i class="fas fa-bars text-lg"></i>
-                </button>
-                <a href="index.html" class="flex items-center">
-                    <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-8">
-                </a>
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-blue-600 p-2 rounded-xl hover:bg-blue-50 transition-colors"><i class="fas fa-bars text-lg"></i></button>
+                <a href="index.html" class="flex items-center"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-8"></a>
             </div>
-            
             <div class="flex items-center gap-4">
-                <!-- Nút định danh -->
                 <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 cursor-pointer animate-pulse">
                     👤 Đang kiểm tra...
                 </button>
             </div>
         </header>
 
-        <!-- KHUNG NỘI DUNG CHÍNH -->
         <div class="flex-1 overflow-auto p-6 md:p-10 relative custom-scrollbar">
             <div class="max-w-5xl mx-auto pb-16">
                 
-                <!-- Hướng dẫn cho màn hình Mobile (sẽ ẩn trên Desktop) -->
                 <div class="md:hidden bg-blue-50/90 border border-blue-200/60 rounded-2xl p-5 mb-8 shadow-sm backdrop-blur">
                     <h3 class="text-sm font-black text-blue-800 mb-3 flex items-center gap-2"><i class="fas fa-info-circle"></i> Hướng Dẫn Thực Hành</h3>
                     <div class="space-y-2 text-blue-900 text-xs">
@@ -127,75 +98,17 @@
                     </div>
                 </div>
 
-                <!-- Tiêu đề lớn -->
                 <div class="mb-10 text-center md:text-left">
                     <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-600 tracking-tight pb-1">
                         Hệ thống Xem và Nộp bài tập thực hành
                     </h2>
-                    <p class="text-sm md:text-base font-medium text-slate-500 mt-2">
-                        Đào tạo Tái ký sản phẩm KiotViet (Ngành hàng Retail)
+                    <p id="systemSubtitle" class="text-sm md:text-base font-medium text-slate-500 mt-2">
+                        Đào tạo Tái ký sản phẩm KiotViet (Vui lòng chọn Lộ trình đào tạo)
                     </p>
                 </div>
 
-                <!-- NGÀY 1 -->
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2 justify-center md:justify-start">
-                    <i class="fas fa-calendar-day text-indigo-500 text-base"></i> NGÀY 1: NỀN TẢNG HÀNG HÓA & QUẢN LÝ KHO
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
-                    
-                    <!-- Buổi 1 -->
-                    <a href="buoi-1.html" class="group relative glass-panel p-6 rounded-3xl border border-white/60 hover:shadow-xl transition-all flex flex-col h-full clickable-card">
-                        <div id="notify_session_1" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full border-2 border-white shadow-md animate-bounce">Có Nhận xét</div>
-                        <div id="check_session_1" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fas fa-check-circle"></i> Đã hoàn thành</div>
-                        
-                        <div class="w-max px-4 h-12 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600 rounded-xl flex items-center justify-center font-black text-lg mb-5 group-hover:scale-110 transition shadow-inner">Buổi 1</div>
-                        <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:text-blue-600 transition">Thiết lập Hàng hóa cơ bản & Nâng cao</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">Thực hành khởi tạo Danh mục hàng hóa, quản lý Hàng dịch vụ, Combo, Sản xuất, Lô HSD và Serial/IMEI.</p>
-                        <div class="text-blue-600 font-bold text-xs flex items-center gap-1 group-hover:gap-2 transition-all pt-4 border-t border-slate-100 mt-auto">Xem chi tiết bài tập <i class="fas fa-arrow-right"></i></div>
-                    </a>
-
-                    <!-- Buổi 2 -->
-                    <a href="buoi-2.html" class="group relative glass-panel p-6 rounded-3xl border border-white/60 hover:shadow-xl transition-all flex flex-col h-full clickable-card">
-                        <div id="notify_session_2" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full border-2 border-white shadow-md animate-bounce">Có Nhận xét</div>
-                        <div id="check_session_2" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fas fa-check-circle"></i> Đã hoàn thành</div>
-                        
-                        <div class="w-max px-4 h-12 bg-gradient-to-br from-blue-100 to-blue-200 text-blue-600 rounded-xl flex items-center justify-center font-black text-lg mb-5 group-hover:scale-110 transition shadow-inner">Buổi 2</div>
-                        <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:text-indigo-600 transition">Quản lý Kho, Nhà cung cấp & Giá</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">Quy trình Nhập hàng, Kiểm kho, thiết lập Bảng giá sỉ, theo dõi công nợ Nhà cung cấp.</p>
-                        <div class="text-indigo-600 font-bold text-xs flex items-center gap-1 group-hover:gap-2 transition-all pt-4 border-t border-slate-100 mt-auto">Xem chi tiết bài tập <i class="fas fa-arrow-right"></i></div>
-                    </a>
-                </div>
-
-                <!-- NGÀY 2 -->
-                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2 justify-center md:justify-start">
-                    <i class="fas fa-calendar-check text-emerald-500 text-base"></i> NGÀY 2: BÁN HÀNG & MỞ RỘNG KINH DOANH
-                </h3>
-                
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- Buổi 3 -->
-                    <a href="buoi-3.html" class="group relative glass-panel p-6 rounded-3xl border border-white/60 hover:shadow-xl transition-all flex flex-col h-full clickable-card">
-                        <div id="notify_session_3" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full border-2 border-white shadow-md animate-bounce">Có Nhận xét</div>
-                        <div id="check_session_3" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fas fa-check-circle"></i> Đã hoàn thành</div>
-                        
-                        <div class="w-max px-4 h-12 bg-gradient-to-br from-emerald-100 to-emerald-200 text-emerald-700 rounded-xl flex items-center justify-center font-black text-lg mb-5 group-hover:scale-110 transition shadow-inner">Buổi 3</div>
-                        <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:text-emerald-600 transition">Giao dịch & Quản lý Khách hàng</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">Thực hành Đặt hàng, Bán hàng, thanh toán QR, điểm tích lũy và thiết lập cấp độ VIP Khách hàng.</p>
-                        <div class="text-emerald-600 font-bold text-xs flex items-center gap-1 group-hover:gap-2 transition-all pt-4 border-t border-slate-100 mt-auto">Xem chi tiết bài tập <i class="fas fa-arrow-right"></i></div>
-                    </a>
-
-                    <!-- Buổi 4 -->
-                    <a href="buoi-4.html" class="group relative glass-panel p-6 rounded-3xl border border-white/60 hover:shadow-xl transition-all flex flex-col h-full clickable-card">
-                        <div id="notify_session_4" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full border-2 border-white shadow-md animate-bounce">Có Nhận xét</div>
-                        <div id="check_session_4" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fas fa-check-circle"></i> Đã hoàn thành</div>
-                        
-                        <div class="w-max px-4 h-12 bg-gradient-to-br from-purple-100 to-purple-200 text-purple-700 rounded-xl flex items-center justify-center font-black text-lg mb-5 group-hover:scale-110 transition shadow-inner">Buổi 4</div>
-                        <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:text-purple-600 transition">Mở rộng Bán hàng & Phân quyền</h4>
-                        <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">Nghiệp vụ Trả hàng, Quản lý Nhân sự - Tính lương, Khởi tạo KiotViet Web và Sàn TMĐT.</p>
-                        <div class="text-purple-600 font-bold text-xs flex items-center gap-1 group-hover:gap-2 transition-all pt-4 border-t border-slate-100 mt-auto">Xem chi tiết bài tập <i class="fas fa-arrow-right"></i></div>
-                    </a>
-
+                <div id="courseContainer">
+                    <!-- DOM sinh ra các thẻ Buổi 1,2,3,4,5 bằng Javascript -->
                 </div>
             </div>
             
@@ -208,15 +121,11 @@
         </div>
     </main>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐỊNH DANH (Kính mờ) -->
+    <!-- MODAL ĐĂNG NHẬP / ĐỊNH DANH -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full relative border border-slate-200/60">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
-                <i class="fas fa-times"></i>
-            </button>
-            <h2 class="text-2xl font-black text-slate-800 mb-1 flex items-center gap-2">
-                <i class="fas fa-user-shield text-blue-600"></i> Đăng nhập
-            </h2>
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fas fa-times"></i></button>
+            <h2 class="text-2xl font-black text-slate-800 mb-1 flex items-center gap-2"><i class="fas fa-user-shield text-blue-600"></i> Đăng nhập</h2>
             <p class="text-xs text-slate-400 font-semibold mb-6">Vui lòng nhập đúng thông tin để hệ thống ghi nhận kết quả cho bạn.</p>
             
             <div class="space-y-4">
@@ -225,8 +134,15 @@
                     <input type="text" id="inpName" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: Nguyễn Văn A">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Phòng ban *</label>
-                    <input type="text" id="inpDept" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: Khối Khách hàng">
+                    <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Mã Lớp / Phòng ban *</label>
+                    <input type="text" id="inpDept" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: TK-Q3-01">
+                </div>
+                <div>
+                    <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Lộ trình đào tạo *</label>
+                    <select id="inpRoadmap" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner">
+                        <option value="Retail">Ngành hàng Retail (Bán lẻ)</option>
+                        <option value="FNB">Ngành hàng FNB (F&B)</option>
+                    </select>
                 </div>
                 <button onclick="saveProfile()" class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-lg shadow-blue-500/20 transition-all hover:-translate-y-0.5 mt-2">
                     Lưu thông tin & Bắt đầu
@@ -235,7 +151,6 @@
         </div>
     </div>
 
-    <!-- Tự động kéo API và Data từ file chung -->
     <script src="codelab-data.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -244,81 +159,76 @@
             if(!profileRaw) {
                 openAuthModal();
             } else {
+                renderCourseCards();
                 fetchGlobalNotifications();
             }
-            
-            // Check tiến độ hoàn thành để gắn Tích xanh
-            checkCompletion('session_1', 'kv_codelab_data_b1', 'check_session_1');
-            checkCompletion('session_2', 'kv_codelab_data_b2', 'check_session_2');
-            checkCompletion('session_3', 'kv_codelab_data_b3', 'check_session_3');
-            checkCompletion('session_4', 'kv_codelab_data_b4', 'check_session_4');
         });
 
-        // HÀM QUÉT NHẬN XÉT GIẢNG VIÊN ĐỂ BẬT CHẤM ĐỎ NOTIFICATION
         function fetchGlobalNotifications() {
             if (typeof APP_CONFIG === 'undefined' || !APP_CONFIG.API_URL) return;
             const apiUrl = APP_CONFIG.API_URL;
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
-            if(!apiUrl || !profile) return;
+            if(!apiUrl || !profile || !profile.roadmap) return;
             
             const btnIdent = document.getElementById('btnIdentity');
-            const originalHTML = btnIdent.innerHTML;
             btnIdent.innerHTML += ` <i class="fas fa-spinner fa-spin ml-1 text-slate-400"></i>`;
 
             fetch(`${apiUrl}?studentName=${encodeURIComponent(profile.name)}`)
             .then(r => r.json())
             .then(res => {
                 if(res.status === 'success' && res.allData) {
-                    checkNotification('session_1', 'kv_codelab_data_b1', 'notify_session_1', res.allData);
-                    checkNotification('session_2', 'kv_codelab_data_b2', 'notify_session_2', res.allData);
-                    checkNotification('session_3', 'kv_codelab_data_b3', 'notify_session_3', res.allData);
-                    checkNotification('session_4', 'kv_codelab_data_b4', 'notify_session_4', res.allData);
+                    checkNotification('session_1', 'kv_codelab_data_b1', 'notify_session_1', res.allData, profile.roadmap);
+                    checkNotification('session_2', 'kv_codelab_data_b2', 'notify_session_2', res.allData, profile.roadmap);
+                    checkNotification('session_3', 'kv_codelab_data_b3', 'notify_session_3', res.allData, profile.roadmap);
+                    checkNotification('session_4', 'kv_codelab_data_b4', 'notify_session_4', res.allData, profile.roadmap);
+                    checkNotification('session_5', 'kv_codelab_data_b5', 'notify_session_5', res.allData, profile.roadmap);
                 }
             }).finally(() => { renderIdentity(); });
         }
 
-        // HÀM SO SÁNH DATA ĐỂ HIỆN CHẤM ĐỎ
-        function checkNotification(sessionId, storageKey, notifyId, allApiData) {
-            const session = CODELAB_DATA.find(s => s.id === sessionId);
-            if(!session) return;
+        function checkNotification(sessionId, storageKey, notifyId, allApiData, roadmap) {
+            const sessionData = CODELAB_DATA[roadmap].find(s => s.id === sessionId);
+            if(!sessionData) return;
             
-            const apiSessionData = allApiData[session.title] || {};
+            const apiSessionData = allApiData[sessionData.title] || {};
             let hasNew = false;
             
             const savedData = localStorage.getItem(storageKey);
             let store = savedData ? JSON.parse(savedData) : {};
             
-            for(let i=0; i<session.exercises.length; i++) {
-                let exTitle = session.exercises[i].title;
+            for(let i=0; i<sessionData.exercises.length; i++) {
+                let exTitle = sessionData.exercises[i].title;
                 if(apiSessionData[exTitle]) {
                     if(!store[i]) store[i] = {};
                     if(store[i].feedback !== apiSessionData[exTitle]) hasNew = true;
                 }
             }
             for(let key in store) { if(store[key].isUnread) hasNew = true; }
-            if(hasNew) document.getElementById(notifyId).classList.remove('hidden');
+            const notifyEl = document.getElementById(notifyId);
+            if(hasNew && notifyEl) notifyEl.classList.remove('hidden');
         }
 
-        // HÀM KIỂM TRA TIẾN ĐỘ 100% ĐỂ BẬT TÍCH XANH HOÀN THÀNH
-        function checkCompletion(sessionId, storageKey, badgeId) {
-            const sessionData = CODELAB_DATA.find(s => s.id === sessionId); if(!sessionData) return;
+        function checkCompletion(sessionId, storageKey, badgeId, roadmap) {
+            const sessionData = CODELAB_DATA[roadmap].find(s => s.id === sessionId); if(!sessionData) return;
             let totalExercises = 0; sessionData.exercises.forEach(ex => { if(!ex.isGroupHeader) totalExercises++; });
             const savedData = localStorage.getItem(storageKey);
             if(savedData) {
                 const store = JSON.parse(savedData); let completedCount = 0;
                 for(let i = 0; i < sessionData.exercises.length; i++) { if(store[i] && store[i].isSubmitted) completedCount++; }
-                if(completedCount === totalExercises && totalExercises > 0) document.getElementById(badgeId).classList.remove('hidden');
+                const badgeEl = document.getElementById(badgeId);
+                if(completedCount === totalExercises && totalExercises > 0 && badgeEl) badgeEl.classList.remove('hidden');
             }
         }
 
-        // HÀM HIỂN THỊ NÚT ĐỊNH DANH Ở GÓC TRÊN BÊN PHẢI
         function renderIdentity() {
             const btn = document.getElementById('btnIdentity'); const profileRaw = localStorage.getItem('kv_trainer_profile');
             if(profileRaw) {
                 const profile = JSON.parse(profileRaw);
-                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- ${profile.dept}</span> <span class="text-[10px] font-normal opacity-70 underline ml-1">(Sửa)</span>`;
+                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- Lớp: ${profile.dept}</span> <span class="text-[10px] font-normal opacity-70 underline ml-1">(Sửa)</span>`;
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer";
-                document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept;
+                document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept; 
+                if(profile.roadmap) document.getElementById('inpRoadmap').value = profile.roadmap;
+                document.getElementById('systemSubtitle').innerText = `Đào tạo Tái ký sản phẩm KiotViet (Ngành hàng ${profile.roadmap})`;
             } else {
                 btn.innerHTML = `👤 Chưa định danh (Bấm để nhập)`;
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 cursor-pointer animate-pulse";
@@ -329,10 +239,90 @@
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
         
         function saveProfile() {
-            const name = document.getElementById('inpName').value.trim(); const dept = document.getElementById('inpDept').value.trim();
-            if(!name || !dept) { alert("Vui lòng điền Họ tên và Phòng ban!"); return; }
-            localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
-            closeAuthModal(); renderIdentity(); fetchGlobalNotifications();
+            const name = document.getElementById('inpName').value.trim(); 
+            const dept = document.getElementById('inpDept').value.trim();
+            const roadmap = document.getElementById('inpRoadmap').value;
+            if(!name || !dept || !roadmap) { alert("Vui lòng điền đủ Họ tên, Mã Lớp và Lộ trình!"); return; }
+            
+            // Xóa cache cũ nếu đổi Lộ trình
+            const oldProfile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
+            if(oldProfile && oldProfile.roadmap !== roadmap) {
+                localStorage.removeItem('kv_codelab_progress_b1'); localStorage.removeItem('kv_codelab_data_b1');
+                localStorage.removeItem('kv_codelab_progress_b2'); localStorage.removeItem('kv_codelab_data_b2');
+                localStorage.removeItem('kv_codelab_progress_b3'); localStorage.removeItem('kv_codelab_data_b3');
+                localStorage.removeItem('kv_codelab_progress_b4'); localStorage.removeItem('kv_codelab_data_b4');
+                localStorage.removeItem('kv_codelab_progress_b5'); localStorage.removeItem('kv_codelab_data_b5');
+            }
+
+            localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept, roadmap: roadmap }));
+            closeAuthModal(); renderIdentity(); 
+            renderCourseCards();
+            fetchGlobalNotifications();
+        }
+
+        // TỰ ĐỘNG RENDER 5 CARD BÀI TẬP THEO LỘ TRÌNH ĐÃ CHỌN
+        function renderCourseCards() {
+            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
+            if(!profile || !profile.roadmap) return;
+            const roadmapData = CODELAB_DATA[profile.roadmap];
+            const container = document.getElementById('courseContainer');
+
+            // Các config màu sắc cho Card
+            const cardStyles = [
+                { icon: 'fa-store', colorBg: 'bg-blue-100', colorText: 'text-blue-600', hoverText: 'group-hover:text-blue-600', colorFrom: 'from-blue-100', colorTo: 'to-blue-200' },
+                { icon: 'fa-box', colorBg: 'bg-indigo-100', colorText: 'text-indigo-600', hoverText: 'group-hover:text-indigo-600', colorFrom: 'from-indigo-100', colorTo: 'to-indigo-200' },
+                { icon: 'fa-cash-register', colorBg: 'bg-emerald-100', colorText: 'text-emerald-700', hoverText: 'group-hover:text-emerald-600', colorFrom: 'from-emerald-100', colorTo: 'to-emerald-200' },
+                { icon: 'fa-users-gear', colorBg: 'bg-purple-100', colorText: 'text-purple-700', hoverText: 'group-hover:text-purple-600', colorFrom: 'from-purple-100', colorTo: 'to-purple-200' },
+                { icon: 'fa-calculator', colorBg: 'bg-orange-100', colorText: 'text-orange-700', hoverText: 'group-hover:text-orange-600', colorFrom: 'from-orange-100', colorTo: 'to-orange-200' }
+            ];
+
+            let html = `
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2 justify-center md:justify-start">
+                    <i class="fas fa-calendar-day text-indigo-500 text-base"></i> NGÀY 1: NỀN TẢNG HÀNG HÓA & QUẢN LÝ KHO
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    ${generateCardHTML(roadmapData[0], 1, cardStyles[0])}
+                    ${generateCardHTML(roadmapData[1], 2, cardStyles[1])}
+                </div>
+
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2 justify-center md:justify-start">
+                    <i class="fas fa-calendar-check text-emerald-500 text-base"></i> NGÀY 2: BÁN HÀNG & MỞ RỘNG KINH DOANH
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    ${generateCardHTML(roadmapData[2], 3, cardStyles[2])}
+                    ${generateCardHTML(roadmapData[3], 4, cardStyles[3])}
+                </div>
+
+                <h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 flex items-center gap-2 justify-center md:justify-start">
+                    <i class="fas fa-file-invoice-dollar text-orange-500 text-base"></i> NGÀY 3: PHÁP LÝ THUẾ & KẾ TOÁN
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+                    ${generateCardHTML(roadmapData[4], 5, cardStyles[4])}
+                </div>
+            `;
+            container.innerHTML = html;
+
+            // Kích hoạt check tích xanh
+            checkCompletion('session_1', 'kv_codelab_data_b1', 'check_session_1', profile.roadmap);
+            checkCompletion('session_2', 'kv_codelab_data_b2', 'check_session_2', profile.roadmap);
+            checkCompletion('session_3', 'kv_codelab_data_b3', 'check_session_3', profile.roadmap);
+            checkCompletion('session_4', 'kv_codelab_data_b4', 'check_session_4', profile.roadmap);
+            checkCompletion('session_5', 'kv_codelab_data_b5', 'check_session_5', profile.roadmap);
+        }
+
+        function generateCardHTML(sessionData, sessionNum, style) {
+            if(!sessionData) return '';
+            const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
+            return `
+            <a href="buoi-${sessionNum}.html" class="group relative glass-panel p-6 rounded-3xl border border-white/60 hover:shadow-xl transition-all flex flex-col h-full clickable-card">
+                <div id="notify_session_${sessionNum}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full border-2 border-white shadow-md animate-bounce">Có Nhận xét</div>
+                <div id="check_session_${sessionNum}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fas fa-check-circle"></i> Đã hoàn thành</div>
+                
+                <div class="w-max px-4 h-12 bg-gradient-to-br ${style.colorFrom} ${style.colorTo} ${style.colorText} rounded-xl flex items-center justify-center font-black text-lg mb-5 group-hover:scale-110 transition shadow-inner">Buổi ${sessionNum}</div>
+                <h4 class="text-lg font-black text-slate-800 mb-2 ${style.hoverText} transition">${safeTitle}</h4>
+                <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">${sessionData.desc}</p>
+                <div class="${style.colorText} font-bold text-xs flex items-center gap-1 group-hover:gap-2 transition-all pt-4 border-t border-slate-100 mt-auto">Xem chi tiết bài tập <i class="fas fa-arrow-right"></i></div>
+            </a>`;
         }
 
         function toggleSidebar() {
