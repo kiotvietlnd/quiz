@@ -108,7 +108,7 @@
     </main>
 
     <!-- MODAL XEM CHI TIẾT KÈM XEM BÀI THỰC HÀNH -->
-    <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div id="detailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[50] flex items-center justify-center hidden">
         <div class="glass-panel-ultra w-screen h-screen max-w-full max-h-screen p-6 lg:p-12 shadow-2xl flex flex-col justify-between overflow-hidden border-none rounded-none m-0">
             
             <div class="flex items-center justify-between border-b pb-4 mb-6 border-slate-200 flex-shrink-0">
@@ -144,10 +144,10 @@
                         <p id="modal-scenario" class="text-xs text-slate-600 leading-relaxed whitespace-pre-wrap">--</p>
                     </div>
 
-                    <!-- KHU VỰC HIỂN THỊ BÀI THỰC HÀNH TÍCH HỢP VÀO TRONG MODAL -->
+                    <!-- KHU VỰC HIỂN THỊ BÀI THỰC HÀNH TÍCH HỢP VÀO TRONG MODAL MANAGER -->
                     <div class="bg-white p-5 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                         <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-laptop-code text-[#166def] mr-1.5"></i> Chi tiết bài thực hành đã nộp</span>
-                        <div id="managerPracticeContent" class="space-y-4 text-xs">
+                        <div id="practiceContent" class="space-y-4 text-xs">
                             <div class="text-center py-4 text-slate-400"><i class="fa-solid fa-spinner animate-spin"></i> Đang tải dữ liệu thực hành...</div>
                         </div>
                     </div>
@@ -173,9 +173,26 @@
         </div>
     </div>
 
+    <!-- FULLSCREEN ẢNH MODAL (Zoom ảnh) -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all">
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
+            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
+            <div class="flex items-center gap-3">
+                <a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Mở tab mới</a>
+                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+        </div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
+            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button>
+            <img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
+        </div>
+        <div class="h-8 shrink-0"></div>
+    </div>
+
     <!-- Script kết nối API & Xử lý lọc dữ liệu -->
     <script>
-        // BẠN ĐIỀN LINK WEB APP MỚI NHẤT VÀO ĐÂY
+        // BẠN ĐIỀN LINK WEB APP MỚI VÀO ĐÂY
         const API_URL = "https://script.google.com/macros/s/AKfycbzYRRgK_0naygfsG4AfoBccmcNdijROyT5tIooz_4kT1fys8jJF1-G3WvuBmHPz7bKl1A/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
@@ -191,14 +208,11 @@
             .then(response => response.json())
             .then(res => {
                 if (res.status === "success" && res.data && res.data.length > 0) {
-                    allRecords = res.data.reverse(); // Reverse để lên đầu
+                    allRecords = res.data.reverse(); 
                     document.getElementById('mock-data-warning').classList.add('hidden');
                     processAndDisplayData(allRecords);
                 }
-            })
-            .catch(err => {
-                console.warn("Lỗi:", err);
-            });
+            }).catch(err => { console.warn("Lỗi:", err); });
         }
 
         function processAndDisplayData(data) { renderDashboard(data); renderTable(data); }
@@ -237,6 +251,7 @@
                     displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
                 }
 
+                // Nút con mắt xem bài trực tiếp từ bảng (Thay cho nút CHI TIẾT)
                 return `
                     <tr class="hover:bg-slate-50/80 transition-all cursor-pointer" onclick="openModal(${index})">
                         <td class="py-4 pl-4 font-bold text-slate-800">${escapeHtml(row.RepName)}<span class="text-xs font-normal text-slate-400 block">${escapeHtml(row.ClassCode || 'N/A')}</span></td>
@@ -245,7 +260,7 @@
                         <td class="py-4 font-medium">${escapeHtml(displayDate)}</td>
                         <td class="py-4 font-medium text-slate-700">${escapeHtml(row.TrainerName)}</td>
                         <td class="py-4 text-center font-extrabold text-[#166def]">${row.ConfidenceScore}/10</td>
-                        <td class="py-4 text-center"><span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-100 border text-slate-600">${escapeHtml(row.HomeworkStatus)}</span></td>
+                        <td class="py-4 text-center"><span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-100 border text-slate-600 flex items-center justify-center gap-1"><i class="fa-solid fa-eye text-blue-500"></i> ${escapeHtml(row.HomeworkStatus)}</span></td>
                         <td class="py-4 max-w-[200px] truncate text-slate-500 font-medium" title="${escapeHtml(row.TrainerNotes || '')}">${escapeHtml(row.TrainerNotes || 'Chưa có nhận xét')}</td>
                         <td class="py-4 text-center"><span class="inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-lg ${ratingClass}">${escapeHtml(row.Rating)}</span></td>
                         <td class="py-4 text-center pr-4"><button class="px-3 py-1 bg-white hover:bg-slate-100 text-[#166def] border border-blue-100 rounded-lg text-[11px] font-bold transition-all shadow-sm"><i class="fa-solid fa-magnifying-glass"></i> CHI TIẾT</button></td>
@@ -288,12 +303,27 @@
             renderTable(filtered);
         }
 
-        // Helpers lấy link ảnh trực tiếp
         function getDirectImageUrl(url) { 
             let m = url.match(/\/d\/(.+?)\//); if(!m) m = url.match(/id=(.+?)(&|$)/); 
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
         }
 
+        // ================= ZOOM ẢNH LIGHTBOX =================
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
+        
+        document.addEventListener('keydown', function(event) {
+            if(!document.getElementById('fullscreenModal').classList.contains('hidden')) {
+                if(event.key === 'ArrowLeft') changeFullscreenImg(-1);
+                else if(event.key === 'ArrowRight') changeFullscreenImg(1);
+                else if(event.key === 'Escape') closeFullscreenModal();
+            }
+        });
+
+        // VIEW BÀI THỰC HÀNH CỦA HỌC VIÊN TÍCH HỢP VÀO MODAL CHI TIẾT
         function openModal(index) {
             const row = allRecords[index];
             if (!row) return;
@@ -326,38 +356,51 @@
             document.getElementById('modal-notes').textContent = row.TrainerNotes || "Không có nhận xét chi tiết.";
             document.getElementById('modal-action').textContent = row.ActionPlan || "Không có khuyến nghị hành động tiếp theo.";
 
-            // Tự động fetch bài thực hành để gán vào Modal
-            const pContainer = document.getElementById('managerPracticeContent');
-            pContainer.innerHTML = '<div class="text-center py-4 text-slate-400"><i class="fa-solid fa-spinner animate-spin"></i> Đang tải dữ liệu thực hành...</div>';
+            // Fetch bài thực hành
+            const container = document.getElementById('practiceContent');
+            container.innerHTML = '<div class="text-center py-4 text-slate-400"><i class="fa-solid fa-spinner animate-spin"></i> Đang tải dữ liệu thực hành...</div>';
 
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(row.RepName)}&department=${encodeURIComponent(row.ClassCode)}`)
             .then(r=>r.json()).then(data => {
                 if(data.status === 'success' && data.data && data.data.length > 0) {
-                    let html = '';
-                    let grouped = {};
-                    data.data.forEach(p => { if(!grouped[p.session]) grouped[p.session]={}; grouped[p.session][p.exerciseTitle] = p; });
+                    let html = ''; let grouped = {};
+                    data.data.forEach(p => {
+                        if(!grouped[p.session]) grouped[p.session] = {};
+                        grouped[p.session][p.exerciseTitle] = p; 
+                    });
+
                     for(let session in grouped) {
-                        html += `<div class="mb-4"><h4 class="font-bold text-[#166def] mb-2 uppercase">${session}</h4><div class="space-y-3">`;
-                        for(let ex in grouped[session]) {
-                            let item = grouped[session][ex];
-                            let links = item.links ? item.links.split('\n').map(l => `<a href="${l}" target="_blank" class="text-blue-500 underline"><i class="fa-solid fa-link"></i> Xem ảnh</a>`).join(' | ') : '';
+                        html += `<div class="mb-6"><h3 class="bg-[#166def] text-white px-4 py-2 rounded-t-xl font-bold uppercase tracking-wider text-[10px]">${session}</h3><div class="border border-[#166def]/20 border-t-0 rounded-b-xl p-4 space-y-4 bg-white">`;
+                        for(let exTitle in grouped[session]) {
+                            let item = grouped[session][exTitle];
                             
-                            // Gộp text tự luận (nếu có)
                             let theoryHtml = '';
                             if(item.ans1 || item.ans2) {
-                                theoryHtml = `<div class="bg-blue-50/50 p-2 rounded mb-2 text-[11px]">`;
-                                for(let i=1; i<=5; i++) { if(item[`ans${i}`]) theoryHtml += `<p class="mb-1 text-slate-700"><b>Câu ${i}:</b> ${item[`ans${i}`]}</p>`; }
+                                theoryHtml = `<div class="bg-blue-50/50 p-3 rounded-xl mb-3"><p class="text-[10px] font-black text-blue-800 uppercase mb-1">TỰ LUẬN:</p>`;
+                                for(let i=1; i<=5; i++) { if(item[`ans${i}`]) theoryHtml += `<p class="text-xs text-blue-900 mb-1"><b>Câu ${i}:</b> ${item[`ans${i}`]}</p>`; }
                                 theoryHtml += `</div>`;
                             }
 
-                            let fb = item.feedback ? `<p class="mt-2 text-emerald-600 bg-emerald-50 p-2 rounded text-[11px]"><b>GV nhận xét:</b> ${item.feedback}</p>` : '';
-                            html += `<div class="bg-slate-50 p-3 rounded-lg border border-slate-200"><p class="font-bold text-slate-700 mb-2">${item.exerciseTitle} <span class="text-[9px] text-slate-400 font-normal ml-2">${item.timestamp}</span></p>${theoryHtml}<div class="mt-1.5">${links}</div>${fb}</div>`;
+                            let links = item.links ? item.links.split('\n') : [];
+                            let imgHtml = links.map((link, idx) => `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(links).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"><div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg"><i class="fa-solid fa-magnifying-glass-plus text-white text-lg"></i></div></div>`).join('');
+
+                            let fbHtml = item.feedback ? `<div class="mt-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200"><p class="text-[10px] font-black text-emerald-700 uppercase mb-1"><i class="fa-solid fa-check-circle"></i> Giảng viên nhận xét:</p><p class="text-sm font-medium text-emerald-900">${item.feedback}</p></div>` : ``;
+
+                            html += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                                <div class="flex justify-between items-start mb-2 border-b border-slate-200 pb-2">
+                                    <h4 class="text-sm font-black text-slate-800">${item.exerciseTitle}</h4>
+                                    <span class="text-[10px] text-slate-400 bg-white px-2 py-1 border rounded shadow-sm">${item.timestamp}</span>
+                                </div>
+                                ${theoryHtml}
+                                <div class="flex flex-wrap gap-2 mt-3">${imgHtml}</div>
+                                ${fbHtml}
+                            </div>`;
                         }
                         html += `</div></div>`;
                     }
-                    pContainer.innerHTML = html;
+                    container.innerHTML = html;
                 } else {
-                    pContainer.innerHTML = `<p class="text-red-500 italic">Học viên này chưa nộp bài thực hành trên hệ thống.</p>`;
+                    container.innerHTML = `<p class="text-red-500 italic text-center p-4">Học viên này chưa nộp bài thực hành trên hệ thống.</p>`;
                 }
             });
 
