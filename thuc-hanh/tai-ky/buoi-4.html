@@ -476,7 +476,7 @@
 
         function buildPrintTemplate() {
             const pdfContent = document.getElementById('pdf-content'); const profile = JSON.parse(localStorage.getItem('kv_trainer_profile')); const sessionName = document.getElementById('sessionTitle').innerText;
-            let reportHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto;"><h1 style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-bottom: 20px;">Báo cáo bài tập - ${sessionName}</h1><div style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 30px;"><p style="margin: 0 0 8px 0; font-size: 16px;"><strong>Học viên:</strong> ${profile.name} - ${profile.dept}</p><p style="margin: 0; font-size: 16px;"><strong>Khóa học:</strong> ${APP_CONFIG.COURSE_NAME}</p></div>`;
+            let reportHtml = `<div style="font-family: Arial, sans-serif; color: #333; max-width: 800px; margin: 0 auto;"><h1 style="font-size: 24px; font-weight: bold; border-bottom: 2px solid #1a73e8; padding-bottom: 10px; margin-bottom: 20px;">Báo cáo bài tập - ${sessionName}</h1><div style="background: #f8f9fa; border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-bottom: 30px;"><p style="margin: 0 0 8px 0; font-size: 16px;"><strong>Học viên:</strong> ${profile.name} - ${profile.dept}</p><p style="margin: 0; font-size: 16px;"><strong>Khóa học:</strong> Đào tạo Tái Ký - Lộ trình ${profile.roadmap || 'Chung'}</p></div>`;
 
             for(let i=0; i<currentExercises.length; i++) {
                 if(currentExercises[i].isGroupHeader) continue;
