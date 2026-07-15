@@ -320,6 +320,7 @@
                     </div>
 
                     <!-- Nhận xét chi tiết & Lộ trình rèn luyện -->
+                    <div id="practiceContent"></div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-2">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical"></i> Trainer nhận xét</span>
@@ -638,23 +639,17 @@
 
             document.getElementById('modal-title-rep').textContent = row.RepName;
             document.getElementById('modal-title-session').textContent = row.Session;
-            
-            // Định dạng ngày hiển thị dd/mm/yyyy trong modal
             let displayDate = row.ReviewDate;
             if (row.ReviewDate && row.ReviewDate.includes('-')) {
                 const parts = row.ReviewDate.split('T')[0].split('-');
                 displayDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
             }
             document.getElementById('modal-info-date').textContent = displayDate;
-            
-            // Gán 2 trường Mã lớp và Ngành hàng vào Grid thông tin của Modal [1]
             document.getElementById('modal-info-classcode').textContent = row.ClassCode || "N/A";
             document.getElementById('modal-info-industry').textContent = row.Industry || "N/A";
-
             document.getElementById('modal-info-trainer').textContent = row.TrainerName;
             document.getElementById('modal-info-homework').textContent = row.HomeworkStatus;
 
-            // Thiết lập màu sắc Xếp Loại trong Modal
             const ratingBadge = document.getElementById('modal-info-rating');
             ratingBadge.textContent = row.Rating;
             ratingBadge.className = "inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-lg";
@@ -663,34 +658,52 @@
             if (row.Rating === "Đạt ứng dụng") ratingBadge.classList.add('badge-ungdung');
             if (row.Rating === "Tốt") ratingBadge.classList.add('badge-tot');
 
-            // Gán dữ liệu Self-Check
             document.getElementById('modal-self-easy').textContent = row.SelfCheckEasy || "Không có ghi nhận";
             document.getElementById('modal-self-hard').textContent = row.SelfCheckHard || "Không có ghi nhận";
             document.getElementById('modal-self-apply').textContent = row.SelfCheckApply || "Không có ghi nhận";
-
-            // Gán các ghi nhận dạng Text tự do
             document.getElementById('modal-scenario').textContent = row.ScenarioNotes || "Không có ghi chép tình huống.";
             document.getElementById('modal-notes').textContent = row.TrainerNotes || "Không có nhận xét chi tiết.";
             document.getElementById('modal-action').textContent = row.ActionPlan || "Không có khuyến nghị hành động tiếp theo.";
 
-            // Hiển thị modal
+            // Tự động fetch bài thực hành để gán vào Modal
+            document.getElementById('practiceContent').innerHTML = "<p>Đang tải dữ liệu...</p>";
+            fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(row.RepName)}&department=${encodeURIComponent(row.ClassCode)}`)
+            .then(res => res.json()).then(data => {
+                if(data.status === 'success' && data.data && data.data.length > 0) {
+                    renderPracticeModal(data.data);
+                } else {
+                    document.getElementById('practiceContent').innerHTML = `<p class="text-sm text-red-500 italic mt-4">Học viên này chưa nộp bài thực hành trên hệ thống!</p>`;
+                }
+            });
+
             document.getElementById('detailModal').classList.remove('hidden');
         }
 
-        // Đóng cửa sổ Modal
-        function closeModal() {
-            document.getElementById('detailModal').classList.add('hidden');
-        }
+        function closeModal() { document.getElementById('detailModal').classList.add('hidden'); }
 
-        // Bộ chuyển đổi mã để hiển thị văn bản an toàn
-        function escapeHtml(string) {
-            if (!string) return "";
-            return String(string)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+        function renderPracticeModal(practiceData) {
+            let html = '<div class="mt-8 border-t border-slate-200 pt-6"><h3 class="text-sm font-black text-slate-800 mb-4"><i class="fa-solid fa-laptop-code text-[#166def]"></i> CHI TIẾT BÀI THỰC HÀNH ĐÃ NỘP</h3>';
+            let grouped = {};
+            practiceData.forEach(p => { if(!grouped[p.session]) grouped[p.session] = {}; grouped[p.session][p.exerciseTitle] = p; });
+
+            for(let session in grouped) {
+                html += `<div class="mb-6"><h4 class="bg-blue-50 text-blue-700 px-3 py-2 rounded-t-xl font-bold uppercase text-[10px]">${session}</h4><div class="border border-blue-50 rounded-b-xl p-4 space-y-4">`;
+                for(let exTitle in grouped[session]) {
+                    let item = grouped[session][exTitle];
+                    let links = item.links ? item.links.split('\n') : [];
+                    let imgHtml = links.map(link => `<a href="${link}" target="_blank" class="text-blue-500 underline text-xs block"><i class="fa-solid fa-link"></i> Xem ảnh đính kèm</a>`).join('');
+                    let fbHtml = item.feedback ? `<p class="text-[10px] bg-emerald-50 text-emerald-700 p-2 rounded mt-2"><b>GV Nhận xét:</b> ${item.feedback}</p>` : ``;
+                    
+                    html += `<div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <div class="flex justify-between border-b pb-1 mb-2"><span class="text-xs font-bold text-slate-800">${item.exerciseTitle}</span><span class="text-[9px] text-slate-400">${item.timestamp}</span></div>
+                        ${imgHtml}
+                        ${fbHtml}
+                    </div>`;
+                }
+                html += `</div></div>`;
+            }
+            html += '</div>';
+            document.getElementById('practiceContent').innerHTML = html;
         }
     </script>
 </body>
