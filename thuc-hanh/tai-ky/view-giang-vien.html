@@ -180,12 +180,10 @@
         function renderCards() {
             const selDept = document.getElementById('filterDept').value;
             const selStudent = document.getElementById('filterStudent').value;
-            const selSession = document.getElementById('filterSession').value;
             const selStatus = document.getElementById('filterStatus').value;
 
             let filtered = allData;
             if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
-            if (selSession !== 'all') filtered = filtered.filter(e => e.buoi === selSession);
             if (selStudent !== 'all') {
                 const parts = selStudent.split('|'); filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]);
                 document.getElementById('statStudentName').innerText = parts[0];
@@ -206,7 +204,7 @@
             document.getElementById('statPending').innerText = `${filtered.filter(e => !e.nhanXet || e.nhanXet.trim()==="").length} bài`;
             document.getElementById('statsSummary').classList.remove('hidden');
 
-            const container = document.getElementById('exercisesContainer');
+            const container = document.getElementById('cardsContainer');
             if(filtered.length === 0) { container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; return; }
 
             container.innerHTML = filtered.map((item, idx) => {
@@ -228,13 +226,23 @@
                 let safeName = item.hoVaTen.replace(/'/g, "\\'"); let safeDept = item.phongBan.replace(/'/g, "\\'"); let safeEx = item.tenBaiHoc.replace(/'/g, "\\'"); let safeSession = item.buoi.replace(/'/g, "\\'");
 
                 return `
-                <div class="glass-panel p-6 rounded-3xl border border-white/60 shadow-sm relative flex flex-col">
+                <div class="glass-panel p-6 rounded-3xl border border-white/60 shadow-sm relative flex flex-col mb-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4 mb-4">
                         <div>
                             <h3 class="text-base font-black text-slate-800">${item.tenBaiHoc}</h3>
-                            <p class="text-xs font-extrabold text-slate-500 mt-1"><i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600">${item.hoVaTen}</span> (${item.phongBan || "Trống"}) | <i class="far fa-clock"></i> ${item.ngay}</p>
+                            
+                            <!-- ĐÂY LÀ ĐOẠN ĐÃ ĐƯỢC CHÈN THÊM TAG NGÀNH HÀNG RETAIL/FNB -->
+                            <p class="text-xs font-medium text-slate-500 mt-1.5 flex items-center flex-wrap gap-1.5">
+                                <i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600 font-bold">${item.hoVaTen}</span> 
+                                <span class="text-slate-300 mx-0.5">|</span>
+                                Lớp: <span class="text-slate-700 font-bold">${item.phongBan || "Trống"}</span>
+                                <span class="text-slate-300 mx-0.5">|</span>
+                                <span class="bg-indigo-50 text-indigo-600 border border-indigo-100 px-1.5 py-0.5 rounded font-bold">${item.khoa || 'Chung'}</span>
+                                <span class="text-slate-300 mx-0.5">|</span>
+                                <i class="far fa-clock"></i> ${item.ngay}
+                            </p>
                         </div>
-                        <div class="flex items-center gap-1.5">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${item.buoi}</span></div>
+                        <div class="flex items-center gap-1.5 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${item.buoi}</span></div>
                     </div>
                     ${theoryHtml}
                     ${imgHtml}
