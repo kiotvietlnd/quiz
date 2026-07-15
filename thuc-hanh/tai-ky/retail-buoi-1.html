@@ -382,7 +382,7 @@
             let promises = []; for(let i = 0; i < pendingFiles.length; i++) { promises.push(compressImage(pendingFiles[i])); }
 
             Promise.all(promises).then(imagesData => {
-                const payload = { studentName: profile.name, department: profile.dept, courseName: profile.roadmap, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
+                const payload = { studentName: profile.name, department: profile.dept, courseName: currentRoadmap, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
                 return fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
             }).then(r => r.json()).then(data => {
                 if(data.status === 'success') {
