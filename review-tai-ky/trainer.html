@@ -44,6 +44,7 @@
     <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col">
         <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-stretch w-full flex-grow">
             
+            <!-- GIÁO TRÌNH BÊN TRÁI -->
             <section class="xl:col-span-7 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
                 <div class="flex gap-2 mb-3 bg-indigo-50/50 p-1 rounded-2xl border border-indigo-100 flex-shrink-0">
                     <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-tags"></i> LỘ TRÌNH RETAIL (BÁN LẺ)</button>
@@ -64,7 +65,7 @@
                     <div class="space-y-4 flex-shrink-0">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <span class="text-xs font-extrabold text-[#166def] uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG</span>
-                            <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-[#166def] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start"><i class="fa-solid fa-dice"></i> CHỌN NGẪU NHIÊN</button>
+                            <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-[#166def] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start"><i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN</button>
                         </div>
                         <div id="random-scenario-box"></div>
                     </div>
@@ -79,6 +80,7 @@
                 </div>
             </section>
             
+            <!-- FORM BÊN PHẢI -->
             <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
                 <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-[#f0f6ff] border border-blue-200 rounded-3xl p-6 lg:p-8 shadow-lg">
                     <h3 class="text-base font-black text-slate-800 mb-6 pb-3 border-b border-blue-100 flex items-center gap-3">
@@ -92,10 +94,13 @@
                             
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative">
-                                    <label class="flex justify-between items-end text-[11px] font-bold text-slate-400 tracking-wider mb-1">
-                                        HỌ TÊN HỌC VIÊN *
-                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] text-white px-2 py-0.5 rounded shadow-sm transition"><i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span></button>
-                                    </label>
+                                    <!-- Nút xem bài thiết kế lại gọn gàng -->
+                                    <div class="flex justify-between items-center mb-1">
+                                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">HỌ TÊN HỌC VIÊN *</label>
+                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm transition-all flex items-center gap-1">
+                                            <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
+                                        </button>
+                                    </div>
                                     <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
                                     <span id="checkPracticeSpinner" class="hidden absolute right-3 top-9 text-blue-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
                                 </div>
@@ -119,10 +124,10 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">PHIÊN REVIEW *</label>
-                                    <select id="session" onchange="checkStudentPractice()" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white"><option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option><option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option><option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option></select>
+                                    <select id="session" onchange="switchSessionAndCheck()" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white"><option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option><option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option><option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option></select>
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW *</label>
+                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀNH REVIEW *</label>
                                     <input type="text" id="reviewDate" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="dd/mm/yyyy">
                                 </div>
                             </div>
@@ -139,19 +144,18 @@
                             </div>
                         </div>
 
-                        <!-- Các khối nhận xét -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá (Self-Check)</span>
+                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá</span>
                             <div class="space-y-3">
-                                <textarea id="selfCheckEasy" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy dễ hiểu nhất? Vì sao?"></textarea>
-                                <textarea id="selfCheckHard" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
-                                <textarea id="selfCheckApply" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nội dung đã học hỗ trợ gì cho cuộc gọi tư vấn tái ký?"></textarea>
+                                <textarea id="selfCheckEasy" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy dễ hiểu nhất?"></textarea>
+                                <textarea id="selfCheckHard" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
+                                <textarea id="selfCheckApply" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ứng dụng vào thực tế?"></textarea>
                             </div>
                         </div>
 
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
-                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp..."></textarea>
+                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi..."></textarea>
                         </div>
 
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
@@ -184,18 +188,35 @@
         </div>
 
         <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
-            <!-- Giữ nguyên nội dung cẩm nang -->
+            <!-- Cẩm nang giữ nguyên -->
         </div>
     </main>
 
     <!-- Modal Thông báo -->
-    <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center hidden">
+    <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] flex items-center justify-center hidden">
         <div class="glass-panel-ultra rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
             <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
             <h4 id="modalTitle" class="text-base font-black text-slate-800 mb-2">Tiêu đề</h4>
             <p id="modalMessage" class="text-xs text-slate-400 mb-6 leading-relaxed"></p>
-            <button onclick="closeModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">XÁC NHẬN</button>
+            <button onclick="closeStatusModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">XÁC NHẬN</button>
         </div>
+    </div>
+
+    <!-- FULLSCREEN ẢNH MODAL (Zoom ảnh) -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all">
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
+            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
+            <div class="flex items-center gap-3">
+                <a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Mở tab mới</a>
+                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+        </div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
+            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button>
+            <img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
+        </div>
+        <div class="h-8 shrink-0"></div>
     </div>
 
     <!-- Gọi file Data để biết cấu trúc bài tập -->
@@ -206,23 +227,21 @@
         <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-4xl w-full max-h-[90vh] flex flex-col relative border border-slate-200">
             <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fa-solid fa-xmark"></i></button>
             <h2 class="text-xl font-black text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-4">
-                <i class="fa-solid fa-laptop-code text-[#166def]"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
+                <i class="fa-solid fa-laptop-code text-[#166def]"></i> BÀI THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
             </h2>
-            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-6 mt-4"></div>
+            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-6 mt-4">
+                <!-- Nội dung bài thực hành sẽ render tại đây -->
+            </div>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // DÁN ĐƯỜNG LINK API MỚI NHẤT VÀO ĐÂY BẠN NHÉ
-        // ==========================================
+        // BẠN ĐIỀN LINK WEB APP MỚI NHẤT VÀO ĐÂY NHÉ
         const API_URL = "https://script.google.com/macros/s/AKfycbzYRRgK_0naygfsG4AfoBccmcNdijROyT5tIooz_4kT1fys8jJF1-G3WvuBmHPz7bKl1A/exec"; 
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
-        let scenariosData = {};
-        let currentDay = 'day1';
-        let currentRoadmap = 'Retail'; 
-        let currentRandomScenario = null;
+        let scenariosData = {}; let currentDay = 'day1'; let currentRoadmap = 'Retail'; let currentRandomScenario = null;
+        let currentStudentPracticeData = []; // Data bài tập thực hành
 
         function setTodayDate() {
             const today = new Date();
@@ -234,18 +253,16 @@
 
         function loadScenariosFromSheet() {
             fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
-            .then(res => res.json())
-            .then(response => {
+            .then(res => res.json()).then(response => {
                 if (response.status === "success" && response.data && response.data.length > 0) {
                     scenariosData = { day1: [], day2: [], day3: [] };
                     response.data.forEach(item => {
-                        if (!item.Day || item.Day.toString().trim().toLowerCase() === "day" || item.Title.toString().trim().toLowerCase() === "title") return; 
+                        if (!item.Day || item.Day.toString().trim().toLowerCase() === "day") return; 
                         const dayKey = item.Day.toString().trim();
                         if (scenariosData[dayKey]) {
                             scenariosData[dayKey].push({
                                 id: item.id || Math.random(), type: item.Type ? item.Type.toString().trim() : "",
-                                title: item.Title, question: item.Question, answer: item.Answer,
-                                roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" 
+                                title: item.Title, question: item.Question, answer: item.Answer, roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" 
                             });
                         }
                     });
@@ -254,43 +271,40 @@
             });
         }
 
-        // HÀM FORMAT SENTENCES AN TOÀN (Đã sửa lỗi cứng giao diện trên trình duyệt)
+        // HÀM NGẮT CÂU AN TOÀN (KHÔNG DÙNG LOOKBEHIND ĐỂ TRÁNH LỖI SAFARI/IOS)
         function formatSentences(text) {
             if (!text) return "";
-            return text.replace(/([a-zA-Záàảãạăắằẳẵặâấầẩẫậéèẻẽẹêếềểễệíìỉĩịóòỏõọôốồổỗộơớờởỡợúùủũụưứừửữựýỳỷỹỵđ]\s*[.?!])\s+/gi, "$1<br><br>");
+            text = text.replace(/\n/g, '<br>');
+            return text.replace(/([.?!])\s+([A-ZĐÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ])/g, "$1<br><br>$2");
         }
 
         function switchRoadmap(roadmap) {
-            currentRoadmap = roadmap;
-            document.getElementById('industry').value = roadmap; 
-            switchSubTab(currentDay);
+            currentRoadmap = roadmap; document.getElementById('industry').value = roadmap; switchSubTab(currentDay);
+        }
+
+        function switchSessionAndCheck() {
+            const val = document.getElementById('session').value;
+            if (val.includes("Phiên 1")) switchSubTab('day1');
+            if (val.includes("Phiên 2")) switchSubTab('day2');
+            if (val.includes("Phiên 3")) switchSubTab('day3');
         }
 
         function switchSubTab(day) {
             currentDay = day;
             document.getElementById('session').value = day === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : day === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
             triggerRandomScenario();
-            checkStudentPractice(); 
+            checkStudentPractice(); // Auto check khi đổi phiên
         }
 
         function triggerRandomScenario() {
             const list = scenariosData[currentDay] ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) : [];
             const box = document.getElementById('random-scenario-box');
             if (!list || list.length === 0) { box.innerHTML = `<p class="text-xs py-6 text-center">Chưa có dữ liệu.</p>`; return; }
-            
             currentRandomScenario = list[Math.floor(Math.random() * list.length)];
             const isMorning = currentRandomScenario.type === 'morning';
             const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-purple-50 border-purple-200 text-purple-950';
-
             box.innerHTML = `<div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white animate-fade"><div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3"><h4 class="font-extrabold text-sm">${escapeHtml(currentRandomScenario.title)}</h4><div class="text-xs space-y-3 pt-1"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div></div></div></div>`;
         }
-
-        document.getElementById('session').addEventListener('change', function(e) {
-            const val = e.target.value;
-            if (val === "Phiên 1 (Cuối Ngày 1)") switchSubTab('day1');
-            if (val === "Phiên 2 (Cuối Ngày 2)") switchSubTab('day2');
-            if (val === "Phiên 3 (Cuối Ngày 3)") switchSubTab('day3');
-        });
 
         function selectRating(rating, element) {
             document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all");
@@ -301,9 +315,7 @@
             else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
         }
 
-        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ =====
-        let currentStudentPracticeData = [];
-
+        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ THEO BUỔI =====
         function checkStudentPractice() {
             const studentName = document.getElementById('repName').value.trim();
             const classCode = document.getElementById('classCode').value.trim();
@@ -316,14 +328,14 @@
             spinner.classList.remove('hidden'); btn.classList.add('hidden');
 
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
-            .then(res => res.json())
-            .then(data => {
+            .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
-                btn.classList.remove('hidden', 'bg-slate-400', 'bg-orange-500', 'bg-emerald-600');
+                btn.classList.remove('hidden', 'bg-slate-400', 'bg-orange-500', 'bg-emerald-600', 'bg-[#166def]');
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
                     
+                    // Tính % tiến độ dựa trên Buổi hiện tại đang Review
                     const sessionSelectVal = document.getElementById('session').value; 
                     let targetSessionId = "";
                     if(sessionSelectVal.includes("Phiên 1")) targetSessionId = "session_1"; 
@@ -335,9 +347,8 @@
                         const sData = CODELAB_DATA.find(s => s.id === targetSessionId);
                         if(sData) {
                             totalExercises = sData.exercises.filter(e => !e.isGroupHeader).length;
-                            const submittedTitles = currentStudentPracticeData.filter(p => {
-                                return p.session === sData.title;
-                            }).map(p => p.exerciseTitle);
+                            // Kiểm tra các bài đã nộp có thuộc Session này không
+                            const submittedTitles = currentStudentPracticeData.filter(p => p.session === sData.title).map(p => p.exerciseTitle);
                             doneExercises = [...new Set(submittedTitles)].length;
                         }
                     }
@@ -345,19 +356,21 @@
                     if(totalExercises > 0) {
                         let percent = Math.round((doneExercises / totalExercises) * 100);
                         if(percent >= 100) {
-                            btn.classList.add('bg-emerald-600'); txtStatus.innerText = `Đủ bài TH (100%)`;
+                            btn.classList.add('bg-emerald-600', 'text-white'); txtStatus.innerText = `Đủ bài TH (100%)`;
                             document.getElementById('homeworkStatus').value = "Đủ";
+                        } else if (percent > 0) {
+                            btn.classList.add('bg-orange-500', 'text-white'); txtStatus.innerText = `Thiếu bài TH (${percent}%)`;
+                            document.getElementById('homeworkStatus').value = "Thiếu";
                         } else {
-                            btn.classList.add('bg-orange-500'); txtStatus.innerText = `Thiếu bài TH (${percent}%)`;
+                            btn.classList.add('bg-slate-400', 'text-white'); txtStatus.innerText = `Chưa làm bài của phiên này`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         }
                     } else {
-                        btn.classList.add('bg-[#166def]'); txtStatus.innerText = `Xem bài TH (${data.data.length} bài nộp)`;
+                        btn.classList.add('bg-[#166def]', 'text-white'); txtStatus.innerText = `Xem bài TH (${data.data.length} bài)`;
                     }
-
                 } else {
                     currentStudentPracticeData = [];
-                    btn.classList.add('bg-slate-400');
+                    btn.classList.add('bg-slate-400', 'text-white');
                     txtStatus.innerText = `Chưa làm bài TH`;
                     document.getElementById('homeworkStatus').value = "Thiếu";
                 }
@@ -369,8 +382,25 @@
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
         }
 
+        // ================= ZOOM ẢNH LIGHTBOX =================
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
+        
+        // Điều hướng ảnh bằng bàn phím
+        document.addEventListener('keydown', function(event) {
+            if(!document.getElementById('fullscreenModal').classList.contains('hidden')) {
+                if(event.key === 'ArrowLeft') changeFullscreenImg(-1);
+                else if(event.key === 'ArrowRight') changeFullscreenImg(1);
+                else if(event.key === 'Escape') closeFullscreenModal();
+            }
+        });
+
+        // VIEW BÀI THỰC HÀNH CỦA HỌC VIÊN DÀNH CHO TRAINER
         function openPracticeModal() {
-            document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value + " - " + document.getElementById('classCode').value;
+            document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value + " - Lớp: " + document.getElementById('classCode').value;
             const container = document.getElementById('practiceContent');
             
             if(currentStudentPracticeData.length === 0) {
@@ -379,7 +409,7 @@
                 let html = ''; let grouped = {};
                 currentStudentPracticeData.forEach(p => {
                     if(!grouped[p.session]) grouped[p.session] = {};
-                    grouped[p.session][p.exerciseTitle] = p;
+                    grouped[p.session][p.exerciseTitle] = p; // Lấy bài nộp mới nhất
                 });
 
                 for(let session in grouped) {
@@ -395,7 +425,7 @@
                         }
 
                         let links = item.links ? item.links.split('\n') : [];
-                        let imgHtml = links.map(link => `<a href="${link}" target="_blank" class="block w-32 h-20 rounded-lg overflow-hidden border border-slate-200 hover:border-[#166def] transition group relative"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-plus text-white text-lg"></i></div></a>`).join('');
+                        let imgHtml = links.map((link, idx) => `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(links).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"><div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg"><i class="fa-solid fa-magnifying-glass-plus text-white text-lg"></i></div></div>`).join('');
 
                         let fbHtml = item.feedback ? `<div class="mt-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200"><p class="text-[10px] font-black text-emerald-700 uppercase mb-1"><i class="fa-solid fa-check-circle"></i> Giảng viên nhận xét:</p><p class="text-sm font-medium text-emerald-900">${item.feedback}</p></div>` : ``;
 
@@ -469,7 +499,7 @@
             modal.classList.remove('hidden');
         }
 
-        function closeModal() { document.getElementById('statusModal').classList.add('hidden'); }
+        function closeStatusModal() { document.getElementById('statusModal').classList.add('hidden'); }
 
         function resetFormFields() {
             document.getElementById('repName').value = ""; document.getElementById('classCode').value = "";
@@ -486,7 +516,7 @@
             if (!string) return "";
             return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
-
+        
         function switchMainTab(tab) {
             const workspaceBtn = document.getElementById('main-tab-workspace');
             const handbookBtn = document.getElementById('main-tab-handbook');
