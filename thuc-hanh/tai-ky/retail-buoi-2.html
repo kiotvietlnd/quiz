@@ -202,9 +202,9 @@
         }
 
         function loadSessionData() {
-            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
-            if(!profile || !profile.roadmap || !CODELAB_DATA[profile.roadmap]) return;
-            const session = CODELAB_DATA[profile.roadmap].find(s => s.id === SESSION_ID); if(!session) return;
+            // HARDCODE Lộ trình cho file này là Retail
+            const currentRoadmap = "Retail"; 
+            const session = CODELAB_DATA[currentRoadmap].find(s => s.id === SESSION_ID); if(!session) return;
             document.getElementById('sessionTitle').innerText = session.title; currentExercises = session.exercises;
             if(currentExercises[currentStepIndex] && currentExercises[currentStepIndex].isGroupHeader) currentStepIndex++;
             renderSidebar(); goToStep(currentStepIndex);
