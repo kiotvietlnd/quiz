@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHẤM BÀI THỰC HÀNH TÁI KÝ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; background: #f8fafc; }</style>
+</head>
+<body class="h-screen flex flex-col">
+
+    <header class="bg-[#166def] text-white px-6 py-4 flex items-center justify-between shadow-md">
+        <h1 class="font-black tracking-wider"><i class="fa-solid fa-chalkboard-user mr-2"></i> TRUNG TÂM CHẤM BÀI TÁI KÝ</h1>
+        <button onclick="fetchPracticeData()" class="bg-blue-800/50 hover:bg-blue-700 px-4 py-2 rounded-lg text-xs font-bold"><i class="fa-solid fa-rotate"></i> Tải dữ liệu</button>
+    </header>
+
+    <div class="flex-1 flex overflow-hidden">
+        <!-- Sidebar Lọc -->
+        <aside class="w-72 bg-white border-r border-slate-200 p-5 flex flex-col gap-4 overflow-y-auto">
+            <h2 class="text-xs font-black text-slate-400 uppercase tracking-widest border-b pb-2">Bộ Lọc Học Viên</h2>
+            
+            <div>
+                <label class="text-xs font-bold text-slate-600 block mb-1">Mã Lớp / Phòng Ban</label>
+                <select id="filterDept" onchange="updateStudentFilter()" class="w-full text-xs p-2 border rounded-lg bg-slate-50"><option value="all">Tất cả</option></select>
+            </div>
+            <div>
+                <label class="text-xs font-bold text-slate-600 block mb-1">Học Viên</label>
+                <select id="filterStudent" onchange="renderCards()" class="w-full text-xs p-2 border rounded-lg bg-slate-50"><option value="all">Tất cả</option></select>
+            </div>
+            <div>
+                <label class="text-xs font-bold text-slate-600 block mb-1">Trạng thái chấm</label>
+                <select id="filterStatus" onchange="renderCards()" class="w-full text-xs p-2 border rounded-lg bg-slate-50">
+                    <option value="all">Tất cả</option>
+                    <option value="pending" selected>Chưa chấm (Chờ feedback)</option>
+                    <option value="graded">Đã chấm</option>
+                </select>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 overflow-y-auto bg-slate-50" id="mainContainer">
+            <div id="loading" class="text-center py-20 text-blue-500 font-bold hidden"><i class="fa-solid fa-spinner fa-spin text-3xl mb-4 block"></i> Đang tải dữ liệu...</div>
+            <div id="cardsContainer" class="max-w-4xl mx-auto space-y-6"></div>
+        </main>
+    </div>
+
+    <!-- Script Data & Logic -->
+    <script src="codelab-data.js"></script>
+    <script>
+        let allData = [];
+
+        function fetchPracticeData() {
+            document.getElementById('loading').classList.remove('hidden');
+            document.getElementById('cardsContainer').innerHTML = "";
+            fetch(`${APP_CONFIG.API_URL}?action=getAllPracticeData`)
+            .then(r => r.json()).then(res => {
+                allData = res.data.reverse(); // Đảo ngược để bài mới nộp lên đầu
+                initFilters();
+                document.getElementById('loading').classList.add('hidden');
+            });
+        }
+
+        function initFilters() {
+            const depts = [...new Set(allData.map(e => e.phongBan))].filter(Boolean);
+            const deptSelect = document.getElementById('filterDept');
+            deptSelect.innerHTML = `<option value="all">Tất cả</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+            updateStudentFilter();
+        }
+
+        function updateStudentFilter() {
+            const selectedDept = document.getElementById('filterDept').value;
+            let filtered = selectedDept === 'all' ? allData : allData.filter(e => e.phongBan === selectedDept);
+            const students = [...new Set(filtered.map(e => `${e.hoVaTen}|${e.phongBan}`))].filter(e => e !== "|");
+            
+            const stdSelect = document.getElementById('filterStudent');
+            stdSelect.innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
+                const parts = s.split('|');
+                return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
+            }).join('');
+            renderCards();
+        }
+
+        function getDirectImg(url) { 
+            let m = url.match(/\/d\/(.+?)\//); if(!m) m = url.match(/id=(.+?)(&|$)/); 
+            return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
+        }
+
+        function renderCards() {
+            const selectedDept = document.getElementById('filterDept').value;
+            const selectedStudent = document.getElementById('filterStudent').value;
+            const selectedStatus = document.getElementById('filterStatus').value;
+
+            let filtered = allData;
+            if (selectedDept !== 'all') filtered = filtered.filter(e => e.phongBan === selectedDept);
+            if (selectedStudent !== 'all') {
+                const parts = selectedStudent.split('|');
+                filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]);
+            }
+
+            // Group by bài nộp mới nhất của từng phần
+            let mapUnique = {};
+            filtered.forEach(e => {
+                let key = `${e.hoVaTen}-${e.phongBan}-${e.tenBaiHoc}`;
+                if (!mapUnique[key]) mapUnique[key] = e; // Lấy bản ghi đầu tiên (vì đã reverse mới nhất lên đầu)
+            });
+            filtered = Object.values(mapUnique);
+
+            if (selectedStatus === 'pending') filtered = filtered.filter(e => !e.nhanXet || e.nhanXet.trim() === "");
+            if (selectedStatus === 'graded') filtered = filtered.filter(e => e.nhanXet && e.nhanXet.trim() !== "");
+
+            const container = document.getElementById('cardsContainer');
+            if(filtered.length === 0) {
+                container.innerHTML = `<p class="text-center text-slate-400 mt-10">Không có bài nộp nào phù hợp.</p>`; return;
+            }
+
+            container.innerHTML = filtered.map((item, idx) => {
+                let statusHtml = item.nhanXet ? `<span class="bg-emerald-100 text-emerald-700 px-2 py-1 rounded text-[10px] font-bold">ĐÃ CHẤM</span>` : `<span class="bg-red-100 text-red-600 px-2 py-1 rounded text-[10px] font-bold animate-pulse">CHƯA CHẤM</span>`;
+                
+                let imgLinks = item.linkDrive.split(/[\n,]+/).filter(l => l.trim() !== "");
+                let imgHtml = imgLinks.length > 0 ? imgLinks.map(link => `<a href="${link}" target="_blank"><img src="${getDirectImg(link)}" class="h-20 w-32 object-cover rounded-lg border hover:border-blue-500"></a>`).join('') : '<span class="text-red-500 text-xs">Không có ảnh</span>';
+
+                let safeName = item.hoVaTen.replace(/'/g, "\\'");
+                let safeDept = item.phongBan.replace(/'/g, "\\'");
+                let safeEx = item.tenBaiHoc.replace(/'/g, "\\'");
+                let safeSession = item.buoi.replace(/'/g, "\\'");
+
+                return `
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-start mb-4 border-b pb-3">
+                        <div>
+                            <h3 class="font-black text-lg text-slate-800">${item.tenBaiHoc}</h3>
+                            <p class="text-xs text-slate-500 mt-1"><i class="fa-solid fa-user text-blue-500 mr-1"></i> ${item.hoVaTen} | <b>Mã Lớp:</b> ${item.phongBan} | <b>${item.buoi}</b> | ${item.ngay}</p>
+                        </div>
+                        ${statusHtml}
+                    </div>
+                    <div class="mb-4">
+                        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2"><i class="fa-solid fa-images text-blue-500"></i> Ảnh minh chứng</p>
+                        <div class="flex flex-wrap gap-2">${imgHtml}</div>
+                    </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 mt-4">
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2 block"><i class="fa-solid fa-comment-dots text-blue-500"></i> Ghi nhận xét</label>
+                        <textarea id="fb-${idx}" class="w-full text-sm p-3 border rounded-lg focus:ring-2 focus:ring-blue-400 outline-none" rows="3" placeholder="Gõ nhận xét vào đây...">${item.nhanXet}</textarea>
+                        <button onclick="saveFeedback(${idx}, '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${idx}" class="mt-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-xs font-bold transition-all"><i class="fa-solid fa-paper-plane"></i> LƯU NHẬN XÉT</button>
+                    </div>
+                </div>`;
+            }).join('');
+        }
+
+        function saveFeedback(idx, name, dept, exTitle, session) {
+            const feedback = document.getElementById(`fb-${idx}`).value.trim();
+            const btn = document.getElementById(`btn-${idx}`);
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`; btn.disabled = true;
+
+            fetch(APP_CONFIG.API_URL, {
+                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
+            }).then(r=>r.json()).then(res => {
+                if(res.status === 'success') {
+                    btn.innerHTML = `<i class="fa-solid fa-check"></i> ĐÃ LƯU`; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
+                    setTimeout(()=> { btn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> LƯU NHẬN XÉT`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; }, 2000);
+                }
+            });
+        }
+        
+        window.onload = fetchPracticeData;
+    </script>
+</body>
+</html>
