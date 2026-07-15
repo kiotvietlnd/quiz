@@ -175,7 +175,7 @@
                 </div>
             </section>
             
-            <!-- Cột phải (42%): Form ghi nhận kết quả review (Màu nền Blue nhạt #f0f6ff) -->
+            <!-- Cột phải (42%): Form ghi nhận kết quả review -->
             <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
                 <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-[#f0f6ff] border border-blue-200 rounded-3xl p-6 lg:p-8 shadow-lg">
                     
@@ -192,9 +192,15 @@
                             
                             <!-- Hàng 1 -->
                             <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
-                                    <input type="text" id="repName" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
+                                <div class="relative">
+                                    <label class="flex justify-between items-end text-[11px] font-bold text-slate-400 tracking-wider mb-1">
+                                        HỌ TÊN HỌC VIÊN *
+                                        <!-- Nút xem bài thực hành -->
+                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 hover:bg-emerald-100 transition shadow-sm"><i class="fa-solid fa-images"></i> Xem bài TH</button>
+                                    </label>
+                                    <!-- Thêm hàm onblur để tự check bài thực hành khi gõ xong -->
+                                    <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
+                                    <span id="checkPracticeSpinner" class="hidden absolute right-3 top-9 text-blue-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
@@ -257,7 +263,7 @@
                             </div>
                         </div>
 
-                        <!-- Block 2: Self-check (Hiển thị tối đa 3 dòng trống - rows="3") -->
+                        <!-- Block 2: Self-check -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá (Self-Check)</span>
                             <div class="space-y-3">
@@ -267,13 +273,13 @@
                             </div>
                         </div>
 
-                        <!-- Block 3: Phản xạ tình huống thực tế (rows="3") -->
+                        <!-- Block 3: Phản xạ tình huống thực tế -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
                             <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp (Vấn đề -> Giải pháp -> Lợi ích)..."></textarea>
                         </div>
 
-                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi (rows="3") -->
+                        <!-- Block 4: Xếp loại & Nhận xét cuối buổi -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-[#166def] mr-1.5"></i> Đánh Giá Của Trainer</span>
                             
@@ -296,7 +302,7 @@
 
                     </div>
 
-                    <!-- Nút gửi mang màu sắc `#166def` tương phản và đồng bộ -->
+                    <!-- Nút gửi -->
                     <div class="mt-6 pt-4 border-t border-blue-100">
                         <button type="submit" id="submitBtn" class="scifi-btn sc-brand w-full font-black tracking-wider shadow-lg">
                             <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
@@ -381,7 +387,7 @@
                 </div>
             </div>
 
-            <!-- Cấu trúc bảng kế hoạch (Cố định độ rộng chống nhảy dòng) -->
+            <!-- Cấu trúc bảng kế hoạch -->
             <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                 <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                     <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
@@ -443,18 +449,40 @@
         </div>
     </div>
 
+    <!-- MODAL XEM BÀI THỰC HÀNH CỦA HỌC VIÊN -->
+    <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-2xl w-full max-h-[85vh] flex flex-col relative border border-slate-200">
+            <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <h2 class="text-lg font-black text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <i class="fa-solid fa-laptop-code text-emerald-600"></i> BÀI THỰC HÀNH: <span id="practiceStudentName" class="text-[#166def]"></span>
+            </h2>
+            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-4 mt-4">
+                <!-- Nội dung bài thực hành sẽ render tại đây -->
+            </div>
+            <div class="mt-4 pt-4 border-t border-slate-100 flex-shrink-0">
+                <button type="button" onclick="closePracticeModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl text-xs font-bold transition-all shadow-sm">
+                    ĐÓNG
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Script điều hướng & xử lý API -->
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzxO5c5KP9Do1DL_xoL5cMGrK0k2Nm6SVloRY6LOpPY2L8AH5mZx6Rd5moKDcPDVQhKrQ/exec";
+        // BẠN ĐIỀN LINK WEB APP MỚI VÀO ĐÂY NHÉ
+        const API_URL = "https://script.google.com/macros/s/AKfycbz2G5BFP3Okofg_35K6Qi_NA0A7tpuiWAjY76zBb4_H4EGjMsECkPq75wDVEC1eENLKbQ/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
-        // Khai báo đối tượng giáo trình rỗng, sẽ được load động từ Google Sheet [1]
+        // Khai báo đối tượng giáo trình rỗng, sẽ được load động từ Google Sheet
         let scenariosData = {};
         let currentDay = 'day1';
-        let currentRoadmap = 'Retail'; // Mặc định là Retail [1]
+        let currentRoadmap = 'Retail'; // Mặc định là Retail
         let currentRandomScenario = null;
+        let currentStudentPracticeData = []; // Data bài tập thực hành
 
-        // Danh sách tình huống dự phòng trường hợp kết nối API lỗi [1]
+        // Danh sách tình huống dự phòng trường hợp kết nối API lỗi
         const fallbackScenarios = {
             day1: [
                 { id: 1, type: "morning", roadmap: "Retail", title: "Tình huống 1: Shop thời trang online & Do dự gia hạn vì tự quản lý ship qua app ngoài", question: 'Khách hàng kinh doanh quần áo online chuẩn bị hết hạn hợp đồng bảo: "Em ơi, giờ chị quét QR ngân hàng cá nhân và tự lên đơn trên app Giao Hàng Tiết Kiệm cũng nhanh, đâu cần qua KiotViet làm gì cho tốn tiền gia hạn hàng năm." Em hãy thuyết phục khách gia hạn.', answer: 'Tư vấn QR động và Tích hợp hãng giao vận trực tiếp. QR tĩnh dễ bị giả hóa đơn, chuyển app thủ công dễ nhầm địa chỉ gây hoàn đơn. KiotViet tích hợp đẩy đơn 1 chạm giúp tiết kiệm 50% thời gian, quản lý đối soát COD tập trung và triệt tiêu hoàn toàn hóa đơn giả.' }
@@ -473,12 +501,12 @@
         }
         setTodayDate();
 
-        // Tự động tải cẩm nang tình huống từ Google Sheet ngay khi mở trang [1]
+        // Tự động tải cẩm nang tình huống từ Google Sheet ngay khi mở trang
         window.onload = function() {
             loadScenariosFromSheet();
         };
 
-        // Hàm lấy danh sách tình huống cẩm nang từ API Google Sheet [1]
+        // Hàm lấy danh sách tình huống cẩm nang từ API Google Sheet
         function loadScenariosFromSheet() {
             const box = document.getElementById('random-scenario-box');
             box.innerHTML = `
@@ -488,7 +516,6 @@
                 </div>
             `;
 
-            // Gọi API đọc phân luồng lấy dữ liệu tình huống [1]
             fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
             .then(res => res.json())
             .then(response => {
@@ -496,16 +523,15 @@
                     scenariosData = { day1: [], day2: [], day3: [] };
                     
                     response.data.forEach(item => {
-                        // Tự động bỏ qua nếu dòng dữ liệu bị lặp lại các tiêu đề cột (Day, Type, Title,...) [1]
                         if (
                             !item.Day || 
                             item.Day.toString().trim().toLowerCase() === "day" || 
                             item.Title.toString().trim().toLowerCase() === "title"
                         ) {
-                            return; // Bỏ qua dòng tiêu đề lặp lại [1]
+                            return; 
                         }
 
-                        const dayKey = item.Day.toString().trim(); // day1, day2, day3
+                        const dayKey = item.Day.toString().trim();
                         if (scenariosData[dayKey]) {
                             scenariosData[dayKey].push({
                                 id: item.id || Math.random(),
@@ -513,12 +539,10 @@
                                 title: item.Title,
                                 question: item.Question,
                                 answer: item.Answer,
-                                roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" // Gắn nhãn lộ trình [1]
+                                roadmap: item.Roadmap ? item.Roadmap.toString().trim() : "" 
                             });
                         }
                     });
-                    
-                    // Khởi chạy đồng bộ hóa theo lộ trình mặc định ban đầu là Retail [1]
                     switchRoadmap('Retail');
                 } else {
                     useFallbackData("Lỗi cấu trúc dữ liệu hoặc Sheet rỗng. Kích hoạt cẩm nang dự phòng.");
@@ -530,26 +554,49 @@
             });
         }
 
-        // Kích hoạt dữ liệu dự phòng offline (Được gán nhãn Roadmap Retail để chạy đồng bộ)
+        // Kích hoạt dữ liệu dự phòng offline
         function useFallbackData(logMessage) {
             scenariosData = fallbackScenarios;
             switchRoadmap('Retail');
             console.info(logMessage);
         }
 
-        // Quy tắc ngắt câu tự động kết xuất văn bản (Hết câu ngắt dòng + chèn 1 dòng trắng)
-        // Bổ sung Negative Lookbehind để bỏ qua các số thứ tự 1. 2. 3. không ngắt dòng [1]
+        // Quy tắc ngắt câu tự động kết xuất văn bản
         function formatSentences(text) {
             if (!text) return "";
-            // Tách các câu bằng dấu chấm, dấu hỏi hoặc cảm thán phía sau có khoảng trắng, loại trừ STT dạng "1.", "2." [1]
             const sentences = text.split(/(?<!\b\d+\.)(?<=[.?!])\s+/);
             return sentences
                 .map(s => s.trim())
                 .filter(s => s.length > 0)
-                .join('<br><br>'); // Nối bằng 2 thẻ ngắt dòng tạo ra 1 dòng trống [1]
+                .join('<br><br>');
         }
 
-        // Chuyển đổi Lộ trình học (Retail <-> FNB) và Tự động đồng bộ form bên phải [1]
+        // Cập nhật điểm tự tin
+        function updateScoreValue(val) {
+            document.getElementById('scoreValue').textContent = val;
+        }
+
+        // Chuyển đổi giữa WORKSPACE và HANDBOOK
+        function switchMainTab(tab) {
+            const workspaceBtn = document.getElementById('main-tab-workspace');
+            const handbookBtn = document.getElementById('main-tab-handbook');
+            const workspaceContent = document.getElementById('main-content-workspace');
+            const handbookContent = document.getElementById('main-content-handbook');
+
+            if (tab === 'workspace') {
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                workspaceContent.classList.remove('hidden');
+                handbookContent.classList.add('hidden');
+            } else {
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                workspaceContent.classList.add('hidden');
+                handbookContent.classList.remove('hidden');
+            }
+        }
+
+        // Chuyển đổi Lộ trình học (Retail <-> FNB)
         function switchRoadmap(roadmap) {
             currentRoadmap = roadmap;
             
@@ -560,25 +607,23 @@
             if (roadmap === 'Retail') {
                 retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
                 fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
-                if (industrySelect) industrySelect.value = "Retail"; // Tự động đồng bộ trường Ngành hàng bên phải sang Retail [1]
+                if (industrySelect) industrySelect.value = "Retail"; 
             } else {
                 retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
                 fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
-                if (industrySelect) industrySelect.value = "FNB"; // Tự động đồng bộ trường Ngành hàng bên phải sang FNB [1]
+                if (industrySelect) industrySelect.value = "FNB"; 
             }
 
-            // Đồng bộ tải lại danh sách của ngày hiện tại theo lộ trình mới
             switchSubTab(currentDay);
         }
 
-        // Chuyển đổi Ngày review & Tự động lọc theo Lộ trình đang chọn [1]
+        // Chuyển đổi Ngày review
         function switchSubTab(day) {
             currentDay = day;
             const tabs = ['day1', 'day2', 'day3'];
             const blob1 = document.getElementById('blob-1');
             const blob2 = document.getElementById('blob-2');
 
-            // Cập nhật background glow chuyển động
             const bgGlows = {
                 day1: ["rgba(22, 109, 239, 0.08)", "rgba(16, 185, 129, 0.08)"],
                 day2: ["rgba(249, 115, 22, 0.08)", "rgba(22, 109, 239, 0.08)"],
@@ -628,15 +673,12 @@
             if (day === 'day2') sessionSelect.value = "Phiên 2 (Cuối Ngày 2)";
             if (day === 'day3') sessionSelect.value = "Phiên 3 (Cuối Ngày 3)";
 
-            // 1. Tự động chọn 1 tình huống ngẫu nhiên dựa trên (Ngày + Lộ trình đã chọn) [1]
             triggerRandomScenario();
-
-            // 2. Đồng bộ danh sách các tình huống lưu trữ khác bên dưới (và mặc định ẩn đi) [1]
             renderAllScenarios(day);
             hideAllScenariosList();
         }
 
-        // Chọn ngẫu nhiên tình huống thuộc Lộ trình hiện tại và hiển thị
+        // Chọn ngẫu nhiên tình huống thuộc Lộ trình hiện tại
         function triggerRandomScenario() {
             const list = scenariosData[currentDay] 
                 ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) 
@@ -670,7 +712,6 @@
                         </div>
                         <h4 class="font-extrabold text-sm text-slate-800">${escapeHtml(currentRandomScenario.title)}</h4>
                         <div class="text-xs space-y-3 pt-1">
-                            <!-- Chạy hàm formatSentences sau khi đã escape chuỗi an toàn -->
                             <div class="leading-relaxed text-slate-600"><strong>Yêu cầu tư vấn:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div>
                             <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng trả lời:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div>
                         </div>
@@ -679,7 +720,7 @@
             `;
         }
 
-        // Kết xuất toàn bộ danh sách các tình huống lưu trữ khác dưới dạng details [1]
+        // Kết xuất toàn bộ danh sách các tình huống lưu trữ khác
         function renderAllScenarios(day) {
             const container = document.getElementById('all-scenarios-list');
             const list = scenariosData[day] 
@@ -691,7 +732,6 @@
                 return;
             }
 
-            // Băng rôn phân cấp Sáng và Chiều dạng cột ngang [1]
             const morningTitle = `
                 <div class="relative flex items-center justify-center my-6">
                     <div class="absolute inset-0 flex items-center" aria-hidden="true"><div class="w-full border-t border-slate-200"></div></div>
@@ -713,7 +753,6 @@
 
             let htmlContent = "";
 
-            // Thống nhất quy chế màu sắc: Sáng dùng 1 màu xanh lá nhạt, chiều dùng màu tím nhạt [1]
             if (morningItems.length > 0) {
                 htmlContent += morningTitle;
                 htmlContent += `<div class="space-y-4">` + morningItems.map(item => `
@@ -757,7 +796,6 @@
             btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
         }
 
-        // Bật/tắt ẩn hiện danh sách tình huống lưu trữ [1]
         function toggleAllScenarios() {
             const list = document.getElementById('all-scenarios-list');
             const btn = document.getElementById('toggle-list-btn');
@@ -799,6 +837,82 @@
             }
         }
 
+        // Hàm kiểm tra bài thực hành khi Trainer gõ tên xong (blur ra khỏi ô input)
+        function checkStudentPractice() {
+            const studentName = document.getElementById('repName').value.trim();
+            const btn = document.getElementById('btnCheckPractice');
+            const spinner = document.getElementById('checkPracticeSpinner');
+            
+            if(!studentName) { btn.classList.add('hidden'); return; }
+
+            spinner.classList.remove('hidden');
+            btn.classList.add('hidden');
+
+            // Gọi API mới check bài
+            fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}`)
+            .then(res => res.json())
+            .then(data => {
+                spinner.classList.add('hidden');
+                if(data.status === 'success' && data.data && data.data.length > 0) {
+                    currentStudentPracticeData = data.data;
+                    btn.classList.remove('hidden');
+                    // Tự đổi trạng thái Bài tập thành "Đủ" nếu thấy có nộp
+                    document.getElementById('homeworkStatus').value = "Đủ"; 
+                } else {
+                    currentStudentPracticeData = [];
+                    btn.classList.add('hidden');
+                }
+            })
+            .catch(err => {
+                spinner.classList.add('hidden');
+                console.error("Check practice err:", err);
+            });
+        }
+
+        function closePracticeModal() {
+            document.getElementById('practiceModal').classList.add('hidden');
+        }
+
+        function getDirectImageUrl(url) { 
+            let fileIdMatch = url.match(/\/d\/(.+?)\//); 
+            if(!fileIdMatch) fileIdMatch = url.match(/id=(.+?)(&|$)/); 
+            if(fileIdMatch && fileIdMatch[1]) return `https://lh3.googleusercontent.com/d/${fileIdMatch[1]}`; 
+            return url; 
+        }
+
+        // Mở Modal xem ảnh
+        function openPracticeModal() {
+            document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value;
+            const container = document.getElementById('practiceContent');
+            
+            if(currentStudentPracticeData.length === 0) {
+                container.innerHTML = `<p class="text-sm text-slate-500 italic">Không tìm thấy dữ liệu thực hành.</p>`;
+            } else {
+                let html = '';
+                currentStudentPracticeData.forEach(item => {
+                    let links = item.links ? item.links.split('\n') : [];
+                    let imgHtml = links.map(link => {
+                        let directLink = getDirectImageUrl(link);
+                        return `<a href="${link}" target="_blank" class="block w-24 h-16 rounded-lg overflow-hidden border border-slate-200 hover:border-[#166def] transition group relative">
+                            <img src="${directLink}" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center"><i class="fa-solid fa-up-right-from-square text-white text-xs"></i></div>
+                        </a>`;
+                    }).join('');
+
+                    html += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">${item.session}</p>
+                        <p class="text-sm font-black text-slate-800 mb-3">${item.exerciseTitle}</p>
+                        <div class="flex flex-wrap gap-2">${imgHtml}</div>
+                        <p class="text-[10px] text-slate-400 mt-2 text-right">${item.timestamp}</p>
+                    </div>`;
+                });
+                container.innerHTML = html;
+            }
+            
+            document.getElementById('practiceModal').classList.remove('hidden');
+        }
+
+
         // Gửi biểu mẫu lên Apps Script
         function submitForm(event) {
             event.preventDefault();
@@ -811,7 +925,6 @@
                 return;
             }
 
-            // Chuyển đổi định dạng ngày gửi lên sheet
             const parts = rawDate.split("/");
             const formattedDbDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
 
@@ -836,24 +949,29 @@
                 rating: rating,
                 trainerNotes: document.getElementById('trainerNotes').value.trim(),
                 actionPlan: document.getElementById('actionPlan').value.trim(),
-                classCode: document.getElementById('classCode').value.trim(), // Mã lớp
-                industry: document.getElementById('industry').value // Ngành hàng
+                classCode: document.getElementById('classCode').value.trim(),
+                industry: document.getElementById('industry').value 
             };
 
             setLoadingState(true);
 
+            // Bỏ mode: 'no-cors' để nhận được phản hồi
             fetch(API_URL, {
                 method: "POST",
-                mode: "no-cors",
                 headers: {
                     "Content-Type": "text/plain;charset=utf-8"
                 },
                 body: JSON.stringify(payload)
             })
-            .then(() => {
+            .then(res => res.json())
+            .then(data => {
                 setLoadingState(false);
-                showModal(true, "Gửi thành công", "Kết quả đã được cập nhật thành công lên Google Sheets của đội ngũ quản lý.");
-                resetFormFields();
+                if (data.status === "success") {
+                    showModal(true, "Gửi thành công", "Kết quả đã được cập nhật thành công lên Google Sheets của đội ngũ quản lý.");
+                    resetFormFields();
+                } else {
+                    showModal(false, "Lỗi phản hồi", "Server báo lỗi: " + data.message);
+                }
             })
             .catch(error => {
                 setLoadingState(false);
@@ -904,7 +1022,6 @@
             document.getElementById('statusModal').classList.add('hidden');
         }
 
-        // Tự động khôi phục về trạng thái mặc định của lộ trình đang chọn khi lưu kết quả
         function resetFormFields() {
             document.getElementById('repName').value = "";
             document.getElementById('classCode').value = "";
@@ -919,7 +1036,6 @@
             document.getElementById('actionPlan').value = "";
             setTodayDate();
             
-            // Giữ đồng bộ dropdown ngành hàng theo tab đang chọn [1]
             document.getElementById('industry').value = currentRoadmap;
 
             document.getElementById('selectedRating').value = "";
@@ -927,6 +1043,10 @@
             buttons.forEach(btn => {
                 btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all";
             });
+            
+            // Ẩn nút xem ảnh thực hành
+            document.getElementById('btnCheckPractice').classList.add('hidden');
+            currentStudentPracticeData = [];
         }
 
         function escapeHtml(string) {
