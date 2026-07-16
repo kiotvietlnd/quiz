@@ -31,21 +31,27 @@
             <button onclick="toggleSidebar()" class="text-white/50 hover:text-red-400 p-1"><i class="fas fa-times"></i></button>
         </div>
         
-        <div class="p-5 flex-1 overflow-y-auto flex flex-col relative z-10 space-y-5">
+        <div class="p-5 flex-1 overflow-y-auto flex flex-col relative z-10 space-y-5 custom-scrollbar">
             <h2 class="text-xs font-extrabold text-blue-200/80 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-info-circle text-blue-300"></i> Hướng Dẫn Thực Hành</h2>
             <div class="space-y-4 text-white/90">
                 <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
                     <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">1</span>
-                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Định danh:</strong> Khai báo <em class="not-italic text-blue-200">Họ tên, Mã Lớp</em> trước khi làm.</p>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-200">Họ tên, Phòng ban</em> trước khi làm.</p>
                 </div>
                 <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
                     <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">2</span>
-                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh &rarr; Nhấn <em class="not-italic text-blue-200">Lưu & Nộp bài</em>.</p>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán/Tải lên và nhấn <em class="not-italic text-blue-200">Nộp bài</em> để lưu tiến độ.</p>
                 </div>
                 <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
                     <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">3</span>
-                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc bài tập".</p>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận từ hệ thống.</p>
                 </div>
+            </div>
+
+            <!-- BẢNG HẠN CHÓT -->
+            <div class="mt-2 border border-amber-500/40 bg-[#1e3a8a]/50 p-4 rounded-xl shadow-inner relative overflow-hidden">
+                <h3 class="text-amber-400 font-black text-xs uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-clock"></i> HẠN CHÓT</h3>
+                <p class="text-xs leading-relaxed text-amber-100/90 font-semibold relative z-10">Hoàn thành bài tập và gửi ảnh Xác Nhận hoàn thành lên Group Zalo trước <span class="text-amber-400">16:00 ngày hôm nay</span>.</p>
             </div>
         </div>
         
