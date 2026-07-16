@@ -112,28 +112,20 @@
                                 <span class="text-xs font-black text-indigo-800 tracking-wider block uppercase"><i class="fa-solid fa-magnifying-glass text-[#166def] mr-1.5"></i> Tra Cứu Học Viên & Tiến Độ</span>
                             </div>
                             
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="relative">
-                                    <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
-                                    <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: Nguyễn Văn A">
-                                    <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[32px] text-indigo-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
-                                </div>
+                            <div class="grid grid-cols-2 gap-4 items-start">
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
-                                    <input type="text" id="classCode" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: TK-Q3-01">
-                                </div>
-                            </div>
-                            
-                            <!-- NÚT TIẾN ĐỘ ĐƯỢC DỜI XUỐNG DƯỚI -->
-                            <div class="flex items-center gap-2 pt-1">
-                                <span id="studentHistoryTag" class="hidden text-[10px] font-bold px-2.5 py-1 rounded-md bg-white text-slate-500 border border-slate-200 shadow-sm"></span>
-                                <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5 border">
-                                    <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
-                                </button>
-                            </div>
-                        </div>
-                                    <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: Nguyễn Văn A">
-                                    <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[32px] text-indigo-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                    <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
+                                    <div class="relative">
+                                        <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: Nguyễn Văn A">
+                                        <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[10px] text-indigo-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                    </div>
+                                    <!-- Cụm hiển thị trạng thái nằm gọn dưới ô Input Họ Tên -->
+                                    <div class="flex items-center gap-2 mt-2 h-6">
+                                        <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-white text-slate-500 border border-slate-200 shadow-sm"></span>
+                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5 border">
+                                            <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
+                                        </button>
+                                    </div>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
