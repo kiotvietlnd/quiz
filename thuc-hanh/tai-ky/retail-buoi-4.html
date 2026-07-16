@@ -76,6 +76,60 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
+    <!-- MODAL HOÀN THÀNH BÀI TẬP -->
+    <div id="completionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full relative border-4 border-emerald-400 text-center animate-fade-in-up">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">
+                <i class="fas fa-award"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-800 mb-2">HOÀN THÀNH BÀI TẬP</h2>
+            <p class="text-sm text-slate-500 font-medium mb-6">Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc quay về trang chủ.</p>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left space-y-3 mb-6">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-user text-blue-500 w-4"></i> Học viên:</span>
+                    <span id="modalDoneName" class="text-sm font-black text-slate-800">--</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-building text-blue-500 w-4"></i> Phòng ban:</span>
+                    <span id="modalDoneDept" class="text-sm font-black text-slate-800">--</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-book text-blue-500 w-4"></i> Bài học:</span>
+                    <span id="modalDoneSession" class="text-sm font-black text-slate-800 truncate max-w-[150px]">--</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-chart-pie text-blue-500 w-4"></i> Tiến độ:</span>
+                    <span class="text-sm font-black text-emerald-600"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-search"></i> Xem lại bài làm
+                </button>
+                <a href="index.html" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 rounded-xl transition-all">
+                    Về Trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM -->
+    <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[120] hidden flex-col transition-all">
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
+                <h1 class="text-base font-black text-slate-800">Xem Lại Bài Làm</h1>
+            </div>
+            <button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
+        </header>
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8">
+            <div class="max-w-4xl mx-auto space-y-6" id="reviewHistoryContainer">
+                <!-- Data đổ vào đây bằng JS -->
+            </div>
+        </div>
+    </div>
     <script src="codelab-data.js"></script>
     <script>
         // =======================================================
@@ -329,28 +383,91 @@
             const percent = totalRealExercises === 0 ? 0 : Math.round((completedCount / totalRealExercises) * 100);
 
             let isLastStep = true; for(let i = currentStepIndex + 1; i < currentExercises.length; i++) { if(!currentExercises[i].isGroupHeader) { isLastStep = false; break; } }
-            if(isLastStep) { btnNext.innerHTML = 'Quay về Trang chủ <i class="fas fa-flag-checkered ml-1"></i>'; btnNext.classList.replace('bg-blue-600', 'bg-emerald-600'); btnNext.classList.replace('hover:bg-blue-700', 'hover:bg-emerald-700'); } 
-            else { btnNext.innerHTML = 'Tiếp <i class="fas fa-chevron-right ml-1"></i>'; btnNext.classList.replace('bg-emerald-600', 'bg-blue-600'); btnNext.classList.replace('hover:bg-emerald-700', 'hover:bg-blue-700'); }
+            
+            // XỬ LÝ NÚT KẾT THÚC
+            if(isLastStep) { 
+                if(percent >= 100) {
+                    btnNext.innerHTML = 'Kết thúc buổi học <i class="fas fa-flag-checkered ml-1"></i>'; 
+                    btnNext.classList.replace('bg-blue-600', 'bg-emerald-600'); btnNext.classList.replace('hover:bg-blue-700', 'hover:bg-emerald-700');
+                    btnNext.onclick = showCompletionModal;
+                } else {
+                    btnNext.innerHTML = 'Quay về Trang chủ <i class="fas fa-home ml-1"></i>'; 
+                    btnNext.classList.replace('bg-blue-600', 'bg-slate-600'); btnNext.classList.replace('hover:bg-blue-700', 'hover:bg-slate-700');
+                    btnNext.onclick = () => window.location.href = 'index.html';
+                }
+            } 
+            else { 
+                btnNext.innerHTML = 'Tiếp <i class="fas fa-chevron-right ml-1"></i>'; 
+                btnNext.classList.replace('bg-emerald-600', 'bg-blue-600'); btnNext.classList.replace('bg-slate-600', 'bg-blue-600');
+                btnNext.classList.replace('hover:bg-emerald-700', 'hover:bg-blue-700'); btnNext.classList.replace('hover:bg-slate-700', 'hover:bg-blue-700');
+                btnNext.onclick = nextStep;
+            }
+            
             document.getElementById('progressBar').style.width = percent + '%'; document.getElementById('timeRemaining').innerText = `Tiến độ: ${percent}%`;
         }
 
         function nextStep() {
             saveDraft();
-            let totalRealExercises = 0; let completedCount = 0;
-            for(let i=0; i<currentExercises.length; i++) { if(!currentExercises[i].isGroupHeader) { totalRealExercises++; if(stepDataStore[i] && stepDataStore[i].isSubmitted) completedCount++; } }
-            const percent = totalRealExercises === 0 ? 0 : Math.round((completedCount / totalRealExercises) * 100);
             let nextIndex = currentStepIndex + 1; while(nextIndex < currentExercises.length && currentExercises[nextIndex].isGroupHeader) nextIndex++;
-
-            if(nextIndex < currentExercises.length) { goToStep(nextIndex); } 
-            else {
-                if(percent < 100) { alert(`Bạn mới hoàn thành ${percent}%.\nVui lòng làm đủ các bài chưa có tích Xanh (✅) và nộp ẢNH MINH CHỨNG trước khi Kết thúc.`); } 
-                else { window.location.href = 'index.html'; } // Đã đủ 100% thì về Home
-            }
+            if(nextIndex < currentExercises.length) goToStep(nextIndex); 
+        }
         }
 
         function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
 
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
+        // ================= CÁC HÀM HIỂN THỊ LỊCH SỬ BÀI LÀM =================
+        function showCompletionModal() {
+            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}');
+            document.getElementById('modalDoneName').innerText = profile.name || "N/A";
+            document.getElementById('modalDoneDept').innerText = profile.dept || "N/A";
+            document.getElementById('modalDoneSession').innerText = document.getElementById('sessionTitle').innerText;
+            document.getElementById('completionModal').classList.remove('hidden');
+        }
+
+        function showReviewHistory() {
+            document.getElementById('completionModal').classList.add('hidden');
+            const container = document.getElementById('reviewHistoryContainer');
+            let html = '';
+            
+            for(let i=0; i<currentExercises.length; i++) {
+                const ex = currentExercises[i];
+                if(ex.isGroupHeader) continue;
+                const data = stepDataStore[i];
+                if(!data || !data.isSubmitted) continue;
+
+                let theoryHtml = '';
+                if(ex.theory && ex.theory.length > 0 && data.textAnswers) {
+                    theoryHtml = `<div class="bg-blue-50/50 p-4 rounded-xl mb-4 border border-blue-100 space-y-3"><p class="text-xs font-black text-blue-800 uppercase tracking-wider mb-2"><i class="fas fa-edit"></i> Trả lời tự luận:</p>`;
+                    ex.theory.forEach((q, idx) => {
+                        theoryHtml += `<div><p class="text-xs font-bold text-slate-700 mb-1">Hỏi: ${q}</p><p class="text-xs text-blue-700 bg-white p-2 rounded border border-blue-200">Đáp: ${data.textAnswers[idx] || '(Không trả lời)'}</p></div>`;
+                    });
+                    theoryHtml += `</div>`;
+                }
+
+                let imgHtml = '';
+                if(data.uploadedUrls && data.uploadedUrls.length > 0) {
+                    imgHtml = `<div class="mb-4"><p class="text-xs font-black text-slate-500 uppercase tracking-wider mb-2"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp:</p><div class="flex flex-wrap gap-2">`;
+                    data.uploadedUrls.forEach((url, idx) => {
+                        imgHtml += `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(data.uploadedUrls).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(url)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"></div>`;
+                    });
+                    imgHtml += `</div></div>`;
+                }
+
+                let fbHtml = data.feedback ? `<div class="bg-emerald-50 p-3 rounded-xl border border-emerald-200 mt-2"><p class="text-[10px] font-black text-emerald-700 uppercase mb-1"><i class="fa-solid fa-check-circle"></i> Giảng viên nhận xét:</p><p class="text-sm font-medium text-emerald-900 whitespace-pre-wrap">${data.feedback}</p></div>` : ``;
+
+                html += `<div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm mb-6"><h3 class="text-base font-black text-blue-700 mb-4 pb-2 border-b border-slate-100">${ex.title}</h3>${theoryHtml}${imgHtml}${fbHtml}</div>`;
+            }
+            container.innerHTML = html;
+            document.getElementById('reviewHistoryModal').classList.remove('hidden');
+            document.getElementById('reviewHistoryModal').classList.add('flex');
+        }
+
+        function closeReviewHistory() {
+            document.getElementById('reviewHistoryModal').classList.add('hidden');
+            document.getElementById('reviewHistoryModal').classList.remove('flex');
+        }
+    
     </script>
 </body>
 </html>
