@@ -5,13 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang review Đào tạo Chuyên viên Tái ký mới</title>
     
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
@@ -21,15 +16,17 @@
         .glow-blob-1 { top: -15%; left: -10%; background: rgba(22, 109, 239, 0.08); } 
         .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.08); }
         .glass-panel-ultra { background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); }
-        .scifi-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; background: var(--bg-color); color: white; transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; }
-        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px var(--shadow-hover); }
-        .sc-brand { --bg-color: #166def; --shadow-hover: rgba(22, 109, 239, 0.4); } 
-        .custom-scroll::-webkit-scrollbar { width: 5px; } .custom-scroll::-webkit-scrollbar-track { background: transparent; } .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .scifi-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; background: #166def; color: white; transition: all 0.3s; }
+        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(22, 109, 239, 0.4); }
+        
+        .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; } .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
         .rating-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
-        .active-chuadat { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.15); }
-        .active-thaotac { background-color: #fffbeb !important; border-color: #f59e0b !important; color: #b45309 !important; box-shadow: 0 4px 12px rgba(245, 158, 11, 0.15); }
-        .active-ungdung { background-color: #eff6ff !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15); }
-        .active-tot { background-color: #f0fdf4 !important; border-color: #22c55e !important; color: #15803d !important; box-shadow: 0 4px 12px rgba(34, 197, 94, 0.15); }
+        .active-chuadat { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
+        .active-thaotac { background-color: #fffbeb !important; border-color: #f59e0b !important; color: #b45309 !important; }
+        .active-ungdung { background-color: #eff6ff !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; }
+        .active-tot { background-color: #f0fdf4 !important; border-color: #22c55e !important; color: #15803d !important; }
     </style>
 </head>
 <body class="text-slate-600 antialiased">
@@ -43,40 +40,25 @@
             <h1 class="text-sm font-black text-white tracking-wider">Trang review Đào tạo Chuyên viên Tái ký mới</h1>
         </div>
         <div class="flex gap-2 bg-blue-800/40 p-1 rounded-xl border border-blue-400/40">
-            <button onclick="switchMainTab('workspace')" id="main-tab-workspace" class="px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2">
-                <i class="fa-solid fa-laptop-code"></i> REVIEW WORKSPACE
-            </button>
-            <button onclick="switchMainTab('handbook')" id="main-tab-handbook" class="px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2">
-                <i class="fa-solid fa-graduation-cap"></i> QUY TRÌNH & KẾ HOẠCH
-            </button>
+            <button onclick="switchMainTab('workspace')" id="main-tab-workspace" class="px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2"><i class="fa-solid fa-laptop-code"></i> REVIEW WORKSPACE</button>
+            <button onclick="switchMainTab('handbook')" id="main-tab-handbook" class="px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2"><i class="fa-solid fa-graduation-cap"></i> QUY TRÌNH & KẾ HOẠCH</button>
         </div>
     </header>
 
     <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col">
-
         <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-stretch w-full flex-grow">
             
-            <!-- CỘT TRÁI (58%): GIÁO TRÌNH & TÌNH HUỐNG -->
+            <!-- CỘT TRÁI: GIÁO TRÌNH & TÌNH HUỐNG -->
             <section class="xl:col-span-7 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
                 <div class="flex gap-2 mb-3 bg-indigo-50/50 p-1 rounded-2xl border border-indigo-100 flex-shrink-0">
-                    <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-tags"></i> LỘ TRÌNH RETAIL (BÁN LẺ)
-                    </button>
-                    <button onclick="switchRoadmap('FNB')" id="roadmap-FNB" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-bowl-food"></i> LỘ TRÌNH FNB (F&B)
-                    </button>
+                    <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-tags"></i> LỘ TRÌNH RETAIL (BÁN LẺ)</button>
+                    <button onclick="switchRoadmap('FNB')" id="roadmap-FNB" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-bowl-food"></i> LỘ TRÌNH FNB (F&B)</button>
                 </div>
 
                 <div class="flex gap-2 mb-4 bg-slate-200/50 p-1.5 rounded-2xl flex-shrink-0">
-                    <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-calendar-day"></i> NGÀY 1
-                    </button>
-                    <button onclick="switchSubTab('day2')" id="sub-tab-day2" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-calendar-day"></i> NGÀY 2
-                    </button>
-                    <button onclick="switchSubTab('day3')" id="sub-tab-day3" class="flex-1 py-3 text-xs font-extrabold rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-calendar-day"></i> NGÀY 3
-                    </button>
+                    <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 1</button>
+                    <button onclick="switchSubTab('day2')" id="sub-tab-day2" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 2</button>
+                    <button onclick="switchSubTab('day3')" id="sub-tab-day3" class="flex-1 py-3 text-xs font-extrabold rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 3</button>
                 </div>
 
                 <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6 flex flex-col">
@@ -90,12 +72,8 @@
 
                     <div class="space-y-4 flex-shrink-0">
                         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <span class="text-xs font-extrabold text-[#166def] uppercase tracking-wider flex items-center gap-2">
-                                <i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG
-                            </span>
-                            <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-[#166def] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start">
-                                <i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN
-                            </button>
+                            <span class="text-xs font-extrabold text-[#166def] uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG</span>
+                            <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-[#166def] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start"><i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN</button>
                         </div>
                         <div id="random-scenario-box"></div>
                     </div>
@@ -103,63 +81,69 @@
                     <div class="border-t pt-5 border-slate-100 flex-grow flex flex-col space-y-4">
                         <div class="flex items-center justify-between">
                             <span class="text-xs font-black text-slate-400 tracking-wider uppercase block">DANH SÁCH LƯU TRỮ TÌNH HUỐNG KHÁC</span>
-                            <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-[#166def] hover:underline flex items-center gap-2">
-                                <i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống
-                            </button>
+                            <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-[#166def] hover:underline flex items-center gap-2"><i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống</button>
                         </div>
                         <div id="all-scenarios-list" class="space-y-4 hidden transition-all"></div>
                     </div>
                 </div>
             </section>
             
-            <!-- CỘT PHẢI (42%): FORM GHI NHẬN KẾT QUẢ REVIEW -->
+            <!-- CỘT PHẢI: FORM ĐÁNH GIÁ -->
             <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
                 <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-[#f0f6ff] border border-blue-200 rounded-3xl p-6 lg:p-8 shadow-lg">
                     
-                    <!-- Form Header & Quick Links -->
                     <div class="mb-6 border-b border-blue-100 pb-5">
                         <h3 class="text-base font-black text-slate-800 mb-4 flex items-center gap-3">
                             <span class="w-8 h-8 rounded-lg bg-blue-100 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-pen-clip"></i></span>
                             PHIẾU GHI NHẬN KẾT QUẢ REVIEW
                         </h3>
-                        <div id="dynamicLinksContainer" class="flex flex-wrap gap-2">
-                            <!-- JS tự động render link bài tập và khóa học vào đây -->
+                        
+                        <!-- DẢI LINK THÔNG MINH TRÊN 1 DÒNG -->
+                        <div id="dynamicLinksContainer" class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-1 w-full">
+                            <!-- JS tự động render link -->
                         </div>
                     </div>
 
                     <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
                         
-                        <!-- BLOCK 1: THÔNG TIN CHUNG (Đã đảo trật tự) -->
-                        <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-[#166def] mr-1.5"></i> Thông Tin Chung</span>
+                        <!-- KHỐI 1: TRA CỨU HỌC VIÊN -->
+                        <div class="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 shadow-sm space-y-4">
+                            <div class="flex justify-between items-center border-b border-indigo-100 pb-2">
+                                <span class="text-xs font-black text-indigo-800 tracking-wider block uppercase"><i class="fa-solid fa-magnifying-glass text-[#166def] mr-1.5"></i> Tra Cứu Học Viên & Tiến Độ</span>
+                            </div>
                             
-                            <!-- Hàng 1: HỌC VIÊN + MÃ LỚP -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="relative">
                                     <div class="flex justify-between items-center mb-1">
-                                        <label class="text-[11px] font-bold text-slate-400 tracking-wider">HỌ TÊN HỌC VIÊN *</label>
-                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow-sm transition-all flex items-center gap-1.5">
-                                            <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
-                                        </button>
+                                        <label class="text-[11px] font-bold text-slate-500 tracking-wider">HỌ TÊN HỌC VIÊN *</label>
+                                        <div class="flex items-center gap-2">
+                                            <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 border border-slate-200"></span>
+                                            <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-3 py-1 rounded-full shadow-sm transition-all flex items-center gap-1.5 border">
+                                                <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nguyễn Văn A">
-                                    <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[32px] text-blue-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                    <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: Nguyễn Văn A">
+                                    <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[32px] text-indigo-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
-                                    <input type="text" id="classCode" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ví dụ: TK-Q3-01">
+                                    <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
+                                    <input type="text" id="classCode" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: TK-Q3-01">
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- Hàng 2: TRAINER + NGÀNH HÀNG -->
+                        <!-- KHỐI 2: THÔNG TIN CHUNG -->
+                        <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
+                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-[#166def] mr-1.5"></i> Thông Tin Chung</span>
+                            
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
-                                    <input type="text" id="trainerName" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer B">
+                                    <input type="text" id="trainerName" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ví dụ: Trần Linh Trang">
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀNH HÀNG *</label>
-                                    <!-- Select này bị khóa (pointer-events-none) vì được điều khiển tự động bởi nút Lộ trình -->
                                     <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-500 pointer-events-none outline-none">
                                         <option value="Retail">Retail (Bán lẻ)</option>
                                         <option value="FNB">FNB (F&B)</option>
@@ -167,7 +151,6 @@
                                 </div>
                             </div>
 
-                            <!-- Hàng 3: PHIÊN REVIEW + NGÀY REVIEW -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">PHIÊN REVIEW *</label>
@@ -178,55 +161,43 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW (DD/MM/YYYY) *</label>
-                                    <div class="relative">
-                                        <input type="text" id="reviewDate" required class="w-full text-xs pl-3.5 pr-10 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="dd/mm/yyyy">
-                                        <span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"><i class="fa-regular fa-calendar-days"></i></span>
-                                    </div>
+                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW *</label>
+                                    <div class="relative"><input type="text" id="reviewDate" required class="w-full text-xs pl-3.5 pr-10 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="dd/mm/yyyy"><span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"><i class="fa-regular fa-calendar-days"></i></span></div>
                                 </div>
                             </div>
 
-                            <!-- Hàng 4: BÀI THỰC HÀNH + ĐIỂM TỰ TIN -->
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
-                                    <!-- Select này cũng bị khóa vì API sẽ tự động chấm Đủ/Thiếu -->
                                     <select id="homeworkStatus" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-500 pointer-events-none outline-none">
                                         <option value="Thiếu">Thiếu bài thực hành</option>
                                         <option value="Đủ">Đủ bài thực hành</option>
-                                        <option value="Cần làm lại">Cần làm lại bài</option>
                                     </select>
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">ĐIỂM TỰ TIN (1-10) *</label>
-                                    <div class="flex items-center gap-3 mt-1.5">
-                                        <input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-[#166def]">
-                                        <span id="scoreValue" class="text-sm font-extrabold text-[#166def] w-6 text-center">7</span>
-                                    </div>
+                                    <div class="flex items-center gap-3 mt-1.5"><input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-[#166def]"><span id="scoreValue" class="text-sm font-extrabold text-[#166def] w-6 text-center">7</span></div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- BLOCK 2: Self-check -->
+                        <!-- KHỐI 3: Self Check -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá (Self-Check)</span>
+                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá</span>
                             <div class="space-y-3">
-                                <textarea id="selfCheckEasy" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy dễ hiểu nhất? Vì sao?"></textarea>
-                                <textarea id="selfCheckHard" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
-                                <textarea id="selfCheckApply" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nội dung đã học hỗ trợ gì cho cuộc gọi tư vấn tái ký?"></textarea>
+                                <textarea id="selfCheckEasy" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy dễ hiểu nhất?"></textarea>
+                                <textarea id="selfCheckHard" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
+                                <textarea id="selfCheckApply" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ứng dụng vào thực tế?"></textarea>
                             </div>
                         </div>
 
-                        <!-- BLOCK 3: Phản xạ tình huống thực tế -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
-                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi và cách học viên trình bày giải pháp..."></textarea>
+                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi..."></textarea>
                         </div>
 
-                        <!-- BLOCK 4: Xếp loại & Nhận xét -->
                         <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
                             <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-[#166def] mr-1.5"></i> Đánh Giá Của Trainer</span>
-                            
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-2">XẾP LOẠI NĂNG LỰC CUỐI BUỔI *</label>
                                 <div class="grid grid-cols-4 gap-2">
@@ -237,32 +208,26 @@
                                 </div>
                                 <input type="hidden" id="selectedRating" required value="">
                             </div>
-
                             <div class="space-y-3">
                                 <textarea id="trainerNotes" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nhận xét chi tiết điểm mạnh/điểm cần khắc phục..."></textarea>
                                 <textarea id="actionPlan" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Khuyến nghị lộ trình rèn luyện tiếp theo cho học viên..."></textarea>
                             </div>
                         </div>
-
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="mt-6 pt-4 border-t border-blue-100">
                         <button type="submit" id="submitBtn" class="scifi-btn sc-brand w-full font-black tracking-wider shadow-lg">
                             <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
                             <span id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i> Đang gửi dữ liệu...</span>
                         </button>
                     </div>
-
                 </form>
             </section>
-
         </div>
 
         <!-- ================= TAB 2: QUY TRÌNH & KẾ HOẠCH ================= -->
         <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                
                 <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                     <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
                         <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-briefcase"></i></span>
@@ -271,7 +236,7 @@
                     <div class="space-y-4 text-sm leading-relaxed text-slate-500">
                         <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ trong thời gian dài hơn, tập trung vào hai mục tiêu cốt lõi: <strong>Giữ gói</strong> (duy trì sử dụng) và <strong>Nâng gói</strong> (upsell).</p>
                         <p>📈 <strong>Quy mô tăng trưởng:</strong> Dự kiến bổ sung <strong>30 - 40 nhân sự mới</strong> trong Quý 3/2026, hình thức gia nhập cuốn chiếu theo từng tuần.</p>
-                        <p>⚡ <strong>Áp lực vận hành:</strong> Mỗi tháng hệ thống ghi nhận thêm khoảng <strong>2.400 khách hàng</strong>, mục tiêu duy trì <strong>MRR đạt 286</strong>.</p>
+                        <p>⚡ <strong>Áp lực vận hành:</strong> Mỗi tháng hệ thống ghi nhận thêm khoảng <strong>2.400 khách hàng</strong>, mục tiêu duy trì <strong>MRR đạt 286</strong>. Trong khi đó, đội ngũ Coacher/Trainer đang gặp hạn chế về mặt thời gian để trực tiếp theo sát và đặt câu hỏi định hướng liên tục cho từng cá nhân.</p>
                         <p>🎯 <strong>Yêu cầu thực tế:</strong> Cần đồng đều hóa năng lực chuyên môn của nhân sự mới một cách nhanh chóng, đảm bảo mọi nhân sự đều có thể tự tin tư vấn ngay sau khi kết thúc lộ trình hội nhập.</p>
                     </div>
                 </div>
@@ -282,128 +247,62 @@
                         MỤC TIÊU CỦA BUỔI REVIEW 1:1
                     </h3>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span>
-                            <p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p>
-                        </div>
-                        <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span>
-                            <p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể.</p>
-                        </div>
-                        <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span>
-                            <p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p>
-                        </div>
-                        <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl">
-                            <span class="text-xs font-black text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span>
-                            <p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục.</p>
-                        </div>
+                        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl"><span class="text-xs font-black text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span><p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p></div>
+                        <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl"><span class="text-xs font-black text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span><p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể.</p></div>
+                        <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl"><span class="text-xs font-black text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span><p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p></div>
+                        <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl"><span class="text-xs font-black text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span><p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục.</p></div>
                     </div>
                 </div>
-
             </div>
 
             <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-r from-blue-50/30 via-slate-50 to-indigo-50/30 border border-slate-100">
-                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>
-                    QUY TRÌNH TRIỂN KHAI CHUNG
-                </h3>
+                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>QUY TRÌNH TRIỂN KHAI CHUNG</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-500 leading-relaxed">
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span>
-                        <p class="text-[#166def] font-bold">Sau 03 ngày</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Kể từ ngày nhân sự mới gia nhập hệ thống.</p>
-                    </div>
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span>
-                        <p class="text-[#166def] font-bold">Mỗi ngày 01 phiên review</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Thời lượng cố định 45 phút/phiên.</p>
-                    </div>
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl">
-                        <span class="text-xs font-black text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span>
-                        <p class="text-[#166def] font-bold">Phỏng vấn sâu kiến thức</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Định hướng trọng tâm nghiệp vụ và tháo gỡ lo ngại.</p>
-                    </div>
+                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-black text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span><p class="text-[#166def] font-bold">Sau 03 ngày</p></div>
+                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-black text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span><p class="text-[#166def] font-bold">Mỗi ngày 01 phiên review</p></div>
+                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-black text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span><p class="text-[#166def] font-bold">Phỏng vấn sâu kiến thức</p></div>
                 </div>
             </div>
 
             <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
-                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                    <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>
-                    CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)
-                </h3>
+                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)</h3>
                 <div class="overflow-x-auto">
                     <table class="w-full border-collapse text-left text-sm min-w-[700px]">
-                        <thead>
-                            <tr class="border-b border-slate-200">
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px] whitespace-nowrap">HỌC PHẦN</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px] min-w-[120px] whitespace-nowrap">THỜI LƯỢNG</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th>
-                                <th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN KHUYẾN NGHỊ</th>
-                            </tr>
-                        </thead>
+                        <thead><tr class="border-b border-slate-200"><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px]">HỌC PHẦN</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px]">THỜI LƯỢNG</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN</th></tr></thead>
                         <tbody class="divide-y divide-slate-100 text-slate-500">
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">1. Self-check</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">5 phút</td>
-                                <td class="py-4">Đánh giá mức độ tự tin và nhận diện khó khăn ban đầu của nhân sự.</td>
-                                <td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất và tự chấm điểm trên thang 10.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">2. Kiểm tra bản chất</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">10 phút</td>
-                                <td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ và tính năng đi kèm.</td>
-                                <td class="py-4">Đặt câu hỏi so sánh hoặc phân tích để phân biệt các tính năng tương đồng (Ví dụ: Combo vs Hàng sản xuất).</td>
-                            </tr>
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">3. Phản xạ tư vấn</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">15 - 20 phút</td>
-                                <td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích thực tế cho khách.</td>
-                                <td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ theo cấu trúc: <strong>Vấn đề &rarr; Giải pháp &rarr; Lợi ích</strong>.</td>
-                            </tr>
-                            <tr>
-                                <td class="py-4 font-bold text-slate-700 whitespace-nowrap">4. Nhận xét & Định hướng</td>
-                                <td class="py-4 text-[#166def] font-black whitespace-nowrap">5 phút</td>
-                                <td class="py-4">Phản hồi nhanh kết quả buổi học và giao bài tập rèn luyện.</td>
-                                <td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy cho phiên tiếp theo.</td>
-                            </tr>
+                            <tr><td class="py-4 font-bold text-slate-700">1. Self-check</td><td class="py-4 text-[#166def] font-black">5 phút</td><td class="py-4">Đánh giá mức độ tự tin.</td><td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất.</td></tr>
+                            <tr><td class="py-4 font-bold text-slate-700">2. Kiểm tra bản chất</td><td class="py-4 text-[#166def] font-black">10 phút</td><td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ.</td><td class="py-4">Đặt câu hỏi so sánh phân biệt các tính năng tương đồng.</td></tr>
+                            <tr><td class="py-4 font-bold text-slate-700">3. Phản xạ tư vấn</td><td class="py-4 text-[#166def] font-black">15 - 20 phút</td><td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích.</td><td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ.</td></tr>
+                            <tr><td class="py-4 font-bold text-slate-700">4. Nhận xét & Định hướng</td><td class="py-4 text-[#166def] font-black">5 phút</td><td class="py-4">Phản hồi nhanh kết quả buổi học.</td><td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy.</td></tr>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </div>
-
     </main>
 
-    <!-- CÁC THỂ LOẠI MODAL -->
-    
     <!-- Modal Thông báo kết quả Form -->
     <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden">
         <div class="glass-panel-ultra rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
             <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
             <h4 id="modalTitle" class="text-base font-black text-slate-800 mb-2">Tiêu đề</h4>
-            <p id="modalMessage" class="text-xs text-slate-400 mb-6 leading-relaxed">Mô tả thông điệp gửi thành công hoặc thất bại.</p>
-            <button onclick="closeStatusModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">
-                XÁC NHẬN
-            </button>
+            <p id="modalMessage" class="text-xs text-slate-400 mb-6 leading-relaxed"></p>
+            <button onclick="closeStatusModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">XÁC NHẬN</button>
         </div>
     </div>
 
-    <!-- Modal Xem Chi Tiết Bài Thực Hành (View Bài của Sinh Viên) -->
+    <!-- MODAL XEM BÀI THỰC HÀNH CỦA HỌC VIÊN -->
     <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-4xl w-full max-h-[90vh] flex flex-col relative border border-slate-200">
             <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fa-solid fa-xmark"></i></button>
             <h2 class="text-xl font-black text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-4">
                 <i class="fa-solid fa-laptop-code text-[#166def]"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
             </h2>
-            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-6 mt-4">
-                <!-- Data render từ JS -->
-            </div>
+            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-6 mt-4"></div>
         </div>
     </div>
 
-    <!-- Fullscreen Ảnh Modal (Zoom Ảnh) -->
+    <!-- FULLSCREEN ẢNH MODAL (Zoom) -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all">
         <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
             <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
@@ -420,13 +319,11 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
-
-    <!-- GỌI SCRIPT DỮ LIỆU ĐỂ RENDER CHI TIẾT TÌNH HUỐNG -->
     <script src="codelab-data.js"></script>
 
     <script>
         // ==========================================
-        // KHAI BÁO CẤU HÌNH VÀ BIẾN TOÀN CỤC
+        // DÁN ĐƯỜNG LINK API VÀO ĐÂY 
         // ==========================================
         const API_URL = "https://script.google.com/macros/s/AKfycbw02rPVB0jTVQGvqVfJTYvoy3OjBz604srivuUOGmSHCdcnQ9tbHF4XI8zo32zxLz_S/exec"; 
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
@@ -437,20 +334,16 @@
         let currentRandomScenario = null;
         let currentStudentPracticeData = []; 
 
-        // ==========================================
-        // INIT KHI LOAD TRANG
-        // ==========================================
-        window.onload = function() { 
-            setTodayDate();
-            loadScenariosFromSheet(); 
-        };
-
         function setTodayDate() {
             const today = new Date();
             document.getElementById('reviewDate').value = `${String(today.getDate()).padStart(2, '0')}/${String(today.getMonth() + 1).padStart(2, '0')}/${today.getFullYear()}`;
         }
+        setTodayDate();
 
-        // Tải danh sách tình huống Cẩm Nang
+        function updateScoreValue(val) { document.getElementById('scoreValue').textContent = val; }
+
+        window.onload = function() { loadScenariosFromSheet(); };
+
         function loadScenariosFromSheet() {
             fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
             .then(res => res.json())
@@ -468,37 +361,73 @@
                             });
                         }
                     });
-                    switchRoadmap('Retail'); // Khởi tạo mặc định
+                    switchRoadmap('Retail');
                 }
             });
         }
 
-        // Cập nhật điểm tự tin
-        function updateScoreValue(val) {
-            document.getElementById('scoreValue').textContent = val;
-        }
-
-        // Hàm ngắt câu an toàn (đã fix crash Safari)
+        // Cắt câu an toàn
         function formatSentences(text) {
             if (!text) return "";
             text = text.replace(/\n/g, '<br>');
             return text.replace(/([.?!])\s+([A-ZĐÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ])/g, "$1<br><br>$2");
         }
 
-        // Decode HTML
+        // Decode
         function escapeHtml(string) {
             if (!string) return "";
             return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        // ==========================================
-        // ĐIỀU HƯỚNG UI (NGÀNH, NGÀY, TAB)
-        // ==========================================
-        
-        // 1. Chuyển Lộ trình
+        // ================= CẬP NHẬT CÁC NÚT LINK ĐỘNG =================
+        function updateDynamicLinks() {
+            const container = document.getElementById('dynamicLinksContainer');
+            let html = '<div class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-2 w-full">';
+
+            let eLearnLink = ""; let practiceLink1 = ""; let practiceLink2 = "";
+            let markLink = "https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien.html";
+
+            if(currentRoadmap === 'Retail') {
+                if(currentDay === 'day1') {
+                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-1.html`;
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-2.html`;
+                } else if(currentDay === 'day2') {
+                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-3.html`;
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-4.html`;
+                } else if(currentDay === 'day3') {
+                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-5.html`;
+                }
+            } else if (currentRoadmap === 'FNB') {
+                if(currentDay === 'day1') {
+                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-1.html`;
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-2.html`;
+                } else if(currentDay === 'day2') {
+                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-3.html`;
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-4.html`;
+                } else if(currentDay === 'day3') {
+                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-5.html`;
+                }
+            }
+
+            if(eLearnLink) html += `<a href="${eLearnLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-blue-200"><i class="fa-solid fa-book"></i> Khóa học E-learning</a>`;
+            if(practiceLink1) html += `<a href="${practiceLink1}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Bài tập 1</a>`;
+            if(practiceLink2) html += `<a href="${practiceLink2}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Bài tập 2</a>`;
+            html += `<a href="${markLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài (GV)</a>`;
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        // ================= ĐIỀU HƯỚNG UI =================
         function switchRoadmap(roadmap) {
             currentRoadmap = roadmap;
-            document.getElementById('industry').value = roadmap; // Cập nhật vào Select
+            document.getElementById('industry').value = roadmap; 
             
             const retailBtn = document.getElementById('roadmap-Retail');
             const fnbBtn = document.getElementById('roadmap-FNB');
@@ -512,7 +441,6 @@
             switchSubTab(currentDay);
         }
 
-        // 2. Chuyển Ngày khi đổi Selectbox
         function switchSessionAndCheck() {
             const val = document.getElementById('session').value;
             if (val.includes("Phiên 1")) switchSubTab('day1');
@@ -520,12 +448,10 @@
             if (val.includes("Phiên 3")) switchSubTab('day3');
         }
 
-        // 3. Chuyển Ngày review
         function switchSubTab(day) {
             currentDay = day;
             document.getElementById('session').value = day === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : day === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
             
-            // Đổi màu nút Ngày
             const tabs = ['day1', 'day2', 'day3'];
             tabs.forEach(item => {
                 const button = document.getElementById(`sub-tab-${item}`);
@@ -540,134 +466,58 @@
                 }
             });
 
-            // Đổi thông tin tiêu đề Giáo trình
-            const headerIcon = document.getElementById('session-header-icon');
             const headerTitle = document.getElementById('session-header-title');
-            const headerDesc = document.getElementById('session-header-desc');
-            if (day === 'day1') {
-                headerIcon.innerHTML = '<i class="fa-solid fa-store"></i>';
-                headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
-                headerDesc.textContent = "Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.";
-            } else if (day === 'day2') {
-                headerIcon.innerHTML = '<i class="fa-solid fa-cash-register"></i>';
-                headerTitle.textContent = "PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH";
-                headerDesc.textContent = "Đặt - Bán - Trả hàng, tích hợp thanh toán nhanh, đồng bộ sàn TMĐT & khai thác báo cáo.";
-            } else if (day === 'day3') {
-                headerIcon.innerHTML = '<i class="fa-solid fa-calculator"></i>';
-                headerTitle.textContent = "PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH";
-                headerDesc.textContent = "Xuất hóa đơn từ máy tính tiền, hoàn thiện 7 loại sổ kế toán (TT88) & Tờ khai thuế (TT40).";
-            }
+            if (day === 'day1') headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
+            else if (day === 'day2') headerTitle.textContent = "PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH";
+            else if (day === 'day3') headerTitle.textContent = "PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH";
 
-            // Gọi các hàm cập nhật liên quan
             triggerRandomScenario();
             renderAllScenarios(day);
             hideAllScenariosList();
             updateDynamicLinks(); 
-            checkStudentPractice(); // Auto check lại % bài tập khi đổi tab
+            checkStudentPractice(); // Gọi lại check khi tự tay bấm tab
         }
 
-        // 4. Chuyển Tab Main (Workspace / Handbook)
-        function switchMainTab(tab) {
-            const workspaceBtn = document.getElementById('main-tab-workspace');
-            const handbookBtn = document.getElementById('main-tab-handbook');
-            const workspaceContent = document.getElementById('main-content-workspace');
-            const handbookContent = document.getElementById('main-content-handbook');
-
-            if (tab === 'workspace') {
-                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
-                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
-                workspaceContent.classList.remove('hidden');
-                workspaceContent.classList.add('grid');
-                handbookContent.classList.add('hidden');
-            } else {
-                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
-                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
-                workspaceContent.classList.add('hidden');
-                workspaceContent.classList.remove('grid');
-                handbookContent.classList.remove('hidden');
-            }
-        }
-
-        // ==========================================
-        // HIỂN THỊ TÌNH HUỐNG (CẨM NANG)
-        // ==========================================
+        // ================= TÌNH HUỐNG (SCENARIOS) =================
         function triggerRandomScenario() {
             const list = scenariosData[currentDay] ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) : [];
             const box = document.getElementById('random-scenario-box');
-            if (!list || list.length === 0) { box.innerHTML = `<p class="text-xs py-6 text-center bg-white border border-dashed rounded-3xl">Lộ trình này chưa có dữ liệu tình huống chỉ định cho ngày hiện tại.</p>`; return; }
+            if (!list || list.length === 0) { box.innerHTML = `<p class="text-xs py-6 text-center bg-white border border-dashed rounded-3xl">Chưa có dữ liệu.</p>`; return; }
             
             currentRandomScenario = list[Math.floor(Math.random() * list.length)];
             const isMorning = currentRandomScenario.type === 'morning';
             const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-purple-50 border-purple-200 text-purple-950';
-            const icon = isMorning ? '<i class="fa-solid fa-sun text-emerald-600"></i>' : '<i class="fa-solid fa-moon text-purple-600"></i>';
-            const typeLabel = isMorning ? 'Học Phần Sáng' : 'Học Phần Chiều';
 
-            box.innerHTML = `
-                <div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white animate-fade">
-                    <div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3">
-                        <div class="flex items-center justify-between border-b pb-2 border-current/10">
-                            <span class="text-xs font-black tracking-widest uppercase flex items-center gap-1.5">${icon} ${typeLabel} - ĐƯỢC CHỈ ĐỊNH</span>
-                            <span class="text-[9px] font-bold px-2 py-0.5 rounded-full bg-white/70 border border-current/10">Random Selected</span>
-                        </div>
-                        <h4 class="font-extrabold text-sm text-slate-800">${escapeHtml(currentRandomScenario.title)}</h4>
-                        <div class="text-xs space-y-3 pt-1">
-                            <div class="leading-relaxed text-slate-600"><strong>Yêu cầu tư vấn:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng trả lời:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div>
-                        </div>
-                    </div>
-                </div>`;
+            box.innerHTML = `<div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white animate-fade"><div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3"><h4 class="font-extrabold text-sm">${escapeHtml(currentRandomScenario.title)}</h4><div class="text-xs space-y-3 pt-1"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div></div></div></div>`;
         }
 
         function renderAllScenarios(day) {
             const container = document.getElementById('all-scenarios-list');
             const list = scenariosData[day] ? scenariosData[day].filter(item => item.roadmap === currentRoadmap) : [];
+            if (!list || list.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Chưa có dữ liệu tình huống.</p>`; return; }
 
-            if (!list || list.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Chưa có dữ liệu tình huống lưu trữ nào khác.</p>`;
-                return;
-            }
-
-            const morningTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-black text-emerald-700 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG</span></div></div>`;
-            const afternoonTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-purple-50 border border-purple-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-black text-purple-700 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU</span></div></div>`;
-
-            const morningItems = list.filter(item => item.type === 'morning');
-            const afternoonItems = list.filter(item => item.type === 'afternoon');
+            const mTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-black text-emerald-700 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG</span></div></div>`;
+            const aTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-purple-50 border border-purple-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-black text-purple-700 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU</span></div></div>`;
 
             let htmlContent = "";
+            const mItems = list.filter(item => item.type === 'morning');
+            const aItems = list.filter(item => item.type === 'afternoon');
 
-            if (morningItems.length > 0) {
-                htmlContent += morningTitle;
-                htmlContent += `<div class="space-y-4">` + morningItems.map(item => `
-                    <details class="group border border-emerald-100 rounded-2xl bg-emerald-50/50 p-4 transition-all duration-200 hover:bg-emerald-50">
-                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center">
-                            <span class="flex items-center gap-2.5"><i class="fa-solid fa-sun text-emerald-600"></i> ${escapeHtml(item.title)}</span>
-                            <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
-                        </summary>
-                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
-                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div>
-                        </div>
-                    </details>
-                `).join('') + `</div>`;
+            if (mItems.length > 0) {
+                htmlContent += mTitle + `<div class="space-y-4">` + mItems.map(item => `
+                    <details class="group border border-emerald-100 rounded-2xl bg-emerald-50/50 p-4 hover:bg-emerald-50">
+                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center"><span class="flex items-center gap-2.5"><i class="fa-solid fa-sun text-emerald-600"></i> ${escapeHtml(item.title)}</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i></summary>
+                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div></div>
+                    </details>`).join('') + `</div>`;
             }
-
-            if (afternoonItems.length > 0) {
-                htmlContent += afternoonTitle;
-                htmlContent += `<div class="space-y-4">` + afternoonItems.map(item => `
-                    <details class="group border border-purple-100 rounded-2xl bg-purple-50/50 p-4 transition-all duration-200 hover:bg-purple-50">
-                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center">
-                            <span class="flex items-center gap-2.5"><i class="fa-solid fa-moon text-purple-600"></i> ${escapeHtml(item.title)}</span>
-                            <span class="transition group-open:rotate-180 text-slate-400"><i class="fa-solid fa-chevron-down text-[10px]"></i></span>
-                        </summary>
-                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10">
-                            <div class="leading-relaxed text-slate-600"><strong>Tình huống:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div>
-                            <div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10 text-slate-700"><strong>Kỳ vọng đáp án:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div>
-                        </div>
-                    </details>
-                `).join('') + `</div>`;
+            if (aItems.length > 0) {
+                htmlContent += aTitle + `<div class="space-y-4">` + aItems.map(item => `
+                    <details class="group border border-purple-100 rounded-2xl bg-purple-50/50 p-4 hover:bg-purple-50">
+                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center"><span class="flex items-center gap-2.5"><i class="fa-solid fa-moon text-purple-600"></i> ${escapeHtml(item.title)}</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i></summary>
+                        <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div></div>
+                    </details>`).join('') + `</div>`;
             }
-
-            document.getElementById('all-scenarios-list').innerHTML = htmlContent;
+            container.innerHTML = htmlContent;
         }
 
         function hideAllScenariosList() {
@@ -687,98 +537,46 @@
             }
         }
 
-
-        // ==========================================
-        // CẬP NHẬT CÁC NÚT LINK ĐỘNG THEO LỘ TRÌNH VÀ NGÀY
-        // ==========================================
-        function updateDynamicLinks() {
-            const container = document.getElementById('dynamicLinksContainer');
-            let html = '';
-
-            // 1. Link Khóa học e-learning
-            let courseLink = "";
-            if (currentRoadmap === 'Retail' && (currentDay === 'day1' || currentDay === 'day2')) {
-                courseLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-            } else if (currentRoadmap === 'FNB' && (currentDay === 'day1' || currentDay === 'day2')) {
-                courseLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-            } else if (currentDay === 'day3') {
-                courseLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-            }
-            if(courseLink) {
-                html += `<a href="${courseLink}" target="_blank" class="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-blue-200"><i class="fa-solid fa-book"></i> E-learning Giáo trình</a>`;
-            }
-
-            // 2. Link Bài tập thực hành
-            let prefix = currentRoadmap.toLowerCase(); 
-            if (currentDay === 'day1') {
-                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-1.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 1</a>`;
-                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-2.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 2</a>`;
-            } else if (currentDay === 'day2') {
-                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-3.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 3</a>`;
-                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-4.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 4</a>`;
-            } else if (currentDay === 'day3') {
-                html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/${prefix}-buoi-5.html" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Đề bài Buổi 5</a>`;
-            }
-
-            // 3. Link Chấm bài
-            html += `<a href="https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien.html" target="_blank" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài thực hành</a>`;
-
-            container.innerHTML = html;
+        function selectRating(rating, element) {
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all");
+            document.getElementById('selectedRating').value = rating;
+            if (rating === 'Chưa đạt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-chuadat transition-all";
+            else if (rating === 'Đạt thao tác') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-thaotac transition-all";
+            else if (rating === 'Đạt ứng dụng') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-ungdung transition-all";
+            else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
         }
 
-        // ==========================================
-        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ THEO BUỔI (SMART DETECT ĐÃ FIX LỖI) =====
+        // ================= LOGIC KIỂM TRA BÀI TẬP VÀ SMART DETECT =================
         function checkStudentPractice() {
             const studentName = document.getElementById('repName').value.trim();
             const classCode = document.getElementById('classCode').value.trim();
             const btn = document.getElementById('btnCheckPractice');
             const txtStatus = document.getElementById('txtPracticeStatus');
             const spinner = document.getElementById('checkPracticeSpinner');
+            const tagEl = document.getElementById('studentHistoryTag');
             
-            if(!studentName || !classCode) { btn.classList.add('hidden'); return; }
+            if(!studentName || !classCode) { btn.classList.add('hidden'); tagEl.classList.add('hidden'); return; }
 
             spinner.classList.remove('hidden'); btn.classList.add('hidden');
 
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
             .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
-                
-                // Reset lại toàn bộ class màu sắc của nút
-                btn.className = "text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm transition-all flex items-center gap-1.5 text-white";
+                btn.className = "text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5"; 
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
 
-                    // --- SMART DETECT LỘ TRÌNH VÀ NGÀY DỰA VÀO BÀI NỘP MỚI NHẤT ---
+                    // SMART DETECT: Gắn Tag thông báo
                     const latestSubmission = data.data[data.data.length - 1]; 
+                    let stdRoadmap = latestSubmission.courseName || "Retail";
+                    let stdSession = latestSubmission.session.split(':')[0] || ""; 
                     
-                    // 1. Detect Ngành (Bọc lót an toàn cho dữ liệu cũ)
-                    let dbRoadmap = "Retail"; // Mặc định là Retail
-                    if (latestSubmission.courseName) {
-                        let rawCourse = latestSubmission.courseName.toUpperCase();
-                        if (rawCourse.includes("FNB") || rawCourse.includes("F&B")) {
-                            dbRoadmap = "FNB";
-                        }
-                    }
+                    tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Gần nhất: <span class="text-[#166def]">${stdRoadmap} - ${stdSession}</span>`;
+                    tagEl.classList.remove('hidden');
 
-                    if (dbRoadmap !== currentRoadmap) {
-                        switchRoadmap(dbRoadmap);
-                        return; // Return để switchRoadmap gọi lại hàm này lần nữa
-                    }
-
-                    // 2. Detect Phiên review (Day 1/2/3) dựa trên tên buổi
+                    // Tính tiến độ dựa vào Tab đang mở trên UI
                     const sessionSelectVal = document.getElementById('session').value; 
-                    let autoSelectDay = "";
-                    if (latestSubmission.session.includes("Buổi 1") || latestSubmission.session.includes("Buổi 2")) autoSelectDay = "day1";
-                    else if (latestSubmission.session.includes("Buổi 3") || latestSubmission.session.includes("Buổi 4")) autoSelectDay = "day2";
-                    else if (latestSubmission.session.includes("Buổi 5")) autoSelectDay = "day3";
-
-                    if (autoSelectDay && autoSelectDay !== currentDay) {
-                        switchSubTab(autoSelectDay);
-                        return; // Đã đổi ngày thì return để hàm gọi lại
-                    }
-
-                    // --- TÍNH TOÁN % TIẾN ĐỘ THỰC HÀNH CỦA ĐÚNG PHIÊN ĐANG CHỌN ---
                     let targetSessionId1 = ""; let targetSessionId2 = "";
                     if(sessionSelectVal.includes("Phiên 1")) { targetSessionId1 = "session_1"; targetSessionId2 = "session_2"; }
                     else if(sessionSelectVal.includes("Phiên 2")) { targetSessionId1 = "session_3"; targetSessionId2 = "session_4"; }
@@ -790,7 +588,6 @@
                         const sData1 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId1);
                         if(sData1) {
                             totalExercises += sData1.exercises.filter(e => !e.isGroupHeader).length;
-                            // Cắt chuỗi an toàn: Lấy "Buổi 1" thay vì lấy cả câu dài để tránh lệch Text
                             const sessionPrefix1 = sData1.title.split(':')[0]; 
                             const submittedTitles1 = currentStudentPracticeData.filter(p => p.session.includes(sessionPrefix1)).map(p => p.exerciseTitle);
                             doneExercises += [...new Set(submittedTitles1)].length;
@@ -806,40 +603,40 @@
                         }
                     }
 
-                    // 3. SET MÀU NÚT VÀ TEXT TRẠNG THÁI
+                    // Đổi màu Nút theo %
                     if(totalExercises > 0) {
                         let percent = Math.round((doneExercises / totalExercises) * 100);
                         if(percent >= 100) {
-                            btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'border-emerald-600'); 
-                            txtStatus.innerText = `Đủ bài TH (100%)`;
+                            btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border', 'border-emerald-300', 'hover:bg-emerald-200'); 
+                            txtStatus.innerText = `Đã làm đủ (100%)`;
                             document.getElementById('homeworkStatus').value = "Đủ";
                         } else if (percent > 0) {
-                            btn.classList.add('bg-orange-500', 'hover:bg-orange-600', 'border-orange-600'); 
-                            txtStatus.innerText = `Thiếu bài TH (${percent}%)`;
+                            btn.classList.add('bg-amber-100', 'text-amber-700', 'border', 'border-amber-300', 'hover:bg-amber-200'); 
+                            txtStatus.innerText = `Đang làm (${percent}%)`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         } else {
-                            btn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'border-rose-600'); 
+                            btn.classList.add('bg-slate-100', 'text-slate-500', 'border', 'border-slate-200', 'hover:bg-slate-200'); 
                             txtStatus.innerText = `Chưa làm bài phiên này`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         }
                     } else {
-                        btn.classList.add('bg-blue-500', 'hover:bg-blue-600', 'border-blue-600'); 
+                        btn.classList.add('bg-slate-100', 'text-slate-600', 'border', 'border-slate-300', 'hover:bg-slate-200'); 
                         txtStatus.innerText = `Xem bài (${data.data.length})`;
                     }
+                    btn.classList.remove('hidden');
 
                 } else {
                     currentStudentPracticeData = [];
-                    btn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'border-rose-600');
+                    tagEl.classList.add('hidden');
+                    btn.classList.add('bg-rose-100', 'text-rose-700', 'border', 'border-rose-300', 'hover:bg-rose-200');
                     txtStatus.innerText = `Chưa làm bài nào`;
                     document.getElementById('homeworkStatus').value = "Thiếu";
+                    btn.classList.remove('hidden');
                 }
             }).catch(err => { spinner.classList.add('hidden'); console.error(err); });
         }
 
-
-        // ==========================================
-        // XỬ LÝ MODAL VIEW BÀI TẬP VÀ ZOOM ẢNH
-        // ==========================================
+        // ================= ZOOM ẢNH VÀ XEM CHI TIẾT BÀI LÀM =================
         function getDirectImageUrl(url) { 
             let m = url.match(/\/d\/(.+?)\//); if(!m) m = url.match(/id=(.+?)(&|$)/); 
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
@@ -868,21 +665,22 @@
             } else {
                 let html = ''; let grouped = {};
                 
-                // Lọc dữ liệu của Buổi đang được chọn trên Form
+                // Cắt lấy Session Prefix hiện tại (Ví dụ: "Phiên 1")
                 const sessionSelectVal = document.getElementById('session').value; 
                 let targetSessionTitle1 = ""; let targetSessionTitle2 = "";
                 
-                if(sessionSelectVal.includes("Phiên 1")) { 
-                    if(currentRoadmap === 'Retail') { targetSessionTitle1 = "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao"; targetSessionTitle2 = "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá"; }
-                    else { targetSessionTitle1 = "Buổi 1: Thiết lập Thực đơn & Quản lý Kho"; targetSessionTitle2 = "Buổi 2: Tùy biến Thực đơn nâng cao"; }
-                } else if(sessionSelectVal.includes("Phiên 2")) { 
-                    if(currentRoadmap === 'Retail') { targetSessionTitle1 = "Buổi 3: Giao dịch & Quản lý Khách hàng"; targetSessionTitle2 = "Buổi 4: Mở rộng Bán hàng & Phân quyền"; }
-                    else { targetSessionTitle1 = "Buổi 3: Nghiệp vụ Thu ngân & Giao dịch"; targetSessionTitle2 = "Buổi 4: Vận hành POS & In ấn chế biến"; }
-                } else if(sessionSelectVal.includes("Phiên 3")) { 
-                    targetSessionTitle1 = "Buổi 5: Thiết lập Thuế, Kế toán và Hóa đơn điện tử"; 
+                if(sessionSelectVal.includes("Phiên 1")) { targetSessionTitle1 = "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao"; targetSessionTitle2 = "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá"; }
+                else if(sessionSelectVal.includes("Phiên 2")) { targetSessionTitle1 = "Buổi 3: Giao dịch & Quản lý Khách hàng"; targetSessionTitle2 = "Buổi 4: Mở rộng Bán hàng & Phân quyền"; }
+                else if(sessionSelectVal.includes("Phiên 3")) { targetSessionTitle1 = "Buổi 5: Thiết lập Thuế, Kế toán và Hóa đơn điện tử"; }
+
+                let title1 = ""; let title2 = "";
+                if(typeof CODELAB_DATA !== 'undefined' && currentRoadmap) {
+                    if (CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle1)) title1 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle1).title.split(':')[0];
+                    if (targetSessionTitle2 && CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle2)) title2 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle2).title.split(':')[0];
                 }
 
-                const sessionData = currentStudentPracticeData.filter(p => p.session === targetSessionTitle1 || p.session === targetSessionTitle2);
+                // Chỉ hiện bài của Phiên đang chọn để Trainer đỡ bị rối
+                const sessionData = currentStudentPracticeData.filter(p => p.session.includes(title1) || (title2 && p.session.includes(title2)));
 
                 if(sessionData.length === 0) {
                      container.innerHTML = `<div class="bg-orange-50 p-6 rounded-2xl text-center border border-orange-200"><i class="fa-solid fa-circle-info text-orange-500 text-3xl mb-2"></i><p class="text-orange-700 font-bold mt-2">Học viên chưa làm bài thực hành của ${sessionSelectVal}!</p></div>`;
@@ -892,7 +690,7 @@
 
                 sessionData.forEach(p => {
                     if(!grouped[p.session]) grouped[p.session] = {};
-                    grouped[p.session][p.exerciseTitle] = p; // Lấy bài mới nhất
+                    grouped[p.session][p.exerciseTitle] = p; // Lấy bài nộp mới nhất
                 });
 
                 for(let session in grouped) {
@@ -931,19 +729,7 @@
 
         function closePracticeModal() { document.getElementById('practiceModal').classList.add('hidden'); }
 
-
-        // ==========================================
-        // SUBMIT FORM LƯU KẾT QUẢ ĐÁNH GIÁ
-        // ==========================================
-        function selectRating(rating, element) {
-            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all");
-            document.getElementById('selectedRating').value = rating;
-            if (rating === 'Chưa đạt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-chuadat transition-all";
-            else if (rating === 'Đạt thao tác') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-thaotac transition-all";
-            else if (rating === 'Đạt ứng dụng') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-ungdung transition-all";
-            else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
-        }
-
+        // ================= GỬI FORM LƯU =================
         function submitForm(event) {
             event.preventDefault();
             const rawDate = document.getElementById('reviewDate').value.trim();
@@ -1006,7 +792,30 @@
             document.getElementById('scenarioNotes').value = ""; document.getElementById('trainerNotes').value = ""; document.getElementById('actionPlan').value = "";
             setTodayDate(); document.getElementById('industry').value = currentRoadmap; document.getElementById('selectedRating').value = "";
             document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all");
-            document.getElementById('btnCheckPractice').classList.add('hidden'); currentStudentPracticeData = [];
+            document.getElementById('btnCheckPractice').classList.add('hidden'); 
+            document.getElementById('studentHistoryTag').classList.add('hidden');
+            currentStudentPracticeData = [];
+        }
+
+        function switchMainTab(tab) {
+            const workspaceBtn = document.getElementById('main-tab-workspace');
+            const handbookBtn = document.getElementById('main-tab-handbook');
+            const workspaceContent = document.getElementById('main-content-workspace');
+            const handbookContent = document.getElementById('main-content-handbook');
+
+            if (tab === 'workspace') {
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                workspaceContent.classList.remove('hidden');
+                workspaceContent.classList.add('grid');
+                handbookContent.classList.add('hidden');
+            } else {
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                workspaceContent.classList.add('hidden');
+                workspaceContent.classList.remove('grid');
+                handbookContent.classList.remove('hidden');
+            }
         }
     </script>
 </body>
