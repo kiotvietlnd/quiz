@@ -260,7 +260,7 @@
                         <td class="py-4 font-medium">${escapeHtml(displayDate)}</td>
                         <td class="py-4 font-medium text-slate-700">${escapeHtml(row.TrainerName)}</td>
                         <td class="py-4 text-center font-extrabold text-[#166def]">${row.ConfidenceScore}/10</td>
-                        <td class="py-4 text-center"><span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-100 border text-slate-600 flex items-center justify-center gap-1"><i class="fa-solid fa-eye text-blue-500"></i> ${escapeHtml(row.HomeworkStatus)}</span></td>
+                        <td class="py-4 text-center"><span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-slate-100 border text-slate-600 inline-flex items-center justify-center gap-1.5"><span class="bg-slate-300 text-slate-700 px-1 rounded uppercase text-[8px]">${escapeHtml(row.Industry)}</span><i class="fa-solid fa-eye text-blue-500"></i> ${escapeHtml(row.HomeworkStatus)}</span></td>
                         <td class="py-4 max-w-[200px] truncate text-slate-500 font-medium" title="${escapeHtml(row.TrainerNotes || '')}">${escapeHtml(row.TrainerNotes || 'Chưa có nhận xét')}</td>
                         <td class="py-4 text-center"><span class="inline-block text-[10px] font-extrabold px-2.5 py-1 rounded-lg ${ratingClass}">${escapeHtml(row.Rating)}</span></td>
                         <td class="py-4 text-center pr-4"><button class="px-3 py-1 bg-white hover:bg-slate-100 text-[#166def] border border-blue-100 rounded-lg text-[11px] font-bold transition-all shadow-sm"><i class="fa-solid fa-magnifying-glass"></i> CHI TIẾT</button></td>
