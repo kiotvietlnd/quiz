@@ -76,6 +76,60 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
+    <!-- MODAL HOÀN THÀNH BÀI TẬP -->
+    <div id="completionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full relative border-4 border-emerald-400 text-center animate-fade-in-up">
+            <div class="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">
+                <i class="fas fa-award"></i>
+            </div>
+            <h2 class="text-2xl font-black text-slate-800 mb-2">HOÀN THÀNH BÀI TẬP</h2>
+            <p class="text-sm text-slate-500 font-medium mb-6">Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc quay về trang chủ.</p>
+            
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left space-y-3 mb-6">
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-user text-blue-500 w-4"></i> Học viên:</span>
+                    <span id="modalDoneName" class="text-sm font-black text-slate-800">--</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-building text-blue-500 w-4"></i> Phòng ban:</span>
+                    <span id="modalDoneDept" class="text-sm font-black text-slate-800">--</span>
+                </div>
+                <div class="flex justify-between items-center border-b border-slate-200 pb-2">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-book text-blue-500 w-4"></i> Bài học:</span>
+                    <span id="modalDoneSession" class="text-sm font-black text-slate-800 truncate max-w-[150px]">--</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-chart-pie text-blue-500 w-4"></i> Tiến độ:</span>
+                    <span class="text-sm font-black text-emerald-600"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span>
+                </div>
+            </div>
+
+            <div class="flex flex-col gap-3">
+                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                    <i class="fas fa-search"></i> Xem lại bài làm
+                </button>
+                <a href="index.html" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 rounded-xl transition-all">
+                    Về Trang chủ
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM -->
+    <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[120] hidden flex-col transition-all">
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
+                <h1 class="text-base font-black text-slate-800">Xem Lại Bài Làm</h1>
+            </div>
+            <button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
+        </header>
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8">
+            <div class="max-w-4xl mx-auto space-y-6" id="reviewHistoryContainer">
+                <!-- Data đổ vào đây bằng JS -->
+            </div>
+        </div>
+    </div>
     <script src="codelab-data.js"></script>
     <script>
         // =======================================================
