@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng Đào Tạo Tái Ký KiotViet</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -12,26 +13,69 @@
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; }
-        .glow-blob-1, .glow-blob-2 { position: absolute; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; }
-        .glow-blob-1 { top: -10%; left: -10%; background: rgba(37, 99, 235, 0.08); }
-        .glow-blob-2 { bottom: -10%; right: -10%; background: rgba(16, 185, 129, 0.08); }
+        
+        /* Hiệu ứng nền */
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
+        .glow-blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; background: rgba(37, 99, 235, 0.08); }
+        .glow-blob-2 { position: absolute; bottom: -10%; right: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; background: rgba(16, 185, 129, 0.08); }
+        
         .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
     </style>
 </head>
 <body class="h-screen flex overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
 
     <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
 
+    <!-- SIDEBAR HƯỚNG DẪN MÀU XANH TÍM -->
+    <aside id="sidebar" class="w-80 bg-[#1e3a8a] border-r border-white/10 flex flex-col z-30 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex">
+        <div class="h-16 flex items-center px-5 border-b border-white/10 shrink-0 justify-between relative z-10 md:hidden">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-7">
+            <button onclick="toggleSidebar()" class="text-white/50 hover:text-red-400 p-1"><i class="fas fa-times"></i></button>
+        </div>
+        
+        <div class="p-5 flex-1 overflow-y-auto flex flex-col relative z-10 space-y-5">
+            <h2 class="text-xs font-extrabold text-blue-200/80 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-info-circle text-blue-300"></i> Hướng Dẫn Thực Hành</h2>
+            <div class="space-y-4 text-white/90">
+                <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+                    <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">1</span>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-200">Họ tên, Mã Lớp</em> trước khi làm.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+                    <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">2</span>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán/Tải lên và nhấn <em class="not-italic text-blue-200">Lưu & Nộp bài</em>.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+                    <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">3</span>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận.</p>
+                </div>
+            </div>
+
+            <!-- Khung Deadline -->
+            <div class="bg-amber-500/10 border border-amber-500/30 p-4 rounded-xl shadow-inner mt-4">
+                <div class="flex items-center gap-2 text-amber-400 font-extrabold text-xs mb-1.5 uppercase tracking-wide"><i class="fas fa-clock"></i> Hạn Chót</div>
+                <p class="text-[11px] text-amber-200 font-medium leading-relaxed">Hoàn thành bài tập và gửi ảnh Xác Nhận hoàn thành lên Group Zalo trước 16:00 ngày hôm nay.</p>
+            </div>
+        </div>
+        
+        <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md shrink-0 flex flex-col gap-2 relative z-10 text-center">
+            <span class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">KiotViet Learning & Development</span>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT KHU VỰC CHÍNH -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10">
-        <header class="glass-panel h-16 flex items-center justify-between px-6 z-20 shrink-0 sticky top-0 rounded-none border-t-0 border-l-0 border-r-0">
+        <header class="glass-header h-16 flex items-center justify-between px-6 z-20 shrink-0 sticky top-0">
             <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-blue-600 p-2 rounded-xl"><i class="fas fa-bars text-lg"></i></button>
                 <a href="index.html" class="flex items-center"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-8"></a>
                 <span class="hidden md:block h-5 w-px bg-slate-300"></span>
-                <span class="hidden md:block text-sm font-bold text-slate-500">Cổng Đào tạo Thực hành Tái ký</span>
+                <span class="hidden md:block text-sm font-bold text-slate-500">Hệ thống Thực hành Tái ký</span>
             </div>
             <div class="flex items-center gap-4">
-                <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 animate-pulse">👤 Đang kiểm tra...</button>
+                <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border transition shadow-sm bg-red-50 text-red-600 border-red-200 animate-pulse">
+                    👤 Đang kiểm tra...
+                </button>
             </div>
         </header>
 
@@ -43,26 +87,26 @@
                     <p id="systemSubtitle" class="text-sm md:text-base font-medium text-slate-500 mt-2">Vui lòng chọn Lộ trình đào tạo của bạn</p>
                 </div>
 
-                <!-- MÀN HÌNH CHỌN NGÀNH HÀNG -->
+                <!-- MÀN HÌNH 2 BOX CHỌN NGÀNH HÀNG -->
                 <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
                     <div onclick="selectIndustry('Retail')" class="glass-panel p-8 rounded-3xl cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all border-b-4 border-b-blue-500 group">
                         <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-tags"></i></div>
                         <h3 class="text-2xl font-black text-slate-800 mb-2">Lộ trình RETAIL</h3>
-                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên chăm sóc Khách hàng Ngành hàng Bán lẻ.</p>
+                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên Ngành hàng Bán lẻ.</p>
                         <div class="mt-6 font-bold text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
                     </div>
 
                     <div onclick="selectIndustry('FNB')" class="glass-panel p-8 rounded-3xl cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all border-b-4 border-b-orange-500 group">
                         <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-bowl-food"></i></div>
                         <h3 class="text-2xl font-black text-slate-800 mb-2">Lộ trình FNB</h3>
-                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên chăm sóc Khách hàng Ngành hàng F&B.</p>
+                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên Ngành hàng F&B.</p>
                         <div class="mt-6 font-bold text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
                     </div>
                 </div>
 
-                <!-- MÀN HÌNH DANH SÁCH CÁC BUỔI (ẨN MẶC ĐỊNH) -->
+                <!-- MÀN HÌNH DANH SÁCH 5 BUỔI HỌC (ẨN MẶC ĐỊNH) -->
                 <div id="courseContainerView" class="hidden">
-                    <button onclick="backToSelection()" class="mb-8 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition"><i class="fa-solid fa-arrow-left"></i> Chọn lại lộ trình</button>
+                    <button onclick="backToSelection()" class="mb-8 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition"><i class="fa-solid fa-arrow-left"></i> Quay lại chọn Lộ trình</button>
                     <div id="courseListRender"></div>
                 </div>
 
@@ -84,18 +128,23 @@
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Mã Lớp / Phòng ban *</label>
                     <input type="text" id="inpDept" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400" placeholder="VD: TK-Q3-01">
                 </div>
-                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 mt-2">Xác nhận</button>
+                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 mt-2">Xác nhận & Bắt đầu</button>
             </div>
         </div>
     </div>
 
+    <!-- TẢI DATA TỪ FILE JS -->
     <script src="codelab-data.js"></script>
     <script>
-        let currentSelectedIndustry = '';
-
         document.addEventListener('DOMContentLoaded', () => {
             renderIdentity();
-            if(!localStorage.getItem('kv_trainer_profile')) openAuthModal();
+            if(!localStorage.getItem('kv_trainer_profile')) {
+                openAuthModal();
+            } else {
+                // Kiểm tra xem trước đó đang xem dở lộ trình nào
+                const lastInd = localStorage.getItem('kv_current_industry');
+                if(lastInd) selectIndustry(lastInd);
+            }
         });
 
         function renderIdentity() {
@@ -107,7 +156,7 @@
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer";
                 document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept; 
             } else {
-                btn.innerHTML = `👤 Chưa định danh (Bấm để nhập)`;
+                btn.innerHTML = `👤 Chưa định danh`;
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 cursor-pointer animate-pulse";
             }
         }
@@ -123,29 +172,19 @@
             closeAuthModal(); renderIdentity(); 
         }
 
-        // HÀM CHỌN LỘ TRÌNH VÀ HIỂN THỊ DANH SÁCH BÀI TẬP
+        // HÀM CHỌN LỘ TRÌNH VÀ TẠO BẢNG BÀI TẬP
         function selectIndustry(industry) {
-            currentSelectedIndustry = industry;
+            localStorage.setItem('kv_current_industry', industry);
             document.getElementById('industrySelectionView').classList.add('hidden');
             document.getElementById('courseContainerView').classList.remove('hidden');
             document.getElementById('systemSubtitle').innerText = `Lộ trình đào tạo Ngành hàng ${industry.toUpperCase()}`;
             
-            // Xóa rác cache nếu chuyển lộ trình
-            const oldIndustry = localStorage.getItem('kv_current_industry');
-            if(oldIndustry && oldIndustry !== industry) {
-                localStorage.removeItem('kv_codelab_progress_b1'); localStorage.removeItem('kv_codelab_data_b1');
-                localStorage.removeItem('kv_codelab_progress_b2'); localStorage.removeItem('kv_codelab_data_b2');
-                localStorage.removeItem('kv_codelab_progress_b3'); localStorage.removeItem('kv_codelab_data_b3');
-                localStorage.removeItem('kv_codelab_progress_b4'); localStorage.removeItem('kv_codelab_data_b4');
-                localStorage.removeItem('kv_codelab_progress_b5'); localStorage.removeItem('kv_codelab_data_b5');
-            }
-            localStorage.setItem('kv_current_industry', industry);
-
             renderCourseCards(industry);
             fetchGlobalNotifications(industry);
         }
 
         function backToSelection() {
+            localStorage.removeItem('kv_current_industry');
             document.getElementById('industrySelectionView').classList.remove('hidden');
             document.getElementById('courseContainerView').classList.add('hidden');
             document.getElementById('systemSubtitle').innerText = `Vui lòng chọn Lộ trình đào tạo của bạn`;
@@ -157,11 +196,11 @@
             const filePrefix = industry.toLowerCase(); // 'retail' hoặc 'fnb'
 
             const styles = [
-                { icon: 'fa-store', colorFrom: 'from-blue-100', colorTo: 'to-blue-200', colorText: 'text-blue-600' },
-                { icon: 'fa-box', colorFrom: 'from-indigo-100', colorTo: 'to-indigo-200', colorText: 'text-indigo-600' },
-                { icon: 'fa-cash-register', colorFrom: 'from-emerald-100', colorTo: 'to-emerald-200', colorText: 'text-emerald-700' },
-                { icon: 'fa-users-gear', colorFrom: 'from-purple-100', colorTo: 'to-purple-200', colorText: 'text-purple-700' },
-                { icon: 'fa-calculator', colorFrom: 'from-orange-100', colorTo: 'to-orange-200', colorText: 'text-orange-700' }
+                { colorFrom: 'from-blue-100', colorTo: 'to-blue-200', colorText: 'text-blue-600' },
+                { colorFrom: 'from-indigo-100', colorTo: 'to-indigo-200', colorText: 'text-indigo-600' },
+                { colorFrom: 'from-emerald-100', colorTo: 'to-emerald-200', colorText: 'text-emerald-700' },
+                { colorFrom: 'from-purple-100', colorTo: 'to-purple-200', colorText: 'text-purple-700' },
+                { colorFrom: 'from-orange-100', colorTo: 'to-orange-200', colorText: 'text-orange-700' }
             ];
 
             let html = `
@@ -184,44 +223,45 @@
             `;
             container.innerHTML = html;
 
-            checkCompletion('session_1', 'kv_codelab_data_b1', 'check_session_1', industry);
-            checkCompletion('session_2', 'kv_codelab_data_b2', 'check_session_2', industry);
-            checkCompletion('session_3', 'kv_codelab_data_b3', 'check_session_3', industry);
-            checkCompletion('session_4', 'kv_codelab_data_b4', 'check_session_4', industry);
-            checkCompletion('session_5', 'kv_codelab_data_b5', 'check_session_5', industry);
+            // Kích hoạt check tiến độ (Tách riêng key theo từng ngành)
+            checkCompletion('session_1', `kv_data_${filePrefix}_b1`, `check_session_1`, industry);
+            checkCompletion('session_2', `kv_data_${filePrefix}_b2`, `check_session_2`, industry);
+            checkCompletion('session_3', `kv_data_${filePrefix}_b3`, `check_session_3`, industry);
+            checkCompletion('session_4', `kv_data_${filePrefix}_b4`, `check_session_4`, industry);
+            checkCompletion('session_5', `kv_data_${filePrefix}_b5`, `check_session_5`, industry);
         }
 
         function generateCard(sessionData, sessionNum, style, prefix) {
             if(!sessionData) return '';
             const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
-            // TẠO LINK FILE: retail-buoi-1.html hoặc fnb-buoi-1.html
             const fileLink = `${prefix}-buoi-${sessionNum}.html`; 
             
             return `
-            <a href="${fileLink}" class="group relative glass-panel p-6 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all flex flex-col h-full">
+            <a href="${fileLink}" class="group relative glass-panel p-6 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all flex flex-col h-full bg-white">
                 <div id="notify_session_${sessionNum}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce">Có Nhận xét</div>
                 <div id="check_session_${sessionNum}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã nộp</div>
                 
                 <div class="w-max px-4 h-12 bg-gradient-to-br ${style.colorFrom} ${style.colorTo} ${style.colorText} rounded-xl flex items-center justify-center font-black text-lg mb-5 shadow-inner">Buổi ${sessionNum}</div>
-                <h4 class="text-lg font-black text-slate-800 mb-2 transition">${safeTitle}</h4>
+                <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:${style.colorText} transition">${safeTitle}</h4>
                 <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">${sessionData.desc}</p>
                 <div class="${style.colorText} font-bold text-xs flex items-center gap-2 pt-4 border-t border-slate-100 mt-auto">Vào làm bài <i class="fa-solid fa-arrow-right"></i></div>
             </a>`;
         }
 
+        // QUÉT NHẬN XÉT CỦA GIẢNG VIÊN VÀ BÁO ĐỎ TỪNG CARD
         function fetchGlobalNotifications(industry) {
-            if (typeof APP_CONFIG === 'undefined' || !APP_CONFIG.API_URL) return;
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
-            if(!profile) return;
+            if(!profile || !APP_CONFIG.API_URL) return;
 
             fetch(`${APP_CONFIG.API_URL}?studentName=${encodeURIComponent(profile.name)}`)
             .then(r => r.json()).then(res => {
                 if(res.status === 'success' && res.allData) {
-                    checkNotification('session_1', 'kv_codelab_data_b1', 'notify_session_1', res.allData, industry);
-                    checkNotification('session_2', 'kv_codelab_data_b2', 'notify_session_2', res.allData, industry);
-                    checkNotification('session_3', 'kv_codelab_data_b3', 'notify_session_3', res.allData, industry);
-                    checkNotification('session_4', 'kv_codelab_data_b4', 'notify_session_4', res.allData, industry);
-                    checkNotification('session_5', 'kv_codelab_data_b5', 'notify_session_5', res.allData, industry);
+                    const prefix = industry.toLowerCase();
+                    checkNotification('session_1', `kv_data_${prefix}_b1`, `notify_session_1`, res.allData, industry);
+                    checkNotification('session_2', `kv_data_${prefix}_b2`, `notify_session_2`, res.allData, industry);
+                    checkNotification('session_3', `kv_data_${prefix}_b3`, `notify_session_3`, res.allData, industry);
+                    checkNotification('session_4', `kv_data_${prefix}_b4`, `notify_session_4`, res.allData, industry);
+                    checkNotification('session_5', `kv_data_${prefix}_b5`, `notify_session_5`, res.allData, industry);
                 }
             });
         }
@@ -257,6 +297,8 @@
                 if(completedCount === totalExercises && totalExercises > 0 && badgeEl) badgeEl.classList.remove('hidden');
             }
         }
+        
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
     </script>
 </body>
 </html>
