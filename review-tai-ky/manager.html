@@ -365,12 +365,12 @@
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     
                     let targetSessionTitle1 = ""; let targetSessionTitle2 = "";
-                    if(row.Session.includes("Phiên 1")) { targetSessionTitle1 = "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao"; targetSessionTitle2 = "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá"; }
-                    else if(row.Session.includes("Phiên 2")) { targetSessionTitle1 = "Buổi 3: Giao dịch & Quản lý Khách hàng"; targetSessionTitle2 = "Buổi 4: Mở rộng Bán hàng & Phân quyền"; }
-                    else if(row.Session.includes("Phiên 3")) { targetSessionTitle1 = "Buổi 5: Thuế & Kế toán"; }
+                    if(row.Session.includes("Phiên 1")) { targetSessionTitle1 = "Buổi 1"; targetSessionTitle2 = "Buổi 2"; }
+                    else if(row.Session.includes("Phiên 2")) { targetSessionTitle1 = "Buổi 3"; targetSessionTitle2 = "Buổi 4"; }
+                    else if(row.Session.includes("Phiên 3")) { targetSessionTitle1 = "Buổi 5"; }
 
-                    // Lọc chỉ lấy bài của phiên review hiện tại
-                    const sessionData = data.data.filter(p => p.session === targetSessionTitle1 || p.session === targetSessionTitle2);
+                    // Lọc chỉ lấy bài của phiên review hiện tại (Dùng Includes để bao quát linh hoạt giữa Retail và FNB)
+                    const sessionData = data.data.filter(p => p.session.includes(targetSessionTitle1) || (targetSessionTitle2 && p.session.includes(targetSessionTitle2)));
 
                     if(sessionData.length === 0) {
                          container.innerHTML = `<div class="bg-orange-50 p-6 rounded-2xl text-center border border-orange-200"><i class="fa-solid fa-circle-info text-orange-500 text-3xl mb-2"></i><p class="text-orange-700 font-bold mt-2">Học viên chưa làm bài thực hành của ${row.Session}!</p></div>`;
