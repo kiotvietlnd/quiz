@@ -133,15 +133,15 @@
     <script src="codelab-data.js"></script>
     <script>
         // =======================================================
-        // CHÚ Ý CHỖ NÀY KHI BẠN NHÂN BẢN RA CÁC FILE KHÁC NHÉ
+        // CẤU HÌNH CHO TỪNG BÀI TẬP
         // =======================================================
         const SESSION_ID = 'session_3'; 
-        const CURRENT_ROADMAP = "Retail";  // Đổi thành "FNB" nếu là file ngành F&B
+        const CURRENT_ROADMAP = "Retail";  // Đổi thành "FNB" nếu là file ngành FNB
         
         // Tự động gen Key lưu trữ độc lập để không dính chùm Data
         const prefix = CURRENT_ROADMAP.toLowerCase();
-        const DATA_KEY = `kv_data_${prefix}_b3`; 
-        const STORAGE_KEY = `kv_progress_${prefix}_b3`;
+        const DATA_KEY = `kv_data_${prefix}_b3`; // Nhớ đổi _b1, _b2 cho phù hợp
+        const STORAGE_KEY = `kv_progress_${prefix}_b3`; // Nhớ đổi _b1, _b2 cho phù hợp
         // =======================================================
 
         let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFiles = [];
@@ -169,7 +169,7 @@
         });
 
         function fetchFeedback(isManualClick) {
-            const apiUrl = APP_CONFIG.API_URL; if(!apiUrl) return;
+            const apiUrl = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.API_URL : null; if(!apiUrl) return;
             const profileRaw = localStorage.getItem('kv_trainer_profile'); if(!profileRaw) return;
             const profile = JSON.parse(profileRaw); const sessionName = document.getElementById('sessionTitle').innerText;
             if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Đang tải...";
@@ -192,9 +192,8 @@
             }).finally(() => { if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Tải Nhận Xét"; updateGlobalNotification(); });
         }
 
-        // HÀM GỌI ĐÚNG LỘ TRÌNH RETAIL/FNB
         function loadSessionData() {
-            if(!CODELAB_DATA[CURRENT_ROADMAP]) return;
+            if(typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[CURRENT_ROADMAP]) return;
             const session = CODELAB_DATA[CURRENT_ROADMAP].find(s => s.id === SESSION_ID); if(!session) return;
             document.getElementById('sessionTitle').innerText = session.title; currentExercises = session.exercises;
             if(currentExercises[currentStepIndex] && currentExercises[currentStepIndex].isGroupHeader) currentStepIndex++;
@@ -351,7 +350,7 @@
             saveDraft(); const currentData = stepDataStore[index];
             if (pendingFiles.length === 0 && (!currentData.uploadedUrls || currentData.uploadedUrls.length === 0)) { alert("❌ LỖI: Bắt buộc phải tải ảnh lên để nộp bài!"); return; }
             
-            const apiUrl = APP_CONFIG.API_URL;
+            const apiUrl = typeof APP_CONFIG !== 'undefined' ? APP_CONFIG.API_URL : null;
             if (!apiUrl) { alert("Lỗi Admin: Chưa cấu hình API URL!"); return; }
             const profileRaw = localStorage.getItem('kv_trainer_profile'); if (!profileRaw) { window.location.href = 'index.html'; return; }
             const profile = JSON.parse(profileRaw);
@@ -362,7 +361,6 @@
             let promises = []; for(let i = 0; i < pendingFiles.length; i++) { promises.push(compressImage(pendingFiles[i])); }
 
             Promise.all(promises).then(imagesData => {
-                // TRUYỀN LÊN CURRENT_ROADMAP để Google Sheet biết nhánh Retail hay FNB
                 const payload = { studentName: profile.name, department: profile.dept, courseName: CURRENT_ROADMAP, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
                 return fetch(apiUrl, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
             }).then(r => r.json()).then(data => {
@@ -411,11 +409,11 @@
             let nextIndex = currentStepIndex + 1; while(nextIndex < currentExercises.length && currentExercises[nextIndex].isGroupHeader) nextIndex++;
             if(nextIndex < currentExercises.length) goToStep(nextIndex); 
         }
-        }
 
         function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
 
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
+
         // ================= CÁC HÀM HIỂN THỊ LỊCH SỬ BÀI LÀM =================
         function showCompletionModal() {
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}');
@@ -467,7 +465,6 @@
             document.getElementById('reviewHistoryModal').classList.add('hidden');
             document.getElementById('reviewHistoryModal').classList.remove('flex');
         }
-    
     </script>
 </body>
 </html>
