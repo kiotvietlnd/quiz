@@ -727,8 +727,7 @@
         }
 
         // ==========================================
-        // LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ (CÓ AUTO DETECT)
-        // ==========================================
+        // ===== LOGIC KIỂM TRA BÀI TẬP THỰC HÀNH TÁI KÝ THEO BUỔI (SMART DETECT ĐÃ FIX LỖI) =====
         function checkStudentPractice() {
             const studentName = document.getElementById('repName').value.trim();
             const classCode = document.getElementById('classCode').value.trim();
@@ -743,7 +742,9 @@
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
             .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
-                btn.classList.remove('hidden', 'border-slate-300', 'text-slate-500', 'bg-slate-100', 'border-orange-300', 'text-orange-600', 'bg-orange-50', 'border-emerald-300', 'text-emerald-600', 'bg-emerald-50');
+                
+                // Reset lại toàn bộ class màu sắc của nút
+                btn.className = "text-[10px] font-bold px-2.5 py-1 rounded-full shadow-sm transition-all flex items-center gap-1.5 text-white";
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
@@ -751,11 +752,21 @@
                     // --- SMART DETECT LỘ TRÌNH VÀ NGÀY DỰA VÀO BÀI NỘP MỚI NHẤT ---
                     const latestSubmission = data.data[data.data.length - 1]; 
                     
-                    if (latestSubmission.courseName && latestSubmission.courseName !== currentRoadmap) {
-                        switchRoadmap(latestSubmission.courseName);
-                        return; // Return để switchRoadmap gọi lại hàm này lần nữa với data đúng ngành
+                    // 1. Detect Ngành (Bọc lót an toàn cho dữ liệu cũ)
+                    let dbRoadmap = "Retail"; // Mặc định là Retail
+                    if (latestSubmission.courseName) {
+                        let rawCourse = latestSubmission.courseName.toUpperCase();
+                        if (rawCourse.includes("FNB") || rawCourse.includes("F&B")) {
+                            dbRoadmap = "FNB";
+                        }
                     }
 
+                    if (dbRoadmap !== currentRoadmap) {
+                        switchRoadmap(dbRoadmap);
+                        return; // Return để switchRoadmap gọi lại hàm này lần nữa
+                    }
+
+                    // 2. Detect Phiên review (Day 1/2/3) dựa trên tên buổi
                     const sessionSelectVal = document.getElementById('session').value; 
                     let autoSelectDay = "";
                     if (latestSubmission.session.includes("Buổi 1") || latestSubmission.session.includes("Buổi 2")) autoSelectDay = "day1";
@@ -767,53 +778,62 @@
                         return; // Đã đổi ngày thì return để hàm gọi lại
                     }
 
-                    // Tính % tiến độ dựa trên Buổi hiện tại đang Review
+                    // --- TÍNH TOÁN % TIẾN ĐỘ THỰC HÀNH CỦA ĐÚNG PHIÊN ĐANG CHỌN ---
                     let targetSessionId1 = ""; let targetSessionId2 = "";
                     if(sessionSelectVal.includes("Phiên 1")) { targetSessionId1 = "session_1"; targetSessionId2 = "session_2"; }
                     else if(sessionSelectVal.includes("Phiên 2")) { targetSessionId1 = "session_3"; targetSessionId2 = "session_4"; }
                     else if(sessionSelectVal.includes("Phiên 3")) { targetSessionId1 = "session_5"; }
 
                     let totalExercises = 0; let doneExercises = 0;
+                    
                     if(typeof CODELAB_DATA !== 'undefined' && currentRoadmap) {
                         const sData1 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId1);
                         if(sData1) {
                             totalExercises += sData1.exercises.filter(e => !e.isGroupHeader).length;
-                            const submittedTitles1 = currentStudentPracticeData.filter(p => p.session === sData1.title).map(p => p.exerciseTitle);
+                            // Cắt chuỗi an toàn: Lấy "Buổi 1" thay vì lấy cả câu dài để tránh lệch Text
+                            const sessionPrefix1 = sData1.title.split(':')[0]; 
+                            const submittedTitles1 = currentStudentPracticeData.filter(p => p.session.includes(sessionPrefix1)).map(p => p.exerciseTitle);
                             doneExercises += [...new Set(submittedTitles1)].length;
                         }
                         if (targetSessionId2) {
                              const sData2 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId2);
                              if(sData2) {
                                 totalExercises += sData2.exercises.filter(e => !e.isGroupHeader).length;
-                                const submittedTitles2 = currentStudentPracticeData.filter(p => p.session === sData2.title).map(p => p.exerciseTitle);
+                                const sessionPrefix2 = sData2.title.split(':')[0]; 
+                                const submittedTitles2 = currentStudentPracticeData.filter(p => p.session.includes(sessionPrefix2)).map(p => p.exerciseTitle);
                                 doneExercises += [...new Set(submittedTitles2)].length;
                              }
                         }
                     }
 
+                    // 3. SET MÀU NÚT VÀ TEXT TRẠNG THÁI
                     if(totalExercises > 0) {
                         let percent = Math.round((doneExercises / totalExercises) * 100);
                         if(percent >= 100) {
-                            btn.classList.add('border-emerald-300', 'text-emerald-600', 'bg-emerald-50'); txtStatus.innerText = `Đủ bài TH (100%)`;
+                            btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'border-emerald-600'); 
+                            txtStatus.innerText = `Đủ bài TH (100%)`;
                             document.getElementById('homeworkStatus').value = "Đủ";
                         } else if (percent > 0) {
-                            btn.classList.add('border-orange-300', 'text-orange-600', 'bg-orange-50'); txtStatus.innerText = `Thiếu bài TH (${percent}%)`;
+                            btn.classList.add('bg-orange-500', 'hover:bg-orange-600', 'border-orange-600'); 
+                            txtStatus.innerText = `Thiếu bài TH (${percent}%)`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         } else {
-                            btn.classList.add('border-slate-300', 'text-slate-500', 'bg-slate-100'); txtStatus.innerText = `Chưa nộp phiên này`;
+                            btn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'border-rose-600'); 
+                            txtStatus.innerText = `Chưa làm bài phiên này`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         }
                     } else {
-                        btn.classList.add('border-slate-300', 'text-slate-500', 'bg-slate-100'); txtStatus.innerText = `Xem bài (${data.data.length})`;
+                        btn.classList.add('bg-blue-500', 'hover:bg-blue-600', 'border-blue-600'); 
+                        txtStatus.innerText = `Xem bài (${data.data.length})`;
                     }
 
                 } else {
                     currentStudentPracticeData = [];
-                    btn.classList.add('border-slate-300', 'text-slate-500', 'bg-slate-100');
+                    btn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'border-rose-600');
                     txtStatus.innerText = `Chưa làm bài nào`;
                     document.getElementById('homeworkStatus').value = "Thiếu";
                 }
-            }).catch(err => { spinner.classList.add('hidden'); });
+            }).catch(err => { spinner.classList.add('hidden'); console.error(err); });
         }
 
 
