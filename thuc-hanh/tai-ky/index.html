@@ -49,7 +49,7 @@
             <button onclick="toggleSidebar()" class="md:hidden text-slate-300 hover:text-white p-2 rounded-xl transition-all"><i class="fas fa-bars text-lg"></i></button>
             <a href="index.html" class="flex items-center"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-8" alt="KiotViet Logo"></a>
             <span class="hidden md:block h-6 w-[1px] bg-blue-900/60"></span>
-            <h1 class="hidden md:block text-xs md:text-sm font-bold text-slate-300 uppercase tracking-wider">Hệ thống Thực hành Tái ký</h1>
+            <h1 class="hidden md:block text-xs md:text-sm font-bold text-slate-300 uppercase tracking-wider">Hệ thống Bài tập Thực hành - Đào tạo Sản phẩm (Tái ký)</h1>
         </div>
         <div class="flex items-center gap-4">
             <!-- Nút định danh -->
@@ -103,46 +103,48 @@
             </div>
         </aside>
 
-        <!-- MAIN CONTENT VIEWPORT -->
+        <!-- MAIN CONTENT VIEWPORT (Cân chỉnh padding p-4 md:p-6 để tối đa không gian hiển thị dọc) -->
         <main class="flex-grow flex flex-col h-full overflow-hidden relative w-full bg-slate-200/80 backdrop-blur-[2px]">
-            <div class="flex-1 overflow-auto p-6 md:p-10 relative custom-scrollbar">
-                <div class="max-w-5xl mx-auto pb-16">
+            <div class="flex-1 overflow-auto p-4 md:p-6 relative custom-scrollbar">
+                <div class="max-w-5xl mx-auto pb-8">
                     
-                    <!-- Lớp Glassmorphism chính bọc ngoài nội dung -->
-                    <div class="glass-panel-ultra p-6 md:p-10 rounded-3xl border border-slate-100 shadow-md">
-                        <div class="mb-10 text-center md:text-left pb-6 border-b border-slate-100">
-                            <h2 class="text-2xl md:text-3xl font-extrabold text-blue-700 tracking-tight leading-snug uppercase">
+                    <!-- Lớp Glassmorphism chính bọc ngoài nội dung (Đã thu gọn padding trong từ p-10 xuống p-6 md:p-8) -->
+                    <div class="glass-panel-ultra p-6 md:p-8 rounded-3xl border border-slate-100 shadow-md">
+                        
+                        <!-- KHU VỰC TIÊU ĐỀ (Đã rút ngắn padding/margin để tránh khoảng hở thừa lớn) -->
+                        <div class="mb-4 text-center md:text-left pb-3 border-b border-slate-100">
+                            <h2 class="text-xl md:text-2xl font-extrabold text-blue-700 tracking-tight leading-snug uppercase">
                                 HỆ THỐNG BÀI TẬP THỰC HÀNH - TÁI KÝ KIOTVIET
                             </h2>
-                            <p id="systemSubtitle" class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-2">Vui lòng chọn Lộ trình đào tạo của bạn</p>
+                            <p id="systemSubtitle" class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5">Vui lòng chọn Lộ trình đào tạo của bạn</p>
                         </div>
 
-                        <!-- MÀN HÌNH CHỌN LỘ TRÌNH (Khung ảnh tỷ lệ chuẩn 1600x983 to và nổi bật) -->
-                        <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                            <!-- Retail Card (Màu xanh dương, ảnh minh họa lớn chuẩn tỉ lệ) -->
-                            <div onclick="selectIndustry('Retail')" class="bg-gradient-to-br from-blue-50/95 to-blue-100/70 border border-blue-200/80 p-6 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
+                        <!-- MÀN HÌNH CHỌN LỘ TRÌNH (Đã co hẹp khoảng trống mt-10 xuống mt-4) -->
+                        <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                            <!-- Retail Card (Màu xanh dương, ảnh minh họa chuẩn tỉ lệ) -->
+                            <div onclick="selectIndustry('Retail')" class="bg-gradient-to-br from-blue-50/95 to-blue-100/70 border border-blue-200/80 p-5 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
                                 <div>
-                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-6 border border-blue-200 bg-white relative">
+                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-3.5 border border-blue-200 bg-white relative">
                                         <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-thoi-trang.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" alt="Retail Fashion Illustration">
                                         <div class="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
-                                    <h3 class="text-xl font-extrabold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">Lộ trình RETAIL</h3>
+                                    <h3 class="text-lg font-extrabold text-slate-800 mb-1 group-hover:text-blue-700 transition-colors">Lộ trình RETAIL</h3>
                                     <p class="text-slate-600 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng Bán lẻ (Thời trang, tạp hóa, siêu thị, mỹ phẩm...).</p>
                                 </div>
-                                <div class="mt-6 font-bold text-xs text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-4 border-t border-blue-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="mt-4 font-bold text-xs text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-3 border-t border-blue-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
                             </div>
 
-                            <!-- FNB Card (Màu cam, ảnh minh họa lớn chuẩn tỉ lệ) -->
-                            <div onclick="selectIndustry('FNB')" class="bg-gradient-to-br from-orange-50/95 to-orange-100/70 border border-orange-200/80 p-6 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
+                            <!-- FNB Card (Màu cam, ảnh minh họa chuẩn tỉ lệ) -->
+                            <div onclick="selectIndustry('FNB')" class="bg-gradient-to-br from-orange-50/95 to-orange-100/70 border border-orange-200/80 p-5 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
                                 <div>
-                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-6 border border-orange-200 bg-white relative">
+                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-3.5 border border-orange-200 bg-white relative">
                                         <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-cafe-tra-sua.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" alt="FNB Cafe Illustration">
                                         <div class="absolute inset-0 bg-orange-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                     </div>
-                                    <h3 class="text-xl font-extrabold text-slate-800 mb-2 group-hover:text-orange-700 transition-colors">Lộ trình FNB</h3>
+                                    <h3 class="text-lg font-extrabold text-slate-800 mb-1 group-hover:text-orange-700 transition-colors">Lộ trình FNB</h3>
                                     <p class="text-slate-600 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng F&B (Nhà hàng, quán ăn, quán café, trà sữa...).</p>
                                 </div>
-                                <div class="mt-6 font-bold text-xs text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-4 border-t border-orange-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                                <div class="mt-4 font-bold text-xs text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-3 border-t border-orange-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
                             </div>
                         </div>
 
@@ -153,7 +155,7 @@
                         </div>
                     </div>
 
-                    <footer class="text-center py-6 mt-8">
+                    <footer class="text-center py-4 mt-6">
                         <div class="flex flex-col items-center gap-2">
                             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-4 opacity-40 grayscale">
                             <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">© 2026 KiotViet Learning & Development</p>
