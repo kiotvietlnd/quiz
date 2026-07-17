@@ -6,61 +6,69 @@
     <title>Học viên - Thực hành Kế Toán 01</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; color: #334155; background-color: #cbd5e1; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
-        .glow-blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 15s ease-in-out infinite; background: rgba(37, 99, 235, 0.08); }
-        .glow-blob-2 { position: absolute; bottom: -10%; right: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; animation: float 18s ease-in-out infinite reverse; background: rgba(16, 185, 129, 0.08); }
-        @keyframes float { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(30px) scale(1.05); } }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #cbd5e1; overflow: hidden; pointer-events: none; }
+        .glow-blob-1, .glow-blob-2 { position: absolute; width: 50vw; height: 50vw; filter: blur(140px); border-radius: 50%; transition: background 1.5s ease-in-out; }
+        .glow-blob-1 { top: -15%; left: -10%; background: rgba(37, 99, 235, 0.05); } 
+        .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.05); }
 
-        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
-        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
+        /* Ultra Glassmorphism Panel (Nền sáng) */
+        .glass-panel-ultra { 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); 
+        }
         
         .zoom-active { max-height: none !important; cursor: zoom-out !important; }
     </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200 selection:text-blue-900">
 
-    <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
+    <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
-    <!-- MODAL CẢNH BÁO QUÊN NỘP BÀI -->
-    <div id="warnModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center hidden p-4 transition-opacity">
-        <div class="bg-white rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative border-t-8 border-amber-500">
-            <div class="w-16 h-16 rounded-full bg-amber-100 text-amber-500 flex items-center justify-center mx-auto mb-4 text-3xl"><i class="fas fa-exclamation-triangle"></i></div>
-            <h2 class="text-xl font-black text-slate-800 text-center mb-2">Khoan đã!</h2>
-            <p class="text-slate-600 text-sm text-center mb-6 font-medium">Bạn đã tải ảnh lên nhưng <strong>chưa bấm nút Nộp bài</strong>. Bạn muốn xử lý thế nào?</p>
+    <!-- MODAL CẢNH BÁO QUÊN NỘP BÀI (Đã đồng bộ giao diện và bổ sung ID warnTaskName) -->
+    <div id="warnModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[110] flex items-center justify-center hidden p-4 transition-all duration-300">
+        <div class="glass-panel-ultra rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative border-t-8 border-amber-500">
+            <div class="w-16 h-16 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center mx-auto mb-4 text-2xl"><i class="fas fa-exclamation-triangle"></i></div>
+            <h2 class="text-lg font-bold text-slate-800 text-center mb-2">Khoan đã!</h2>
+            <p class="text-slate-600 text-xs text-center mb-6 font-semibold leading-relaxed">Bạn đã tải ảnh lên bài tập <strong id="warnTaskName" class="text-slate-800"></strong> nhưng <strong>chưa bấm nút Nộp bài</strong>. Bạn muốn xử lý thế nào?</p>
             <div class="space-y-3">
-                <button onclick="document.getElementById('warnModal').classList.add('hidden')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                <button onclick="document.getElementById('warnModal').classList.add('hidden')" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3 rounded-xl transition-all shadow-md flex items-center justify-center gap-2">
                     <i class="fas fa-undo"></i> Ở lại trang này để nộp bài
                 </button>
-                <button onclick="confirmLeave()" class="w-full bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 font-bold py-3 rounded-xl border border-slate-200 hover:border-red-200 transition flex items-center justify-center gap-2">
+                <button onclick="confirmLeave()" class="w-full bg-slate-100 hover:bg-red-50 text-slate-600 hover:text-red-600 text-xs font-bold py-3 rounded-xl border border-slate-200 hover:border-red-200 transition-all flex items-center justify-center gap-2">
                     <i class="fas fa-trash-alt"></i> Xóa ảnh đó & Sang bài mới
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL ĐỊNH DANH -->
+    <!-- MODAL ĐỊNH DANH (Chữ đen nền trắng tương phản cao dễ quan sát) -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="glass-panel rounded-3xl p-8 max-w-md w-full shadow-2xl relative overflow-hidden">
-            <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-blue-500 to-indigo-500"></div>
-            <h2 class="text-2xl font-black text-slate-800 mb-1 text-center tracking-tight">Đăng nhập hệ thống</h2>
-            <p class="text-xs text-blue-600 mb-6 text-center font-bold uppercase tracking-widest">Bài thực hành Kế Toán 01 (KiotViet)</p>
+        <div class="glass-panel-ultra rounded-3xl p-6 md:p-8 max-w-md w-full shadow-2xl relative border border-white">
+            <h2 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2.5">
+                <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-user-shield"></i></span>
+                Đăng nhập hệ thống
+            </h2>
+            <p class="text-xs text-slate-400 font-semibold mb-6">Bài thực hành Kế Toán 01 (KiotViet)</p>
             <div class="space-y-4 relative z-10">
                 <div>
-                    <label class="block text-xs font-black text-slate-400 uppercase mb-2">Họ và tên của bạn</label>
-                    <input type="text" id="inpName" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-inner transition" placeholder="VD: Nguyễn Văn A">
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Họ và tên của bạn</label>
+                    <input type="text" id="inpName" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 font-bold shadow-inner" placeholder="VD: Nguyễn Văn A">
                 </div>
                 <div>
-                    <label class="block text-xs font-black text-slate-400 uppercase mb-2">Phòng ban</label>
-                    <input type="text" id="inpDept" class="w-full bg-white border border-slate-200 rounded-xl px-4 py-3 text-sm font-semibold text-slate-800 focus:outline-none focus:border-blue-500 shadow-inner transition" placeholder="VD: LND">
+                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Phòng ban</label>
+                    <input type="text" id="inpDept" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 font-bold shadow-inner" placeholder="VD: LND">
                 </div>
-                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl transition shadow-lg shadow-blue-500/30 mt-4 text-sm">
+                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all hover:scale-[1.01] mt-2">
                     VÀO LỚP HỌC <i class="fas fa-arrow-right ml-1"></i>
                 </button>
             </div>
@@ -70,50 +78,50 @@
     <!-- MODAL XEM ẢNH FULLSCREEN -->
     <div id="imgModal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-[150] hidden flex-col overflow-auto p-4 items-center justify-center">
         <div class="fixed top-4 right-6 flex items-center gap-4 z-50">
-            <a id="btnRawImg" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-sm font-bold transition flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Mở ảnh gốc</a>
+            <a id="btnRawImg" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Mở ảnh gốc</a>
             <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="w-10 h-10 bg-white/10 hover:bg-red-500 text-white rounded-xl flex items-center justify-center text-xl transition"><i class="fas fa-times"></i></button>
         </div>
         <p class="fixed top-4 left-6 text-white/50 text-sm font-bold bg-black/40 px-3 py-1 rounded-lg z-50 pointer-events-none hidden md:block"><i class="fas fa-search-plus"></i> Bấm vào ảnh để phóng to kích thước thực</p>
         <img id="fullImg" src="" onclick="toggleZoom(this)" class="max-w-full max-h-[90vh] object-contain rounded shadow-2xl transition-all duration-300 cursor-zoom-in m-auto mt-20 mb-20 border border-white/10">
     </div>
 
-    <!-- HEADER -->
-    <header class="glass-header h-16 flex items-center justify-between px-4 md:px-6 z-30 shrink-0 relative">
+    <!-- HEADER (NAVBAR NGANG TOÀN TRANG - MÀU SẪM #1b365d) -->
+    <header class="h-16 bg-[#1b365d] border-b border-[#122543] px-4 md:px-6 z-50 shrink-0 flex items-center justify-between shadow-md sticky top-0 w-full">
         <div class="flex items-center gap-4">
-            <button onclick="toggleSidebar()" class="md:hidden text-slate-500 text-lg hover:text-blue-600 px-2"><i class="fas fa-bars"></i></button>
-            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-6 md:h-7">
-            <div class="h-5 w-px bg-slate-300 mx-1 hidden sm:block"></div>
-            <span class="font-black text-slate-700 hidden sm:block tracking-tight text-sm md:text-base">Thực hành Kế Toán 01</span>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-300 text-lg hover:text-white p-2 rounded-xl transition-all"><i class="fas fa-bars"></i></button>
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-8" alt="KiotViet Logo">
+            <div class="h-5 w-px bg-blue-900/60 mx-1 hidden sm:block"></div>
+            <span class="font-bold text-slate-300 hidden sm:block tracking-wide text-xs uppercase">Thực hành Kế Toán 01</span>
         </div>
-        <div id="studentInfo" class="flex items-center gap-2 bg-white/60 text-blue-700 px-4 py-1.5 rounded-full text-xs font-bold border border-blue-200 cursor-pointer hidden hover:bg-blue-50 transition shadow-sm" onclick="document.getElementById('authModal').classList.remove('hidden')">
+        <div id="studentInfo" class="flex items-center gap-2 bg-blue-900/30 text-blue-300 px-4 py-1.5 rounded-xl text-xs font-bold border border-blue-900/40 cursor-pointer hidden hover:bg-blue-900/45 transition shadow-sm" onclick="document.getElementById('authModal').classList.remove('hidden')">
             <i class="fas fa-user-circle text-base"></i> <span id="lblStudentName"></span>
         </div>
     </header>
 
-    <!-- BODY (SIDEBAR + MAIN) -->
+    <!-- BODY CHÍNH (SIDEBAR + MAIN) -->
     <div class="flex flex-1 overflow-hidden relative z-20">
         
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="w-72 md:w-[320px] glass-panel border-r-0 border-r border-white/40 flex flex-col z-30 transition-all shrink-0 absolute md:relative inset-y-0 left-0 hidden md:flex shadow-2xl md:shadow-none">
-            <div class="h-14 flex items-center px-4 justify-between md:hidden border-b border-slate-200/50">
-                <span class="font-black text-slate-700 text-sm">Danh sách bài tập</span>
-                <button onclick="toggleSidebar()" class="text-slate-400 hover:text-red-500 text-lg"><i class="fas fa-times"></i></button>
+        <!-- SIDEBAR (MÀU NỀN #224472 SÁNG HƠN NAVBAR) -->
+        <aside id="sidebar" class="w-72 md:w-[320px] bg-[#224472] border-r border-[#173052] flex flex-col z-30 transition-all shrink-0 absolute md:relative inset-y-0 left-0 hidden md:flex h-full shadow-2xl md:shadow-none">
+            <div class="h-16 flex items-center px-6 justify-between md:hidden border-b border-white/10">
+                <span class="font-bold text-white text-xs uppercase tracking-wider">Danh sách bài tập</span>
+                <button onclick="toggleSidebar()" class="text-slate-300 hover:text-red-400 text-lg p-2"><i class="fas fa-times"></i></button>
             </div>
             <ul id="stepList" class="flex-1 overflow-y-auto py-4 custom-scrollbar select-none">
                 <!-- JS Render Sidebar -->
             </ul>
         </aside>
 
-        <!-- KHUNG MAIN CONTENT -->
-        <main class="flex-1 overflow-y-auto custom-scrollbar relative p-4 md:p-8 flex flex-col bg-slate-50/50">
+        <!-- KHUNG MAIN CONTENT (NỀN TRẮNG ĐỤC TRONG SUỐT PHÁT SÁNG) -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar relative p-4 md:p-8 flex flex-col bg-slate-200/80 backdrop-blur-[2px]">
             <div id="mainContent" class="max-w-4xl mx-auto w-full">
                 <!-- JS Render Task Content -->
             </div>
             
             <!-- BOTTOM NAVIGATION -->
-            <div class="fixed bottom-0 right-0 glass-panel border-t-0 border-t border-slate-200/60 p-4 flex justify-between items-center w-full md:w-[calc(100%-320px)] z-10 shadow-[0_-10px_20px_rgba(0,0,0,0.02)]">
-                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2.5 text-sm text-slate-600 font-bold hover:text-blue-600 hover:bg-blue-50 rounded-xl transition disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed"><i class="fas fa-chevron-left"></i> Lùi lại</button>
-                <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-8 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg shadow-blue-500/30 transition font-black text-sm tracking-wide">Tiếp theo <i class="fas fa-arrow-right"></i></button>
+            <div class="fixed bottom-0 right-0 glass-panel-ultra border-t border-slate-100 p-4 flex justify-between items-center w-full md:w-[calc(100%-320px)] z-10 shadow-lg">
+                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2.5 text-xs text-slate-600 font-bold hover:text-blue-600 hover:bg-blue-50 rounded-xl transition disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed"><i class="fas fa-chevron-left"></i> Lùi lại</button>
+                <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-8 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-lg transition font-bold text-xs tracking-wide">Tiếp theo <i class="fas fa-arrow-right"></i></button>
             </div>
             <div class="h-24 shrink-0"></div>
         </main>
@@ -178,22 +186,22 @@
             document.getElementById('sidebar').classList.toggle('hidden'); 
         }
 
-        // ================= XỬ LÝ ĐIỀU HƯỚNG BÀI TẬP =================
+        // ================= XỬ LÝ ĐIỀU HƯỚNG BÀI TẬP (Màu sắc đồng bộ với nền Sidebar) =================
         function renderSidebar() {
             const list = document.getElementById('stepList'); let html = '';
             TASKS.forEach((t, index) => {
                 if(t.isHeader) {
-                    html += `<li class="mt-6 mb-2 px-5 text-[11px] font-extrabold text-blue-500 uppercase tracking-widest">${t.title}</li>`;
+                    html += `<li class="mt-6 mb-2 px-5 text-[10px] font-extrabold text-blue-300 uppercase tracking-wider">${t.title}</li>`;
                 } else {
                     const isActive = (index === currentStepIndex);
                     const isSubmitted = submittedProgress[t.id] && submittedProgress[t.id].length > 0;
-                    const activeClass = isActive ? 'bg-blue-50/80 border-blue-500 text-blue-700 shadow-sm' : 'border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-800';
+                    const activeClass = isActive ? 'bg-[#122543]/60 border-blue-500 text-white shadow-sm' : 'border-transparent text-slate-300 hover:bg-white/10 hover:text-white';
                     
                     let iconBadge = '';
-                    if(t.isSpecial) iconBadge = `<div class="w-6 h-6 rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[10px] font-bold"><i class="fas fa-star"></i></div>`;
+                    if(t.isSpecial) iconBadge = `<div class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 flex items-center justify-center text-[10px] font-bold shadow-sm"><i class="fas fa-star"></i></div>`;
                     else iconBadge = isSubmitted 
-                            ? `<div class="w-6 h-6 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center text-[10px] font-bold shadow-sm"><i class="fas fa-check"></i></div>`
-                            : `<div class="w-6 h-6 rounded-full bg-slate-200 text-slate-500 flex items-center justify-center text-[10px] font-bold">${t.id}</div>`;
+                            ? `<div class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center text-[10px] font-bold shadow-sm"><i class="fas fa-check"></i></div>`
+                            : `<div class="w-6 h-6 rounded-full bg-white/10 text-slate-300 flex items-center justify-center text-[10px] font-bold">${t.id}</div>`;
 
                     html += `
                         <li class="cursor-pointer mx-3 my-1 border-l-4 rounded-r-xl px-3 py-3 transition-all flex items-start gap-3 ${activeClass}" onclick="attemptGoToStep(${index})">
@@ -253,38 +261,38 @@
 
                     uploadHtml = `
                         <div class="mt-8 p-5 md:p-6 bg-emerald-50 border border-emerald-200 rounded-2xl shadow-sm">
-                            <p class="text-emerald-700 font-black text-sm mb-4 flex items-center gap-2"><i class="fas fa-check-circle text-xl"></i> BẠN ĐÃ NỘP BÀI THÀNH CÔNG</p>
+                            <p class="text-[#15803d] font-bold text-sm mb-4 flex items-center gap-2"><i class="fas fa-check-circle text-xl"></i> BẠN ĐÃ NỘP BÀI THÀNH CÔNG</p>
                             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">${thumbnails}</div>
                             
                             <div class="border-t border-emerald-200 pt-4 mt-2">
                                 <p class="text-[13px] text-emerald-800 font-medium mb-3">Muốn nộp bổ sung/nộp lại? Tải ảnh mới lên đây:</p>
                                 <div class="flex flex-col sm:flex-row gap-3">
-                                    <label class="bg-white border border-emerald-200 text-slate-700 px-4 py-2.5 text-sm font-bold rounded-xl cursor-pointer hover:bg-emerald-100 shadow-sm transition flex items-center justify-center gap-2 shrink-0">
+                                    <label class="bg-white border border-emerald-200 text-slate-700 px-4 py-2.5 text-xs font-bold rounded-xl cursor-pointer hover:bg-emerald-100 shadow-sm transition flex items-center justify-center gap-2 shrink-0">
                                         <i class="fas fa-upload text-blue-500"></i> Tải ảnh mới
                                         <input type="file" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, '${t.id}')">
                                     </label>
-                                    <span class="text-sm text-slate-500 font-medium bg-white/60 px-4 py-2.5 rounded-xl border border-transparent flex-1 text-center sm:text-left">...hoặc ấn <strong>Ctrl+V</strong> dán ảnh.</span>
+                                    <span class="text-xs text-slate-500 font-medium bg-white/60 px-4 py-2.5 rounded-xl border border-transparent flex-1 text-center sm:text-left">...hoặc ấn <strong>Ctrl+V</strong> dán ảnh.</span>
                                 </div>
                                 <div id="tags_${t.id}" class="mt-3 flex flex-wrap gap-2 empty:hidden"></div>
                             </div>
                         </div>
-                        <button id="btnSubmit_${t.id}" onclick="submitTask('${t.id}', '${t.title}')" class="mt-6 w-full sm:w-auto bg-blue-100 text-blue-700 hover:bg-blue-200 font-black text-sm px-8 py-3.5 rounded-xl transition flex items-center justify-center gap-2 ml-auto shadow-sm">
+                        <button id="btnSubmit_${t.id}" onclick="submitTask('${t.id}', '${t.title}')" class="mt-6 w-full sm:w-auto bg-blue-100 text-blue-700 hover:bg-blue-200 font-bold text-xs px-8 py-3.5 rounded-xl transition flex items-center justify-center gap-2 ml-auto shadow-sm">
                             <i class="fas fa-sync-alt"></i> Cập nhật bài làm
                         </button>
                     `;
                 } else {
                     uploadHtml = `
-                        <div class="mt-8 p-6 bg-white/60 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl transition">
+                        <div class="mt-8 p-6 bg-white/65 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl transition">
                             <div class="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
-                                <label class="bg-white border border-slate-200 text-slate-700 px-5 py-3 text-sm font-bold rounded-xl cursor-pointer hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 shadow-sm transition flex items-center justify-center gap-2 w-full sm:w-auto shrink-0">
+                                <label class="bg-white border border-slate-200 text-slate-700 px-5 py-3 text-xs font-bold rounded-xl cursor-pointer hover:bg-blue-50 hover:text-blue-600 hover:border-blue-300 shadow-sm transition flex items-center justify-center gap-2 w-full sm:w-auto shrink-0">
                                     <i class="fas fa-cloud-upload-alt text-lg text-blue-500"></i> Tải ảnh lên
                                     <input type="file" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event, '${t.id}')">
                                 </label>
-                                <span class="text-sm text-slate-500 font-medium flex-1 text-center sm:text-left">Hoặc click chuột vào khung này, nhấn <strong>Ctrl+V</strong> để dán ảnh.</span>
+                                <span class="text-xs text-slate-500 font-medium flex-1 text-center sm:text-left">Hoặc click chuột vào khung này, nhấn <strong>Ctrl+V</strong> để dán ảnh.</span>
                             </div>
                             <div id="tags_${t.id}" class="mt-4 flex flex-wrap gap-2 empty:hidden"></div>
                         </div>
-                        <button id="btnSubmit_${t.id}" onclick="submitTask('${t.id}', '${t.title}')" class="mt-6 w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm px-10 py-3.5 rounded-xl shadow-lg shadow-blue-500/30 transition flex items-center justify-center gap-2 ml-auto">
+                        <button id="btnSubmit_${t.id}" onclick="submitTask('${t.id}', '${t.title}')" class="mt-6 w-full sm:w-auto bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs px-10 py-3.5 rounded-xl shadow-lg transition flex items-center justify-center gap-2 ml-auto">
                             <i class="fas fa-paper-plane"></i> Nộp kết quả
                         </button>
                     `;
@@ -293,14 +301,14 @@
             
             let linkHtml = '';
             if(t.link) {
-                if(t.isDownload) linkHtml = `<a href="${t.link}" class="mt-5 inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-black text-sm px-6 py-3.5 rounded-xl shadow-sm transition"><i class="fas fa-file-excel text-emerald-600 text-lg"></i> ${t.btnText}</a>`;
-                else linkHtml = `<a href="${t.link}" target="_blank" class="mt-5 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-black text-sm px-6 py-3.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt text-lg text-indigo-500"></i> ${t.btnText}</a>`;
+                if(t.isDownload) linkHtml = `<a href="${t.link}" class="mt-5 inline-flex items-center gap-2 bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100 font-bold text-xs px-6 py-3.5 rounded-xl shadow-sm transition"><i class="fas fa-file-excel text-emerald-600 text-lg"></i> ${t.btnText}</a>`;
+                else linkHtml = `<a href="${t.link}" target="_blank" class="mt-5 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-bold text-xs px-6 py-3.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt text-lg text-indigo-500"></i> ${t.btnText}</a>`;
             }
 
             document.getElementById('mainContent').innerHTML = `
-                <div class="glass-panel p-6 md:p-10 rounded-3xl relative border border-white/60">
-                    <h1 class="text-2xl md:text-3xl font-black text-slate-800 tracking-tight mb-3">${t.title}</h1>
-                    <p class="text-[15px] text-slate-600 font-medium leading-relaxed">${t.desc}</p>
+                <div class="glass-panel-ultra p-6 md:p-10 rounded-3xl relative border border-slate-100 shadow-md">
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight mb-3">${t.title}</h1>
+                    <p class="text-xs font-semibold text-slate-500 leading-relaxed">${t.desc}</p>
                     ${linkHtml}
                     ${uploadHtml}
                 </div>
@@ -327,12 +335,10 @@
                 btnNext.innerHTML = 'Kết thúc <i class="fas fa-flag-checkered ml-1"></i>';
                 btnNext.classList.replace('bg-blue-600', 'bg-emerald-600');
                 btnNext.classList.replace('hover:bg-blue-700', 'hover:bg-emerald-700');
-                btnNext.classList.replace('shadow-blue-500/30', 'shadow-emerald-500/30');
             } else {
                 btnNext.innerHTML = 'Tiếp theo <i class="fas fa-arrow-right ml-1"></i>';
                 btnNext.classList.replace('bg-emerald-600', 'bg-blue-600');
                 btnNext.classList.replace('hover:bg-emerald-700', 'hover:bg-blue-700');
-                btnNext.classList.replace('shadow-emerald-500/30', 'shadow-blue-500/30');
             }
         }
 
