@@ -69,12 +69,16 @@
     <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
     <!-- SIDEBAR BỘ LỌC (Màu Xanh Navy Đậm Kính mờ) -->
-    <div class="space-y-3.5">
-                <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-1.5">Bộ lọc hiển thị</h2>
-                
+    <aside id="sidebar" class="w-72 glass-panel-dark flex flex-col z-30 transition-all duration-300 flex-shrink-0 text-sm relative overflow-hidden">
+        <div class="h-16 flex items-center px-6 border-b border-white/10 flex-shrink-0 justify-between relative z-10">
+            <span class="text-sm font-extrabold text-white tracking-widest uppercase flex items-center gap-2"><i class="fas fa-filter text-blue-400"></i> BỘ LỌC TÌM KIẾM</span>
+        </div>
+        
+        <div class="p-6 flex-1 overflow-y-auto flex flex-col custom-scrollbar relative z-10 space-y-5">
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[11px] font-bold text-yellow-300 mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
-                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                    <label class="block text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-1.5"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
+                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
                         <option value="all">Tất cả bài nộp</option>
                         <option value="pending" selected>🔴 Cần chấm (Chưa nhận xét)</option>
                         <option value="graded">✅ Đã chấm (Có nhận xét)</option>
@@ -82,43 +86,41 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Ngành hàng</label>
-                    <!-- Thêm updateFilters('industry') -->
-                    <select id="filterIndustry" onchange="updateFilters('industry')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Ngành hàng</label>
+                    <select id="filterIndustry" onchange="updateFilters('industry')" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
                         <option value="all">Tất cả Ngành hàng</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Mã Lớp / Phòng ban</label>
-                    <!-- Thêm updateFilters('dept') -->
-                    <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Mã Lớp / Phòng ban</label>
+                    <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
                         <option value="all">Tất cả Mã Lớp / PB</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label>
-                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Học viên</label>
+                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
                         <option value="all">Tất cả Học viên</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label>
-                    <!-- Thêm updateFilters('session') -->
-                    <select id="filterSession" onchange="updateFilters('session')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Buổi học</label>
+                    <select id="filterSession" onchange="updateFilters('session')" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
                         <option value="all">Tất cả Buổi</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Tên Bài tập</label>
-                    <select id="filterExercise" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Tên Bài tập</label>
+                    <select id="filterExercise" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
                         <option value="all">Tất cả Bài tập</option>
                     </select>
                 </div>
             </div>
+        </div>
         
         <div class="p-6 border-t border-white/10 bg-[#122543]/40 backdrop-blur-md flex-shrink-0 flex flex-col gap-2 relative z-10">
             <button onclick="fetchPracticeData()" class="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 transition-all">
