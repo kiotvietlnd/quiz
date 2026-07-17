@@ -31,18 +31,12 @@
             border: 1px solid rgba(226, 232, 240, 0.8); 
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); 
         }
-        
-        /* Dark Navy Glassmorphism Panel (Nền tối dùng cho Sidebar) */
-        .glass-panel-dark {
-            background: rgba(27, 54, 93, 0.98);
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 4px 0 24px rgba(27, 54, 93, 0.2);
-        }
 
         .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; } 
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        .clickable-card { cursor: pointer; transition: all 0.3s ease; }
+        .clickable-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
@@ -58,7 +52,8 @@
             <h1 class="hidden md:block text-xs md:text-sm font-bold text-slate-300 uppercase tracking-wider">Hệ thống Thực hành Tái ký</h1>
         </div>
         <div class="flex items-center gap-4">
-            <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 cursor-pointer animate-pulse">
+            <!-- Nút định danh -->
+            <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-xs font-bold text-slate-300 bg-blue-900/30 border border-blue-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-900/50 transition-all">
                 👤 Đang kiểm tra...
             </button>
         </div>
@@ -67,10 +62,10 @@
     <!-- CONTAINER CHÍNH DƯỚI HEADER -->
     <div class="flex-grow flex overflow-hidden relative w-full">
 
-        <!-- SIDEBAR HƯỚNG DẪN (MÀU NỀN #224472 SÁNG HƠN NAVBAR) -->
+        <!-- SIDEBAR HƯỚNG DẪN (MÀU NỀN #224472 SÁNG HƠN NAVBAR, CÁC KHỐI CHỮ ĐEN NỀN SÁNG) -->
         <aside id="sidebar" class="w-80 bg-[#224472] border-r border-[#173052] flex flex-col z-40 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex h-full">
             
-            <!-- HEADER SIDEBAR (HIỂN THỊ TRÊN MOBILE ĐỂ ĐÓNG SIDEBAR) -->
+            <!-- HEADER SIDEBAR -->
             <div class="h-16 flex items-center px-6 border-b border-white/10 shrink-0 justify-between relative z-10 md:hidden">
                 <span class="text-xs font-bold text-white tracking-wider uppercase"><i class="fas fa-info-circle text-blue-400 mr-1.5"></i>HƯỚNG DẪN</span>
                 <button onclick="toggleSidebar()" class="text-slate-300 hover:text-red-400 p-2 text-lg"><i class="fas fa-times"></i></button>
@@ -79,27 +74,27 @@
             <div class="p-6 flex-1 overflow-y-auto flex flex-col relative z-10 space-y-5 custom-scrollbar">
                 <h2 class="text-xs font-extrabold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-2"><i class="fas fa-map-signs text-blue-400"></i> Các bước thực hiện</h2>
                 <div class="space-y-4">
-                    <!-- Khối 1 -->
-                    <div class="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-slate-200 shadow-md text-slate-800">
+                    <!-- Khối 1 nền sáng nhạt, chữ đen -->
+                    <div class="flex items-start gap-3 bg-blue-50/95 p-4 rounded-xl border border-blue-200/60 shadow-md text-slate-800">
                         <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow">1</span>
-                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-850 font-bold">Họ tên, Phòng ban</em> trước khi làm bài.</p>
+                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-800 font-bold">Họ tên, Phòng ban</em> trước khi làm bài.</p>
                     </div>
-                    <!-- Khối 2 -->
-                    <div class="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-slate-200 shadow-md text-slate-800">
+                    <!-- Khối 2 nền sáng nhạt, chữ đen -->
+                    <div class="flex items-start gap-3 bg-blue-50/95 p-4 rounded-xl border border-blue-200/60 shadow-md text-slate-800">
                         <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow">2</span>
-                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán hoặc tải lên và nhấn <em class="not-italic text-blue-850 font-bold">Nộp bài</em> để lưu tiến độ.</p>
+                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán hoặc tải lên và nhấn <em class="not-italic text-blue-800 font-bold">Nộp bài</em> để lưu tiến độ.</p>
                     </div>
-                    <!-- Khối 3 -->
-                    <div class="flex items-start gap-3 bg-white/95 p-4 rounded-xl border border-slate-200 shadow-md text-slate-800">
+                    <!-- Khối 3 nền sáng nhạt, chữ đen -->
+                    <div class="flex items-start gap-3 bg-blue-50/95 p-4 rounded-xl border border-blue-200/60 shadow-md text-slate-800">
                         <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow">3</span>
                         <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận từ hệ thống.</p>
                     </div>
                 </div>
 
-                <!-- KHỐI LƯU Ý (MÀU SÁNG NHẠT, CHỮ TỐI ĐỘ TƯƠNG PHẢN CAO) -->
-                <div class="mt-2 border border-amber-200 bg-amber-50 p-4 rounded-xl shadow-md relative overflow-hidden text-slate-800">
-                    <h3 class="text-amber-700 font-bold text-xs uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-exclamation-circle text-amber-600"></i> LƯU Ý QUAN TRỌNG</h3>
-                    <p class="text-xs leading-relaxed text-slate-700 font-semibold relative z-10">Hoàn thành đầy đủ bài tập thực hành <span class="text-amber-700 font-bold">ngay sau mỗi buổi học</span> để tránh ảnh hưởng đến kết quả thi đua.</p>
+                <!-- KHỐI LƯU Ý -->
+                <div class="mt-2 border border-amber-200 bg-amber-50 p-4 rounded-xl shadow-md relative overflow-hidden text-slate-850">
+                    <h3 class="text-amber-800 font-bold text-xs uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-exclamation-circle text-amber-600"></i> LƯU Ý QUAN TRỌNG</h3>
+                    <p class="text-xs leading-relaxed text-slate-850 font-bold relative z-10">Hoàn thành đầy đủ bài tập thực hành <span class="text-amber-800 font-black">ngay sau mỗi buổi học</span> để tránh ảnh hưởng đến kết quả thi đua.</p>
                 </div>
             </div>
             
@@ -113,58 +108,90 @@
             <div class="flex-1 overflow-auto p-6 md:p-10 relative custom-scrollbar">
                 <div class="max-w-5xl mx-auto pb-16">
                     
-                    <div class="mb-10 text-center md:text-left">
-                        <h2 class="text-2xl md:text-3xl font-extrabold text-slate-800 tracking-tight pb-1">Hệ thống Xem và Nộp bài tập thực hành</h2>
-                        <p id="systemSubtitle" class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-2">Vui lòng chọn Lộ trình đào tạo của bạn</p>
-                    </div>
-
-                    <!-- MÀN HÌNH CHỌN LỘ TRÌNH -->
-                    <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                        <div onclick="selectIndustry('Retail')" class="glass-panel-ultra p-8 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all border-b-4 border-b-green-600 group">
-                            <div class="w-16 h-16 bg-green-50 text-green-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-105 transition"><i class="fa-solid fa-tags"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Lộ trình RETAIL</h3>
-                            <p class="text-slate-500 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng Bán lẻ.</p>
-                            <div class="mt-6 font-bold text-xs text-green-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                    <!-- Lớp Glassmorphism chính bọc ngoài nội dung -->
+                    <div class="glass-panel-ultra p-6 md:p-10 rounded-3xl border border-slate-100 shadow-md">
+                        <div class="mb-10 text-center md:text-left pb-6 border-b border-slate-100">
+                            <h2 class="text-2xl md:text-3xl font-extrabold text-blue-700 tracking-tight leading-snug uppercase">
+                                HỆ THỐNG BÀI TẬP THỰC HÀNH - TÁI KÝ KIOTVIET
+                            </h2>
+                            <p id="systemSubtitle" class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-2">Vui lòng chọn Lộ trình đào tạo của bạn</p>
                         </div>
 
-                        <div onclick="selectIndustry('FNB')" class="glass-panel-ultra p-8 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all border-b-4 border-b-orange-500 group">
-                            <div class="w-16 h-16 bg-orange-50 text-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-105 transition"><i class="fa-solid fa-bowl-food"></i></div>
-                            <h3 class="text-xl font-bold text-slate-800 mb-2">Lộ trình FNB</h3>
-                            <p class="text-slate-500 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng F&B.</p>
-                            <div class="mt-6 font-bold text-xs text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                        <!-- MÀN HÌNH CHỌN LỘ TRÌNH (Khung ảnh tỷ lệ chuẩn 1600x983 to và nổi bật) -->
+                        <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                            <!-- Retail Card (Màu xanh dương, ảnh minh họa lớn chuẩn tỉ lệ) -->
+                            <div onclick="selectIndustry('Retail')" class="bg-gradient-to-br from-blue-50/95 to-blue-100/70 border border-blue-200/80 p-6 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
+                                <div>
+                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-6 border border-blue-200 bg-white relative">
+                                        <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-thoi-trang.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" alt="Retail Fashion Illustration">
+                                        <div class="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </div>
+                                    <h3 class="text-xl font-extrabold text-slate-800 mb-2 group-hover:text-blue-700 transition-colors">Lộ trình RETAIL</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng Bán lẻ (Thời trang, tạp hóa, siêu thị, mỹ phẩm...).</p>
+                                </div>
+                                <div class="mt-6 font-bold text-xs text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-4 border-t border-blue-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                            </div>
+
+                            <!-- FNB Card (Màu cam, ảnh minh họa lớn chuẩn tỉ lệ) -->
+                            <div onclick="selectIndustry('FNB')" class="bg-gradient-to-br from-orange-50/95 to-orange-100/70 border border-orange-200/80 p-6 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
+                                <div>
+                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-6 border border-orange-200 bg-white relative">
+                                        <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-cafe-tra-sua.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" alt="FNB Cafe Illustration">
+                                        <div class="absolute inset-0 bg-orange-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                                    </div>
+                                    <h3 class="text-xl font-extrabold text-slate-800 mb-2 group-hover:text-orange-700 transition-colors">Lộ trình FNB</h3>
+                                    <p class="text-slate-600 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng F&B (Nhà hàng, quán ăn, quán café, trà sữa...).</p>
+                                </div>
+                                <div class="mt-6 font-bold text-xs text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-4 border-t border-orange-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                            </div>
+                        </div>
+
+                        <!-- MÀN HÌNH DANH SÁCH BUỔI (RENDER ĐỘNG THEO LỘ TRÌNH) -->
+                        <div id="courseContainerView" class="hidden">
+                            <button onclick="backToSelection()" class="mb-8 flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-blue-600 transition"><i class="fa-solid fa-arrow-left"></i> Quay lại chọn Lộ trình</button>
+                            <div id="courseListRender"></div>
                         </div>
                     </div>
 
-                    <!-- MÀN HÌNH DANH SÁCH BUỔI (RENDER ĐỘNG THEO LỘ TRÌNH) -->
-                    <div id="courseContainerView" class="hidden">
-                        <button onclick="backToSelection()" class="mb-8 flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-blue-600 transition"><i class="fa-solid fa-arrow-left"></i> Quay lại chọn Lộ trình</button>
-                        <div id="courseListRender"></div>
-                    </div>
-
+                    <footer class="text-center py-6 mt-8">
+                        <div class="flex flex-col items-center gap-2">
+                            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-4 opacity-40 grayscale">
+                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">© 2026 KiotViet Learning & Development</p>
+                        </div>
+                    </footer>
                 </div>
             </div>
         </main>
 
     </div>
 
-    <!-- MODAL KHAI BÁO DANH TÍNH (Nền trắng, chữ đen sắc nét dễ điền) -->
+    <!-- MODAL KHAI BÁO DANH TÍNH -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="glass-panel-ultra rounded-3xl max-w-md w-full p-6 md:p-8 relative border border-white shadow-2xl">
-            <h2 class="text-lg font-bold text-slate-800 mb-1 flex items-center gap-2.5">
-                <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-user-shield"></i></span>
-                Đăng nhập học viên
-            </h2>
-            <p class="text-xs text-slate-400 font-semibold mb-6">Khai báo thông tin chính xác để hệ thống đồng bộ tiến độ chấm bài.</p>
-            <div class="space-y-4">
+        <div class="glass-panel-ultra rounded-3xl max-w-md w-full p-6 md:p-8 relative border-4 border-blue-500 text-center animate-fade-in-up">
+            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <h2 class="text-xl font-black text-slate-800 mb-2">Đăng Nhập Học Viên</h2>
+            <p class="text-xs text-slate-500 font-medium mb-6 leading-relaxed">Vui lòng nhập đúng thông tin để hệ thống ghi nhận kết quả và cấp chứng nhận thực hành cho bạn.</p>
+            <div class="space-y-4 text-left">
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Họ và tên học viên *</label>
-                    <input type="text" id="inpName" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 font-bold shadow-inner" placeholder="VD: Nguyễn Văn A">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                        <i class="fas fa-user text-blue-500 w-4"></i> Họ và tên học viên *
+                    </label>
+                    <input type="text" id="inpName" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: Nguyễn Văn A">
                 </div>
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Mã Lớp / Phòng ban *</label>
-                    <input type="text" id="inpDept" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 font-bold shadow-inner" placeholder="VD: TK-Q3-01">
+                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
+                        <i class="fas fa-building text-blue-500 w-4"></i> Mã Lớp / Phòng ban *
+                    </label>
+                    <input type="text" id="inpDept" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: TK-Q3-01">
                 </div>
-                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3.5 px-4 rounded-xl shadow-lg transition-all hover:scale-[1.01] mt-2">Xác nhận & Bắt đầu</button>
+                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4">
+                    Lưu thông tin & Bắt đầu <i class="fas fa-chevron-right"></i>
+                </button>
             </div>
         </div>
     </div>
@@ -189,11 +216,11 @@
             if(profileRaw) {
                 const profile = JSON.parse(profileRaw);
                 btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- ${profile.dept}</span> <span class="text-[9px] underline ml-1 font-bold">(Sửa)</span>`;
-                btn.className = "flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl border transition shadow-sm bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer";
+                btn.className = "flex items-center gap-2 text-xs font-bold text-slate-300 bg-blue-900/30 border border-blue-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-900/50 transition-all";
                 document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept; 
             } else {
                 btn.innerHTML = `👤 Chưa định danh`;
-                btn.className = "flex items-center gap-2 text-xs font-bold px-4 py-2 rounded-xl border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 cursor-pointer animate-pulse";
+                btn.className = "flex items-center gap-2 text-xs font-bold text-red-200 bg-red-950/30 border border-red-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-red-950/50 transition-all animate-pulse";
             }
         }
 
@@ -216,7 +243,6 @@
             
             const oldIndustry = localStorage.getItem('kv_current_industry');
             if(oldIndustry && oldIndustry !== industry) {
-                // Xóa cache bài làm nếu đổi lộ trình khác để tránh lặp UI
                 localStorage.removeItem('kv_codelab_progress_b1'); localStorage.removeItem('kv_codelab_data_b1');
                 localStorage.removeItem('kv_codelab_progress_b2'); localStorage.removeItem('kv_codelab_data_b2');
                 localStorage.removeItem('kv_codelab_progress_b3'); localStorage.removeItem('kv_codelab_data_b3');
@@ -243,6 +269,7 @@
             const container = document.getElementById('courseListRender');
             const filePrefix = industry.toLowerCase(); 
 
+            // Phối màu nền sinh động cho các Thẻ Buổi học
             const styles = [
                 { colorFrom: 'from-blue-50', colorTo: 'to-blue-100', colorText: 'text-blue-600', borderCol: 'border-blue-200' },
                 { colorFrom: 'from-indigo-50', colorTo: 'to-indigo-100', colorText: 'text-indigo-600', borderCol: 'border-indigo-200' },
@@ -284,14 +311,14 @@
             const fileLink = `${prefix}-buoi-${sessionNum}.html`; 
             
             return `
-            <a href="${fileLink}" class="group relative glass-panel-ultra p-6 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all flex flex-col h-full bg-white border border-slate-100">
-                <div id="notify_session_${sessionNum}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce">Có Nhận xét</div>
-                <div id="check_session_${sessionNum}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã hoàn thành</div>
+            <a href="${fileLink}" class="group relative p-6 rounded-3xl transition-all duration-300 flex flex-col h-full bg-gradient-to-br ${style.colorFrom}/95 ${style.colorTo}/75 border ${style.borderCol} clickable-card hover:border-slate-400">
+                <div id="notify_session_${sessionNum}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce z-10">Có Nhận xét</div>
+                <div id="check_session_${sessionNum}" class="hidden absolute top-4 right-4 bg-emerald-100/90 text-emerald-800 px-3 py-1.5 rounded-full text-[10px] font-bold flex items-center gap-1 border border-emerald-300 z-10"><i class="fa-solid fa-check-circle"></i> Đã hoàn thành</div>
                 
-                <div class="w-max px-4 h-9 bg-gradient-to-br ${style.colorFrom} ${style.colorTo} ${style.colorText} rounded-xl flex items-center justify-center font-bold text-xs mb-5 shadow-sm">Buổi ${sessionNum}</div>
-                <h4 class="text-base font-extrabold text-slate-800 mb-2 group-hover:${style.colorText} transition-all duration-300">${safeTitle}</h4>
-                <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">${sessionData.desc}</p>
-                <div class="${style.colorText} font-bold text-xs flex items-center gap-2 pt-4 border-t border-slate-100 mt-auto">Vào làm bài <i class="fa-solid fa-arrow-right"></i></div>
+                <div class="w-max px-4 h-9 bg-slate-900/10 text-slate-800 rounded-xl flex items-center justify-center font-bold text-xs mb-5 shadow-sm border border-slate-900/10">Buổi ${sessionNum}</div>
+                <h4 class="text-base font-extrabold text-slate-850 mb-2 group-hover:${style.colorText} transition-all duration-300">${safeTitle}</h4>
+                <p class="text-slate-600 text-xs leading-relaxed mb-6 flex-1">${sessionData.desc}</p>
+                <div class="${style.colorText} font-bold text-xs flex items-center gap-2 pt-4 border-t ${style.borderCol} mt-auto">Vào làm bài <i class="fa-solid fa-arrow-right"></i></div>
             </a>`;
         }
 
