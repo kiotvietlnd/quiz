@@ -8,53 +8,71 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; color: #334155; background-color: #cbd5e1; }
+        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        #sidebar { background-color: #1e3a8a; } 
-        .group-header { padding: 16px 16px 6px 24px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #93c5fd; margin-top: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.1); margin-right: 12px; }
-        .step-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-radius: 12px; margin: 0 12px; transition: all 0.2s; }
+        
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #cbd5e1; overflow: hidden; pointer-events: none; }
+        .glow-blob-1, .glow-blob-2 { position: absolute; width: 50vw; height: 50vw; filter: blur(140px); border-radius: 50%; transition: background 1.5s ease-in-out; }
+        .glow-blob-1 { top: -15%; left: -10%; background: rgba(37, 99, 235, 0.05); } 
+        .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.05); }
+
+        #sidebar { background-color: #224472; border-right: 1px solid #173052; } 
+        
+        .group-header { padding: 16px 16px 6px 24px; font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.1em; color: #93c5fd; margin-top: 14px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); margin-right: 12px; }
+        .step-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; cursor: pointer; border-radius: 12px; margin: 0 12px; transition: all 0.2s; border-left: 4px solid transparent; }
         .step-inactive { color: #cbd5e1; } .step-inactive:hover { background: rgba(255, 255, 255, 0.1); color: #ffffff; }
-        .step-active { background-color: rgba(255, 255, 255, 0.2); color: #ffffff; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.3); }
-        .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid white; }
+        .step-active { background-color: rgba(18, 37, 67, 0.6); color: #ffffff; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.1); border-left: 4px solid #3b82f6; }
+        .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid #224472; }
+
+        /* Ultra Glassmorphism Panel (Nền sáng) */
+        .glass-panel-ultra { 
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); 
+            backdrop-filter: blur(25px); 
+            -webkit-backdrop-filter: blur(25px); 
+            border: 1px solid rgba(226, 232, 240, 0.8); 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); 
+        }
     </style>
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200">
 
-    <!-- HEADER -->
-    <header class="bg-white/90 backdrop-blur border-b border-slate-200 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0">
+    <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
+
+    <!-- HEADER (ĐỒNG BỘ MÀU SẪM #1b365d VỚI LOGO KIOTVIET) -->
+    <header class="bg-[#1b365d] border-b border-[#122543] h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 w-full shadow-md">
         <div class="flex items-center gap-4">
-            <a href="index.html" class="flex items-center gap-1.5 text-slate-500 hover:text-blue-600 font-bold text-xs border border-slate-200 px-3 py-1.5 rounded-lg hover:bg-blue-50 transition"><i class="fas fa-chevron-left"></i><span class="hidden sm:inline">Quay lại Trang Chủ</span></a>
-            <button onclick="toggleSidebar()" class="md:hidden text-slate-500 text-lg"><i class="fas fa-bars"></i></button>
-            <div class="h-6 w-px bg-slate-200 hidden lg:block mx-2"></div>
-            <div class="font-bold text-sm text-slate-800 hidden lg:block truncate" id="sessionTitle">Đang tải...</div>
+            <a href="index.html" class="flex items-center gap-1.5 text-slate-300 hover:text-white font-bold text-xs border border-blue-900/60 px-3 py-1.5 rounded-lg hover:bg-blue-900/40 transition-all"><i class="fas fa-chevron-left"></i><span class="hidden sm:inline">Quay lại Trang Chủ</span></a>
+            <button onclick="toggleSidebar()" class="md:hidden text-slate-300 text-lg p-2 rounded-xl transition-all"><i class="fas fa-bars"></i></button>
+            <div class="h-6 w-px bg-blue-900/60 hidden lg:block mx-2"></div>
+            <div class="font-bold text-sm text-white hidden lg:block truncate" id="sessionTitle">Đang tải...</div>
         </div>
         <div class="flex items-center gap-3 shrink-0">
-            <button onclick="fetchFeedback(true)" class="relative flex items-center gap-2 text-xs font-bold text-amber-700 bg-amber-50 px-3 py-2 rounded-lg transition border border-amber-200 hover:bg-amber-100">
+            <button onclick="fetchFeedback(true)" class="relative flex items-center gap-2 text-xs font-bold text-amber-300 bg-[#122543]/60 px-3 py-2 rounded-lg transition border border-blue-900/40 hover:bg-blue-900/40">
                 <i class="fas fa-sync-alt"></i><span id="btnFeedbackText">Tải Nhận Xét</span>
-                <span id="globalNotificationDot" class="hidden absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span></span>
+                <span id="globalNotificationDot" class="hidden absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>
             </button>
-            <div class="flex items-center gap-2 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-3 py-2 rounded-lg"><span id="studentLabel" class="text-blue-600 pr-2">👤 Chưa định danh</span><span id="timeRemaining">Tiến độ: 0%</span></div>
+            <div class="flex items-center gap-2 text-xs font-bold text-slate-300 bg-blue-900/30 border border-blue-900/40 px-3 py-2 rounded-lg"><span id="studentLabel" class="text-blue-450 pr-2">👤 Chưa định danh</span><span id="timeRemaining">Tiến độ: 0%</span></div>
         </div>
     </header>
-    <div class="w-full bg-slate-200 h-1 relative z-20"><div id="progressBar" class="bg-blue-600 h-1 transition-all duration-300" style="width: 0%"></div></div>
+    <div class="w-full bg-[#122543] h-1 relative z-20"><div id="progressBar" class="bg-blue-500 h-1 transition-all duration-300" style="width: 0%"></div></div>
 
     <div class="flex flex-1 overflow-hidden">
-        <!-- SIDEBAR (Màu xanh đậm chuẩn KiotViet) -->
-        <aside id="sidebar" class="w-72 flex flex-col z-30 transition-all shrink-0 shadow-xl relative overflow-hidden hidden md:flex">
+        <!-- SIDEBAR (Màu xanh navy sáng #224472) -->
+        <aside id="sidebar" class="w-72 flex flex-col z-30 transition-all shrink-0 shadow-xl relative overflow-hidden hidden md:flex h-full">
             <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden">
-                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50"><i class="fas fa-times"></i></button>
+                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 p-2"><i class="fas fa-times"></i></button>
             </div>
             <div class="p-4 border-b border-white/10 shrink-0"><h2 class="text-[10px] font-extrabold text-blue-200 uppercase tracking-widest px-1">Danh sách bài tập</h2></div>
             <div id="sidebarScroll" class="flex-1 overflow-y-auto py-2 custom-scrollbar"><ul id="stepList" class="flex flex-col gap-1"></ul></div>
         </aside>
 
-        <!-- KHUNG LÀM BÀI -->
-        <main class="flex-1 overflow-y-auto custom-scrollbar relative p-4 md:p-8 bg-slate-50 flex flex-col">
-            <div id="mainContent" class="max-w-4xl mx-auto bg-white border border-slate-200 rounded-3xl shadow-sm p-6 md:p-10 mb-24 w-full relative"></div>
-            <div class="fixed bottom-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10">
-                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2 text-sm text-slate-600 font-bold hover:text-blue-600 transition disabled:opacity-40"><i class="fas fa-chevron-left"></i> Trở lại</button>
-                <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-6 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition font-bold text-sm">Tiếp <i class="fas fa-chevron-right"></i></button>
+        <!-- KHUNG LÀM BÀI (NỀN TRẮNG ĐỤC TRONG SUỐT PHÁT SÁNG) -->
+        <main class="flex-grow flex flex-col h-full overflow-hidden relative w-full bg-slate-200/80 backdrop-blur-[2px] overflow-y-auto custom-scrollbar p-4 md:p-8">
+            <div id="mainContent" class="max-w-4xl mx-auto mb-24 w-full relative"></div>
+            <div class="fixed bottom-0 right-0 glass-panel-ultra border-t border-slate-100 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10 shadow-lg">
+                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2 text-xs text-slate-600 font-bold hover:text-blue-600 transition disabled:opacity-40"><i class="fas fa-chevron-left"></i> Trở lại</button>
+                <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-6 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl transition font-bold text-xs">Tiếp <i class="fas fa-chevron-right"></i></button>
             </div>
         </main>
     </div>
@@ -76,55 +94,55 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
-    <!-- MODAL HOÀN THÀNH BÀI TẬP -->
+    <!-- MODAL HOÀN THÀNH BÀI TẬP (Mỹ hóa theo form glassmorphism) -->
     <div id="completionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-8 max-w-md w-full relative border-4 border-emerald-400 text-center animate-fade-in-up">
+        <div class="glass-panel-ultra rounded-3xl shadow-2xl p-8 max-w-md w-full relative border-4 border-emerald-400 text-center animate-fade-in-up">
             <div class="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 shadow-inner">
                 <i class="fas fa-award"></i>
             </div>
             <h2 class="text-2xl font-black text-slate-800 mb-2">HOÀN THÀNH BÀI TẬP</h2>
-            <p class="text-sm text-slate-500 font-medium mb-6">Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc quay về trang chủ.</p>
+            <p class="text-xs text-slate-500 font-medium mb-6 leading-relaxed">Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc quay về trang chủ.</p>
             
-            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left space-y-3 mb-6">
+            <div class="bg-slate-50/80 border border-slate-200 rounded-2xl p-4 text-left space-y-3 mb-6">
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-user text-blue-500 w-4"></i> Học viên:</span>
-                    <span id="modalDoneName" class="text-sm font-black text-slate-800">--</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-user text-blue-500 w-4"></i> Học viên:</span>
+                    <span id="modalDoneName" class="text-xs font-black text-slate-800">--</span>
                 </div>
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-building text-blue-500 w-4"></i> Phòng ban:</span>
-                    <span id="modalDoneDept" class="text-sm font-black text-slate-800">--</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-building text-blue-500 w-4"></i> Phòng ban:</span>
+                    <span id="modalDoneDept" class="text-xs font-black text-slate-800">--</span>
                 </div>
                 <div class="flex justify-between items-center border-b border-slate-200 pb-2">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-book text-blue-500 w-4"></i> Bài học:</span>
-                    <span id="modalDoneSession" class="text-sm font-black text-slate-800 truncate max-w-[150px]">--</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-book text-blue-500 w-4"></i> Bài học:</span>
+                    <span id="modalDoneSession" class="text-xs font-black text-slate-800 truncate max-w-[150px]">--</span>
                 </div>
                 <div class="flex justify-between items-center">
-                    <span class="text-xs font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-chart-pie text-blue-500 w-4"></i> Tiến độ:</span>
-                    <span class="text-sm font-black text-emerald-600"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span>
+                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider"><i class="fas fa-chart-pie text-blue-500 w-4"></i> Tiến độ:</span>
+                    <span class="text-xs font-black text-emerald-600"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span>
                 </div>
             </div>
 
             <div class="flex flex-col gap-3">
-                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
                     <i class="fas fa-search"></i> Xem lại bài làm
                 </button>
-                <a href="index.html" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3.5 rounded-xl transition-all">
+                <a href="index.html" class="w-full bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold py-3.5 rounded-xl transition-all flex items-center justify-center">
                     Về Trang chủ
                 </a>
             </div>
         </div>
     </div>
 
-    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM -->
+    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM (Mỹ hóa theo form glassmorphism) -->
     <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[120] hidden flex-col transition-all">
-        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm">
+        <header class="bg-[#1b365d] border-b border-[#122543] h-16 flex items-center justify-between px-6 shrink-0 shadow-md">
             <div class="flex items-center gap-3">
-                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
-                <h1 class="text-base font-black text-slate-800">Xem Lại Bài Làm</h1>
+                <div class="bg-blue-900/30 text-blue-300 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
+                <h1 class="text-xs md:text-sm font-bold text-white tracking-wider uppercase">Xem Lại Bài Làm Đã Nộp</h1>
             </div>
-            <button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
+            <button onclick="closeReviewHistory()" class="w-8 h-8 bg-white/10 hover:bg-red-500/20 text-white rounded-full flex items-center justify-center transition-colors"><i class="fas fa-times"></i></button>
         </header>
-        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8">
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 bg-slate-200/80 backdrop-blur-[2px]">
             <div class="max-w-4xl mx-auto space-y-6" id="reviewHistoryContainer">
                 <!-- Data đổ vào đây bằng JS -->
             </div>
@@ -213,8 +231,8 @@
                 } else {
                     const li = document.createElement('li'); li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; li.onclick = () => goToStep(index);
                     const isSubmitted = stepDataStore[index] && stepDataStore[index].isSubmitted;
-                    let statusIcon = isSubmitted ? `<div class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[10px] font-bold shadow"><i class="fas fa-check"></i></div>` : `<div class="w-6 h-6 rounded-full bg-slate-800 text-amber-400 flex items-center justify-center text-[10px] border border-amber-500/50 shadow-inner"><i class="fas fa-exclamation-triangle"></i></div>`;
-                    const hasFeedbackIcon = (stepDataStore[index] && stepDataStore[index].feedback) ? `<span title="Có nhận xét" class="ml-auto text-amber-400 text-sm"><i class="fas fa-comment-dots"></i></span>` : '';
+                    let statusIcon = isSubmitted ? `<div class="w-6 h-6 rounded-full bg-[#10b981]/25 text-[#10b981] border border-[#10b981]/40 flex items-center justify-center text-[10px] font-bold shadow-sm"><i class="fas fa-check"></i></div>` : `<div class="w-6 h-6 rounded-full bg-white/10 text-slate-350 flex items-center justify-center text-[10px] font-bold"><i class="fas fa-exclamation-triangle text-amber-450 text-[8px]"></i></div>`;
+                    const hasFeedbackIcon = (stepDataStore[index] && stepDataStore[index].feedback) ? `<span title="Có nhận xét" class="ml-auto text-amber-400 text-sm"><i class="fas fa-comment-dots animate-pulse"></i></span>` : '';
                     const unreadBadge = (stepDataStore[index] && stepDataStore[index].isUnread) ? '<span class="notification-dot"></span>' : '';
                     li.innerHTML = `<div class="relative shrink-0">${statusIcon}${unreadBadge}</div><div class="leading-snug text-[13px] flex-1 flex items-center pr-2 font-medium">${ex.title} ${hasFeedbackIcon}</div>`;
                     listUl.appendChild(li); exerciseCounter++;
@@ -247,7 +265,7 @@
             const myData = stepDataStore[index] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
             if(myData.text && (!myData.textAnswers || myData.textAnswers.length === 0)) myData.textAnswers = [myData.text];
 
-            let html = `<div class="relative w-full pr-12 md:pr-36"><h1 class="text-2xl md:text-3xl font-black text-blue-700 mb-6 pb-4 border-b border-slate-200 tracking-tight">${ex.title}</h1>`;
+            let html = `<div class="relative w-full pr-12 md:pr-36"><h1 class="text-2xl md:text-3xl font-extrabold text-blue-700 mb-6 pb-4 border-b border-slate-200 tracking-tight">${ex.title}</h1>`;
 
             if(myData.feedback) {
                 const pingHtml = myData.isUnread ? `<span id="pingDot_${index}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : '';
@@ -260,7 +278,7 @@
                 let answersArr = myData.textAnswers || [];
                 ex.theory.forEach((q, qIndex) => {
                     let ansVal = answersArr[qIndex] || '';
-                    html += `<div class="mb-5 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm"><div class="bg-blue-50/50 p-4 border-b border-slate-200"><p class="text-slate-800 font-bold text-sm leading-relaxed">${q}</p></div><textarea id="inpTextAnswer_${index}_${qIndex}" rows="3" class="w-full p-4 focus:ring-0 outline-none font-medium text-slate-700 text-sm transition-all resize-none bg-white" placeholder="Gõ câu trả lời của bạn..." oninput="saveDraft()">${ansVal}</textarea></div>`;
+                    html += `<div class="mb-5 bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden shadow-sm"><div class="bg-blue-50/50 p-4 border-b border-slate-200"><p class="text-slate-800 font-bold text-sm leading-relaxed">${q}</p></div><textarea id="inpTextAnswer_${index}_${qIndex}" rows="3" class="w-full text-xs p-4 focus:ring-0 outline-none font-medium text-slate-700 transition-all resize-none bg-white" placeholder="Gõ câu trả lời của bạn..." oninput="saveDraft()">${ansVal}</textarea></div>`;
                 });
                 html += `</div>`;
             }
@@ -274,7 +292,7 @@
                 btnText = "Lưu & Nộp bổ sung";
                 let thumbnailsHtml = myData.uploadedUrls.map((url, i) => {
                     let directUrl = getDirectImageUrl(url);
-                    return `<div class="relative group cursor-zoom-in border border-emerald-300 rounded-xl overflow-hidden aspect-video bg-slate-100" onclick="openFullscreenModal(${JSON.stringify(myData.uploadedUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${directUrl}" class="w-full h-full object-cover opacity-90 group-hover:opacity-50 transition-opacity"><div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fas fa-search-plus text-white text-2xl drop-shadow-md"></i></div></div>`;
+                    return `<div class="relative group cursor-zoom-in border border-emerald-350 rounded-xl overflow-hidden aspect-video bg-slate-100" onclick="openFullscreenModal(${JSON.stringify(myData.uploadedUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${directUrl}" class="w-full h-full object-cover opacity-90 group-hover:opacity-50 transition-opacity"><div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><i class="fas fa-search-plus text-white text-2xl drop-shadow-md"></i></div></div>`;
                 }).join('');
                 uploadWarningHtml = `<div class="bg-emerald-50 border border-emerald-200 p-5 rounded-2xl mb-6 shadow-sm"><p class="font-black flex items-center gap-1.5 mb-3 text-emerald-700 uppercase tracking-wider"><i class="fas fa-check-circle text-lg"></i> BẠN ĐÃ NỘP BÀI THÀNH CÔNG</p><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">${thumbnailsHtml}</div></div>`;
             } else {
@@ -283,9 +301,14 @@
 
             if(ex.confirm) { html += `<div class="bg-blue-50 border border-blue-200 p-4 rounded-xl mb-4"><p class="text-sm font-bold text-blue-800 flex items-center gap-2"><i class="fas fa-camera"></i> ${ex.confirm}</p></div>`; }
 
-            html += `<div class="mt-8 border-t border-slate-200 pt-8">${uploadWarningHtml}<div id="uploadArea" class="flex flex-col bg-slate-50 p-5 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl transition-all duration-300 shadow-inner"><div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full"><div class="relative w-full md:w-auto shrink-0"><button class="w-full flex justify-center items-center gap-2 px-4 py-3 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-sm font-bold shadow-sm transition"><i class="fas fa-paperclip text-slate-500 text-base"></i> Đính kèm ảnh</button><input type="file" multiple accept="image/*" onchange="handleFileSelect(event)" class="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"></div><p class="text-sm text-slate-400 font-medium italic hidden md:block">...hoặc ấn <strong class="text-slate-500 font-bold">Ctrl + V</strong> để dán nhanh.</p><button id="btnSubmitStep_${index}" onclick="uploadToGAS(${index}, '${ex.title}')" class="w-full md:w-auto ml-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg transition font-black text-sm flex items-center justify-center gap-2 shrink-0"><i class="fas fa-cloud-upload-alt"></i> <span id="btnSubmitText_${index}">${btnText}</span></button></div><div id="fileTags" class="mt-4 flex flex-wrap gap-2 empty:hidden"></div></div></div>`;
+            html += `<div class="mt-8 border-t border-slate-200 pt-8">${uploadWarningHtml}<div id="uploadArea" class="flex flex-col bg-slate-50 p-5 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl transition-all duration-300 shadow-inner"><div class="flex flex-col md:flex-row items-stretch md:items-center gap-4 w-full"><div class="relative w-full md:w-auto shrink-0"><button class="w-full flex justify-center items-center gap-2 px-4 py-3 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold shadow-sm transition"><i class="fas fa-paperclip text-slate-500 text-base"></i> Đính kèm ảnh</button><input type="file" multiple accept="image/*" onchange="handleFileSelect(event)" class="absolute left-0 top-0 w-full h-full opacity-0 cursor-pointer"></div><p class="text-xs text-slate-400 font-medium italic hidden md:block">...hoặc ấn <strong class="text-slate-500 font-bold">Ctrl + V</strong> để dán nhanh.</p><button id="btnSubmitStep_${index}" onclick="uploadToGAS(${index}, '${ex.title}')" class="w-full md:w-auto ml-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl shadow-lg transition font-black text-xs flex items-center justify-center gap-2 shrink-0"><i class="fas fa-cloud-upload-alt"></i> <span id="btnSubmitText_${index}">${btnText}</span></button></div><div id="fileTags" class="mt-4 flex flex-wrap gap-2 empty:hidden"></div></div></div>`;
 
-            contentDiv.innerHTML = html; updateBottomNav(); document.querySelector('main').scrollTo(0, 0); localStorage.setItem(STORAGE_KEY, currentStepIndex);
+            contentDiv.innerHTML = `
+                <div class="glass-panel-ultra p-6 md:p-10 rounded-3xl relative border border-slate-100 shadow-md">
+                    ${html}
+                </div>
+            `;
+            updateBottomNav(); document.querySelector('main').scrollTo(0, 0); localStorage.setItem(STORAGE_KEY, currentStepIndex);
         }
 
         function toggleFeedback(index) {
@@ -368,7 +391,7 @@
                     currentData.isSubmitted = true; if(data.urls) currentData.uploadedUrls = [...new Set([...currentData.uploadedUrls, ...data.urls])];
                     localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); pendingFiles = []; alert("🎉 Lưu & Nộp bài thành công!"); goToStep(index); renderSidebar(); 
                 } else alert("Lỗi server: " + data.message);
-            }).catch(err => alert("Lỗi kết nối mạng: Vui lòng thử lại sau.")).finally(() => { btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = oldText; btnEl.disabled = false; });
+            }).catch(err => alert("Lỗi kết nối mạng: Vui lòng thử lại sau.")).finally(() => { btnEl.classList.remove('animate-pulse'); btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed'); txtEl.innerHTML = oldText; btnEl.disabled = false; });
         }
 
         function updateBottomNav() {
