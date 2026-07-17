@@ -135,7 +135,8 @@
 
         function fetchPracticeData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
-            document.getElementById('exercisesContainer').innerHTML = "";
+            const container = document.getElementById('exercisesContainer');
+            if(container) container.innerHTML = "";
             document.getElementById('statsSummary').classList.add('hidden');
             
             fetch(`${API_URL}?action=getAllPracticeData`)
@@ -143,10 +144,15 @@
                 if(res.status === 'success') {
                     allData = res.data.reverse(); 
                     initFilters();
+                } else {
+                    throw new Error(res.message || "Lỗi dữ liệu từ Server");
                 }
             }).catch(e => {
-                console.error("Fetch error: ", e);
-                document.getElementById('exercisesContainer').innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-wifi text-3xl mb-3"></i><p class="font-bold">Lỗi kết nối mạng hoặc máy chủ Google đang quá tải.</p><p class="text-xs mt-1">Vui lòng tải lại trang (F5) để thử lại.</p></div>`;
+                console.error("Fetch/Render error: ", e);
+                const containerEl = document.getElementById('exercisesContainer');
+                if(containerEl) {
+                    containerEl.innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-exclamation-triangle text-3xl mb-3"></i><p class="font-bold">Đã xảy ra lỗi khi hiển thị dữ liệu.</p><p class="text-xs mt-1">Hệ thống phát hiện có bài nộp bị thiếu thông tin cốt lõi.</p><p class="text-xs mt-1">Chi tiết lỗi: ${e.message}</p></div>`;
+                }
             })
             .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
         }
@@ -164,7 +170,9 @@
         function updateStudentFilter() {
             const selectedDept = document.getElementById('filterDept').value;
             let filtered = selectedDept === 'all' ? allData : allData.filter(e => e.phongBan === selectedDept);
-            const students = [...new Set(filtered.map(e => `${e.hoVaTen}|${e.phongBan}`))].filter(e => e !== "|").sort();
+            
+            // Xử lý an toàn khi thiếu Tên học viên
+            const students = [...new Set(filtered.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
             
             document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
                 const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
@@ -173,6 +181,7 @@
         }
 
         function getDirectImg(url) { 
+            if(!url) return "";
             let m = url.match(/\/d\/(.+?)\//); if(!m) m = url.match(/id=(.+?)(&|$)/); 
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
         }
@@ -187,35 +196,47 @@
             const selDept = document.getElementById('filterDept').value;
             const selStudent = document.getElementById('filterStudent').value;
             const selStatus = document.getElementById('filterStatus').value;
+            const selSession = document.getElementById('filterSession').value; // Bộ lọc buổi học
 
             let filtered = allData;
             if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
+            if (selSession !== 'all') filtered = filtered.filter(e => e.buoi === selSession);
+            
             if (selStudent !== 'all') {
-                const parts = selStudent.split('|'); filtered = filtered.filter(e => e.hoVaTen === parts[0] && e.phongBan === parts[1]);
+                const parts = selStudent.split('|'); 
+                filtered = filtered.filter(e => (e.hoVaTen || 'Ẩn Danh') === parts[0] && (e.phongBan || 'N/A') === parts[1]);
                 document.getElementById('statStudentName').innerText = parts[0];
-            } else { document.getElementById('statStudentName').innerText = "Tất cả"; }
+            } else { 
+                document.getElementById('statStudentName').innerText = "Tất cả"; 
+            }
 
             // Group để lấy bài nộp cuối cùng
             let mapUnique = {};
             filtered.forEach(e => {
-                let key = `${e.hoVaTen}-${e.phongBan}-${e.tenBaiHoc}`;
+                let key = `${e.hoVaTen || 'Ẩn Danh'}-${e.phongBan || 'N/A'}-${e.tenBaiHoc || 'Unknown'}`;
                 if (!mapUnique[key]) mapUnique[key] = e; 
             });
             filtered = Object.values(mapUnique);
 
-            if (selStatus === 'pending') filtered = filtered.filter(e => !e.nhanXet || e.nhanXet.trim() === "");
-            if (selStatus === 'graded') filtered = filtered.filter(e => e.nhanXet && e.nhanXet.trim() !== "");
+            if (selStatus === 'pending') filtered = filtered.filter(e => !e.nhanXet || e.nhanXet.toString().trim() === "");
+            if (selStatus === 'graded') filtered = filtered.filter(e => e.nhanXet && e.nhanXet.toString().trim() !== "");
 
             document.getElementById('statProgress').innerText = `${filtered.length} bài`;
-            document.getElementById('statPending').innerText = `${filtered.filter(e => !e.nhanXet || e.nhanXet.trim()==="").length} bài`;
+            document.getElementById('statPending').innerText = `${filtered.filter(e => !e.nhanXet || e.nhanXet.toString().trim()==="").length} bài`;
             document.getElementById('statsSummary').classList.remove('hidden');
 
-            const container = document.getElementById('cardsContainer');
-            if(filtered.length === 0) { container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; return; }
+            const container = document.getElementById('exercisesContainer');
+            if(!container) return; // Bảo vệ DOM
 
+            if(filtered.length === 0) { 
+                container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; 
+                return; 
+            }
+
+            // Render an toàn không sợ lỗi Data trống
             container.innerHTML = filtered.map((item, idx) => {
                 const safeKey = `card-${idx}`;
-                let statusBadge = item.nhanXet ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>` : `<span class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
+                let statusBadge = (item.nhanXet && item.nhanXet.toString().trim() !== "") ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>` : `<span class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
                 
                 let theoryHtml = '';
                 if(item.ans1 || item.ans2) {
@@ -226,34 +247,39 @@
                     theoryHtml += `</div>`;
                 }
 
-                let imgUrls = item.linkDrive.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
+                // Split an toàn cho LinkDrive
+                let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
                 let imgHtml = imgUrls.length > 0 ? `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 mb-4"><span class="text-blue-500 block uppercase text-[9px] font-black mb-2"><i class="fas fa-images mr-1.5"></i>Minh chứng</span><div class="flex flex-wrap gap-2">` + imgUrls.map((url, i) => `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${getDirectImg(url)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"><div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg"><i class="fas fa-search-plus text-white"></i></div></div>`).join('') + `</div></div>` : `<div class="bg-red-50 border border-red-200 p-3 text-center text-red-500 text-xs rounded-xl font-bold mb-4"><i class="fas fa-exclamation-triangle mr-1"></i> Không nộp ảnh</div>`;
 
-                let safeName = item.hoVaTen.replace(/'/g, "\\'"); let safeDept = item.phongBan.replace(/'/g, "\\'"); let safeEx = item.tenBaiHoc.replace(/'/g, "\\'"); let safeSession = item.buoi.replace(/'/g, "\\'");
+                // Replace an toàn các thông tin để gán vào hàm Onclick
+                let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); 
+                let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); 
+                let safeEx = (item.tenBaiHoc || "").toString().replace(/'/g, "\\'"); 
+                let safeSession = (item.buoi || "").toString().replace(/'/g, "\\'");
 
                 return `
                 <div class="glass-panel p-6 rounded-3xl border border-white/60 shadow-sm relative flex flex-col mb-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4 mb-4">
                         <div>
-                            <h3 class="text-base font-black text-slate-800">${item.tenBaiHoc}</h3>
+                            <h3 class="text-base font-black text-slate-800">${item.tenBaiHoc || 'Bài tập'}</h3>
                             <p class="text-xs font-medium text-slate-500 mt-1.5 flex items-center flex-wrap gap-1.5">
-                                <i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600 font-bold">${item.hoVaTen}</span> 
+                                <i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600 font-bold">${item.hoVaTen || 'Ẩn danh'}</span> 
                                 <span class="text-slate-300 mx-0.5">|</span>
                                 Lớp: <span class="text-slate-700 font-bold">${item.phongBan || "Trống"}</span>
                                 <span class="text-slate-300 mx-0.5">|</span>
                                 <span class="bg-indigo-50 text-indigo-600 border border-indigo-100 px-1.5 py-0.5 rounded font-bold">${item.khoa || 'Chung'}</span>
                                 <span class="text-slate-300 mx-0.5">|</span>
-                                <i class="far fa-clock"></i> ${item.ngay}
+                                <i class="far fa-clock"></i> ${item.ngay || ''}
                             </p>
                         </div>
-                        <div class="flex items-center gap-1.5 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${item.buoi}</span></div>
+                        <div class="flex items-center gap-1.5 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[9px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm">${item.buoi || ''}</span></div>
                     </div>
                     ${theoryHtml}
                     ${imgHtml}
                     <div class="pt-4 border-t border-slate-200/60">
                         <label class="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-2"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Ghi Nhận xét</label>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[50px] p-3 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:border-blue-400 outline-none shadow-inner resize-none font-semibold text-slate-700" placeholder="Viết nhận xét...">${item.nhanXet}</textarea>
+                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[50px] p-3 text-xs bg-white border border-slate-200 rounded-xl focus:ring-2 focus:border-blue-400 outline-none shadow-inner resize-none font-semibold text-slate-700" placeholder="Viết nhận xét...">${item.nhanXet || ''}</textarea>
                             <button onclick="saveFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${safeKey}" class="px-5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-black rounded-xl shadow-md shrink-0 transition-colors"><i class="fas fa-paper-plane"></i> Lưu Web</button>
                         </div>
                     </div>
