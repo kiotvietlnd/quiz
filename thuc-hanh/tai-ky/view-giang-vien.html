@@ -31,31 +31,45 @@
                 
                 <div>
                     <label class="block text-[11px] font-bold text-yellow-300 mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
-                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả bài nộp</option>
-                        <option value="pending" selected>🔴 Cần chấm (Chưa có nhận xét)</option>
+                        <option value="pending" selected>🔴 Cần chấm (Chưa nhận xét)</option>
                         <option value="graded">✅ Đã chấm (Có nhận xét)</option>
                     </select>
                 </div>
 
                 <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Ngành hàng</label>
+                    <select id="filterIndustry" onchange="updateStudentFilter()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                        <option value="all">Tất cả Ngành hàng</option>
+                    </select>
+                </div>
+
+                <div>
                     <label class="block text-[11px] font-bold text-slate-200 mb-1">Mã Lớp / Phòng ban</label>
-                    <select id="filterDept" onchange="updateStudentFilter()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
-                        <option value="all">Tất cả</option>
+                    <select id="filterDept" onchange="updateStudentFilter()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                        <option value="all">Tất cả Mã Lớp / PB</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label>
-                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Học viên</option>
                     </select>
                 </div>
 
                 <div>
                     <label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label>
-                    <select id="filterSession" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <select id="filterSession" onchange="updateExerciseFilter()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Buổi</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Tên Bài tập</label>
+                    <select id="filterExercise" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
+                        <option value="all">Tất cả Bài tập</option>
                     </select>
                 </div>
             </div>
@@ -158,25 +172,40 @@
         }
 
         function initFilters() {
+            const industries = [...new Set(allData.map(e => e.khoa))].filter(Boolean).sort();
             const depts = [...new Set(allData.map(e => e.phongBan))].filter(Boolean).sort();
             const sessions = [...new Set(allData.map(e => e.buoi))].filter(Boolean).sort();
             
+            document.getElementById('filterIndustry').innerHTML = `<option value="all">Tất cả Ngành hàng</option>` + industries.map(i => `<option value="${i}">${i}</option>`).join('');
             document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
             document.getElementById('filterSession').innerHTML = `<option value="all">Tất cả Buổi</option>` + sessions.map(s => `<option value="${s}">${s}</option>`).join('');
             
             updateStudentFilter();
+            updateExerciseFilter();
         }
 
         function updateStudentFilter() {
-            const selectedDept = document.getElementById('filterDept').value;
-            let filtered = selectedDept === 'all' ? allData : allData.filter(e => e.phongBan === selectedDept);
+            const selInd = document.getElementById('filterIndustry').value;
+            const selDept = document.getElementById('filterDept').value;
             
-            // Xử lý an toàn khi thiếu Tên học viên
+            let filtered = allData;
+            if(selInd !== 'all') filtered = filtered.filter(e => e.khoa === selInd);
+            if(selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
+            
             const students = [...new Set(filtered.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
             
             document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
                 const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
             }).join('');
+            renderCards();
+        }
+
+        function updateExerciseFilter() {
+            const selSession = document.getElementById('filterSession').value;
+            let filtered = selSession === 'all' ? allData : allData.filter(e => e.buoi === selSession);
+            
+            const exercises = [...new Set(filtered.map(e => e.tenBaiHoc))].filter(Boolean).sort();
+            document.getElementById('filterExercise').innerHTML = `<option value="all">Tất cả Bài tập</option>` + exercises.map(ex => `<option value="${ex}">${ex}</option>`).join('');
             renderCards();
         }
 
@@ -193,14 +222,18 @@
         function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
 
         function renderCards() {
+            const selStatus = document.getElementById('filterStatus').value;
+            const selInd = document.getElementById('filterIndustry').value;
             const selDept = document.getElementById('filterDept').value;
             const selStudent = document.getElementById('filterStudent').value;
-            const selStatus = document.getElementById('filterStatus').value;
-            const selSession = document.getElementById('filterSession').value; // Bộ lọc buổi học
+            const selSession = document.getElementById('filterSession').value;
+            const selExercise = document.getElementById('filterExercise').value;
 
             let filtered = allData;
+            if (selInd !== 'all') filtered = filtered.filter(e => e.khoa === selInd);
             if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
             if (selSession !== 'all') filtered = filtered.filter(e => e.buoi === selSession);
+            if (selExercise !== 'all') filtered = filtered.filter(e => e.tenBaiHoc === selExercise);
             
             if (selStudent !== 'all') {
                 const parts = selStudent.split('|'); 
@@ -226,14 +259,13 @@
             document.getElementById('statsSummary').classList.remove('hidden');
 
             const container = document.getElementById('exercisesContainer');
-            if(!container) return; // Bảo vệ DOM
+            if(!container) return; 
 
             if(filtered.length === 0) { 
                 container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-400"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; 
                 return; 
             }
 
-            // Render an toàn không sợ lỗi Data trống
             container.innerHTML = filtered.map((item, idx) => {
                 const safeKey = `card-${idx}`;
                 let statusBadge = (item.nhanXet && item.nhanXet.toString().trim() !== "") ? `<span class="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[10px] px-2.5 py-1 rounded-lg font-black shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>` : `<span class="bg-red-50 text-red-600 border border-red-200 text-[10px] px-2.5 py-1 rounded-lg font-black uppercase shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
@@ -247,11 +279,9 @@
                     theoryHtml += `</div>`;
                 }
 
-                // Split an toàn cho LinkDrive
                 let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
                 let imgHtml = imgUrls.length > 0 ? `<div class="bg-blue-50/80 border border-blue-200/60 rounded-2xl p-4 mb-4"><span class="text-blue-500 block uppercase text-[9px] font-black mb-2"><i class="fas fa-images mr-1.5"></i>Minh chứng</span><div class="flex flex-wrap gap-2">` + imgUrls.map((url, i) => `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${getDirectImg(url)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"><div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg"><i class="fas fa-search-plus text-white"></i></div></div>`).join('') + `</div></div>` : `<div class="bg-red-50 border border-red-200 p-3 text-center text-red-500 text-xs rounded-xl font-bold mb-4"><i class="fas fa-exclamation-triangle mr-1"></i> Không nộp ảnh</div>`;
 
-                // Replace an toàn các thông tin để gán vào hàm Onclick
                 let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); 
                 let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); 
                 let safeEx = (item.tenBaiHoc || "").toString().replace(/'/g, "\\'"); 
