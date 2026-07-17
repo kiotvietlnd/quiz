@@ -1,28 +1,43 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
-<head> <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
+<head> 
+    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang review Đào tạo Chuyên viên Tái ký mới</title>
     
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts Preconnect giúp tải Font Inter nhanh và không bị lỗi dẹt chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
-        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; display: flex; flex-direction: column; min-height: 100vh; color: #334155; background-color: #f8fafc; overflow-x: hidden; }
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; }
+        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; display: flex; flex-direction: column; min-height: 100vh; color: #334155; background-color: #cbd5e1; overflow-x: hidden; }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #cbd5e1; }
         .glow-blob-1, .glow-blob-2 { position: absolute; width: 50vw; height: 50vw; filter: blur(140px); border-radius: 50%; transition: background 1.5s ease-in-out; }
-        .glow-blob-1 { top: -15%; left: -10%; background: rgba(22, 109, 239, 0.08); } 
-        .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.08); }
+        .glow-blob-1 { top: -15%; left: -10%; background: rgba(37, 99, 235, 0.05); } 
+        .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.05); }
         .glass-panel-ultra { background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border: 1px solid rgba(226, 232, 240, 0.8); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); }
-        .scifi-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; background: #166def; color: white; transition: all 0.3s; }
-        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(22, 109, 239, 0.4); }
+        
+        .glass-panel-dark {
+            background: rgba(27, 54, 93, 0.98);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: -8px 0 24px rgba(27, 54, 93, 0.2);
+        }
+
+        .scifi-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; background: #2563eb; color: white; transition: all 0.3s; }
+        .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.4); }
         
         .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; } .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
-        .rating-btn { transition: all 0.2s ease; border: 2px solid #e2e8f0; }
+        .rating-btn { transition: all 0.2s ease; border: 2px solid #1e3a8a; }
         .active-chuadat { background-color: #fef2f2 !important; border-color: #ef4444 !important; color: #b91c1c !important; }
         .active-thaotac { background-color: #fffbeb !important; border-color: #f59e0b !important; color: #b45309 !important; }
         .active-ungdung { background-color: #eff6ff !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; }
@@ -33,262 +48,264 @@
 
     <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
-    <header class="sticky top-0 z-50 bg-[#166def] border-b border-blue-600 px-6 lg:px-12 py-4 flex items-center justify-between shadow-md">
-        <div class="flex items-center gap-4">
-            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" alt="KiotViet Logo" class="h-8">
-            <span class="h-6 w-[1px] bg-blue-400"></span>
-            <h1 class="text-sm font-black text-white tracking-wider">Trang review Đào tạo Chuyên viên Tái ký mới</h1>
-        </div>
-        <div class="flex gap-2 bg-blue-800/40 p-1 rounded-xl border border-blue-400/40">
-            <button onclick="switchMainTab('workspace')" id="main-tab-workspace" class="px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2"><i class="fa-solid fa-laptop-code"></i> REVIEW WORKSPACE</button>
-            <button onclick="switchMainTab('handbook')" id="main-tab-handbook" class="px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2"><i class="fa-solid fa-graduation-cap"></i> QUY TRÌNH & KẾ HOẠCH</button>
-        </div>
-    </header>
+    <div class="min-h-screen flex flex-col bg-slate-200/80 backdrop-blur-[2px]">
 
-    <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col">
-        <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-stretch w-full flex-grow">
-            
-            <!-- CỘT TRÁI: GIÁO TRÌNH & TÌNH HUỐNG -->
-            <section class="xl:col-span-7 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
-                <div class="flex gap-2 mb-3 bg-indigo-50/50 p-1 rounded-2xl border border-indigo-100 flex-shrink-0">
-                    <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-tags"></i> LỘ TRÌNH RETAIL (BÁN LẺ)</button>
-                    <button onclick="switchRoadmap('FNB')" id="roadmap-FNB" class="flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-bowl-food"></i> LỘ TRÌNH FNB (F&B)</button>
-                </div>
+        <!-- TIÊU ĐỀ ĐÃ ĐƯỢC CHUYỂN VIẾT HOA UPPER CASE -->
+        <header class="sticky top-0 z-50 bg-[#1b365d] border-b border-[#122543] px-6 lg:px-12 py-4 flex items-center justify-between shadow-md">
+            <div class="flex items-center gap-4">
+                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" alt="KiotViet Logo" class="h-8">
+                <span class="h-6 w-[1px] bg-blue-900/60"></span>
+                <h1 class="text-sm font-bold text-white tracking-wider uppercase">TRANG REVIEW ĐÀO TẠO CHUYÊN VIÊN TÁI KÝ MỚI</h1>
+            </div>
+            <div class="flex gap-2 bg-[#122543]/60 p-1 rounded-xl border border-blue-900/40">
+                <button onclick="switchMainTab('workspace')" id="main-tab-workspace" class="px-5 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white shadow-sm flex items-center gap-2"><i class="fa-solid fa-laptop-code"></i> REVIEW WORKSPACE</button>
+                <button onclick="switchMainTab('handbook')" id="main-tab-handbook" class="px-5 py-2 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2"><i class="fa-solid fa-graduation-cap"></i> QUY TRÌNH & KẾ HOẠCH</button>
+            </div>
+        </header>
 
-                <div class="flex gap-2 mb-4 bg-slate-200/50 p-1.5 rounded-2xl flex-shrink-0">
-                    <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 1</button>
-                    <button onclick="switchSubTab('day2')" id="sub-tab-day2" class="flex-1 py-2.5 text-xs font-extrabold rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 2</button>
-                    <button onclick="switchSubTab('day3')" id="sub-tab-day3" class="flex-1 py-3 text-xs font-extrabold rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 3</button>
-                </div>
-
-                <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6 flex flex-col">
-                    <div class="flex items-center gap-4 border-b pb-4 border-slate-100 flex-shrink-0">
-                        <span class="w-10 h-10 rounded-xl bg-blue-50 text-[#166def] flex items-center justify-center text-lg" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
-                        <div>
-                            <h2 class="text-base font-black text-slate-800 tracking-wide" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
-                            <p class="text-xs text-slate-400 mt-0.5" id="session-header-desc">Vận hành danh mục hàng hóa, kiểm soát kho và quản trị bảng giá đầu vào.</p>
-                        </div>
+        <main class="flex-grow w-full px-6 lg:px-12 py-8 flex flex-col">
+            <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-8 items-stretch w-full flex-grow">
+                
+                <!-- CỘT TRÁI: GIÁO TRÌNH & TÌNH HUỐNG -->
+                <section class="xl:col-span-7 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
+                    <div class="flex gap-2 mb-3 bg-indigo-50/50 p-1 rounded-2xl border border-indigo-100 flex-shrink-0">
+                        <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-white transition-all bg-green-600 shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-tags"></i> LỘ TRÌNH RETAIL (BÁN LẺ)</button>
+                        <button onclick="switchRoadmap('FNB')" id="roadmap-FNB" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-bowl-food"></i> LỘ TRÌNH FNB (F&B)</button>
                     </div>
 
-                    <div class="space-y-4 flex-shrink-0">
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                            <span class="text-xs font-extrabold text-[#166def] uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG</span>
-                            <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-[#166def] hover:bg-blue-600 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start"><i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN</button>
-                        </div>
-                        <div id="random-scenario-box"></div>
+                    <div class="flex gap-2 mb-4 bg-slate-300/40 p-1.5 rounded-2xl flex-shrink-0">
+                        <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2.5 text-xs font-bold rounded-xl transition-all bg-orange-500 text-white shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 1</button>
+                        <button onclick="switchSubTab('day2')" id="sub-tab-day2" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 2</button>
+                        <button onclick="switchSubTab('day3')" id="sub-tab-day3" class="flex-1 py-3 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 3</button>
                     </div>
 
-                    <div class="border-t pt-5 border-slate-100 flex-grow flex flex-col space-y-4">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-black text-slate-400 tracking-wider uppercase block">DANH SÁCH LƯU TRỮ TÌNH HUỐNG KHÁC</span>
-                            <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-[#166def] hover:underline flex items-center gap-2"><i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống</button>
-                        </div>
-                        <div id="all-scenarios-list" class="space-y-4 hidden transition-all"></div>
-                    </div>
-                </div>
-            </section>
-            
-            <!-- CỘT PHẢI: FORM ĐÁNH GIÁ -->
-            <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
-                <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-[#f0f6ff] border border-blue-200 rounded-3xl p-6 lg:p-8 shadow-lg">
-                    
-                    <div class="mb-6 border-b border-blue-100 pb-5">
-                        <h3 class="text-base font-black text-slate-800 mb-4 flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-lg bg-blue-100 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-pen-clip"></i></span>
-                            PHIẾU GHI NHẬN KẾT QUẢ REVIEW
-                        </h3>
-                        
-                        <!-- DẢI LINK THÔNG MINH TRÊN 1 DÒNG -->
-                        <div id="dynamicLinksContainer" class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-1 w-full">
-                            <!-- JS tự động render link -->
-                        </div>
-                    </div>
-
-                    <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
-                        
-                        <!-- KHỐI 1: TRA CỨU HỌC VIÊN -->
-                        <div class="bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100 shadow-sm space-y-4">
-                            <div class="flex justify-between items-center border-b border-indigo-100 pb-2">
-                                <span class="text-xs font-black text-indigo-800 tracking-wider block uppercase"><i class="fa-solid fa-magnifying-glass text-[#166def] mr-1.5"></i> Tra Cứu Học Viên & Tiến Độ</span>
-                            </div>
-                            
-                            <div class="grid grid-cols-2 gap-4 items-start">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
-                                    <div class="relative">
-                                        <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: Nguyễn Văn A">
-                                        <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[10px] text-indigo-500 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
-                                    </div>
-                                    <!-- Cụm hiển thị trạng thái nằm gọn dưới ô Input Họ Tên -->
-                                    <div class="flex items-center gap-2 mt-2 h-6">
-                                        <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-white text-slate-500 border border-slate-200 shadow-sm"></span>
-                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5 border">
-                                            <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
-                                        </button>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-500 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
-                                    <input type="text" id="classCode" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-indigo-500/10 focus:border-indigo-500 bg-white shadow-inner" placeholder="Ví dụ: TK-Q3-01">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- KHỐI 2: THÔNG TIN CHUNG -->
-                        <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-[#166def] mr-1.5"></i> Thông Tin Chung</span>
-                            
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
-                                    <input type="text" id="trainerName" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ví dụ: Trần Linh Trang">
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀNH HÀNG *</label>
-                                    <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white cursor-pointer transition-all">
-                                        <option value="Retail">Retail (Bán lẻ)</option>
-                                        <option value="FNB">FNB (F&B)</option>
-                                        <option value="Booking">Booking (Dịch vụ)</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">PHIÊN REVIEW *</label>
-                                    <select id="session" onchange="switchSessionAndCheck()" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white">
-                                        <option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option>
-                                        <option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option>
-                                        <option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀY REVIEW *</label>
-                                    <div class="relative"><input type="text" id="reviewDate" required class="w-full text-xs pl-3.5 pr-10 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="dd/mm/yyyy"><span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"><i class="fa-regular fa-calendar-days"></i></span></div>
-                                </div>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
-                                    <select id="homeworkStatus" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white cursor-pointer transition-all">
-                                        <option value="Đủ">Đủ bài thực hành</option>
-                                        <option value="Thiếu">Thiếu bài thực hành</option>
-                                        <option value="Cần làm lại">Cần làm lại bài</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">ĐIỂM TỰ TIN (1-10) *</label>
-                                    <div class="flex items-center gap-3 mt-1.5"><input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-[#166def]"><span id="scoreValue" class="text-sm font-extrabold text-[#166def] w-6 text-center">7</span></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- KHỐI 3: Self Check -->
-                        <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-comments text-[#166def] mr-1.5"></i> Học Viên Tự Đánh Giá</span>
-                            <div class="space-y-3">
-                                <textarea id="selfCheckEasy" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy dễ hiểu nhất?"></textarea>
-                                <textarea id="selfCheckHard" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
-                                <textarea id="selfCheckApply" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Ứng dụng vào thực tế?"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-[#166def] mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
-                            <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi..."></textarea>
-                        </div>
-
-                        <div class="bg-white p-4 rounded-2xl border border-blue-100/50 shadow-sm space-y-4">
-                            <span class="text-xs font-black text-slate-800 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-[#166def] mr-1.5"></i> Đánh Giá Của Trainer</span>
+                    <div class="flex-grow glass-panel-ultra rounded-3xl p-6 lg:p-8 overflow-y-auto custom-scroll shadow-lg space-y-6 flex flex-col">
+                        <div class="flex items-center gap-4 border-b pb-4 border-slate-100 flex-shrink-0">
+                            <span class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
                             <div>
-                                <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-2">XẾP LOẠI NĂNG LỰC CUỐI BUỔI *</label>
-                                <div class="grid grid-cols-4 gap-2">
-                                    <button type="button" onclick="selectRating('Chưa đạt', this)" class="rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all">CHƯA ĐẠT</button>
-                                    <button type="button" onclick="selectRating('Đạt thao tác', this)" class="rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all">ĐẠT THAO TÁC</button>
-                                    <button type="button" onclick="selectRating('Đạt ứng dụng', this)" class="rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all">ĐẠT ỨNG DỤNG</button>
-                                    <button type="button" onclick="selectRating('Tốt', this)" class="rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all">TỐT</button>
+                                <!-- Đã bỏ hoàn toàn thẻ chứa mô tả Vận hành danh mục hàng hóa... -->
+                                <h2 class="text-base font-bold text-slate-800 tracking-wide" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
+                            </div>
+                        </div>
+
+                        <div class="space-y-4 flex-shrink-0">
+                            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <span class="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG</span>
+                                <button onclick="triggerRandomScenario()" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start"><i class="fa-solid fa-dice"></i> CHỌN TÌNH HUỐNG NGẪU NHIÊN</button>
+                            </div>
+                            <div id="random-scenario-box"></div>
+                        </div>
+
+                        <div class="border-t pt-5 border-slate-100 flex-grow flex flex-col space-y-4">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs font-bold text-slate-400 tracking-wider uppercase block">DANH SÁCH LƯU TRỮ TÌNH HUỐNG KHÁC</span>
+                                <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-blue-600 hover:underline flex items-center gap-2"><i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống</button>
+                            </div>
+                            <div id="all-scenarios-list" class="space-y-4 hidden transition-all"></div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- CỘT PHẢI: FORM ĐÁNH GIÁ (Ô NHẬP LIỆU NỀN TRẮNG CHỮ ĐEN DỄ QUAN SÁT) -->
+                <section class="xl:col-span-5 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
+                    <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full glass-panel-dark text-slate-100 rounded-3xl p-6 lg:p-8 shadow-lg">
+                        
+                        <div class="mb-6 border-b border-blue-900/50 pb-5">
+                            <h3 class="text-base font-bold text-white mb-4 flex items-center gap-3">
+                                <span class="w-8 h-8 rounded-lg bg-blue-900/50 text-blue-300 flex items-center justify-center text-sm"><i class="fa-solid fa-pen-clip"></i></span>
+                                PHIẾU GHI NHẬN KẾT QUẢ REVIEW
+                            </h3>
+                            
+                            <div id="dynamicLinksContainer" class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-1 w-full">
+                                <!-- JS tự động render link -->
+                            </div>
+                        </div>
+
+                        <div class="flex-grow overflow-y-auto custom-scroll space-y-6 pr-2">
+                            
+                            <!-- KHỐI 1: TRA CỨU HỌC VIÊN -->
+                            <div class="bg-[#122543]/40 p-4 rounded-2xl border border-blue-900/30 shadow-sm space-y-4">
+                                <div class="flex justify-between items-center border-b border-blue-900/40 pb-2">
+                                    <span class="text-xs font-bold text-blue-100 tracking-wider block uppercase"><i class="fa-solid fa-magnifying-glass text-blue-400 mr-1.5"></i> Tra Cứu Học Viên & Tiến Độ</span>
                                 </div>
-                                <input type="hidden" id="selectedRating" required value="">
+                                
+                                <div class="grid grid-cols-2 gap-4 items-start">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
+                                        <div class="relative">
+                                            <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 shadow-inner" placeholder="Ví dụ: Nguyễn Văn A">
+                                            <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[10px] text-blue-400 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-2 h-6">
+                                            <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-white/10 text-slate-300 border border-blue-900/50 shadow-sm"></span>
+                                            <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5 border">
+                                                <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">MÃ LỚP / PHÒNG BAN *</label>
+                                        <input type="text" id="classCode" onblur="checkStudentPractice()" required class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 shadow-inner" placeholder="Ví dụ: TK-Q3-01">
+                                    </div>
+                                </div>
                             </div>
-                            <div class="space-y-3">
-                                <textarea id="trainerNotes" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Nhận xét chi tiết điểm mạnh/điểm cần khắc phục..."></textarea>
-                                <textarea id="actionPlan" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white" placeholder="Khuyến nghị lộ trình rèn luyện tiếp theo cho học viên..."></textarea>
+
+                            <!-- KHỐI 2: THÔNG TIN CHUNG -->
+                            <div class="bg-[#122543]/20 p-4 rounded-2xl border border-blue-900/20 shadow-sm space-y-4">
+                                <span class="text-xs font-bold text-blue-100 tracking-wider block uppercase"><i class="fa-solid fa-address-card text-blue-400 mr-1.5"></i> Thông Tin Chung</span>
+                                
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
+                                        <input type="text" id="trainerName" required class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Ví dụ: Trần Linh Trang">
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">NGÀNH HÀNG *</label>
+                                        <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 cursor-pointer transition-all">
+                                            <option value="Retail">Retail (Bán lẻ)</option>
+                                            <option value="FNB">FNB (F&B)</option>
+                                            <option value="Booking">Booking (Dịch vụ)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">PHIÊN REVIEW *</label>
+                                        <select id="session" onchange="switchSessionAndCheck()" required class="w-full text-xs px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800">
+                                            <option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option>
+                                            <option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option>
+                                            <option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">NGÀY REVIEW *</label>
+                                        <div class="relative"><input type="text" id="reviewDate" required class="w-full text-xs pl-3.5 pr-10 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="dd/mm/yyyy"><span class="absolute right-3.5 top-1/2 -translate-y-1/2 text-blue-400 text-xs"><i class="fa-regular fa-calendar-days"></i></span></div>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
+                                        <select id="homeworkStatus" required class="w-full text-xs px-3 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 cursor-pointer transition-all">
+                                            <option value="Đủ">Đủ bài thực hành</option>
+                                            <option value="Thiếu">Thiếu bài thực hành</option>
+                                            <option value="Cần làm lại">Cần làm lại bài</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-1">ĐIỂM TỰ TIN (1-10) *</label>
+                                        <div class="flex items-center gap-3 mt-1.5"><input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-blue-500"><span id="scoreValue" class="text-sm font-bold text-blue-400 w-6 text-center">7</span></div>
+                                    </div>
+                                </div>
                             </div>
+
+                            <!-- KHỐI 3: Self Check -->
+                            <div class="bg-[#122543]/20 p-4 rounded-2xl border border-blue-900/20 shadow-sm space-y-4">
+                                <span class="text-xs font-bold text-blue-100 tracking-wider block uppercase"><i class="fa-solid fa-comments text-blue-400 mr-1.5"></i> Học Viên Tự Đánh Giá</span>
+                                <div class="space-y-3">
+                                    <textarea id="selfCheckEasy" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Tính năng học viên thấy dễ hiểu nhất?"></textarea>
+                                    <textarea id="selfCheckHard" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Tính năng học viên thấy khó giải thích nhất?"></textarea>
+                                    <textarea id="selfCheckApply" rows="2" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Ứng dụng vào thực tế?"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="bg-[#122543]/20 p-4 rounded-2xl border border-blue-900/20 shadow-sm space-y-4">
+                                <span class="text-xs font-bold text-blue-100 tracking-wider block uppercase"><i class="fa-solid fa-shield-halved text-blue-400 mr-1.5"></i> Đánh Giá Phản Xạ Tình Huống</span>
+                                <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi..."></textarea>
+                            </div>
+
+                            <div class="bg-[#122543]/20 p-4 rounded-2xl border border-blue-900/20 shadow-sm space-y-4">
+                                <span class="text-xs font-bold text-blue-100 tracking-wider block uppercase"><i class="fa-solid fa-square-poll-vertical text-blue-400 mr-1.5"></i> Đánh Giá Của Trainer</span>
+                                <div>
+                                    <label class="block text-[11px] font-bold text-blue-200 tracking-wider mb-2">XẾP LOẠI NĂNG LỰC CUỐI BUỔI *</label>
+                                    <div class="grid grid-cols-4 gap-2">
+                                        <button type="button" onclick="selectRating('Chưa đạt', this)" class="rating-btn py-2.5 text-[10px] font-bold rounded-xl bg-[#122543]/40 text-slate-300 border border-blue-900/50 transition-all">CHƯA ĐẠT</button>
+                                        <button type="button" onclick="selectRating('Đạt thao tác', this)" class="rating-btn py-2.5 text-[10px] font-bold rounded-xl bg-[#122543]/40 text-slate-300 border border-blue-900/50 transition-all">ĐẠT THAO TÁC</button>
+                                        <button type="button" onclick="selectRating('Đạt ứng dụng', this)" class="rating-btn py-2.5 text-[10px] font-bold rounded-xl bg-[#122543]/40 text-slate-300 border border-blue-900/50 transition-all">ĐẠT ỨNG DỤNG</button>
+                                        <button type="button" onclick="selectRating('Tốt', this)" class="rating-btn py-2.5 text-[10px] font-bold rounded-xl bg-[#122543]/40 text-slate-300 border border-blue-900/50 transition-all">TỐT</button>
+                                    </div>
+                                    <input type="hidden" id="selectedRating" required value="">
+                                </div>
+                                <div class="space-y-3">
+                                    <textarea id="trainerNotes" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Nhận xét chi tiết điểm mạnh/điểm cần khắc phục..."></textarea>
+                                    <textarea id="actionPlan" rows="3" class="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800" placeholder="Khuyến nghị lộ trình rèn luyện tiếp theo cho học viên..."></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mt-6 pt-4 border-t border-blue-900/50">
+                            <button type="submit" id="submitBtn" class="scifi-btn sc-brand w-full font-bold tracking-wider shadow-lg">
+                                <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
+                                <span id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i> Đang gửi dữ liệu...</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+
+            <!-- ================= TAB 2: QUY TRÌNH & KẾ HOẠCH ================= -->
+            <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-briefcase"></i></span>
+                            BỐI CẢNH VẬN HÀNH QUÝ 3 - 2026
+                        </h3>
+                        <div class="space-y-4 text-sm leading-relaxed text-slate-500">
+                            <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ trong thời gian dài hơn, tập trung vào hai mục tiêu cốt lõi: <strong>Giữ gói</strong> (duy trì sử dụng) và <strong>Nâng gói</strong> (upsell).</p>
+                            <p>📈 <strong>Quy mô tăng trưởng:</strong> Dự kiến bổ sung <strong>30 - 40 nhân sự mới</strong> trong Quý 3/2026, hình thức gia nhập cuốn chiếu theo từng tuần.</p>
+                            <p>⚡ <strong>Áp lực vận hành:</strong> Mỗi tháng hệ thống ghi nhận thêm khoảng <strong>2.400 khách hàng</strong>, mục tiêu duy trì <strong>MRR đạt 286</strong>. Trong khi đó, đội ngũ Coacher/Trainer đang gặp hạn chế về mặt thời gian để trực tiếp theo sát và đặt câu hỏi định hướng liên tục cho từng cá nhân.</p>
+                            <p>🎯 <strong>Yêu cầu thực tế:</strong> Cần đồng đều hóa năng lực chuyên môn của nhân sự mới một cách nhanh chóng, đảm bảo mọi nhân sự đều có thể tự tin tư vấn ngay sau khi kết thúc lộ trình hội nhập.</p>
                         </div>
                     </div>
 
-                    <div class="mt-6 pt-4 border-t border-blue-100">
-                        <button type="submit" id="submitBtn" class="scifi-btn sc-brand w-full font-black tracking-wider shadow-lg">
-                            <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
-                            <span id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i> Đang gửi dữ liệu...</span>
-                        </button>
+                    <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-tr from-emerald-50/40 via-sky-50/20 to-purple-50/40 border border-slate-100">
+                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3">
+                            <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-bullseye"></i></span>
+                            MỤC TIÊU CỦA BUỔI REVIEW 1:1
+                        </h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl"><span class="text-xs font-bold text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span><p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p></div>
+                            <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl"><span class="text-xs font-bold text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span><p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể.</p></div>
+                            <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl"><span class="text-xs font-bold text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span><p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p></div>
+                            <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl"><span class="text-xs font-bold text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span><p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục.</p></div>
+                        </div>
                     </div>
-                </form>
-            </section>
-        </div>
+                </div>
 
-        <!-- ================= TAB 2: QUY TRÌNH & KẾ HOẠCH ================= -->
-        <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-r from-blue-50/30 via-slate-50 to-indigo-50/30 border border-slate-100">
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>QUY TRÌNH TRIỂN KHAI CHUNG</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-500 leading-relaxed">
+                        <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-bold text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span><p class="text-blue-600 font-bold">Sau 03 ngày</p></div>
+                        <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-bold text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span><p class="text-blue-600 font-bold">Mỗi ngày 01 phiên review</p></div>
+                        <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-bold text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span><p class="text-blue-600 font-bold">Phỏng vấn sâu kiến thức</p></div>
+                    </div>
+                </div>
+
                 <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
-                    <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                        <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-briefcase"></i></span>
-                        BỐI CẢNH VẬN HÀNH QUÝ 3 - 2026
-                    </h3>
-                    <div class="space-y-4 text-sm leading-relaxed text-slate-500">
-                        <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ trong thời gian dài hơn, tập trung vào hai mục tiêu cốt lõi: <strong>Giữ gói</strong> (duy trì sử dụng) và <strong>Nâng gói</strong> (upsell).</p>
-                        <p>📈 <strong>Quy mô tăng trưởng:</strong> Dự kiến bổ sung <strong>30 - 40 nhân sự mới</strong> trong Quý 3/2026, hình thức gia nhập cuốn chiếu theo từng tuần.</p>
-                        <p>⚡ <strong>Áp lực vận hành:</strong> Mỗi tháng hệ thống ghi nhận thêm khoảng <strong>2.400 khách hàng</strong>, mục tiêu duy trì <strong>MRR đạt 286</strong>. Trong khi đó, đội ngũ Coacher/Trainer đang gặp hạn chế về mặt thời gian để trực tiếp theo sát và đặt câu hỏi định hướng liên tục cho từng cá nhân.</p>
-                        <p>🎯 <strong>Yêu cầu thực tế:</strong> Cần đồng đều hóa năng lực chuyên môn của nhân sự mới một cách nhanh chóng, đảm bảo mọi nhân sự đều có thể tự tin tư vấn ngay sau khi kết thúc lộ trình hội nhập.</p>
-                    </div>
-                </div>
-
-                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 shadow-sm bg-gradient-to-tr from-emerald-50/40 via-sky-50/20 to-purple-50/40 border border-slate-100">
-                    <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3">
-                        <span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-bullseye"></i></span>
-                        MỤC TIÊU CỦA BUỔI REVIEW 1:1
-                    </h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl"><span class="text-xs font-black text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span><p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p></div>
-                        <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl"><span class="text-xs font-black text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span><p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể.</p></div>
-                        <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl"><span class="text-xs font-black text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span><p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p></div>
-                        <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl"><span class="text-xs font-black text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span><p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục.</p></div>
+                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full border-collapse text-left text-sm min-w-[700px]">
+                            <thead><tr class="border-b border-slate-200"><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px]">HỌC PHẦN</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px]">THỜI LƯỢNG</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN</th></tr></thead>
+                            <tbody class="divide-y divide-slate-100 text-slate-500">
+                                <tr><td class="py-4 font-bold text-slate-700">1. Self-check</td><td class="py-4 text-blue-600 font-bold">5 phút</td><td class="py-4">Đánh giá mức độ tự tin.</td><td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất.</td></tr>
+                                <tr><td class="py-4 font-bold text-slate-700">2. Kiểm tra bản chất</td><td class="py-4 text-blue-600 font-bold">10 phút</td><td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ.</td><td class="py-4">Đặt câu hỏi so sánh phân biệt các tính năng tương đồng.</td></tr>
+                                <tr><td class="py-4 font-bold text-slate-700">3. Phản xạ tư vấn</td><td class="py-4 text-blue-600 font-bold">15 - 20 phút</td><td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích.</td><td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ.</td></tr>
+                                <tr><td class="py-4 font-bold text-slate-700">4. Nhận xét & Định hướng</td><td class="py-4 text-blue-600 font-bold">5 phút</td><td class="py-4">Phản hồi nhanh kết quả buổi học.</td><td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy.</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
-
-            <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-r from-blue-50/30 via-slate-50 to-indigo-50/30 border border-slate-100">
-                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>QUY TRÌNH TRIỂN KHAI CHUNG</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-500 leading-relaxed">
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-black text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span><p class="text-[#166def] font-bold">Sau 03 ngày</p></div>
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-black text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span><p class="text-[#166def] font-bold">Mỗi ngày 01 phiên review</p></div>
-                    <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-black text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span><p class="text-[#166def] font-bold">Phỏng vấn sâu kiến thức</p></div>
-                </div>
-            </div>
-
-            <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
-                <h3 class="text-base font-black text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-[#166def] flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)</h3>
-                <div class="overflow-x-auto">
-                    <table class="w-full border-collapse text-left text-sm min-w-[700px]">
-                        <thead><tr class="border-b border-slate-200"><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px]">HỌC PHẦN</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px]">THỜI LƯỢNG</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN</th></tr></thead>
-                        <tbody class="divide-y divide-slate-100 text-slate-500">
-                            <tr><td class="py-4 font-bold text-slate-700">1. Self-check</td><td class="py-4 text-[#166def] font-black">5 phút</td><td class="py-4">Đánh giá mức độ tự tin.</td><td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất.</td></tr>
-                            <tr><td class="py-4 font-bold text-slate-700">2. Kiểm tra bản chất</td><td class="py-4 text-[#166def] font-black">10 phút</td><td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ.</td><td class="py-4">Đặt câu hỏi so sánh phân biệt các tính năng tương đồng.</td></tr>
-                            <tr><td class="py-4 font-bold text-slate-700">3. Phản xạ tư vấn</td><td class="py-4 text-[#166def] font-black">15 - 20 phút</td><td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích.</td><td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ.</td></tr>
-                            <tr><td class="py-4 font-bold text-slate-700">4. Nhận xét & Định hướng</td><td class="py-4 text-[#166def] font-black">5 phút</td><td class="py-4">Phản hồi nhanh kết quả buổi học.</td><td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy.</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </main>
+        </main>
+    </div>
 
     <!-- Modal Thông báo kết quả Form -->
     <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden">
         <div class="glass-panel-ultra rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
             <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
-            <h4 id="modalTitle" class="text-base font-black text-slate-800 mb-2">Tiêu đề</h4>
+            <h4 id="modalTitle" class="text-base font-bold text-slate-800 mb-2">Tiêu đề</h4>
             <p id="modalMessage" class="text-xs text-slate-400 mb-6 leading-relaxed"></p>
             <button onclick="closeStatusModal()" class="w-full py-2.5 bg-slate-800 hover:bg-slate-700 text-white rounded-xl text-xs font-bold transition-all shadow-md">XÁC NHẬN</button>
         </div>
@@ -298,8 +315,8 @@
     <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-4xl w-full max-h-[90vh] flex flex-col relative border border-slate-200">
             <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="text-xl font-black text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-4">
-                <i class="fa-solid fa-laptop-code text-[#166def]"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
+            <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-4">
+                <i class="fa-solid fa-laptop-code text-blue-600"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
             </h2>
             <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-6 mt-4"></div>
         </div>
@@ -325,9 +342,6 @@
     <script src="codelab-data.js"></script>
 
     <script>
-        // ==========================================
-        // DÁN ĐƯỜNG LINK API VÀO ĐÂY 
-        // ==========================================
         const API_URL = "https://script.google.com/macros/s/AKfycbw02rPVB0jTVQGvqVfJTYvoy3OjBz604srivuUOGmSHCdcnQ9tbHF4XI8zo32zxLz_S/exec"; 
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
@@ -369,20 +383,18 @@
             });
         }
 
-        // Cắt câu an toàn
         function formatSentences(text) {
             if (!text) return "";
             text = text.replace(/\n/g, '<br>');
             return text.replace(/([.?!])\s+([A-ZĐÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ])/g, "$1<br><br>$2");
         }
 
-        // Decode
         function escapeHtml(string) {
             if (!string) return "";
             return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        // ================= CẬP NHẬT CÁC NÚT LINK ĐỘNG =================
+        // ================= CẬP NHẬT CÁC NÚT LINK ĐỘNG (Đồng bộ Dark Navy Glass theme) =================
         function updateDynamicLinks() {
             const container = document.getElementById('dynamicLinksContainer');
             let html = '<div class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-2 w-full">';
@@ -419,16 +431,16 @@
                 }
             }
 
-            if(eLearnLink) html += `<a href="${eLearnLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-blue-200"><i class="fa-solid fa-book"></i> Khóa học E-learning</a>`;
-            if(practiceLink1) html += `<a href="${practiceLink1}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> ${textBtn1}</a>`;
-            if(practiceLink2) html += `<a href="${practiceLink2}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> ${textBtn2}</a>`;
-            html += `<a href="${markLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài (GV)</a>`;
+            if(eLearnLink) html += `<a href="${eLearnLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-blue-950/40 text-blue-200 hover:bg-blue-900/40 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-blue-900/50"><i class="fa-solid fa-book"></i> Khóa học E-learning</a>`;
+            if(practiceLink1) html += `<a href="${practiceLink1}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-950/40 text-indigo-200 hover:bg-indigo-900/40 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-900/50"><i class="fa-solid fa-file-signature"></i> ${textBtn1}</a>`;
+            if(practiceLink2) html += `<a href="${practiceLink2}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-950/40 text-indigo-200 hover:bg-indigo-900/40 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-900/50"><i class="fa-solid fa-file-signature"></i> ${textBtn2}</a>`;
+            html += `<a href="${markLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-emerald-950/40 text-emerald-200 hover:bg-emerald-900/40 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-900/50"><i class="fa-solid fa-check-double"></i> Chấm bài (GV)</a>`;
 
             html += '</div>';
             container.innerHTML = html;
         }
 
-        // ================= ĐIỀU HƯỚNG UI =================
+        // ================= ĐIỀU HƯỚNG UI (Màu Xanh lá cho Lộ trình) =================
         function switchRoadmap(roadmap) {
             currentRoadmap = roadmap;
             document.getElementById('industry').value = roadmap; 
@@ -436,11 +448,11 @@
             const retailBtn = document.getElementById('roadmap-Retail');
             const fnbBtn = document.getElementById('roadmap-FNB');
             if (roadmap === 'Retail') {
-                retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
-                fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
+                retailBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition-all bg-green-600 text-white shadow-sm flex items-center justify-center gap-2";
+                fnbBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 transition-all flex items-center justify-center gap-2";
             } else {
-                retailBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl text-slate-600 transition-all flex items-center justify-center gap-2";
-                fnbBtn.className = "flex-1 py-2.5 text-xs font-black rounded-xl transition-all bg-white text-[#166def] shadow-sm flex items-center justify-center gap-2";
+                retailBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 transition-all flex items-center justify-center gap-2";
+                fnbBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition-all bg-green-600 text-white shadow-sm flex items-center justify-center gap-2";
             }
             switchSubTab(currentDay);
         }
@@ -452,6 +464,7 @@
             if (val.includes("Phiên 3")) switchSubTab('day3');
         }
 
+        // ================= ĐIỀU HƯỚNG UI (Màu Cam cho Ngày học) =================
         function switchSubTab(day) {
             currentDay = day;
             document.getElementById('session').value = day === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : day === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
@@ -461,14 +474,26 @@
                 const button = document.getElementById(`sub-tab-${item}`);
                 if (button) {
                     if (item === day) {
-                        button.classList.add('bg-white', 'text-[#166def]', 'shadow-sm');
-                        button.classList.remove('text-slate-600');
+                        button.classList.add('bg-orange-500', 'text-white', 'shadow-sm');
+                        button.classList.remove('text-slate-600', 'hover:text-slate-800');
                     } else {
-                        button.classList.remove('bg-white', 'text-[#166def]', 'shadow-sm');
-                        button.classList.add('text-slate-600');
+                        button.classList.remove('bg-orange-500', 'text-white', 'shadow-sm');
+                        button.classList.add('text-slate-600', 'hover:text-slate-800');
                     }
                 }
             });
+
+            const bgGlows = {
+                day1: ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
+                day2: ["rgba(249, 115, 22, 0.05)", "rgba(37, 99, 235, 0.05)"],
+                day3: ["rgba(16, 185, 129, 0.05)", "rgba(249, 115, 22, 0.05)"]
+            };
+            const blob1 = document.getElementById('blob-1');
+            const blob2 = document.getElementById('blob-2');
+            if (blob1 && blob2 && bgGlows[day]) {
+                blob1.style.background = bgGlows[day][0];
+                blob2.style.background = bgGlows[day][1];
+            }
 
             const headerTitle = document.getElementById('session-header-title');
             if (day === 'day1') headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
@@ -479,10 +504,10 @@
             renderAllScenarios(day);
             hideAllScenariosList();
             updateDynamicLinks(); 
-            checkStudentPractice(); // Gọi lại check khi tự tay bấm tab
+            checkStudentPractice(); 
         }
 
-        // ================= TÌNH HUỐNG (SCENARIOS) =================
+        // ================= TÌNH HUỐNG (SCENARIOS - Đồng bộ Chiều màu Xanh dương dịu) =================
         function triggerRandomScenario() {
             const list = scenariosData[currentDay] ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) : [];
             const box = document.getElementById('random-scenario-box');
@@ -490,9 +515,10 @@
             
             currentRandomScenario = list[Math.floor(Math.random() * list.length)];
             const isMorning = currentRandomScenario.type === 'morning';
-            const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-purple-50 border-purple-200 text-purple-950';
+            
+            const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-blue-50 border-blue-200 text-blue-950';
 
-            box.innerHTML = `<div class="border-2 border-dashed border-[#166def]/30 rounded-3xl p-1 bg-white animate-fade"><div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3"><h4 class="font-extrabold text-sm">${escapeHtml(currentRandomScenario.title)}</h4><div class="text-xs space-y-3 pt-1"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div></div></div></div>`;
+            box.innerHTML = `<div class="border-2 border-dashed border-blue-600/30 rounded-3xl p-1 bg-white animate-fade"><div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-3"><h4 class="font-extrabold text-sm">${escapeHtml(currentRandomScenario.title)}</h4><div class="text-xs space-y-3 pt-1"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(currentRandomScenario.answer))}</div></div></div></div></div>`;
         }
 
         function renderAllScenarios(day) {
@@ -500,8 +526,8 @@
             const list = scenariosData[day] ? scenariosData[day].filter(item => item.roadmap === currentRoadmap) : [];
             if (!list || list.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Chưa có dữ liệu tình huống.</p>`; return; }
 
-            const mTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-black text-emerald-700 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG</span></div></div>`;
-            const aTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-purple-50 border border-purple-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-black text-purple-700 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU</span></div></div>`;
+            const mTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-bold text-emerald-700 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG</span></div></div>`;
+            const aTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-blue-50 border border-blue-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-bold text-blue-700 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU</span></div></div>`;
 
             let htmlContent = "";
             const mItems = list.filter(item => item.type === 'morning');
@@ -516,8 +542,8 @@
             }
             if (aItems.length > 0) {
                 htmlContent += aTitle + `<div class="space-y-4">` + aItems.map(item => `
-                    <details class="group border border-purple-100 rounded-2xl bg-purple-50/50 p-4 hover:bg-purple-50">
-                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center"><span class="flex items-center gap-2.5"><i class="fa-solid fa-moon text-purple-600"></i> ${escapeHtml(item.title)}</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i></summary>
+                    <details class="group border border-blue-100 rounded-2xl bg-blue-50/50 p-4 hover:bg-blue-50">
+                        <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-center"><span class="flex items-center gap-2.5"><i class="fa-solid fa-moon text-blue-600"></i> ${escapeHtml(item.title)}</span><i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i></summary>
                         <div class="mt-4 text-xs space-y-3 border-t pt-3 border-current/10"><div class="leading-relaxed"><strong>Hỏi:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.question))}</div></div><div class="leading-relaxed bg-white/95 p-3 rounded-xl border border-current/10"><strong>Kỳ vọng:</strong> <div class="mt-1.5">${formatSentences(escapeHtml(item.answer))}</div></div></div>
                     </details>`).join('') + `</div>`;
             }
@@ -542,12 +568,12 @@
         }
 
         function selectRating(rating, element) {
-            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 border border-slate-200 transition-all");
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-bold rounded-xl bg-[#122543]/40 text-slate-300 border border-blue-900/50 transition-all");
             document.getElementById('selectedRating').value = rating;
-            if (rating === 'Chưa đạt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-chuadat transition-all";
-            else if (rating === 'Đạt thao tác') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-thaotac transition-all";
-            else if (rating === 'Đạt ứng dụng') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-ungdung transition-all";
-            else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl active-tot transition-all";
+            if (rating === 'Chưa đạt') element.className = "rating-btn py-2.5 text-[10px] font-bold rounded-xl active-chuadat transition-all";
+            else if (rating === 'Đạt thao tác') element.className = "rating-btn py-2.5 text-[10px] font-bold rounded-xl active-thaotac transition-all";
+            else if (rating === 'Đạt ứng dụng') element.className = "rating-btn py-2.5 text-[10px] font-bold rounded-xl active-ungdung transition-all";
+            else if (rating === 'Tốt') element.className = "rating-btn py-2.5 text-[10px] font-bold rounded-xl active-tot transition-all";
         }
 
         // ================= LOGIC KIỂM TRA BÀI TẬP VÀ SMART DETECT =================
@@ -567,22 +593,19 @@
             .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
                 
-                // Reset class của nút: Thêm whitespace-nowrap để text không bao giờ bị rớt dòng
                 btn.className = "text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer text-white"; 
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
 
-                    // SMART DETECT: Gắn Tag thông báo (Đã bỏ viền, bỏ nền, chỉ giữ text)
                     const latestSubmission = data.data[data.data.length - 1]; 
                     let stdRoadmap = latestSubmission.courseName || "Retail";
                     let stdSession = latestSubmission.session.split(':')[0] || ""; 
                     
-                    tagEl.className = "hidden text-[10px] font-bold text-slate-500 flex items-center gap-1.5";
-                    tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Gần nhất: <span class="text-[#166def]">${stdRoadmap} - ${stdSession}</span>`;
+                    tagEl.className = "hidden text-[10px] font-bold text-slate-300 flex items-center gap-1.5";
+                    tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Gần nhất: <span class="text-blue-400">${stdRoadmap} - ${stdSession}</span>`;
                     tagEl.classList.remove('hidden');
 
-                    // Tính tiến độ dựa vào Tab đang mở trên UI
                     const sessionSelectVal = document.getElementById('session').value; 
                     let targetSessionId1 = ""; let targetSessionId2 = "";
                     if(sessionSelectVal.includes("Phiên 1")) { targetSessionId1 = "session_1"; targetSessionId2 = "session_2"; }
@@ -610,7 +633,6 @@
                         }
                     }
 
-                    // Đổi màu Nút theo % (Dùng màu nổi, đậm, không dùng màu xám nhạt nữa)
                     if(totalExercises > 0) {
                         let percent = Math.round((doneExercises / totalExercises) * 100);
                         if(percent >= 100) {
@@ -627,8 +649,7 @@
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         }
                     } else {
-                        // Trường hợp xem chung chung: Đổi thành màu Xanh dương chuẩn KiotViet
-                        btn.classList.add('bg-[#166def]', 'hover:bg-blue-700'); 
+                        btn.classList.add('bg-blue-600', 'hover:bg-blue-700'); 
                         txtStatus.innerText = `Xem bài (${data.data.length})`;
                     }
                     btn.classList.remove('hidden');
@@ -636,7 +657,6 @@
                 } else {
                     currentStudentPracticeData = [];
                     tagEl.classList.add('hidden');
-                    // Không có bài nào -> Màu Đỏ nổi bật
                     btn.classList.add('bg-rose-500', 'hover:bg-rose-600');
                     txtStatus.innerText = `Chưa làm bài nào`;
                     document.getElementById('homeworkStatus').value = "Thiếu";
@@ -674,7 +694,6 @@
             } else {
                 let html = ''; let grouped = {};
                 
-                // Cắt lấy Session Prefix hiện tại (Ví dụ: "Phiên 1")
                 const sessionSelectVal = document.getElementById('session').value; 
                 let targetSessionTitle1 = ""; let targetSessionTitle2 = "";
                 
@@ -688,7 +707,6 @@
                     if (targetSessionTitle2 && CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle2)) title2 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle2).title.split(':')[0];
                 }
 
-                // Chỉ hiện bài của Phiên đang chọn để Trainer đỡ bị rối
                 const sessionData = currentStudentPracticeData.filter(p => p.session.includes(title1) || (title2 && p.session.includes(title2)));
 
                 if(sessionData.length === 0) {
@@ -699,11 +717,11 @@
 
                 sessionData.forEach(p => {
                     if(!grouped[p.session]) grouped[p.session] = {};
-                    grouped[p.session][p.exerciseTitle] = p; // Lấy bài nộp mới nhất
+                    grouped[p.session][p.exerciseTitle] = p; 
                 });
 
                 for(let session in grouped) {
-                    html += `<div class="mb-6"><h3 class="bg-[#166def] text-white px-4 py-2 rounded-t-xl font-bold uppercase tracking-wider text-[10px]">${session}</h3><div class="border border-[#166def]/20 border-t-0 rounded-b-xl p-4 space-y-4 bg-white">`;
+                    html += `<div class="mb-6"><h3 class="bg-blue-600 text-white px-4 py-2 rounded-t-xl font-bold uppercase tracking-wider text-[10px]">${session}</h3><div class="border border-blue-600/20 border-t-0 rounded-b-xl p-4 space-y-4 bg-white">`;
                     for(let exTitle in grouped[session]) {
                         let item = grouped[session][exTitle];
                         
@@ -800,7 +818,7 @@
             document.getElementById('selfCheckHard').value = ""; document.getElementById('selfCheckApply').value = "";
             document.getElementById('scenarioNotes').value = ""; document.getElementById('trainerNotes').value = ""; document.getElementById('actionPlan').value = "";
             setTodayDate(); document.getElementById('industry').value = currentRoadmap; document.getElementById('selectedRating').value = "";
-            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-black rounded-xl bg-slate-50 text-slate-600 transition-all");
+            document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2.5 text-[10px] font-bold rounded-xl bg-[#122543]/40 text-slate-300 border border-blue-900/50 transition-all");
             document.getElementById('btnCheckPractice').classList.add('hidden'); 
             document.getElementById('studentHistoryTag').classList.add('hidden');
             currentStudentPracticeData = [];
@@ -813,14 +831,14 @@
             const handbookContent = document.getElementById('main-content-handbook');
 
             if (tab === 'workspace') {
-                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
-                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white shadow-sm flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2";
                 workspaceContent.classList.remove('hidden');
                 workspaceContent.classList.add('grid');
                 handbookContent.classList.add('hidden');
             } else {
-                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-blue-100 hover:text-white transition-all flex items-center gap-2";
-                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-white text-[#166def] shadow-sm flex items-center gap-2";
+                workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2";
+                handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white shadow-sm flex items-center gap-2";
                 workspaceContent.classList.add('hidden');
                 workspaceContent.classList.remove('grid');
                 handbookContent.classList.remove('hidden');
