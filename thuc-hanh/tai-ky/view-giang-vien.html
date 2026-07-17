@@ -197,6 +197,7 @@
     </div>
 
     <!-- Script kết nối API & Xử lý lọc dữ liệu -->
+    <!-- Script kết nối API & Xử lý lọc dữ liệu -->
     <script src="codelab-data.js"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbw02rPVB0jTVQGvqVfJTYvoy3OjBz604srivuUOGmSHCdcnQ9tbHF4XI8zo32zxLz_S/exec";
@@ -286,6 +287,26 @@
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
         }
 
+        // HÀM MỚI: TÌM CÂU HỎI TỰ LUẬN TỪ CODELAB-DATA.JS
+        function getTheoryQuestions(industry, exerciseTitle) {
+            if (typeof CODELAB_DATA === 'undefined') return [];
+            // Tìm trong ngành được chỉ định, nếu ko có thì tìm full mảng
+            let searchIndustries = industry && CODELAB_DATA[industry] ? [industry] : Object.keys(CODELAB_DATA);
+            
+            for (let ind of searchIndustries) {
+                const sessions = CODELAB_DATA[ind];
+                for (let s of sessions) {
+                    if (!s.exercises) continue;
+                    for (let ex of s.exercises) {
+                        if (ex.title.trim() === exerciseTitle.trim() && ex.theory) {
+                            return ex.theory;
+                        }
+                    }
+                }
+            }
+            return [];
+        }
+
         let fullscreenImageList = []; let fullscreenImageIndex = 0;
         function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
         function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
@@ -356,14 +377,22 @@
                     ? `<span class="bg-emerald-50 text-[#15803d] border border-emerald-200 text-[10px] px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>` 
                     : `<span class="bg-rose-50 text-[#b91c1c] border border-rose-200 text-[10px] px-3 py-1.5 rounded-xl font-bold uppercase shadow-sm animate-pulse flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
                 
-                // Trình bày tự luận bên TRÁI
+                // Trình bày tự luận bên TRÁI (KÈM CÂU HỎI TỪ CODELAB_DATA)
                 let theoryHtml = '';
                 if(item.ans1 || item.ans2) {
                     theoryHtml = `<div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-4 h-full flex flex-col justify-start space-y-3">
                         <span class="text-blue-600 block uppercase text-[10px] font-bold tracking-wider"><i class="fas fa-user-edit mr-1.5"></i>Nội dung tự luận</span>`;
+                    
+                    // Gọi hàm móc dữ liệu câu hỏi
+                    let questions = getTheoryQuestions(item.khoa, item.tenBaiHoc);
+
                     for(let i=1; i<=5; i++) {
                         if(item[`ans${i}`]) {
-                            theoryHtml += `<div class="text-xs text-slate-700 leading-relaxed bg-white/95 p-3 rounded-xl border border-blue-50 whitespace-pre-wrap"><b class="text-blue-800">Câu ${i}:</b> ${item[`ans${i}`]}</div>`;
+                            let qText = questions[i-1] ? questions[i-1] : `Câu hỏi ${i}`;
+                            theoryHtml += `<div class="text-xs text-slate-700 leading-relaxed bg-white/95 p-3 rounded-xl border border-blue-100 whitespace-pre-wrap shadow-sm space-y-1">
+                                <p class="font-bold text-slate-800"><i class="fa-solid fa-circle-question text-blue-500 mr-1"></i> ${qText}</p>
+                                <p class="pt-1.5 border-t border-blue-50"><b class="text-emerald-600"><i class="fa-solid fa-comment-dots mr-1"></i> Đáp án:</b> <span class="font-medium">${item[`ans${i}`]}</span></p>
+                            </div>`;
                         }
                     }
                     theoryHtml += `</div>`;
@@ -374,13 +403,12 @@
                     </div>`;
                 }
 
-                // Trình bày minh chứng bên PHẢI (Có hỗ trợ slider nếu có nhiều ảnh)
+                // Trình bày minh chứng bên PHẢI
                 let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
                 let imgHtml = '';
                 
                 if (imgUrls.length > 0) {
                     if (imgUrls.length === 1) {
-                        // Chỉ có 1 ảnh
                         imgHtml = `<div class="bg-indigo-50/30 border border-slate-100 rounded-2xl p-4 h-full flex flex-col justify-between">
                             <span class="text-slate-400 block uppercase text-[10px] font-bold tracking-wider mb-3"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span>
                             <div class="relative w-full h-44 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, 0)">
@@ -388,9 +416,7 @@
                             </div>
                         </div>`;
                     } else {
-                        // Slider cho nhiều ảnh
                         activeSlides[safeKey] = 0; 
-                        
                         let slidesImages = imgUrls.map((url, i) => {
                             let hiddenClass = i === 0 ? "" : "hidden";
                             return `<img id="slide-${safeKey}-${i}" src="${getDirectImg(url)}" class="absolute inset-0 w-full h-full object-cover cursor-zoom-in transition-opacity duration-300 ${hiddenClass}" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, activeSlides['${safeKey}'] || 0)">`;
