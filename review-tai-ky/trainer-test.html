@@ -148,6 +148,7 @@
                                     <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white cursor-pointer transition-all">
                                         <option value="Retail">Retail (Bán lẻ)</option>
                                         <option value="FNB">FNB (F&B)</option>
+                                        <option value="Booking">Booking (Dịch vụ)</option>
                                     </select>
                                 </div>
                             </div>
@@ -171,8 +172,9 @@
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
                                     <select id="homeworkStatus" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white cursor-pointer transition-all">
-                                        <option value="Thiếu">Thiếu bài thực hành</option>
                                         <option value="Đủ">Đủ bài thực hành</option>
+                                        <option value="Thiếu">Thiếu bài thực hành</option>
+                                        <option value="Cần làm lại">Cần làm lại bài</option>
                                     </select>
                                 </div>
                                 <div>
@@ -386,39 +388,40 @@
             let html = '<div class="flex flex-nowrap items-center gap-2 overflow-x-auto no-scrollbar pb-2 w-full">';
 
             let eLearnLink = ""; let practiceLink1 = ""; let practiceLink2 = "";
+            let textBtn1 = "Bài tập buổi 1"; let textBtn2 = "Bài tập buổi 2"; 
             let markLink = "https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien.html";
 
             if(currentRoadmap === 'Retail') {
                 if(currentDay === 'day1') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-1.html`;
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-2.html`;
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-1.html`; textBtn1 = "Bài tập buổi 1";
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-2.html`; textBtn2 = "Bài tập buổi 2";
                 } else if(currentDay === 'day2') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-3.html`;
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-4.html`;
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-3.html`; textBtn1 = "Bài tập buổi 3";
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-4.html`; textBtn2 = "Bài tập buổi 4";
                 } else if(currentDay === 'day3') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-5.html`;
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-5.html`; textBtn1 = "Bài tập buổi 5";
                 }
             } else if (currentRoadmap === 'FNB') {
                 if(currentDay === 'day1') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-1.html`;
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-2.html`;
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-1.html`; textBtn1 = "Bài tập buổi 1";
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-2.html`; textBtn2 = "Bài tập buổi 2";
                 } else if(currentDay === 'day2') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-3.html`;
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-4.html`;
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-3.html`; textBtn1 = "Bài tập buổi 3";
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-4.html`; textBtn2 = "Bài tập buổi 4";
                 } else if(currentDay === 'day3') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-5.html`;
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-5.html`; textBtn1 = "Bài tập buổi 5";
                 }
             }
 
             if(eLearnLink) html += `<a href="${eLearnLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-blue-200"><i class="fa-solid fa-book"></i> Khóa học E-learning</a>`;
-            if(practiceLink1) html += `<a href="${practiceLink1}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Bài tập 1</a>`;
-            if(practiceLink2) html += `<a href="${practiceLink2}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> Bài tập 2</a>`;
+            if(practiceLink1) html += `<a href="${practiceLink1}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> ${textBtn1}</a>`;
+            if(practiceLink2) html += `<a href="${practiceLink2}" target="_blank" class="shrink-0 px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> ${textBtn2}</a>`;
             html += `<a href="${markLink}" target="_blank" class="shrink-0 px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài (GV)</a>`;
 
             html += '</div>';
