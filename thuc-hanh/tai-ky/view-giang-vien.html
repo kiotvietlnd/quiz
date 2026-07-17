@@ -124,8 +124,11 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
+    <!-- Script kết nối API & Xử lý lọc dữ liệu -->
     <script src="codelab-data.js"></script>
     <script>
+        // Gắn cứng API URL để không bao giờ bị lỗi do đợi file JS
+        const API_URL = "https://script.google.com/macros/s/AKfycbw02rPVB0jTVQGvqVfJTYvoy3OjBz604srivuUOGmSHCdcnQ9tbHF4XI8zo32zxLz_S/exec";
         let allData = [];
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
@@ -135,13 +138,16 @@
             document.getElementById('exercisesContainer').innerHTML = "";
             document.getElementById('statsSummary').classList.add('hidden');
             
-            fetch(`${APP_CONFIG.API_URL}?action=getAllPracticeData`)
+            fetch(`${API_URL}?action=getAllPracticeData`)
             .then(r => r.json()).then(res => {
                 if(res.status === 'success') {
                     allData = res.data.reverse(); 
                     initFilters();
                 }
-            }).catch(e => alert("Lỗi mạng!"))
+            }).catch(e => {
+                console.error("Fetch error: ", e);
+                document.getElementById('exercisesContainer').innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-wifi text-3xl mb-3"></i><p class="font-bold">Lỗi kết nối mạng hoặc máy chủ Google đang quá tải.</p><p class="text-xs mt-1">Vui lòng tải lại trang (F5) để thử lại.</p></div>`;
+            })
             .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
         }
 
@@ -230,8 +236,6 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200/60 pb-4 mb-4">
                         <div>
                             <h3 class="text-base font-black text-slate-800">${item.tenBaiHoc}</h3>
-                            
-                            <!-- ĐÂY LÀ ĐOẠN ĐÃ ĐƯỢC CHÈN THÊM TAG NGÀNH HÀNG RETAIL/FNB -->
                             <p class="text-xs font-medium text-slate-500 mt-1.5 flex items-center flex-wrap gap-1.5">
                                 <i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600 font-bold">${item.hoVaTen}</span> 
                                 <span class="text-slate-300 mx-0.5">|</span>
@@ -262,7 +266,7 @@
             const btn = document.getElementById(`btn-${key}`);
             btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`; btn.disabled = true;
 
-            fetch(APP_CONFIG.API_URL, {
+            fetch(API_URL, {
                 method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
             }).then(r=>r.json()).then(res => {
