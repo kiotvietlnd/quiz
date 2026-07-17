@@ -69,16 +69,12 @@
     <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
     <!-- SIDEBAR BỘ LỌC (Màu Xanh Navy Đậm Kính mờ) -->
-    <aside id="sidebar" class="w-72 glass-panel-dark flex flex-col z-30 transition-all duration-300 flex-shrink-0 text-sm relative overflow-hidden">
-        <div class="h-16 flex items-center px-6 border-b border-white/10 flex-shrink-0 justify-between relative z-10">
-            <span class="text-sm font-extrabold text-white tracking-widest uppercase flex items-center gap-2"><i class="fas fa-filter text-blue-400"></i> BỘ LỌC TÌM KIẾM</span>
-        </div>
-        
-        <div class="p-6 flex-1 overflow-y-auto flex flex-col custom-scrollbar relative z-10 space-y-5">
-            <div class="space-y-4">
+    <div class="space-y-3.5">
+                <h2 class="text-[10px] font-extrabold text-blue-200/80 uppercase tracking-widest mb-1.5">Bộ lọc hiển thị</h2>
+                
                 <div>
-                    <label class="block text-[11px] font-bold text-amber-300 uppercase tracking-wider mb-1.5"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
-                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
+                    <label class="block text-[11px] font-bold text-yellow-300 mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
+                    <select id="filterStatus" onchange="renderCards()" class="w-full bg-white/20 border border-yellow-400/50 text-white text-[11px] rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả bài nộp</option>
                         <option value="pending" selected>🔴 Cần chấm (Chưa nhận xét)</option>
                         <option value="graded">✅ Đã chấm (Có nhận xét)</option>
@@ -86,41 +82,43 @@
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Ngành hàng</label>
-                    <select id="filterIndustry" onchange="updateStudentFilter()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Ngành hàng</label>
+                    <!-- Thêm updateFilters('industry') -->
+                    <select id="filterIndustry" onchange="updateFilters('industry')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Ngành hàng</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Mã Lớp / Phòng ban</label>
-                    <select id="filterDept" onchange="updateStudentFilter()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Mã Lớp / Phòng ban</label>
+                    <!-- Thêm updateFilters('dept') -->
+                    <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Mã Lớp / PB</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Học viên</label>
-                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Học viên</label>
+                    <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Học viên</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Buổi học</label>
-                    <select id="filterSession" onchange="updateExerciseFilter()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Buổi học</label>
+                    <!-- Thêm updateFilters('session') -->
+                    <select id="filterSession" onchange="updateFilters('session')" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Buổi</option>
                     </select>
                 </div>
 
                 <div>
-                    <label class="block text-[11px] font-bold text-slate-300 uppercase tracking-wider mb-1.5">Tên Bài tập</label>
-                    <select id="filterExercise" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[38px] focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 px-3 font-semibold cursor-pointer truncate transition-all">
+                    <label class="block text-[11px] font-bold text-slate-200 mb-1">Tên Bài tập</label>
+                    <select id="filterExercise" onchange="renderCards()" class="w-full bg-white/10 border border-white/10 text-white text-[11px] hover:bg-white/20 rounded-lg h-[34px] focus:ring-0 outline-none px-2.5 font-semibold cursor-pointer truncate transition">
                         <option value="all">Tất cả Bài tập</option>
                     </select>
                 </div>
             </div>
-        </div>
         
         <div class="p-6 border-t border-white/10 bg-[#122543]/40 backdrop-blur-md flex-shrink-0 flex flex-col gap-2 relative z-10">
             <button onclick="fetchPracticeData()" class="w-full h-11 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md flex items-center justify-center gap-2 transition-all">
@@ -231,53 +229,70 @@
         }
 
         function initFilters() {
+            // Chỉ lấy danh sách Ngành hàng đổ vào trước
             const industries = [...new Set(allData.map(e => e.khoa))].filter(Boolean).sort();
-            const depts = [...new Set(allData.map(e => e.phongBan))].filter(Boolean).sort();
-            const sessions = [...new Set(allData.map(e => e.buoi))].filter(Boolean).sort();
-            
             document.getElementById('filterIndustry').innerHTML = `<option value="all">Tất cả Ngành hàng</option>` + industries.map(i => `<option value="${i}">${i}</option>`).join('');
-            document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
-            document.getElementById('filterSession').innerHTML = `<option value="all">Tất cả Buổi</option>` + sessions.map(s => `<option value="${s}">${s}</option>`).join('');
             
-            updateStudentFilter();
-            updateExerciseFilter();
+            // Gọi hàm phân tầng
+            updateFilters('init');
         }
 
-        function updateStudentFilter() {
+        // Hàm Logic Lọc Phân Tầng (Cascading Filter)
+        function updateFilters(source) {
             const selInd = document.getElementById('filterIndustry').value;
-            const selDept = document.getElementById('filterDept').value;
-            
-            let filtered = allData;
-            if(selInd !== 'all') filtered = filtered.filter(e => e.khoa === selInd);
-            if(selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
-            
-            const students = [...new Set(filtered.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
-            
-            document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
-                const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
-            }).join('');
-            renderCards();
-        }
-
-        function updateExerciseFilter() {
+            let selDept = document.getElementById('filterDept').value;
             const selSession = document.getElementById('filterSession').value;
-            let filtered = selSession === 'all' ? allData : allData.filter(e => e.buoi === selSession);
-            
-            const exercises = [...new Set(filtered.map(e => e.tenBaiHoc))].filter(Boolean).sort();
-            document.getElementById('filterExercise').innerHTML = `<option value="all">Tất cả Bài tập</option>` + exercises.map(ex => `<option value="${ex}">${ex}</option>`).join('');
-            
-            const bgGlows = {
-                "all": ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
-                "Buổi 1": ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
-                "Buổi 2": ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
-                "Buổi 3": ["rgba(249, 115, 22, 0.05)", "rgba(37, 99, 235, 0.05)"],
-                "Buổi 4": ["rgba(249, 115, 22, 0.05)", "rgba(37, 99, 235, 0.05)"],
-                "Buổi 5": ["rgba(16, 185, 129, 0.05)", "rgba(249, 115, 22, 0.05)"]
-            };
-            const activeGlow = bgGlows[selSession] || bgGlows["all"];
-            document.getElementById('blob-1').style.background = activeGlow[0];
-            document.getElementById('blob-2').style.background = activeGlow[1];
 
+            // 1. Lọc dữ liệu theo NGÀNH HÀNG
+            let dataByInd = selInd === 'all' ? allData : allData.filter(e => e.khoa === selInd);
+
+            // Nếu đổi Ngành hàng -> Cập nhật lại list Mã Lớp và Buổi học của riêng ngành đó
+            if (source === 'init' || source === 'industry') {
+                const depts = [...new Set(dataByInd.map(e => e.phongBan))].filter(Boolean).sort();
+                document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+                selDept = 'all'; // Đổi ngành thì reset Mã lớp
+
+                const sessions = [...new Set(dataByInd.map(e => e.buoi))].filter(Boolean).sort();
+                document.getElementById('filterSession').innerHTML = `<option value="all">Tất cả Buổi</option>` + sessions.map(s => `<option value="${s}">${s}</option>`).join('');
+                document.getElementById('filterSession').value = 'all';
+            }
+
+            // 2. Lọc tiếp dữ liệu theo MÃ LỚP
+            let dataByDept = selDept === 'all' ? dataByInd : dataByInd.filter(e => e.phongBan === selDept);
+
+            // Nếu đổi Ngành hoặc Lớp -> Cập nhật lại list Học viên
+            if (source === 'init' || source === 'industry' || source === 'dept') {
+                const students = [...new Set(dataByDept.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
+                document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
+                    const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
+                }).join('');
+            }
+
+            // 3. Lọc tiếp dữ liệu theo BUỔI HỌC
+            const currentSession = document.getElementById('filterSession').value;
+            let dataBySession = currentSession === 'all' ? dataByInd : dataByInd.filter(e => e.buoi === currentSession);
+            
+            // Nếu đổi Ngành hoặc Buổi học -> Cập nhật lại list Bài tập
+            if (source === 'init' || source === 'industry' || source === 'session') {
+                const exercises = [...new Set(dataBySession.map(e => e.tenBaiHoc))].filter(Boolean).sort();
+                document.getElementById('filterExercise').innerHTML = `<option value="all">Tất cả Bài tập</option>` + exercises.map(ex => `<option value="${ex}">${ex}</option>`).join('');
+                
+                // Hiệu ứng đèn nền (Glow) thay đổi theo buổi
+                const bgGlows = {
+                    "all": ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
+                    "Buổi 1": ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
+                    "Buổi 2": ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
+                    "Buổi 3": ["rgba(249, 115, 22, 0.05)", "rgba(37, 99, 235, 0.05)"],
+                    "Buổi 4": ["rgba(249, 115, 22, 0.05)", "rgba(37, 99, 235, 0.05)"],
+                    "Buổi 5": ["rgba(16, 185, 129, 0.05)", "rgba(249, 115, 22, 0.05)"]
+                };
+                let activeGlow = bgGlows["all"];
+                for (let k in bgGlows) { if (currentSession.includes(k)) activeGlow = bgGlows[k]; }
+                document.getElementById('blob-1').style.background = activeGlow[0];
+                document.getElementById('blob-2').style.background = activeGlow[1];
+            }
+
+            // Gọi render in ra giao diện
             renderCards();
         }
 
