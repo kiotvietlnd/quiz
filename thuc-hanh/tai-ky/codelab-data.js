@@ -10,7 +10,7 @@ const APP_CONFIG = {
 const session5Data = {
     id: "session_5",
     title: "Buổi 5: Thiết lập Thuế, Kế toán và Hóa đơn điện tử",
-    desc: "Nghiệp vụ xuất hóa đơn từ máy tính tiền, hệ thống sổ sách theo Thông tư 88 & Tờ khai thuế.",
+    desc: "Nghiệp vụ xuất hóa đơn từ máy tính tiền, hệ thống Sổ kế toán & Tờ khai thuế.",
     exercises: [
         { title: "Nghiệp vụ Kế toán & Thuế", isGroupHeader: true },
         { 
