@@ -145,7 +145,7 @@
                                 </div>
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">NGÀNH HÀNG *</label>
-                                    <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-500 pointer-events-none outline-none">
+                                    <select id="industry" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white cursor-pointer transition-all">
                                         <option value="Retail">Retail (Bán lẻ)</option>
                                         <option value="FNB">FNB (F&B)</option>
                                     </select>
@@ -170,7 +170,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label class="block text-[11px] font-bold text-slate-400 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
-                                    <select id="homeworkStatus" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-slate-500 pointer-events-none outline-none">
+                                    <select id="homeworkStatus" required class="w-full text-xs px-3 py-2.5 border border-slate-200 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#166def] bg-white cursor-pointer transition-all">
                                         <option value="Thiếu">Thiếu bài thực hành</option>
                                         <option value="Đủ">Đủ bài thực hành</option>
                                     </select>
@@ -563,16 +563,19 @@
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
             .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
-                btn.className = "text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5"; 
+                
+                // Reset class của nút: Thêm whitespace-nowrap để text không bao giờ bị rớt dòng
+                btn.className = "text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer text-white"; 
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
 
-                    // SMART DETECT: Gắn Tag thông báo
+                    // SMART DETECT: Gắn Tag thông báo (Đã bỏ viền, bỏ nền, chỉ giữ text)
                     const latestSubmission = data.data[data.data.length - 1]; 
                     let stdRoadmap = latestSubmission.courseName || "Retail";
                     let stdSession = latestSubmission.session.split(':')[0] || ""; 
                     
+                    tagEl.className = "hidden text-[10px] font-bold text-slate-500 flex items-center gap-1.5";
                     tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Gần nhất: <span class="text-[#166def]">${stdRoadmap} - ${stdSession}</span>`;
                     tagEl.classList.remove('hidden');
 
@@ -604,24 +607,25 @@
                         }
                     }
 
-                    // Đổi màu Nút theo %
+                    // Đổi màu Nút theo % (Dùng màu nổi, đậm, không dùng màu xám nhạt nữa)
                     if(totalExercises > 0) {
                         let percent = Math.round((doneExercises / totalExercises) * 100);
                         if(percent >= 100) {
-                            btn.classList.add('bg-emerald-100', 'text-emerald-700', 'border', 'border-emerald-300', 'hover:bg-emerald-200'); 
+                            btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600'); 
                             txtStatus.innerText = `Đã làm đủ (100%)`;
                             document.getElementById('homeworkStatus').value = "Đủ";
                         } else if (percent > 0) {
-                            btn.classList.add('bg-amber-100', 'text-amber-700', 'border', 'border-amber-300', 'hover:bg-amber-200'); 
+                            btn.classList.add('bg-amber-500', 'hover:bg-amber-600'); 
                             txtStatus.innerText = `Đang làm (${percent}%)`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         } else {
-                            btn.classList.add('bg-slate-100', 'text-slate-500', 'border', 'border-slate-200', 'hover:bg-slate-200'); 
+                            btn.classList.add('bg-rose-500', 'hover:bg-rose-600'); 
                             txtStatus.innerText = `Chưa làm bài phiên này`;
                             document.getElementById('homeworkStatus').value = "Thiếu";
                         }
                     } else {
-                        btn.classList.add('bg-slate-100', 'text-slate-600', 'border', 'border-slate-300', 'hover:bg-slate-200'); 
+                        // Trường hợp xem chung chung: Đổi thành màu Xanh dương chuẩn KiotViet
+                        btn.classList.add('bg-[#166def]', 'hover:bg-blue-700'); 
                         txtStatus.innerText = `Xem bài (${data.data.length})`;
                     }
                     btn.classList.remove('hidden');
@@ -629,7 +633,8 @@
                 } else {
                     currentStudentPracticeData = [];
                     tagEl.classList.add('hidden');
-                    btn.classList.add('bg-rose-100', 'text-rose-700', 'border', 'border-rose-300', 'hover:bg-rose-200');
+                    // Không có bài nào -> Màu Đỏ nổi bật
+                    btn.classList.add('bg-rose-500', 'hover:bg-rose-600');
                     txtStatus.innerText = `Chưa làm bài nào`;
                     document.getElementById('homeworkStatus').value = "Thiếu";
                     btn.classList.remove('hidden');
