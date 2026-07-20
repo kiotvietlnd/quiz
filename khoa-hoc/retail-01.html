@@ -82,7 +82,7 @@
                 </div>
             </div>
 
-            <!-- Nút liên kết góc phải Navbar (Đã gỡ nút bánh răng sang Sidebar) -->
+            <!-- Nút liên kết góc phải Navbar -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-retail-01/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
@@ -378,9 +378,9 @@
 
     <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
-        const gasAppUrl = 'https://script.google.com/macros/s/AKfycbwoH5H56nqpv8aCfT3G0InI1LYJQYTI97SWToCvdJUmoQ54AgInK4IhX4oaxoREj8A8/exec';
+        const spreadsheetId = '164_vo9EwM51toiyy3XaGsZvC1z3KXPvjdAQWeNpX0Fg';
         const sheetName = 'Retail 01'; 
-        const dataUrl = `${gasAppUrl}?sheetName=${encodeURIComponent(sheetName)}`;
+        const dataUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
 
         let allQuestions = [];
         let currentQuizSet = [];
@@ -413,21 +413,54 @@
             }
         };
 
+        function parseCSV(text) {
+            if (text.startsWith('\ufeff')) {
+                text = text.substring(1);
+            }
+            let lines = [];
+            let row = [""];
+            let insideQuote = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                let nextChar = text[i+1];
+                
+                if (char === '"') {
+                    if (insideQuote && nextChar === '"') {
+                        row[row.length - 1] += '"';
+                        i++; // Bỏ qua dấu nháy kép phụ tiếp theo
+                    } else {
+                        insideQuote = !insideQuote;
+                    }
+                } else if (char === ',' && !insideQuote) {
+                    row.push("");
+                } else if ((char === '\r' || char === '\n') && !insideQuote) {
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                    lines.push(row);
+                    row = [""];
+                } else {
+                    row[row.length - 1] += char;
+                }
+            }
+            if (row.length > 1 || row[0] !== "") {
+                lines.push(row);
+            }
+            return lines;
+        }
+
         async function fetchData() {
             try {
                 const response = await fetch(dataUrl);
                 if (!response.ok) throw new Error("Yêu cầu mạng thất bại");
                 
-                const jsonResult = await response.json();
+                const text = await response.text();
+                const parsedRows = parseCSV(text);
                 
-                if (jsonResult.error) {
-                    showErrorScreen("Lỗi cấu hình Sheet: " + jsonResult.error);
-                    return;
-                }
-                
-                processQuizData(jsonResult.data);
+                processQuizData(parsedRows);
             } catch (error) {
-                showErrorScreen("Không kết nối được nguồn cấp dữ liệu thông qua API bảo mật: " + error.message);
+                showErrorScreen("Không kết nối được nguồn cấp dữ liệu trực tiếp từ Google Sheets: " + error.message);
             }
         }
 
