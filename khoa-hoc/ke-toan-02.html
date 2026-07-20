@@ -379,9 +379,9 @@
 
     <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
-        const gasAppUrl = 'https://script.google.com/macros/s/AKfycbwoH5H56nqpv8aCfT3G0InI1LYJQYTI97SWToCvdJUmoQ54AgInK4IhX4oaxoREj8A8/exec';
+        const spreadsheetId = '164_vo9EwM51toiyy3XaGsZvC1z3KXPvjdAQWeNpX0Fg';
         const sheetName = 'Kế toán 02'; 
-        const dataUrl = `${gasAppUrl}?sheetName=${encodeURIComponent(sheetName)}`;
+        const dataUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
 
         let allQuestions = [];
         let currentQuizSet = [];
@@ -414,19 +414,53 @@
             }
         };
 
+        function parseCSV(text) {
+            if (text.startsWith('\ufeff')) {
+                text = text.substring(1);
+            }
+            let lines = [];
+            let row = [""];
+            let insideQuote = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                let nextChar = text[i+1];
+                
+                if (char === '"') {
+                    if (insideQuote && nextChar === '"') {
+                        row[row.length - 1] += '"';
+                        i++; // Bỏ qua dấu nháy kép phụ tiếp theo
+                    } else {
+                        insideQuote = !insideQuote;
+                    }
+                } else if (char === ',' && !insideQuote) {
+                    row.push("");
+                } else if ((char === '\r' || char === '\n') && !insideQuote) {
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                    lines.push(row);
+                    row = [""];
+                } else {
+                    row[row.length - 1] += char;
+                }
+            }
+            if (row.length > 1 || row[0] !== "") {
+                lines.push(row);
+            }
+            return lines;
+        }
+
         async function fetchData() {
             try {
                 const response = await fetch(dataUrl);
                 if (!response.ok) throw new Error("Yêu cầu mạng thất bại");
                 
-                const jsonResult = await response.json();
-                if (jsonResult.error) {
-                    showErrorScreen("Lỗi cấu hình Sheet: " + jsonResult.error);
-                    return;
-                }
-                processQuizData(jsonResult.data);
+                const rawText = await response.text();
+                const parsedRows = parseCSV(rawText);
+                processQuizData(parsedRows);
             } catch (error) {
-                showErrorScreen("Không kết nối được nguồn cấp dữ liệu thông qua API bảo mật: " + error.message);
+                showErrorScreen("Không kết nối được nguồn cấp dữ liệu trực tiếp: " + error.message);
             }
         }
 
@@ -687,11 +721,11 @@
             if (valEl) valEl.textContent = `${scalePercent}%`;
         }
 
+        // Khởi tạo phiên làm bài mới
         function initQuizSession() {
             clearQuizState();
             currentIndex = 0;
             score = 0;
-            viewMode = 'single'; 
             userAnswers = currentQuizSet.map(q => ({
                 question: q,
                 selectedIdx: null,
