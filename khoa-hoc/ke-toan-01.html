@@ -362,10 +362,10 @@
                 <div>
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Chế độ hiển thị</label>
                     <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1 rounded-xl">
-                        <button onclick="changeViewModeSetting('single')" id="set-view-single" class="py-2 rounded-lg text-xs font-black transition-all focus:outline-none">
+                        <button onclick="changeViewModeSetting('single')" id="set-view-single" class="py-2 rounded-lg text-xs font-black transition-all bg-kvBlue text-white shadow-sm">
                             Từng câu
                         </button>
-                        <button onclick="changeViewModeSetting('all')" id="set-view-all" class="py-2 rounded-lg text-xs font-black transition-all focus:outline-none">
+                        <button onclick="changeViewModeSetting('all')" id="set-view-all" class="py-2 rounded-lg text-xs font-extrabold transition-all text-slate-600 hover:text-slate-800">
                             Tất cả
                         </button>
                     </div>
@@ -390,9 +390,9 @@
 
     <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
-        const gasAppUrl = 'https://script.google.com/macros/s/AKfycbwoH5H56nqpv8aCfT3G0InI1LYJQYTI97SWToCvdJUmoQ54AgInK4IhX4oaxoREj8A8/exec';
+        const spreadsheetId = '164_vo9EwM51toiyy3XaGsZvC1z3KXPvjdAQWeNpX0Fg';
         const sheetName = 'Kế toán 01'; 
-        const dataUrl = `${gasAppUrl}?sheetName=${encodeURIComponent(sheetName)}`;
+        const dataUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(sheetName)}`;
 
         let allQuestions = [];
         let currentQuizSet = [];
@@ -425,19 +425,57 @@
             }
         };
 
+        function parseCSV(text) {
+            if (text.startsWith('\ufeff')) {
+                text = text.substring(1);
+            }
+            let lines = [];
+            let row = [""];
+            let insideQuote = false;
+            
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                let nextChar = text[i+1];
+                
+                if (char === '"') {
+                    if (insideQuote && nextChar === '"') {
+                        row[row.length - 1] += '"';
+                        i++; // Bỏ qua dấu nháy kép phụ tiếp theo
+                    } else {
+                        insideQuote = !insideQuote;
+                    }
+                } else if (char === ',' && !insideQuote) {
+                    row.push("");
+                } else if ((char === '\r' || char === '\n') && !insideQuote) {
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
+                    lines.push(row);
+                    row = [""];
+                } else {
+                    row[row.length - 1] += char;
+                }
+            }
+            if (row.length > 1 || row[0] !== "") {
+                lines.push(row);
+            }
+            return lines;
+        }
+
         async function fetchData() {
             try {
                 const response = await fetch(dataUrl);
                 if (!response.ok) throw new Error("Yêu cầu kết nối thất bại");
                 
-                const jsonResult = await response.json();
+                const csvText = await response.text();
+                const parsedRows = parseCSV(csvText);
                 
-                if (jsonResult.error) {
-                    showErrorScreen("Lỗi cấu hình bảng tính: " + jsonResult.error);
+                if (!parsedRows || parsedRows.length === 0) {
+                    showErrorScreen("Dữ liệu nhận về trống rỗng hoặc lỗi định dạng CSV.");
                     return;
                 }
                 
-                processQuizData(jsonResult.data);
+                processQuizData(parsedRows);
             } catch (error) {
                 showErrorScreen("Không kết nối được nguồn cấp dữ liệu thông qua API bảo mật: " + error.message);
             }
