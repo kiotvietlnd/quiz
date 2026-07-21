@@ -86,8 +86,8 @@
                                 <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-layer-group text-xs"></i></span>
                                 <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Danh sách bài học</h3>
                             </div>
-                            <div id="lesson-sidebar-list" class="flex-grow overflow-y-auto custom-scroll p-3 space-y-2 max-h-[25vh] md:max-h-none">
-                                <!-- Render JS danh sách tên bài học -->
+                            <div id="lesson-sidebar-list" class="flex-grow overflow-y-auto custom-scroll p-3 space-y-4 max-h-[25vh] md:max-h-none">
+                                <!-- Render JS danh sách tên bài học phân loại Sáng/Chiều -->
                             </div>
                         </div>
 
@@ -161,11 +161,9 @@
                                         </button>
                                     </div>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">PHÒNG BAN *</label>
-                                    <!-- Đặt giá trị mặc định value="Tái ký" theo yêu cầu -->
-                                    <input type="text" id="classCode" onblur="checkStudentPractice()" required value="Tái ký" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ví dụ: Tái ký">
-                                </div>
+                                
+                                <!-- Input ẩn để hệ thống vẫn chạy tự động nhưng không hiển thị ra UI -->
+                                <input type="hidden" id="classCode" value="Tái ký">
                             </div>
 
                             <!-- KHỐI 2: THÔNG TIN CHUNG -->
@@ -225,10 +223,9 @@
                                     <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">TÍNH NĂNG KHÓ HIỂU NHẤT</label>
                                     <textarea id="selfCheckHard" rows="2" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ghi nhận..."></textarea>
                                 </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">ỨNG DỤNG VÀO THỰC TẾ</label>
-                                    <textarea id="selfCheckApply" rows="2" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ghi nhận..."></textarea>
-                                </div>
+                                
+                                <!-- Hóa thân thành input ẩn để đảm bảo logic lưu trữ nguyên vẹn -->
+                                <input type="hidden" id="selfCheckApply" value="">
                             </div>
 
                             <!-- KHỐI 4: Phản xạ -->
@@ -511,7 +508,6 @@
         // ================= CẬP NHẬT CÁC NÚT LINK ĐỘNG =================
         function updateDynamicLinks() {
             const container = document.getElementById('dynamicLinksContainer');
-            // Cập nhật thẻ bọc: flex-wrap cho phép rớt dòng do Form bị thu hẹp diện tích
             let html = '<div class="flex flex-wrap items-center gap-2.5 pb-2 w-full">';
 
             let eLearnLink = ""; let practiceLink1 = ""; let practiceLink2 = "";
@@ -634,48 +630,91 @@
                 return; 
             }
 
-            const lessonMap = new Map();
+            // Sử dụng Map để lưu trữ bài học dựa theo thứ tự xuất hiện của chúng trong dữ liệu thô (Spreadsheet Order)
+            const morningMap = new Map();
+            const afternoonMap = new Map();
+
             list.forEach(item => {
                 const parts = splitTitle(item.title);
                 const lessonName = parts.lesson || "Chưa phân loại";
-                
-                const codeMatch = parts.code.match(/\d+/);
-                const codeNum = codeMatch ? parseInt(codeMatch[0]) : 9999;
+                const isMorning = item.type === 'morning';
 
-                if (!lessonMap.has(lessonName)) {
-                    lessonMap.set(lessonName, { name: lessonName, minCode: codeNum, count: 1, sampleCode: parts.code });
+                if (isMorning) {
+                    if (!morningMap.has(lessonName)) {
+                        morningMap.set(lessonName, { name: lessonName, count: 1 });
+                    } else {
+                        morningMap.get(lessonName).count++;
+                    }
                 } else {
-                    const existing = lessonMap.get(lessonName);
-                    existing.count++;
-                    if (codeNum < existing.minCode) {
-                        existing.minCode = codeNum;
-                        existing.sampleCode = parts.code;
+                    if (!afternoonMap.has(lessonName)) {
+                        afternoonMap.set(lessonName, { name: lessonName, count: 1 });
+                    } else {
+                        afternoonMap.get(lessonName).count++;
                     }
                 }
             });
 
-            // Sắp xếp theo minCode từ nhỏ đến lớn
-            const sortedLessons = Array.from(lessonMap.values()).sort((a, b) => a.minCode - b.minCode);
+            const morningList = Array.from(morningMap.values());
+            const afternoonList = Array.from(afternoonMap.values());
 
             let html = "";
-            sortedLessons.forEach(lesson => {
-                const isActive = (lesson.name === currentSelectedLesson);
-                const activeClasses = isActive 
-                    ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" 
-                    : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
-                
-                // Đã ẩn phần mã tình huống, chỉ hiển thị tên bài học
-                html += `<button data-lesson="${escapeHtml(lesson.name)}" onclick="selectLesson('${escapeHtml(lesson.name)}')" class="w-full text-left px-3.5 py-2.5 rounded-xl border transition-all ${activeClasses}">
-                    <span class="text-xs font-semibold leading-snug line-clamp-2">${escapeHtml(lesson.name)} <span class="font-normal opacity-70">(${lesson.count})</span></span>
-                </button>`;
-            });
+            
+            // Render học phần sáng
+            if (morningList.length > 0) {
+                html += `
+                    <div class="mb-4">
+                        <div class="flex items-center gap-1.5 px-2.5 py-1.5 mb-2 text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider bg-emerald-50 rounded-xl border border-emerald-100">
+                            <i class="fa-solid fa-sun text-xs text-emerald-500"></i> HỌC PHẦN SÁNG
+                        </div>
+                        <div class="space-y-1.5">
+                `;
+                morningList.forEach(lesson => {
+                    const isActive = (lesson.name === currentSelectedLesson);
+                    const activeClasses = isActive 
+                        ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" 
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
+                    
+                    html += `
+                        <button data-lesson="${escapeHtml(lesson.name)}" onclick="selectLesson('${escapeHtml(lesson.name)}')" class="w-full text-left px-3 py-2.5 rounded-xl border transition-all ${activeClasses}">
+                            <span class="text-xs font-semibold leading-snug line-clamp-2">${escapeHtml(lesson.name)} <span class="font-normal opacity-70">(${lesson.count})</span></span>
+                        </button>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+
+            // Render học phần chiều
+            if (afternoonList.length > 0) {
+                html += `
+                    <div class="mb-4">
+                        <div class="flex items-center gap-1.5 px-2.5 py-1.5 mb-2 text-[10px] font-extrabold text-blue-700 uppercase tracking-wider bg-blue-50 rounded-lg border border-blue-100">
+                            <i class="fa-solid fa-moon text-xs text-blue-500"></i> HỌC PHẦN CHIỀU
+                        </div>
+                        <div class="space-y-1.5">
+                `;
+                afternoonList.forEach(lesson => {
+                    const isActive = (lesson.name === currentSelectedLesson);
+                    const activeClasses = isActive 
+                        ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" 
+                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
+                    
+                    html += `
+                        <button data-lesson="${escapeHtml(lesson.name)}" onclick="selectLesson('${escapeHtml(lesson.name)}')" class="w-full text-left px-3 py-2.5 rounded-xl border transition-all ${activeClasses}">
+                            <span class="text-xs font-semibold leading-snug line-clamp-2">${escapeHtml(lesson.name)} <span class="font-normal opacity-70">(${lesson.count})</span></span>
+                        </button>
+                    `;
+                });
+                html += `</div></div>`;
+            }
             
             sidebar.innerHTML = html;
 
-            // Auto select bài học đầu tiên nếu chưa có
-            if (!currentSelectedLesson || !lessonMap.has(currentSelectedLesson)) {
-                if (sortedLessons.length > 0) {
-                    selectLesson(sortedLessons[0].name);
+            // Tự chọn bài học đầu tiên nếu chưa có cấu hình trước đó
+            if (!currentSelectedLesson || (!morningMap.has(currentSelectedLesson) && !afternoonMap.has(currentSelectedLesson))) {
+                if (morningList.length > 0) {
+                    selectLesson(morningList[0].name);
+                } else if (afternoonList.length > 0) {
+                    selectLesson(afternoonList[0].name);
                 } else {
                     triggerRandomScenario(null);
                 }
@@ -685,13 +724,13 @@
         function selectLesson(lessonName) {
             currentSelectedLesson = lessonName;
             
-            // Re-render UI classes for active state
+            // Cập nhật trạng thái Active CSS thủ công cho trực quan
             const buttons = document.getElementById('lesson-sidebar-list').querySelectorAll('button');
             buttons.forEach(btn => {
                 if (btn.getAttribute('data-lesson') === lessonName) {
-                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl border transition-all bg-blue-100 border-blue-300 text-blue-800 shadow-sm";
+                    btn.className = "w-full text-left px-3 py-2.5 rounded-xl border transition-all bg-blue-100 border-blue-300 text-blue-800 shadow-sm";
                 } else {
-                    btn.className = "w-full text-left px-3.5 py-2.5 rounded-xl border transition-all bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
+                    btn.className = "w-full text-left px-3 py-2.5 rounded-xl border transition-all bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
                 }
             });
 
@@ -1098,8 +1137,8 @@
 
         function resetFormFields() {
             document.getElementById('repName').value = ""; 
-            // Giữ lại mã lớp mặc định 26KV00 khi reset form
-            document.getElementById('classCode').value = "26KV00";
+            // Giữ lại mặc định phòng ban Tái ký khi reset form
+            document.getElementById('classCode').value = "Tái ký";
             
             document.getElementById('homeworkStatus').selectedIndex = 0; document.getElementById('confidenceScore').value = 7;
             document.getElementById('scoreValue').textContent = "7"; document.getElementById('selfCheckEasy').value = "";
