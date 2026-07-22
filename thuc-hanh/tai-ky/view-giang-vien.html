@@ -46,218 +46,198 @@
 </head>
 <body class="h-screen flex overflow-hidden">
 
-    <!-- SIDEBAR BỘ LỌC CHUẨN UI MỚI -->
-    <aside id="sidebar" class="w-72 sidebar-dark flex flex-col z-30 transition-all duration-300 flex-shrink-0 relative">
-        <div class="h-16 flex items-center px-6 border-b border-white/10 justify-between shrink-0">
-            <span class="text-sm font-black tracking-widest uppercase flex items-center gap-2"><i class="fas fa-filter text-blue-400"></i> BỘ LỌC BÁO CÁO</span>
-            <button onclick="resetFilters()" class="text-[11px] font-bold text-blue-300 hover:text-white border border-blue-400/30 px-2 py-1 rounded transition"><i class="fas fa-undo"></i> Đặt lại</button>
+    <!-- SIDEBAR BỘ LỌC -->
+    <aside id="sidebar" class="w-72 glass-panel-dark flex flex-col z-30 transition-all duration-300 flex-shrink-0 text-sm relative overflow-hidden">
+        <div class="h-16 flex items-center px-6 border-b border-white/10 flex-shrink-0 justify-between relative z-10">
+            <span class="text-sm font-extrabold text-white tracking-widest uppercase flex items-center gap-2"><i class="fas fa-filter text-blue-400"></i> BỘ LỌC TÌM KIẾM</span>
         </div>
         
-        <div class="p-6 flex-1 overflow-y-auto flex flex-col custom-scrollbar space-y-6">
+        <div class="p-5 flex-1 overflow-y-auto flex flex-col custom-scrollbar relative z-10 space-y-4">
+            <div>
+                <label class="block text-[10px] font-bold text-amber-300 uppercase tracking-wider mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
+                <select id="filterStatus" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[36px] focus:outline-none focus:ring-2 focus:ring-blue-500 px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả bài nộp</option>
+                    <option value="pending" selected>🔴 Cần chấm (Chưa nhận xét)</option>
+                    <option value="graded">✅ Đã chấm (Có nhận xét)</option>
+                    <option value="skipped">⏭️ Đã bỏ qua</option>
+                </select>
+            </div>
             
-            <!-- Ngành hàng (Radio UI) -->
+            <!-- BỘ LỌC THỜI GIAN MỚI -->
             <div>
-                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">NGÀNH HÀNG</label>
-                <div class="radio-custom space-y-1">
-                    <div><input type="radio" id="ind_all" name="filterIndustry" value="all" checked onchange="updateFilters('industry')"><label for="ind_all">Tất cả các ngành</label></div>
-                    <div><input type="radio" id="ind_retail" name="filterIndustry" value="Retail" onchange="updateFilters('industry')"><label for="ind_retail">Retail (Bán lẻ)</label></div>
-                    <div><input type="radio" id="ind_fnb" name="filterIndustry" value="FNB" onchange="updateFilters('industry')"><label for="ind_fnb">FNB (F&B)</label></div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Thời gian nộp bài</label>
+                <select id="filterTime" onchange="toggleCustomTime(); updateFilters('time')" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[36px] focus:outline-none focus:ring-2 focus:ring-blue-500 px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả thời gian</option>
+                    <option value="today">Hôm nay</option>
+                    <option value="this_week">Tuần này</option>
+                    <option value="last_week">Tuần trước</option>
+                    <option value="custom">Tùy chọn...</option>
+                </select>
+                <div id="customTimeBox" class="hidden mt-2 grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="text-[9px] text-slate-400 block mb-0.5">Từ ngày</label>
+                        <input type="date" id="dateFrom" onchange="updateFilters('time')" class="w-full bg-white text-slate-800 text-[10px] rounded p-1 border outline-none">
+                    </div>
+                    <div>
+                        <label class="text-[9px] text-slate-400 block mb-0.5">Đến ngày</label>
+                        <input type="date" id="dateTo" onchange="updateFilters('time')" class="w-full bg-white text-slate-800 text-[10px] rounded p-1 border outline-none">
+                    </div>
                 </div>
             </div>
 
-            <!-- Thời gian (Button Group UI) -->
             <div>
-                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-3">THỜI GIAN NỘP BÀI</label>
-                <div class="flex items-center mb-3">
-                    <div id="time_all" onclick="setTimeFilter('all')" class="time-btn active">Tất cả</div>
-                    <div id="time_week" onclick="setTimeFilter('week')" class="time-btn">Tuần này</div>
-                    <div id="time_prev" onclick="setTimeFilter('prev')" class="time-btn border-l-0">Tuần trước</div>
-                    <div id="time_custom" onclick="setTimeFilter('custom')" class="time-btn">Tùy chọn</div>
-                </div>
-                <div id="customDateWrap" class="grid grid-cols-2 gap-2 hidden animate-fade-in-up">
-                    <input type="date" id="dateFrom" onchange="updateFilters('time')" class="w-full bg-[#1e293b] border border-slate-600 text-white text-[10px] rounded p-1.5 focus:outline-none focus:border-blue-400">
-                    <input type="date" id="dateTo" onchange="updateFilters('time')" class="w-full bg-[#1e293b] border border-slate-600 text-white text-[10px] rounded p-1.5 focus:outline-none focus:border-blue-400">
-                </div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Ngành hàng</label>
+                <select id="filterIndustry" onchange="updateFilters('industry')" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả Ngành hàng</option>
+                </select>
             </div>
 
-            <hr class="border-slate-600/50">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Mã Lớp / Phòng ban</label>
+                <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả Mã Lớp / PB</option>
+                </select>
+            </div>
 
-            <!-- Các Select Box -->
-            <div class="space-y-4">
-                <div>
-                    <label class="block text-[10px] font-black text-amber-400 uppercase tracking-widest mb-1.5">TRẠNG THÁI CHẤM</label>
-                    <select id="filterStatus" onchange="renderUI()" class="w-full bg-[#1e293b] border border-slate-600 text-white text-xs rounded-lg p-2 focus:outline-none">
-                        <option value="all">Tất cả bài nộp</option>
-                        <option value="pending" selected>🔴 Cần chấm (Chưa nhận xét)</option>
-                        <option value="graded">✅ Đã chấm (Có nhận xét)</option>
-                        <option value="skipped">⏭️ Đã bỏ qua</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">MÃ LỚP / PB</label>
-                    <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-[#1e293b] border border-slate-600 text-white text-xs rounded-lg p-2 focus:outline-none"><option value="all">Tất cả Mã Lớp / PB</option></select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">HỌC VIÊN</label>
-                    <select id="filterStudent" onchange="renderUI()" class="w-full bg-[#1e293b] border border-slate-600 text-white text-xs rounded-lg p-2 focus:outline-none"><option value="all">Tất cả Học viên</option></select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">BUỔI HỌC</label>
-                    <select id="filterSession" onchange="updateFilters('session')" class="w-full bg-[#1e293b] border border-slate-600 text-white text-xs rounded-lg p-2 focus:outline-none"><option value="all">Tất cả Buổi</option></select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1.5">TÊN BÀI TẬP</label>
-                    <select id="filterExercise" onchange="renderUI()" class="w-full bg-[#1e293b] border border-slate-600 text-white text-xs rounded-lg p-2 focus:outline-none"><option value="all">Tất cả Bài tập</option></select>
-                </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Học viên</label>
+                <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả Học viên</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Buổi học</label>
+                <select id="filterSession" onchange="updateFilters('session')" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả Buổi</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Tên Bài tập</label>
+                <select id="filterExercise" onchange="renderCards()" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả Bài tập</option>
+                </select>
             </div>
         </div>
         
-        <div class="p-5 border-t border-white/10 shrink-0">
-            <button onclick="fetchPracticeData()" class="w-full h-10 bg-blue-600 hover:bg-blue-500 text-white font-black text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-                <i class="fas fa-sync-alt"></i> LÀM MỚI DỮ LIỆU
-            </button>
+        <div class="p-5 border-t border-white/10 bg-[#122543]/40 backdrop-blur-md shrink-0 flex flex-col z-10">
+            <button onclick="fetchPracticeData()" class="w-full h-10 bg-blue-600 hover:bg-blue-500 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2"><i class="fas fa-sync-alt"></i> LÀM MỚI DỮ LIỆU</button>
         </div>
     </aside>
 
     <!-- MAIN CONTENT -->
-    <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full bg-[#f1f5f9]">
-        <header class="h-16 bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm shrink-0 w-full z-20">
-            <div class="flex items-center gap-3">
-                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-6 opacity-80 mix-blend-multiply">
-                <span class="w-px h-6 bg-slate-300"></span>
-                <h1 class="text-sm font-black text-slate-700 tracking-tight">TRUNG TÂM PHÂN TÍCH & CHẤM BÀI</h1>
-            </div>
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10 bg-slate-100 backdrop-blur-[2px]">
+        <header class="h-16 bg-[#1b365d] border-b border-[#122543] px-6 py-4 flex items-center shadow-md shrink-0 w-full z-50">
+            <span class="w-8 h-8 rounded-lg bg-blue-900/50 text-blue-300 flex items-center justify-center text-sm mr-3"><i class="fas fa-chart-line"></i></span>
+            <h1 class="text-xs md:text-sm font-bold text-white tracking-wider uppercase">TRUNG TÂM PHÂN TÍCH & CHẤM BÀI TRỰC TUYẾN</h1>
         </header>
 
-        <div class="flex-1 overflow-auto p-4 md:p-6 pb-28 custom-scrollbar">
-            <div class="max-w-6xl mx-auto w-full space-y-6">
+        <div class="flex-1 overflow-auto p-6 md:p-8 relative pb-28 custom-scrollbar">
+            <div class="max-w-6xl mx-auto w-full space-y-8">
                 
-                <!-- BẢNG THỐNG KÊ TỔNG QUAN (CARD TRÊN CÙNG) -->
-                <div id="statsSummary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 z-10 relative hidden">
-                    <div class="glass-panel p-5 border-b-4 border-indigo-500 text-center">
-                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider mb-1">Tổng lượt Review</p>
-                        <p class="text-3xl font-black text-slate-800" id="statTotal">0</p>
-                    </div>
-                    <div class="glass-panel p-5 border-b-4 border-emerald-500 text-center">
-                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider mb-1">Tỉ lệ đạt yêu cầu</p>
-                        <p class="text-3xl font-black text-emerald-600" id="statPassRate">0%</p>
-                    </div>
-                    <div class="glass-panel p-5 border-b-4 border-amber-500 text-center">
-                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider mb-1">Chờ chấm điểm</p>
-                        <p class="text-3xl font-black text-amber-500" id="statPendingCount">0</p>
-                    </div>
-                    <div class="glass-panel p-5 border-b-4 border-rose-500 text-center bg-rose-50/50">
-                        <p class="text-[10px] font-black uppercase text-rose-500 tracking-wider mb-1 flex items-center justify-center gap-1"><i class="fas fa-exclamation-triangle"></i> Cần đào tạo lại</p>
-                        <p class="text-3xl font-black text-rose-600" id="statFailCount">0</p>
-                    </div>
-                </div>
-
-                <!-- BIỂU ĐỒ DASHBOARD TỔNG QUAN -->
-                <div id="dashboardCharts" class="grid grid-cols-1 md:grid-cols-3 gap-4 hidden">
-                    <!-- Pie Chart Phân bổ kết quả -->
-                    <div class="glass-panel p-5 flex flex-col">
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="text-xs font-black text-slate-700 uppercase tracking-widest"><i class="fas fa-chart-pie mr-1 text-blue-500"></i> Phân bổ kết quả</span>
-                        </div>
-                        <div class="flex-1 flex flex-col items-center justify-center">
-                            <div id="ratingPieChart" class="pie-chart shadow-md mb-6"></div>
-                            <div class="flex flex-wrap justify-center gap-3 text-[10px] font-bold text-slate-500">
-                                <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 bg-emerald-500 rounded-sm"></div>Tốt</span>
-                                <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 bg-blue-500 rounded-sm"></div>Đạt ƯD</span>
-                                <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 bg-amber-500 rounded-sm"></div>Đạt TT</span>
-                                <span class="flex items-center gap-1"><div class="w-2.5 h-2.5 bg-rose-500 rounded-sm"></div>Chưa đạt</span>
-                            </div>
+                <!-- BẢNG THỐNG KÊ TỔNG QUAN -->
+                <div id="statsSummary" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 z-10 relative hidden">
+                    <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm">
+                        <div class="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-users"></i></div>
+                        <div class="overflow-hidden w-full">
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Học Viên Retail</p>
+                            <p class="text-lg font-black text-slate-800 truncate"><span id="statRetailStudents">0</span> <span class="text-xs text-slate-400 font-medium">người</span></p>
                         </div>
                     </div>
-
-                    <!-- Bar Chart Theo Ngành Hàng -->
-                    <div class="glass-panel p-5 flex flex-col">
-                        <div class="flex justify-between items-center mb-6">
-                            <span class="text-xs font-black text-slate-700 uppercase tracking-widest"><i class="fas fa-chart-simple mr-1 text-indigo-500"></i> Theo Ngành Hàng</span>
-                        </div>
-                        <div class="flex-1 flex items-end justify-center gap-8 pb-8 relative">
-                            <!-- Lưới nền -->
-                            <div class="absolute inset-0 flex flex-col justify-between text-[10px] text-slate-300 pointer-events-none pb-8">
-                                <div class="border-b border-slate-200/50 w-full"></div>
-                                <div class="border-b border-slate-200/50 w-full"></div>
-                                <div class="border-b border-slate-200/50 w-full"></div>
-                                <div class="border-b border-slate-300 w-full"></div>
-                            </div>
-                            
-                            <!-- Cột Retail -->
-                            <div class="flex flex-col items-center gap-2 z-10 w-16">
-                                <span id="barValueRet" class="text-xs font-bold text-emerald-600">0%</span>
-                                <div class="w-full bg-slate-100 rounded-t-lg h-32 flex items-end overflow-hidden">
-                                    <div id="barHeightRet" class="w-full bg-emerald-500 transition-all duration-1000" style="height: 0%"></div>
-                                </div>
-                                <span class="text-[10px] font-black text-slate-500">RETAIL</span>
-                            </div>
-                            <!-- Cột FNB -->
-                            <div class="flex flex-col items-center gap-2 z-10 w-16">
-                                <span id="barValueFnb" class="text-xs font-bold text-orange-500">0%</span>
-                                <div class="w-full bg-slate-100 rounded-t-lg h-32 flex items-end overflow-hidden">
-                                    <div id="barHeightFnb" class="w-full bg-orange-500 transition-all duration-1000" style="height: 0%"></div>
-                                </div>
-                                <span class="text-[10px] font-black text-slate-500">FNB</span>
-                            </div>
+                    <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm">
+                        <div class="h-12 w-12 rounded-2xl bg-orange-50 text-orange-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-bowl-food"></i></div>
+                        <div class="overflow-hidden w-full">
+                            <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Học Viên FNB</p>
+                            <p class="text-lg font-black text-slate-800 truncate"><span id="statFnbStudents">0</span> <span class="text-xs text-slate-400 font-medium">người</span></p>
                         </div>
                     </div>
-
-                    <!-- Bảng Vàng Cảnh Báo -->
-                    <div class="glass-panel p-5 flex flex-col border-t-4 border-t-rose-500">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="text-xs font-black text-rose-600 uppercase tracking-widest"><i class="fas fa-skull-crossbones mr-1"></i> Báo Động Đỏ</span>
-                        </div>
-                        <p class="text-[10px] text-slate-500 mb-3">Top học viên thiếu bài tập nhiều nhất:</p>
-                        <ul id="wallOfShameList" class="flex-1 overflow-y-auto custom-scrollbar space-y-2"></ul>
-                    </div>
-                </div>
-
-                <!-- BẢNG BIỂU SO SÁNH TIẾN ĐỘ HỌC VIÊN TỔNG THỂ -->
-                <div id="classAnalyticsPanel" class="hidden glass-panel p-6">
-                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2"><i class="fas fa-list-ol text-blue-500 mr-2"></i>Tiến độ nộp bài của Lớp</h3>
-                    <div class="max-h-64 overflow-y-auto custom-scrollbar pr-2 space-y-3.5" id="studentProgressList"></div>
-                </div>
-
-                <!-- BÁO CÁO TIẾN ĐỘ CÁ NHÂN (HIỆN KHI CHỌN 1 HỌC VIÊN) -->
-                <div id="studentProgressPanel" class="hidden glass-panel p-6 border-l-4 border-blue-500">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-6">
+                    <div class="glass-panel-ultra p-5 rounded-3xl flex items-center justify-between border border-emerald-200 shadow-sm bg-emerald-50/50">
                         <div>
-                            <h3 class="text-lg font-black text-blue-800 flex items-center gap-2"><i class="fas fa-user-graduate"></i> BÁO CÁO CÁ NHÂN</h3>
-                            <p class="text-xs font-bold text-slate-500 mt-1" id="progressStudentInfo">--</p>
+                            <p class="text-[10px] font-black uppercase text-emerald-600 tracking-wider mb-1">Đã chấm điểm</p>
+                            <p class="text-2xl font-black text-emerald-600" id="statGradedPercent">0%</p>
                         </div>
-                        <div class="flex-1 max-w-md w-full tooltip relative cursor-help">
+                        <div class="text-right">
+                            <p class="text-xs font-bold text-slate-600"><i class="fas fa-check text-emerald-500"></i> <span id="statGraded">0</span> chấm</p>
+                            <p class="text-xs font-bold text-slate-600 mt-1"><i class="fas fa-ban text-slate-400"></i> <span id="statSkipped">0</span> bỏ qua</p>
+                        </div>
+                    </div>
+                    <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-rose-200 shadow-sm bg-rose-50/80">
+                        <div class="h-12 w-12 rounded-2xl bg-rose-100 text-rose-600 flex items-center justify-center text-xl shrink-0 animate-pulse"><i class="fas fa-skull-crossbones"></i></div>
+                        <div class="overflow-hidden w-full">
+                            <p class="text-[10px] font-black uppercase text-rose-600 tracking-wider">Trễ Deadline</p>
+                            <p class="text-lg font-black text-rose-700 truncate"><span id="statOverdueStudents">0</span> <span class="text-xs text-rose-500 font-medium">người vi phạm</span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BẢNG BIỂU ĐỒ SO SÁNH LỚP HỌC -->
+                <div id="classAnalyticsPanel" class="hidden glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md relative overflow-hidden bg-white">
+                    <div class="flex flex-col md:flex-row gap-8">
+                        <div class="flex-1">
+                            <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-4 border-b border-slate-100 pb-3 flex items-center gap-2"><i class="fas fa-list-ol text-blue-500"></i> Xếp hạng Tiến độ Lớp học</h3>
+                            <div class="max-h-64 overflow-y-auto custom-scrollbar pr-3 space-y-4" id="studentProgressList"></div>
+                        </div>
+                        <div class="w-full md:w-80 shrink-0 bg-rose-50/50 border border-rose-100 rounded-2xl p-5 flex flex-col">
+                            <h3 class="text-[11px] font-black text-rose-600 uppercase tracking-wider mb-4 flex items-center gap-1.5"><i class="fas fa-exclamation-triangle"></i> Báo động: Danh sách trễ hạn</h3>
+                            <ul class="space-y-2.5 flex-1 overflow-y-auto custom-scrollbar pr-1" id="wallOfShameList"></ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KHUNG TIẾN ĐỘ CÁ NHÂN VÀ DANH SÁCH BÀI (ACCORDION) -->
+                <div id="studentProgressPanel" class="hidden glass-panel-ultra p-6 lg:p-8 rounded-3xl border border-blue-200 shadow-md relative overflow-hidden bg-white">
+                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10 border-b border-slate-100 pb-6 mb-6">
+                        <div>
+                            <h3 class="text-lg font-black text-blue-800 flex items-center gap-2 mb-1.5"><i class="fas fa-user-graduate"></i> BÁO CÁO TIẾN ĐỘ CHI TIẾT</h3>
+                            <p class="text-xs font-bold text-slate-500" id="progressStudentInfo">--</p>
+                        </div>
+                        <div class="flex-1 max-w-md w-full bg-blue-50/50 p-4 rounded-2xl border border-blue-100">
                             <div class="flex justify-between items-end mb-2">
                                 <span class="text-xs font-bold text-slate-600" id="progressText">Đã làm: 0/0 bài</span>
-                                <span class="text-2xl font-black text-blue-600" id="progressPercent">0%</span>
+                                <span class="text-2xl font-black text-[#166def]" id="progressPercent">0%</span>
                             </div>
-                            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                                <div id="progressBarFill" class="bg-blue-600 h-full rounded-full transition-all duration-700 w-0"></div>
+                            <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner">
+                                <div id="progressBarFill" class="bg-[#166def] h-full rounded-full transition-all duration-700 w-0"></div>
                             </div>
-                            <!-- Tooltip chi tiết tiến độ -->
-                            <div class="tooltip-text" id="progressTooltip"></div>
                         </div>
                     </div>
                     
-                    <!-- DANH SÁCH BÀI THIẾU DẠNG ACCORDION -->
-                    <div id="missingExercisesAlert" class="hidden pt-4 border-t border-slate-200">
-                        <p class="text-[11px] font-black text-rose-500 uppercase tracking-wider mb-3"><i class="fas fa-clipboard-list"></i> CHI TIẾT BÀI TẬP CHƯA HOÀN THÀNH:</p>
-                        <div id="missingExercisesAccordion" class="space-y-2"></div>
+                    <!-- DANH SÁCH BÀI CHƯA LÀM DẠNG THANH SỔ ACCORDION -->
+                    <div id="missingExercisesAlert">
+                        <p class="text-xs font-black text-slate-700 uppercase tracking-wider mb-4 flex items-center gap-2"><i class="fas fa-tasks text-blue-500"></i> Phân tích Bài tập theo chủ đề:</p>
+                        <div id="missingExercisesList" class="space-y-3"></div>
                     </div>
                 </div>
 
                 <!-- Loading Spinner -->
                 <div id="loadingSpinner" class="flex flex-col items-center justify-center py-20 hidden">
                     <div class="w-12 h-12 border-4 border-slate-300 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                    <p class="font-bold text-slate-500 text-sm">Đang tải và phân tích dữ liệu...</p>
+                    <p class="font-bold text-slate-700 text-sm">Đang tải và phân tích dữ liệu...</p>
                 </div>
 
-                <!-- KHUNG CHẤM BÀI -->
+                <!-- VÙNG HIỂN THỊ CÁC BÀI NỘP -->
                 <div id="exercisesContainer" class="space-y-6"></div>
 
             </div>
         </div>
     </main>
+
+    <!-- MODAL CHI TIẾT HỌC VIÊN TỪ BẢNG VÀNG CẢNH BÁO -->
+    <div id="studentDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[200] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-3xl max-h-[85vh] flex flex-col relative border border-slate-200 overflow-hidden">
+            <div class="bg-[#1b365d] px-6 py-4 flex items-center justify-between shrink-0">
+                <h3 class="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2"><i class="fas fa-search"></i> Chi tiết tiến độ: <span id="modalSDName" class="text-yellow-400"></span></h3>
+                <button onclick="closeStudentModal()" class="text-white/70 hover:text-white transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto custom-scrollbar bg-slate-50 flex-1 space-y-4" id="modalSDContent">
+                <!-- Data đổ vào đây bằng JS -->
+            </div>
+            <div class="p-4 bg-white border-t border-slate-100 flex justify-end shrink-0">
+                <button onclick="closeStudentModal()" class="px-6 py-2 bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md hover:bg-slate-700 transition">ĐÓNG CHI TIẾT</button>
+            </div>
+        </div>
+    </div>
 
     <!-- FULLSCREEN ẢNH MODAL -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[150] hidden flex-col justify-between items-center p-4 transition-all">
@@ -273,141 +253,110 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
+    <!-- Script kết nối API & Xử lý lọc dữ liệu -->
     <script src="codelab-data.js"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbzZwkUV8g79PfYExma-7WRFg7IRY2fWmjpb63XiHqu6cqzx03uYi8Wmul9SamvyM9FMgQ/exec";
-        let allData = []; let reviewData = []; // Mảng chứa data chấm điểm
+        let allData = [];
         let activeSlides = {};
-        let currentTimeFilter = 'all';
+        let studentStartDates = {}; // Cỗ máy lưu "Ngày 1" của từng học viên
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
 
+        function toggleCustomTime() {
+            const val = document.getElementById('filterTime').value;
+            const box = document.getElementById('customTimeBox');
+            if (val === 'custom') box.classList.remove('hidden');
+            else box.classList.add('hidden');
+        }
+
         function fetchPracticeData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
+            const container = document.getElementById('exercisesContainer');
+            if(container) container.innerHTML = "";
             document.getElementById('statsSummary').classList.add('hidden');
-            document.getElementById('dashboardCharts').classList.add('hidden');
+            document.getElementById('classAnalyticsPanel').classList.add('hidden');
+            document.getElementById('studentProgressPanel').classList.add('hidden');
             
-            // Gọi song song 2 API: 1 lấy bài làm, 1 lấy data Review (để vẽ biểu đồ Pie)
-            Promise.all([
-                fetch(`${API_URL}?action=getAllPracticeData`).then(r=>r.json()),
-                fetch(`${API_URL}?token=KIOT_RENEWAL_Q3_2026`).then(r=>r.json())
-            ]).then(([practiceRes, reviewRes]) => {
-                if(practiceRes.status === 'success') {
-                    allData = practiceRes.data.reverse();
-                    if(reviewRes.status === 'success') reviewData = reviewRes.data;
+            fetch(`${API_URL}?action=getAllPracticeData`)
+            .then(r => r.json()).then(res => {
+                if(res.status === 'success') {
+                    allData = res.data.reverse(); 
+                    buildTimeEngine(); // Phân tích thời gian Start Date
                     initFilters();
-                } else throw new Error(practiceRes.message || "Lỗi Server");
+                } else throw new Error(res.message || "Lỗi dữ liệu từ Server");
             }).catch(e => {
-                document.getElementById('exercisesContainer').innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-xl font-bold"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><p>Lỗi hiển thị dữ liệu: ${e.message}</p></div>`;
-            }).finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
+                console.error("Fetch error: ", e);
+                const containerEl = document.getElementById('exercisesContainer');
+                if(containerEl) {
+                    containerEl.innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-exclamation-triangle text-3xl mb-3"></i><p class="font-bold">Lỗi hiển thị dữ liệu.</p></div>`;
+                }
+            })
+            .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
         }
 
-        // =====================================
-        // SMART DEADLINE & TIME LOGIC
-        // =====================================
-        function parseDate(dateStr) {
-            if(!dateStr) return new Date();
-            const d = new Date(dateStr);
-            if(!isNaN(d.getTime())) return d;
-            // Fallback for dd/mm/yyyy
-            const parts = dateStr.split('/');
-            if(parts.length === 3) return new Date(`${parts[2]}-${parts[1]}-${parts[0]}T00:00:00`);
-            return new Date();
+        function formatDateTime(isoString) {
+            if (!isoString) return '';
+            const d = new Date(isoString);
+            if (isNaN(d.getTime())) return isoString;
+            const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         }
 
-        function getStudentDay1(studentName, dept) {
-            const studentRecords = allData.filter(e => (e.hoVaTen||'') === studentName && (e.phongBan||'') === dept && e.ngay);
-            if (studentRecords.length === 0) return new Date(); // Mặc định hôm nay
-            
-            // Tìm ngày nộp bài sớm nhất
-            let minDate = new Date(8640000000000000);
-            studentRecords.forEach(r => {
-                const d = new Date(r.ngay);
-                if (d < minDate) minDate = d;
+        const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
+
+        // ==========================================
+        // TIME ENGINE: TÍNH DEADLINE CHUẨN XÁC
+        // ==========================================
+        function buildTimeEngine() {
+            studentStartDates = {};
+            // Tìm ngày nộp bài đầu tiên của từng học viên làm Ngày 1
+            allData.forEach(e => {
+                const key = `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`;
+                const d = new Date(e.ngay);
+                if (!isNaN(d.getTime())) {
+                    if (!studentStartDates[key] || d < studentStartDates[key]) {
+                        studentStartDates[key] = new Date(d.getFullYear(), d.getMonth(), d.getDate()); // Reset về 00:00:00 của ngày đó
+                    }
+                }
             });
-            // Reset về 00:00:00 của ngày đó
-            minDate.setHours(0,0,0,0);
-            return minDate;
         }
 
-        function calculateDeadlineStatus(studentName, dept, sessionName) {
-            const day1 = getStudentDay1(studentName, dept);
+        function checkExerciseStatus(studentKey, sessionName) {
+            // return: "DONE", "OVERDUE" (Trễ hạn đỏ), "UPCOMING" (Chưa tới giờ)
+            const startDate = studentStartDates[studentKey];
+            if (!startDate) return "UPCOMING"; // Chưa có data nộp bài thì coi như chưa học
+
             const now = new Date();
-            let deadline = new Date(day1);
+            let deadline = new Date(startDate);
 
-            // Logic theo yêu cầu:
-            // Buổi 1: Day 1 (12:00) | Buổi 2: Day 1 (16:00)
-            // Buổi 3: Day 2 (12:00) | Buổi 4: Day 2 (16:00)
-            // Buổi 5: Day 3 (16:00)
-            if (sessionName.includes("Buổi 1")) deadline.setHours(12, 0, 0);
-            else if (sessionName.includes("Buổi 2")) deadline.setHours(16, 0, 0);
-            else if (sessionName.includes("Buổi 3")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(12, 0, 0); }
-            else if (sessionName.includes("Buổi 4")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(16, 0, 0); }
-            else if (sessionName.includes("Buổi 5")) { deadline.setDate(deadline.getDate() + 2); deadline.setHours(16, 0, 0); }
-            else deadline.setHours(23, 59, 59); // Mặc định cuối ngày
+            if (sessionName.includes("Buổi 1")) { deadline.setHours(12, 0, 0); } // 12h ngày 1
+            else if (sessionName.includes("Buổi 2")) { deadline.setHours(16, 0, 0); } // 16h ngày 1
+            else if (sessionName.includes("Buổi 3")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(12, 0, 0); } // 12h ngày 2
+            else if (sessionName.includes("Buổi 4")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(16, 0, 0); } // 16h ngày 2
+            else if (sessionName.includes("Buổi 5")) { deadline.setDate(deadline.getDate() + 2); deadline.setHours(16, 0, 0); } // 16h ngày 3
+            else return "OVERDUE"; // An toàn
 
-            if (now < deadline) return { text: "Trong hạn", color: "text-emerald-600", bg: "bg-emerald-50", border: "border-emerald-200" };
-            return { text: "Quá hạn", color: "text-rose-600", bg: "bg-rose-50", border: "border-rose-200" };
+            if (now > deadline) return "OVERDUE";
+            return "UPCOMING";
         }
 
-        // =====================================
-        // BỘ LỌC UI / UX
-        // =====================================
-        function setTimeFilter(val) {
-            document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-            document.getElementById(`time_${val}`).classList.add('active');
-            currentTimeFilter = val;
-            const customWrap = document.getElementById('customDateWrap');
-            if (val === 'custom') customWrap.classList.remove('hidden');
-            else customWrap.classList.add('hidden');
-            updateFilters('time');
-        }
-
-        function isDateInRange(dateStr) {
-            if (currentTimeFilter === 'all') return true;
-            const recordDate = new Date(dateStr);
-            if (isNaN(recordDate.getTime())) return true;
-            
-            const now = new Date();
-            const dayOfWeek = now.getDay() || 7; 
-            
-            if (currentTimeFilter === 'week') {
-                const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - dayOfWeek + 1); startOfWeek.setHours(0,0,0,0);
-                const endOfWeek = new Date(startOfWeek); endOfWeek.setDate(startOfWeek.getDate() + 6); endOfWeek.setHours(23,59,59,999);
-                return recordDate >= startOfWeek && recordDate <= endOfWeek;
-            }
-            if (currentTimeFilter === 'prev') {
-                const startOfPrev = new Date(now); startOfPrev.setDate(now.getDate() - dayOfWeek - 6); startOfPrev.setHours(0,0,0,0);
-                const endOfPrev = new Date(startOfPrev); endOfPrev.setDate(startOfPrev.getDate() + 6); endOfPrev.setHours(23,59,59,999);
-                return recordDate >= startOfPrev && recordDate <= endOfPrev;
-            }
-            if (currentTimeFilter === 'custom') {
-                const dF = document.getElementById('dateFrom').value;
-                const dT = document.getElementById('dateTo').value;
-                let pass = true;
-                if (dF) { const f = new Date(dF); f.setHours(0,0,0,0); if (recordDate < f) pass = false; }
-                if (dT) { const t = new Date(dT); t.setHours(23,59,59,999); if (recordDate > t) pass = false; }
-                return pass;
-            }
-            return true;
-        }
-
+        // ==========================================
+        // CORE LOGIC & RENDERING
+        // ==========================================
         function initFilters() {
-            const depts = [...new Set(allData.map(e => e.phongBan))].filter(Boolean).sort();
-            document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
+            const industries = [...new Set(allData.map(e => e.khoa))].filter(Boolean).sort();
+            document.getElementById('filterIndustry').innerHTML = `<option value="all">Tất cả Ngành hàng</option>` + industries.map(i => `<option value="${i}">${i}</option>`).join('');
             updateFilters('init');
         }
 
         function updateFilters(source) {
-            const selInd = document.querySelector('input[name="filterIndustry"]:checked').value;
+            const selInd = document.getElementById('filterIndustry').value;
             let selDept = document.getElementById('filterDept').value;
-            const selSession = document.getElementById('filterSession').value;
 
-            // 1. Lọc theo Ngành & Thời gian để fill các dropdown khác
             let dataByInd = selInd === 'all' ? allData : allData.filter(e => e.khoa === selInd);
-            dataByInd = dataByInd.filter(e => isDateInRange(e.ngay));
 
-            if (source === 'init' || source === 'industry' || source === 'time') {
+            if (source === 'init' || source === 'industry') {
                 const depts = [...new Set(dataByInd.map(e => e.phongBan))].filter(Boolean).sort();
                 document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
                 selDept = 'all'; document.getElementById('filterDept').value = 'all';
@@ -419,7 +368,7 @@
 
             let dataByDept = selDept === 'all' ? dataByInd : dataByInd.filter(e => e.phongBan === selDept);
 
-            if (source === 'init' || source === 'industry' || source === 'dept' || source === 'time') {
+            if (source === 'init' || source === 'industry' || source === 'dept') {
                 const students = [...new Set(dataByDept.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
                 document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
                     const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
@@ -427,13 +376,12 @@
             }
 
             const currentSession = document.getElementById('filterSession').value;
-            
-            if (source === 'init' || source === 'industry' || source === 'session' || source === 'time') {
+            if (source === 'init' || source === 'industry' || source === 'session') {
                 const exSelect = document.getElementById('filterExercise');
                 if (currentSession === 'all' || selInd === 'all' || typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[selInd]) {
                     exSelect.innerHTML = `<option value="all">Tất cả Bài tập</option>`;
                 } else {
-                    let htmlOptions = `<option value="all">Tất cả Bài tập trong buổi</option>`;
+                    let htmlOptions = `<option value="all">Tất cả Bài tập trong buổi này</option>`;
                     const sessionData = CODELAB_DATA[selInd].find(s => s.title.includes(currentSession) || currentSession.includes(s.title.split(':')[0]));
                     if (sessionData && sessionData.exercises) {
                         let currentGroup = "Khác";
@@ -445,71 +393,88 @@
                     exSelect.innerHTML = htmlOptions;
                 }
             }
-
-            renderUI();
+            renderCards();
         }
 
-        const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
-
-        function calculateTotalRequiredExercises(industry) {
-            if (typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[industry]) return [];
-            let required = [];
+        // THUẬT TOÁN TÍNH TỔNG BÀI TẬP THEO BUỔI & NGÀNH
+        function getRequiredExercisesTree(industry, sessionFilter) {
+            if (!CODELAB_DATA || !CODELAB_DATA[industry]) return [];
+            let tree = [];
             CODELAB_DATA[industry].forEach(s => {
-                let curGroup = "";
+                if (sessionFilter !== 'all' && !s.title.includes(sessionFilter) && !sessionFilter.includes(s.title.split(':')[0])) return;
+                
+                let sessionObj = { sessionName: s.title, groups: [] };
+                let currentGroup = { groupName: "Khác", exercises: [] };
+                
                 s.exercises.forEach(ex => {
-                    if(ex.isGroupHeader) curGroup = ex.title;
-                    else required.push({ session: s.title, group: curGroup, exercise: ex.title });
-                });
-            });
-            return required;
-        }
-
-        function getExerciseDetails(exerciseTitle) {
-            const targetTitle = cleanStr(exerciseTitle);
-            for (let key in CODELAB_DATA) {
-                for (let s of CODELAB_DATA[key]) {
-                    if (!s.exercises) continue;
-                    for (let ex of s.exercises) {
-                        if (ex.title && cleanStr(ex.title) === targetTitle) return ex;
+                    if (ex.isGroupHeader) {
+                        if (currentGroup.exercises.length > 0) sessionObj.groups.push(currentGroup);
+                        currentGroup = { groupName: ex.title, exercises: [] };
+                    } else {
+                        currentGroup.exercises.push(ex.title);
                     }
-                }
-            }
-            return null;
+                });
+                if (currentGroup.exercises.length > 0) sessionObj.groups.push(currentGroup);
+                tree.push(sessionObj);
+            });
+            return tree;
         }
 
-        function resetFilters() {
-            document.getElementById('ind_all').checked = true;
-            setTimeFilter('all');
-            document.getElementById('filterStatus').value = 'all';
-            updateFilters('init');
-        }
-
-        // =====================================
-        // RENDER GIAO DIỆN CHÍNH
-        // =====================================
-        function renderUI() {
+        function renderCards() {
             const selStatus = document.getElementById('filterStatus').value;
-            const selInd = document.querySelector('input[name="filterIndustry"]:checked').value;
+            const selTime = document.getElementById('filterTime').value;
+            const selInd = document.getElementById('filterIndustry').value;
             const selDept = document.getElementById('filterDept').value;
             const selStudent = document.getElementById('filterStudent').value;
             const selSession = document.getElementById('filterSession').value;
             const selExercise = document.getElementById('filterExercise').value;
 
-            // 1. ÁP DỤNG BỘ LỌC CƠ BẢN CHO DATA
-            let filtered = allData.filter(e => isDateInRange(e.ngay));
+            // 1. ÁP DỤNG BỘ LỌC CƠ BẢN
+            let filtered = allData;
+            
+            // Lọc thời gian
+            if (selTime !== 'all') {
+                const now = new Date(); now.setHours(0,0,0,0);
+                const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
+                
+                filtered = filtered.filter(e => {
+                    const rowDate = new Date(e.ngay); if(isNaN(rowDate.getTime())) return false;
+                    rowDate.setHours(0,0,0,0);
+                    if (selTime === 'today') return rowDate.getTime() === now.getTime();
+                    if (selTime === 'this_week') {
+                        const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - dayOfWeek + 1);
+                        return rowDate >= startOfWeek && rowDate <= now;
+                    }
+                    if (selTime === 'last_week') {
+                        const endOfLastWeek = new Date(now); endOfLastWeek.setDate(now.getDate() - dayOfWeek);
+                        const startOfLastWeek = new Date(endOfLastWeek); startOfLastWeek.setDate(endOfLastWeek.getDate() - 6);
+                        return rowDate >= startOfLastWeek && rowDate <= endOfLastWeek;
+                    }
+                    if (selTime === 'custom') {
+                        const df = document.getElementById('dateFrom').value;
+                        const dt = document.getElementById('dateTo').value;
+                        let match = true;
+                        if(df) { const f = new Date(df); f.setHours(0,0,0,0); match = match && rowDate >= f; }
+                        if(dt) { const t = new Date(dt); t.setHours(23,59,59,999); match = match && rowDate <= t; }
+                        return match;
+                    }
+                    return true;
+                });
+            }
+
             if (selInd !== 'all') filtered = filtered.filter(e => e.khoa === selInd);
             if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
             if (selSession !== 'all') filtered = filtered.filter(e => e.buoi === selSession);
             if (selExercise !== 'all') filtered = filtered.filter(e => e.tenBaiHoc === selExercise);
             
-            let currentStudentName = "Tất cả"; let currentStudentDept = "N/A";
+            let currentStudentName = "Tất cả"; let currentStudentKey = "";
             if (selStudent !== 'all') {
                 const parts = selStudent.split('|'); 
-                currentStudentName = parts[0]; currentStudentDept = parts[1];
+                currentStudentName = parts[0]; currentStudentKey = selStudent;
                 filtered = filtered.filter(e => (e.hoVaTen || 'Ẩn Danh') === parts[0] && (e.phongBan || 'N/A') === parts[1]);
             }
 
-            // Group để lấy bài nộp cuối cùng
+            // 2. LẤY BÀI NỘP CUỐI CÙNG
             let mapUnique = {};
             filtered.forEach(e => {
                 let key = `${e.hoVaTen || 'Ẩn Danh'}-${e.phongBan || 'N/A'}-${e.tenBaiHoc || 'Unknown'}`;
@@ -517,230 +482,187 @@
             });
             let uniqueRecords = Object.values(mapUnique);
 
+            // TÍNH TOÁN STATUS
+            let countPending = 0; let countGraded = 0; let countSkipped = 0;
+            uniqueRecords.forEach(e => {
+                if (!e.nhanXet || e.nhanXet.toString().trim() === "") countPending++;
+                else if (e.nhanXet.toString().includes("[BỎ QUA]")) countSkipped++;
+                else countGraded++;
+            });
+
+            if (selStatus === 'pending') uniqueRecords = uniqueRecords.filter(e => !e.nhanXet || e.nhanXet.toString().trim() === "");
+            if (selStatus === 'graded') uniqueRecords = uniqueRecords.filter(e => e.nhanXet && e.nhanXet.toString().trim() !== "" && !e.nhanXet.toString().includes("[BỎ QUA]"));
+            if (selStatus === 'skipped') uniqueRecords = uniqueRecords.filter(e => e.nhanXet && e.nhanXet.toString().includes("[BỎ QUA]"));
+
             // ===============================================
-            // 2. DASHBOARD TỔNG QUAN TẠI THỜI ĐIỂM LỌC
+            // TÍNH TOÁN DASHBOARD TỔNG QUAN
             // ===============================================
             document.getElementById('statsSummary').classList.remove('hidden');
-            document.getElementById('dashboardCharts').classList.remove('hidden');
+            let totalOverdueStudents = new Set();
             
-            // Xử lý Pie Chart từ reviewData
-            let rTot=0, rDatUD=0, rDatTT=0, rChuaDat=0;
-            let filteredReview = reviewData.filter(r => isDateInRange(r.ReviewDate));
-            if(selInd !== 'all') filteredReview = filteredReview.filter(r => r.Industry === selInd);
-            
-            filteredReview.forEach(r => {
-                if(r.Rating === 'Tốt') rTot++;
-                else if(r.Rating === 'Đạt ứng dụng') rDatUD++;
-                else if(r.Rating === 'Đạt thao tác') rDatTT++;
-                else if(r.Rating === 'Chưa đạt') rChuaDat++;
-            });
-            
-            let totalReview = rTot + rDatUD + rDatTT + rChuaDat;
-            document.getElementById('statTotal').innerText = totalReview;
-            document.getElementById('statPassRate').innerText = totalReview === 0 ? "0%" : `${Math.round(((rTot + rDatUD)/totalReview)*100)}%`;
-            document.getElementById('statFailCount').innerText = rChuaDat;
-            
-            let pTot = totalReview === 0 ? 0 : (rTot/totalReview)*100;
-            let pUD = totalReview === 0 ? 0 : (rDatUD/totalReview)*100;
-            let pTT = totalReview === 0 ? 0 : (rDatTT/totalReview)*100;
-            let pCD = totalReview === 0 ? 0 : (rChuaDat/totalReview)*100;
-            
-            document.getElementById('ratingPieChart').style.background = `conic-gradient(
-                #22c55e 0% ${pTot}%, 
-                #3b82f6 ${pTot}% ${pTot+pUD}%, 
-                #f59e0b ${pTot+pUD}% ${pTot+pUD+pTT}%, 
-                #ef4444 ${pTot+pUD+pTT}% 100%
-            )`;
-
-            // Xử lý Bar Chart Ngành Hàng từ dữ liệu Thực hành
-            let countRet = 0, countFnb = 0;
-            let allUniqueStudents = [...new Set(allData.filter(e => isDateInRange(e.ngay)).map(e => `${e.hoVaTen}|${e.phongBan}|${e.khoa}`))];
-            allUniqueStudents.forEach(s => {
-                if(s.endsWith("Retail")) countRet++;
-                if(s.endsWith("FNB")) countFnb++;
-            });
-            
-            let totalStu = countRet + countFnb;
-            let pcRet = totalStu === 0 ? 0 : (countRet/totalStu)*100;
-            let pcFnb = totalStu === 0 ? 0 : (countFnb/totalStu)*100;
-            
-            document.getElementById('barHeightRet').style.height = `${pcRet}%`;
-            document.getElementById('barValueRet').innerText = `${countRet} hv`;
-            document.getElementById('barHeightFnb').style.height = `${pcFnb}%`;
-            document.getElementById('barValueFnb').innerText = `${countFnb} hv`;
-
-            // Bảng vàng lười (Toàn cục)
-            let shameHtml = '';
-            let studentMissingStats = [];
-            const reqRet = calculateTotalRequiredExercises('Retail');
-            const reqFnb = calculateTotalRequiredExercises('FNB');
-
-            allUniqueStudents.forEach(stKey => {
-                const p = stKey.split('|'); const ind = p[2];
-                if(selInd !== 'all' && ind !== selInd) return;
+            const allStudentsSet = new Set(allData.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}|${e.khoa}`));
+            allStudentsSet.forEach(studentKey => {
+                const p = studentKey.split('|'); const ind = p[2]; const key = `${p[0]}|${p[1]}`;
+                let doneTitles = allData.filter(e => (e.hoVaTen || 'Ẩn Danh') === p[0] && (e.phongBan || 'N/A') === p[1]).map(e => cleanStr(e.tenBaiHoc));
                 
-                const doneList = allData.filter(e => (e.hoVaTen||'') === p[0] && (e.phongBan||'') === p[1]).map(e => cleanStr(e.tenBaiHoc));
-                let missingCount = 0;
-                let reqExs = ind === 'Retail' ? reqRet : reqFnb;
-                
-                reqExs.forEach(req => { if(!doneList.includes(cleanStr(req.exercise))) missingCount++; });
-                if(missingCount > 0) studentMissingStats.push({ name: p[0], missing: missingCount });
+                if (ind === 'Retail' || ind === 'FNB') {
+                    let tree = getRequiredExercisesTree(ind, 'all');
+                    tree.forEach(ss => {
+                        ss.groups.forEach(gr => {
+                            gr.exercises.forEach(ex => {
+                                if (!doneTitles.includes(cleanStr(ex))) {
+                                    if (checkExerciseStatus(key, ss.sessionName) === "OVERDUE") {
+                                        totalOverdueStudents.add(key);
+                                    }
+                                }
+                            });
+                        });
+                    });
+                }
             });
 
-            studentMissingStats.sort((a,b) => b.missing - a.missing).slice(0, 5).forEach(st => {
-                shameHtml += `<li class="flex justify-between items-center text-[11px] bg-white p-2 rounded-lg border border-rose-100"><span class="font-bold text-slate-700 truncate mr-2">${st.name}</span><span class="text-rose-500 font-black bg-rose-100 px-1.5 py-0.5 rounded shrink-0">Thiếu ${st.missing}</span></li>`;
-            });
-            document.getElementById('wallOfShameList').innerHTML = shameHtml || `<p class="text-xs italic text-slate-400">Không có dữ liệu</p>`;
-
+            document.getElementById('statOverdueStudents').innerText = totalOverdueStudents.size;
+            document.getElementById('statGraded').innerText = countGraded;
+            document.getElementById('statSkipped').innerText = countSkipped;
+            document.getElementById('statPending').innerText = `${countPending} chờ`;
+            let totalReviewAction = countGraded + countSkipped + countPending;
+            let percentGraded = totalReviewAction === 0 ? 0 : Math.round(((countGraded + countSkipped) / totalReviewAction) * 100);
+            document.getElementById('statGradedPercent').innerText = `${percentGraded}%`;
 
             // ===============================================
-            // 3. XỬ LÝ KHUNG TIẾN ĐỘ VÀ CHI TIẾT BÀI THIẾU
+            // XỬ LÝ KHUNG TIẾN ĐỘ CÁ NHÂN VÀ BẢNG SO SÁNH
             // ===============================================
             const progressPanel = document.getElementById('studentProgressPanel');
             const classAnalyticsPanel = document.getElementById('classAnalyticsPanel');
-            let countPendingForFilter = 0;
             
-            // NẾU CHỌN 1 HỌC VIÊN CỤ THỂ
             if (selStudent !== 'all' && selInd !== 'all') {
+                // HIỆN CÁ NHÂN ACCORDION DỊU MẮT
                 classAnalyticsPanel.classList.add('hidden');
-                let reqExs = calculateTotalRequiredExercises(selInd);
-                if (selSession !== 'all') reqExs = reqExs.filter(r => r.session.includes(selSession) || selSession.includes(r.session.split(':')[0]));
-
-                const totalReq = reqExs.length;
-                const completedTitles = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === currentStudentName && e.khoa === selInd).map(e => cleanStr(e.tenBaiHoc));
-                const doneCount = [...new Set(completedTitles)].length;
-                const percent = totalReq === 0 ? 0 : Math.round((doneCount / totalReq) * 100);
                 
-                document.getElementById('progressStudentInfo').innerText = `Học viên: ${currentStudentName} | Lớp: ${currentStudentDept}`;
+                let tree = getRequiredExercisesTree(selInd, selSession);
+                let totalReq = 0; let doneCount = 0;
+                const completedTitles = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === currentStudentName).map(e => cleanStr(e.tenBaiHoc));
+
+                let missingHtml = '';
+                
+                tree.forEach(ss => {
+                    let ssTotal = 0; let ssDone = 0; let ssMissingHtml = '';
+                    ss.groups.forEach(gr => {
+                        let grTotal = gr.exercises.length; let grDone = 0; let grMissingHtml = '';
+                        gr.exercises.forEach(ex => {
+                            totalReq++; ssTotal++;
+                            if (completedTitles.includes(cleanStr(ex))) { doneCount++; ssDone++; grDone++; }
+                            else {
+                                let status = checkExerciseStatus(currentStudentKey, ss.sessionName);
+                                if (status === "OVERDUE") grMissingHtml += `<li class="text-xs text-rose-600 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-times-circle mt-0.5 text-rose-400"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Trễ hạn</span></li>`;
+                                else grMissingHtml += `<li class="text-xs text-slate-500 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-clock mt-0.5 text-slate-300"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Chưa tới hạn</span></li>`;
+                            }
+                        });
+                        if(grMissingHtml !== '') ssMissingHtml += `<div class="mt-2"><p class="text-[10px] font-black text-slate-400 uppercase tracking-wider bg-slate-50 px-2 py-1 rounded mb-1">${gr.groupName} (${grDone}/${grTotal})</p><ul class="pl-1">${grMissingHtml}</ul></div>`;
+                    });
+
+                    if (ssMissingHtml !== '') {
+                        let isSsOverdue = checkExerciseStatus(currentStudentKey, ss.sessionName) === "OVERDUE";
+                        let borderClass = isSsOverdue ? "border-rose-200" : "border-slate-200";
+                        let bgClass = isSsOverdue ? "bg-rose-50/30" : "bg-white";
+                        
+                        missingHtml += `
+                        <details class="group border ${borderClass} ${bgClass} rounded-2xl overflow-hidden shadow-sm">
+                            <summary class="cursor-pointer p-4 font-bold text-sm text-slate-700 flex justify-between items-center list-none select-none hover:bg-slate-50 transition-colors">
+                                <div class="flex items-center gap-2"><i class="fas fa-chevron-right text-xs text-slate-400 group-open:rotate-90 transition-transform"></i> ${ss.sessionName.split(':')[0]} <span class="text-xs font-medium text-slate-500 ml-1">(${ssDone}/${ssTotal} bài)</span></div>
+                                ${isSsOverdue ? '<i class="fas fa-exclamation-circle text-rose-500 text-lg animate-pulse"></i>' : ''}
+                            </summary>
+                            <div class="px-4 pb-4 pt-1 border-t border-slate-100">
+                                ${ssMissingHtml}
+                            </div>
+                        </details>`;
+                    }
+                });
+
+                const percent = totalReq === 0 ? 0 : Math.round((doneCount / totalReq) * 100);
+                document.getElementById('progressStudentInfo').innerText = `Học viên: ${currentStudentName} | Lớp: ${selDept} | ${selSession === 'all' ? 'Tất cả các buổi' : selSession}`;
                 document.getElementById('progressText').innerText = `Đã làm: ${doneCount}/${totalReq} bài`;
                 document.getElementById('progressPercent').innerText = `${percent}%`;
                 document.getElementById('progressBarFill').style.width = `${percent}%`;
 
-                // Tạo Tooltip chi tiết
-                let tooltipHtml = '<p class="font-bold mb-2 border-b border-slate-600 pb-1 text-center">CHI TIẾT TIẾN ĐỘ TỪNG BUỔI</p>';
-                let sessionStats = {};
-                reqExs.forEach(req => {
-                    if(!sessionStats[req.session]) sessionStats[req.session] = { req: 0, done: 0 };
-                    sessionStats[req.session].req++;
-                    if(completedTitles.includes(cleanStr(req.exercise))) sessionStats[req.session].done++;
-                });
-                for(let ss in sessionStats) {
-                    let d = sessionStats[ss].done; let r = sessionStats[ss].req;
-                    let p = Math.round((d/r)*100);
-                    let color = p === 100 ? "text-emerald-400" : (p > 0 ? "text-amber-400" : "text-rose-400");
-                    tooltipHtml += `<div class="flex justify-between text-xs mb-1.5 gap-4"><span class="truncate max-w-[150px]">${ss}</span><span class="font-bold ${color}">${d}/${r} (${p}%)</span></div>`;
-                }
-                document.getElementById('progressTooltip').innerHTML = tooltipHtml;
-
-                // TẠO ACCORDION BÀI TẬP CHƯA LÀM
-                let missingHtml = '';
-                let missingStructure = {}; // { Buoi: { ChuDe: [BaiTap] } }
-                
-                reqExs.forEach(req => {
-                    if (!completedTitles.includes(cleanStr(req.exercise))) {
-                        if(!missingStructure[req.session]) missingStructure[req.session] = {};
-                        if(!missingStructure[req.session][req.group]) missingStructure[req.session][req.group] = [];
-                        missingStructure[req.session][req.group].push(req.exercise);
-                    }
-                });
-
-                for(let ss in missingStructure) {
-                    missingHtml += `
-                    <details class="group bg-white border border-slate-200 rounded-xl overflow-hidden mb-3 shadow-sm" open>
-                        <summary class="bg-slate-50 px-4 py-3 font-black text-xs text-slate-700 cursor-pointer flex justify-between items-center hover:bg-slate-100 transition">
-                            <span class="uppercase tracking-wider"><i class="fas fa-folder-open text-blue-500 mr-2"></i> ${ss}</span>
-                            <i class="fas fa-chevron-down text-slate-400 group-open:rotate-180 transition"></i>
-                        </summary>
-                        <div class="p-4 space-y-4">`;
-                    
-                    for(let gr in missingStructure[ss]) {
-                        missingHtml += `<div><p class="text-[11px] font-bold text-slate-500 mb-2 border-b border-slate-100 pb-1"><i class="fas fa-layer-group text-slate-300 mr-1"></i> ${gr}</p><ul class="space-y-1.5 pl-2">`;
-                        missingStructure[ss][gr].forEach(ex => {
-                            // Gọi hàm kiểm tra tiến độ thông minh
-                            const status = calculateDeadlineStatus(currentStudentName, currentStudentDept, ss);
-                            missingHtml += `<li class="text-xs font-medium text-slate-700 flex items-center justify-between bg-slate-50 p-2 rounded border border-slate-100">
-                                <span><i class="fas fa-times text-rose-400 mr-1.5 w-3"></i> ${ex}</span>
-                                <span class="text-[9px] font-bold px-2 py-0.5 rounded ${status.bg} ${status.color} ${status.border} border shrink-0">${status.text}</span>
-                            </li>`;
-                        });
-                        missingHtml += `</ul></div>`;
-                    }
-                    missingHtml += `</div></details>`;
-                }
-
                 const missingDiv = document.getElementById('missingExercisesAlert');
-                if (missingHtml !== '') {
-                    document.getElementById('missingExercisesAccordion').innerHTML = missingHtml;
-                    missingDiv.classList.remove('hidden');
-                } else missingDiv.classList.add('hidden');
+                if (missingHtml !== '') { document.getElementById('missingExercisesList').innerHTML = missingHtml; missingDiv.classList.remove('hidden'); } 
+                else missingDiv.classList.add('hidden');
                 
                 progressPanel.classList.remove('hidden');
 
             } 
-            // NẾU KHÔNG CHỌN HỌC VIÊN -> HIỆN BẢNG TIẾN ĐỘ CỦA CẢ LỚP
             else if (selStudent === 'all' && selInd !== 'all') {
+                // BẢNG SO SÁNH CLASS THÔNG MINH
                 progressPanel.classList.add('hidden');
                 classAnalyticsPanel.classList.remove('hidden');
                 
-                let reqExs = calculateTotalRequiredExercises(selInd);
-                if (selSession !== 'all') reqExs = reqExs.filter(r => r.session.includes(selSession) || selSession.includes(r.session.split(':')[0]));
-                const totalReq = reqExs.length;
+                let tree = getRequiredExercisesTree(selInd, selSession);
+                let totalReq = 0; tree.forEach(ss => ss.groups.forEach(gr => totalReq += gr.exercises.length));
 
                 let studentStats = [];
-                let currentStudents = [...new Set(filtered.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))];
+                let currentStudents = [...new Set(allData.filter(e => e.khoa === selInd && (selDept === 'all' || e.phongBan === selDept)).map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))];
                 
                 currentStudents.forEach(stKey => {
                     const p = stKey.split('|');
-                    const doneTitles = allData.filter(e => (e.hoVaTen||'') === p[0] && (e.phongBan||'') === p[1] && e.khoa === selInd).map(e => cleanStr(e.tenBaiHoc));
-                    const uniqueDone = [...new Set(doneTitles)];
-                    const percent = totalReq === 0 ? 0 : Math.round((uniqueDone.length / totalReq) * 100);
+                    const doneList = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === p[0] && (e.phongBan||'N/A') === p[1]).map(e => cleanStr(e.tenBaiHoc));
+                    const uniqueDone = [...new Set(doneList)];
                     
-                    // Tooltip data
-                    let tHtml = '';
-                    let ssStats = {};
-                    reqExs.forEach(req => {
-                        if(!ssStats[req.session]) ssStats[req.session] = { r: 0, d: 0 };
-                        ssStats[req.session].r++;
-                        if(uniqueDone.includes(cleanStr(req.exercise))) ssStats[req.session].d++;
+                    let overdueMissing = 0; let tooltipText = "";
+                    tree.forEach(ss => {
+                        let ssTotal = 0; let ssDone = 0;
+                        ss.groups.forEach(gr => {
+                            gr.exercises.forEach(ex => {
+                                ssTotal++;
+                                if (uniqueDone.includes(cleanStr(ex))) ssDone++;
+                                else if (checkExerciseStatus(stKey, ss.sessionName) === "OVERDUE") overdueMissing++;
+                            });
+                        });
+                        tooltipText += `&#10;${ss.sessionName.split(':')[0]}: ${ssDone}/${ssTotal} bài`;
                     });
-                    for(let ss in ssStats) {
-                        let d = ssStats[ss].d; let r = ssStats[ss].r; let pt = Math.round((d/r)*100);
-                        let color = pt === 100 ? "text-emerald-400" : (pt > 0 ? "text-amber-400" : "text-rose-400");
-                        tHtml += `<div class="flex justify-between text-xs mb-1 gap-4"><span class="truncate max-w-[120px]">${ss.split(':')[0]}</span><span class="font-bold ${color}">${d}/${r}</span></div>`;
-                    }
 
-                    studentStats.push({ name: p[0], dept: p[1], percent: percent, tooltip: tHtml });
+                    const percent = totalReq === 0 ? 0 : Math.round((uniqueDone.length / totalReq) * 100);
+                    studentStats.push({ name: p[0], dept: p[1], percent: percent, done: uniqueDone.length, missing: overdueMissing, tooltip: tooltipText, key: stKey });
                 });
 
-                studentStats.sort((a,b) => b.percent - a.percent); 
+                studentStats.sort((a,b) => b.percent - a.percent);
 
                 let chartHtml = '';
                 studentStats.forEach(st => {
-                    chartHtml += `<div class="flex items-center gap-4 text-xs tooltip relative cursor-help">
-                        <div class="w-32 shrink-0 truncate"><span class="font-bold text-slate-700">${st.name}</span> <span class="text-[9px] text-slate-400 block">${st.dept}</span></div>
-                        <div class="flex-1"><div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden shadow-inner"><div class="bg-blue-500 h-full rounded-full transition-all duration-700" style="width: ${st.percent}%"></div></div></div>
-                        <div class="w-10 text-right font-black ${st.percent === 100 ? 'text-emerald-500' : 'text-slate-500'}">${st.percent}%</div>
-                        <div class="tooltip-text"><p class="font-bold mb-2 border-b border-slate-600 pb-1 text-center text-blue-300">${st.name}</p>${st.tooltip}</div>
+                    chartHtml += `<div class="group relative flex items-center gap-4 text-xs p-2 hover:bg-blue-50 rounded-xl transition cursor-default">
+                        <!-- Tooltip siêu xịn -->
+                        <div class="hidden group-hover:block absolute bottom-full left-1/4 mb-2 w-48 bg-slate-800 text-white p-3 rounded-xl shadow-xl z-50 text-[11px] whitespace-pre-wrap leading-relaxed border border-slate-600 font-medium">Chi tiết tiến độ:${st.tooltip}</div>
+                        <div class="w-32 shrink-0 truncate"><span class="font-bold text-slate-700">${st.name}</span> <span class="text-[10px] text-slate-400 block">${st.dept}</span></div>
+                        <div class="flex-1"><div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden"><div class="${st.missing > 0 ? 'bg-amber-500' : 'bg-blue-500'} h-full rounded-full transition-all duration-700" style="width: ${st.percent}%"></div></div></div>
+                        <div class="w-12 text-right font-black ${st.percent === 100 ? 'text-emerald-500' : (st.missing > 0 ? 'text-amber-500' : 'text-slate-500')}">${st.percent}%</div>
                     </div>`;
                 });
                 document.getElementById('studentProgressList').innerHTML = chartHtml;
+
+                // Bảng vàng lười biếng (chỉ tính Trễ hạn)
+                let shameStats = [...studentStats].sort((a,b) => b.missing - a.missing).filter(st => st.missing > 0).slice(0, 8);
+                let shameHtml = '';
+                if(shameStats.length === 0) shameHtml = `<div class="flex flex-col items-center justify-center p-4 text-center"><i class="fas fa-glass-cheers text-3xl text-emerald-400 mb-2"></i><p class="text-xs text-slate-500 font-bold">Tuyệt vời!<br>Không có học viên nào bị trễ hạn.</p></div>`;
+                else {
+                    shameStats.forEach(st => {
+                        shameHtml += `<li onclick="openStudentModal('${st.key}', '${selInd}', '${selSession}')" class="flex items-center justify-between text-xs bg-white p-3 rounded-xl border-l-4 border-rose-400 shadow-sm cursor-pointer hover:bg-rose-50 transition-colors group">
+                            <span class="font-bold text-slate-700 truncate mr-2 group-hover:text-rose-600 transition">${st.name}</span>
+                            <span class="font-black text-rose-600 bg-rose-100 px-2.5 py-1 rounded-lg shrink-0">Trễ ${st.missing} bài</span>
+                        </li>`;
+                    });
+                }
+                document.getElementById('wallOfShameList').innerHTML = shameHtml;
             } else {
                 progressPanel.classList.add('hidden');
                 classAnalyticsPanel.classList.add('hidden');
             }
 
-            // ===============================================
-            // 4. RENDER CÁC THẺ BÀI LÀM (LỌC THEO TRẠNG THÁI)
-            // ===============================================
-            if (selStatus === 'pending') uniqueRecords = uniqueRecords.filter(e => !e.nhanXet || e.nhanXet.toString().trim() === "");
-            if (selStatus === 'graded') uniqueRecords = uniqueRecords.filter(e => e.nhanXet && e.nhanXet.toString().trim() !== "" && !e.nhanXet.toString().includes("[BỎ QUA]"));
-            if (selStatus === 'skipped') uniqueRecords = uniqueRecords.filter(e => e.nhanXet && e.nhanXet.toString().includes("[BỎ QUA]"));
-
-            document.getElementById('statPendingCount').innerText = uniqueRecords.filter(e => !e.nhanXet || e.nhanXet.toString().trim() === "").length;
-
+            // 5. RENDER BÀI TẬP ĐỂ CHẤM
             const container = document.getElementById('exercisesContainer');
+            if(!container) return; 
+
             if(uniqueRecords.length === 0) { 
-                container.innerHTML = `<div class="glass-panel rounded-3xl p-12 text-center text-slate-400"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-500"></i><br>Không có bài nộp nào cần xử lý!</div>`; 
+                container.innerHTML = `<div class="glass-panel-ultra rounded-3xl p-12 text-center text-slate-400 border border-slate-100"><i class="fas fa-check-circle text-4xl mb-4 text-emerald-500"></i><br>Không có bài làm nào khớp bộ lọc!</div>`; 
                 return; 
             }
 
@@ -750,99 +672,113 @@
                 const isSkipped = hasFeedback && item.nhanXet.toString().includes("[BỎ QUA]");
 
                 let statusBadge = "";
-                if (isSkipped) statusBadge = `<span class="bg-slate-100 text-slate-500 border border-slate-300 text-[10px] px-3 py-1 rounded-lg font-bold shadow-sm flex items-center gap-1"><i class="fas fa-ban"></i> ĐÃ BỎ QUA</span>`;
-                else if (hasFeedback) statusBadge = `<span class="bg-emerald-50 text-[#15803d] border border-emerald-200 text-[10px] px-3 py-1 rounded-lg font-bold shadow-sm flex items-center gap-1"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`;
-                else statusBadge = `<span class="bg-rose-50 text-[#b91c1c] border border-rose-200 text-[10px] px-3 py-1 rounded-lg font-bold uppercase shadow-sm animate-pulse flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
+                if (isSkipped) statusBadge = `<span class="bg-slate-100 text-slate-500 border border-slate-300 text-[10px] px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1"><i class="fas fa-ban"></i> BỎ QUA</span>`;
+                else if (hasFeedback) statusBadge = `<span class="bg-emerald-50 text-[#15803d] border border-emerald-200 text-[10px] px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`;
+                else statusBadge = `<span class="bg-rose-50 text-[#b91c1c] border border-rose-200 text-[10px] px-3 py-1.5 rounded-xl font-bold uppercase shadow-sm animate-pulse flex items-center gap-1"><i class="fas fa-exclamation-circle"></i> CHƯA CHẤM</span>`;
                 
                 let exerciseDetails = getExerciseDetails(item.tenBaiHoc) || {};
                 let requirements = exerciseDetails.requirements || [];
                 let questions = exerciseDetails.theory || [];
 
                 let requirementsHtml = '';
-                if (requirements.length > 0) {
-                    requirementsHtml = `<div class="mb-5"><p class="mb-2 font-bold text-[10px] text-slate-400 uppercase tracking-widest">Yêu cầu:</p><ul class="space-y-1.5 text-[13px] text-slate-700 pl-4 border-l-4 border-orange-400 bg-orange-50/50 p-4 rounded-r-xl font-medium">${requirements.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
-                }
+                if (requirements.length > 0) requirementsHtml = `<div class="mb-6"><p class="mb-2.5 font-bold text-[11px] text-slate-400 uppercase tracking-widest">Yêu cầu:</p><ul class="space-y-2 text-xs text-slate-700 pl-4 border-l-4 border-orange-500 bg-orange-50 p-4 rounded-r-2xl shadow-sm leading-relaxed font-medium">${requirements.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
 
                 let theoryHtml = '';
                 if (questions.length > 0) {
                     if (item.ans1 || item.ans2 || item.ans3 || item.ans4 || item.ans5) {
-                        theoryHtml = `<div class="bg-blue-50/40 border border-blue-100 rounded-xl p-5 h-full flex flex-col justify-start space-y-4"><span class="text-blue-600 block uppercase text-[10px] font-black tracking-wider"><i class="fas fa-user-edit mr-1.5"></i>Tự luận</span><div class="space-y-3">`;
+                        theoryHtml = `<div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-blue-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-user-edit mr-1.5"></i>Nội dung tự luận</span><div class="space-y-3">`;
                         for(let i=1; i<=5; i++) {
                             if(item[`ans${i}`]) {
                                 let qText = questions[i-1] ? questions[i-1] : `Câu hỏi ${i}`;
-                                theoryHtml += `<div class="text-[13px] text-slate-700 leading-relaxed bg-white p-3.5 rounded-xl border border-blue-50 shadow-sm space-y-1.5"><p class="font-bold text-slate-800"><i class="fa-solid fa-circle-question text-blue-400 mr-1.5"></i> ${qText}</p><p class="pt-2 border-t border-blue-50"><b class="text-emerald-600"><i class="fa-solid fa-comment-dots mr-1.5"></i> Đáp án:</b> <span class="font-medium text-slate-600">${item[`ans${i}`]}</span></p></div>`;
+                                theoryHtml += `<div class="text-xs text-slate-700 leading-relaxed bg-white/95 p-3.5 rounded-xl border border-blue-100 shadow-sm space-y-1.5"><p class="font-bold text-slate-800"><i class="fa-solid fa-circle-question text-blue-500 mr-1.5"></i> ${qText}</p><p class="pt-2 border-t border-blue-50"><b class="text-emerald-600"><i class="fa-solid fa-comment-dots mr-1.5"></i> Đáp án:</b> <span class="font-medium text-slate-700">${item[`ans${i}`]}</span></p></div>`;
                             }
                         }
                         theoryHtml += `</div></div>`;
-                    } else theoryHtml = `<div class="bg-slate-50 border border-slate-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center text-slate-400"><i class="fas fa-keyboard text-3xl mb-3 text-slate-300"></i><span class="text-xs font-semibold">Bỏ trống phần tự luận</span></div>`;
-                } else theoryHtml = `<div class="bg-slate-50 border border-slate-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center text-slate-400"><i class="fas fa-image text-3xl mb-3 text-emerald-300"></i><span class="text-xs font-semibold">Bài tập này chỉ yêu cầu Ảnh minh chứng</span></div>`;
+                    } else theoryHtml = `<div class="bg-rose-50/50 border border-rose-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-rose-500"><i class="fas fa-edit text-3xl mb-3 text-rose-300"></i><span class="text-sm font-semibold">Học viên bỏ trống tự luận</span></div>`;
+                } else theoryHtml = `<div class="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-slate-400"><i class="fas fa-check-circle text-3xl mb-3 text-emerald-400"></i><span class="text-sm font-semibold">Bài tập này chỉ yêu cầu nộp Ảnh</span></div>`;
 
                 let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
                 let imgHtml = '';
-                
                 if (imgUrls.length > 0) {
-                    if (imgUrls.length === 1) {
-                        imgHtml = `<div class="bg-indigo-50/20 border border-indigo-100/50 rounded-xl p-5 h-full flex flex-col justify-start space-y-4"><span class="text-indigo-600 block uppercase text-[10px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng</span><div class="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden border border-slate-200 cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, 0)"><img src="${getDirectImg(imgUrls[0])}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div></div>`;
-                    } else {
+                    if (imgUrls.length === 1) imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in shadow-sm" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, 0)"><img src="${getDirectImg(imgUrls[0])}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div></div>`;
+                    else {
                         activeSlides[safeKey] = 0; 
-                        let slidesImages = imgUrls.map((url, i) => `<img id="slide-${safeKey}-${i}" src="${getDirectImg(url)}" class="absolute inset-0 w-full h-full object-contain bg-slate-100 cursor-zoom-in transition-opacity duration-300 ${i===0?'':'hidden'}" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, activeSlides['${safeKey}'] || 0)">`).join('');
-                        imgHtml = `<div class="bg-indigo-50/20 border border-indigo-100/50 rounded-xl p-5 h-full flex flex-col justify-start space-y-4"><span class="text-indigo-600 block uppercase text-[10px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng (${imgUrls.length})</span><div class="relative w-full aspect-video bg-slate-100 rounded-lg overflow-hidden border border-slate-200">${slidesImages}<button onclick="changeSlide('${safeKey}', -1, ${imgUrls.length})" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center z-10"><i class="fas fa-chevron-left text-xs"></i></button><button onclick="changeSlide('${safeKey}', 1, ${imgUrls.length})" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/50 text-white flex items-center justify-center z-10"><i class="fas fa-chevron-right text-xs"></i></button><span id="counter-${safeKey}" class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2 py-0.5 rounded font-bold">1 / ${imgUrls.length}</span></div></div>`;
+                        let slidesImages = imgUrls.map((url, i) => `<img id="slide-${safeKey}-${i}" src="${getDirectImg(url)}" class="absolute inset-0 w-full h-full object-contain bg-slate-100 cursor-zoom-in transition-opacity duration-300 ${i === 0 ? '' : 'hidden'}" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, activeSlides['${safeKey}'] || 0)">`).join('');
+                        imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh (${imgUrls.length})</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 shadow-sm">${slidesImages}<button type="button" onclick="changeSlide('${safeKey}', -1, ${imgUrls.length})" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-left text-xs"></i></button><button type="button" onclick="changeSlide('${safeKey}', 1, ${imgUrls.length})" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-right text-xs"></i></button><span id="counter-${safeKey}" class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2.5 py-0.5 rounded font-bold backdrop-blur-sm">1 / ${imgUrls.length}</span></div></div>`;
                     }
-                } else imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-xl p-5 h-full flex flex-col justify-start space-y-4"><span class="text-rose-600 block uppercase text-[10px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng</span><div class="bg-white border border-rose-200 border-dashed rounded-lg p-6 h-full flex flex-col items-center justify-center text-center"><div class="w-10 h-10 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-lg mb-2"><i class="fas fa-exclamation-triangle"></i></div><span class="text-xs font-bold text-rose-700">CHƯA NỘP ẢNH</span></div></div>`;
+                } else imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-rose-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="bg-white border border-rose-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm"><div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl mb-3"><i class="fas fa-exclamation-triangle"></i></div><span class="text-sm font-bold text-rose-700 mb-1">CHƯA NỘP ẢNH MINH CHỨNG</span></div></div>`;
 
-                let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); let safeEx = (item.tenBaiHoc || "").toString().replace(/'/g, "\\'"); let safeSession = (item.buoi || "").toString().replace(/'/g, "\\'");
+                let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); 
+                let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); 
+                let safeEx = (item.tenBaiHoc || "").toString().replace(/'/g, "\\'"); 
+                let safeSession = (item.buoi || "").toString().replace(/'/g, "\\'");
 
                 return `
-                <div class="glass-panel p-6 md:p-8 relative flex flex-col mb-6">
-                    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4 mb-4">
+                <div class="glass-panel-ultra p-6 lg:p-8 rounded-3xl border border-slate-100 shadow-md relative flex flex-col mb-6">
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-5">
                         <div>
-                            <h3 class="text-base font-black text-slate-800 tracking-tight">${item.tenBaiHoc || 'Bài tập thực hành'}</h3>
-                            <p class="text-xs font-medium text-slate-500 mt-2 flex items-center flex-wrap gap-2">
-                                <i class="fas fa-user-circle text-slate-400"></i> <span class="text-blue-600 font-bold">${item.hoVaTen || 'Ẩn danh'}</span> 
-                                <span class="text-slate-300">|</span>Lớp: <span class="text-slate-700 font-bold">${item.phongBan || "Trống"}</span>
-                                <span class="text-slate-300">|</span><span class="bg-indigo-50 text-indigo-600 border border-indigo-100 px-1.5 py-0.5 rounded text-[9px] font-black uppercase">${item.khoa || 'Chung'}</span>
-                                <span class="text-slate-300">|</span><i class="far fa-clock text-slate-400"></i> ${formatDateTime(item.ngay)}
-                            </p>
+                            <h3 class="text-base font-extrabold text-slate-800 tracking-wide">${item.tenBaiHoc || 'Bài tập thực hành'}</h3>
+                            <p class="text-xs font-medium text-slate-500 mt-2 flex items-center flex-wrap gap-2"><i class="fas fa-user-circle text-slate-400 text-sm"></i> <span class="text-blue-600 font-bold">${item.hoVaTen || 'Ẩn danh'}</span> <span class="text-slate-300">|</span> Lớp: <span class="text-slate-700 font-bold">${item.phongBan || "Trống"}</span> <span class="text-slate-300">|</span> <span class="bg-indigo-50 text-indigo-600 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold text-[10px]">${item.khoa || 'Chung'}</span> <span class="text-slate-300">|</span> <i class="far fa-clock text-slate-400"></i> ${formatDateTime(item.ngay)}</p>
                         </div>
-                        <div class="flex items-center gap-2 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[10px] px-3 py-1 rounded-lg font-bold uppercase">${item.buoi || ''}</span></div>
+                        <div class="flex items-center gap-2 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[10px] px-3 py-1.5 rounded-xl font-bold uppercase shadow-sm">${item.buoi || ''}</span></div>
                     </div>
-                    
                     ${requirementsHtml}
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 mb-5 items-stretch"><div class="h-full">${theoryHtml}</div><div class="h-full">${imgHtml}</div></div>
-                    
-                    <div class="pt-4 border-t border-slate-100">
-                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2"><i class="fas fa-comment-dots text-blue-500 mr-1"></i> Ghi Nhận xét</label>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5 items-stretch"><div class="h-full">${theoryHtml}</div><div class="h-full">${imgHtml}</div></div>
+                    <div class="pt-5 border-t border-slate-100">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2.5"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Ghi Nhận xét của giảng viên</label>
                         <div class="flex flex-col sm:flex-row gap-3">
-                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[48px] p-3 text-sm bg-slate-50 border border-slate-200 rounded-xl focus:outline-none focus:bg-white focus:border-blue-400 outline-none resize-none font-medium text-slate-800" placeholder="Nhập nhận xét...">${item.nhanXet || ''}</textarea>
-                            <div class="flex sm:flex-col gap-2 shrink-0 w-full sm:w-32">
-                                <button onclick="saveFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${safeKey}" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white text-[11px] font-bold rounded-xl shadow-sm transition-all flex items-center justify-center gap-1.5 h-[34px]"><i class="fas fa-paper-plane"></i> Gửi</button>
-                                <button onclick="skipFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-600 text-[11px] font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 h-[28px]"><i class="fas fa-ban"></i> Bỏ qua</button>
-                            </div>
+                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[52px] p-3.5 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 outline-none shadow-inner resize-none font-semibold text-slate-800" placeholder="Viết nhận xét chi tiết, khen ngợi hoặc lưu ý điểm cần sửa...">${item.nhanXet || ''}</textarea>
+                            <div class="flex flex-col gap-2 shrink-0"><button onclick="saveFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${safeKey}" class="px-6 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 h-10 w-full"><i class="fas fa-paper-plane"></i> Chốt nhận xét!</button><button onclick="skipFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" class="px-6 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 h-8 w-full"><i class="fas fa-ban"></i> Bỏ qua</button></div>
                         </div>
                     </div>
                 </div>`;
             }).join('');
         }
 
-        function skipFeedback(key, name, dept, exTitle, session) {
-            document.getElementById(`fb-${key}`).value = "[BỎ QUA] Bài này không cần chấm điểm chi tiết.";
-            saveFeedback(key, name, dept, exTitle, session);
+        // HÀM MỞ POPUP CHI TIẾT KHI CLICK VÀO BẢNG VÀNG LƯỜI BIẾNG
+        function openStudentModal(studentKey, industry, sessionFilter) {
+            const parts = studentKey.split('|'); const sName = parts[0]; const sDept = parts[1];
+            document.getElementById('modalSDName').innerText = `${sName} (${sDept})`;
+            
+            let tree = getRequiredExercisesTree(industry, sessionFilter);
+            const completedTitles = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === sName && (e.phongBan||'N/A') === sDept).map(e => cleanStr(e.tenBaiHoc));
+
+            let html = '';
+            tree.forEach(ss => {
+                let isSsOverdue = checkExerciseStatus(studentKey, ss.sessionName) === "OVERDUE";
+                let ssHtml = `<div class="bg-white rounded-2xl border ${isSsOverdue?'border-rose-200':'border-slate-200'} shadow-sm overflow-hidden mb-4"><div class="${isSsOverdue?'bg-rose-50':'bg-slate-50'} px-4 py-3 border-b border-slate-100 flex items-center justify-between"><h4 class="font-black text-xs ${isSsOverdue?'text-rose-700':'text-slate-700'} uppercase tracking-wider">${ss.sessionName.split(':')[0]}</h4></div><div class="p-4 space-y-4">`;
+                
+                ss.groups.forEach(gr => {
+                    let grHtml = `<div class="border border-slate-100 rounded-xl bg-slate-50/50 p-3"><p class="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1.5">${gr.groupName}</p><ul class="space-y-1.5 pl-1">`;
+                    gr.exercises.forEach(ex => {
+                        if (completedTitles.includes(cleanStr(ex))) {
+                            grHtml += `<li class="text-xs text-emerald-600 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-check-circle mt-0.5 text-emerald-500"></i> <span class="flex-1 line-through opacity-70">${ex}</span><span class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Đã làm</span></li>`;
+                        } else {
+                            if (isSsOverdue) grHtml += `<li class="text-xs text-rose-600 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-times-circle mt-0.5 text-rose-500 animate-pulse"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-rose-200">Trễ hạn đỏ</span></li>`;
+                            else grHtml += `<li class="text-xs text-slate-500 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-clock mt-0.5 text-slate-300"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Chưa tới hạn</span></li>`;
+                        }
+                    });
+                    grHtml += `</ul></div>`;
+                    ssHtml += grHtml;
+                });
+                ssHtml += `</div></div>`;
+                html += ssHtml;
+            });
+
+            document.getElementById('modalSDContent').innerHTML = html;
+            document.getElementById('studentDetailModal').classList.remove('hidden');
         }
 
-        function saveFeedback(key, name, dept, exTitle, session) {
-            const feedback = document.getElementById(`fb-${key}`).value.trim();
-            const btn = document.getElementById(`btn-${key}`);
-            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> LƯU...`; btn.disabled = true;
+        function closeStudentModal() { document.getElementById('studentDetailModal').classList.add('hidden'); }
 
-            fetch(API_URL, {
-                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" },
-                body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
+        function skipFeedback(key, name, dept, exTitle, session) { document.getElementById(`fb-${key}`).value = "[BỎ QUA] Đã xem. Bài này không cần chấm điểm."; saveFeedback(key, name, dept, exTitle, session); }
+        function saveFeedback(key, name, dept, exTitle, session) {
+            const feedback = document.getElementById(`fb-${key}`).value.trim(); const btn = document.getElementById(`btn-${key}`); btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`; btn.disabled = true;
+            fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
             }).then(r=>r.json()).then(res => {
-                if(res.status === 'success') {
-                    btn.innerHTML = `<i class="fa-solid fa-check"></i> ĐÃ LƯU`; btn.classList.replace('bg-blue-600', 'bg-emerald-600');
-                    setTimeout(()=> { btn.innerHTML = `<i class="fas fa-paper-plane"></i> GỬI`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; fetchPracticeData(); }, 1500);
+                if(res.status === 'success') { btn.innerHTML = `<i class="fa-solid fa-check"></i> Đã chốt`; btn.classList.replace('bg-blue-600', 'bg-emerald-600'); setTimeout(()=> { btn.innerHTML = `<i class="fas fa-paper-plane"></i> Chốt nhận xét!`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; fetchPracticeData(); }, 1500);
                 } else alert("Lỗi lưu nhận xét!");
-            }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = `<i class="fas fa-paper-plane"></i> GỬI`; btn.disabled=false; });
+            }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = `<i class="fas fa-paper-plane"></i> Chốt nhận xét!`; btn.disabled=false; });
         }
     </script>
 </body>
