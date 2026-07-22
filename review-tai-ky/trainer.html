@@ -214,7 +214,7 @@
                                 </div>
                             </div>
 
-                            <!-- KHỐI 3: PHẢN XẠ TÌNH HUỐNG (TỰ ĐỘNG ĐIỀN TỪ CHECKBOX) -->
+                            <!-- KHỐI 3: PHẢN XẠ TÌNH HUỐNG (TĂNG CHIỀU CAO GẤP 3 LẦN: rows=12) -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
                                     <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center">
@@ -222,15 +222,15 @@
                                     </span>
                                     <button type="button" onclick="clearSelectedScenarios()" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i> Xóa tick</button>
                                 </div>
-                                <textarea id="scenarioNotes" rows="4" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm leading-relaxed" placeholder="Ghi nhận câu hỏi thực hành (Có thể tick chọn nhanh tình huống ở cột bên trái)..."></textarea>
+                                <textarea id="scenarioNotes" rows="12" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm leading-relaxed min-h-[220px]" placeholder="Ghi nhận câu hỏi thực hành (Có thể tick chọn nhanh tình huống ở cột bên trái)..."></textarea>
                             </div>
 
-                            <!-- KHỐI 4: NHẬN XẾT CỦA TRAINER -->
+                            <!-- KHỐI 4: NHẬN XẾT CỦA TRAINER (TĂNG CHIỀU CAO GẤP 3 LẦN: rows=9) -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
                                 <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
                                     <i class="fa-solid fa-comment-dots text-blue-500 mr-2"></i> 4. Nhận xét của Trainer
                                 </span>
-                                <textarea id="trainerNotes" rows="3" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Điểm mạnh, điểm yếu, phần kiến thức đã nắm / chưa nắm..."></textarea>
+                                <textarea id="trainerNotes" rows="9" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm min-h-[160px]" placeholder="Điểm mạnh, điểm yếu, phần kiến thức đã nắm / chưa nắm..."></textarea>
                             </div>
 
                             <!-- KHỐI 5: ĐÁNH GIÁ TỔNG KẾT (4 THANG) -->
@@ -267,7 +267,7 @@
                 </section>
             </div>
 
-            <!-- TAB 2: QUY TRÌNH & KẾ HOẠCH (ĐÃ KHÔI PHÚC FULL 100% BẢN GỐC) -->
+            <!-- TAB 2: QUY TRÌNH & KẾ HOẠCH (FULL NGUYÊN VẸN BẢN GỐC) -->
             <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
                 
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -790,16 +790,17 @@
             document.getElementById('scenarioNotes').value = "";
         }
 
+        // TỰ ĐỘNG CHÈN TÊN TÌNH HUỐNG + 2 DÒNG TRẮNG ĐỂ TRAINER ĐIỀN GHI CHÚ
         function updateScenarioNotesTextarea() {
             const textarea = document.getElementById('scenarioNotes');
             if (checkedScenarioTitles.size === 0) {
                 textarea.value = "";
                 return;
             }
-            let text = "Các tình huống đã thực hành:\n";
+            let text = "Các tình huống đã thực hành:\n\n";
             let index = 1;
             checkedScenarioTitles.forEach(title => {
-                text += `${index}. ${title}\n`;
+                text += `${index}. ${title}\n\n\n`; // Tên tình huống + 2 dòng trắng bên dưới
                 index++;
             });
             textarea.value = text;
@@ -949,7 +950,7 @@
         function setLoadingState(isLoading) {
             const btn = document.getElementById('submitBtn'); const btnText = document.getElementById('btnText'); const btnSpinner = document.getElementById('btnSpinner');
             if (isLoading) { btn.disabled = true; btn.classList.add('opacity-70'); btnText.classList.add('hidden'); btnSpinner.classList.remove('hidden'); } 
-            else { btn.disabled = false; btn.classList.remove('opacity-70'); btnText.classList.remove('hidden'); btnSpinner.classList.add('hidden'); }
+            else { btn.disabled = false; btn.classList.remove('opacity-70'); btnText.classList.remove('hidden'); btnSpinner.classList.remove('hidden'); }
         }
 
         function showModal(isSuccess, title, message) {
