@@ -249,7 +249,7 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbzZwkUV8g79PfYExma-7WRFg7IRY2fWmjpb63XiHqu6cqzx03uYi8Wmul9SamvyM9FMgQ/exec";
         let allData = [];
         let activeSlides = {};
-        let studentStartDates = {}; // Lưu ngày bắt đầu của từng học viên
+        let studentStartDates = {}; // Cỗ máy lưu "Ngày 1" của từng học viên
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
 
@@ -272,14 +272,14 @@
             .then(r => r.json()).then(res => {
                 if(res.status === 'success') {
                     allData = res.data.reverse(); 
-                    buildTimeEngine(); 
+                    buildTimeEngine(); // Phân tích thời gian Start Date
                     initFilters();
                 } else throw new Error(res.message || "Lỗi dữ liệu từ Server");
             }).catch(e => {
                 console.error("Fetch error: ", e);
                 const containerEl = document.getElementById('exercisesContainer');
                 if(containerEl) {
-                    containerEl.innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-exclamation-triangle text-3xl mb-3"></i><p class="font-bold">Đã xảy ra lỗi khi hiển thị dữ liệu.</p><p class="text-xs mt-1">Hệ thống phát hiện có bài nộp bị thiếu thông tin cốt lõi.</p></div>`;
+                    containerEl.innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-3xl"><i class="fas fa-exclamation-triangle text-3xl mb-3"></i><p class="font-bold">Đã xảy ra lỗi khi hiển thị dữ liệu.</p><p class="text-xs mt-1">Hệ thống phát hiện có bài nộp bị thiếu thông tin cốt lõi.</p><p class="text-xs mt-1">Chi tiết lỗi: ${e.message}</p></div>`;
                 }
             })
             .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
@@ -304,6 +304,7 @@
                 const key = `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`;
                 const d = new Date(e.ngay);
                 if (!isNaN(d.getTime())) {
+                    // Lấy ngày nộp bài sớm nhất làm mốc "Ngày 1"
                     if (!studentStartDates[key] || d < studentStartDates[key]) {
                         studentStartDates[key] = new Date(d.getFullYear(), d.getMonth(), d.getDate()); 
                     }
@@ -312,25 +313,27 @@
         }
 
         function checkExerciseStatus(studentKey, sessionName) {
+            // Trả về: "OVERDUE" (Trễ hạn đỏ) hoặc "UPCOMING" (Chưa tới giờ/Đúng hạn)
             const startDate = studentStartDates[studentKey];
             if (!startDate) return "UPCOMING"; 
 
             const now = new Date();
             let deadline = new Date(startDate);
 
+            // Logic tính Deadline tự động như L&D yêu cầu
             if (sessionName.includes("Buổi 1")) { deadline.setHours(12, 0, 0); } 
             else if (sessionName.includes("Buổi 2")) { deadline.setHours(16, 0, 0); } 
             else if (sessionName.includes("Buổi 3")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(12, 0, 0); } 
             else if (sessionName.includes("Buổi 4")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(16, 0, 0); } 
             else if (sessionName.includes("Buổi 5")) { deadline.setDate(deadline.getDate() + 2); deadline.setHours(16, 0, 0); } 
-            else return "OVERDUE"; 
+            else return "UPCOMING"; 
 
             if (now > deadline) return "OVERDUE";
             return "UPCOMING";
         }
 
         // ==========================================
-        // BỘ LỌC PHÂN TẦNG VÀ LẤY DỮ LIỆU GỐC
+        // LỌC DỮ LIỆU & RENDER
         // ==========================================
         function initFilters() {
             const industries = [...new Set(allData.map(e => e.khoa))].filter(Boolean).sort();
@@ -365,7 +368,6 @@
             }
 
             const currentSession = document.getElementById('filterSession').value;
-            
             if (source === 'init' || source === 'industry' || source === 'session') {
                 const exSelect = document.getElementById('filterExercise');
                 if (currentSession === 'all' || selInd === 'all' || typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[selInd]) {
@@ -386,6 +388,17 @@
             renderCards();
         }
 
+        function calculateTotalRequiredExercises(industry) {
+            if (typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[industry]) return [];
+            let required = [];
+            CODELAB_DATA[industry].forEach(s => {
+                s.exercises.forEach(ex => {
+                    if(!ex.isGroupHeader) required.push({ session: s.title, exercise: ex.title });
+                });
+            });
+            return required;
+        }
+
         function getRequiredExercisesTree(industry, sessionFilter) {
             if (typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[industry]) return [];
             let tree = [];
@@ -398,9 +411,7 @@
                     if (ex.isGroupHeader) {
                         if (currentGroup.exercises.length > 0) sessionObj.groups.push(currentGroup);
                         currentGroup = { groupName: ex.title, exercises: [] };
-                    } else {
-                        currentGroup.exercises.push(ex.title);
-                    }
+                    } else currentGroup.exercises.push(ex.title);
                 });
                 if (currentGroup.exercises.length > 0) sessionObj.groups.push(currentGroup);
                 tree.push(sessionObj);
@@ -431,7 +442,7 @@
         }
 
         // ==========================================
-        // RENDER GIAO DIỆN
+        // RENDER DỮ LIỆU & DASHBOARD
         // ==========================================
         function renderCards() {
             const selStatus = document.getElementById('filterStatus').value;
@@ -507,11 +518,11 @@
             if (selStatus === 'skipped') uniqueRecords = uniqueRecords.filter(e => e.nhanXet && e.nhanXet.toString().includes("[BỎ QUA]"));
 
             // ===============================================
-            // TÍNH TOÁN DASHBOARD TỔNG QUAN TOÀN HỆ THỐNG
+            // TÍNH TOÁN DASHBOARD TỔNG QUAN (AN TOÀN KO LỖI)
             // ===============================================
             document.getElementById('statsSummary').classList.remove('hidden');
             let totalRet = 0, totalFnb = 0, totalRetDone = 0, totalFnbDone = 0;
-            let totalOverdueStudents = new Set();
+            let missingTally = {}; let skippedTally = {};
             
             const reqRet = calculateTotalRequiredExercises('Retail');
             const reqFnb = calculateTotalRequiredExercises('FNB');
@@ -524,19 +535,22 @@
                 if (ind === 'Retail') { totalRet++; totalRetDone += [...new Set(doneTitles)].length; }
                 if (ind === 'FNB') { totalFnb++; totalFnbDone += [...new Set(doneTitles)].length; }
                 
+                // Gom dữ liệu thiếu
                 if (ind === 'Retail' || ind === 'FNB') {
-                    let tree = getRequiredExercisesTree(ind, 'all');
-                    tree.forEach(ss => {
-                        ss.groups.forEach(gr => {
-                            gr.exercises.forEach(ex => {
-                                if (!doneTitles.includes(cleanStr(ex))) {
-                                    if (checkExerciseStatus(key, ss.sessionName) === "OVERDUE") {
-                                        totalOverdueStudents.add(key);
-                                    }
-                                }
-                            });
-                        });
+                    let reqExs = calculateTotalRequiredExercises(ind);
+                    reqExs.forEach(req => {
+                        if (!doneTitles.includes(cleanStr(req.exercise))) {
+                            let missingKey = `${req.session} > ${req.exercise}`;
+                            missingTally[req.session] = (missingTally[req.session] || 0) + 1;
+                        }
                     });
+                }
+            });
+
+            // Tìm bài bỏ qua nhiều nhất
+            allData.forEach(e => {
+                if (e.nhanXet && e.nhanXet.toString().includes("[BỎ QUA]")) {
+                    skippedTally[e.tenBaiHoc] = (skippedTally[e.tenBaiHoc] || 0) + 1;
                 }
             });
 
@@ -548,7 +562,15 @@
             let percentFnb = (totalFnb * reqFnb.length) === 0 ? 0 : Math.round((totalFnbDone / (totalFnb * reqFnb.length)) * 100);
             document.getElementById('barFnb').style.width = `${percentFnb}%`;
 
-            document.getElementById('statOverdueStudents').innerText = totalOverdueStudents.size;
+            let worstSession = Object.keys(missingTally).reduce((a, b) => missingTally[a] > missingTally[b] ? a : b, "");
+            let worstSkipped = Object.keys(skippedTally).reduce((a, b) => skippedTally[a] > skippedTally[b] ? a : b, "");
+
+            const wsEl = document.getElementById('statWorstSession');
+            if(wsEl) wsEl.innerText = worstSession ? `${worstSession.split(':')[0]} (${missingTally[worstSession]} lượt thiếu)` : 'Tiến độ lớp đang rất tốt!';
+            
+            const weEl = document.getElementById('statWorstExercise');
+            if(weEl) weEl.innerText = worstSkipped ? `Bài bị bỏ qua: ${worstSkipped}` : 'Không có bài nào bị bỏ qua.';
+
             document.getElementById('statGraded').innerText = countGraded;
             document.getElementById('statSkipped').innerText = countSkipped;
             document.getElementById('statPending').innerText = countPending;
@@ -557,12 +579,13 @@
             document.getElementById('statGradedPercent').innerText = `${percentGraded}%`;
 
             // ===============================================
-            // XỬ LÝ KHUNG TIẾN ĐỘ
+            // XỬ LÝ KHUNG TIẾN ĐỘ CÁ NHÂN VÀ BẢNG SO SÁNH CLASS
             // ===============================================
             const progressPanel = document.getElementById('studentProgressPanel');
             const classAnalyticsPanel = document.getElementById('classAnalyticsPanel');
             
             if (selStudent !== 'all' && selInd !== 'all') {
+                // TIẾN ĐỘ CÁ NHÂN ACCORDION
                 classAnalyticsPanel.classList.add('hidden');
                 
                 let tree = getRequiredExercisesTree(selInd, selSession);
@@ -570,7 +593,6 @@
                 const completedTitles = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === currentStudentName).map(e => cleanStr(e.tenBaiHoc));
 
                 let missingHtml = '';
-                
                 tree.forEach(ss => {
                     let ssTotal = 0; let ssDone = 0; let ssMissingHtml = '';
                     ss.groups.forEach(gr => {
@@ -598,9 +620,7 @@
                                 <div class="flex items-center gap-2.5"><i class="fas fa-chevron-right text-xs text-slate-400 group-open:rotate-90 transition-transform"></i> ${ss.sessionName.split(':')[0]} <span class="text-xs font-medium text-slate-500 ml-1">(${ssDone}/${ssTotal} bài)</span></div>
                                 ${isSsOverdue ? '<i class="fas fa-exclamation-circle text-rose-500 text-lg animate-pulse" title="Có bài trễ hạn"></i>' : ''}
                             </summary>
-                            <div class="px-4 pb-4 pt-1 border-t border-slate-100">
-                                ${ssMissingHtml}
-                            </div>
+                            <div class="px-4 pb-4 pt-1 border-t border-slate-100">${ssMissingHtml}</div>
                         </details>`;
                     }
                 });
@@ -619,17 +639,16 @@
 
             } 
             else if (selStudent === 'all' && selInd !== 'all') {
+                // BẢNG SO SÁNH CLASS
                 progressPanel.classList.add('hidden');
                 classAnalyticsPanel.classList.remove('hidden');
                 
-                let reqExs = calculateTotalRequiredExercises(selInd);
-                if (selSession !== 'all') reqExs = reqExs.filter(r => r.session.includes(selSession) || selSession.includes(r.session.split(':')[0]));
-                const totalReq = reqExs.length;
+                let tree = getRequiredExercisesTree(selInd, selSession);
+                let totalReq = 0; tree.forEach(ss => ss.groups.forEach(gr => totalReq += gr.exercises.length));
 
                 let studentStats = [];
                 let currentStudents = [...new Set(allData.filter(e => e.khoa === selInd && (selDept === 'all' || e.phongBan === selDept)).map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))];
-                let tree = getRequiredExercisesTree(selInd, selSession);
-
+                
                 currentStudents.forEach(stKey => {
                     const p = stKey.split('|');
                     const doneList = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === p[0] && (e.phongBan||'N/A') === p[1]).map(e => cleanStr(e.tenBaiHoc));
@@ -670,7 +689,8 @@
                 if(shameStats.length === 0) shameHtml = `<div class="flex flex-col items-center justify-center p-6 text-center"><i class="fas fa-glass-cheers text-4xl text-emerald-400 mb-3"></i><p class="text-xs text-slate-500 font-bold leading-relaxed">Tuyệt vời!<br>Không có học viên nào bị trễ hạn.</p></div>`;
                 else {
                     shameStats.forEach(st => {
-                        shameHtml += `<li onclick="openStudentModal('${st.key}', '${selInd}', '${selSession}')" class="flex items-center justify-between text-xs bg-white p-3 rounded-xl border-l-4 border-rose-400 shadow-sm cursor-pointer hover:bg-rose-50 transition-colors group">
+                        let stKeySafe = st.key.replace(/'/g, "\\'");
+                        shameHtml += `<li onclick="openStudentModal('${stKeySafe}', '${selInd}', '${selSession}')" class="flex items-center justify-between text-xs bg-white p-3 rounded-xl border-l-4 border-rose-400 shadow-sm cursor-pointer hover:bg-rose-50 transition-colors group">
                             <span class="font-bold text-slate-700 truncate mr-2 group-hover:text-rose-600 transition">${st.name}</span>
                             <span class="font-black text-rose-600 bg-rose-100 px-2.5 py-1 rounded-lg shrink-0 border border-rose-200">Trễ ${st.missing} bài</span>
                         </li>`;
@@ -682,7 +702,7 @@
                 classAnalyticsPanel.classList.add('hidden');
             }
 
-            // 6. RENDER BÀI TẬP BÊN DƯỚI CÙNG
+            // 5. RENDER BÀI TẬP ĐỂ CHẤM BÊN DƯỚI
             const container = document.getElementById('exercisesContainer');
             if(!container) return; 
 
@@ -697,7 +717,7 @@
                 const isSkipped = hasFeedback && item.nhanXet.toString().includes("[BỎ QUA]");
 
                 let statusBadge = "";
-                if (isSkipped) statusBadge = `<span class="bg-slate-100 text-slate-500 border border-slate-300 text-[10px] px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1.5"><i class="fas fa-ban"></i> ĐÃ BỎ QUA</span>`;
+                if (isSkipped) statusBadge = `<span class="bg-slate-100 text-slate-500 border border-slate-300 text-[10px] px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1.5"><i class="fas fa-ban"></i> BỎ QUA</span>`;
                 else if (hasFeedback) statusBadge = `<span class="bg-emerald-50 text-[#15803d] border border-emerald-200 text-[10px] px-3 py-1.5 rounded-xl font-bold shadow-sm flex items-center gap-1.5"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`;
                 else statusBadge = `<span class="bg-rose-50 text-[#b91c1c] border border-rose-200 text-[10px] px-3 py-1.5 rounded-xl font-bold uppercase shadow-sm animate-pulse flex items-center gap-1.5"><i class="fas fa-exclamation-circle"></i> CẦN CHẤM</span>`;
                 
@@ -719,26 +739,19 @@
                             }
                         }
                         theoryHtml += `</div></div>`;
-                    } else {
-                        theoryHtml = `<div class="bg-rose-50/50 border border-rose-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-rose-500"><i class="fas fa-edit text-3xl mb-3 text-rose-300"></i><span class="text-sm font-semibold">Học viên đã bỏ trống phần Trả lời tự luận</span></div>`;
-                    }
-                } else {
-                    theoryHtml = `<div class="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-slate-400"><i class="fas fa-check-circle text-3xl mb-3 text-emerald-400"></i><span class="text-sm font-semibold">Bài tập này chỉ yêu cầu nộp Ảnh minh chứng</span></div>`;
-                }
+                    } else theoryHtml = `<div class="bg-rose-50/50 border border-rose-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-rose-500"><i class="fas fa-edit text-3xl mb-3 text-rose-300"></i><span class="text-sm font-semibold">Học viên bỏ trống tự luận</span></div>`;
+                } else theoryHtml = `<div class="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-slate-400"><i class="fas fa-check-circle text-3xl mb-3 text-emerald-400"></i><span class="text-sm font-semibold">Bài tập này chỉ yêu cầu nộp Ảnh</span></div>`;
 
                 let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
                 let imgHtml = '';
                 if (imgUrls.length > 0) {
-                    if (imgUrls.length === 1) {
-                        imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in shadow-sm" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, 0)"><img src="${getDirectImg(imgUrls[0])}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div></div>`;
-                    } else {
+                    if (imgUrls.length === 1) imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in shadow-sm" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, 0)"><img src="${getDirectImg(imgUrls[0])}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div></div>`;
+                    else {
                         activeSlides[safeKey] = 0; 
                         let slidesImages = imgUrls.map((url, i) => `<img id="slide-${safeKey}-${i}" src="${getDirectImg(url)}" class="absolute inset-0 w-full h-full object-contain bg-slate-100 cursor-zoom-in transition-opacity duration-300 ${i === 0 ? '' : 'hidden'}" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, activeSlides['${safeKey}'] || 0)">`).join('');
                         imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh (${imgUrls.length})</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 shadow-sm">${slidesImages}<button type="button" onclick="changeSlide('${safeKey}', -1, ${imgUrls.length})" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-left text-xs"></i></button><button type="button" onclick="changeSlide('${safeKey}', 1, ${imgUrls.length})" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-right text-xs"></i></button><span id="counter-${safeKey}" class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2.5 py-0.5 rounded font-bold backdrop-blur-sm">1 / ${imgUrls.length}</span></div></div>`;
                     }
-                } else {
-                    imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-rose-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="bg-white border border-rose-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm"><div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl mb-3"><i class="fas fa-exclamation-triangle"></i></div><span class="text-sm font-bold text-rose-700 mb-1">CHƯA NỘP ẢNH MINH CHỨNG</span></div></div>`;
-                }
+                } else imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-rose-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="bg-white border border-rose-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm"><div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl mb-3"><i class="fas fa-exclamation-triangle"></i></div><span class="text-sm font-bold text-rose-700 mb-1">CHƯA NỘP ẢNH MINH CHỨNG</span></div></div>`;
 
                 let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); 
                 let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); 
@@ -750,12 +763,7 @@
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-5">
                         <div>
                             <h3 class="text-base font-extrabold text-slate-800 tracking-wide">${item.tenBaiHoc || 'Bài tập thực hành'}</h3>
-                            <p class="text-xs font-medium text-slate-500 mt-2 flex items-center flex-wrap gap-2">
-                                <i class="fas fa-user-circle text-slate-400 text-sm"></i> <span class="text-blue-600 font-bold">${item.hoVaTen || 'Ẩn danh'}</span> 
-                                <span class="text-slate-300">|</span>Lớp: <span class="text-slate-700 font-bold">${item.phongBan || "Trống"}</span>
-                                <span class="text-slate-300">|</span><span class="bg-indigo-50 text-indigo-600 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold text-[10px]">${item.khoa || 'Chung'}</span>
-                                <span class="text-slate-300">|</span><i class="far fa-clock text-slate-400"></i> <span class="text-slate-700 font-semibold">${formatDateTime(item.ngay)}</span>
-                            </p>
+                            <p class="text-xs font-medium text-slate-500 mt-2 flex items-center flex-wrap gap-2"><i class="fas fa-user-circle text-slate-400 text-sm"></i> <span class="text-blue-600 font-bold">${item.hoVaTen || 'Ẩn danh'}</span> <span class="text-slate-300">|</span> Lớp: <span class="text-slate-700 font-bold">${item.phongBan || "Trống"}</span> <span class="text-slate-300">|</span> <span class="bg-indigo-50 text-indigo-600 border border-indigo-100 px-2 py-0.5 rounded-lg font-bold text-[10px]">${item.khoa || 'Chung'}</span> <span class="text-slate-300">|</span> <i class="far fa-clock text-slate-400"></i> <span class="text-slate-700 font-semibold">${formatDateTime(item.ngay)}</span></p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[10px] px-3 py-1.5 rounded-xl font-bold uppercase shadow-sm">${item.buoi || ''}</span></div>
                     </div>
@@ -776,23 +784,19 @@
         }
 
         // ==========================================
-        // CÁC HÀM MODAL VÀ API POST
+        // CÁC HÀM MODAL POPUP VÀ API POST
         // ==========================================
-        let fullscreenImageList = []; let fullscreenImageIndex = 0;
-        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
-        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
-        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
-        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
-
         function openStudentModal(studentKey, industry, sessionFilter) {
             const parts = studentKey.split('|'); const sName = parts[0]; const sDept = parts[1];
             document.getElementById('modalSDName').innerText = `${sName} (${sDept})`;
             let tree = getRequiredExercisesTree(industry, sessionFilter);
             const completedTitles = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === sName && (e.phongBan||'N/A') === sDept).map(e => cleanStr(e.tenBaiHoc));
+            
             let html = '';
             tree.forEach(ss => {
                 let isSsOverdue = checkExerciseStatus(studentKey, ss.sessionName) === "OVERDUE";
                 let ssHtml = `<div class="bg-white rounded-2xl border ${isSsOverdue?'border-rose-200':'border-slate-200'} shadow-sm overflow-hidden mb-4"><div class="${isSsOverdue?'bg-rose-50':'bg-slate-50'} px-4 py-3 border-b border-slate-100 flex items-center justify-between"><h4 class="font-black text-xs ${isSsOverdue?'text-rose-700':'text-slate-700'} uppercase tracking-wider">${ss.sessionName.split(':')[0]}</h4></div><div class="p-4 space-y-4">`;
+                
                 ss.groups.forEach(gr => {
                     let grHtml = `<div class="border border-slate-100 rounded-xl bg-slate-50/50 p-3"><p class="text-[10px] font-black text-slate-500 uppercase tracking-wider mb-2 border-b border-slate-200 pb-1.5">${gr.groupName}</p><ul class="space-y-1.5 pl-1">`;
                     gr.exercises.forEach(ex => {
@@ -809,11 +813,18 @@
                 ssHtml += `</div></div>`;
                 html += ssHtml;
             });
+
             document.getElementById('modalSDContent').innerHTML = html;
             document.getElementById('studentDetailModal').classList.remove('hidden');
         }
 
         function closeStudentModal() { document.getElementById('studentDetailModal').classList.add('hidden'); }
+
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
 
         function skipFeedback(key, name, dept, exTitle, session) { document.getElementById(`fb-${key}`).value = "[BỎ QUA] Đã xem. Bài này không cần chấm điểm."; saveFeedback(key, name, dept, exTitle, session); }
         
