@@ -9,7 +9,7 @@
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Google Fonts Preconnect giúp tải Font Inter nhanh và không bị lỗi dẹt chữ -->
+    <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -27,7 +27,7 @@
         .scifi-btn { position: relative; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: 12px; font-weight: 700; font-size: 14px; background: #2563eb; color: white; transition: all 0.3s; }
         .scifi-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.4); }
         
-        .custom-scroll::-webkit-scrollbar { width: 5px; height: 5px; } .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; } .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .no-scrollbar::-webkit-scrollbar { display: none; } .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 
         .rating-btn { transition: all 0.2s ease; border: 2px solid transparent; }
@@ -56,216 +56,207 @@
             </div>
         </header>
 
-        <main class="flex-grow w-full px-4 lg:px-8 xl:px-12 py-8 flex flex-col">
-            <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-6 xl:gap-8 items-stretch w-full flex-grow">
+        <main class="flex-grow w-full px-4 lg:px-8 xl:px-12 py-6 flex flex-col">
+            <div id="main-content-workspace" class="grid grid-cols-1 xl:grid-cols-12 gap-6 items-stretch w-full flex-grow">
                 
-                <!-- CỘT TRÁI: GIÁO TRÌNH & TÌNH HUỐNG (RỘNG HƠN - 75%) -->
-                <section class="xl:col-span-9 flex flex-col h-[calc(100vh-140px)] min-h-[600px]">
+                <!-- CỘT TRÁI: GIÁO TRÌNH & TÌNH HUỐNG (58% - col-span-7) -->
+                <section class="xl:col-span-7 flex flex-col h-[calc(100vh-120px)] min-h-[600px]">
                     
-                    <!-- MENU LỘ TRÌNH VÀ NGÀY HỌC ĐƯỢC ĐƯA LÊN CÙNG 1 DÒNG -->
-                    <div class="flex flex-col lg:flex-row gap-4 mb-5 flex-shrink-0">
-                        <!-- Lộ trình Ngành Hàng -->
-                        <div class="flex w-full lg:w-[40%] gap-2 bg-indigo-50/50 p-1.5 rounded-2xl border border-indigo-100">
-                            <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-white transition-all bg-blue-600 shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-tags"></i> RETAIL (BÁN LẺ)</button>
-                            <button onclick="switchRoadmap('FNB')" id="roadmap-FNB" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-300/50 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-bowl-food"></i> FNB (F&B)</button>
+                    <!-- MENU LỘ TRÌNH VÀ NGÀY HỌC -->
+                    <div class="flex flex-col sm:flex-row gap-3 mb-4 flex-shrink-0">
+                        <div class="flex w-full sm:w-[40%] gap-2 bg-indigo-50/50 p-1.5 rounded-2xl border border-indigo-100">
+                            <button onclick="switchRoadmap('Retail')" id="roadmap-Retail" class="flex-1 py-2 text-xs font-bold rounded-xl text-white transition-all bg-blue-600 shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-tags"></i> RETAIL</button>
+                            <button onclick="switchRoadmap('FNB')" id="roadmap-FNB" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-300/50 transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-bowl-food"></i> FNB</button>
                         </div>
 
-                        <!-- Chọn Ngày học -->
-                        <div class="flex w-full lg:w-[60%] gap-2 bg-slate-300/40 p-1.5 rounded-2xl border border-slate-300/50">
-                            <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2.5 text-xs font-bold rounded-xl transition-all bg-emerald-500 text-white shadow-sm flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 1</button>
-                            <button onclick="switchSubTab('day2')" id="sub-tab-day2" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-200/50 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 2</button>
-                            <button onclick="switchSubTab('day3')" id="sub-tab-day3" class="flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-200/50 transition-all flex items-center justify-center gap-2"><i class="fa-solid fa-calendar-day"></i> NGÀY 3</button>
+                        <div class="flex w-full sm:w-[60%] gap-2 bg-slate-300/40 p-1.5 rounded-2xl border border-slate-300/50">
+                            <button onclick="switchSubTab('day1')" id="sub-tab-day1" class="flex-1 py-2 text-xs font-bold rounded-xl transition-all bg-emerald-500 text-white shadow-sm flex items-center justify-center gap-1.5"><i class="fa-solid fa-calendar-day"></i> NGÀY 1</button>
+                            <button onclick="switchSubTab('day2')" id="sub-tab-day2" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-200/50 transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-calendar-day"></i> NGÀY 2</button>
+                            <button onclick="switchSubTab('day3')" id="sub-tab-day3" class="flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-200/50 transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-calendar-day"></i> NGÀY 3</button>
                         </div>
                     </div>
 
                     <div class="flex-grow glass-panel-ultra rounded-3xl overflow-hidden shadow-lg flex flex-col md:flex-row border border-slate-200/60">
                         
-                        <!-- SIDEBAR BÀI HỌC BÊN TRONG -->
-                        <div class="w-full md:w-[260px] shrink-0 bg-slate-50/80 border-r border-slate-200 flex flex-col">
-                            <div class="p-4 border-b border-slate-200 bg-white/60 flex items-center gap-2">
-                                <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-layer-group text-xs"></i></span>
+                        <!-- SIDEBAR BÀI HỌC -->
+                        <div class="w-full md:w-[220px] shrink-0 bg-slate-50/80 border-r border-slate-200 flex flex-col">
+                            <div class="p-3 border-b border-slate-200 bg-white/60 flex items-center gap-2">
+                                <span class="w-6 h-6 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center"><i class="fa-solid fa-layer-group text-xs"></i></span>
                                 <h3 class="text-xs font-bold text-slate-700 uppercase tracking-wider">Danh sách bài học</h3>
                             </div>
-                            <div id="lesson-sidebar-list" class="flex-grow overflow-y-auto custom-scroll p-3 space-y-4 max-h-[25vh] md:max-h-none">
-                                <!-- Render JS danh sách tên bài học phân loại Sáng/Chiều -->
+                            <div id="lesson-sidebar-list" class="flex-grow overflow-y-auto custom-scroll p-2.5 space-y-3 max-h-[25vh] md:max-h-none">
                             </div>
                         </div>
 
-                        <!-- KHU VỰC HIỂN THỊ TÌNH HUỐNG CHÍNH -->
-                        <div class="flex-grow p-6 lg:p-8 overflow-y-auto custom-scroll flex flex-col space-y-6">
-                            <div class="flex items-center gap-4 border-b pb-4 border-slate-100 flex-shrink-0">
-                                <span class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-lg" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
-                                <div>
-                                    <h2 class="text-base font-bold text-slate-800 tracking-wide" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
+                        <!-- KHU VỰC DANH SÁCH TÌNH HUỐNG -->
+                        <div class="flex-grow p-4 lg:p-6 overflow-y-auto custom-scroll flex flex-col space-y-4">
+                            <div class="flex items-center justify-between border-b pb-3 border-slate-100 flex-shrink-0">
+                                <div class="flex items-center gap-3">
+                                    <span class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-base" id="session-header-icon"><i class="fa-solid fa-store"></i></span>
+                                    <h2 class="text-xs font-bold text-slate-800 tracking-wide uppercase" id="session-header-title">PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG</h2>
                                 </div>
+                                <span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100">
+                                    <i class="fa-solid fa-square-check mr-1"></i> Tick chọn để tự điền form
+                                </span>
                             </div>
 
-                            <div class="space-y-4 flex-shrink-0">
-                                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                                    <span class="text-xs font-bold text-blue-600 uppercase tracking-wider flex items-center gap-2"><i class="fa-solid fa-shuffle"></i> TÌNH HUỐNG CHỈ ĐỊNH HOẠT ĐỘNG</span>
-                                    <button onclick="triggerRandomScenario(currentSelectedLesson)" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-2 self-start"><i class="fa-solid fa-dice"></i> CHỌN NGẪU NHIÊN LẠI</button>
-                                </div>
-                                <div id="random-scenario-box"></div>
+                            <!-- Ô TÌM KIẾM NHANH TÌNH HUỐNG -->
+                            <div class="relative flex-shrink-0">
+                                <input type="text" id="searchScenarioInput" onkeyup="filterAllScenarios(this.value)" placeholder="🔍 Tìm nhanh tình huống theo tên, từ khóa..." class="w-full text-xs pl-8 pr-3 py-2 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white shadow-sm">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                             </div>
 
-                            <div class="border-t pt-5 border-slate-100 flex-grow flex flex-col space-y-4">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-xs font-bold text-slate-400 tracking-wider uppercase block">DANH SÁCH TÌNH HUỐNG (LƯU TRỮ)</span>
-                                    <button onclick="toggleAllScenarios()" id="toggle-list-btn" class="text-xs font-bold text-blue-600 hover:underline flex items-center gap-2"><i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống</button>
-                                </div>
-                                <div id="all-scenarios-wrapper" class="hidden flex-col space-y-4 transition-all">
-                                    <div class="relative">
-                                        <input type="text" id="searchScenarioInput" onkeyup="filterAllScenarios(this.value)" placeholder="🔍 Tìm nhanh theo Mã tình huống, Tên bài học, Nội dung..." class="w-full text-xs pl-9 pr-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/20 bg-white shadow-sm">
-                                        <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                                    </div>
-                                    <div id="all-scenarios-list" class="space-y-4"></div>
-                                </div>
+                            <!-- DANH SÁCH TÌNH HUỐNG DẠNG SCROLL + TICK CHỌN -->
+                            <div id="scenarios-checkbox-list" class="flex-grow overflow-y-auto custom-scroll space-y-3 pr-1">
+                                <!-- JS Render danh sách câu hỏi kèm ô tick chọn -->
                             </div>
                         </div>
 
                     </div>
                 </section>
                 
-                <!-- CỘT PHẢI: FORM ĐÁNH GIÁ (GỌN HƠN THÀNH SIDEBAR - 25%, TONE MÀU SÁNG, 1 CỘT) -->
-                <section class="xl:col-span-3 h-[calc(100vh-140px)] min-h-[600px] flex flex-col">
+                <!-- CỘT PHẢI: FORM ĐÁNH GIÁ (42% - col-span-5) -->
+                <section class="xl:col-span-5 h-[calc(100vh-120px)] min-h-[600px] flex flex-col">
                     <form id="reviewForm" onsubmit="submitForm(event)" class="flex flex-col h-full bg-white/95 backdrop-blur-xl border border-white/60 text-slate-700 rounded-3xl p-5 shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
                         
-                        <div class="mb-5 border-b border-slate-200 pb-4">
-                            <h3 class="text-sm font-extrabold text-slate-800 mb-3 flex items-center gap-2.5">
-                                <span class="w-8 h-8 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-pen-clip"></i></span>
-                                PHIẾU KẾT QUẢ REVIEW
+                        <div class="mb-4 border-b border-slate-200 pb-3 flex-shrink-0">
+                            <h3 class="text-sm font-extrabold text-slate-800 flex items-center gap-2">
+                                <span class="w-7 h-7 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i class="fa-solid fa-pen-clip"></i></span>
+                                PHIẾU KẾT QUẢ REVIEW ĐÀO TẠO
                             </h3>
                             
-                            <div id="dynamicLinksContainer" class="flex flex-wrap items-center gap-2 w-full">
-                                <!-- JS tự động render link -->
+                            <div id="dynamicLinksContainer" class="flex flex-wrap items-center gap-2 w-full mt-2">
+                                <!-- JS tự động render nút liên kết -->
                             </div>
                         </div>
 
-                        <div class="flex-grow overflow-y-auto custom-scroll space-y-5 pr-1.5">
+                        <div class="flex-grow overflow-y-auto custom-scroll space-y-4 pr-1.5">
                             
-                            <!-- KHỐI 1: TRA CỨU HỌC VIÊN -->
-                            <div class="bg-slate-50/50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3.5">
-                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-2">
-                                    <i class="fa-solid fa-magnifying-glass text-blue-500 mr-2"></i> Tra cứu học viên
+                            <!-- KHỐI 1: THÔNG TIN HỌC VIÊN & BUỔI REVIEW -->
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-3">
+                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
+                                    <i class="fa-solid fa-user-check text-blue-500 mr-2"></i> 1. Thông tin buổi review
                                 </span>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
-                                    <div class="relative">
-                                        <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ví dụ: Nguyễn Văn A (Viết đúng tên học viên)">
-                                        <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[8px] text-blue-400 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
+                                        <div class="relative">
+                                            <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Nhập đúng tên học viên...">
+                                            <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[8px] text-blue-400 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                        </div>
+                                        <div class="flex items-center gap-2 mt-1.5 h-5">
+                                            <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 shadow-sm"></span>
+                                            <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-sm transition-all flex items-center gap-1 border">
+                                                <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
+                                            </button>
+                                        </div>
                                     </div>
-                                    <div class="flex items-center gap-2 mt-2 h-6">
-                                        <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 shadow-sm"></span>
-                                        <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-3 py-1 rounded-md shadow-sm transition-all flex items-center gap-1.5 border">
-                                            <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
-                                        </button>
+
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
+                                        <input type="text" id="trainerName" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Tên Trainer...">
                                     </div>
                                 </div>
-                                
-                                <!-- Input ẩn để hệ thống vẫn chạy tự động nhưng không hiển thị ra UI -->
+
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">NGÀNH HÀNG *</label>
+                                        <select id="industry" required class="w-full text-xs px-2.5 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
+                                            <option value="Retail">Retail (Bán lẻ)</option>
+                                            <option value="FNB">FNB (F&B)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">PHIÊN REVIEW *</label>
+                                        <select id="session" onchange="switchSessionAndCheck()" required class="w-full text-xs px-2 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
+                                            <option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Ngày 1)</option>
+                                            <option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Ngày 2)</option>
+                                            <option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Ngày 3)</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">NGÀY REVIEW *</label>
+                                        <input type="text" id="reviewDate" required class="w-full text-xs px-2.5 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 shadow-sm" placeholder="dd/mm/yyyy">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                    <div>
+                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
+                                        <select id="homeworkStatus" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
+                                            <option value="Đủ">Đủ bài thực hành</option>
+                                            <option value="Thiếu">Thiếu bài thực hành</option>
+                                            <option value="Cần làm lại">Cần làm lại bài</option>
+                                        </select>
+                                    </div>
+                                </div>
                                 <input type="hidden" id="classCode" value="Tái ký">
                             </div>
 
-                            <!-- KHỐI 2: THÔNG TIN CHUNG -->
-                            <div class="bg-slate-50/50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3.5">
-                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-2">
-                                    <i class="fa-solid fa-address-card text-blue-500 mr-2"></i> Thông tin chung
-                                </span>
-                                
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
-                                    <input type="text" id="trainerName" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ví dụ: Trần Linh Trang">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">NGÀNH HÀNG *</label>
-                                    <select id="industry" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 cursor-pointer shadow-sm">
-                                        <option value="Retail">Retail (Bán lẻ)</option>
-                                        <option value="FNB">FNB (F&B)</option>
-                                        <option value="Booking">Booking (Dịch vụ)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">PHIÊN REVIEW *</label>
-                                    <select id="session" onchange="switchSessionAndCheck()" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 cursor-pointer shadow-sm">
-                                        <option value="Phiên 1 (Cuối Ngày 1)">Phiên 1 (Cuối Ngày 1)</option>
-                                        <option value="Phiên 2 (Cuối Ngày 2)">Phiên 2 (Cuối Ngày 2)</option>
-                                        <option value="Phiên 3 (Cuối Ngày 3)">Phiên 3 (Cuối Ngày 3)</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">NGÀY REVIEW *</label>
-                                    <div class="relative"><input type="text" id="reviewDate" required class="w-full text-xs pl-3 pr-10 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="dd/mm/yyyy"><span class="absolute right-3 top-1/2 -translate-y-1/2 text-blue-500 text-xs"><i class="fa-regular fa-calendar-days"></i></span></div>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
-                                    <select id="homeworkStatus" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 cursor-pointer shadow-sm">
-                                        <option value="Đủ">Đủ bài thực hành</option>
-                                        <option value="Thiếu">Thiếu bài thực hành</option>
-                                        <option value="Cần làm lại">Cần làm lại bài</option>
-                                    </select>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">ĐIỂM TỰ TIN (1-10) *</label>
-                                    <div class="flex items-center gap-3 mt-1.5"><input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-blue-500"><span id="scoreValue" class="text-sm font-bold text-blue-600 w-6 text-center">7</span></div>
-                                </div>
-                            </div>
-
-                            <!-- KHỐI 3: Self Check -->
-                            <div class="bg-slate-50/50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3.5">
-                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-2">
-                                    <i class="fa-solid fa-comments text-blue-500 mr-2"></i> Tự đánh giá
+                            <!-- KHỐI 2: PHẦN TỰ ĐÁNH GIÁ (SLIDER + 1 Ô CHIA SẺ) -->
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-3">
+                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
+                                    <i class="fa-solid fa-face-smile text-blue-500 mr-2"></i> 2. Học viên Tự đánh giá
                                 </span>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">TÍNH NĂNG DỄ HIỂU NHẤT</label>
-                                    <textarea id="selfCheckEasy" rows="2" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ghi nhận..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">TÍNH NĂNG KHÓ HIỂU NHẤT</label>
-                                    <textarea id="selfCheckHard" rows="2" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Ghi nhận..."></textarea>
-                                </div>
-                                
-                                <!-- Hóa thân thành input ẩn để đảm bảo logic lưu trữ nguyên vẹn -->
-                                <input type="hidden" id="selfCheckApply" value="">
-                            </div>
-
-                            <!-- KHỐI 4: Phản xạ -->
-                            <div class="bg-slate-50/50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3.5">
-                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-2">
-                                    <i class="fa-solid fa-shield-halved text-blue-500 mr-2"></i> Phản xạ tình huống
-                                </span>
-                                <div>
-                                    <textarea id="scenarioNotes" rows="3" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Trainer ghi nhận chi tiết tình huống thực hành đã hỏi..."></textarea>
-                                </div>
-                            </div>
-
-                            <!-- KHỐI 5: Đánh giá -->
-                            <div class="bg-slate-50/50 border border-slate-200 rounded-2xl p-4 shadow-sm space-y-3.5">
-                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-2">
-                                    <i class="fa-solid fa-square-poll-vertical text-blue-500 mr-2"></i> Đánh giá tổng kết
-                                </span>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-2">XẾP LOẠI NĂNG LỰC CUỐI BUỔI *</label>
-                                    <div class="grid grid-cols-2 gap-2">
-                                        <button type="button" onclick="selectRating('Chưa đạt', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-600 transition-all shadow-sm">CHƯA ĐẠT</button>
-                                        <button type="button" onclick="selectRating('Đạt thao tác', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-amber-400 hover:text-amber-600 transition-all shadow-sm">ĐẠT THAO TÁC</button>
-                                        <button type="button" onclick="selectRating('Đạt ứng dụng', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm">ĐẠT ỨNG DỤNG</button>
-                                        <button type="button" onclick="selectRating('Tốt', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-green-400 hover:text-green-600 transition-all shadow-sm">TỐT</button>
+                                    <div class="flex justify-between items-center mb-1">
+                                        <label class="text-[10px] font-bold text-slate-500 tracking-wider">MỨC ĐỘ TỰ TIN (1-10) *</label>
+                                        <span id="scoreValue" class="text-xs font-black text-blue-600 bg-blue-100 px-2 py-0.5 rounded-md">7 / 10</span>
                                     </div>
-                                    <input type="hidden" id="selectedRating" required value="">
+                                    <input type="range" id="confidenceScore" min="1" max="10" value="7" oninput="updateScoreValue(this.value)" class="w-full accent-blue-600 cursor-pointer">
                                 </div>
                                 <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">NHẬN XÉT CỦA TRAINER</label>
-                                    <textarea id="trainerNotes" rows="3" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Điểm mạnh/điểm cần khắc phục..."></textarea>
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1.5">ACTION PLAN (KẾ HOẠCH)</label>
-                                    <textarea id="actionPlan" rows="3" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Khuyến nghị lộ trình rèn luyện tiếp theo..."></textarea>
+                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">CHIA SẺ & CẢM NHẬN CỦA HỌC VIÊN</label>
+                                    <textarea id="selfCheckNotes" rows="3" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Học viên chia sẻ về tính năng dễ hiểu, vướng mắc hoặc đề xuất..."></textarea>
                                 </div>
                             </div>
+
+                            <!-- KHỐI 3: PHẢN XẠ TÌNH HUỐNG (TỰ ĐỘNG ĐIỀN TỪ CHECKBOX) -->
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center">
+                                        <i class="fa-solid fa-shield-halved text-blue-500 mr-2"></i> 3. Phản xạ tình huống đã hỏi
+                                    </span>
+                                    <button type="button" onclick="clearSelectedScenarios()" class="text-[10px] font-bold text-slate-400 hover:text-red-500 transition-colors"><i class="fa-solid fa-trash-can"></i> Xóa tick</button>
+                                </div>
+                                <textarea id="scenarioNotes" rows="4" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm leading-relaxed" placeholder="Ghi nhận câu hỏi thực hành (Có thể tick chọn nhanh tình huống ở cột bên trái)..."></textarea>
+                            </div>
+
+                            <!-- KHỐI 4: NHẬN XẾT CỦA TRAINER -->
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
+                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
+                                    <i class="fa-solid fa-comment-dots text-blue-500 mr-2"></i> 4. Nhận xét của Trainer
+                                </span>
+                                <textarea id="trainerNotes" rows="3" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Điểm mạnh, điểm yếu, phần kiến thức đã nắm / chưa nắm..."></textarea>
+                            </div>
+
+                            <!-- KHỐI 5: ĐÁNH GIÁ TỔNG KẾT (4 THANG) -->
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2.5">
+                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
+                                    <i class="fa-solid fa-square-poll-vertical text-blue-500 mr-2"></i> 5. Xếp loại năng lực buổi học *
+                                </span>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button type="button" onclick="selectRating('Chưa đạt', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-red-300 hover:text-red-600 transition-all shadow-sm">CHƯA ĐẠT</button>
+                                    <button type="button" onclick="selectRating('Đạt thao tác', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-amber-400 hover:text-amber-600 transition-all shadow-sm">ĐẠT THAO TÁC</button>
+                                    <button type="button" onclick="selectRating('Đạt ứng dụng', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-blue-400 hover:text-blue-600 transition-all shadow-sm">ĐẠT ỨNG DỤNG</button>
+                                    <button type="button" onclick="selectRating('Tốt', this)" class="rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 hover:border-green-400 hover:text-green-600 transition-all shadow-sm">TỐT</button>
+                                </div>
+                                <input type="hidden" id="selectedRating" required value="">
+                            </div>
+
+                            <!-- KHỐI 6: KHUYẾN NGHỊ / ACTION PLAN -->
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
+                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
+                                    <i class="fa-solid fa-compass text-blue-500 mr-2"></i> 6. Khuyến nghị & Định hướng tiếp theo
+                                </span>
+                                <textarea id="actionPlan" rows="3" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Hành động gợi ý tiếp theo mà Trainer đã định hướng và góp ý..."></textarea>
+                            </div>
+
                         </div>
 
-                        <div class="mt-4 pt-4 border-t border-slate-200">
-                            <button type="submit" id="submitBtn" class="scifi-btn w-full font-bold tracking-wider shadow-lg bg-blue-600 hover:bg-blue-700">
+                        <div class="mt-3 pt-3 border-t border-slate-200 flex-shrink-0">
+                            <button type="submit" id="submitBtn" class="scifi-btn w-full font-bold tracking-wider shadow-lg bg-blue-600 hover:bg-blue-700 py-3">
                                 <span id="btnText"><i class="fa-solid fa-paper-plane"></i> GỬI KẾT QUẢ ĐÁNH GIÁ</span>
                                 <span id="btnSpinner" class="hidden"><i class="fa-solid fa-circle-notch animate-spin"></i> Đang gửi dữ liệu...</span>
                             </button>
@@ -274,9 +265,8 @@
                 </section>
             </div>
 
-            <!-- ================= TAB 2: QUY TRÌNH & KẾ HOẠCH ================= -->
+            <!-- TAB 2: HANDBOOK -->
             <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
-                <!-- Nội dung Handbook giữ nguyên -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
                         <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3">
@@ -284,55 +274,50 @@
                             BỐI CẢNH VẬN HÀNH QUÝ 3 - 2026
                         </h3>
                         <div class="space-y-4 text-sm leading-relaxed text-slate-500">
-                            <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ trong thời gian dài hơn, tập trung vào hai mục tiêu cốt lõi: <strong>Giữ gói</strong> (duy trì sử dụng) và <strong>Nâng gói</strong> (upsell).</p>
-                            <p>📈 <strong>Quy mô tăng trưởng:</strong> Dự kiến bổ sung <strong>30 - 40 nhân sự mới</strong> trong Quý 3/2026, hình thức gia nhập cuốn chiếu theo từng tuần.</p>
-                            <p>⚡ <strong>Áp lực vận hành:</strong> Mỗi tháng hệ thống ghi nhận thêm khoảng <strong>2.400 khách hàng</strong>, mục tiêu duy trì <strong>MRR đạt 286</strong>. Trong khi đó, đội ngũ Coacher/Trainer đang gặp hạn chế về mặt thời gian để trực tiếp theo sát và đặt câu hỏi định hướng liên tục cho từng cá nhân.</p>
-                            <p>🎯 <strong>Yêu cầu thực tế:</strong> Cần đồng đều hóa năng lực chuyên môn của nhân sự mới một cách nhanh chóng, đảm bảo mọi nhân sự đều có thể tự tin tư vấn ngay sau khi kết thúc lộ trình hội nhập.</p>
+                            <p>📌 <strong>Đặc thù công việc:</strong> Nhân sự tái ký chịu trách nhiệm chăm sóc tệp khách hàng cũ, giữ gói và nâng gói.</p>
+                            <p>📈 <strong>Quy mô tăng trưởng:</strong> Bổ sung 30 - 40 nhân sự mới cuốn chiếu theo tuần.</p>
                         </div>
-                    </div>
-
-                    <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-tr from-emerald-50/40 via-sky-50/20 to-purple-50/40 border border-slate-100">
-                        <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3">
-                            <span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-bullseye"></i></span>
-                            MỤC TIÊU CỦA BUỔI REVIEW 1:1
-                        </h3>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl"><span class="text-xs font-bold text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span><p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p></div>
-                            <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl"><span class="text-xs font-bold text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span><p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể.</p></div>
-                            <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl"><span class="text-xs font-bold text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span><p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p></div>
-                            <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl"><span class="text-xs font-bold text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span><p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục.</p></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4 bg-gradient-to-r from-blue-50/30 via-slate-50 to-indigo-50/30 border border-slate-100">
-                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-list-check"></i></span>QUY TRÌNH TRIỂN KHAI CHUNG</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-sm text-slate-500 leading-relaxed">
-                        <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-bold text-slate-400 block tracking-wider uppercase">THỜI ĐIỂM THỰC HIỆN</span><p class="text-blue-600 font-bold">Sau 03 ngày</p></div>
-                        <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-bold text-slate-400 block tracking-wider uppercase">TẦN SUẤT & THỜI LƯỢNG</span><p class="text-blue-600 font-bold">Mỗi ngày 01 phiên review</p></div>
-                        <div class="space-y-1 p-3 bg-white border border-slate-100 rounded-2xl"><span class="text-xs font-bold text-slate-400 block tracking-wider uppercase">NHIỆM VỤ TRAINER</span><p class="text-blue-600 font-bold">Phỏng vấn sâu kiến thức</p></div>
-                    </div>
-                </div>
-
-                <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
-                    <h3 class="text-base font-bold text-slate-800 flex items-center gap-3 border-b pb-3"><span class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center text-sm"><i class="fa-solid fa-clock-rotate-left"></i></span>CẤU TRÚC PHÂN BỔ KHUNG GIỜ REVIEW (45 PHÚT/PHIÊN)</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full border-collapse text-left text-sm min-w-[700px]">
-                            <thead><tr class="border-b border-slate-200"><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[180px] min-w-[180px]">HỌC PHẦN</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider w-[120px]">THỜI LƯỢNG</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">MỤC ĐÍCH ĐÁNH GIÁ</th><th class="pb-3 font-bold text-slate-400 text-xs tracking-wider">CÁCH THỨC THỰC HIỆN</th></tr></thead>
-                            <tbody class="divide-y divide-slate-100 text-slate-500">
-                                <tr><td class="py-4 font-bold text-slate-700">1. Self-check</td><td class="py-4 text-blue-600 font-bold">5 phút</td><td class="py-4">Đánh giá mức độ tự tự tin.</td><td class="py-4">Nhân sự tự chia sẻ phần kiến thức thấy dễ hiểu nhất, khó nhất.</td></tr>
-                                <tr><td class="py-4 font-bold text-slate-700">2. Kiểm tra bản chất</td><td class="py-4 text-blue-600 font-bold">10 phút</td><td class="py-4">Đánh giá khả năng nhận diện nghiệp vụ.</td><td class="py-4">Đặt câu hỏi so sánh phân biệt các tính năng tương đồng.</td></tr>
-                                <tr><td class="py-4 font-bold text-slate-700">3. Phản xạ tư vấn</td><td class="py-4 text-blue-600 font-bold">15 - 20 phút</td><td class="py-4">Đánh giá khả năng chuyển đổi tính năng thành lợi ích.</td><td class="py-4">Đưa ra tình huống thực tế của chủ shop. Sale phản xạ.</td></tr>
-                                <tr><td class="py-4 font-bold text-slate-700">4. Nhận xét & Định hướng</td><td class="py-4 text-blue-600 font-bold">5 phút</td><td class="py-4">Phản hồi nhanh kết quả buổi học.</td><td class="py-4">Trainer đóng góp 1 - 2 điểm cốt lõi cần sửa hoặc phát huy.</td></tr>
-                            </tbody>
-                        </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
 
-    <!-- Modal Thông báo kết quả Form -->
+    <!-- MODAL IFRAME NHÚNG LINK (FULLSCREEN SÁT LỀ) -->
+    <div id="iframeModal" class="fixed inset-0 bg-slate-900/85 backdrop-blur-md z-[120] flex items-center justify-center hidden p-2 sm:p-3">
+        <div class="bg-white rounded-2xl shadow-2xl w-[98vw] h-[95vh] max-w-none flex flex-col overflow-hidden border border-slate-200">
+            <div class="flex items-center justify-between px-4 py-2.5 bg-[#1b365d] text-white flex-shrink-0">
+                <div class="flex items-center gap-2.5">
+                    <span class="w-7 h-7 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center text-xs"><i class="fa-solid fa-window-maximize"></i></span>
+                    <h3 id="iframeModalTitle" class="text-xs sm:text-sm font-bold truncate max-w-[50vw]">Tiêu đề trang</h3>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a id="iframeModalExternalBtn" href="#" target="_blank" title="Mở tab mới" class="px-3 py-1 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i> <span class="hidden sm:inline">Mở tab mới</span>
+                    </a>
+                    <button onclick="closeIframeModal()" class="w-8 h-8 rounded-lg bg-white/10 hover:bg-red-500 text-white flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-grow w-full h-full relative bg-slate-100">
+                <iframe id="iframeModalSource" src="" class="w-full h-full border-0"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CHI TIẾT BÀI THỰC HÀNH (FULLSCREEN SÁT LỀ) -->
+    <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-2 sm:p-3">
+        <div class="bg-white rounded-2xl shadow-2xl w-[98vw] h-[95vh] max-w-none flex flex-col relative border border-slate-200 p-5 md:p-6">
+            <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fa-solid fa-xmark"></i></button>
+            <h2 class="text-base font-bold text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-3">
+                <i class="fa-solid fa-laptop-code text-blue-600"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
+            </h2>
+            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-4 mt-2"></div>
+        </div>
+    </div>
+
+    <!-- MODAL STATUS -->
     <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden">
         <div class="glass-panel-ultra rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
             <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
@@ -342,18 +327,7 @@
         </div>
     </div>
 
-    <!-- MODAL XEM BÀI THỰC HÀNH CỦA HỌC VIÊN -->
-    <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-4xl w-full max-h-[90vh] flex flex-col relative border border-slate-200">
-            <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="text-xl font-bold text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-4">
-                <i class="fa-solid fa-laptop-code text-blue-600"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
-            </h2>
-            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-6 mt-4"></div>
-        </div>
-    </div>
-
-    <!-- FULLSCREEN ẢNH MODAL (Zoom) -->
+    <!-- FULLSCREEN ẢNH MODAL -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all">
         <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
             <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
@@ -379,9 +353,9 @@
         let scenariosData = {};
         let currentDay = 'day1';
         let currentRoadmap = 'Retail'; 
-        let currentRandomScenario = null;
         let currentSelectedLesson = null;
         let currentStudentPracticeData = []; 
+        let checkedScenarioTitles = new Set();
 
         function setTodayDate() {
             const today = new Date();
@@ -389,7 +363,7 @@
         }
         setTodayDate();
 
-        function updateScoreValue(val) { document.getElementById('scoreValue').textContent = val; }
+        function updateScoreValue(val) { document.getElementById('scoreValue').textContent = `${val} / 10`; }
 
         window.onload = function() { loadScenariosFromSheet(); };
 
@@ -415,8 +389,7 @@
             });
         }
 
-        // ================= ĐỊNH DẠNG TEXT TÌNH HUỐNG & ĐÁP ÁN (FORMATTER) =================
-        
+        // ================= ĐỊNH DẠNG & TRÍCH XUẤT ĐÁP ÁN =================
         function splitTitle(fullTitle) {
             if (!fullTitle) return { code: "", lesson: "", scenario: "" };
             let code = "", lesson = "", scenario = "";
@@ -433,32 +406,64 @@
             return { code, lesson, scenario };
         }
 
-        function renderTitleHtml(title) {
-            const parts = splitTitle(title);
-            if (parts.code) {
-                return `
-                    <div class="flex flex-col gap-0.5">
-                        <span class="text-blue-600 font-bold text-xs tracking-wide">${escapeHtml(parts.code)}</span>
-                        ${parts.lesson ? `<span class="text-slate-500 uppercase text-[10px] md:text-xs font-semibold leading-tight">${escapeHtml(parts.lesson)}</span>` : ''}
-                        <span class="text-slate-800 font-bold text-sm md:text-base mt-1 leading-snug">${escapeHtml(parts.scenario)}</span>
-                    </div>
-                `;
-            }
-            return `<span class="text-slate-800 font-bold text-sm md:text-base leading-snug">${escapeHtml(title)}</span>`;
-        }
-
         function formatQuestionText(text) {
             if (!text) return "";
             let cleanText = text.replace(/\r\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-            let escaped = escapeHtml(cleanText);
-            return escaped.replace(/([.?!])\s+(?=[A-ZÀ-Ỹa-zà-ỹ0-9"'])/g, "$1<br><br>");
+            return escapeHtml(cleanText);
+        }
+
+        // HÀM TRÍCH XUẤT CHUẨN XÁC CHỈ LẤY NỘI DUNG "GỢI Ý GIẢI PHÁP"
+        function extractSuggestedSolution(answerText) {
+            if (!answerText) return "";
+            let cleanText = answerText.replace(/\r\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            
+            // 1. Tìm vị trí bắt đầu
+            const startKeywords = ["Gợi ý giải pháp", "Giải pháp gợi ý"];
+            let foundIdx = -1;
+            let foundKwLen = 0;
+
+            for (let kw of startKeywords) {
+                let idx = cleanText.toLowerCase().indexOf(kw.toLowerCase());
+                if (idx !== -1) {
+                    foundIdx = idx;
+                    foundKwLen = kw.length;
+                    break;
+                }
+            }
+
+            if (foundIdx === -1) return "";
+
+            let rest = cleanText.substring(foundIdx + foundKwLen).trim();
+            if (rest.startsWith(":")) rest = rest.substring(1).trim();
+
+            // 2. Tìm điểm dừng ngay trước các tiêu đề tiếp theo (Không lấy Phân biệt bản chất, Lợi ích...)
+            const stopKeywords = [
+                "Phân biệt bản chất",
+                "Giải thích bản chất",
+                "Lợi ích thuyết phục gia hạn",
+                "Lợi ích thuyết phục",
+                "Nhận diện nút thắt"
+            ];
+
+            let cutIdx = rest.length;
+            for (let kw of stopKeywords) {
+                let idx = rest.toLowerCase().indexOf(kw.toLowerCase());
+                if (idx !== -1 && idx < cutIdx) {
+                    cutIdx = idx;
+                }
+            }
+
+            let result = rest.substring(0, cutIdx).trim();
+            // Làm sạch ký tự thừa ở 2 đầu
+            result = result.replace(/[-•▪■:]+$/, '').trim();
+            result = result.replace(/^[-•▪■:]+/, '').trim();
+            return escapeHtml(result);
         }
 
         function formatAnswerWithBullets(text) {
             if (!text) return "";
             const keywords = ["Nhận diện nút thắt", "Giải pháp gợi ý", "Gợi ý giải pháp", "Giải thích bản chất", "Phân biệt bản chất", "Lợi ích thuyết phục gia hạn", "Lợi ích thuyết phục"];
             let preparedText = text.replace(/\r\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-            
             preparedText = escapeHtml(preparedText);
             
             keywords.forEach(kw => {
@@ -480,24 +485,13 @@
                     const headerText = trimmedPart.substring(0, colonIdx).trim() + ':';
                     let bodyText = trimmedPart.substring(colonIdx + 1).trim();
                     
-                    htmlOutput.push(`<div class="text-emerald-700 font-extrabold text-sm mt-4 mb-1.5 first:mt-0">${headerText}</div>`);
-                    if (bodyText) {
-                        if (/^[•\-*▪■]/.test(bodyText)) bodyText = bodyText.substring(1).trim();
-                        htmlOutput.push(`<div class="flex items-start gap-1.5 text-slate-700 text-sm font-normal leading-relaxed my-1"><span class="text-blue-500 mt-1 shrink-0 select-none text-[8px] leading-none">■</span><span>${bodyText}</span></div>`);
-                    }
+                    htmlOutput.push(`<div class="text-emerald-700 font-extrabold text-xs mt-2 mb-1">${headerText}</div>`);
+                    if (bodyText) htmlOutput.push(`<div class="text-slate-700 text-xs font-normal leading-relaxed pl-2 border-l-2 border-emerald-200 mb-1">${bodyText}</div>`);
                 } else {
-                    let cleanText = trimmedPart;
-                    if (/^[•\-*▪■]/.test(cleanText)) cleanText = cleanText.substring(1).trim();
-                    htmlOutput.push(`<div class="flex items-start gap-1.5 text-slate-700 text-sm font-normal leading-relaxed my-1"><span class="text-blue-500 mt-1 shrink-0 select-none text-[8px] leading-none">■</span><span>${cleanText}</span></div>`);
+                    htmlOutput.push(`<div class="text-slate-700 text-xs leading-relaxed my-1">${trimmedPart}</div>`);
                 }
             });
             return htmlOutput.join('');
-        }
-
-        function formatSentences(text) {
-            if (!text) return "";
-            text = text.replace(/\n/g, '<br>');
-            return text.replace(/([.?!])\s+([A-ZĐÁÀẢÃẠÂẤẦẨẪẬĂẮẰẲẴẶÉÈẺẼẸÊẾỀỂỄỆÍÌỈĨỊÓÒỎÕỌÔỐỒỔỖỘƠỚỜỞỠỢÚÙỦŨỤƯỨỪỬỮỰÝỲỶỸỴ])/g, "$1<br><br>$2");
         }
 
         function escapeHtml(string) {
@@ -505,50 +499,62 @@
             return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        // ================= CẬP NHẬT CÁC NÚT LINK ĐỘNG =================
+        // ================= CẬP NHẬT NÚT MỞ MODAL POPUP (IFRAME) =================
         function updateDynamicLinks() {
             const container = document.getElementById('dynamicLinksContainer');
-            let html = '<div class="flex flex-wrap items-center gap-2.5 pb-2 w-full">';
+            let html = '<div class="flex flex-wrap items-center gap-2 pb-1 w-full">';
 
             let eLearnLink = ""; let practiceLink1 = ""; let practiceLink2 = "";
-            let textBtn1 = "Đề bài TH1"; let textBtn2 = "Đề bài TH2"; 
+            let textBtn1 = "Bài TH1"; let textBtn2 = "Bài TH2"; 
             let markLink = "https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien.html";
 
             if(currentRoadmap === 'Retail') {
                 if(currentDay === 'day1') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-1.html`; textBtn1 = "Đề bài TH1";
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-2.html`; textBtn2 = "Đề bài TH2";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-1.html`;
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-2.html`;
                 } else if(currentDay === 'day2') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-3.html`; textBtn1 = "Đề bài TH3";
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-4.html`; textBtn2 = "Đề bài TH4";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-3.html`; textBtn1 = "Bài TH3";
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-4.html`; textBtn2 = "Bài TH4";
                 } else if(currentDay === 'day3') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-5.html`; textBtn1 = "Đề bài TH5";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-5.html`; textBtn1 = "Bài TH5";
                 }
             } else if (currentRoadmap === 'FNB') {
                 if(currentDay === 'day1') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-1.html`; textBtn1 = "Đề bài TH1";
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-2.html`; textBtn2 = "Đề bài TH2";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-1.html`;
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-2.html`;
                 } else if(currentDay === 'day2') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-3.html`; textBtn1 = "Đề bài TH3";
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-4.html`; textBtn2 = "Đề bài TH4";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-3.html`; textBtn1 = "Bài TH3";
+                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-4.html`; textBtn2 = "Bài TH4";
                 } else if(currentDay === 'day3') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-5.html`; textBtn1 = "Đề bài TH5";
+                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-5.html`; textBtn1 = "Bài TH5";
                 }
             }
 
-            if(eLearnLink) html += `<a href="${eLearnLink}" target="_blank" class="px-3 py-1.5 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-blue-200"><i class="fa-solid fa-book"></i> Khóa học E-learning</a>`;
-            if(practiceLink1) html += `<a href="${practiceLink1}" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> ${textBtn1}</a>`;
-            if(practiceLink2) html += `<a href="${practiceLink2}" target="_blank" class="px-3 py-1.5 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-indigo-200"><i class="fa-solid fa-file-signature"></i> ${textBtn2}</a>`;
-            html += `<a href="${markLink}" target="_blank" class="px-3 py-1.5 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-emerald-200"><i class="fa-solid fa-check-double"></i> Chấm bài (GV)</a>`;
+            if(eLearnLink) html += `<button type="button" onclick="openIframeModal('${eLearnLink}', 'Khóa học E-learning')" class="px-2.5 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition border border-blue-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-book"></i> E-learning</button>`;
+            if(practiceLink1) html += `<button type="button" onclick="openIframeModal('${practiceLink1}', '${textBtn1}')" class="px-2.5 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition border border-indigo-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-file-signature"></i> ${textBtn1}</button>`;
+            if(practiceLink2) html += `<button type="button" onclick="openIframeModal('${practiceLink2}', '${textBtn2}')" class="px-2.5 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition border border-indigo-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-file-signature"></i> ${textBtn2}</button>`;
+            html += `<button type="button" onclick="openIframeModal('${markLink}', 'Chấm bài Giảng viên')" class="px-2.5 py-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition border border-emerald-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-check-double"></i> Chấm bài</button>`;
 
             html += '</div>';
             container.innerHTML = html;
+        }
+
+        function openIframeModal(url, title) {
+            document.getElementById('iframeModalTitle').textContent = title;
+            document.getElementById('iframeModalSource').src = url;
+            document.getElementById('iframeModalExternalBtn').href = url;
+            document.getElementById('iframeModal').classList.remove('hidden');
+        }
+
+        function closeIframeModal() {
+            document.getElementById('iframeModal').classList.add('hidden');
+            document.getElementById('iframeModalSource').src = '';
         }
 
         // ================= ĐIỀU HƯỚNG UI =================
@@ -559,11 +565,11 @@
             const retailBtn = document.getElementById('roadmap-Retail');
             const fnbBtn = document.getElementById('roadmap-FNB');
             if (roadmap === 'Retail') {
-                retailBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-2";
-                fnbBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-300/50 transition-all flex items-center justify-center gap-2";
+                retailBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition-all bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1.5";
+                fnbBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-300/50 transition-all flex items-center justify-center gap-1.5";
             } else {
-                retailBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-300/50 transition-all flex items-center justify-center gap-2";
-                fnbBtn.className = "flex-1 py-2.5 text-xs font-bold rounded-xl transition-all bg-orange-500 text-white shadow-sm flex items-center justify-center gap-2";
+                retailBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl text-slate-600 hover:text-slate-800 hover:bg-slate-300/50 transition-all flex items-center justify-center gap-1.5";
+                fnbBtn.className = "flex-1 py-2 text-xs font-bold rounded-xl transition-all bg-orange-500 text-white shadow-sm flex items-center justify-center gap-1.5";
             }
             switchSubTab(currentDay);
         }
@@ -579,316 +585,191 @@
             currentDay = day;
             document.getElementById('session').value = day === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : day === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
             
-            const tabs = ['day1', 'day2', 'day3'];
-            tabs.forEach(item => {
+            ['day1', 'day2', 'day3'].forEach(item => {
                 const button = document.getElementById(`sub-tab-${item}`);
                 if (button) {
                     if (item === day) {
                         button.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
-                        button.classList.remove('text-slate-600', 'hover:text-slate-800');
+                        button.classList.remove('text-slate-600');
                     } else {
                         button.classList.remove('bg-emerald-500', 'text-white', 'shadow-sm');
-                        button.classList.add('text-slate-600', 'hover:text-slate-800');
+                        button.classList.add('text-slate-600');
                     }
                 }
             });
-
-            const bgGlows = {
-                day1: ["rgba(37, 99, 235, 0.05)", "rgba(16, 185, 129, 0.05)"],
-                day2: ["rgba(249, 115, 22, 0.05)", "rgba(37, 99, 235, 0.05)"],
-                day3: ["rgba(16, 185, 129, 0.05)", "rgba(249, 115, 22, 0.05)"]
-            };
-            const blob1 = document.getElementById('blob-1');
-            const blob2 = document.getElementById('blob-2');
-            if (blob1 && blob2 && bgGlows[day]) {
-                blob1.style.background = bgGlows[day][0];
-                blob2.style.background = bgGlows[day][1];
-            }
 
             const headerTitle = document.getElementById('session-header-title');
             if (day === 'day1') headerTitle.textContent = "PHIÊN 1: KIẾN THỨC BÁN LẺ NỀN TẢNG";
             else if (day === 'day2') headerTitle.textContent = "PHIÊN 2: BÁN HÀNG NÂNG CAO & QUẢN TRỊ ĐA KÊNH";
             else if (day === 'day3') headerTitle.textContent = "PHIÊN 3: PHÁP LÝ THUẾ & KẾ TOÁN HỘ KINH DOANH";
 
-            currentSelectedLesson = null; // Reset bộ chọn bài học
+            currentSelectedLesson = null;
             renderLessonSidebar();
-            renderAllScenarios(day);
-            hideAllScenariosList();
             updateDynamicLinks(); 
             checkStudentPractice(); 
         }
 
-        // ================= XỬ LÝ SIDEBAR BÀI HỌC VÀ LẤY NGẪU NHIÊN =================
-        
+        // ================= XỬ LÝ SIDEBAR BÀI HỌC =================
         function renderLessonSidebar() {
             const list = scenariosData[currentDay] ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) : [];
             const sidebar = document.getElementById('lesson-sidebar-list');
             
             if (!list || list.length === 0) { 
-                sidebar.innerHTML = '<p class="text-[11px] p-3 text-slate-400 text-center italic">Chưa có bài học</p>'; 
-                triggerRandomScenario(null);
+                sidebar.innerHTML = '<p class="text-[11px] p-2 text-slate-400 text-center italic">Chưa có bài học</p>'; 
+                renderScenariosCheckboxList();
                 return; 
             }
 
-            // Sử dụng Map để lưu trữ bài học dựa theo thứ tự xuất hiện của chúng trong dữ liệu thô (Spreadsheet Order)
             const morningMap = new Map();
             const afternoonMap = new Map();
 
             list.forEach(item => {
                 const parts = splitTitle(item.title);
                 const lessonName = parts.lesson || "Chưa phân loại";
-                const isMorning = item.type === 'morning';
-
-                if (isMorning) {
-                    if (!morningMap.has(lessonName)) {
-                        morningMap.set(lessonName, { name: lessonName, count: 1 });
-                    } else {
-                        morningMap.get(lessonName).count++;
-                    }
+                if (item.type === 'morning') {
+                    morningMap.set(lessonName, (morningMap.get(lessonName) || 0) + 1);
                 } else {
-                    if (!afternoonMap.has(lessonName)) {
-                        afternoonMap.set(lessonName, { name: lessonName, count: 1 });
-                    } else {
-                        afternoonMap.get(lessonName).count++;
-                    }
+                    afternoonMap.set(lessonName, (afternoonMap.get(lessonName) || 0) + 1);
                 }
             });
 
-            const morningList = Array.from(morningMap.values());
-            const afternoonList = Array.from(afternoonMap.values());
-
             let html = "";
-            
-            // Render học phần sáng
-            if (morningList.length > 0) {
-                html += `
-                    <div class="mb-4">
-                        <div class="flex items-center gap-1.5 px-2.5 py-1.5 mb-2 text-[10px] font-extrabold text-emerald-700 uppercase tracking-wider bg-emerald-50 rounded-xl border border-emerald-100">
-                            <i class="fa-solid fa-sun text-xs text-emerald-500"></i> HỌC PHẦN SÁNG
-                        </div>
-                        <div class="space-y-1.5">
-                `;
-                morningList.forEach(lesson => {
-                    const isActive = (lesson.name === currentSelectedLesson);
-                    const activeClasses = isActive 
-                        ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" 
-                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
-                    
-                    html += `
-                        <button data-lesson="${escapeHtml(lesson.name)}" onclick="selectLesson('${escapeHtml(lesson.name)}')" class="w-full text-left px-3 py-2.5 rounded-xl border transition-all ${activeClasses}">
-                            <span class="text-xs font-semibold leading-snug line-clamp-2">${escapeHtml(lesson.name)} <span class="font-normal opacity-70">(${lesson.count})</span></span>
-                        </button>
-                    `;
+            if (morningMap.size > 0) {
+                html += `<div class="mb-2"><span class="text-[10px] font-extrabold text-emerald-700 uppercase block mb-1">HỌC PHẦN SÁNG</span><div class="space-y-1">`;
+                morningMap.forEach((count, name) => {
+                    const isActive = (name === currentSelectedLesson);
+                    const activeCss = isActive ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100";
+                    html += `<button type="button" onclick="selectLesson('${escapeHtml(name)}')" class="w-full text-left px-2.5 py-2 rounded-xl border text-xs font-semibold leading-tight ${activeCss}">${escapeHtml(name)} <span class="opacity-60">(${count})</span></button>`;
                 });
                 html += `</div></div>`;
             }
 
-            // Render học phần chiều
-            if (afternoonList.length > 0) {
-                html += `
-                    <div class="mb-4">
-                        <div class="flex items-center gap-1.5 px-2.5 py-1.5 mb-2 text-[10px] font-extrabold text-blue-700 uppercase tracking-wider bg-blue-50 rounded-lg border border-blue-100">
-                            <i class="fa-solid fa-moon text-xs text-blue-500"></i> HỌC PHẦN CHIỀU
-                        </div>
-                        <div class="space-y-1.5">
-                `;
-                afternoonList.forEach(lesson => {
-                    const isActive = (lesson.name === currentSelectedLesson);
-                    const activeClasses = isActive 
-                        ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" 
-                        : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
-                    
-                    html += `
-                        <button data-lesson="${escapeHtml(lesson.name)}" onclick="selectLesson('${escapeHtml(lesson.name)}')" class="w-full text-left px-3 py-2.5 rounded-xl border transition-all ${activeClasses}">
-                            <span class="text-xs font-semibold leading-snug line-clamp-2">${escapeHtml(lesson.name)} <span class="font-normal opacity-70">(${lesson.count})</span></span>
-                        </button>
-                    `;
+            if (afternoonMap.size > 0) {
+                html += `<div><span class="text-[10px] font-extrabold text-blue-700 uppercase block mb-1">HỌC PHẦN CHIỀU</span><div class="space-y-1">`;
+                afternoonMap.forEach((count, name) => {
+                    const isActive = (name === currentSelectedLesson);
+                    const activeCss = isActive ? "bg-blue-100 border-blue-300 text-blue-800 shadow-sm" : "bg-white border-slate-200 text-slate-600 hover:bg-slate-100";
+                    html += `<button type="button" onclick="selectLesson('${escapeHtml(name)}')" class="w-full text-left px-2.5 py-2 rounded-xl border text-xs font-semibold leading-tight ${activeCss}">${escapeHtml(name)} <span class="opacity-60">(${count})</span></button>`;
                 });
                 html += `</div></div>`;
             }
             
             sidebar.innerHTML = html;
 
-            // Tự chọn bài học đầu tiên nếu chưa có cấu hình trước đó
-            if (!currentSelectedLesson || (!morningMap.has(currentSelectedLesson) && !afternoonMap.has(currentSelectedLesson))) {
-                if (morningList.length > 0) {
-                    selectLesson(morningList[0].name);
-                } else if (afternoonList.length > 0) {
-                    selectLesson(afternoonList[0].name);
-                } else {
-                    triggerRandomScenario(null);
-                }
+            if (!currentSelectedLesson) {
+                const firstLesson = morningMap.keys().next().value || afternoonMap.keys().next().value;
+                if (firstLesson) selectLesson(firstLesson);
+                else renderScenariosCheckboxList();
+            } else {
+                renderScenariosCheckboxList();
             }
         }
 
         function selectLesson(lessonName) {
             currentSelectedLesson = lessonName;
-            
-            // Cập nhật trạng thái Active CSS thủ công cho trực quan
-            const buttons = document.getElementById('lesson-sidebar-list').querySelectorAll('button');
-            buttons.forEach(btn => {
-                if (btn.getAttribute('data-lesson') === lessonName) {
-                    btn.className = "w-full text-left px-3 py-2.5 rounded-xl border transition-all bg-blue-100 border-blue-300 text-blue-800 shadow-sm";
-                } else {
-                    btn.className = "w-full text-left px-3 py-2.5 rounded-xl border transition-all bg-white border-slate-200 text-slate-600 hover:bg-slate-100 hover:border-blue-300";
-                }
-            });
-
-            triggerRandomScenario(currentSelectedLesson);
+            renderLessonSidebar();
         }
 
-        function triggerRandomScenario(lessonName = null) {
+        // ================= XỬ LÝ DANH SÁCH TÌNH HUỐNG (CÓ TRÍCH XUẤT CHUẨN GỢI Ý GIẢI PHÁP) =================
+        function renderScenariosCheckboxList() {
+            const container = document.getElementById('scenarios-checkbox-list');
             let list = scenariosData[currentDay] ? scenariosData[currentDay].filter(item => item.roadmap === currentRoadmap) : [];
-            const box = document.getElementById('random-scenario-box');
             
-            if (lessonName) {
+            if (currentSelectedLesson) {
                 list = list.filter(item => {
                     const parts = splitTitle(item.title);
-                    return (parts.lesson || "Chưa phân loại") === lessonName;
+                    return (parts.lesson || "Chưa phân loại") === currentSelectedLesson;
                 });
             }
 
-            if (!list || list.length === 0) { 
-                box.innerHTML = `<p class="text-xs py-6 text-center bg-white border border-dashed rounded-3xl text-slate-400">Không có tình huống thuộc bài học này.</p>`; 
-                return; 
+            if (!list || list.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 py-6 text-center italic">Không có tình huống thuộc bài học này.</p>`;
+                return;
             }
-            
-            currentRandomScenario = list[Math.floor(Math.random() * list.length)];
-            const isMorning = currentRandomScenario.type === 'morning';
-            
-            const colorClass = isMorning ? 'bg-emerald-50 border-emerald-200 text-emerald-950' : 'bg-blue-50 border-blue-200 text-blue-950';
 
-            const titleHtml = renderTitleHtml(currentRandomScenario.title);
-            const questionHtml = formatQuestionText(currentRandomScenario.question);
-            const answerHtml = formatAnswerWithBullets(currentRandomScenario.answer);
+            container.innerHTML = list.map((item) => {
+                const parts = splitTitle(item.title);
+                const questionHtml = formatQuestionText(item.question);
+                const extractedSolution = extractSuggestedSolution(item.answer);
+                const answerHtml = formatAnswerWithBullets(item.answer);
+                const isChecked = checkedScenarioTitles.has(item.title) ? "checked" : "";
 
-            box.innerHTML = `
-                <div class="border-2 border-dashed border-blue-600/30 rounded-3xl p-1 bg-white animate-fade shadow-sm">
-                    <div class="${colorClass} rounded-2xl p-5 shadow-sm space-y-4">
-                        <div class="border-b border-current/10 pb-3">
-                            ${titleHtml}
+                return `
+                    <div class="scenario-card border border-slate-200 rounded-2xl bg-white p-4 shadow-sm hover:border-blue-300 transition-all space-y-3" data-search="${escapeHtml((item.title + ' ' + item.question).toLowerCase())}">
+                        <div class="flex items-start justify-between gap-3 border-b pb-2.5 border-slate-100">
+                            <label class="flex items-start gap-2.5 cursor-pointer flex-grow">
+                                <input type="checkbox" onchange="toggleScenarioCheck('${escapeHtml(item.title)}', this.checked)" ${isChecked} class="mt-1 w-4 h-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500 cursor-pointer">
+                                <div>
+                                    <span class="text-xs font-bold text-blue-600 block">${escapeHtml(parts.code || item.title)}</span>
+                                    <span class="text-xs font-bold text-slate-800 block">${escapeHtml(parts.scenario || item.title)}</span>
+                                </div>
+                            </label>
                         </div>
-                        <div class="space-y-4 pt-1 text-xs">
-                            <div class="leading-relaxed">
-                                <strong class="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-1">Tình huống hỏi:</strong>
-                                <div class="text-slate-700 text-sm font-normal leading-relaxed">${questionHtml}</div>
+                        <div class="space-y-2 text-xs">
+                            <div class="text-slate-700 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
+                                <strong class="text-[10px] font-extrabold uppercase text-slate-400 block mb-0.5">Tình huống hỏi:</strong>
+                                ${questionHtml}
                             </div>
-                            <div class="leading-relaxed bg-white/95 p-4 rounded-xl border border-current/10">
-                                <strong class="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-2">Kịch bản giải pháp tư vấn (Kỳ vọng):</strong>
-                                <div class="space-y-2">${answerHtml}</div>
+                            
+                            ${extractedSolution ? `
+                            <div class="text-emerald-900 bg-emerald-50/80 p-2.5 rounded-xl border border-emerald-200/80">
+                                <strong class="text-[10px] font-extrabold uppercase text-emerald-700 block mb-0.5 flex items-center gap-1"><i class="fa-solid fa-lightbulb"></i> Gợi ý giải pháp nhanh:</strong>
+                                <div class="text-xs leading-relaxed font-medium">${extractedSolution}</div>
                             </div>
+                            ` : ''}
+
+                            <details class="group pt-1">
+                                <summary class="text-[11px] font-bold text-blue-600 cursor-pointer hover:underline list-none flex items-center gap-1">
+                                    <i class="fa-solid fa-chevron-right text-[9px] group-open:rotate-90 transition-transform"></i> Xem đáp án & kịch bản tư vấn đầy đủ
+                                </summary>
+                                <div class="mt-2 p-3 bg-emerald-50/40 rounded-xl border border-emerald-100 text-xs">
+                                    ${answerHtml}
+                                </div>
+                            </details>
                         </div>
                     </div>
-                </div>
-            `;
+                `;
+            }).join('');
         }
 
-        // ================= DANH SÁCH LƯU TRỮ TẤT CẢ TÌNH HUỐNG VÀ LỌC =================
-        function renderAllScenarios(day) {
-            const container = document.getElementById('all-scenarios-list');
-            const list = scenariosData[day] ? scenariosData[day].filter(item => item.roadmap === currentRoadmap) : [];
-            if (!list || list.length === 0) { container.innerHTML = `<p class="text-xs text-slate-400 py-4 text-center">Chưa có dữ liệu tình huống.</p>`; return; }
-
-            const mTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-emerald-50 border border-emerald-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-bold text-emerald-700 tracking-wider uppercase"><i class="fa-solid fa-sun mr-1.5"></i> HỌC PHẦN SÁNG</span></div></div>`;
-            const aTitle = `<div class="relative flex items-center justify-center my-6"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-slate-200"></div></div><div class="relative bg-blue-50 border border-blue-200 px-6 py-2 rounded-full shadow-sm text-center"><span class="text-xs font-bold text-blue-700 tracking-wider uppercase"><i class="fa-solid fa-moon mr-1.5"></i> HỌC PHẦN CHIỀU</span></div></div>`;
-
-            let htmlContent = "";
-            const mItems = list.filter(item => item.type === 'morning');
-            const aItems = list.filter(item => item.type === 'afternoon');
-
-            if (mItems.length > 0) {
-                htmlContent += mTitle + `<div class="space-y-4">` + mItems.map(item => {
-                    const titleHtml = renderTitleHtml(item.title);
-                    const questionHtml = formatQuestionText(item.question);
-                    const answerHtml = formatAnswerWithBullets(item.answer);
-                    const searchStr = escapeHtml((item.title + ' ' + item.question).toLowerCase());
-                    return `
-                        <details class="scenario-item-detail group border border-emerald-100 rounded-2xl bg-emerald-50/50 p-4 hover:bg-emerald-50 transition-colors" data-search="${searchStr}">
-                            <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-start gap-3 outline-none">
-                                <div class="flex gap-2.5 items-start flex-grow">
-                                    <i class="fa-solid fa-sun text-emerald-600 mt-1 shrink-0"></i>
-                                    <div class="flex-grow">${titleHtml}</div>
-                                </div>
-                                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 mt-1 shrink-0 transition-transform group-open:rotate-180"></i>
-                            </summary>
-                            <div class="mt-4 space-y-4 border-t pt-4 border-current/10">
-                                <div class="leading-relaxed">
-                                    <strong class="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-1">Tình huống hỏi:</strong>
-                                    <div class="text-slate-700 text-sm font-normal leading-relaxed">${questionHtml}</div>
-                                </div>
-                                <div class="leading-relaxed bg-white/95 p-4 rounded-xl border border-current/10">
-                                    <strong class="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-2">Kịch bản giải pháp tư vấn (Kỳ vọng):</strong>
-                                    <div class="space-y-2">${answerHtml}</div>
-                                </div>
-                            </div>
-                        </details>
-                    `;
-                }).join('') + `</div>`;
+        function toggleScenarioCheck(title, isChecked) {
+            if (isChecked) {
+                checkedScenarioTitles.add(title);
+            } else {
+                checkedScenarioTitles.delete(title);
             }
-            if (aItems.length > 0) {
-                htmlContent += aTitle + `<div class="space-y-4">` + aItems.map(item => {
-                    const titleHtml = renderTitleHtml(item.title);
-                    const questionHtml = formatQuestionText(item.question);
-                    const answerHtml = formatAnswerWithBullets(item.answer);
-                    const searchStr = escapeHtml((item.title + ' ' + item.question).toLowerCase());
-                    return `
-                        <details class="scenario-item-detail group border border-blue-100 rounded-2xl bg-blue-50/50 p-4 hover:bg-blue-50 transition-colors" data-search="${searchStr}">
-                            <summary class="font-bold text-xs cursor-pointer list-none flex justify-between items-start gap-3 outline-none">
-                                <div class="flex gap-2.5 items-start flex-grow">
-                                    <i class="fa-solid fa-moon text-blue-600 mt-1 shrink-0"></i>
-                                    <div class="flex-grow">${titleHtml}</div>
-                                </div>
-                                <i class="fa-solid fa-chevron-down text-[10px] text-slate-400 mt-1 shrink-0 transition-transform group-open:rotate-180"></i>
-                            </summary>
-                            <div class="mt-4 space-y-4 border-t pt-4 border-current/10">
-                                <div class="leading-relaxed">
-                                    <strong class="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-1">Tình huống hỏi:</strong>
-                                    <div class="text-slate-700 text-sm font-normal leading-relaxed">${questionHtml}</div>
-                                </div>
-                                <div class="leading-relaxed bg-white/95 p-4 rounded-xl border border-current/10">
-                                    <strong class="text-xs font-extrabold uppercase tracking-wider text-slate-500 block mb-2">Kịch bản giải pháp tư vấn (Kỳ vọng):</strong>
-                                    <div class="space-y-2">${answerHtml}</div>
-                                </div>
-                            </div>
-                        </details>
-                    `;
-                }).join('') + `</div>`;
+            updateScenarioNotesTextarea();
+        }
+
+        function clearSelectedScenarios() {
+            checkedScenarioTitles.clear();
+            document.querySelectorAll('#scenarios-checkbox-list input[type="checkbox"]').forEach(cb => cb.checked = false);
+            document.getElementById('scenarioNotes').value = "";
+        }
+
+        function updateScenarioNotesTextarea() {
+            const textarea = document.getElementById('scenarioNotes');
+            if (checkedScenarioTitles.size === 0) {
+                textarea.value = "";
+                return;
             }
-            container.innerHTML = htmlContent;
+            let text = "Các tình huống đã thực hành:\n";
+            let index = 1;
+            checkedScenarioTitles.forEach(title => {
+                text += `${index}. ${title}\n`;
+                index++;
+            });
+            textarea.value = text;
         }
 
         function filterAllScenarios(keyword) {
             const lowerKey = keyword.toLowerCase().trim();
-            const items = document.querySelectorAll('.scenario-item-detail');
-            items.forEach(item => {
-                const searchStr = item.getAttribute('data-search');
-                if (searchStr.includes(lowerKey)) {
-                    item.classList.remove('hidden');
-                } else {
-                    item.classList.add('hidden');
-                }
+            const cards = document.querySelectorAll('.scenario-card');
+            cards.forEach(card => {
+                const searchStr = card.getAttribute('data-search');
+                if (searchStr.includes(lowerKey)) card.classList.remove('hidden');
+                else card.classList.add('hidden');
             });
-        }
-
-        function hideAllScenariosList() {
-            document.getElementById('all-scenarios-wrapper').classList.add('hidden');
-            document.getElementById('toggle-list-btn').innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
-            document.getElementById('searchScenarioInput').value = '';
-            filterAllScenarios('');
-        }
-
-        function toggleAllScenarios() {
-            const wrapper = document.getElementById('all-scenarios-wrapper');
-            const btn = document.getElementById('toggle-list-btn');
-            if (wrapper.classList.contains('hidden')) {
-                wrapper.classList.remove('hidden');
-                wrapper.classList.add('flex');
-                btn.innerHTML = '<i class="fa-solid fa-eye-slash"></i> Ẩn các tình huống lưu trữ';
-            } else {
-                wrapper.classList.add('hidden');
-                wrapper.classList.remove('flex');
-                btn.innerHTML = '<i class="fa-solid fa-eye"></i> Xem danh sách tất cả tình huống';
-            }
         }
 
         function selectRating(rating, element) {
@@ -900,7 +781,7 @@
             else if (rating === 'Tốt') element.className = "rating-btn py-2 text-[10px] font-bold rounded-lg active-tot transition-all shadow-sm";
         }
 
-        // ================= LOGIC KIỂM TRA BÀI TẬP VÀ SMART DETECT =================
+        // ================= LOGIC TRA CỨU BÀI THỰC HÀNH =================
         function checkStudentPractice() {
             const studentName = document.getElementById('repName').value.trim();
             const classCode = document.getElementById('classCode').value.trim();
@@ -916,80 +797,29 @@
             fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
             .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
-                
-                btn.className = "text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-sm transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer text-white"; 
+                btn.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-sm transition-all flex items-center gap-1 cursor-pointer text-white"; 
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
-
-                    const latestSubmission = data.data[data.data.length - 1]; 
-                    let stdRoadmap = latestSubmission.courseName || "Retail";
-                    let stdSession = latestSubmission.session.split(':')[0] || ""; 
+                    const latest = data.data[data.data.length - 1]; 
                     
-                    tagEl.className = "hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 shadow-sm flex items-center gap-1.5";
-                    tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> Gần nhất: <span class="text-blue-500">${stdRoadmap} - ${stdSession}</span>`;
+                    tagEl.className = "text-[9px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 shadow-sm flex items-center gap-1";
+                    tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> ${latest.courseName || 'Retail'} - ${latest.session.split(':')[0] || ''}`;
                     tagEl.classList.remove('hidden');
 
-                    const sessionSelectVal = document.getElementById('session').value; 
-                    let targetSessionId1 = ""; let targetSessionId2 = "";
-                    if(sessionSelectVal.includes("Phiên 1")) { targetSessionId1 = "session_1"; targetSessionId2 = "session_2"; }
-                    else if(sessionSelectVal.includes("Phiên 2")) { targetSessionId1 = "session_3"; targetSessionId2 = "session_4"; }
-                    else if(sessionSelectVal.includes("Phiên 3")) { targetSessionId1 = "session_5"; }
-
-                    let totalExercises = 0; let doneExercises = 0;
-                    
-                    if(typeof CODELAB_DATA !== 'undefined' && currentRoadmap) {
-                        const sData1 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId1);
-                        if(sData1) {
-                            totalExercises += sData1.exercises.filter(e => !e.isGroupHeader).length;
-                            const sessionPrefix1 = sData1.title.split(':')[0]; 
-                            const submittedTitles1 = currentStudentPracticeData.filter(p => p.session.includes(sessionPrefix1)).map(p => p.exerciseTitle);
-                            doneExercises += [...new Set(submittedTitles1)].length;
-                        }
-                        if (targetSessionId2) {
-                             const sData2 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionId2);
-                             if(sData2) {
-                                totalExercises += sData2.exercises.filter(e => !e.isGroupHeader).length;
-                                const sessionPrefix2 = sData2.title.split(':')[0]; 
-                                const submittedTitles2 = currentStudentPracticeData.filter(p => p.session.includes(sessionPrefix2)).map(p => p.exerciseTitle);
-                                doneExercises += [...new Set(submittedTitles2)].length;
-                             }
-                        }
-                    }
-
-                    if(totalExercises > 0) {
-                        let percent = Math.round((doneExercises / totalExercises) * 100);
-                        if(percent >= 100) {
-                            btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600'); 
-                            txtStatus.innerText = `Đã làm đủ (100%)`;
-                            document.getElementById('homeworkStatus').value = "Đủ";
-                        } else if (percent > 0) {
-                            btn.classList.add('bg-amber-500', 'hover:bg-amber-600'); 
-                            txtStatus.innerText = `Đang làm (${percent}%)`;
-                            document.getElementById('homeworkStatus').value = "Thiếu";
-                        } else {
-                            btn.classList.add('bg-rose-500', 'hover:bg-rose-600'); 
-                            txtStatus.innerText = `Chưa làm bài phiên này`;
-                            document.getElementById('homeworkStatus').value = "Thiếu";
-                        }
-                    } else {
-                        btn.classList.add('bg-blue-600', 'hover:bg-blue-700'); 
-                        txtStatus.innerText = `Xem bài (${data.data.length})`;
-                    }
+                    btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600'); 
+                    txtStatus.innerText = `Xem bài TH (${data.data.length})`;
                     btn.classList.remove('hidden');
-
                 } else {
                     currentStudentPracticeData = [];
                     tagEl.classList.add('hidden');
                     btn.classList.add('bg-rose-500', 'hover:bg-rose-600');
-                    txtStatus.innerText = `Chưa làm bài nào`;
-                    document.getElementById('homeworkStatus').value = "Thiếu";
+                    txtStatus.innerText = `Chưa nộp bài nào`;
                     btn.classList.remove('hidden');
                 }
             }).catch(err => { spinner.classList.add('hidden'); console.error(err); });
         }
 
-        // ================= ZOOM ẢNH VÀ XEM CHI TIẾT BÀI LÀM =================
         function getDirectImageUrl(url) { 
             let m = url.match(/\/d\/(.+?)\//); if(!m) m = url.match(/id=(.+?)(&|$)/); 
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; 
@@ -1000,75 +830,27 @@
         function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
         function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
         function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
-        
-        document.addEventListener('keydown', function(event) {
-            if(!document.getElementById('fullscreenModal').classList.contains('hidden')) {
-                if(event.key === 'ArrowLeft') changeFullscreenImg(-1);
-                else if(event.key === 'ArrowRight') changeFullscreenImg(1);
-                else if(event.key === 'Escape') closeFullscreenModal();
-            }
-        });
 
         function openPracticeModal() {
             document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value + " - Lớp: " + document.getElementById('classCode').value;
             const container = document.getElementById('practiceContent');
-            
             if(currentStudentPracticeData.length === 0) {
-                container.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl text-center border border-red-200"><i class="fa-solid fa-triangle-exclamation text-red-500 text-3xl mb-2"></i><p class="text-red-700 font-bold mt-2">Học viên này chưa nộp bài thực hành nào trên hệ thống!</p></div>`;
+                container.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl text-center border border-red-200"><p class="text-red-700 font-bold">Học viên này chưa nộp bài thực hành nào trên hệ thống!</p></div>`;
             } else {
                 let html = ''; let grouped = {};
-                
-                const sessionSelectVal = document.getElementById('session').value; 
-                let targetSessionTitle1 = ""; let targetSessionTitle2 = "";
-                
-                if(sessionSelectVal.includes("Phiên 1")) { targetSessionTitle1 = "Buổi 1: Thiết lập Hàng hóa cơ bản & Nâng cao"; targetSessionTitle2 = "Buổi 2: Quản lý Kho, Nhà cung cấp & Giá"; }
-                else if(sessionSelectVal.includes("Phiên 2")) { targetSessionTitle1 = "Buổi 3: Giao dịch & Quản lý Khách hàng"; targetSessionTitle2 = "Buổi 4: Mở rộng Bán hàng & Phân quyền"; }
-                else if(sessionSelectVal.includes("Phiên 3")) { targetSessionTitle1 = "Buổi 5: Thiết lập Thuế, Kế toán và Hóa đơn điện tử"; }
-
-                let title1 = ""; let title2 = "";
-                if(typeof CODELAB_DATA !== 'undefined' && currentRoadmap) {
-                    if (CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle1)) title1 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle1).title.split(':')[0];
-                    if (targetSessionTitle2 && CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle2)) title2 = CODELAB_DATA[currentRoadmap].find(s => s.id === targetSessionTitle2).title.split(':')[0];
-                }
-
-                const sessionData = currentStudentPracticeData.filter(p => p.session.includes(title1) || (title2 && p.session.includes(title2)));
-
-                if(sessionData.length === 0) {
-                     container.innerHTML = `<div class="bg-orange-50 p-6 rounded-2xl text-center border border-orange-200"><i class="fa-solid fa-circle-info text-orange-500 text-3xl mb-2"></i><p class="text-orange-700 font-bold mt-2">Học viên chưa làm bài thực hành của ${sessionSelectVal}!</p></div>`;
-                     document.getElementById('practiceModal').classList.remove('hidden');
-                     return;
-                }
-
-                sessionData.forEach(p => {
+                currentStudentPracticeData.forEach(p => {
                     if(!grouped[p.session]) grouped[p.session] = {};
                     grouped[p.session][p.exerciseTitle] = p; 
                 });
-
                 for(let session in grouped) {
-                    html += `<div class="mb-6"><h3 class="bg-blue-600 text-white px-4 py-2 rounded-t-xl font-bold uppercase tracking-wider text-[10px]">${session}</h3><div class="border border-blue-600/20 border-t-0 rounded-b-xl p-4 space-y-4 bg-white">`;
+                    html += `<div class="mb-4"><h3 class="bg-blue-600 text-white px-3 py-1.5 rounded-t-xl font-bold uppercase text-[10px]">${session}</h3><div class="border border-blue-600/20 border-t-0 rounded-b-xl p-3 space-y-3 bg-white">`;
                     for(let exTitle in grouped[session]) {
                         let item = grouped[session][exTitle];
-                        
-                        let theoryHtml = '';
-                        if(item.ans1 || item.ans2) {
-                            theoryHtml = `<div class="bg-blue-50/50 p-3 rounded-xl mb-3"><p class="text-[10px] font-black text-blue-800 uppercase mb-1">TỰ LUẬN:</p>`;
-                            for(let i=1; i<=5; i++) { if(item[`ans${i}`]) theoryHtml += `<p class="text-xs text-blue-900 mb-1"><b>Câu ${i}:</b> ${item[`ans${i}`]}</p>`; }
-                            theoryHtml += `</div>`;
-                        }
-
                         let links = item.links ? item.links.split('\n') : [];
-                        let imgHtml = links.map((link, idx) => `<div class="w-32 h-20 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(links).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover rounded-lg border border-slate-300 group-hover:border-blue-500"><div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 flex items-center justify-center rounded-lg"><i class="fa-solid fa-magnifying-glass-plus text-white text-lg"></i></div></div>`).join('');
-
-                        let fbHtml = item.feedback ? `<div class="mt-3 bg-emerald-50 p-3 rounded-xl border border-emerald-200"><p class="text-[10px] font-black text-emerald-700 uppercase mb-1"><i class="fa-solid fa-check-circle"></i> Giảng viên nhận xét:</p><p class="text-sm font-medium text-emerald-900">${item.feedback}</p></div>` : ``;
-
-                        html += `<div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
-                            <div class="flex justify-between items-start mb-2 border-b border-slate-200 pb-2">
-                                <h4 class="text-sm font-black text-slate-800">${item.exerciseTitle}</h4>
-                                <span class="text-[10px] text-slate-400 bg-white px-2 py-1 border rounded shadow-sm">${item.timestamp}</span>
-                            </div>
-                            ${theoryHtml}
-                            <div class="flex flex-wrap gap-2 mt-3">${imgHtml}</div>
-                            ${fbHtml}
+                        let imgHtml = links.map((link, idx) => `<div class="w-28 h-16 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(links).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover rounded-lg border border-slate-300"></div>`).join('');
+                        html += `<div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <h4 class="text-xs font-bold text-slate-800 mb-1">${item.exerciseTitle}</h4>
+                            <div class="flex flex-wrap gap-2 mt-2">${imgHtml}</div>
                         </div>`;
                     }
                     html += `</div></div>`;
@@ -1090,6 +872,8 @@
 
             if(!rating) { showModal(false, "Thiếu xếp loại", "Vui lòng chọn 1 trong 4 mức xếp loại năng lực."); return; }
 
+            const selfNotes = document.getElementById('selfCheckNotes').value.trim();
+
             const payload = {
                 token: SECURITY_TOKEN,
                 repName: document.getElementById('repName').value.trim(),
@@ -1098,9 +882,9 @@
                 reviewDate: formattedDbDate,
                 homeworkStatus: document.getElementById('homeworkStatus').value,
                 confidenceScore: parseInt(document.getElementById('confidenceScore').value),
-                selfCheckEasy: document.getElementById('selfCheckEasy').value.trim(),
-                selfCheckHard: document.getElementById('selfCheckHard').value.trim(),
-                selfCheckApply: document.getElementById('selfCheckApply').value.trim(),
+                selfCheckEasy: selfNotes, 
+                selfCheckHard: "",
+                selfCheckApply: "",
                 scenarioNotes: document.getElementById('scenarioNotes').value.trim(),
                 rating: rating,
                 trainerNotes: document.getElementById('trainerNotes').value.trim(),
@@ -1115,8 +899,8 @@
                 body: JSON.stringify(payload)
             }).then(() => {
                 setLoadingState(false);
-                showModal(true, "Gửi thành công", "Kết quả đã được cập nhật."); resetFormFields();
-            }).catch(error => { setLoadingState(false); showModal(false, "Lỗi mạng", "Vui lòng thử lại."); });
+                showModal(true, "Gửi thành công", "Kết quả đánh giá đã được lưu vào hệ thống."); resetFormFields();
+            }).catch(error => { setLoadingState(false); showModal(false, "Lỗi kết nối", "Thử lại sau."); });
         }
 
         function setLoadingState(isLoading) {
@@ -1137,14 +921,18 @@
 
         function resetFormFields() {
             document.getElementById('repName').value = ""; 
-            // Giữ lại mặc định phòng ban Tái ký khi reset form
             document.getElementById('classCode').value = "Tái ký";
-            
-            document.getElementById('homeworkStatus').selectedIndex = 0; document.getElementById('confidenceScore').value = 7;
-            document.getElementById('scoreValue').textContent = "7"; document.getElementById('selfCheckEasy').value = "";
-            document.getElementById('selfCheckHard').value = ""; document.getElementById('selfCheckApply').value = "";
-            document.getElementById('scenarioNotes').value = ""; document.getElementById('trainerNotes').value = ""; document.getElementById('actionPlan').value = "";
-            setTodayDate(); document.getElementById('industry').value = currentRoadmap; document.getElementById('selectedRating').value = "";
+            document.getElementById('homeworkStatus').selectedIndex = 0; 
+            document.getElementById('confidenceScore').value = 7;
+            document.getElementById('scoreValue').textContent = "7 / 10"; 
+            document.getElementById('selfCheckNotes').value = "";
+            document.getElementById('scenarioNotes').value = ""; 
+            document.getElementById('trainerNotes').value = ""; 
+            document.getElementById('actionPlan').value = "";
+            clearSelectedScenarios();
+            setTodayDate(); 
+            document.getElementById('industry').value = currentRoadmap; 
+            document.getElementById('selectedRating').value = "";
             document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 transition-all shadow-sm");
             document.getElementById('btnCheckPractice').classList.add('hidden'); 
             document.getElementById('studentHistoryTag').classList.add('hidden');
@@ -1160,14 +948,12 @@
             if (tab === 'workspace') {
                 workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white shadow-sm flex items-center gap-2";
                 handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2";
-                workspaceContent.classList.remove('hidden');
-                workspaceContent.classList.add('grid');
+                workspaceContent.classList.remove('hidden'); workspaceContent.classList.add('grid');
                 handbookContent.classList.add('hidden');
             } else {
                 workspaceBtn.className = "px-5 py-2 text-xs font-bold rounded-lg text-slate-300 hover:text-white transition-all flex items-center gap-2";
                 handbookBtn.className = "px-5 py-2 text-xs font-bold rounded-lg transition-all bg-blue-600 text-white shadow-sm flex items-center gap-2";
-                workspaceContent.classList.add('hidden');
-                workspaceContent.classList.remove('grid');
+                workspaceContent.classList.add('hidden'); workspaceContent.classList.remove('grid');
                 handbookContent.classList.remove('hidden');
             }
         }
