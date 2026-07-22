@@ -1,7 +1,7 @@
 // CẤU HÌNH HỆ THỐNG
 const APP_CONFIG = {
     // Link API Google Sheet mới nhất của bạn
-    API_URL: "https://script.google.com/macros/s/AKfycbw02rPVB0jTVQGvqVfJTYvoy3OjBz604srivuUOGmSHCdcnQ9tbHF4XI8zo32zxLz_S/exec"
+    API_URL: "https://script.google.com/macros/s/AKfycbzZwkUV8g79PfYExma-7WRFg7IRY2fWmjpb63XiHqu6cqzx03uYi8Wmul9SamvyM9FMgQ/exec"
 };
 
 // ============================================================================
