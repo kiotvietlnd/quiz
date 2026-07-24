@@ -330,17 +330,29 @@
             const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
             const sessionNum = sessionData.title.split(':')[0] || sessionData.id;
             
+            // TRỎ LINK THÔNG MINH VỀ FILE PRACTICE.HTML
             const fileLink = `practice.html?roadmap=${industry}&session=${sessionData.id}`; 
             
             return `
-            <a href="${fileLink}" class="group relative glass-panel p-6 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all flex flex-col h-full bg-white">
-                <div id="notify_${sessionData.id}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce z-10"><i class="fas fa-comment-dots"></i> Có Nhận xét</div>
-                <div id="check_${sessionData.id}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã hoàn thành</div>
+            <a href="${fileLink}" class="group relative p-6 rounded-3xl hover:-translate-y-1 hover:shadow-2xl transition-all flex flex-col h-full bg-white border border-slate-200 shadow-sm overflow-hidden">
+                <!-- Vạch màu trang trí phía trên cùng -->
+                <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${style.colorFrom} ${style.colorTo}"></div>
+
+                <!-- Các Badge Thông báo -->
+                <div id="notify_${sessionData.id}" class="hidden absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce z-10"><i class="fas fa-comment-dots"></i> Có Nhận xét</div>
+                <div id="check_${sessionData.id}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-black flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã hoàn thành</div>
                 
-                <div class="w-max px-4 h-12 bg-gradient-to-br ${style.colorFrom} ${style.colorTo} ${style.colorText} rounded-xl flex items-center justify-center font-black text-sm mb-5 shadow-inner uppercase tracking-wider">${sessionNum}</div>
-                <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:${style.colorText} transition">${safeTitle}</h4>
+                <!-- Tag Buổi -->
+                <div class="w-max px-3 h-8 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center font-bold text-xs mb-4 shadow-inner uppercase tracking-widest border border-slate-200 group-hover:${style.colorText} group-hover:bg-blue-50 transition-colors">${sessionNum}</div>
+                
+                <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:${style.colorText} transition-colors">${safeTitle}</h4>
                 <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">${sessionData.desc}</p>
-                <div class="${style.colorText} font-bold text-xs flex items-center gap-2 pt-4 border-t border-slate-100 mt-auto">Vào làm bài <i class="fa-solid fa-arrow-right"></i></div>
+                
+                <!-- Khu vực nút bấm phía dưới -->
+                <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
+                    <span class="${style.colorText} font-bold text-xs flex items-center gap-2 group-hover:translate-x-1 transition-transform">Vào làm bài <i class="fa-solid fa-arrow-right"></i></span>
+                    <span class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:${style.colorText} group-hover:bg-blue-50 transition-colors"><i class="fas fa-play text-xs"></i></span>
+                </div>
             </a>`;
         }
 
