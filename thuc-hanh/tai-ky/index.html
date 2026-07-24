@@ -80,22 +80,54 @@
                     <p id="systemSubtitle" class="text-sm md:text-base font-bold text-slate-400 mt-2 uppercase tracking-wider">Vui lòng chọn Lộ trình đào tạo của bạn</p>
                 </div>
 
-                <!-- MÀN HÌNH CHỌN LỘ TRÌNH -->
                 <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
-                    <div onclick="selectIndustry('Retail')" class="glass-panel p-8 rounded-3xl cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all border-b-4 border-b-blue-500 group bg-white">
-                        <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition shadow-sm"><i class="fa-solid fa-tags"></i></div>
-                        <h3 class="text-2xl font-black text-slate-800 mb-2">Lộ trình RETAIL</h3>
-                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên Ngành hàng Bán lẻ.</p>
-                        <div class="mt-6 font-bold text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                    
+                    <!-- BOX RETAIL -->
+                    <div onclick="selectIndustry('Retail')" class="bg-white rounded-[2rem] cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border-2 border-slate-100 hover:border-blue-300 group overflow-hidden flex flex-col shadow-lg">
+                        <div class="h-48 w-full relative overflow-hidden bg-slate-100">
+                            <!-- BẠN DÁN LINK ẢNH RETAIL VÀO THUỘC TÍNH src DƯỚI ĐÂY NHÉ -->
+                            <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/05101018/ban-hang-nhanh-chong-hieu-qua-995x662-1.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Retail">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-4 left-6 text-white flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center shadow-lg"><i class="fa-solid fa-tags text-xs"></i></div>
+                                <span class="font-black tracking-widest uppercase text-sm drop-shadow-md">Ngành Bán Lẻ</span>
+                            </div>
+                        </div>
+                        <div class="p-6 md:p-8 flex-1 flex flex-col relative">
+                            <h3 class="text-2xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">Lộ trình RETAIL</h3>
+                            <!-- BẠN GHI LẠI MÔ TẢ CỦA BẠN VÀO ĐÂY NHÉ -->
+                            <p class="text-slate-500 text-sm flex-1 leading-relaxed">
+                                Khóa học thực chiến dành riêng cho chuyên viên tư vấn ngành hàng Bán Lẻ. Trang bị kỹ năng quản lý tồn kho, mã vạch, và thiết lập bảng giá tự động.
+                            </p>
+                            <div class="mt-6 font-bold text-blue-600 flex items-center justify-between border-t border-slate-100 pt-5">
+                                <span class="flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></span>
+                                <div class="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors"><i class="fa-solid fa-play text-xs"></i></div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div onclick="selectIndustry('FNB')" class="glass-panel p-8 rounded-3xl cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all border-b-4 border-b-orange-500 group bg-white">
-                        <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition shadow-sm"><i class="fa-solid fa-bowl-food"></i></div>
-                        <h3 class="text-2xl font-black text-slate-800 mb-2">Lộ trình FNB</h3>
-                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên Ngành hàng F&B.</p>
-                        <div class="mt-6 font-bold text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
-                    </div>
-                </div>
+                    <!-- BOX FNB -->
+                    <div onclick="selectIndustry('FNB')" class="bg-white rounded-[2rem] cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border-2 border-slate-100 hover:border-orange-300 group overflow-hidden flex flex-col shadow-lg">
+                        <div class="h-48 w-full relative overflow-hidden bg-slate-100">
+                            <!-- BẠN DÁN LINK ẢNH FNB VÀO THUỘC TÍNH src DƯỚI ĐÂY NHÉ -->
+                            <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/05101235/quan-ly-ban-phong-chi-tiet-995x662-1.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="FNB">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                            <div class="absolute bottom-4 left-6 text-white flex items-center gap-2.5">
+                                <div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center shadow-lg"><i class="fa-solid fa-bowl-food text-xs"></i></div>
+                                <span class="font-black tracking-widest uppercase text-sm drop-shadow-md">Ngành F&B</span>
+                            </div>
+                        </div>
+                        <div class="p-6 md:p-8 flex-1 flex flex-col relative">
+                            <h3 class="text-2xl font-black text-slate-800 mb-3 group-hover:text-orange-600 transition-colors">Lộ trình FNB</h3>
+                            <!-- BẠN GHI LẠI MÔ TẢ CỦA BẠN VÀO ĐÂY NHÉ -->
+                            <p class="text-slate-500 text-sm flex-1 leading-relaxed">
+                                Đào tạo chuyên sâu nghiệp vụ F&B (Nhà hàng, Quán Cafe). Nắm vững kỹ năng thiết lập phòng bàn, định lượng nguyên vật liệu và quản lý chế biến.
+                            </p>
+                            <div class="mt-6 font-bold text-orange-600 flex items-center justify-between border-t border-slate-100 pt-5">
+                                <span class="flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></span>
+                                <div class="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center group-hover:bg-orange-600 group-hover:text-white transition-colors"><i class="fa-solid fa-play text-xs"></i></div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
