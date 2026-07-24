@@ -157,28 +157,61 @@
         </div>
     </div>
 
-    <!-- Gọi code data -->
-    <script src="codelab-data.js"></script>
+    <!-- BẮT BUỘC KHÔNG ĐƯỢC CÓ THẺ <script src="codelab-data.js"> Ở ĐÂY NỮA -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
         let currentSelectedIndustry = '';
+        let CODELAB_DATA = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             renderIdentity();
             if(!localStorage.getItem('kv_trainer_profile')) {
                 openAuthModal();
             } else {
-                restoreLastIndustry(); 
+                fetchMasterData(); // ÉP BUỘC GỌI API NGAY LẬP TỨC
             }
         });
 
+        // ==========================================
+        // GỌI API LẤY DỮ LIỆU TỪ GOOGLE SHEET CHUẨN XÁC 100%
+        // ==========================================
+        function fetchMasterData() {
+            const lastInd = localStorage.getItem('kv_current_industry');
+            const container = document.getElementById('courseListRender');
+            
+            // Hiện loading spinner ngay lập tức
+            if (lastInd && container) {
+                document.getElementById('industrySelectionView').classList.add('hidden');
+                document.getElementById('courseContainerView').classList.remove('hidden');
+                document.getElementById('systemSubtitle').innerText = `Lộ trình đào tạo Ngành hàng ${lastInd.toUpperCase()}`;
+                container.innerHTML = `<div class="text-center py-20 text-slate-500"><i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-600"></i><p class="font-bold">Đang đồng bộ giáo trình từ hệ thống KiotViet...</p></div>`;
+            }
+
+            // Gọi API
+            fetch(`${API_URL}?action=getExercises`)
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    CODELAB_DATA = res.data;
+                    if(lastInd) selectIndustry(lastInd); // Render UI ngay khi có data
+                } else {
+                    if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi từ máy chủ: ${res.message}</p></div>`;
+                }
+            }).catch(err => {
+                if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-wifi text-4xl mb-4"></i><p class="font-bold">Lỗi kết nối mạng! Vui lòng F5 tải lại trang.</p></div>`;
+            });
+        }
+
+        // ==========================================
+        // QUẢN LÝ ĐỊNH DANH HỌC VIÊN
+        // ==========================================
         function renderIdentity() {
             const btn = document.getElementById('btnIdentity'); 
             const profileRaw = localStorage.getItem('kv_trainer_profile');
             if(profileRaw) {
                 const profile = JSON.parse(profileRaw);
-                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- ${profile.dept}</span> <span class="text-[10px] underline ml-1 font-normal">(Sửa)</span>`;
+                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- Lớp: ${profile.dept}</span> <span class="text-[10px] underline ml-1">(Sửa)</span>`;
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer";
                 document.getElementById('inpName').value = profile.name; 
             } else {
@@ -190,30 +223,22 @@
         function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
         
-        // HÀM TỰ ĐỘNG VIẾT HOA CHỮ CÁI ĐẦU VÀ FIX CỨNG PHÒNG BAN "TÁI KÝ"
-        function toTitleCase(str) {
-            return str.toLowerCase().split(' ').map(function(word) {
-                return (word.charAt(0).toUpperCase() + word.slice(1));
-            }).join(' ');
-        }
+        function toTitleCase(str) { return str.toLowerCase().split(' ').map(function(word) { return (word.charAt(0).toUpperCase() + word.slice(1)); }).join(' '); }
 
         function saveProfile() {
             let name = document.getElementById('inpName').value.trim(); 
             if(!name) { alert("Vui lòng điền Họ tên của bạn!"); return; }
-            
-            name = toTitleCase(name); // Tự động viết hoa
-            const dept = "Tái ký"; // Fix cứng phòng ban
+            name = toTitleCase(name); 
+            const dept = "Tái ký"; 
             
             localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
             closeAuthModal(); renderIdentity(); 
-            restoreLastIndustry(); 
+            fetchMasterData(); 
         }
 
-        function restoreLastIndustry() {
-            const lastInd = localStorage.getItem('kv_current_industry');
-            if(lastInd && typeof CODELAB_DATA !== 'undefined') selectIndustry(lastInd);
-        }
-
+        // ==========================================
+        // ĐIỀU HƯỚNG VÀ RENDER GIAO DIỆN
+        // ==========================================
         function selectIndustry(industry) {
             currentSelectedIndustry = industry;
             document.getElementById('industrySelectionView').classList.add('hidden');
@@ -244,14 +269,11 @@
         function renderCourseCards(industry) {
             const container = document.getElementById('courseListRender');
             
-            if (typeof CODELAB_DATA === 'undefined') {
-                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi: Không tìm thấy file dữ liệu codelab-data.js. Vui lòng kiểm tra lại.</p></div>`;
-                return;
-            }
+            if (!CODELAB_DATA) return; // Bảo vệ an toàn
 
             const roadmapData = CODELAB_DATA[industry];
             if (!roadmapData || roadmapData.length === 0) {
-                container.innerHTML = `<div class="bg-amber-50 border border-amber-200 p-8 text-center rounded-3xl text-amber-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry}.</p></div>`;
+                container.innerHTML = `<div class="bg-amber-50 border border-amber-200 p-8 text-center rounded-3xl text-amber-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry} trên Google Sheet.</p></div>`;
                 return;
             }
 
@@ -278,6 +300,7 @@
             }
 
             container.innerHTML = html;
+
             roadmapData.forEach(session => { checkCompletion(session.id, industry); });
         }
 
@@ -290,8 +313,8 @@
             
             const match = sessionData.title.match(/^(Buổi\s*[^:\.]+)[:\.]\s*(.+)$/i);
             if (match) {
-                sessionNum = match[1].trim(); // Bốc đoạn "Buổi 1A"
-                safeTitle = match[2].trim();  // Bốc đoạn "Tổng quan Hàng hóa..."
+                sessionNum = match[1].trim(); 
+                safeTitle = match[2].trim(); 
             }
             
             const fileLink = `practice.html?roadmap=${industry}&session=${sessionData.id}`; 
@@ -314,6 +337,9 @@
             </a>`;
         }
 
+        // ==========================================
+        // THÔNG BÁO VÀ TIẾN ĐỘ
+        // ==========================================
         function fetchGlobalNotifications(industry) {
             if (!API_URL) return;
             const profileRaw = localStorage.getItem('kv_trainer_profile');
@@ -322,7 +348,7 @@
 
             fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}`)
             .then(r => r.json()).then(res => {
-                if(res.status === 'success' && res.allData && typeof CODELAB_DATA !== 'undefined' && CODELAB_DATA[industry]) {
+                if(res.status === 'success' && res.allData && CODELAB_DATA && CODELAB_DATA[industry]) {
                     CODELAB_DATA[industry].forEach(session => {
                         checkNotification(session, res.allData, industry);
                     });
@@ -345,7 +371,6 @@
                     if(store[i].feedback !== apiSessionData[exTitle]) hasNew = true;
                 }
             }
-            
             for(let key in store) { if(store[key].isUnread) hasNew = true; }
             
             const notifyEl = document.getElementById(`notify_${sessionData.id}`);
