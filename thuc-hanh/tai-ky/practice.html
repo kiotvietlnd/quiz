@@ -52,13 +52,12 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-        <!-- SIDEBAR GIAO DIỆN MỚI TÍCH HỢP PROGRESS BAR -->
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-80 flex flex-col z-30 transition-all shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.15)] relative overflow-hidden hidden md:flex no-print">
             <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#122543]">
                 <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
             </div>
             
-            <!-- TIẾN ĐỘ NỔI BẬT GÓC TRÁI -->
             <div class="p-6 border-b border-white/10 bg-[#122543]/50 shrink-0">
                 <div class="flex justify-between items-end mb-2.5">
                     <span class="text-xs font-extrabold text-blue-200 tracking-wider uppercase">TIẾN TRÌNH HỌC TẬP</span>
@@ -73,7 +72,6 @@
                 </div>
             </div>
 
-            <!-- DANH SÁCH BÀI TẬP (ACCORDION) -->
             <div id="sidebarScroll" class="flex-1 overflow-y-auto custom-scrollbar">
                 <div id="stepList" class="flex flex-col"></div>
             </div>
@@ -89,94 +87,44 @@
         </main>
     </div>
 
-    <!-- MODAL HOÀN THÀNH BÀI TẬP (GIỐNG HÌNH YÊU CẦU) -->
+    <!-- MODAL HOÀN THÀNH -->
     <div id="completionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4 no-print">
         <div class="bg-white rounded-[2rem] shadow-2xl p-8 max-w-md w-full relative border flex flex-col items-center animate-fade-in-up">
             <button onclick="closeCompletionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 transition"><i class="fas fa-times"></i></button>
-            
             <h2 class="text-2xl font-black text-slate-800 mb-6 uppercase tracking-tight">HOÀN THÀNH BÀI TẬP</h2>
-            
-            <div class="w-24 h-24 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center text-5xl mb-6 shadow-inner ring-8 ring-emerald-50">
-                <i class="fas fa-award"></i>
-            </div>
-            
+            <div class="w-24 h-24 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center text-5xl mb-6 shadow-inner ring-8 ring-emerald-50"><i class="fas fa-award"></i></div>
             <p class="text-sm text-slate-500 font-medium text-center mb-8 px-4 leading-relaxed">Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc quay về trang chủ.</p>
-            
             <div class="w-full bg-slate-50 border border-slate-100 rounded-2xl p-5 space-y-4 mb-6">
-                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3">
-                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-user text-slate-300"></i> HỌC VIÊN:</span>
-                    <span id="modalDoneName" class="text-sm font-bold text-slate-800">--</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3">
-                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-building text-slate-300"></i> PHÒNG BAN:</span>
-                    <span id="modalDoneDept" class="text-sm font-bold text-slate-800">--</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3">
-                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-book text-slate-300"></i> BÀI HỌC:</span>
-                    <span id="modalDoneSession" class="text-sm font-bold text-slate-800 truncate max-w-[160px] text-right">--</span>
-                </div>
-                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3">
-                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-chart-pie text-slate-300"></i> TIẾN ĐỘ:</span>
-                    <span class="text-sm font-black text-emerald-600 flex items-center gap-1.5"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="far fa-clock text-slate-300"></i> THỜI GIAN:</span>
-                    <span id="modalDoneTime" class="text-sm font-bold text-slate-800">--</span>
-                </div>
+                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-user text-slate-300"></i> HỌC VIÊN:</span><span id="modalDoneName" class="text-sm font-bold text-slate-800">--</span></div>
+                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-building text-slate-300"></i> PHÒNG BAN:</span><span id="modalDoneDept" class="text-sm font-bold text-slate-800">--</span></div>
+                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-book text-slate-300"></i> BÀI HỌC:</span><span id="modalDoneSession" class="text-sm font-bold text-slate-800 truncate max-w-[160px] text-right">--</span></div>
+                <div class="flex justify-between items-center border-b border-slate-200/60 pb-3"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="fas fa-chart-pie text-slate-300"></i> TIẾN ĐỘ:</span><span class="text-sm font-black text-emerald-600 flex items-center gap-1.5"><i class="fas fa-check-circle"></i> 100% (Đã nộp)</span></div>
+                <div class="flex justify-between items-center"><span class="text-[11px] font-black text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="far fa-clock text-slate-300"></i> THỜI GIAN:</span><span id="modalDoneTime" class="text-sm font-bold text-slate-800">--</span></div>
             </div>
-
-            <div class="w-full bg-rose-50 border border-rose-100 text-rose-600 text-xs font-black text-center p-3 rounded-xl mb-6 flex items-center justify-center gap-2 uppercase tracking-wide">
-                <i class="fas fa-exclamation-triangle"></i> CHỤP MÀN HÌNH VÀ GỬI ZALO TRƯỚC 16:00
-            </div>
-
             <div class="w-full flex flex-col gap-3">
-                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm">
-                    <i class="fas fa-search"></i> Xem lại bài làm & Xuất PDF
-                </button>
-                <a href="index.html" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-xl transition-all text-center text-sm">
-                    Về Trang chủ
-                </a>
+                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-sm"><i class="fas fa-search"></i> Xem lại bài làm & Xuất PDF</button>
+                <a href="index.html" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3.5 rounded-xl transition-all text-center text-sm">Về Trang chủ</a>
             </div>
         </div>
     </div>
 
-    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM (HIỂN THỊ KHI IN PDF) -->
+    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM (IN PDF) -->
     <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[120] hidden flex-col transition-all">
         <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm no-print">
-            <div class="flex items-center gap-3">
-                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
-                <h1 class="text-base font-black text-slate-800">Xem Lại Bài Làm</h1>
-                <span class="text-xs text-slate-500 font-medium ml-2">Chụp màn hình hoặc tải PDF để nộp.</span>
-            </div>
-            <div class="flex items-center gap-3">
-                <button onclick="window.print()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-sm transition"><i class="fas fa-print"></i> In / Lưu PDF</button>
-                <button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
-            </div>
+            <div class="flex items-center gap-3"><div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div><h1 class="text-base font-black text-slate-800">Xem Lại Bài Làm</h1><span class="text-xs text-slate-500 font-medium ml-2">Tải PDF để lưu trữ.</span></div>
+            <div class="flex items-center gap-3"><button onclick="window.print()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-sm transition"><i class="fas fa-print"></i> In / Lưu PDF</button><button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button></div>
         </header>
         <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 bg-slate-50 print:bg-white print:p-0">
-            <div class="max-w-4xl mx-auto space-y-6 print:space-y-4" id="reviewHistoryContainer">
-                <!-- Data đổ vào đây bằng JS -->
-            </div>
+            <div class="max-w-4xl mx-auto space-y-6 print:space-y-4" id="reviewHistoryContainer"></div>
         </div>
     </div>
 
-    <!-- FULLSCREEN ẢNH MODAL -->
+    <!-- FULLSCREEN ẢNH -->
     <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all no-print">
-        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
-            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
-            <div class="flex items-center gap-3">
-                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400"><i class="fas fa-times text-lg"></i></button>
-            </div>
-        </div>
-        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
-            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-left text-lg"></i></button>
-            <img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
-            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-right text-lg"></i></button>
-        </div>
-        <div class="h-8 shrink-0"></div>
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0"><span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span><div class="flex items-center gap-3"><button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400"><i class="fas fa-times text-lg"></i></button></div></div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none"><button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-left text-lg"></i></button><img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"><button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-right text-lg"></i></button></div><div class="h-8 shrink-0"></div>
     </div>
 
-    <script src="codelab-data.js"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
 
@@ -184,11 +132,13 @@
         const CURRENT_ROADMAP = urlParams.get('roadmap') || "Retail"; 
         const SESSION_ID = urlParams.get('session') || "session_1"; 
         
-        const prefix = CURRENT_ROADMAP.toLowerCase();
-        const DATA_KEY = `kv_data_${prefix}_${SESSION_ID}`; 
-        const STORAGE_KEY = `kv_progress_${prefix}_${SESSION_ID}`;
+        const prefix = CURRENT_ROADMAP.toLowerCase().trim();
+        const safeSessionId = SESSION_ID.toLowerCase().trim();
+        const DATA_KEY = `kv_data_${prefix}_${safeSessionId}`; 
+        const STORAGE_KEY = `kv_progress_${prefix}_${safeSessionId}`;
 
         let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFiles = [];
+        let CODELAB_DATA = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             const savedState = localStorage.getItem(STORAGE_KEY); if(savedState) currentStepIndex = parseInt(savedState) || 0;
@@ -208,27 +158,63 @@
                 }
             });
 
-            document.getElementById('sessionTitle').innerText = "Đang tải dữ liệu bài tập từ hệ thống...";
-            
-            if (typeof CODELAB_DATA === 'undefined') {
-                document.getElementById('mainContent').innerHTML = "<h2 class='text-rose-600 font-bold p-10 text-center'>Lỗi: Không tìm thấy file dữ liệu codelab-data.js</h2>";
-                return;
-            }
-            parseAndRenderData();
+            document.getElementById('sessionTitle').innerText = "Đang đồng bộ dữ liệu bài tập từ hệ thống...";
+            fetchMasterData();
         });
 
-        function parseAndRenderData() {
-            if(!CODELAB_DATA[CURRENT_ROADMAP]) {
-                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center bg-rose-50 rounded-3xl"><h2 class='text-rose-700 font-black text-xl'>Không tìm thấy dữ liệu cho ngành: ${CURRENT_ROADMAP}.</h2></div>`;
-                return;
-            }
-            const session = CODELAB_DATA[CURRENT_ROADMAP].find(s => s.id === SESSION_ID); 
-            if(!session) {
-                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center bg-amber-50 rounded-3xl"><h2 class='text-amber-700 font-black text-xl'>Không tìm thấy dữ liệu của Buổi học này.</h2></div>`;
-                return;
+        function fetchMasterData() {
+            const cachedMasterData = sessionStorage.getItem('kv_master_exercises');
+            if (cachedMasterData) {
+                try {
+                    CODELAB_DATA = JSON.parse(cachedMasterData);
+                    parseAndRenderData();
+                    return;
+                } catch(e) {}
             }
 
-            // Xử lý cắt tên hiển thị trên thanh Header
+            fetch(`${API_URL}?action=getExercises`)
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); 
+                    CODELAB_DATA = res.data;
+                    parseAndRenderData();
+                } else {
+                    showError(`Lỗi từ máy chủ: ${res.message}`);
+                }
+            }).catch(err => {
+                showError("Lỗi kết nối mạng! Vui lòng kiểm tra Internet.");
+            });
+        }
+
+        function showError(msg) {
+            document.getElementById('sessionTitle').innerText = "Lỗi dữ liệu";
+            document.getElementById('mainContent').innerHTML = `
+                <div class="p-10 text-center bg-rose-50 border border-rose-200 rounded-3xl shadow-sm">
+                    <i class="fas fa-exclamation-triangle text-5xl text-rose-500 mb-4"></i>
+                    <h2 class='text-rose-700 font-black text-xl'>${msg}</h2>
+                    <button onclick="sessionStorage.removeItem('kv_master_exercises'); location.reload();" class="mt-6 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i> Xóa bộ nhớ đệm và Tải lại</button>
+                </div>`;
+        }
+
+        function parseAndRenderData() {
+            if (!CODELAB_DATA) { showError("Không tìm thấy dữ liệu từ Google Sheet."); return; }
+
+            const safeRoadmap = CURRENT_ROADMAP.toLowerCase().trim();
+            const targetRoadmapKey = Object.keys(CODELAB_DATA).find(k => k.toLowerCase().trim() === safeRoadmap);
+
+            if(!targetRoadmapKey || !CODELAB_DATA[targetRoadmapKey]) {
+                showError(`Không tìm thấy dữ liệu bài tập cho ngành: ${CURRENT_ROADMAP}.`); return;
+            }
+
+            const safeSession = SESSION_ID.toLowerCase().trim();
+            const session = CODELAB_DATA[targetRoadmapKey].find(s => s.id.toLowerCase().trim() === safeSession); 
+            
+            if(!session) {
+                showError(`Không tìm thấy dữ liệu của Buổi học này (Mã: ${SESSION_ID}). Vui lòng kiểm tra lại cột "Mã Buổi" trên Google Sheet.`); return;
+            }
+
+            // Xử lý tiêu đề hiển thị
             let displayTitle = session.title;
             const match = session.title.match(/^(Buổi\s*[^:\.]+)[:\.]\s*(.+)$/i);
             if (match) displayTitle = match[2].trim();
@@ -271,96 +257,58 @@
             const dot = document.getElementById('globalNotificationDot'); if(hasAnyUnread) dot.classList.remove('hidden'); else dot.classList.add('hidden');
         }
 
-        // =================================================================
-        // HÀM RENDER SIDEBAR DẠNG ACCORDION NHÓM BÀI TẬP VÀ CẬP NHẬT PROGRESS CỰC XỊN
-        // =================================================================
         function renderSidebar() {
-            const listUl = document.getElementById('stepList'); 
-            listUl.innerHTML = ''; 
-            
-            let totalRealExercises = 0; 
-            let completedCount = 0;
-            let currentDetailsObj = null;
-            let currentGroupList = null;
-            let groupExCount = 0;
-            let groupDoneCount = 0;
-            let activeGroupIndex = -1; // Để biết mở group nào khi render
+            const listUl = document.getElementById('stepList'); listUl.innerHTML = ''; 
+            let totalRealExercises = 0; let completedCount = 0;
+            let currentDetailsObj = null; let currentGroupList = null;
+            let groupExCount = 0; let groupDoneCount = 0;
 
             currentExercises.forEach((ex, index) => {
                 if(ex.isGroupHeader) {
-                    // Đóng Group cũ trước khi mở Group mới
                     if (currentDetailsObj) {
                         const countSpan = currentDetailsObj.querySelector('.group-counter');
                         if(countSpan) countSpan.innerText = `${groupDoneCount}/${groupExCount}`;
                     }
-                    
                     groupExCount = 0; groupDoneCount = 0;
                     
-                    const details = document.createElement('details'); 
-                    details.className = 'group border-b border-white/5';
-                    details.id = `group_details_${index}`;
-                    
-                    const summary = document.createElement('summary');
-                    summary.className = 'group-header flex justify-between items-center';
+                    const details = document.createElement('details'); details.className = 'group border-b border-white/5'; details.id = `group_details_${index}`;
+                    const summary = document.createElement('summary'); summary.className = 'group-header flex justify-between items-center';
                     summary.innerHTML = `<span class="flex-1 truncate pr-2"><i class="fas fa-folder-open text-blue-400 mr-2 opacity-70"></i>${ex.title}</span> <span class="group-counter bg-white/10 px-1.5 py-0.5 rounded text-[9px] font-bold text-blue-200 tracking-wider">0/0</span>`;
                     
-                    const groupUl = document.createElement('ul');
-                    groupUl.className = 'flex flex-col bg-[#0b172a]/30'; // Màu nền đậm hơn cho bài con
+                    const groupUl = document.createElement('ul'); groupUl.className = 'flex flex-col bg-[#0b172a]/30';
+                    details.appendChild(summary); details.appendChild(groupUl); listUl.appendChild(details);
                     
-                    details.appendChild(summary);
-                    details.appendChild(groupUl);
-                    listUl.appendChild(details);
-                    
-                    currentDetailsObj = details;
-                    currentGroupList = groupUl;
+                    currentDetailsObj = details; currentGroupList = groupUl;
                 } else {
-                    totalRealExercises++;
-                    groupExCount++;
-                    
+                    totalRealExercises++; groupExCount++;
                     const isSubmitted = stepDataStore[index] && stepDataStore[index].isSubmitted;
                     if(isSubmitted) { completedCount++; groupDoneCount++; }
 
-                    const li = document.createElement('li'); 
-                    li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; 
-                    li.onclick = () => goToStep(index);
-                    
+                    const li = document.createElement('li'); li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; li.onclick = () => goToStep(index);
                     let statusIcon = isSubmitted ? `<div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold shadow shrink-0"><i class="fas fa-check"></i></div>` : `<div class="w-5 h-5 rounded-full border-2 border-slate-600 text-transparent flex items-center justify-center text-[9px] shrink-0"></div>`;
                     const hasFeedbackIcon = (stepDataStore[index] && stepDataStore[index].feedback) ? `<span title="Có nhận xét" class="ml-auto text-amber-400 text-xs"><i class="fas fa-comment-dots"></i></span>` : '';
                     const unreadBadge = (stepDataStore[index] && stepDataStore[index].isUnread) ? '<span class="notification-dot"></span>' : '';
                     
                     li.innerHTML = `<div class="relative shrink-0 flex items-center">${statusIcon}${unreadBadge}</div><div class="leading-snug text-[12px] flex-1 flex items-center pr-2 truncate ml-3">${ex.title} ${hasFeedbackIcon}</div>`;
                     
-                    if (currentGroupList) currentGroupList.appendChild(li);
-                    else listUl.appendChild(li); // Cứu cánh nếu bài tập ko nằm trong group nào
-                    
-                    // Nếu bài này đang được active, đánh dấu Group của nó để mở ra
-                    if (index === currentStepIndex && currentDetailsObj) {
-                        currentDetailsObj.open = true;
-                    }
+                    if (currentGroupList) currentGroupList.appendChild(li); else listUl.appendChild(li);
+                    if (index === currentStepIndex && currentDetailsObj) currentDetailsObj.open = true;
                 }
             });
 
-            // Cập nhật Group cuối cùng
             if (currentDetailsObj) {
                 const countSpan = currentDetailsObj.querySelector('.group-counter');
                 if(countSpan) countSpan.innerText = `${groupDoneCount}/${groupExCount}`;
             }
 
-            // CẬP NHẬT THANH TIẾN ĐỘ PROGRESS BAR Ở SIDEBAR
             const percent = totalRealExercises === 0 ? 0 : Math.round((completedCount / totalRealExercises) * 100);
             document.getElementById('progressPercentTxt').innerText = `${percent}%`;
             document.getElementById('sidebarProgressBar').style.width = `${percent}%`;
             document.getElementById('progressCountTxt').innerText = `Hoàn thành: ${completedCount} / ${totalRealExercises} bài`;
             
             const badge = document.getElementById('progressStatusBadge');
-            if (percent === 100) {
-                badge.className = "bg-emerald-500 text-white border border-emerald-400 text-[10px] px-2 py-0.5 rounded font-bold shadow-[0_0_8px_rgba(52,211,153,0.5)]";
-                badge.innerText = "Hoàn tất";
-            } else {
-                badge.className = "bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded font-bold";
-                badge.innerText = "Đang học";
-            }
-
+            if (percent === 100) { badge.className = "bg-emerald-500 text-white border border-emerald-400 text-[10px] px-2 py-0.5 rounded font-bold shadow-[0_0_8px_rgba(52,211,153,0.5)]"; badge.innerText = "Hoàn tất"; } 
+            else { badge.className = "bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded font-bold"; badge.innerText = "Đang học"; }
             updateGlobalNotification();
         }
 
@@ -377,7 +325,6 @@
             if(index < 0 || index >= currentExercises.length || currentExercises[index].isGroupHeader) return;
             currentStepIndex = index; const ex = currentExercises[index]; pendingFiles = [];
 
-            // UI logic active class cho Sidebar
             document.querySelectorAll('.step-item').forEach((li) => { li.classList.remove('step-active'); li.classList.add('step-inactive'); });
             const allItems = document.querySelectorAll('.step-item');
             let realIdx = 0;
@@ -517,7 +464,6 @@
             }).catch(err => alert("Lỗi kết nối mạng: Vui lòng thử lại sau.")).finally(() => { btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = oldText; btnEl.disabled = false; });
         }
 
-        // ================= CẬP NHẬT THANH ĐIỀU HƯỚNG BÊN DƯỚI =================
         function updateBottomNav() {
             const btnNext = document.getElementById('btnNext');
             let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--;
@@ -529,7 +475,6 @@
 
             let isLastStep = true; for(let i = currentStepIndex + 1; i < currentExercises.length; i++) { if(!currentExercises[i].isGroupHeader) { isLastStep = false; break; } }
             
-            // XỬ LÝ NÚT KẾT THÚC
             if(isLastStep) { 
                 if(percent >= 100) {
                     btnNext.innerHTML = 'Kết thúc buổi học <i class="fas fa-flag-checkered ml-1"></i>'; 
@@ -552,7 +497,6 @@
         function prevStep() { saveDraft(); let prevIndex = currentStepIndex - 1; while(prevIndex >= 0 && currentExercises[prevIndex].isGroupHeader) prevIndex--; if(prevIndex >= 0) goToStep(prevIndex); }
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); sidebar.classList.toggle('z-50'); } }
 
-        // ================= CÁC HÀM HIỂN THỊ MODAL =================
         function showCompletionModal() {
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}');
             document.getElementById('modalDoneName').innerText = profile.name || "N/A";
@@ -575,7 +519,6 @@
             const container = document.getElementById('reviewHistoryContainer');
             let html = '';
             
-            // Xây dựng Header Profile in PDF
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}');
             html += `<div class="bg-blue-50 border-2 border-blue-200 rounded-3xl p-6 mb-8 text-center hidden print:block">
                 <h1 class="text-2xl font-black text-blue-800 uppercase tracking-widest mb-4">BÁO CÁO BÀI TẬP THỰC HÀNH TÁI KÝ</h1>
