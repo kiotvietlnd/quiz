@@ -154,12 +154,9 @@
             </div>
         </div>
     </div>
-    
-    <!-- CHÈN THÊM DÒNG NÀY NGAY TRƯỚC THẺ <script> BÊN DƯỚI -->
-<script src="codelab-data.js"></script>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
+    const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
 
     // 1. ĐỌC THÔNG SỐ TỪ TRÊN ĐƯỜNG LINK (URL)
     const urlParams = new URLSearchParams(window.location.search);
@@ -171,9 +168,9 @@
     const STORAGE_KEY = `kv_progress_${prefix}_${SESSION_ID}`;
 
     let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFiles = [];
+    let CODELAB_DATA = null; // Khai báo biến chứa data động
 
     document.addEventListener('DOMContentLoaded', () => {
-        // CÁC THAO TÁC LOCALSTORAGE 
         const savedState = localStorage.getItem(STORAGE_KEY); if(savedState) currentStepIndex = parseInt(savedState) || 0;
         const savedData = localStorage.getItem(DATA_KEY); if(savedData) stepDataStore = JSON.parse(savedData);
         
@@ -191,30 +188,49 @@
             }
         });
 
-        // 2. KHÔNG CẦN GỌI API NỮA, ĐỌC TRỰC TIẾP TỪ CODELAB_DATA SIÊU TỐC
-        parseAndRenderData();
+        // 2. GỌI API LẤY DATA BÀI TẬP TỪ GOOGLE SHEET
+        document.getElementById('sessionTitle').innerText = "Đang tải dữ liệu bài tập từ hệ thống...";
+        fetchMasterData();
     });
 
-    function parseAndRenderData() {
-        if (typeof CODELAB_DATA === 'undefined') {
-            document.getElementById('mainContent').innerHTML = "<h2 class='text-rose-600 font-bold'>Lỗi: Không tìm thấy file codelab-data.js</h2>";
+    function fetchMasterData() {
+        // Kiểm tra xem đã có cache data trên máy chưa cho nhanh
+        const cachedMasterData = sessionStorage.getItem('kv_master_exercises');
+        if (cachedMasterData) {
+            CODELAB_DATA = JSON.parse(cachedMasterData);
+            parseAndRenderData();
             return;
         }
 
-        if(!CODELAB_DATA[CURRENT_ROADMAP]) {
-            document.getElementById('mainContent').innerHTML = `<h2 class='text-rose-600 font-bold'>Không tìm thấy dữ liệu cho ngành ${CURRENT_ROADMAP}.</h2>`;
+        // Nếu chưa có thì gọi API
+        fetch(`${API_URL}?action=getExercises`)
+        .then(r => r.json())
+        .then(res => {
+            if (res.status === 'success') {
+                sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); // Lưu đệm để f5 không phải load lại
+                CODELAB_DATA = res.data;
+                parseAndRenderData();
+            } else {
+                alert("Lỗi tải dữ liệu bài tập từ Sheet: " + res.message);
+            }
+        }).catch(err => {
+            document.getElementById('sessionTitle').innerText = "Lỗi kết nối mạng! Vui lòng F5 lại trang.";
+        });
+    }
+
+    function parseAndRenderData() {
+        if(!CODELAB_DATA || !CODELAB_DATA[CURRENT_ROADMAP]) {
+            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><i class="fas fa-exclamation-triangle text-4xl text-rose-500 mb-4"></i><h2 class='text-rose-600 font-bold text-xl'>Chưa có dữ liệu bài tập cho ngành ${CURRENT_ROADMAP} trên hệ thống Google Sheet.</h2></div>`;
             document.getElementById('sessionTitle').innerText = "Lỗi dữ liệu";
             return;
         }
-        
         const session = CODELAB_DATA[CURRENT_ROADMAP].find(s => s.id === SESSION_ID); 
         if(!session) {
-            document.getElementById('mainContent').innerHTML = `<h2 class='text-rose-600 font-bold'>Buổi học này chưa được cấu hình bài tập.</h2>`;
+            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><i class="fas fa-exclamation-triangle text-4xl text-rose-500 mb-4"></i><h2 class='text-rose-600 font-bold text-xl'>Buổi học này chưa được cấu hình bài tập trên hệ thống Google Sheet.</h2></div>`;
             document.getElementById('sessionTitle').innerText = "Lỗi dữ liệu";
             return;
         }
 
-        // VẼ DỮ LIỆU LÊN MÀN HÌNH
         document.getElementById('sessionTitle').innerText = session.title; 
         currentExercises = session.exercises;
         
@@ -226,7 +242,7 @@
     }
 
     // =======================================================
-    // CÁC HÀM XỬ LÝ GIAO DIỆN CÒN LẠI (GIỮ NGUYÊN)
+    // CÁC HÀM XỬ LÝ GIAO DIỆN CÒN LẠI (GIỮ NGUYÊN TỪ BẢN TRƯỚC)
     // =======================================================
     function fetchFeedback(isManualClick) {
         const profileRaw = localStorage.getItem('kv_trainer_profile'); if(!profileRaw) return;
