@@ -283,8 +283,17 @@
 
         function generateCard(sessionData, style, industry) {
             if(!sessionData) return '';
-            const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
-            const sessionNum = sessionData.title.split(':')[0] || sessionData.id;
+            
+            // Xử lý cắt chuỗi thông minh (Hỗ trợ cả dấu : và dấu .)
+            let safeTitle = sessionData.title;
+            let sessionNum = sessionData.id;
+            
+            const match = sessionData.title.match(/^(Buổi\s*[^:\.]+)[:\.]\s*(.+)$/i);
+            if (match) {
+                sessionNum = match[1].trim(); // Bốc đoạn "Buổi 1A"
+                safeTitle = match[2].trim();  // Bốc đoạn "Tổng quan Hàng hóa..."
+            }
+            
             const fileLink = `practice.html?roadmap=${industry}&session=${sessionData.id}`; 
             
             return `
