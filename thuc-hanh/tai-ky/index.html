@@ -310,7 +310,7 @@
         function generateCard(sessionData, sessionNum, style, prefix) {
             if(!sessionData) return '';
             const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
-            const fileLink = `${prefix}-buoi-${sessionNum}.html`; 
+            const fileLink = `practice.html?roadmap=${industry}&session=session_${sessionNum}`; 
             
             return `
             <a href="${fileLink}" class="group relative p-6 rounded-3xl transition-all duration-300 flex flex-col h-full bg-gradient-to-br ${style.colorFrom}/95 ${style.colorTo}/75 border ${style.borderCol} clickable-card hover:border-slate-400">
