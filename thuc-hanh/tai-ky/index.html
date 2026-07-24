@@ -198,45 +198,22 @@
         </div>
     </div>
 
+    <!-- ĐẢM BẢO CÓ DÒNG NÀY ĐỂ ĐỌC DỮ LIỆU TỪ FILE LOCAL CỰC NHANH -->
+    <script src="codelab-data.js"></script>
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbzZwkUV8g79PfYExma-7WRFg7IRY2fWmjpb63XiHqu6cqzx03uYi8Wmul9SamvyM9FMgQ/exec";
+        // API này chỉ dùng để lấy Nhận xét của giảng viên (Không dùng để tải đề bài nữa)
+        const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
         let currentSelectedIndustry = '';
-        let CODELAB_DATA = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             renderIdentity();
             if(!localStorage.getItem('kv_trainer_profile')) {
                 openAuthModal();
             } else {
-                fetchMasterData(); // Tự động load data từ Sheet ngầm bên dưới
+                restoreLastIndustry(); 
             }
         });
-
-        // ==========================================
-        // GỌI API LẤY DỮ LIỆU TỪ GOOGLE SHEET
-        // ==========================================
-        function fetchMasterData() {
-            const cachedMasterData = sessionStorage.getItem('kv_master_exercises');
-            if (cachedMasterData) {
-                CODELAB_DATA = JSON.parse(cachedMasterData);
-                restoreLastIndustry();
-                return;
-            }
-
-            // Gọi API
-            fetch(`${API_URL}?action=getExercises`)
-            .then(r => r.json())
-            .then(res => {
-                if (res.status === 'success') {
-                    sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); 
-                    CODELAB_DATA = res.data;
-                    restoreLastIndustry();
-                } else {
-                    console.error("Lỗi tải dữ liệu:", res.message);
-                }
-            }).catch(err => console.error("Lỗi mạng:", err));
-        }
 
         // ==========================================
         // QUẢN LÝ ĐỊNH DANH HỌC VIÊN
@@ -264,15 +241,15 @@
             if(!name || !dept) { alert("Vui lòng điền đủ Họ tên và Mã Lớp!"); return; }
             localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
             closeAuthModal(); renderIdentity(); 
-            fetchMasterData(); // Tải data sau khi định danh xong
+            restoreLastIndustry(); 
         }
 
         // ==========================================
-        // ĐIỀU HƯỚNG VÀ RENDER GIAO DIỆN
+        // ĐIỀU HƯỚNG VÀ RENDER GIAO DIỆN TỪ CODELAB-DATA.JS
         // ==========================================
         function restoreLastIndustry() {
             const lastInd = localStorage.getItem('kv_current_industry');
-            if(lastInd && CODELAB_DATA) selectIndustry(lastInd);
+            if(lastInd && typeof CODELAB_DATA !== 'undefined') selectIndustry(lastInd);
         }
 
         function selectIndustry(industry) {
@@ -283,7 +260,7 @@
             
             const oldIndustry = localStorage.getItem('kv_current_industry');
             if(oldIndustry && oldIndustry !== industry) {
-                // Xóa cache bài làm nếu đổi lộ trình khác (giải phóng dung lượng)
+                // Xóa cache bài làm nếu đổi lộ trình khác
                 for(let i=1; i<=10; i++) {
                     localStorage.removeItem(`kv_progress_${oldIndustry.toLowerCase()}_session_${i}`);
                     localStorage.removeItem(`kv_data_${oldIndustry.toLowerCase()}_session_${i}`);
@@ -306,14 +283,15 @@
         function renderCourseCards(industry) {
             const container = document.getElementById('courseListRender');
             
-            if (!CODELAB_DATA) {
-                container.innerHTML = `<div class="text-center py-20 text-slate-500"><i class="fas fa-spinner fa-spin text-3xl mb-4 text-blue-500"></i><p class="font-bold">Đang tải dữ liệu hệ thống...</p></div>`;
+            // Kiểm tra xem file codelab-data.js có được tải thành công không
+            if (typeof CODELAB_DATA === 'undefined') {
+                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi: Không tìm thấy file dữ liệu codelab-data.js. Vui lòng kiểm tra lại thư mục.</p></div>`;
                 return;
             }
 
             const roadmapData = CODELAB_DATA[industry];
             if (!roadmapData || roadmapData.length === 0) {
-                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry} trên Google Sheet.</p></div>`;
+                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry}.</p></div>`;
                 return;
             }
 
@@ -326,7 +304,6 @@
             ];
 
             let html = '';
-            // Tự động phân chia 2 Buổi = 1 Ngày (Động 100%)
             for(let i=0; i < roadmapData.length; i+=2) {
                 let dayNum = Math.floor(i/2) + 1;
                 html += `<h3 class="text-xs font-black text-slate-400 uppercase tracking-widest mb-6 mt-8 flex items-center gap-2"><i class="fa-solid fa-calendar-day text-indigo-500 text-base"></i> NGÀY ${dayNum}</h3>`;
@@ -342,7 +319,7 @@
 
             container.innerHTML = html;
 
-            // Kiểm tra trạng thái nộp bài
+            // Kiểm tra trạng thái nộp bài (Hiển thị nhãn Đã hoàn thành)
             roadmapData.forEach(session => {
                 checkCompletion(session.id, industry);
             });
@@ -353,13 +330,12 @@
             const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
             const sessionNum = sessionData.title.split(':')[0] || sessionData.id;
             
-            // TRỎ LINK THÔNG MINH VỀ FILE PRACTICE.HTML
             const fileLink = `practice.html?roadmap=${industry}&session=${sessionData.id}`; 
             
             return `
             <a href="${fileLink}" class="group relative glass-panel p-6 rounded-3xl hover:-translate-y-1 hover:shadow-xl transition-all flex flex-col h-full bg-white">
                 <div id="notify_${sessionData.id}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce z-10"><i class="fas fa-comment-dots"></i> Có Nhận xét</div>
-                <div id="check_${sessionData.id}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã nộp bài</div>
+                <div id="check_${sessionData.id}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã hoàn thành</div>
                 
                 <div class="w-max px-4 h-12 bg-gradient-to-br ${style.colorFrom} ${style.colorTo} ${style.colorText} rounded-xl flex items-center justify-center font-black text-sm mb-5 shadow-inner uppercase tracking-wider">${sessionNum}</div>
                 <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:${style.colorText} transition">${safeTitle}</h4>
@@ -369,7 +345,7 @@
         }
 
         // ==========================================
-        // XỬ LÝ TIẾN ĐỘ & THÔNG BÁO
+        // XỬ LÝ TIẾN ĐỘ & THÔNG BÁO TỪ GOOGLE SHEET
         // ==========================================
         function fetchGlobalNotifications(industry) {
             if (!API_URL) return;
@@ -379,7 +355,7 @@
 
             fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}`)
             .then(r => r.json()).then(res => {
-                if(res.status === 'success' && res.allData && CODELAB_DATA && CODELAB_DATA[industry]) {
+                if(res.status === 'success' && res.allData && typeof CODELAB_DATA !== 'undefined' && CODELAB_DATA[industry]) {
                     CODELAB_DATA[industry].forEach(session => {
                         checkNotification(session, res.allData, industry);
                     });
@@ -427,8 +403,6 @@
                 }
             }
         }
-        
-        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
     </script>
 </body>
 </html>
