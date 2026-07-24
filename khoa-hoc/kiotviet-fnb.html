@@ -35,7 +35,7 @@
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #fff7ed 0%, #fff3e0 50%, #fef3c7 100%); }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: radial-gradient(circle at top right, #e0f2fe 0%, #f0f6ff 50%, #e6f0ff 100%); }
         
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in-stagger { animation: fadeInUp 0.4s ease-out forwards; opacity: 0; }
@@ -51,7 +51,7 @@
         .btn-attention:hover { animation-play-state: paused; }
     </style>
 </head>
-<body class="text-slate-800 antialiased selection:bg-orange-100 selection:text-orange-900 flex flex-col h-screen bg-[#fff8f0] overflow-hidden">
+<body class="text-slate-800 antialiased selection:bg-orange-100 selection:text-orange-900 flex flex-col h-screen bg-[#f0f6ff] overflow-hidden">
 
     <div class="tech-bg"></div>
 
@@ -67,7 +67,7 @@
                 </div>
                 <div class="hidden md:block border-l border-white/20 pl-3">
                     <h1 class="text-sm font-bold tracking-tight text-white font-black">Đào tạo chuyên ngành - KiotViet FNB</h1>
-                    <p class="text-[11px] text-white/80 font-bold tracking-wider uppercase">Dành cho Chuyên viên tư vấn KiotViet FNB</p>
+                    <p class="text-[11px] text-white/80 font-bold tracking-wider uppercase">Dành cho Chuyên viên tư vấn KiotViet</p>
                 </div>
             </div>
 
@@ -75,7 +75,7 @@
                 <a href="https://daotao.kiotviet.vn/khoa-hoc/sales-dao-tao-san-pham-fnb/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-600 hover:to-green-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
                 </a>
-                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-sales/dao-tao-chuyen-nganh-fnb" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-orange-500 to-purple-600 hover:opacity-90 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-opacity flex items-center gap-1.5">
+                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-sales/dao-tao-chuyen-nganh-fnb" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-orange-500 to-amber-600 hover:opacity-90 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-opacity flex items-center gap-1.5">
                     <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
                 </a>
             </div>
@@ -83,7 +83,6 @@
     </header>
 
     <main class="flex flex-1 overflow-hidden relative">
-        <!-- Sidebar Navigation -->
         <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-blue-900/40 bg-[#073c6c] text-white relative z-20 shadow-lg justify-between h-full">
             <div class="p-5 border-b border-blue-900/40 bg-[#052d52] shrink-0 flex items-center justify-between gap-2">
                 <h2 class="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2 select-none">
@@ -106,12 +105,11 @@
             </div>
         </aside>
 
-        <!-- Main Content Scroll Area -->
-        <div id="main-scroll-area" class="flex-1 overflow-y-auto px-3 md:px-8 py-8 md:py-10 relative bg-[#fff8f0] flex flex-col items-center">
+        <div id="main-scroll-area" class="flex-1 overflow-y-auto px-3 md:px-8 py-8 md:py-10 relative bg-[#f0f6ff] flex flex-col items-center">
             <div id="loading-screen" class="w-full flex flex-col items-center justify-center p-6 my-auto text-center max-w-md">
-                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-kvBlue mb-4"></div>
+                <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-orange-500 mb-4"></div>
                 <p class="text-slate-600 font-bold text-sm leading-relaxed">
-                    Nội dung ôn tập trắc nghiệm đang được tải trực tiếp từ cơ sở dữ liệu Google Sheets, vui lòng đợi trong giây lát... 🚚💨⚡
+                    Nội dung ôn tập trắc nghiệm đang được tải trực tiếp từ cơ sở dữ liệu Google Sheets, vui lòng đợi trong giây lát... 🍔☕⚡
                 </p>
             </div>
 
@@ -123,9 +121,8 @@
             </div>
 
             <div id="main-layout" class="hidden w-full mx-auto flex-grow flex flex-col items-center">
-                <!-- Greeting Screen -->
-                <div id="greeting-screen" class="hidden w-full max-w-3xl bg-white rounded-3xl shadow-sm p-8 md:p-10 relative overflow-hidden border border-orange-100 mb-auto mt-auto">
-                    <div class="absolute right-0 bottom-0 w-80 h-80 bg-orange-50/50 rounded-full blur-3xl pointer-events-none"></div>
+                <div id="greeting-screen" class="hidden w-full max-w-3xl bg-white rounded-3xl shadow-sm p-8 md:p-10 relative overflow-hidden border border-blue-100 mb-auto mt-auto">
+                    <div class="absolute right-0 bottom-0 w-80 h-80 bg-blue-50/50 rounded-full blur-3xl pointer-events-none"></div>
                     <div class="relative z-10 text-center md:text-left">
                         <div id="resume-container" class="hidden mb-6 p-4 rounded-2xl border border-amber-200 bg-amber-50/50 flex flex-col sm:flex-row items-center justify-between gap-4">
                             <div class="text-left">
@@ -134,7 +131,7 @@
                             </div>
                             <button onclick="resumeQuiz()" class="bg-amber-500 hover:bg-amber-600 text-white font-extrabold py-2.5 px-5 rounded-full text-xs shadow-md transition-all shrink-0">Làm tiếp bài cũ <i class="fa-solid fa-forward"></i></button>
                         </div>
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-kvBlue/10 text-kvBlue text-xs font-bold rounded-full mb-5 uppercase tracking-wider"><i class="fa-solid fa-ranking-star"></i> CHUYÊN TRANG ÔN TẬP TRẮC NGHIỆM</span>
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-orange-100 text-orange-700 text-xs font-bold rounded-full mb-5 uppercase tracking-wider"><i class="fa-solid fa-ranking-star"></i> CHUYÊN TRANG ÔN TẬP TRẮC NGHIỆM</span>
                         <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 mb-5 leading-snug">Chào mừng bạn đến với chuyên trang Luyện thi của Khóa học Đào tạo chuyên ngành - KiotViet FNB</h2>
                         
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
@@ -146,9 +143,8 @@
                     </div>
                 </div>
 
-                <!-- Config General Mode Screen -->
                 <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left mb-auto mt-auto">
-                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-kvBlue/10 text-kvBlue text-xs font-black rounded-full mb-6"><i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN</span>
+                    <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-orange-100 text-orange-700 text-xs font-black rounded-full mb-6"><i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN</span>
                     <h2 class="text-3xl font-black text-slate-900 mb-3 leading-tight">Luyện đề ngẫu nhiên</h2>
                     <p class="text-sm text-slate-500 leading-relaxed mb-8">Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề ôn tập thử thách toàn diện.</p>
                     <div class="mb-10">
@@ -156,23 +152,23 @@
                         <div class="grid grid-cols-3 gap-4">
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="5" checked class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-[#f97316] peer-checked:bg-orange-50/50 text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-xs text-slate-800">Flash ⚡</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">05 câu</span>
+                                    <span class="block text-xs text-[#f97316] font-black mt-2">05 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="10" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-[#f97316] peer-checked:bg-orange-50/50 text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-xs text-slate-800">Pro 🎯</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">10 câu</span>
+                                    <span class="block text-xs text-[#f97316] font-black mt-2">10 câu</span>
                                 </div>
                             </label>
                             <label class="cursor-pointer">
                                 <input type="radio" name="general-count" value="30" class="sr-only peer">
-                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-[#166def] peer-checked:bg-[#e0f2fe]/40 text-center transform hover:scale-[1.02] shadow-sm">
+                                <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-[#f97316] peer-checked:bg-orange-50/50 text-center transform hover:scale-[1.02] shadow-sm">
                                     <span class="block font-extrabold text-xs text-slate-800">Ultra 🔥</span>
-                                    <span class="block text-xs text-[#166def] font-black mt-2">30 câu</span>
+                                    <span class="block text-xs text-[#f97316] font-black mt-2">30 câu</span>
                                 </div>
                             </label>
                         </div>
@@ -180,7 +176,6 @@
                     <button onclick="startGeneralQuiz()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-extrabold py-4 px-8 rounded-2xl shadow-lg text-sm uppercase tracking-wider btn-interact flex items-center justify-center gap-2">Bắt đầu bài ôn tập <i class="fa-solid fa-arrow-right"></i></button>
                 </div>
 
-                <!-- Quiz Screen -->
                 <div id="quiz-screen" class="hidden w-full max-w-3xl flex flex-col px-1 mt-4">
                     <div class="w-full bg-slate-200 h-1.5 rounded-full overflow-hidden mb-6 shadow-inner">
                         <div id="progress-bar" class="bg-gradient-to-r from-orange-500 to-[#f97316] h-full w-0 rounded-full"></div>
@@ -204,7 +199,6 @@
                     </div>
                 </div>
 
-                <!-- Result Screen -->
                 <div id="result-screen" class="hidden w-full max-w-3xl flex flex-col px-1">
                     <div class="bg-white rounded-3xl p-6 md:p-10 shadow-md border border-slate-150 mb-8 text-center mt-2">
                         <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-green-50 text-green-600 text-sm font-bold rounded-full mb-3"><i class="fa-solid fa-circle-check"></i> Lượt ôn tập hoàn tất</span>
@@ -220,7 +214,7 @@
                             </div>
                         </div>
                         <div class="flex flex-col sm:flex-row justify-center gap-4 mt-2">
-                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-sales/dao-tao-chuyen-nganh-fnb" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-orange-500 to-purple-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm flex items-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md"><i class="fa-brands fa-github text-lg"></i> Học lại bài này trên Github</a>
+                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-sales/dao-tao-chuyen-nganh-fnb" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-blue-600 via-orange-500 to-amber-600 hover:opacity-90 text-white font-bold py-3 px-6 rounded-full text-sm flex items-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md"><i class="fa-brands fa-github text-lg"></i> Học lại bài này trên Github</a>
                             <button onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-6 rounded-full text-sm shadow-md btn-interact flex items-center justify-center gap-2"><i class="fa-solid fa-rotate-right"></i> Ôn tập lại lượt này</button>
                         </div>
                     </div>
@@ -231,7 +225,6 @@
         </div>
     </main>
 
-    <!-- Mobile Sidebar -->
     <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-[280px] bg-[#073c6c] text-white z-50 transform -translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl h-full">
         <div class="p-4 border-b border-blue-900/40 flex items-center justify-between shrink-0 bg-[#052d52]">
             <span class="text-xs font-bold tracking-tight uppercase">Danh sách Bài học</span>
@@ -316,7 +309,7 @@
             <p class="text-[11px] text-slate-500 mt-3 text-center">💡 <span class="font-bold">Mẹo nhỏ:</span> Bạn có thể nhấp nút "Tải xuống chứng chỉ" dưới đây để tải về xem chi tiết!</p>
             <div class="w-full flex gap-3 mt-6">
                 <button onclick="toggleCertificatePreviewModal(false)" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl text-xs text-center focus:outline-none">Đóng cửa sổ</button>
-                <a id="download-certificate-link" href="#" download="Chung_Chi_FNB_01.png" class="flex-1 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-2">Tải xuống chứng chỉ <i class="fa-solid fa-download"></i></a>
+                <a id="download-certificate-link" href="#" download="Chung_Chi_Dao_Tao_FNB.png" class="flex-1 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-2">Tải xuống chứng chỉ <i class="fa-solid fa-download"></i></a>
             </div>
         </div>
     </div>
@@ -327,7 +320,7 @@
         const sheetName = 'FNB 01'; 
         const dataUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
 
-        // Cấu hình liên kết Apps Script quản lý cơ sở dữ liệu chứng chỉ
+        // Cấu hình liên kết Apps Script quản lý cơ sở dữ liệu chứng chỉ đã được cố định
         const certDatabaseAppUrl = 'https://script.google.com/macros/s/AKfycbzMHULnGN2yDupA1rG5eadbR5_EU9iUjHbULR_D-36kvs5ZYmo8sVvJsCrBtoZNLuJr/exec';
 
         let allQuestions = [];
@@ -340,7 +333,7 @@
         
         let viewMode = 'single';
         
-        // NAMESPACED LOCAL STORAGE KEYS
+        // NAMESPACED LOCAL STORAGE KEYS (Tránh đè dữ liệu với các khóa học khác)
         const lsKeys = {
             passedCategories: `KiotViet_Passed_Categories_${sheetName}`,
             quizState: `KiotViet_Quiz_State_${sheetName}`,
@@ -823,7 +816,7 @@
         }
 
         // ==========================================
-        // KHU VỰC CẤP PHÁT & KHÓA CHỨNG CHỈ 
+        // KHU VỰC CẤP PHÁT & KHÓA CHỨNG CHỈ BẢO MẬT
         // ==========================================
         
         function checkCertificateUnlockStatus() {
@@ -925,7 +918,7 @@
             
             const bgGrad = ctx.createLinearGradient(0, 0, 1414, 1000);
             bgGrad.addColorStop(0, '#fdfdfb');
-            bgGrad.addColorStop(1, '#fef3c7');
+            bgGrad.addColorStop(1, '#f7f6f0');
             ctx.fillStyle = bgGrad;
             ctx.fillRect(0, 0, 1414, 1000);
             
@@ -979,7 +972,7 @@
             const downloadLink = document.getElementById('download-certificate-link');
             downloadLink.href = dataUrlString;
             const safeName = certData.fullName.replace(/[^a-zA-Z0-9\s]/g, "").replace(/\s+/g, "_");
-            downloadLink.download = `Chung_Chi_FNB_01_${safeName}.png`;
+            downloadLink.download = `Chung_Chi_Dao_Tao_FNB_${safeName}.png`;
             toggleCertificatePreviewModal(true);
         }
 
