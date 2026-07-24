@@ -219,14 +219,27 @@
     }
 
     function parseAndRenderData() {
-        if(!CODELAB_DATA || !CODELAB_DATA[CURRENT_ROADMAP]) {
-            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><i class="fas fa-exclamation-triangle text-4xl text-rose-500 mb-4"></i><h2 class='text-rose-600 font-bold text-xl'>Chưa có dữ liệu bài tập cho ngành ${CURRENT_ROADMAP} trên hệ thống Google Sheet.</h2></div>`;
+        if (!CODELAB_DATA) {
+            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><i class="fas fa-wifi text-4xl text-slate-400 mb-4"></i><h2 class='text-slate-600 font-bold text-xl'>Đang chờ kết nối dữ liệu...</h2><button onclick="sessionStorage.removeItem('kv_master_exercises'); location.reload();" class="mt-4 px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-xl shadow-md transition">Tải lại trang</button></div>`;
+            return;
+        }
+
+        // Tìm đúng ngành hàng (Bất chấp chữ hoa chữ thường hay có dấu cách thừa)
+        const safeRoadmap = CURRENT_ROADMAP.toLowerCase().trim();
+        const targetRoadmapKey = Object.keys(CODELAB_DATA).find(k => k.toLowerCase().trim() === safeRoadmap);
+
+        if(!targetRoadmapKey || !CODELAB_DATA[targetRoadmapKey]) {
+            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center bg-rose-50 border border-rose-200 rounded-3xl"><i class="fas fa-exclamation-triangle text-4xl text-rose-500 mb-4"></i><h2 class='text-rose-700 font-black text-xl'>Không tìm thấy dữ liệu cho ngành: ${CURRENT_ROADMAP}.</h2><p class="text-sm text-rose-600 mt-2 font-medium">Vui lòng kiểm tra lại cột "Ngành Hàng" trên Google Sheet.</p><button onclick="sessionStorage.removeItem('kv_master_exercises'); location.reload();" class="mt-5 px-5 py-2 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i>Xóa bộ nhớ đệm và Tải lại</button></div>`;
             document.getElementById('sessionTitle').innerText = "Lỗi dữ liệu";
             return;
         }
-        const session = CODELAB_DATA[CURRENT_ROADMAP].find(s => s.id === SESSION_ID); 
+
+        // Tìm đúng buổi học
+        const safeSession = SESSION_ID.toLowerCase().trim();
+        const session = CODELAB_DATA[targetRoadmapKey].find(s => s.id.toLowerCase().trim() === safeSession); 
+        
         if(!session) {
-            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><i class="fas fa-exclamation-triangle text-4xl text-rose-500 mb-4"></i><h2 class='text-rose-600 font-bold text-xl'>Buổi học này chưa được cấu hình bài tập trên hệ thống Google Sheet.</h2></div>`;
+            document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center bg-amber-50 border border-amber-200 rounded-3xl"><i class="fas fa-search text-4xl text-amber-500 mb-4"></i><h2 class='text-amber-700 font-black text-xl'>Không tìm thấy dữ liệu của Buổi học này.</h2><p class="text-sm text-amber-600 mt-2 font-medium">Vui lòng kiểm tra lại cột "Mã Buổi" (Ví dụ: session_1) trên Google Sheet.</p><button onclick="sessionStorage.removeItem('kv_master_exercises'); location.reload();" class="mt-5 px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i>Xóa bộ nhớ đệm và Tải lại</button></div>`;
             document.getElementById('sessionTitle').innerText = "Lỗi dữ liệu";
             return;
         }
