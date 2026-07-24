@@ -1,259 +1,150 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
-<head> 
-    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cổng Đào Tạo Tái Ký KiotViet</title>
-    
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts Preconnect giúp tải Font Inter nhanh và ổn định -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; color: #334155; background-color: #cbd5e1; }
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #cbd5e1; overflow: hidden; pointer-events: none; }
-        .glow-blob-1, .glow-blob-2 { position: absolute; width: 50vw; height: 50vw; filter: blur(140px); border-radius: 50%; transition: background 1.5s ease-in-out; }
-        .glow-blob-1 { top: -15%; left: -10%; background: rgba(37, 99, 235, 0.05); } 
-        .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.05); }
-        
-        /* Ultra Glassmorphism Panel (Nền sáng) */
-        .glass-panel-ultra { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid rgba(226, 232, 240, 0.8); 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); 
-        }
-
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; } 
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-
-        .clickable-card { cursor: pointer; transition: all 0.3s ease; }
-        .clickable-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #f8fafc; overflow: hidden; pointer-events: none; }
+        .glow-blob-1 { position: absolute; top: -10%; left: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; background: rgba(37, 99, 235, 0.08); }
+        .glow-blob-2 { position: absolute; bottom: -10%; right: -10%; width: 50vw; height: 50vw; filter: blur(120px); border-radius: 50%; background: rgba(16, 185, 129, 0.08); }
+        .glass-panel { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.6); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.05); }
+        .glass-header { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.5); }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
+<body class="h-screen flex overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
 
-    <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
+    <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
 
-    <!-- HEADER (NAVBAR NGANG TOÀN TRANG - MÀU SẪM #1b365d) -->
-    <header class="h-16 bg-[#1b365d] border-b border-[#122543] px-6 py-4 flex items-center justify-between shadow-md shrink-0 w-full z-50 sticky top-0">
-        <div class="flex items-center gap-4">
-            <button onclick="toggleSidebar()" class="md:hidden text-slate-300 hover:text-white p-2 rounded-xl transition-all"><i class="fas fa-bars text-lg"></i></button>
-            <a href="index.html" class="flex items-center"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-8" alt="KiotViet Logo"></a>
-            <span class="hidden md:block h-6 w-[1px] bg-blue-900/60"></span>
-            <h1 class="hidden md:block text-xs md:text-sm font-bold text-slate-300 uppercase tracking-wider">Hệ thống Bài tập Thực hành - Đào tạo Sản phẩm (Tái ký)</h1>
+    <aside id="sidebar" class="w-80 bg-[#1e3a8a] border-r border-white/10 flex flex-col z-30 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex">
+        <div class="h-16 flex items-center px-5 border-b border-white/10 shrink-0 justify-between relative z-10 md:hidden">
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-7">
+            <button onclick="toggleSidebar()" class="text-white/50 hover:text-red-400 p-1"><i class="fas fa-times"></i></button>
         </div>
-        <div class="flex items-center gap-4">
-            <!-- Nút định danh -->
-            <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-xs font-bold text-slate-300 bg-blue-900/30 border border-blue-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-900/50 transition-all">
-                👤 Đang kiểm tra...
-            </button>
+        
+        <div class="p-5 flex-1 overflow-y-auto flex flex-col relative z-10 space-y-5">
+            <h2 class="text-xs font-extrabold text-blue-200/80 uppercase tracking-widest flex items-center gap-2"><i class="fas fa-info-circle text-blue-300"></i> Hướng Dẫn Thực Hành</h2>
+            <div class="space-y-4 text-white/90">
+                <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+                    <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">1</span>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-200">Họ tên</em> trước khi làm bài.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+                    <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">2</span>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán hoặc tải lên và nhấn <em class="not-italic text-blue-200">Nộp bài</em> để lưu tiến độ.</p>
+                </div>
+                <div class="flex items-start gap-3 bg-white/5 p-3 rounded-xl border border-white/10 shadow-inner">
+                    <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5">3</span>
+                    <p class="text-xs leading-relaxed"><strong class="text-blue-200">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận từ hệ thống.</p>
+                </div>
+            </div>
+
+            <div class="mt-2 border border-amber-500/40 bg-[#1e3a8a]/50 p-4 rounded-xl shadow-inner relative overflow-hidden">
+                <h3 class="text-amber-400 font-black text-[11px] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-exclamation-circle"></i> LƯU Ý QUAN TRỌNG</h3>
+                <p class="text-xs leading-relaxed text-amber-100/90 font-semibold relative z-10">Hoàn thành đầy đủ bài tập thực hành <span class="text-amber-400">ngay sau mỗi buổi học</span> để tránh ảnh hưởng đến kết quả thi đua.</p>
+            </div>
         </div>
-    </header>
+        
+        <div class="p-4 border-t border-white/10 bg-black/20 backdrop-blur-md shrink-0 flex flex-col gap-2 relative z-10 text-center">
+            <span class="text-[10px] text-slate-400 font-extrabold uppercase tracking-wider">KiotViet Learning & Development</span>
+        </div>
+    </aside>
 
-    <!-- CONTAINER CHÍNH DƯỚI HEADER -->
-    <div class="flex-grow flex overflow-hidden relative w-full">
-
-        <!-- SIDEBAR HƯỚNG DẪN (MÀU NỀN #224472 SÁNG HƠN NAVBAR, CÁC KHỐI CHỮ ĐEN NỀN SÁNG) -->
-        <aside id="sidebar" class="w-80 bg-[#224472] border-r border-[#173052] flex flex-col z-40 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex h-full">
-            
-            <!-- HEADER SIDEBAR -->
-            <div class="h-16 flex items-center px-6 border-b border-white/10 shrink-0 justify-between relative z-10 md:hidden">
-                <span class="text-xs font-bold text-white tracking-wider uppercase"><i class="fas fa-info-circle text-blue-400 mr-1.5"></i>HƯỚNG DẪN</span>
-                <button onclick="toggleSidebar()" class="text-slate-300 hover:text-red-400 p-2 text-lg"><i class="fas fa-times"></i></button>
+    <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10">
+        <header class="glass-header h-16 flex items-center justify-between px-6 z-20 shrink-0 sticky top-0 rounded-none border-t-0 border-l-0 border-r-0">
+            <div class="flex items-center gap-4">
+                <button onclick="toggleSidebar()" class="md:hidden text-slate-500 hover:text-blue-600 p-2 rounded-xl"><i class="fas fa-bars text-lg"></i></button>
+                <a href="index.html" class="flex items-center"><img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" class="h-8"></a>
+                <span class="hidden md:block h-5 w-px bg-slate-300"></span>
+                <span class="hidden md:block text-sm font-bold text-slate-500">Hệ thống Thực hành Đào tạo Sản phẩm (Tái ký)</span>
             </div>
-
-            <div class="p-6 flex-1 overflow-y-auto flex flex-col relative z-10 space-y-5 custom-scrollbar">
-                <h2 class="text-xs font-extrabold text-blue-300 uppercase tracking-widest flex items-center gap-2 mb-2"><i class="fas fa-map-signs text-blue-400"></i> Các bước thực hiện</h2>
-                <div class="space-y-4">
-                    <!-- Khối 1 nền sáng nhạt, chữ đen -->
-                    <div class="flex items-start gap-3 bg-blue-50/95 p-4 rounded-xl border border-blue-200/60 shadow-md text-slate-800">
-                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow">1</span>
-                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-800 font-bold">Họ tên, Phòng ban</em> trước khi làm bài.</p>
-                    </div>
-                    <!-- Khối 2 nền sáng nhạt, chữ đen -->
-                    <div class="flex items-start gap-3 bg-blue-50/95 p-4 rounded-xl border border-blue-200/60 shadow-md text-slate-800">
-                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow">2</span>
-                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Cách làm bài:</strong> Thực hành trên KiotViet &rarr; Chụp ảnh màn hình &rarr; Dán hoặc tải lên và nhấn <em class="not-italic text-blue-800 font-bold">Nộp bài</em> để lưu tiến độ.</p>
-                    </div>
-                    <!-- Khối 3 nền sáng nhạt, chữ đen -->
-                    <div class="flex items-start gap-3 bg-blue-50/95 p-4 rounded-xl border border-blue-200/60 shadow-md text-slate-800">
-                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-[10px] font-extrabold shrink-0 mt-0.5 shadow">3</span>
-                        <p class="text-xs leading-relaxed"><strong class="text-blue-900 font-bold">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" để nhận Thẻ Xác Nhận từ hệ thống.</p>
-                    </div>
-                </div>
-
-                <!-- KHỐI LƯU Ý -->
-                <div class="mt-2 border border-amber-200 bg-amber-50 p-4 rounded-xl shadow-md relative overflow-hidden text-slate-850">
-                    <h3 class="text-amber-800 font-bold text-xs uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-exclamation-circle text-amber-600"></i> LƯU Ý QUAN TRỌNG</h3>
-                    <p class="text-xs leading-relaxed text-slate-850 font-bold relative z-10">Hoàn thành đầy đủ bài tập thực hành <span class="text-amber-800 font-black">ngay sau mỗi buổi học</span> để tránh ảnh hưởng đến kết quả thi đua.</p>
-                </div>
-            </div>
-            
-            <div class="p-6 border-t border-white/10 bg-[#122543]/40 backdrop-blur-md shrink-0 flex flex-col gap-2 relative z-10 text-center">
-                <span class="text-[9px] text-slate-400 font-extrabold uppercase tracking-widest">KiotViet Learning & Development</span>
-            </div>
-        </aside>
-
-        <!-- MAIN CONTENT VIEWPORT (Cân chỉnh padding p-4 md:p-6 để tối đa không gian hiển thị dọc) -->
-        <main class="flex-grow flex flex-col h-full overflow-hidden relative w-full bg-slate-200/80 backdrop-blur-[2px]">
-            <div class="flex-1 overflow-auto p-4 md:p-6 relative custom-scrollbar">
-                <div class="max-w-5xl mx-auto pb-8">
-                    
-                    <!-- Lớp Glassmorphism chính bọc ngoài nội dung (Đã thu gọn padding trong từ p-10 xuống p-6 md:p-8) -->
-                    <div class="glass-panel-ultra p-6 md:p-8 rounded-3xl border border-slate-100 shadow-md">
-                        
-                        <!-- KHU VỰC TIÊU ĐỀ (Đã rút ngắn padding/margin để tránh khoảng hở thừa lớn) -->
-                        <div class="mb-4 text-center md:text-left pb-3 border-b border-slate-100">
-                            <h2 class="text-xl md:text-2xl font-extrabold text-blue-700 tracking-tight leading-snug uppercase">
-                                HỆ THỐNG BÀI TẬP THỰC HÀNH - TÁI KÝ KIOTVIET
-                            </h2>
-                            <p id="systemSubtitle" class="text-xs font-bold text-slate-400 uppercase tracking-wider mt-1.5">Vui lòng chọn Lộ trình đào tạo của bạn</p>
-                        </div>
-
-                        <!-- MÀN HÌNH CHỌN LỘ TRÌNH (Đã co hẹp khoảng trống mt-10 xuống mt-4) -->
-                        <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                            <!-- Retail Card (Màu xanh dương, ảnh minh họa chuẩn tỉ lệ) -->
-                            <div onclick="selectIndustry('Retail')" class="bg-gradient-to-br from-blue-50/95 to-blue-100/70 border border-blue-200/80 p-5 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
-                                <div>
-                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-3.5 border border-blue-200 bg-white relative">
-                                        <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-thoi-trang.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" alt="Retail Fashion Illustration">
-                                        <div class="absolute inset-0 bg-blue-900/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
-                                    <h3 class="text-lg font-extrabold text-slate-800 mb-1 group-hover:text-blue-700 transition-colors">Lộ trình RETAIL</h3>
-                                    <p class="text-slate-600 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng Bán lẻ (Thời trang, tạp hóa, siêu thị, mỹ phẩm...).</p>
-                                </div>
-                                <div class="mt-4 font-bold text-xs text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-3 border-t border-blue-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
-                            </div>
-
-                            <!-- FNB Card (Màu cam, ảnh minh họa chuẩn tỉ lệ) -->
-                            <div onclick="selectIndustry('FNB')" class="bg-gradient-to-br from-orange-50/95 to-orange-100/70 border border-orange-200/80 p-5 rounded-3xl cursor-pointer hover:-translate-y-1 hover:shadow-xl transition-all group clickable-card flex flex-col justify-between h-full">
-                                <div>
-                                    <div class="w-full aspect-[1600/983] rounded-2xl overflow-hidden shadow-md mb-3.5 border border-orange-200 bg-white relative">
-                                        <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-cafe-tra-sua.webp" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out" alt="FNB Cafe Illustration">
-                                        <div class="absolute inset-0 bg-orange-950/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                    </div>
-                                    <h3 class="text-lg font-extrabold text-slate-800 mb-1 group-hover:text-orange-700 transition-colors">Lộ trình FNB</h3>
-                                    <p class="text-slate-600 text-xs leading-relaxed">Bài tập thực hành chi tiết dành cho chuyên viên Ngành hàng F&B (Nhà hàng, quán ăn, quán café, trà sữa...).</p>
-                                </div>
-                                <div class="mt-4 font-bold text-xs text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all pt-3 border-t border-orange-200/40">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
-                            </div>
-                        </div>
-
-                        <!-- MÀN HÌNH DANH SÁCH BUỔI (RENDER ĐỘNG THEO LỘ TRÌNH) -->
-                        <div id="courseContainerView" class="hidden">
-                            <button onclick="backToSelection()" class="mb-8 flex items-center gap-2 text-xs font-bold text-slate-500 hover:text-blue-600 transition"><i class="fa-solid fa-arrow-left"></i> Quay lại chọn Lộ trình</button>
-                            <div id="courseListRender"></div>
-                        </div>
-                    </div>
-
-                    <footer class="text-center py-4 mt-6">
-                        <div class="flex flex-col items-center gap-2">
-                            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-4 opacity-40 grayscale">
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">© 2026 KiotViet Learning & Development</p>
-                        </div>
-                    </footer>
-                </div>
-            </div>
-        </main>
-
-    </div>
-
-    <!-- MODAL KHAI BÁO DANH TÍNH -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="glass-panel-ultra rounded-3xl max-w-md w-full p-6 md:p-8 relative border-4 border-blue-500 text-center animate-fade-in-up">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner">
-                <i class="fas fa-user-shield"></i>
-            </div>
-            <h2 class="text-xl font-black text-slate-800 mb-2">Đăng Nhập Học Viên</h2>
-            <p class="text-xs text-slate-500 font-medium mb-6 leading-relaxed">Vui lòng nhập đúng thông tin để hệ thống ghi nhận kết quả và cấp chứng nhận thực hành cho bạn.</p>
-            <div class="space-y-4 text-left">
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                        <i class="fas fa-user text-blue-500 w-4"></i> Họ và tên học viên *
-                    </label>
-                    <input type="text" id="inpName" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: Nguyễn Văn A">
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                        <i class="fas fa-building text-blue-500 w-4"></i> Mã Lớp / Phòng ban *
-                    </label>
-                    <input type="text" id="inpDept" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: TK-Q3-01">
-                </div>
-                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4">
-                    Lưu thông tin & Bắt đầu <i class="fas fa-chevron-right"></i>
+            <div class="flex items-center gap-4">
+                <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-sm font-semibold px-4 py-2 rounded-full border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 animate-pulse">
+                    👤 Đang kiểm tra...
                 </button>
             </div>
+        </header>
+
+        <div class="flex-1 overflow-auto p-6 md:p-10 relative">
+            <div class="max-w-5xl mx-auto pb-16">
+                
+                <div class="mb-10 text-center md:text-left">
+                    <h2 class="text-3xl md:text-4xl font-black text-transparent bg-clip-text bg-gradient-to-r from-blue-700 via-indigo-600 to-purple-600 tracking-tight pb-1 uppercase">Hệ thống bài tập thực hành - Tái ký KiotViet</h2>
+                    <p id="systemSubtitle" class="text-sm md:text-base font-bold text-slate-400 mt-2 uppercase tracking-wider">Vui lòng chọn Lộ trình đào tạo của bạn</p>
+                </div>
+
+                <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+                    <div onclick="selectIndustry('Retail')" class="glass-panel p-8 rounded-3xl cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all border-b-4 border-b-blue-500 group">
+                        <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-tags"></i></div>
+                        <h3 class="text-2xl font-black text-slate-800 mb-2">Lộ trình RETAIL</h3>
+                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên Ngành hàng Bán lẻ.</p>
+                        <div class="mt-6 font-bold text-blue-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+
+                    <div onclick="selectIndustry('FNB')" class="glass-panel p-8 rounded-3xl cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all border-b-4 border-b-orange-500 group">
+                        <div class="w-16 h-16 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition"><i class="fa-solid fa-bowl-food"></i></div>
+                        <h3 class="text-2xl font-black text-slate-800 mb-2">Lộ trình FNB</h3>
+                        <p class="text-slate-500 text-sm">Bài tập thực hành dành cho chuyên viên Ngành hàng F&B.</p>
+                        <div class="mt-6 font-bold text-orange-600 flex items-center gap-2 group-hover:gap-3 transition-all">Vào học ngay <i class="fa-solid fa-arrow-right"></i></div>
+                    </div>
+                </div>
+
+                <div id="courseContainerView" class="hidden">
+                    <button onclick="backToSelection()" class="mb-8 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-blue-600 transition"><i class="fa-solid fa-arrow-left"></i> Quay lại chọn Lộ trình</button>
+                    <div id="courseListRender"></div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL ĐĂNG NHẬP -->
+    <div id="authModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full relative border border-slate-200">
+            <h2 class="text-2xl font-black text-slate-800 mb-1 flex items-center gap-2"><i class="fa-solid fa-user-check text-blue-600"></i> Định danh Học viên</h2>
+            <p class="text-xs text-slate-500 font-medium mb-6">Hệ thống Tái ký đã tự động gán phòng ban. Bạn chỉ cần nhập Họ và Tên để bắt đầu.</p>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Họ và tên học viên *</label>
+                    <input type="text" id="inpName" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400 transition-colors" placeholder="Nhập họ và tên của bạn...">
+                </div>
+                <!-- Đã ẩn ô Phòng ban đi theo yêu cầu -->
+                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 mt-2 flex items-center justify-center gap-2"><i class="fas fa-sign-in-alt"></i> Vào Hệ Thống</button>
+            </div>
         </div>
     </div>
 
+    <!-- Gọi code data -->
+    <script src="codelab-data.js"></script>
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
         let currentSelectedIndustry = '';
-        let CODELAB_DATA = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             renderIdentity();
             if(!localStorage.getItem('kv_trainer_profile')) {
                 openAuthModal();
             } else {
-                fetchMasterData(); // Gọi API ngay khi vào trang web
+                restoreLastIndustry(); 
             }
         });
 
-        // ==========================================
-        // 1. GỌI API LẤY DỮ LIỆU TỪ GOOGLE SHEET (ĐỒNG BỘ 100% VỚI PRACTICE.HTML)
-        // ==========================================
-        function fetchMasterData() {
-            const container = document.getElementById('courseListRender');
-            
-            const cachedMasterData = sessionStorage.getItem('kv_master_exercises');
-            if (cachedMasterData) {
-                CODELAB_DATA = JSON.parse(cachedMasterData);
-                restoreLastIndustry();
-                return;
-            }
-
-            if(container) container.innerHTML = `<div class="text-center py-20 text-slate-500"><i class="fas fa-spinner fa-spin text-3xl mb-4 text-blue-500"></i><p class="font-bold">Đang đồng bộ dữ liệu giáo trình từ hệ thống...</p></div>`;
-
-            fetch(`${API_URL}?action=getExercises`)
-            .then(r => r.json())
-            .then(res => {
-                if (res.status === 'success') {
-                    sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); 
-                    CODELAB_DATA = res.data;
-                    restoreLastIndustry();
-                } else {
-                    if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi từ máy chủ: ${res.message}</p></div>`;
-                }
-            }).catch(err => {
-                if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-wifi text-4xl mb-4"></i><p class="font-bold">Lỗi kết nối mạng! Vui lòng F5 tải lại trang.</p></div>`;
-            });
-        }
-
-        // ==========================================
-        // QUẢN LÝ ĐỊNH DANH HỌC VIÊN
-        // ==========================================
         function renderIdentity() {
             const btn = document.getElementById('btnIdentity'); 
             const profileRaw = localStorage.getItem('kv_trainer_profile');
             if(profileRaw) {
                 const profile = JSON.parse(profileRaw);
-                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- Lớp: ${profile.dept}</span> <span class="text-[10px] underline ml-1">(Sửa)</span>`;
+                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- ${profile.dept}</span> <span class="text-[10px] underline ml-1 font-normal">(Sửa)</span>`;
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-blue-50 text-blue-700 border-blue-200 hover:bg-blue-100 cursor-pointer";
-                document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept; 
+                document.getElementById('inpName').value = profile.name; 
             } else {
                 btn.innerHTML = `👤 Chưa định danh`;
                 btn.className = "flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border transition shadow-sm bg-red-50 text-red-600 border-red-200 hover:bg-red-100 cursor-pointer animate-pulse";
@@ -263,24 +154,28 @@
         function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
         
-        function saveProfile() {
-            const name = document.getElementById('inpName').value.trim(); 
-            const dept = document.getElementById('inpDept').value.trim();
-            if(!name || !dept) { alert("Vui lòng điền đủ Họ tên và Mã Lớp!"); return; }
-            localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
-            closeAuthModal(); renderIdentity(); 
-            
-            // Xóa cache cũ để load lại data mới nhất nếu cần
-            sessionStorage.removeItem('kv_master_exercises');
-            fetchMasterData(); 
+        // HÀM TỰ ĐỘNG VIẾT HOA CHỮ CÁI ĐẦU VÀ FIX CỨNG PHÒNG BAN "TÁI KÝ"
+        function toTitleCase(str) {
+            return str.toLowerCase().split(' ').map(function(word) {
+                return (word.charAt(0).toUpperCase() + word.slice(1));
+            }).join(' ');
         }
 
-        // ==========================================
-        // ĐIỀU HƯỚNG VÀ RENDER GIAO DIỆN
-        // ==========================================
+        function saveProfile() {
+            let name = document.getElementById('inpName').value.trim(); 
+            if(!name) { alert("Vui lòng điền Họ tên của bạn!"); return; }
+            
+            name = toTitleCase(name); // Tự động viết hoa
+            const dept = "Tái ký"; // Fix cứng phòng ban
+            
+            localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
+            closeAuthModal(); renderIdentity(); 
+            restoreLastIndustry(); 
+        }
+
         function restoreLastIndustry() {
             const lastInd = localStorage.getItem('kv_current_industry');
-            if(lastInd && CODELAB_DATA) selectIndustry(lastInd);
+            if(lastInd && typeof CODELAB_DATA !== 'undefined') selectIndustry(lastInd);
         }
 
         function selectIndustry(industry) {
@@ -313,11 +208,14 @@
         function renderCourseCards(industry) {
             const container = document.getElementById('courseListRender');
             
-            if (!CODELAB_DATA) return; // Đang load
+            if (typeof CODELAB_DATA === 'undefined') {
+                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi: Không tìm thấy file dữ liệu codelab-data.js. Vui lòng kiểm tra lại.</p></div>`;
+                return;
+            }
 
             const roadmapData = CODELAB_DATA[industry];
             if (!roadmapData || roadmapData.length === 0) {
-                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry} trên Google Sheet.</p></div>`;
+                container.innerHTML = `<div class="bg-amber-50 border border-amber-200 p-8 text-center rounded-3xl text-amber-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry}.</p></div>`;
                 return;
             }
 
@@ -344,7 +242,6 @@
             }
 
             container.innerHTML = html;
-
             roadmapData.forEach(session => { checkCompletion(session.id, industry); });
         }
 
@@ -352,8 +249,6 @@
             if(!sessionData) return '';
             const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
             const sessionNum = sessionData.title.split(':')[0] || sessionData.id;
-            
-            // LINK ĐƯỢC TẠO DỰA VÀO ID CHÍNH XÁC TRÊN GOOGLE SHEET
             const fileLink = `practice.html?roadmap=${industry}&session=${sessionData.id}`; 
             
             return `
@@ -374,9 +269,6 @@
             </a>`;
         }
 
-        // ==========================================
-        // XỬ LÝ TIẾN ĐỘ & THÔNG BÁO TỪ GOOGLE SHEET
-        // ==========================================
         function fetchGlobalNotifications(industry) {
             if (!API_URL) return;
             const profileRaw = localStorage.getItem('kv_trainer_profile');
@@ -385,7 +277,7 @@
 
             fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}`)
             .then(r => r.json()).then(res => {
-                if(res.status === 'success' && res.allData && CODELAB_DATA && CODELAB_DATA[industry]) {
+                if(res.status === 'success' && res.allData && typeof CODELAB_DATA !== 'undefined' && CODELAB_DATA[industry]) {
                     CODELAB_DATA[industry].forEach(session => {
                         checkNotification(session, res.allData, industry);
                     });
