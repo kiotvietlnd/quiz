@@ -198,22 +198,50 @@
         </div>
     </div>
 
-    <!-- ĐẢM BẢO CÓ DÒNG NÀY ĐỂ ĐỌC DỮ LIỆU TỪ FILE LOCAL CỰC NHANH -->
-    <script src="codelab-data.js"></script>
     <script>
-        // API này chỉ dùng để lấy Nhận xét của giảng viên (Không dùng để tải đề bài nữa)
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
         let currentSelectedIndustry = '';
+        let CODELAB_DATA = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             renderIdentity();
             if(!localStorage.getItem('kv_trainer_profile')) {
                 openAuthModal();
             } else {
-                restoreLastIndustry(); 
+                fetchMasterData(); // Gọi API ngay khi vào trang web
             }
         });
+
+        // ==========================================
+        // 1. GỌI API LẤY DỮ LIỆU TỪ GOOGLE SHEET (ĐỒNG BỘ 100% VỚI PRACTICE.HTML)
+        // ==========================================
+        function fetchMasterData() {
+            const container = document.getElementById('courseListRender');
+            
+            const cachedMasterData = sessionStorage.getItem('kv_master_exercises');
+            if (cachedMasterData) {
+                CODELAB_DATA = JSON.parse(cachedMasterData);
+                restoreLastIndustry();
+                return;
+            }
+
+            if(container) container.innerHTML = `<div class="text-center py-20 text-slate-500"><i class="fas fa-spinner fa-spin text-3xl mb-4 text-blue-500"></i><p class="font-bold">Đang đồng bộ dữ liệu giáo trình từ hệ thống...</p></div>`;
+
+            fetch(`${API_URL}?action=getExercises`)
+            .then(r => r.json())
+            .then(res => {
+                if (res.status === 'success') {
+                    sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); 
+                    CODELAB_DATA = res.data;
+                    restoreLastIndustry();
+                } else {
+                    if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi từ máy chủ: ${res.message}</p></div>`;
+                }
+            }).catch(err => {
+                if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-wifi text-4xl mb-4"></i><p class="font-bold">Lỗi kết nối mạng! Vui lòng F5 tải lại trang.</p></div>`;
+            });
+        }
 
         // ==========================================
         // QUẢN LÝ ĐỊNH DANH HỌC VIÊN
@@ -241,15 +269,18 @@
             if(!name || !dept) { alert("Vui lòng điền đủ Họ tên và Mã Lớp!"); return; }
             localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
             closeAuthModal(); renderIdentity(); 
-            restoreLastIndustry(); 
+            
+            // Xóa cache cũ để load lại data mới nhất nếu cần
+            sessionStorage.removeItem('kv_master_exercises');
+            fetchMasterData(); 
         }
 
         // ==========================================
-        // ĐIỀU HƯỚNG VÀ RENDER GIAO DIỆN TỪ CODELAB-DATA.JS
+        // ĐIỀU HƯỚNG VÀ RENDER GIAO DIỆN
         // ==========================================
         function restoreLastIndustry() {
             const lastInd = localStorage.getItem('kv_current_industry');
-            if(lastInd && typeof CODELAB_DATA !== 'undefined') selectIndustry(lastInd);
+            if(lastInd && CODELAB_DATA) selectIndustry(lastInd);
         }
 
         function selectIndustry(industry) {
@@ -260,7 +291,6 @@
             
             const oldIndustry = localStorage.getItem('kv_current_industry');
             if(oldIndustry && oldIndustry !== industry) {
-                // Xóa cache bài làm nếu đổi lộ trình khác
                 for(let i=1; i<=10; i++) {
                     localStorage.removeItem(`kv_progress_${oldIndustry.toLowerCase()}_session_${i}`);
                     localStorage.removeItem(`kv_data_${oldIndustry.toLowerCase()}_session_${i}`);
@@ -283,15 +313,11 @@
         function renderCourseCards(industry) {
             const container = document.getElementById('courseListRender');
             
-            // Kiểm tra xem file codelab-data.js có được tải thành công không
-            if (typeof CODELAB_DATA === 'undefined') {
-                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi: Không tìm thấy file dữ liệu codelab-data.js. Vui lòng kiểm tra lại thư mục.</p></div>`;
-                return;
-            }
+            if (!CODELAB_DATA) return; // Đang load
 
             const roadmapData = CODELAB_DATA[industry];
             if (!roadmapData || roadmapData.length === 0) {
-                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry}.</p></div>`;
+                container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-box-open text-4xl mb-4"></i><p class="font-bold">Chưa có bài tập nào được cấu hình cho ngành ${industry} trên Google Sheet.</p></div>`;
                 return;
             }
 
@@ -319,10 +345,7 @@
 
             container.innerHTML = html;
 
-            // Kiểm tra trạng thái nộp bài (Hiển thị nhãn Đã hoàn thành)
-            roadmapData.forEach(session => {
-                checkCompletion(session.id, industry);
-            });
+            roadmapData.forEach(session => { checkCompletion(session.id, industry); });
         }
 
         function generateCard(sessionData, style, industry) {
@@ -330,25 +353,20 @@
             const safeTitle = sessionData.title.split(': ')[1] || sessionData.title;
             const sessionNum = sessionData.title.split(':')[0] || sessionData.id;
             
-            // TRỎ LINK THÔNG MINH VỀ FILE PRACTICE.HTML
+            // LINK ĐƯỢC TẠO DỰA VÀO ID CHÍNH XÁC TRÊN GOOGLE SHEET
             const fileLink = `practice.html?roadmap=${industry}&session=${sessionData.id}`; 
             
             return `
             <a href="${fileLink}" class="group relative p-6 rounded-3xl hover:-translate-y-1 hover:shadow-2xl transition-all flex flex-col h-full bg-white border border-slate-200 shadow-sm overflow-hidden">
-                <!-- Vạch màu trang trí phía trên cùng -->
                 <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r ${style.colorFrom} ${style.colorTo}"></div>
-
-                <!-- Các Badge Thông báo -->
                 <div id="notify_${sessionData.id}" class="hidden absolute top-4 right-4 bg-rose-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full shadow-md animate-bounce z-10"><i class="fas fa-comment-dots"></i> Có Nhận xét</div>
                 <div id="check_${sessionData.id}" class="hidden absolute top-4 right-4 bg-emerald-50 text-emerald-600 px-3 py-1 rounded-full text-[10px] font-black flex items-center gap-1 border border-emerald-200"><i class="fa-solid fa-check-circle"></i> Đã hoàn thành</div>
                 
-                <!-- Tag Buổi -->
                 <div class="w-max px-3 h-8 bg-slate-100 text-slate-600 rounded-lg flex items-center justify-center font-bold text-xs mb-4 shadow-inner uppercase tracking-widest border border-slate-200 group-hover:${style.colorText} group-hover:bg-blue-50 transition-colors">${sessionNum}</div>
                 
                 <h4 class="text-lg font-black text-slate-800 mb-2 group-hover:${style.colorText} transition-colors">${safeTitle}</h4>
                 <p class="text-slate-500 text-xs leading-relaxed mb-6 flex-1">${sessionData.desc}</p>
                 
-                <!-- Khu vực nút bấm phía dưới -->
                 <div class="mt-auto pt-4 border-t border-slate-100 flex items-center justify-between">
                     <span class="${style.colorText} font-bold text-xs flex items-center gap-2 group-hover:translate-x-1 transition-transform">Vào làm bài <i class="fa-solid fa-arrow-right"></i></span>
                     <span class="w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-400 group-hover:${style.colorText} group-hover:bg-blue-50 transition-colors"><i class="fas fa-play text-xs"></i></span>
@@ -367,7 +385,7 @@
 
             fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}`)
             .then(r => r.json()).then(res => {
-                if(res.status === 'success' && res.allData && typeof CODELAB_DATA !== 'undefined' && CODELAB_DATA[industry]) {
+                if(res.status === 'success' && res.allData && CODELAB_DATA && CODELAB_DATA[industry]) {
                     CODELAB_DATA[industry].forEach(session => {
                         checkNotification(session, res.allData, industry);
                     });
@@ -415,6 +433,8 @@
                 }
             }
         }
+        
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); } }
     </script>
 </body>
 </html>
