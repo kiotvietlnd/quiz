@@ -228,7 +228,12 @@
                 return;
             }
 
-            document.getElementById('sessionTitle').innerText = session.title.split(':')[1] || session.title; 
+            // Xử lý cắt tên hiển thị trên thanh Header
+            let displayTitle = session.title;
+            const match = session.title.match(/^(Buổi\s*[^:\.]+)[:\.]\s*(.+)$/i);
+            if (match) displayTitle = match[2].trim();
+
+            document.getElementById('sessionTitle').innerText = displayTitle; 
             currentExercises = session.exercises;
             
             if(currentExercises[currentStepIndex] && currentExercises[currentStepIndex].isGroupHeader) currentStepIndex++;
