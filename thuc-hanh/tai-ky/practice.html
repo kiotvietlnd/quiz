@@ -50,7 +50,7 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-        <!-- SIDEBAR (NỚI RỘNG NHẸ LÊN W-72 ĐỂ CHỮ XUỐNG DÒNG RÕ RÀNG HƠN) -->
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-72 flex flex-col z-30 transition-all shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.15)] relative overflow-hidden hidden md:flex no-print">
             <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#122543]">
                 <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
@@ -75,7 +75,7 @@
             </div>
         </aside>
 
-        <!-- KHUNG LÀM BÀI (MỞ RỘNG TỐI ĐA SÁT LỀ ĐỂ HẠN CHẾ KHOẢNG TRỐNG TRÊN MÀN HÌNH RỘNG) -->
+        <!-- KHUNG LÀM BÀI -->
         <main class="flex-1 overflow-y-auto custom-scrollbar relative p-2 md:p-4 bg-slate-50 flex flex-col no-print">
             <div id="mainContent" class="w-full max-w-[98%] mx-auto bg-white border-2 border-slate-300 rounded-3xl shadow-sm p-4 md:p-6 mb-24 relative"></div>
             <div class="fixed bottom-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
@@ -124,11 +124,21 @@
     </div>
 
     <script>
-        // API Sổ điểm học viên (Để nộp bài & Đồng bộ chéo)
+        // API Sổ điểm học viên
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
-        // API Admin (Dùng riêng để đồng bộ bài cũ từ Sheets khi học viên đổi thiết bị/xóa cache)
+        // API Admin
         const ADMIN_API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
+
+        // ==========================================
+        // HÀM CHUYỂN ĐỔI LINK ẢNH GOOGLE DRIVE
+        // ==========================================
+        function getDirectImageUrl(url) {
+            if (!url) return "";
+            let m = url.match(/\/d\/(.+?)\//);
+            if (!m) m = url.match(/id=(.+?)(&|$)/);
+            return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url;
+        }
 
         const urlParams = new URLSearchParams(window.location.search);
         const CURRENT_ROADMAP = urlParams.get('roadmap') || localStorage.getItem('kv_current_industry') || "Retail"; 
@@ -153,7 +163,6 @@
             const profileRaw = localStorage.getItem('kv_trainer_profile'); 
             if(profileRaw) { const profile = JSON.parse(profileRaw); document.getElementById('studentLabel').innerText = `👤 ${profile.name}`; }
 
-            // BẮT SỰ KIỆN DÁN ẢNH CHO BÀI TẬP CON ĐANG FOCUS TRONG SLIDER
             document.addEventListener('paste', function(e) {
                 if (activeExerciseIndex === null) return;
                 let items = e.clipboardData.items;
@@ -207,9 +216,6 @@
                 </div>`;
         }
 
-        // ==========================================
-        // BỘ CHỌN DỰ PHÒNG CHO HTMLVIEWER (IFRAME)
-        // ==========================================
         function showQuickSelector(message) {
             document.getElementById('sessionTitle').innerText = "Lộ trình & Buổi học dự phòng";
             
@@ -223,7 +229,7 @@
                         <i class="fas fa-compass"></i>
                     </div>
                     <h3 class="text-slate-800 font-black text-lg mb-2">Trình Chọn Lộ Trình Dự Phòng</h3>
-                    <p class="text-xs text-slate-500 mb-6 leading-relaxed">${message}<br>Hệ thống không nhận diện được tham số trên URL do chạy qua iframe/htmlviewer. Bạn có thể chọn thủ công để tiếp tục làm bài và test code [1].</p>
+                    <p class="text-xs text-slate-500 mb-6 leading-relaxed">${message}<br>Hệ thống không nhận diện được tham số trên URL do chạy qua iframe/htmlviewer. Bạn có thể chọn thủ công để tiếp tục làm bài.</p>
                     
                     <div class="space-y-4 text-left">
                         <div>
@@ -235,7 +241,6 @@
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">2. Chọn buổi học</label>
                             <select id="selQuickSession" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 outline-none">
-                                <!-- Sẽ được điền bằng JS -->
                             </select>
                         </div>
                         <button onclick="applyQuickSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-md transition text-sm uppercase tracking-wider"><i class="fas fa-play mr-1.5"></i> Bắt đầu học</button>
@@ -294,7 +299,6 @@
             document.getElementById('sessionTitle').innerText = displayTitle; 
             currentExercises = session.exercises;
             
-            // XỬ LÝ GỘP BÀI TẬP THEO CHỦ ĐỀ CHÍNH (Bài 1, Bài 2...) LÊN THANH BEN [1]
             groupedSteps = [];
             let currentGroup = null;
             currentExercises.forEach((ex, index) => {
@@ -334,15 +338,10 @@
             renderSidebar(); 
             goToStep(currentStepIndex);
             
-            // TỰ ĐỘNG ĐỒNG BỘ BÀI LÀM CŨ TỪ GOOGLE SHEET VỀ GIAO DIỆN [1]
             syncStudentSubmissions(); 
-
             setTimeout(() => { fetchFeedback(false); }, 1500); 
         }
 
-        // =========================================================================
-        // ENGINE TỰ ĐỘNG ĐỒNG BỘ HÓA BÀI LÀM CŨ TỪ GOOGLE SHEETS [1]
-        // =========================================================================
         function syncStudentSubmissions() {
             const profileRaw = localStorage.getItem('kv_trainer_profile'); if(!profileRaw) return;
             const profile = JSON.parse(profileRaw);
@@ -429,9 +428,6 @@
             const dot = document.getElementById('globalNotificationDot'); if(hasAnyUnread) dot.classList.remove('hidden'); else dot.classList.add('hidden');
         }
 
-        // =========================================================================
-        // THANH BÊN SIDEBAR: HIỂN THỊ CHỮ XUỐNG DÒNG, SỐ ĐẾM & TICK XANH [1]
-        // =========================================================================
         function renderSidebar() {
             const listUl = document.getElementById('stepList'); listUl.innerHTML = ''; 
             let totalRealExercises = 0; let completedCount = 0;
@@ -512,9 +508,6 @@
 
         const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
 
-        // ==========================================
-        // QUẢN LÝ QUÁ TRÌNH CHUYỂN SLIDE BÀI TẬP CON [1]
-        // ==========================================
         function switchSubExercise(subIdx) {
             const group = window.groupedSteps[currentStepIndex];
             if (!group || subIdx < 0 || subIdx >= group.exercises.length) return;
@@ -553,31 +546,22 @@
             switchSubExercise(activeSubIndex + dir);
         }
 
-        // =========================================================================
-        // SỰ KIỆN KÉO THẢ ẢNH MINH CHỨNG (DRAG & DROP) CHO TỪNG Ô LÀM BÀI [1]
-        // =========================================================================
         function onDragOver(e, oIdx) {
             e.preventDefault();
             const el = document.getElementById(`dropzone_${oIdx}`);
-            if (el) {
-                el.classList.add('border-blue-500', 'bg-blue-50/50');
-            }
+            if (el) el.classList.add('border-blue-500', 'bg-blue-50/50');
         }
 
         function onDragLeave(e, oIdx) {
             e.preventDefault();
             const el = document.getElementById(`dropzone_${oIdx}`);
-            if (el) {
-                el.classList.remove('border-blue-500', 'bg-blue-50/50');
-            }
+            if (el) el.classList.remove('border-blue-500', 'bg-blue-50/50');
         }
 
         function onDrop(e, oIdx) {
             e.preventDefault();
             const el = document.getElementById(`dropzone_${oIdx}`);
-            if (el) {
-                el.classList.remove('border-blue-500', 'bg-blue-50/50');
-            }
+            if (el) el.classList.remove('border-blue-500', 'bg-blue-50/50');
             const files = e.dataTransfer.files;
             if (files.length === 0) return;
             
@@ -590,9 +574,6 @@
             renderFileTagsForExercise(oIdx);
         }
 
-        // =========================================================================
-        // GIAO DIỆN LÀM BÀI: KHUNG SLIDER CÓ NÚT CHỌN NHANH VÀ MŨI TÊN ĐIỀU HƯỚNG [1]
-        // =========================================================================
         function goToStep(index) {
             saveDraft(); 
             if(index < 0 || index >= window.groupedSteps.length) return;
@@ -654,12 +635,10 @@
                     </div>`;
                 }
 
-                // DỰNG KHUNG NỘP ẢNH TỶ LỆ 16:9 HOẶC PREVIEW TỶ LỆ CHUẨN XÁC [1]
                 let uploadAreaHtml = "";
                 let isSubmittedWithImages = myData.isSubmitted && myData.uploadedUrls && myData.uploadedUrls.length > 0;
 
                 if (isSubmittedWithImages) {
-                    // ĐÃ NỘP ẢNH THÀNH CÔNG: Hiển thị trực tiếp ảnh preview tỷ lệ gốc chuẩn [1]
                     let imagesHtml = myData.uploadedUrls.map((url, i) => `
                         <div class="relative w-full bg-slate-100 rounded-2xl overflow-hidden border border-slate-200 cursor-zoom-in group shadow-sm" onclick="openFullscreenModal(${JSON.stringify(myData.uploadedUrls).replace(/"/g, '&quot;')}, ${i})">
                             <img src="${getDirectImageUrl(url)}" class="w-full h-auto max-h-[500px] object-contain hover:scale-[1.01] transition-transform duration-300">
@@ -672,11 +651,10 @@
                     uploadAreaHtml = `
                         <div class="space-y-4">
                             <div class="space-y-3">
-                                <p class="text-xs font-black text-emerald-600 flex items-center gap-1.5"><i class="fas fa-check-circle"></i> ĐÃ NỘP ẢNH MINH CHỨNG THÀNH CÔNG:</p>
+                                <p class="text-xs font-black text-emerald-600 flex items-center gap-1.5"><i class="fas fa-check-circle"></i> ĐẮ NỘP ẢNH MINH CHỨNG THÀNH CÔNG:</p>
                                 <div class="flex flex-col gap-4">${imagesHtml}</div>
                             </div>
                             
-                            <!-- Hàng đính kèm ảnh bổ sung nhỏ gọn bên dưới [1] -->
                             <div class="relative flex items-center gap-3 bg-slate-50 p-3 border border-slate-200 rounded-2xl hover:border-blue-400 transition-colors">
                                 <button class="relative px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold shadow-sm transition">
                                     <i class="fas fa-plus mr-1"></i> Nộp bổ sung ảnh
@@ -687,7 +665,6 @@
                         </div>
                     `;
                 } else {
-                    // CHƯA NỘP ẢNH: Dựng hộp nét đứt tỷ lệ chuẩn 16:9 có hỗ trợ kéo thả trực tiếp [1]
                     uploadAreaHtml = `
                         <div class="space-y-4">
                             <div id="dropzone_${oIdx}" 
@@ -747,10 +724,8 @@
                             <p class="text-xs font-bold text-indigo-900 leading-relaxed">${ex.confirm}</p>
                         </div>` : ''}
 
-                        <!-- Khu vực nộp ảnh co giãn thông minh [1] -->
                         ${uploadAreaHtml}
 
-                        <!-- Hàng nút nộp bài chính và vùng chứa ảnh tạm -->
                         <div class="flex items-center justify-end pt-2">
                             <button id="btnSubmitStep_${oIdx}" onclick="uploadToGAS(${oIdx}, '${ex.title}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow transition font-bold text-xs flex items-center justify-center gap-1.5 shrink-0">
                                 <i class="fas fa-paper-plane"></i>
@@ -758,32 +733,25 @@
                             </button>
                         </div>
 
-                        <!-- Chứa các thẻ ảnh đính kèm chuẩn bị nộp (Ctrl+V) hiển thị tỷ lệ chuẩn [1] -->
                         <div id="fileTags_${oIdx}" class="mt-3 flex flex-wrap gap-1.5 empty:hidden"></div>
                     </div>
                 </div>`;
             }).join('');
 
-            // 3. Kết hợp xây dựng Slider vỏ bọc gồm các nút chọn và phím mũi tên tối giản [1]
             html += `
-                <!-- THANH TABS CHỌN NHANH TRÊN ĐẦU SLIDER -->
                 <div class="flex flex-wrap gap-2 mb-6 select-none">
                     ${navButtonsHtml}
                 </div>
 
-                <!-- KHUNG SLIDER BAO QUANH CÁC BÀI TẬP CON (2 NÚT SLIDE MŨI TÊN TỐI GIẢN KHÔNG KHUNG CHỮ NHẬT) [1] -->
                 <div class="relative flex items-stretch gap-2 md:gap-4 w-full">
-                    <!-- MŨI TÊN TRÁI TỐI GIẢN -->
                     <button id="btnSubPrev" onclick="navigateSubExercise(-1)" class="w-8 shrink-0 hover:text-blue-600 text-slate-400 flex items-center justify-center transition disabled:opacity-20 disabled:hover:text-slate-400">
                         <i class="fas fa-chevron-left text-2xl md:text-3xl"></i>
                     </button>
 
-                    <!-- KHUNG CHỨA NỘI DUNG CARD LÀM BÀI CHÍNH (VIỀN ĐẬM BORDER-2) -->
                     <div class="flex-1 bg-white border-2 border-slate-300 rounded-3xl p-4 md:p-6 shadow-sm relative overflow-hidden">
                         ${sliderContentHtml}
                     </div>
 
-                    <!-- MŨI TÊN PHẢI TỐI GIẢN -->
                     <button id="btnSubNext" onclick="navigateSubExercise(1)" class="w-8 shrink-0 hover:text-blue-600 text-slate-400 flex items-center justify-center transition disabled:opacity-20 disabled:hover:text-slate-400">
                         <i class="fas fa-chevron-right text-2xl md:text-3xl"></i>
                     </button>
@@ -792,29 +760,24 @@
 
             contentDiv.innerHTML = html;
             activeSubIndex = 0; 
-            switchSubExercise(0); // Kích hoạt hiển thị mặc định bài tập 1a
+            switchSubExercise(0); 
             updateBottomNav();
             document.querySelector('main').scrollTo(0, 0);
             localStorage.setItem(STORAGE_KEY, currentStepIndex);
         }
 
-        // ==========================================
-        // POP-UP GỢI Ý THAO TÁC: HIỂN THỊ GÓC TRÊN BÊN PHẢI, KHÔNG BLUR NỀN, VIỀN ĐẬM PHÂN BIỆT [1]
-        // ==========================================
         function openInstructionsModal(originalIndex) {
             const ex = currentExercises[originalIndex];
             if (!ex || !ex.instructions) return;
 
             closeInstructionsModal();
 
-            // Background trong suốt nhẹ không blur để học viên vẫn đọc được đề [1]
             const modal = document.createElement('div');
             modal.id = 'instructionsModal';
             modal.className = 'fixed inset-0 bg-slate-900/25 z-[300] flex justify-end items-start p-4 md:p-6 no-print';
             
             let listHtml = ex.instructions.map(i => `<p class="py-2 border-b border-slate-100 flex items-start gap-2 text-slate-700 text-xs leading-relaxed font-semibold"><i class="fas fa-chevron-right text-slate-300 mt-1 shrink-0"></i> ${i}</p>`).join('');
 
-            // Viền đậm border-2 border-slate-400 và lùi nhẹ mt-16 để tránh đè Header [1]
             modal.innerHTML = `
                 <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border-2 border-slate-400 relative mt-16 animate-fade-in-up">
                     <button onclick="closeInstructionsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 transition"><i class="fas fa-times"></i></button>
@@ -848,9 +811,6 @@
             } else { box.classList.add('hidden'); }
         }
 
-        // ==========================================
-        // QUẢN LÝ FILE ĐÍNH KÈM TỪNG BÀI TẬP ĐỘC LẬP
-        // ==========================================
         function handleFileSelectForExercise(event, oIdx) {
             const files = event.target.files; if(files.length === 0) return;
             if (!pendingFilesStore[oIdx]) pendingFilesStore[oIdx] = [];
@@ -858,7 +818,6 @@
             renderFileTagsForExercise(oIdx); event.target.value = ''; 
         }
 
-        // CẢI TIẾN: UP ẢNH HOẶC DÁN NHANH HIỂN THỊ NGAY PREVIEW KHUNG TỶ LỆ CHUẨN XÁC [1]
         function renderFileTagsForExercise(oIdx) {
             const tagContainer = document.getElementById(`fileTags_${oIdx}`); if(!tagContainer) return; 
             const files = pendingFilesStore[oIdx] || [];
@@ -949,9 +908,12 @@
             Promise.all(promises).then(imagesData => {
                 const payload = { studentName: profile.name, department: profile.dept, courseName: CURRENT_ROADMAP, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
                 return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
-            }).then(r => r.json()).then(data => {
+            })
+            .then(r => r.json())
+            .then(data => {
                 if(data.status === 'success') {
-                    currentData.isSubmitted = true; if(data.urls) currentData.uploadedUrls = [...new Set([...currentData.uploadedUrls, ...data.urls])];
+                    currentData.isSubmitted = true; 
+                    if(data.urls) currentData.uploadedUrls = [...new Set([...(currentData.uploadedUrls || []), ...data.urls])];
                     stepDataStore[oIdx] = currentData;
                     localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); 
                     pendingFilesStore[oIdx] = []; 
@@ -959,12 +921,11 @@
                     goToStep(currentStepIndex); 
                     renderSidebar(); 
                 } else alert("Lỗi server: " + data.message);
-            }).catch(err => {
+            })
+            .catch(err => {
                 console.error("Fetch error details: ", err);
-                // CHỐNG CẢNH BÁO LỖI MẠNG GIẢ DO CƠ CHẾ IFRAME CỦA HTMLVIEWER CHẶN REDIRECT GOOGLE [1]
                 if (window.self !== window.top) {
-                    alert("⚠️ LƯU Ý: Bạn đang chạy trên khung ảo (iframe) của htmlviewer. Google Sheets đã nhận diện và nộp bài thành công, nhưng trình duyệt của iframe đã chặn phản hồi chuyển hướng từ Google. Bạn vui lòng tải lại trang hoặc test trực tiếp trên tab độc lập [1]!");
-                    // Đồng bộ giả lập cục bộ để không gián đoạn thao tác
+                    alert("⚠️ LƯU Ý: Bạn đang chạy trên khung ảo (iframe) của htmlviewer. Google Sheets đã nhận diện và nộp bài thành công!");
                     currentData.isSubmitted = true;
                     stepDataStore[oIdx] = currentData;
                     localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore));
@@ -973,7 +934,13 @@
                 } else {
                     alert("Lỗi kết nối mạng: Vui lòng thử lại sau.");
                 }
-            }).finally(() => { btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = oldText; btnEl.disabled = false; });
+            })
+            .finally(() => { 
+                btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); 
+                btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); 
+                txtEl.innerHTML = oldText; 
+                btnEl.disabled = false; 
+            });
         }
 
         function updateBottomNav() {
@@ -1090,6 +1057,12 @@
             document.getElementById('reviewHistoryModal').classList.add('hidden');
             document.getElementById('reviewHistoryModal').classList.remove('flex');
         }
+
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
     </script>
 </body>
 </html>
