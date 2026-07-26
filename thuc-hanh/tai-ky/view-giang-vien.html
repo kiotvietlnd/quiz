@@ -38,22 +38,51 @@
         </div>
         
         <div class="p-5 flex-1 overflow-y-auto flex flex-col custom-scrollbar relative z-10 space-y-4">
+            <!-- 1. Ngành hàng (Dạng Radio Button trên cùng) -->
+            <div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Ngành hàng</label>
+                <div class="flex gap-2">
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="filterIndustry" value="all" checked onchange="updateFilters('industry')" class="sr-only peer">
+                        <div class="text-center py-2 text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-all">Tất cả</div>
+                    </label>
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="filterIndustry" value="Retail" onchange="updateFilters('industry')" class="sr-only peer">
+                        <div class="text-center py-2 text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-all">Retail</div>
+                    </label>
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="filterIndustry" value="FNB" onchange="updateFilters('industry')" class="sr-only peer">
+                        <div class="text-center py-2 text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-orange-600 peer-checked:border-orange-600 transition-all">F&B</div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 2. Học viên -->
+            <div>
+                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Học viên</label>
+                <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
+                    <option value="all">Tất cả Học viên</option>
+                </select>
+            </div>
+
+            <!-- 3. Trạng thái bài làm (Mặc định: Tất cả) -->
             <div>
                 <label class="block text-[10px] font-bold text-amber-300 uppercase tracking-wider mb-1"><i class="fas fa-filter"></i> Trạng thái bài làm</label>
                 <select id="filterStatus" onchange="renderCards()" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[36px] focus:outline-none focus:ring-2 focus:ring-blue-500 px-2.5 font-semibold cursor-pointer truncate">
-                    <option value="all">Tất cả bài nộp</option>
-                    <option value="pending" selected>🔴 Cần chấm (Chưa nhận xét)</option>
+                    <option value="all" selected>Tất cả bài nộp</option>
+                    <option value="pending">🔴 Cần chấm (Chưa nhận xét)</option>
                     <option value="graded">✅ Đã chấm (Có nhận xét)</option>
                     <option value="skipped">⏭️ Đã bỏ qua</option>
                 </select>
             </div>
             
+            <!-- 4. Thời gian nộp bài (Mặc định: Tuần này) -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Thời gian nộp bài</label>
                 <select id="filterTime" onchange="toggleCustomTime(); updateFilters('time')" class="w-full bg-white text-slate-800 border border-slate-300 text-xs rounded-xl h-[36px] focus:outline-none focus:ring-2 focus:ring-blue-500 px-2.5 font-semibold cursor-pointer truncate">
                     <option value="all">Tất cả thời gian</option>
                     <option value="today">Hôm nay</option>
-                    <option value="this_week">Tuần này</option>
+                    <option value="this_week" selected>Tuần này</option>
                     <option value="last_week">Tuần trước</option>
                     <option value="custom">Tùy chọn...</option>
                 </select>
@@ -67,41 +96,6 @@
                         <input type="date" id="dateTo" onchange="updateFilters('time')" class="w-full bg-white text-slate-800 text-[10px] rounded p-1 border outline-none">
                     </div>
                 </div>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Ngành hàng</label>
-                <select id="filterIndustry" onchange="updateFilters('industry')" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
-                    <option value="all">Tất cả Ngành hàng</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Mã Lớp / Phòng ban</label>
-                <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
-                    <option value="all">Tất cả Mã Lớp / PB</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Học viên</label>
-                <select id="filterStudent" onchange="renderCards()" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
-                    <option value="all">Tất cả Học viên</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Buổi học</label>
-                <select id="filterSession" onchange="updateFilters('session')" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
-                    <option value="all">Tất cả Buổi</option>
-                </select>
-            </div>
-
-            <div>
-                <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-1">Tên Bài tập</label>
-                <select id="filterExercise" onchange="renderCards()" class="w-full bg-white/10 text-white border border-white/10 hover:bg-white/20 text-xs rounded-xl h-[36px] outline-none px-2.5 font-semibold cursor-pointer truncate">
-                    <option value="all">Tất cả Bài tập</option>
-                </select>
             </div>
         </div>
         
@@ -247,11 +241,15 @@
         <div class="h-8 shrink-0"></div>
     </div>
 
-    <!-- Script kết nối API & Xử lý lọc dữ liệu -->
-    <script src="codelab-data.js"></script>
     <script>
+        // API Sổ điểm & Bài nộp (Admin)
         const API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
+        
+        // API Giáo trình & Bài tập của Học viên (Đồng nhất với File 1 & 2)
+        const EXERCISE_API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
+
         let allData = [];
+        let CODELAB_DATA = null; 
         let activeSlides = {};
         let studentStartDates = {}; 
 
@@ -264,27 +262,39 @@
             else box.classList.add('hidden');
         }
 
+        // =========================================================================
+        // ĐỒNG BỘ SONG SONG: LẤY BÀI NỘP TỪ API ADMIN & LẤY GIÁO TRÌNH TỪ API HỌC VIÊN
+        // =========================================================================
         function fetchPracticeData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
             const container = document.getElementById('exercisesContainer');
             if(container) container.innerHTML = "";
             
-            // Ẩn bảng tránh báo lỗi DOM
             const sum = document.getElementById('statsSummary'); if(sum) sum.classList.add('hidden');
             const cap = document.getElementById('classAnalyticsPanel'); if(cap) cap.classList.add('hidden');
             const spp = document.getElementById('studentProgressPanel'); if(spp) spp.classList.add('hidden');
             
-            fetch(`${API_URL}?action=getAllPracticeData`)
-            .then(r => r.json()).then(res => {
-                if(res.status === 'success') {
-                    allData = res.data.reverse(); 
+            Promise.all([
+                fetch(`${API_URL}?action=getAllPracticeData`).then(r => r.json()),
+                fetch(`${EXERCISE_API_URL}?action=getExercises`).then(r => r.json())
+            ])
+            .then(([practiceRes, exercisesRes]) => {
+                if (practiceRes.status === 'success' && exercisesRes.status === 'success') {
+                    allData = practiceRes.data.reverse(); 
+                    CODELAB_DATA = exercisesRes.data; 
                     buildTimeEngine(); 
                     initFilters();
-                } else throw new Error(res.message || "Lỗi dữ liệu từ Server");
-            }).catch(e => {
+                } else {
+                    let errorMessages = [];
+                    if (practiceRes.status !== 'success') errorMessages.push(`Bài nộp: ${practiceRes.message}`);
+                    if (exercisesRes.status !== 'success') errorMessages.push(`Giáo trình: ${exercisesRes.message}`);
+                    throw new Error(errorMessages.join(" | "));
+                }
+            })
+            .catch(e => {
                 console.error("Fetch error: ", e);
                 if(container) {
-                    container.innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-exclamation-triangle text-3xl mb-3"></i><p class="font-bold">Đã xảy ra lỗi khi hiển thị dữ liệu.</p><p class="text-xs mt-1">Chi tiết lỗi: ${e.message}</p></div>`;
+                    container.innerHTML = `<div class="bg-red-50 border border-red-200 p-6 text-center text-red-600 rounded-2xl"><i class="fas fa-exclamation-triangle text-3xl mb-3"></i><p class="font-bold">Đã xảy ra lỗi khi đồng bộ dữ liệu.</p><p class="text-xs mt-1">Chi tiết lỗi: ${e.message}</p></div>`;
                 }
             })
             .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
@@ -323,11 +333,11 @@
             const now = new Date();
             let deadline = new Date(startDate);
 
-            if (sessionName.includes("Buổi 1")) { deadline.setHours(12, 0, 0); } 
-            else if (sessionName.includes("Buổi 2")) { deadline.setHours(16, 0, 0); } 
-            else if (sessionName.includes("Buổi 3")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(12, 0, 0); } 
-            else if (sessionName.includes("Buổi 4")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(16, 0, 0); } 
-            else if (sessionName.includes("Buổi 5")) { deadline.setDate(deadline.getDate() + 2); deadline.setHours(16, 0, 0); } 
+            if (sessionName.includes("Buổi 1") || sessionName.includes("session_1")) { deadline.setHours(12, 0, 0); } 
+            else if (sessionName.includes("Buổi 2") || sessionName.includes("session_2")) { deadline.setHours(16, 0, 0); } 
+            else if (sessionName.includes("Buổi 3") || sessionName.includes("session_3")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(12, 0, 0); } 
+            else if (sessionName.includes("Buổi 4") || sessionName.includes("session_4")) { deadline.setDate(deadline.getDate() + 1); deadline.setHours(16, 0, 0); } 
+            else if (sessionName.includes("Buổi 5") || sessionName.includes("session_5")) { deadline.setDate(deadline.getDate() + 2); deadline.setHours(16, 0, 0); } 
             else return "UPCOMING"; 
 
             if (now > deadline) return "OVERDUE";
@@ -338,60 +348,27 @@
         // BỘ LỌC PHÂN TẦNG VÀ LẤY DỮ LIỆU GỐC
         // ==========================================
         function initFilters() {
-            const industries = [...new Set(allData.map(e => e.khoa))].filter(Boolean).sort();
-            document.getElementById('filterIndustry').innerHTML = `<option value="all">Tất cả Ngành hàng</option>` + industries.map(i => `<option value="${i}">${i}</option>`).join('');
             updateFilters('init');
         }
 
         function updateFilters(source) {
-            const selInd = document.getElementById('filterIndustry').value;
-            let selDept = document.getElementById('filterDept').value;
+            // Lấy giá trị Ngành hàng từ Radio Button
+            const selInd = document.querySelector('input[name="filterIndustry"]:checked').value;
 
             let dataByInd = selInd === 'all' ? allData : allData.filter(e => e.khoa === selInd);
 
             if (source === 'init' || source === 'industry') {
-                const depts = [...new Set(dataByInd.map(e => e.phongBan))].filter(Boolean).sort();
-                document.getElementById('filterDept').innerHTML = `<option value="all">Tất cả Mã Lớp / PB</option>` + depts.map(d => `<option value="${d}">${d}</option>`).join('');
-                selDept = 'all'; document.getElementById('filterDept').value = 'all';
-
-                const sessions = [...new Set(dataByInd.map(e => e.buoi))].filter(Boolean).sort();
-                document.getElementById('filterSession').innerHTML = `<option value="all">Tất cả Buổi</option>` + sessions.map(s => `<option value="${s}">${s}</option>`).join('');
-                document.getElementById('filterSession').value = 'all';
-            }
-
-            let dataByDept = selDept === 'all' ? dataByInd : dataByInd.filter(e => e.phongBan === selDept);
-
-            if (source === 'init' || source === 'industry' || source === 'dept') {
-                const students = [...new Set(dataByDept.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
-                document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học Viên</option>` + students.map(s => {
+                const students = [...new Set(dataByInd.map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))].filter(e => e !== "|").sort();
+                document.getElementById('filterStudent').innerHTML = `<option value="all">Tất cả Học viên</option>` + students.map(s => {
                     const parts = s.split('|'); return `<option value="${s}">${parts[0]} (${parts[1]})</option>`;
                 }).join('');
             }
 
-            const currentSession = document.getElementById('filterSession').value;
-            
-            if (source === 'init' || source === 'industry' || source === 'session') {
-                const exSelect = document.getElementById('filterExercise');
-                if (currentSession === 'all' || selInd === 'all' || typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[selInd]) {
-                    exSelect.innerHTML = `<option value="all">Tất cả Bài tập</option>`;
-                } else {
-                    let htmlOptions = `<option value="all">Tất cả Bài tập trong buổi này</option>`;
-                    const sessionData = CODELAB_DATA[selInd].find(s => s.title.includes(currentSession) || currentSession.includes(s.title.split(':')[0]));
-                    if (sessionData && sessionData.exercises) {
-                        let currentGroup = "Khác";
-                        sessionData.exercises.forEach(ex => {
-                            if (ex.isGroupHeader) { currentGroup = ex.title; htmlOptions += `<optgroup label="📌 ${currentGroup}">`; } 
-                            else htmlOptions += `<option value="${ex.title}">${ex.title}</option>`;
-                        });
-                    }
-                    exSelect.innerHTML = htmlOptions;
-                }
-            }
             renderCards();
         }
 
         function calculateTotalRequiredExercises(industry) {
-            if (typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[industry]) return [];
+            if (!CODELAB_DATA || !CODELAB_DATA[industry]) return [];
             let required = [];
             CODELAB_DATA[industry].forEach(s => {
                 s.exercises.forEach(ex => {
@@ -402,10 +379,10 @@
         }
 
         function getRequiredExercisesTree(industry, sessionFilter) {
-            if (typeof CODELAB_DATA === 'undefined' || !CODELAB_DATA[industry]) return [];
+            if (!CODELAB_DATA || !CODELAB_DATA[industry]) return [];
             let tree = [];
             CODELAB_DATA[industry].forEach(s => {
-                if (sessionFilter !== 'all' && !s.title.includes(sessionFilter) && !sessionFilter.includes(s.title.split(':')[0])) return;
+                if (sessionFilter !== 'all' && !s.title.includes(sessionFilter) && !sessionFilter.includes(s.title.split(':')[0]) && s.id !== sessionFilter) return;
                 let sessionObj = { sessionName: s.title, groups: [] };
                 let currentGroup = { groupName: "Khác", exercises: [] };
                 
@@ -424,7 +401,7 @@
         }
 
         function getExerciseDetails(exerciseTitle) {
-            if (typeof CODELAB_DATA === 'undefined' || !exerciseTitle) return null;
+            if (!CODELAB_DATA || !exerciseTitle) return null;
             const targetTitle = cleanStr(exerciseTitle);
             for (let key in CODELAB_DATA) {
                 const sessions = CODELAB_DATA[key];
@@ -446,16 +423,13 @@
         }
 
         // ==========================================
-        // RENDER GIAO DIỆN
+        // RENDER GIAO DIỆN CHẤM BÀI
         // ==========================================
         function renderCards() {
             const selStatus = document.getElementById('filterStatus').value;
             const selTime = document.getElementById('filterTime').value;
-            const selInd = document.getElementById('filterIndustry').value;
-            const selDept = document.getElementById('filterDept').value;
+            const selInd = document.querySelector('input[name="filterIndustry"]:checked').value;
             const selStudent = document.getElementById('filterStudent').value;
-            const selSession = document.getElementById('filterSession').value;
-            const selExercise = document.getElementById('filterExercise').value;
 
             let filtered = allData;
             
@@ -489,9 +463,6 @@
             }
 
             if (selInd !== 'all') filtered = filtered.filter(e => e.khoa === selInd);
-            if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
-            if (selSession !== 'all') filtered = filtered.filter(e => e.buoi === selSession);
-            if (selExercise !== 'all') filtered = filtered.filter(e => e.tenBaiHoc === selExercise);
             
             let currentStudentName = "Tất cả"; let currentStudentKey = "";
             if (selStudent !== 'all') {
@@ -507,6 +478,23 @@
             });
             let uniqueRecords = Object.values(mapUnique);
 
+            // =========================================================================
+            // SẮP XẾP BÀI TẬP: ƯU TIÊN ALPHABET TÊN BUỔI HỌC (buoi) RỒI ĐẾN TÊN BÀI TẬP (tenBaiHoc)
+            // =========================================================================
+            uniqueRecords.sort((a, b) => {
+                const buoiA = a.buoi || '';
+                const buoiB = b.buoi || '';
+                const buoiCompare = buoiA.localeCompare(buoiB, 'vi', { sensitivity: 'base', numeric: true });
+                
+                if (buoiCompare !== 0) {
+                    return buoiCompare;
+                }
+                
+                const exA = a.tenBaiHoc || '';
+                const exB = b.tenBaiHoc || '';
+                return exA.localeCompare(exB, 'vi', { sensitivity: 'base', numeric: true });
+            });
+
             let countPending = 0; let countGraded = 0; let countSkipped = 0;
             uniqueRecords.forEach(e => {
                 if (!e.nhanXet || e.nhanXet.toString().trim() === "") countPending++;
@@ -519,7 +507,7 @@
             if (selStatus === 'skipped') uniqueRecords = uniqueRecords.filter(e => e.nhanXet && e.nhanXet.toString().includes("[BỎ QUA]"));
 
             // ===============================================
-            // TÍNH TOÁN DASHBOARD TỔNG QUAN (Của toàn bộ dữ liệu hiện có)
+            // TÍNH TOÁN DASHBOARD TỔNG QUAN
             // ===============================================
             document.getElementById('statsSummary').classList.remove('hidden');
             let totalRet = 0, totalFnb = 0, totalRetDone = 0, totalFnbDone = 0;
@@ -536,7 +524,6 @@
                 if (ind === 'Retail') { totalRet++; totalRetDone += [...new Set(doneTitles)].length; }
                 if (ind === 'FNB') { totalFnb++; totalFnbDone += [...new Set(doneTitles)].length; }
                 
-                // Gom dữ liệu thiếu
                 if (ind === 'Retail' || ind === 'FNB') {
                     let reqExs = calculateTotalRequiredExercises(ind);
                     reqExs.forEach(req => {
@@ -548,7 +535,6 @@
                 }
             });
 
-            // Tìm bài bỏ qua nhiều nhất
             allData.forEach(e => {
                 if (e.nhanXet && e.nhanXet.toString().includes("[BỎ QUA]")) {
                     skippedTally[e.tenBaiHoc] = (skippedTally[e.tenBaiHoc] || 0) + 1;
@@ -580,17 +566,16 @@
             let percentGraded = totalReviewAction === 0 ? 0 : Math.round(((countGraded + countSkipped) / totalReviewAction) * 100);
             const elGradedP = document.getElementById('statGradedPercent'); if(elGradedP) elGradedP.innerText = `${percentGraded}%`;
 
-            // ===============================================
-            // XỬ LÝ KHUNG TIẾN ĐỘ CÁ NHÂN VÀ BẢNG SO SÁNH CLASS
-            // ===============================================
+            // =========================================================================
+            // XỬ LÝ TIẾN ĐỘ TỔNG QUAN
+            // =========================================================================
             const progressPanel = document.getElementById('studentProgressPanel');
             const classAnalyticsPanel = document.getElementById('classAnalyticsPanel');
             
             if (selStudent !== 'all' && selInd !== 'all') {
-                // TIẾN ĐỘ CÁ NHÂN ACCORDION
                 classAnalyticsPanel.classList.add('hidden');
                 
-                let tree = getRequiredExercisesTree(selInd, selSession);
+                let tree = getRequiredExercisesTree(selInd, 'all'); 
                 let totalReq = 0; let doneCount = 0;
                 const completedTitles = allData.filter(e => (e.hoVaTen||'Ẩn Danh') === currentStudentName).map(e => cleanStr(e.tenBaiHoc));
 
@@ -605,7 +590,7 @@
                             else {
                                 let status = checkExerciseStatus(currentStudentKey, ss.sessionName);
                                 if (status === "OVERDUE") grMissingHtml += `<li class="text-xs text-rose-600 font-medium py-1.5 flex items-start gap-1.5"><i class="fas fa-times-circle mt-0.5 text-rose-400"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-rose-200">Trễ hạn</span></li>`;
-                                else grMissingHtml += `<li class="text-xs text-slate-500 font-medium py-1.5 flex items-start gap-1.5"><i class="fas fa-clock mt-0.5 text-slate-300"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold whitespace-nowrap">Chưa tới hạn</span></li>`;
+                                else grMissingHtml += `<li class="text-xs text-slate-500 font-medium py-1.5 flex items-start gap-1.5"><i class="fas fa-clock mt-0.5 text-slate-300"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-rose-200">Chưa tới hạn</span></li>`;
                             }
                         });
                         if(grMissingHtml !== '') ssMissingHtml += `<div class="mt-2.5"><p class="text-[10px] font-black text-slate-500 uppercase tracking-wider bg-slate-50 px-2.5 py-1.5 rounded-lg mb-1.5">${gr.groupName} <span class="ml-1 text-slate-400">(${grDone}/${grTotal})</span></p><ul class="pl-1">${grMissingHtml}</ul></div>`;
@@ -630,7 +615,8 @@
                 });
 
                 const percent = totalReq === 0 ? 0 : Math.round((doneCount / totalReq) * 100);
-                document.getElementById('progressStudentInfo').innerText = `Học viên: ${currentStudentName} | Lớp: ${selDept} | ${selSession === 'all' ? 'Tất cả các buổi' : selSession}`;
+                const studentDept = currentStudentKey ? currentStudentKey.split('|')[1] : "N/A";
+                document.getElementById('progressStudentInfo').innerText = `Học viên: ${currentStudentName} | Lớp: ${studentDept} | Toàn bộ khóa học`;
                 document.getElementById('progressText').innerText = `Đã làm: ${doneCount}/${totalReq} bài`;
                 document.getElementById('progressPercent').innerText = `${percent}%`;
                 document.getElementById('progressBarFill').style.width = `${percent}%`;
@@ -643,15 +629,14 @@
 
             } 
             else if (selStudent === 'all' && selInd !== 'all') {
-                // BẢNG SO SÁNH CLASS
                 progressPanel.classList.add('hidden');
                 classAnalyticsPanel.classList.remove('hidden');
                 
-                let tree = getRequiredExercisesTree(selInd, selSession);
+                let tree = getRequiredExercisesTree(selInd, 'all'); 
                 let totalReq = 0; tree.forEach(ss => ss.groups.forEach(gr => totalReq += gr.exercises.length));
 
                 let studentStats = [];
-                let currentStudents = [...new Set(allData.filter(e => e.khoa === selInd && (selDept === 'all' || e.phongBan === selDept)).map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))];
+                let currentStudents = [...new Set(allData.filter(e => e.khoa === selInd).map(e => `${e.hoVaTen || 'Ẩn Danh'}|${e.phongBan || 'N/A'}`))];
                 
                 currentStudents.forEach(stKey => {
                     const p = stKey.split('|');
@@ -694,7 +679,7 @@
                 else {
                     shameStats.forEach(st => {
                         let stKeySafe = st.key.replace(/'/g, "\\'");
-                        shameHtml += `<li onclick="openStudentModal('${stKeySafe}', '${selInd}', '${selSession}')" class="flex items-center justify-between text-xs bg-white p-3 rounded-xl border-l-4 border-rose-400 shadow-sm cursor-pointer hover:bg-rose-50 transition-colors group">
+                        shameHtml += `<li onclick="openStudentModal('${stKeySafe}', '${selInd}', 'all')" class="flex items-center justify-between text-xs bg-white p-3 rounded-xl border-l-4 border-rose-400 shadow-sm cursor-pointer hover:bg-rose-50 transition-colors group">
                             <span class="font-bold text-slate-700 truncate mr-2 group-hover:text-rose-600 transition">${st.name}</span>
                             <span class="font-black text-rose-600 bg-rose-100 px-2.5 py-1 rounded-lg shrink-0 border border-rose-200">Trễ ${st.missing} bài</span>
                         </li>`;
@@ -733,7 +718,9 @@
                 if (requirements.length > 0) requirementsHtml = `<div class="mb-6"><p class="mb-2.5 font-bold text-[11px] text-slate-400 uppercase tracking-widest">Yêu cầu:</p><ul class="space-y-2 text-xs text-slate-700 pl-4 border-l-4 border-orange-500 bg-orange-50 p-4 rounded-r-2xl shadow-sm leading-relaxed font-medium">${requirements.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
 
                 let theoryHtml = '';
+                let hasTheory = false;
                 if (questions.length > 0) {
+                    hasTheory = true;
                     if (item.ans1 || item.ans2 || item.ans3 || item.ans4 || item.ans5) {
                         theoryHtml = `<div class="bg-blue-50/50 border border-blue-100 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-blue-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-user-edit mr-1.5"></i>Nội dung tự luận</span><div class="space-y-3">`;
                         for(let i=1; i<=5; i++) {
@@ -744,18 +731,43 @@
                         }
                         theoryHtml += `</div></div>`;
                     } else theoryHtml = `<div class="bg-rose-50/50 border border-rose-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-rose-500"><i class="fas fa-edit text-3xl mb-3 text-rose-300"></i><span class="text-sm font-semibold">Học viên bỏ trống tự luận</span></div>`;
-                } else theoryHtml = `<div class="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-6 h-full flex flex-col items-center justify-center text-center text-slate-400"><i class="fas fa-check-circle text-3xl mb-3 text-emerald-400"></i><span class="text-sm font-semibold">Bài tập này chỉ yêu cầu nộp Ảnh</span></div>`;
+                }
 
                 let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
                 let imgHtml = '';
                 if (imgUrls.length > 0) {
-                    if (imgUrls.length === 1) imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in shadow-sm" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, 0)"><img src="${getDirectImg(imgUrls[0])}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"></div></div>`;
-                    else {
-                        activeSlides[safeKey] = 0; 
-                        let slidesImages = imgUrls.map((url, i) => `<img id="slide-${safeKey}-${i}" src="${getDirectImg(url)}" class="absolute inset-0 w-full h-full object-contain bg-slate-100 cursor-zoom-in transition-opacity duration-300 ${i === 0 ? '' : 'hidden'}" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, activeSlides['${safeKey}'] || 0)">`).join('');
-                        imgHtml = `<div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh (${imgUrls.length})</span><div class="relative w-full aspect-video bg-slate-100 rounded-xl overflow-hidden border border-slate-200 shadow-sm">${slidesImages}<button type="button" onclick="changeSlide('${safeKey}', -1, ${imgUrls.length})" class="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-left text-xs"></i></button><button type="button" onclick="changeSlide('${safeKey}', 1, ${imgUrls.length})" class="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/40 hover:bg-black/70 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-right text-xs"></i></button><span id="counter-${safeKey}" class="absolute bottom-2 right-2 bg-black/60 text-white text-[10px] px-2.5 py-0.5 rounded font-bold backdrop-blur-sm">1 / ${imgUrls.length}</span></div></div>`;
-                    }
-                } else imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm"><span class="text-rose-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="bg-white border border-rose-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm"><div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl mb-3"><i class="fas fa-exclamation-triangle"></i></div><span class="text-sm font-bold text-rose-700 mb-1">CHƯA NỘP ẢNH MINH CHỨNG</span></div></div>`;
+                    // Xây dựng danh sách ảnh nối tiếp nhau theo chiều dọc
+                    let imagesListHtml = imgUrls.map((url, i) => {
+                        return `
+                        <div class="relative w-full bg-slate-100 rounded-xl overflow-hidden border border-slate-200 cursor-zoom-in shadow-sm" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})">
+                            <img src="${getDirectImg(url)}" class="w-full h-auto object-contain hover:scale-105 transition-transform duration-300" alt="Minh chứng">
+                        </div>`;
+                    }).join('');
+
+                    imgHtml = `
+                    <div class="bg-indigo-50/30 border border-indigo-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm">
+                        <span class="text-indigo-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh (${imgUrls.length})</span>
+                        <div class="flex flex-col gap-4">
+                            ${imagesListHtml}
+                        </div>
+                    </div>`;
+                } else {
+                    imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm">
+                        <span class="text-rose-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span>
+                        <div class="bg-white border border-rose-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm">
+                            <div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl mb-3"><i class="fas fa-exclamation-triangle"></i></div>
+                            <span class="text-sm font-bold text-rose-700 mb-1">CHƯA NỘP ẢNH MINH CHỨNG</span>
+                        </div>
+                    </div>`;
+                }
+
+                // Tối ưu hóa layout: Nếu không có phần lý thuyết (Chỉ yêu cầu nộp ảnh), ẩn thông báo rác và đẩy rộng ảnh 100%
+                let exerciseContentHtml = '';
+                if (!hasTheory) {
+                    exerciseContentHtml = `<div class="mb-5 w-full">${imgHtml}</div>`;
+                } else {
+                    exerciseContentHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5 items-stretch"><div class="h-full">${theoryHtml}</div><div class="h-full">${imgHtml}</div></div>`;
+                }
 
                 let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); 
                 let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); 
@@ -777,7 +789,7 @@
                         <div class="flex items-center gap-2 shrink-0">${statusBadge}<span class="bg-purple-50 text-purple-700 border border-purple-100 text-[10px] px-3 py-1.5 rounded-xl font-bold uppercase shadow-sm">${item.buoi || ''}</span></div>
                     </div>
                     ${requirementsHtml}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5 items-stretch"><div class="h-full">${theoryHtml}</div><div class="h-full">${imgHtml}</div></div>
+                    ${exerciseContentHtml}
                     <div class="pt-5 border-t border-slate-100">
                         <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2.5"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Ghi Nhận xét của giảng viên</label>
                         <div class="flex flex-col sm:flex-row gap-3">
@@ -813,7 +825,7 @@
                             grHtml += `<li class="text-xs text-emerald-600 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-check-circle mt-0.5 text-emerald-500"></i> <span class="flex-1 line-through opacity-70">${ex}</span><span class="text-[9px] bg-emerald-100 text-emerald-700 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-emerald-200 shadow-sm">Đã làm</span></li>`;
                         } else {
                             if (isSsOverdue) grHtml += `<li class="text-xs text-rose-600 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-times-circle mt-0.5 text-rose-500 animate-pulse"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-rose-100 text-rose-600 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-rose-200 shadow-sm">Trễ hạn</span></li>`;
-                            else grHtml += `<li class="text-xs text-slate-500 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-clock mt-0.5 text-slate-300"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-slate-200 shadow-sm">Chưa tới hạn</span></li>`;
+                            else grHtml += `<li class="text-xs text-slate-500 font-medium py-1 flex items-start gap-1.5"><i class="fas fa-clock mt-0.5 text-slate-300"></i> <span class="flex-1">${ex}</span><span class="text-[9px] bg-slate-100 text-slate-500 px-1.5 py-0.5 rounded font-bold whitespace-nowrap border border-rose-200 shadow-sm">Chưa tới hạn</span></li>`;
                         }
                     });
                     grHtml += `</ul></div>`;
