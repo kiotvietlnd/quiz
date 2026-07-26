@@ -23,7 +23,8 @@
 
     <div class="tech-bg"><div class="glow-blob-1"></div><div class="glow-blob-2"></div></div>
 
-    <aside id="sidebar" class="w-80 bg-[#1e3a8a] border-r border-white/10 flex flex-col z-30 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex">
+    <!-- SIDEBAR ĐỒNG BỘ MÀU NAVY #1b365d -->
+    <aside id="sidebar" class="w-80 bg-[#1b365d] border-r border-white/10 flex flex-col z-30 transition-all duration-300 shrink-0 text-sm shadow-[4px_0_24px_rgba(0,0,0,0.2)] relative overflow-hidden hidden md:flex">
         <div class="h-16 flex items-center px-5 border-b border-white/10 shrink-0 justify-between relative z-10 md:hidden">
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-7">
             <button onclick="toggleSidebar()" class="text-white/50 hover:text-red-400 p-1"><i class="fas fa-times"></i></button>
@@ -46,7 +47,7 @@
                 </div>
             </div>
 
-            <div class="mt-2 border border-amber-500/40 bg-[#1e3a8a]/50 p-4 rounded-xl shadow-inner relative overflow-hidden">
+            <div class="mt-2 border border-amber-500/40 bg-[#1b365d]/50 p-4 rounded-xl shadow-inner relative overflow-hidden">
                 <h3 class="text-amber-400 font-black text-[11px] uppercase tracking-wider mb-2 flex items-center gap-2"><i class="fas fa-exclamation-circle"></i> LƯU Ý QUAN TRỌNG</h3>
                 <p class="text-xs leading-relaxed text-amber-100/90 font-semibold relative z-10">Hoàn thành đầy đủ bài tập thực hành <span class="text-amber-400">ngay sau mỗi buổi học</span> để tránh ảnh hưởng đến kết quả thi đua.</p>
             </div>
@@ -82,11 +83,10 @@
 
                 <div id="industrySelectionView" class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
                     
-                    <!-- BOX RETAIL -->
+                    <!-- BOX RETAIL (Cập nhật ảnh Thời trang) -->
                     <div onclick="selectIndustry('Retail')" class="bg-white rounded-[2rem] cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border-2 border-slate-100 hover:border-blue-300 group overflow-hidden flex flex-col shadow-lg">
                         <div class="h-48 w-full relative overflow-hidden bg-slate-100">
-                            <!-- BẠN DÁN LINK ẢNH RETAIL VÀO THUỘC TÍNH src DƯỚI ĐÂY NHÉ -->
-                            <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/05101018/ban-hang-nhanh-chong-hieu-qua-995x662-1.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Retail">
+                            <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-thoi-trang.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Retail">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                             <div class="absolute bottom-4 left-6 text-white flex items-center gap-2.5">
                                 <div class="w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center shadow-lg"><i class="fa-solid fa-tags text-xs"></i></div>
@@ -95,7 +95,6 @@
                         </div>
                         <div class="p-6 md:p-8 flex-1 flex flex-col relative">
                             <h3 class="text-2xl font-black text-slate-800 mb-3 group-hover:text-blue-600 transition-colors">Lộ trình RETAIL</h3>
-                            <!-- BẠN GHI LẠI MÔ TẢ CỦA BẠN VÀO ĐÂY NHÉ -->
                             <p class="text-slate-500 text-sm flex-1 leading-relaxed">
                                 Khóa học thực chiến dành riêng cho chuyên viên tư vấn ngành hàng Bán Lẻ. Trang bị kỹ năng quản lý tồn kho, mã vạch, và thiết lập bảng giá tự động.
                             </p>
@@ -106,20 +105,18 @@
                         </div>
                     </div>
 
-                    <!-- BOX FNB -->
+                    <!-- BOX FNB (Cập nhật ảnh Cafe Trà sữa) -->
                     <div onclick="selectIndustry('FNB')" class="bg-white rounded-[2rem] cursor-pointer hover:-translate-y-2 hover:shadow-2xl transition-all duration-300 border-2 border-slate-100 hover:border-orange-300 group overflow-hidden flex flex-col shadow-lg">
                         <div class="h-48 w-full relative overflow-hidden bg-slate-100">
-                            <!-- BẠN DÁN LINK ẢNH FNB VÀO THUỘC TÍNH src DƯỚI ĐÂY NHÉ -->
-                            <img src="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/05101235/quan-ly-ban-phong-chi-tiet-995x662-1.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="FNB">
+                            <img src="https://www.kiotviet.vn/images/v2/giai-phap/hero-cafe-tra-sua.webp" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="FNB">
                             <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
                             <div class="absolute bottom-4 left-6 text-white flex items-center gap-2.5">
-                                <div class="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center shadow-lg"><i class="fa-solid fa-bowl-food text-xs"></i></div>
+                                <div class="w-8 h-8 rounded-full bg-orange-50 flex items-center justify-center shadow-lg"><i class="fa-solid fa-bowl-food text-xs"></i></div>
                                 <span class="font-black tracking-widest uppercase text-sm drop-shadow-md">Ngành F&B</span>
                             </div>
                         </div>
                         <div class="p-6 md:p-8 flex-1 flex flex-col relative">
                             <h3 class="text-2xl font-black text-slate-800 mb-3 group-hover:text-orange-600 transition-colors">Lộ trình FNB</h3>
-                            <!-- BẠN GHI LẠI MÔ TẢ CỦA BẠN VÀO ĐÂY NHÉ -->
                             <p class="text-slate-500 text-sm flex-1 leading-relaxed">
                                 Đào tạo chuyên sâu nghiệp vụ F&B (Nhà hàng, Quán Cafe). Nắm vững kỹ năng thiết lập phòng bàn, định lượng nguyên vật liệu và quản lý chế biến.
                             </p>
@@ -151,13 +148,11 @@
                     <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-2">Họ và tên học viên *</label>
                     <input type="text" id="inpName" class="w-full bg-slate-50 border-2 border-slate-200 rounded-xl px-4 py-3 text-sm font-bold text-slate-800 focus:outline-none focus:border-blue-400 transition-colors" placeholder="Nhập họ và tên của bạn...">
                 </div>
-                <!-- Đã ẩn ô Phòng ban đi theo yêu cầu -->
                 <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-lg transition-all hover:-translate-y-0.5 mt-2 flex items-center justify-center gap-2"><i class="fas fa-sign-in-alt"></i> Vào Hệ Thống</button>
             </div>
         </div>
     </div>
 
-    <!-- BẮT BUỘC KHÔNG ĐƯỢC CÓ THẺ <script src="codelab-data.js"> Ở ĐÂY NỮA -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
@@ -169,32 +164,30 @@
             if(!localStorage.getItem('kv_trainer_profile')) {
                 openAuthModal();
             } else {
-                fetchMasterData(); // ÉP BUỘC GỌI API NGAY LẬP TỨC
+                fetchMasterData(); 
             }
         });
 
         // ==========================================
-        // GỌI API LẤY DỮ LIỆU TỪ GOOGLE SHEET CHUẨN XÁC 100%
+        // GỌI API LẤY DỮ LIỆU TỪ GOOGLE SHEET
         // ==========================================
         function fetchMasterData() {
             const lastInd = localStorage.getItem('kv_current_industry');
             const container = document.getElementById('courseListRender');
             
-            // Hiện loading spinner ngay lập tức
             if (lastInd && container) {
                 document.getElementById('industrySelectionView').classList.add('hidden');
                 document.getElementById('courseContainerView').classList.remove('hidden');
                 document.getElementById('systemSubtitle').innerText = `Lộ trình đào tạo Ngành hàng ${lastInd.toUpperCase()}`;
-                container.innerHTML = `<div class="text-center py-20 text-slate-500"><i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-600"></i><p class="font-bold">Đang đồng bộ giáo trình từ hệ thống KiotViet...</p></div>`;
+                container.innerHTML = `<div class="text-center py-20 text-slate-500"><i class="fas fa-spinner fa-spin text-4xl mb-4 text-blue-600"></i><p class="font-bold">Đã hoàn thành đồng bộ giáo trình từ hệ thống KiotViet...</p></div>`;
             }
 
-            // Gọi API
             fetch(`${API_URL}?action=getExercises`)
             .then(r => r.json())
             .then(res => {
                 if (res.status === 'success') {
                     CODELAB_DATA = res.data;
-                    if(lastInd) selectIndustry(lastInd); // Render UI ngay khi có data
+                    if(lastInd) selectIndustry(lastInd); 
                 } else {
                     if(container) container.innerHTML = `<div class="bg-red-50 border border-red-200 p-8 text-center rounded-3xl text-red-600"><i class="fas fa-exclamation-triangle text-4xl mb-4"></i><p class="font-bold">Lỗi từ máy chủ: ${res.message}</p></div>`;
                 }
@@ -269,7 +262,7 @@
         function renderCourseCards(industry) {
             const container = document.getElementById('courseListRender');
             
-            if (!CODELAB_DATA) return; // Bảo vệ an toàn
+            if (!CODELAB_DATA) return; 
 
             const roadmapData = CODELAB_DATA[industry];
             if (!roadmapData || roadmapData.length === 0) {
@@ -307,7 +300,6 @@
         function generateCard(sessionData, style, industry) {
             if(!sessionData) return '';
             
-            // Xử lý cắt chuỗi thông minh (Hỗ trợ cả dấu : và dấu .)
             let safeTitle = sessionData.title;
             let sessionNum = sessionData.id;
             
