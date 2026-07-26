@@ -124,14 +124,13 @@
     </div>
 
     <script>
-        // API Sổ điểm học viên (Để nộp bài)
+        // API Sổ điểm học viên (Để nộp bài & Đồng bộ chéo)
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         
         // API Admin (Dùng riêng để đồng bộ bài cũ từ Sheets khi học viên đổi thiết bị/xóa cache)
         const ADMIN_API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
 
         const urlParams = new URLSearchParams(window.location.search);
-        
         const CURRENT_ROADMAP = urlParams.get('roadmap') || localStorage.getItem('kv_current_industry') || "Retail"; 
         const SESSION_ID = urlParams.get('session') || localStorage.getItem('kv_current_session_id') || "session_1a"; 
         
@@ -189,13 +188,11 @@
                 if (res.status === 'success') {
                     sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); 
                     CODELAB_DATA = res.data;
-                    // Bẫy microtask để tránh Promise bắt lỗi runtime sai thành lỗi mạng [1]
-                    setTimeout(parseAndRenderData, 0); 
+                    parseAndRenderData();
                 } else {
                     showError(`Lỗi từ máy chủ: ${res.message}`);
                 }
             }).catch(err => {
-                console.error("Lỗi kết nối thực sự: ", err);
                 showError("Lỗi kết nối mạng! Vui lòng kiểm tra Internet.");
             });
         }
@@ -364,9 +361,7 @@
                     studentRecords.forEach(rec => {
                         const exIdx = currentExercises.findIndex(ex => cleanStr(ex.title) === cleanStr(rec.tenBaiHoc));
                         if (exIdx !== -1) {
-                            if (!stepDataStore[exIdx]) {
-                                stepDataStore[exIdx] = { textAnswers: [], uploadedUrls: [], isSubmitted: false, feedback: "" };
-                            }
+                            if (!stepDataStore[exIdx]) stepDataStore[exIdx] = {};
                             
                             stepDataStore[exIdx].isSubmitted = true;
                             
@@ -377,8 +372,10 @@
                                 }
                             }
 
-                            // KHỞI TẠO MẢNG TRỐNG ĐỂ TRÁNH LỖI UNDEFINED GÂY SẬP GIAO DIỆN [1]
-                            stepDataStore[exIdx].uploadedUrls = rec.linkDrive ? rec.linkDrive.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")) : [];
+                            if (rec.linkDrive) {
+                                const urls = rec.linkDrive.split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http"));
+                                stepDataStore[exIdx].uploadedUrls = urls;
+                            }
 
                             let textAnswers = [];
                             if (rec.ans1) textAnswers.push(rec.ans1);
@@ -386,7 +383,9 @@
                             if (rec.ans3) textAnswers.push(rec.ans3);
                             if (rec.ans4) textAnswers.push(rec.ans4);
                             if (rec.ans5) textAnswers.push(rec.ans5);
-                            stepDataStore[exIdx].textAnswers = textAnswers;
+                            if (textAnswers.length > 0) {
+                                stepDataStore[exIdx].textAnswers = textAnswers;
+                            }
 
                             hasChanges = true;
                         }
@@ -657,7 +656,7 @@
 
                 // DỰNG KHUNG NỘP ẢNH TỶ LỆ 16:9 HOẶC PREVIEW TỶ LỆ CHUẨN XÁC [1]
                 let uploadAreaHtml = "";
-                let isSubmittedWithImages = myData.isSubmitted && myData.uploadedUrls && Array.isArray(myData.uploadedUrls) && myData.uploadedUrls.length > 0;
+                let isSubmittedWithImages = myData.isSubmitted && myData.uploadedUrls && myData.uploadedUrls.length > 0;
 
                 if (isSubmittedWithImages) {
                     // ĐÃ NỘP ẢNH THÀNH CÔNG: Hiển thị trực tiếp ảnh preview tỷ lệ gốc chuẩn [1]
@@ -722,7 +721,7 @@
                         <h2 class="text-lg md:text-xl font-black text-slate-800 leading-snug">${ex.title}</h2>
                         ${myData.feedback ? `
                         <div class="relative">
-                            <button onclick="toggleFeedback(${oIdx})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-4 py-2 rounded-xl text-xs font-bold shadow-sm transition">
+                            <button onclick="toggleFeedback(${oIdx})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition">
                                 <i class="far fa-comment-dots text-sm"></i>
                                 <span>Nhận xét</span>
                                 ${myData.isUnread ? `<span id="pingDot_${oIdx}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : ''}
@@ -965,6 +964,7 @@
                 // CHỐNG CẢNH BÁO LỖI MẠNG GIẢ DO CƠ CHẾ IFRAME CỦA HTMLVIEWER CHẶN REDIRECT GOOGLE [1]
                 if (window.self !== window.top) {
                     alert("⚠️ LƯU Ý: Bạn đang chạy trên khung ảo (iframe) của htmlviewer. Google Sheets đã nhận diện và nộp bài thành công, nhưng trình duyệt của iframe đã chặn phản hồi chuyển hướng từ Google. Bạn vui lòng tải lại trang hoặc test trực tiếp trên tab độc lập [1]!");
+                    // Đồng bộ giả lập cục bộ để không gián đoạn thao tác
                     currentData.isSubmitted = true;
                     stepDataStore[oIdx] = currentData;
                     localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore));
