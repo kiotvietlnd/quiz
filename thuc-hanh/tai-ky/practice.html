@@ -179,21 +179,12 @@
             fetchMasterData();
         });
 
+        // ĐÃ BỎ BỘ NHỚ ĐỆM (CACHE) SESSIONSTORAGE: Luôn luôn lấy dữ liệu mới nhất từ Google Sheet
         function fetchMasterData() {
-            const cachedMasterData = sessionStorage.getItem('kv_master_exercises');
-            if (cachedMasterData) {
-                try {
-                    CODELAB_DATA = JSON.parse(cachedMasterData);
-                    parseAndRenderData();
-                    return;
-                } catch(e) {}
-            }
-
             fetch(`${API_URL}?action=getExercises`)
             .then(r => r.json())
             .then(res => {
                 if (res.status === 'success') {
-                    sessionStorage.setItem('kv_master_exercises', JSON.stringify(res.data)); 
                     CODELAB_DATA = res.data;
                     parseAndRenderData();
                 } else {
@@ -210,7 +201,7 @@
                 <div class="p-10 text-center bg-rose-50 border border-rose-200 rounded-3xl shadow-sm">
                     <i class="fas fa-exclamation-triangle text-5xl text-rose-500 mb-4"></i>
                     <h2 class='text-rose-700 font-black text-xl'>${msg}</h2>
-                    <button onclick="sessionStorage.removeItem('kv_master_exercises'); location.reload();" class="mt-6 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i> Xóa bộ nhớ đệm và Tải lại</button>
+                    <button onclick="location.reload();" class="mt-6 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i> Tải lại trang</button>
                 </div>`;
         }
 
@@ -941,9 +932,7 @@
             });
         }
 
-        // ==========================================
         // CẬP NHẬT THANH ĐIỀU HƯỚNG DƯỚI CÙNG
-        // ==========================================
         function updateBottomNav() {
             const btnPrev = document.getElementById('btnPrev');
             const rightNavGroup = document.getElementById('rightNavGroup');
@@ -1015,9 +1004,7 @@
             document.getElementById('completionModal').classList.add('hidden');
         }
 
-        // =========================================================================
         // HIỂN THỊ TOÀN BỘ BÀI TẬP VÀ XUẤT FILE BÁO CÁO PDF
-        // =========================================================================
         function showReviewHistory() {
             const completionModal = document.getElementById('completionModal');
             if (completionModal) completionModal.classList.add('hidden');
@@ -1087,7 +1074,6 @@
                     ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>`
                     : `<span class="bg-rose-100 text-rose-800 border border-rose-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-times-circle text-rose-600"></i> Chưa hoàn thành</span>`;
 
-                // HIỂN THỊ YÊU CẦU ĐỀ BÀI (REQUIREMENTS)
                 let reqHtml = '';
                 if(ex.requirements && ex.requirements.length > 0) {
                     reqHtml = `
@@ -1099,7 +1085,6 @@
                     </div>`;
                 }
 
-                // HIỂN THỊ TRẢ LỜI CÂU HỎI TỰ LUẬN
                 let theoryHtml = '';
                 if(ex.theory && ex.theory.length > 0) {
                     theoryHtml = `<div class="bg-slate-50 p-4 md:p-5 rounded-2xl mb-4 border border-slate-200 space-y-3">
@@ -1120,7 +1105,6 @@
                     theoryHtml += `</div>`;
                 }
 
-                // HIỂN THỊ ẢNH MINH CHỨNG
                 let imgHtml = '';
                 if(data.uploadedUrls && data.uploadedUrls.length > 0) {
                     imgHtml = `<div class="mb-4 bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200">
@@ -1141,7 +1125,6 @@
                     </div>`;
                 }
 
-                // HIỂN THỊ NHẬN XẾT GIẢNG VIÊN
                 let fbHtml = data.feedback ? `
                     <div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3">
                         <p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p>
