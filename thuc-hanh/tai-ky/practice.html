@@ -107,27 +107,53 @@
         </main>
     </div>
 
-    <!-- MODAL THỜI KHÓA BIỂU TUẦN 1 -->
-    <div id="tkbModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[200] hidden flex-col no-print transition-all">
-        <header class="bg-[#166def] text-white h-14 flex items-center justify-between px-6 shrink-0 shadow-md">
-            <div class="flex items-center gap-3">
-                <i class="fas fa-calendar-alt text-amber-300 text-lg"></i>
-                <h2 class="text-sm font-black tracking-wide uppercase">Thời Khóa Biểu Tuần 1</h2>
+    <!-- MODAL THỜI KHÓA BIỂU TUẦN 1 (ĐÃ SỬA LỖI TRẮNG TRANG) -->
+<div id="tkbModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[200] hidden flex-col no-print transition-all">
+    <header class="bg-[#166def] text-white h-14 flex items-center justify-between px-6 shrink-0 shadow-md">
+        <div class="flex items-center gap-3">
+            <i class="fas fa-calendar-alt text-amber-300 text-lg"></i>
+            <h2 class="text-sm font-black tracking-wide uppercase">Thời Khóa Biểu Tuần 1</h2>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-white/20">
+                <i class="fas fa-external-link-alt text-xs"></i>
+                <span class="hidden sm:inline">Mở trang riêng</span>
+            </a>
+            <button onclick="closeTkbModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                <i class="fas fa-times text-base"></i>
+            </button>
+        </div>
+    </header>
+    <div class="flex-1 w-full h-full bg-slate-100 relative overflow-hidden">
+        <!-- Vùng Đang tải (Spinner) -->
+        <div id="tkbLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
+            <div class="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
+            <p class="text-xs font-bold text-slate-600">Đang tải dữ liệu Thời khóa biểu...</p>
+        </div>
+        
+        <!-- Khung nhúng Iframe -->
+        <iframe id="tkbIframe" 
+                src="" 
+                onload="hideTkbLoader()"
+                onerror="handleTkbError()"
+                referrerpolicy="no-referrer"
+                allow="fullscreen"
+                class="w-full h-full border-0 relative z-20">
+        </iframe>
+
+        <!-- Khung dự phòng (khi bị trình duyệt chặn hoàn toàn) -->
+        <div id="tkbFallback" class="hidden absolute inset-0 bg-white z-30 flex flex-col items-center justify-center p-6 text-center">
+            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mb-4">
+                <i class="fas fa-shield-alt"></i>
             </div>
-            <div class="flex items-center gap-3">
-                <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-white/20">
-                    <i class="fas fa-external-link-alt text-xs"></i>
-                    <span class="hidden sm:inline">Mở trang riêng</span>
-                </a>
-                <button onclick="closeTkbModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
-                    <i class="fas fa-times text-base"></i>
-                </button>
-            </div>
-        </header>
-        <div class="flex-1 w-full h-full bg-white">
-            <iframe id="tkbIframe" src="" class="w-full h-full border-0"></iframe>
+            <h3 class="text-base font-bold text-slate-800 mb-2">Trình duyệt hạn chế nhúng trực tiếp trang này</h3>
+            <p class="text-xs text-slate-500 max-w-md mb-6 leading-relaxed">Do chính sách bảo mật chống nhúng khung của trình duyệt, vui lòng nhấn nút bên dưới để mở Thời khóa biểu trên cửa sổ mới.</p>
+            <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                <i class="fas fa-external-link-alt"></i> Mở Thời Khóa Biểu Trong Tab Mới
+            </a>
         </div>
     </div>
+</div>
 
     <!-- MODAL HOÀN THÀNH -->
     <div id="completionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4 no-print">
@@ -227,21 +253,70 @@
             fetchMasterData();
         });
 
-        function openTkbModal() {
-            const modal = document.getElementById('tkbModal');
-            const iframe = document.getElementById('tkbIframe');
-            if (iframe && !iframe.src) {
-                iframe.src = "https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1";
-            }
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+        // XỬ LÝ NỘI DUNG VÀ SỬA LỖI TRẮNG TRANG CHO MODAL THỜI KHÓA BIỂU
+function openTkbModal() {
+    const modal = document.getElementById('tkbModal');
+    const iframe = document.getElementById('tkbIframe');
+    const loader = document.getElementById('tkbLoader');
+    const fallback = document.getElementById('tkbFallback');
 
-        function closeTkbModal() {
-            const modal = document.getElementById('tkbModal');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
+    if (loader) loader.classList.remove('hidden');
+    if (fallback) fallback.classList.add('hidden');
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+
+    const targetUrl = "https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1";
+    
+    // Nạp đường dẫn cho Iframe
+    if (iframe && iframe.src !== targetUrl) {
+        iframe.src = targetUrl;
+    }
+
+    // Tự động kiểm tra: Nếu sau 2.5 giây Iframe bị chặn trắng trang, tự động Fetch mã HTML bơm trực tiếp vào khung
+    setTimeout(() => {
+        if (loader && !loader.classList.contains('hidden')) {
+            fetch(targetUrl)
+            .then(r => {
+                if(!r.ok) throw new Error("Blocked");
+                return r.text();
+            })
+            .then(html => {
+                if(html && html.trim().length > 0) {
+                    const doc = iframe.contentDocument || iframe.contentWindow.document;
+                    doc.open();
+                    doc.write(html);
+                    doc.close();
+                    hideTkbLoader();
+                } else {
+                    handleTkbError();
+                }
+            })
+            .catch(err => {
+                console.warn("Bị chặn iframe, chuyển sang chế độ dự phòng.");
+                handleTkbError();
+            });
         }
+    }, 2500);
+}
+
+function hideTkbLoader() {
+    const loader = document.getElementById('tkbLoader');
+    if (loader) loader.classList.add('hidden');
+}
+
+function handleTkbError() {
+    const loader = document.getElementById('tkbLoader');
+    const fallback = document.getElementById('tkbFallback');
+    if (loader) loader.classList.add('hidden');
+    if (fallback) fallback.classList.remove('hidden');
+}
+
+function closeTkbModal() {
+    const modal = document.getElementById('tkbModal');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+}
 
         function fetchMasterData() {
             fetch(`${API_URL}?action=getExercises`)
