@@ -66,7 +66,7 @@
                 <i class="fas fa-filter"></i> BỘ LỌC CHẤM BÀI
             </p>
 
-            <!-- 1. Ngành hàng (BẮT BUỘC CHỌN 1, MẶC ĐỊNH RETAIL) -->
+            <!-- 1. Ngành hàng -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Ngành hàng</label>
                 <div class="flex gap-1.5">
@@ -81,15 +81,15 @@
                 </div>
             </div>
 
-            <!-- 2. Buổi học (BẮT BUỘC CHỌN 1, KHÔNG CÓ TẤT CẢ) -->
+            <!-- 2. Buổi học -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Buổi học</label>
-                <div id="radioSessionContainer" class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5 max-h-44 overflow-y-auto custom-scrollbar">
+                <div id="radioSessionContainer" class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5 max-h-48 overflow-y-auto custom-scrollbar">
                     <!-- Dynamic radio options -->
                 </div>
             </div>
 
-            <!-- 3. Học viên (BẮT BUỘC CHỌN 1, HỌ TÊN HIỂN THỊ ĐẦY ĐỦ KHÔNG SCROLL RIÊNG) -->
+            <!-- 3. Học viên -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Học viên</label>
                 <div id="radioStudentContainer" class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5">
@@ -97,7 +97,7 @@
                 </div>
             </div>
 
-            <!-- 4. Bộ lọc Radio: Bài tập Đã nộp / Chưa nộp (MỚI THÊM) -->
+            <!-- 4. Tình trạng nộp bài -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Tình trạng Nộp bài</label>
                 <div class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5">
@@ -139,7 +139,7 @@
                 </div>
             </div>
 
-            <!-- 6. Trạng thái bài làm (ĐÃ ĐƯA XUỐNG SAU THỜI GIAN NỘP BÀI) -->
+            <!-- 6. Trạng thái chấm điểm -->
             <div>
                 <label class="block text-[10px] font-bold text-amber-300 uppercase tracking-wider mb-2">Trạng thái chấm điểm</label>
                 <div class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5">
@@ -224,10 +224,10 @@
                                 </select>
                             </div>
 
-                            <!-- 3. Buổi học (Mặc định: Buổi đầu tiên) -->
+                            <!-- 3. Buổi học (ĐÃ MỞ RỘNG KÍCH THƯỚC TRÁNH BỊ CẮT CHỮ) -->
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Buổi học</label>
-                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 max-w-[240px]">
+                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-[380px] truncate">
                                     <!-- Populated dynamically -->
                                 </select>
                             </div>
@@ -256,7 +256,7 @@
                     <!-- KHUNG CHÍNH: BẢNG XẾP HẠNG + BIỂU ĐỒ DONUT NỘP BÀI -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                         
-                        <!-- BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP (HIỂN THỊ ĐẦY ĐỦ 100% HỌC VIÊN) -->
+                        <!-- BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP -->
                         <div class="lg:col-span-2 glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md bg-white">
                             <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
                                 <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
@@ -379,6 +379,24 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
         const EXERCISE_API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
 
+        // DANH SÁCH SẮP XẾP ƯU TIÊN BUỔI HỌC THEO YÊU CẦU
+        const SESSION_ORDER = {
+            Retail: [
+                "Buổi 1A. Tổng quan Hàng hóa ngành Bán Lẻ",
+                "Buổi 1B. Giao dịch, Giá bán & Quản lý Kho",
+                "Buổi 2A. Vận hành Bán hàng & Khách hàng",
+                "Buổi 2B. Vận hành Nhân sự, Báo cáo & Mở rộng",
+                "Buổi 3. Thuế, Kế toán và HĐĐT"
+            ],
+            FNB: [
+                "Buổi 1A. Tổng quan Thực đơn & Kho hàng",
+                "Buổi 1B. Món đặc thù ngành F&B",
+                "Buổi 2A. Vận hành Bán hàng & Thanh toán",
+                "Buổi 2B. Thiết lập Phần cứng",
+                "Buổi 3. Thuế, Kế toán và HĐĐT"
+            ]
+        };
+
         let allData = [];
         let CODELAB_DATA = null;
         let currentActiveTab = 'dashboard';
@@ -487,25 +505,18 @@
             if (dataByInd.length === 0) dataByInd = allData;
 
             if (source === 'init' || source === 'industry') {
-                // 1. Buổi học (BẮT BUỘC CHỌN 1, MẶC ĐỊNH BUỔI ĐẦU TIÊN)
-                let sessionSet = new Set();
-                dataByInd.forEach(e => {
-                    if (e.buoi && e.buoi.toString().trim() !== "") {
-                        const khoaStr = e.khoa || selInd;
-                        const buoiStr = e.buoi.toString().trim();
-                        sessionSet.add(`${khoaStr} - ${buoiStr}`);
-                    }
-                });
+                // 1. Buổi học Sidebar (LẤY THEO THỨ TỰ ƯU TIÊN PHÂN LOẠI)
+                let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
+                let formattedList = orderedSessions.map(s => `${selInd} - ${s}`);
 
-                let sessionList = Array.from(sessionSet).sort((a,b) => a.localeCompare(b, 'vi', {numeric: true}));
-                let sessionHtml = sessionList.map((s, idx) => `
+                let sessionHtml = formattedList.map((s, idx) => `
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-200 p-1.5 rounded-lg hover:bg-white/10">
                         <input type="radio" name="filterSession" value="${s}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()" class="accent-blue-500">
                         <span class="truncate">${s}</span>
                     </label>`).join('');
                 document.getElementById('radioSessionContainer').innerHTML = sessionHtml || '<p class="text-xs text-slate-400 p-1.5">Không có buổi học</p>';
 
-                // 2. Học viên (BẮT BUỘC CHỌN 1, CHỈ HỌ TÊN, HIỂN THỊ ĐẦY ĐỦ ĐỘ DÀI)
+                // 2. Học viên Sidebar
                 const students = [...new Set(dataByInd.map(e => (e.hoVaTen || 'Ẩn Danh').trim()))].filter(Boolean).sort();
                 let studentHtml = students.map((sName, idx) => `
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-200 p-1.5 rounded-lg hover:bg-white/10">
@@ -518,28 +529,15 @@
             if (currentActiveTab === 'grading') renderCards();
         }
 
+        // CẬP NHẬT BUỔI HỌC TRÊN DASHBOARD THEO THỨ TỰ ƯU TIÊN SẮP XẾP
         function onDashIndustryChange() {
-            const selInd = document.getElementById('dashFilterIndustry').value;
-            let dataByInd = allData.filter(e => e.khoa === selInd);
-            if (dataByInd.length === 0) dataByInd = allData;
+            const selInd = document.getElementById('dashFilterIndustry').value || 'Retail';
 
-            let sessionSet = new Set();
-            dataByInd.forEach(e => {
-                if (e.buoi && e.buoi.toString().trim() !== "") {
-                    const khoaStr = e.khoa || selInd;
-                    const buoiStr = e.buoi.toString().trim();
-                    sessionSet.add(`${khoaStr} - ${buoiStr}`);
-                }
-            });
+            let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
+            let formattedList = orderedSessions.map(s => `${selInd} - ${s}`);
 
-            let sessionList = Array.from(sessionSet).sort((a,b) => a.localeCompare(b, 'vi', {numeric: true}));
             let selectEl = document.getElementById('dashFilterSession');
-
-            if (sessionList.length === 0) {
-                selectEl.innerHTML = `<option value="all">Tất cả buổi học</option>`;
-            } else {
-                selectEl.innerHTML = sessionList.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
-            }
+            selectEl.innerHTML = formattedList.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
 
             renderDashboardAnalytics();
         }
@@ -614,7 +612,7 @@
             const selInd = document.getElementById('dashFilterIndustry').value;
             const selSession = document.getElementById('dashFilterSession').value;
 
-            // Filter bài nộp theo Bộ Lọc Dashboard
+            // 1. Filter bài nộp theo Bộ Lọc Dashboard
             let filteredSubmissions = allData;
 
             if (selTime !== 'all') {
@@ -639,15 +637,7 @@
 
             if (selInd !== 'all') filteredSubmissions = filteredSubmissions.filter(e => e.khoa === selInd);
 
-            if (selSession && selSession !== 'all') {
-                filteredSubmissions = filteredSubmissions.filter(e => {
-                    const formattedBuoi = `${e.khoa || 'Retail'} - ${e.buoi || ''}`.trim();
-                    const cleanSel = cleanStr(selSession);
-                    return formattedBuoi === selSession || cleanStr(formattedBuoi) === cleanSel || cleanSel.includes(cleanStr(e.buoi));
-                });
-            }
-
-            // Danh sách toàn bộ học viên thuộc ngành chọn
+            // 2. Lấy danh sách toàn bộ học viên thuộc ngành chọn
             let baseDataForStudents = selInd === 'all' ? allData : allData.filter(e => e.khoa === selInd);
             const allStudentsMap = {};
             baseDataForStudents.forEach(e => {
@@ -666,17 +656,34 @@
             let studentRankingData = [];
 
             studentList.forEach(st => {
+                // Lấy cây bài tập chuẩn thuộc RIÊNG Buổi học chọn
                 let tree = getRequiredExercisesTree(st.industry, selSession);
                 let totalReq = 0;
-                tree.forEach(ss => ss.groups.forEach(gr => totalReq += gr.exercises.length));
+                let reqExTitlesForSession = [];
 
-                const completedTitles = allData.filter(e => (e.hoVaTen||'').trim() === st.name).map(e => cleanStr(e.tenBaiHoc));
-                const uniqueDone = [...new Set(completedTitles)];
+                tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(ex => {
+                    totalReq++;
+                    reqExTitlesForSession.push(cleanStr(ex));
+                })));
 
-                const percent = totalReq === 0 ? 0 : Math.round((uniqueDone.length / totalReq) * 100);
+                // SỬA LỖI 104%: CHỈ ĐẾM NHỮNG BÀI NỘP THUỘC RIÊNG BUỔI HỌC ĐANG CHỌN
+                const studentSubmissions = allData.filter(e => (e.hoVaTen||'').trim() === st.name);
+                const doneInSession = studentSubmissions
+                    .map(e => cleanStr(e.tenBaiHoc))
+                    .filter(title => reqExTitlesForSession.includes(title));
+
+                const uniqueDone = [...new Set(doneInSession)];
+
+                const rawPercent = totalReq === 0 ? 0 : Math.round((uniqueDone.length / totalReq) * 100);
+                const percent = Math.min(100, rawPercent); // Giới hạn tối đa 100%
                 totalAvgPercentSum += percent;
 
-                const hasSubmission = filteredSubmissions.some(e => (e.hoVaTen||'').trim() === st.name);
+                // Kiểm tra xem học viên có bài nộp nào khớp bộ lọc buổi & thời gian không
+                const hasSubmission = filteredSubmissions.some(e => {
+                    if ((e.hoVaTen||'').trim() !== st.name) return false;
+                    return reqExTitlesForSession.includes(cleanStr(e.tenBaiHoc));
+                });
+
                 if (hasSubmission) submittedCount++;
 
                 studentRankingData.push({
@@ -697,7 +704,7 @@
             let avgGlobalProgress = studentList.length === 0 ? 0 : Math.round(totalAvgPercentSum / studentList.length);
             document.getElementById('kpiAvgProgress').innerText = `${avgGlobalProgress}%`;
 
-            // BẢNG XẾP HẠNG TIẾN ĐỘ (HIỂN THỊ ĐẦY ĐỦ TẤT CẢ HỌC VIÊN)
+            // HIỂN THỊ ĐẦY ĐỦ BẢNG XẾP HẠNG
             document.getElementById('rankingStudentCountText').innerText = `Tổng cộng: ${studentRankingData.length} học viên`;
             
             let rankingHtml = '';
@@ -781,7 +788,7 @@
             const selInd = getRadioValue('filterIndustry');
             const selSession = getRadioValue('filterSession');
             const selStudent = getRadioValue('filterStudent');
-            const selSubmissionState = getRadioValue('filterSubmissionState'); // 'all', 'submitted', 'unsubmitted'
+            const selSubmissionState = getRadioValue('filterSubmissionState');
             const selStatus = getRadioValue('filterStatus');
             const selTime = getRadioValue('filterTime');
 
@@ -793,14 +800,14 @@
                 return;
             }
 
-            // 1. Lấy danh sách toàn bộ bài tập cần làm trong buổi học này
+            // 1. Danh sách bài tập cần làm trong buổi học này
             let tree = getRequiredExercisesTree(selInd, selSession);
             let requiredExerciseTitles = [];
             tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(ex => {
                 if(!requiredExerciseTitles.includes(ex)) requiredExerciseTitles.push(ex);
             })));
 
-            // 2. Lấy các bài nộp thực tế của Học viên
+            // 2. Bài nộp thực tế của Học viên
             let studentSubmissions = allData.filter(e => cleanStr(e.hoVaTen) === cleanStr(selStudent));
 
             if (selTime !== 'all') {
@@ -823,7 +830,7 @@
                 });
             }
 
-            // 3. Ghép nối danh sách bài tập (Đã nộp + Chưa nộp)
+            // 3. Ghép nối bài tập Đã nộp & Chưa nộp
             let cardItems = [];
 
             requiredExerciseTitles.forEach(exTitle => {
@@ -842,7 +849,7 @@
                 cardItems = cardItems.filter(item => !item.isSubmitted);
             }
 
-            // 5. Lọc theo Trạng thái Chấm điểm (Cần chấm / Đã chấm / Bỏ qua)
+            // 5. Lọc theo Trạng thái Chấm điểm
             if (selStatus !== 'all') {
                 cardItems = cardItems.filter(item => {
                     if (!item.isSubmitted) return false;
@@ -854,14 +861,14 @@
                 });
             }
 
-            // 6. SẮP XẾP DANH SÁCH THEO ALPHABET TÊN BÀI TẬP (A-Z)
+            // 6. SẮP XẾP CÁC BÀI TẬP THEO THEO THỨ TỰ ALPHABET (A-Z)
             cardItems.sort((a, b) => a.title.localeCompare(b.title, 'vi', { numeric: true, sensitivity: 'base' }));
 
             // Cập nhật Tiến độ Cá nhân
             const progressPanel = document.getElementById('studentProgressPanel');
             let totalReq = requiredExerciseTitles.length;
             let doneCount = requiredExerciseTitles.filter(t => studentSubmissions.some(s => cleanStr(s.tenBaiHoc) === cleanStr(t))).length;
-            const percent = totalReq === 0 ? 0 : Math.round((doneCount / totalReq) * 100);
+            const percent = totalReq === 0 ? 0 : Math.min(100, Math.round((doneCount / totalReq) * 100));
 
             document.getElementById('progressStudentInfo').innerText = `Học viên: ${selStudent} | Ngành: ${selInd} | ${selSession}`;
             document.getElementById('progressText').innerText = `Đã làm: ${doneCount}/${totalReq} bài`;
@@ -874,7 +881,7 @@
                 return;
             }
 
-            // Render các Card
+            // Render Cards
             container.innerHTML = cardItems.map((cardObj, idx) => {
                 const exTitle = cardObj.title;
                 const isSubmitted = cardObj.isSubmitted;
@@ -888,7 +895,6 @@
                     requirementsHtml = `<div class="mb-5"><p class="mb-2 font-bold text-[11px] text-slate-400 uppercase tracking-widest">Yêu cầu đề bài:</p><ul class="space-y-1.5 text-xs text-slate-800 pl-4 border-l-4 border-emerald-500 bg-emerald-50/80 p-3.5 rounded-r-2xl font-semibold">${requirements.map(r => `<li>${parseLinks(r)}</li>`).join('')}</ul></div>`;
                 }
 
-                // NẾU BÀI TẬP CHƯA NỘP ➔ VẼ CARD CHƯA NỘP
                 if (!isSubmitted) {
                     return `
                     <div class="glass-panel-ultra p-6 rounded-3xl border border-rose-200 shadow-md relative flex flex-col mb-6 bg-rose-50/20">
@@ -914,7 +920,6 @@
                     </div>`;
                 }
 
-                // NẾU BÀI TẬP ĐÃ NỘP ➔ VẼ CARD ĐẦY ĐỦ VỚI KHUNG NHẬN XẾT
                 const safeKey = `card-${idx}`;
                 const hasFeedback = item.nhanXet && item.nhanXet.toString().trim() !== "";
                 const isSkipped = hasFeedback && item.nhanXet.toString().includes("[BỎ QUA]");
@@ -1046,7 +1051,7 @@
                 });
             });
 
-            const percent = totalReq === 0 ? 0 : Math.round((doneCount / totalReq) * 100);
+            const percent = totalReq === 0 ? 0 : Math.min(100, Math.round((doneCount / totalReq) * 100));
 
             let html = `
             <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-md print:bg-white print:text-slate-800 print:border-2 print:border-slate-300">
