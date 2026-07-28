@@ -32,7 +32,7 @@
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200">
 
-    <!-- HEADER (Text & Icon thuần trắng) -->
+    <!-- HEADER (Đã bỏ icon tên học viên) -->
     <header class="bg-[#166def] border-b border-blue-600 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 no-print text-white shadow-sm">
         <div class="flex items-center gap-4">
             <a href="index.html" class="flex items-center gap-1.5 text-white hover:text-white/80 font-bold text-xs border border-white/20 bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">
@@ -50,7 +50,7 @@
                 <span id="globalNotificationDot" class="hidden absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span></span>
             </button>
             <div class="flex items-center gap-2 text-xs font-bold text-white bg-white/10 border border-white/20 px-3 py-2 rounded-lg">
-                <span id="studentLabel" class="text-white">👤 Chưa định danh</span>
+                <span id="studentLabel" class="text-white">Chưa định danh</span>
             </div>
         </div>
     </header>
@@ -80,14 +80,14 @@
                 <div id="stepList" class="flex flex-col"></div>
             </div>
 
-            <!-- CHÂN SIDEBAR: NÚT BÁO CÁO PDF + NÚT THỜI KHÓA BIỂU TUẦN 1 -->
+            <!-- CHÂN SIDEBAR: NÚT XEM PDF (XANH LÁ) + NÚT TKB (CAM) -->
             <div class="p-4 border-t border-white/10 bg-[#122543]/60 shrink-0 space-y-2">
-                <button onclick="showReviewHistory()" class="w-full bg-emerald-600/30 hover:bg-emerald-600/60 border border-emerald-400/40 text-emerald-200 font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fas fa-file-pdf text-red-400 text-sm"></i>
+                <button onclick="showReviewHistory()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fas fa-file-pdf text-white text-sm"></i>
                     <span>Xem & Tải Báo Cáo PDF</span>
                 </button>
-                <button onclick="openTkbModal()" class="w-full bg-blue-600/30 hover:bg-blue-600/60 border border-blue-400/30 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fas fa-calendar-alt text-amber-300 text-sm"></i>
+                <button onclick="openTkbModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fas fa-calendar-alt text-white text-sm"></i>
                     <span>Thời khóa biểu Tuần 1</span>
                 </button>
             </div>
@@ -97,7 +97,7 @@
         <main class="flex-1 overflow-y-auto custom-scrollbar relative p-2 md:p-4 bg-slate-50 flex flex-col no-print">
             <div id="mainContent" class="w-full max-w-[98%] mx-auto bg-white border-2 border-slate-300 rounded-3xl shadow-sm p-4 md:p-6 mb-24 relative"></div>
             
-            <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG (Bài học trước / Bài học sau) -->
+            <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG -->
             <div class="fixed bottom-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
                 <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2.5 text-sm text-slate-500 font-bold hover:text-blue-600 transition hover:bg-blue-50 rounded-xl disabled:opacity-40 disabled:hover:bg-transparent">
                     <i class="fas fa-chevron-left"></i> Bài học trước
@@ -107,7 +107,7 @@
         </main>
     </div>
 
-    <!-- MODAL THỜI KHÓA BIỂU TUẦN 1 (CÓ NÚT MỞ TRANG RIÊNG) -->
+    <!-- MODAL THỜI KHÓA BIỂU TUẦN 1 -->
     <div id="tkbModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[200] hidden flex-col no-print transition-all">
         <header class="bg-[#166def] text-white h-14 flex items-center justify-between px-6 shrink-0 shadow-md">
             <div class="flex items-center gap-3">
@@ -178,7 +178,6 @@
             return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url;
         }
 
-        // TỰ ĐỘNG CHUYỂN HYPERLINK (HTTPS) THÀNH THẺ <a> MỞ TAB MỚI
         function parseLinks(text) {
             if (!text) return "";
             const urlRegex = /(https?:\/\/[^\s<]+)/g;
@@ -208,7 +207,7 @@
             const savedData = localStorage.getItem(DATA_KEY); if(savedData) stepDataStore = JSON.parse(savedData);
             
             const profileRaw = localStorage.getItem('kv_trainer_profile'); 
-            if(profileRaw) { const profile = JSON.parse(profileRaw); document.getElementById('studentLabel').innerText = `👤 ${profile.name}`; }
+            if(profileRaw) { const profile = JSON.parse(profileRaw); document.getElementById('studentLabel').innerText = profile.name; }
 
             document.addEventListener('paste', function(e) {
                 if (activeExerciseIndex === null) return;
@@ -228,7 +227,6 @@
             fetchMasterData();
         });
 
-        // XỬ LÝ MODAL THỜI KHÓA BIỂU
         function openTkbModal() {
             const modal = document.getElementById('tkbModal');
             const iframe = document.getElementById('tkbIframe');
@@ -672,9 +670,10 @@
                     theoryHtml += `</div>`;
                 }
 
+                // KHUNG YÊU CẦU ĐỀ BÀI: Nền xanh lá nhạt dịu mắt
                 let reqHtml = '';
                 if(ex.requirements && ex.requirements.length > 0) {
-                    reqHtml = `<div class="mb-4"><ul class="space-y-2 text-xs text-slate-700 pl-4 border-l-4 border-orange-500 bg-orange-50/80 p-4 rounded-r-2xl leading-relaxed font-semibold shadow-sm">${ex.requirements.map(r => `<li>${parseLinks(r)}</li>`).join('')}</ul></div>`;
+                    reqHtml = `<div class="mb-4"><ul class="space-y-2 text-xs text-slate-800 pl-4 border-l-4 border-emerald-500 bg-emerald-50/80 p-4 rounded-r-2xl leading-relaxed font-semibold shadow-sm">${ex.requirements.map(r => `<li>${parseLinks(r)}</li>`).join('')}</ul></div>`;
                 }
 
                 let instrHtml = '';
@@ -717,6 +716,7 @@
                         </div>
                     `;
                 } else {
+                    // CẢNH BÁO CHƯA NỘP ẢNH: Màu xám dịu mắt
                     uploadAreaHtml = `
                         <div class="space-y-3">
                             <div id="dropzone_${oIdx}" 
@@ -737,9 +737,9 @@
                                 <span class="text-xs font-bold text-blue-600 group-hover:underline pointer-events-none shrink-0 hidden sm:inline"><i class="fas fa-plus mr-1"></i>Chọn ảnh</span>
                             </div>
                             
-                            <div class="bg-red-50 border border-red-100 p-2.5 rounded-xl flex items-center gap-2">
-                                <i class="fas fa-exclamation-triangle text-red-500 text-xs"></i>
-                                <span class="text-[11px] text-red-700 font-bold">Chưa nộp ảnh minh chứng để hoàn thành bài này.</span>
+                            <div class="bg-slate-100 border border-slate-200 p-2.5 rounded-xl flex items-center gap-2">
+                                <i class="fas fa-info-circle text-slate-400 text-xs"></i>
+                                <span class="text-[11px] text-slate-500 font-bold">Chưa nộp ảnh minh chứng cho bài này.</span>
                             </div>
                         </div>
                     `;
@@ -1114,8 +1114,8 @@
                 let reqHtml = '';
                 if(ex.requirements && ex.requirements.length > 0) {
                     reqHtml = `
-                    <div class="mb-4 bg-amber-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-amber-200/80 print:border-slate-300">
-                        <p class="text-[11px] font-black text-amber-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-amber-600 print:text-slate-600"></i> Yêu cầu đề bài:</p>
+                    <div class="mb-4 bg-emerald-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-emerald-200/80 print:border-slate-300">
+                        <p class="text-[11px] font-black text-emerald-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-emerald-600 print:text-slate-600"></i> Yêu cầu đề bài:</p>
                         <div class="space-y-1.5 text-xs text-slate-700 font-medium leading-relaxed">
                             ${ex.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}
                         </div>
@@ -1156,8 +1156,8 @@
                     });
                     imgHtml += `</div></div>`;
                 } else {
-                    imgHtml = `<div class="mb-4 bg-rose-50/60 p-4 rounded-2xl border border-rose-200/80 flex items-center gap-3 text-rose-700">
-                        <i class="fas fa-exclamation-triangle text-rose-500 text-lg"></i>
+                    imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex items-center gap-3 text-slate-500">
+                        <i class="fas fa-info-circle text-slate-400 text-base"></i>
                         <span class="text-xs font-bold">Chưa nộp ảnh minh chứng cho bài tập này.</span>
                     </div>`;
                 }
