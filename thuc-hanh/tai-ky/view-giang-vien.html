@@ -116,8 +116,9 @@
 
     <!-- MAIN CONTENT -->
     <main class="flex-1 flex flex-col h-screen overflow-hidden relative w-full z-10 bg-slate-100 backdrop-blur-[2px] no-print">
-        <header class="h-16 bg-[#1b365d] border-b border-[#122543] px-6 py-4 flex items-center shadow-md shrink-0 w-full z-50">
-            <span class="w-8 h-8 rounded-lg bg-blue-900/50 text-blue-300 flex items-center justify-center text-sm mr-3"><i class="fas fa-chart-line"></i></span>
+        <!-- HEADER (Nền #166def, chữ & icon màu trắng) -->
+        <header class="h-16 bg-[#166def] border-b border-blue-600 px-6 py-4 flex items-center shadow-sm shrink-0 w-full z-50 text-white">
+            <span class="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center text-sm mr-3"><i class="fas fa-chart-line"></i></span>
             <h1 class="text-xs md:text-sm font-bold text-white tracking-wider uppercase">TRUNG TÂM PHÂN TÍCH & CHẤM BÀI TRỰC TUYẾN</h1>
         </header>
 
@@ -193,9 +194,9 @@
                                 </div>
                             </div>
                             
-                            <!-- NÚT XEM BÁO CÁO PDF TỪ BỘ LỌC HỌC VIÊN -->
-                            <button onclick="openReportFromFilter()" class="px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0">
-                                <i class="fas fa-file-pdf text-red-300 text-sm"></i>
+                            <!-- NÚT XEM BÁO CÁO PDF TỪ BỘ LỌC HỌC VIÊN (Nền xanh lá) -->
+                            <button onclick="openReportFromFilter()" class="px-4 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-2xl shadow-md transition-all flex items-center justify-center gap-2 shrink-0">
+                                <i class="fas fa-file-pdf text-white text-sm"></i>
                                 <span>Xem Báo Cáo & In PDF</span>
                             </button>
                         </div>
@@ -230,8 +231,8 @@
             <div class="p-6 overflow-y-auto custom-scrollbar bg-slate-50 flex-1 space-y-4" id="modalSDContent">
             </div>
             <div class="p-4 bg-white border-t border-slate-100 flex items-center justify-between shrink-0">
-                <button id="btnModalExportPdf" onclick="" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2">
-                    <i class="fas fa-file-pdf text-red-300"></i> XUẤT BÁO CÁO PDF
+                <button id="btnModalExportPdf" onclick="" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-file-pdf text-white"></i> XUẤT BÁO CÁO PDF
                 </button>
                 <button onclick="closeStudentModal()" class="px-6 py-2.5 bg-slate-800 text-white font-bold text-xs rounded-xl shadow-md hover:bg-slate-700 transition">ĐÓNG CHI TIẾT</button>
             </div>
@@ -283,6 +284,15 @@
         let studentStartDates = {}; 
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
+
+        // TỰ ĐỘNG CHUYỂN HYPERLINK (HTTPS) THÀNH THẺ <a> MỞ TAB MỚI
+        function parseLinks(text) {
+            if (!text) return "";
+            const urlRegex = /(https?:\/\/[^\s<]+)/g;
+            return text.replace(urlRegex, function(url) {
+                return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800 font-bold break-all">${url}</a>`;
+            });
+        }
 
         function toggleCustomTime() {
             const val = document.getElementById('filterTime').value;
@@ -728,8 +738,9 @@
                 let requirements = exerciseDetails.requirements || [];
                 let questions = exerciseDetails.theory || [];
 
+                // KHUNG YÊU CẦU ĐỀ BÀI: Đồng bộ màu Xanh lá nhạt dịu mắt + Parse links
                 let requirementsHtml = '';
-                if (requirements.length > 0) requirementsHtml = `<div class="mb-6"><p class="mb-2.5 font-bold text-[11px] text-slate-400 uppercase tracking-widest">Yêu cầu:</p><ul class="space-y-2 text-xs text-slate-700 pl-4 border-l-4 border-orange-500 bg-orange-50 p-4 rounded-r-2xl shadow-sm leading-relaxed font-medium">${requirements.map(r => `<li>${r}</li>`).join('')}</ul></div>`;
+                if (requirements.length > 0) requirementsHtml = `<div class="mb-6"><p class="mb-2.5 font-bold text-[11px] text-slate-400 uppercase tracking-widest">Yêu cầu đề bài:</p><ul class="space-y-2 text-xs text-slate-800 pl-4 border-l-4 border-emerald-500 bg-emerald-50/80 p-4 rounded-r-2xl shadow-sm leading-relaxed font-semibold">${requirements.map(r => `<li>${parseLinks(r)}</li>`).join('')}</ul></div>`;
 
                 let theoryHtml = '';
                 let hasTheory = false;
@@ -740,7 +751,7 @@
                         for(let i=1; i<=5; i++) {
                             if(item[`ans${i}`]) {
                                 let qText = questions[i-1] ? questions[i-1] : `Câu hỏi ${i}`;
-                                theoryHtml += `<div class="text-xs text-slate-700 leading-relaxed bg-white/95 p-3.5 rounded-xl border border-blue-100 shadow-sm space-y-1.5"><p class="font-bold text-slate-800"><i class="fa-solid fa-circle-question text-blue-500 mr-1.5"></i> ${qText}</p><p class="pt-2 border-t border-blue-50"><b class="text-emerald-600"><i class="fa-solid fa-comment-dots mr-1.5"></i> Đáp án:</b> <span class="font-medium text-slate-700">${item[`ans${i}`]}</span></p></div>`;
+                                theoryHtml += `<div class="text-xs text-slate-700 leading-relaxed bg-white/95 p-3.5 rounded-xl border border-blue-100 shadow-sm space-y-1.5"><p class="font-bold text-slate-800"><i class="fa-solid fa-circle-question text-blue-500 mr-1.5"></i> ${parseLinks(qText)}</p><p class="pt-2 border-t border-blue-50"><b class="text-emerald-600"><i class="fa-solid fa-comment-dots mr-1.5"></i> Đáp án:</b> <span class="font-medium text-slate-700">${parseLinks(item[`ans${i}`])}</span></p></div>`;
                             }
                         }
                         theoryHtml += `</div></div>`;
@@ -765,11 +776,12 @@
                         </div>
                     </div>`;
                 } else {
-                    imgHtml = `<div class="bg-rose-50/30 border border-rose-100/50 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm">
-                        <span class="text-rose-600 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span>
-                        <div class="bg-white border border-rose-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm">
-                            <div class="w-12 h-12 bg-rose-100 text-rose-500 rounded-full flex items-center justify-center text-xl mb-3"><i class="fas fa-exclamation-triangle"></i></div>
-                            <span class="text-sm font-bold text-rose-700 mb-1">CHƯA NỘP ẢNH MINH CHỨNG</span>
+                    // CẢNH BÁO CHƯA NỘP ẢNH: Màu xám dịu mắt
+                    imgHtml = `<div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 h-full flex flex-col justify-start space-y-4 shadow-sm">
+                        <span class="text-slate-500 block uppercase text-[11px] font-black tracking-wider"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span>
+                        <div class="bg-slate-100/70 border border-slate-200 border-dashed rounded-xl p-6 h-full flex flex-col items-center justify-center text-center shadow-sm">
+                            <div class="w-10 h-10 bg-slate-200 text-slate-400 rounded-full flex items-center justify-center text-lg mb-2"><i class="fas fa-info-circle"></i></div>
+                            <span class="text-xs font-bold text-slate-500">Chưa nộp ảnh minh chứng</span>
                         </div>
                     </div>`;
                 }
@@ -800,9 +812,9 @@
                             </p>
                         </div>
                         <div class="flex items-center gap-2 shrink-0">
-                            <!-- NÚT MỞ XEM BÁO CÁO PDF DÀNH CHO GIẢNG VIÊN -->
-                            <button onclick="openStudentReportModal('${safeName}', '${safeDept}', '${safeInd}', '${safeSession}')" class="px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
-                                <i class="fas fa-file-pdf text-red-500"></i> Báo cáo PDF
+                            <!-- NÚT MỞ XEM BÁO CÁO PDF (Nền xanh lá nhẹ dịu mắt) -->
+                            <button onclick="openStudentReportModal('${safeName}', '${safeDept}', '${safeInd}', '${safeSession}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-sm">
+                                <i class="fas fa-file-pdf text-emerald-600"></i> Báo cáo PDF
                             </button>
                             ${statusBadge}
                         </div>
@@ -961,14 +973,15 @@
                             ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>`
                             : `<span class="bg-rose-100 text-rose-800 border border-rose-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-times-circle text-rose-600"></i> Chưa hoàn thành</span>`;
 
+                        // XUẤT BÁO CÁO PDF: Bỏ toàn bộ bullets đầu dòng & Parse link
                         let reqHtml = '';
                         if (exDetails.requirements && exDetails.requirements.length > 0) {
                             reqHtml = `
-                            <div class="mb-4 bg-amber-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-amber-200/80 print:border-slate-300">
-                                <p class="text-[11px] font-black text-amber-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-amber-600 print:text-slate-600"></i> Yêu cầu đề bài:</p>
-                                <ul class="space-y-1.5 text-xs text-slate-700 pl-4 list-disc font-medium leading-relaxed">
-                                    ${exDetails.requirements.map(r => `<li>${r}</li>`).join('')}
-                                </ul>
+                            <div class="mb-4 bg-emerald-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-emerald-200/80 print:border-slate-300">
+                                <p class="text-[11px] font-black text-emerald-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-emerald-600 print:text-slate-600"></i> Yêu cầu đề bài:</p>
+                                <div class="space-y-1.5 text-xs text-slate-700 font-medium leading-relaxed">
+                                    ${exDetails.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}
+                                </div>
                             </div>`;
                         }
 
@@ -981,12 +994,12 @@
                                 let ansKey = `ans${idx + 1}`;
                                 let ans = (subRecord && subRecord[ansKey]) ? subRecord[ansKey].toString().trim() : '';
                                 let ansDisplay = ans !== '' 
-                                    ? `<span class="text-slate-800 font-semibold">${ans}</span>` 
+                                    ? `<span class="text-slate-800 font-semibold">${parseLinks(ans)}</span>` 
                                     : `<span class="text-rose-500 font-bold italic">(Chưa trả lời)</span>`;
                                 
                                 theoryHtml += `
                                 <div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm">
-                                    <p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500 mr-1"></i> ${q}</p>
+                                    <p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500 mr-1"></i> ${parseLinks(q)}</p>
                                     <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100"><b>Đáp án:</b> ${ansDisplay}</p>
                                 </div>`;
                             });
@@ -1011,8 +1024,8 @@
                             });
                             imgHtml += `</div></div>`;
                         } else {
-                            imgHtml = `<div class="mb-4 bg-rose-50/60 p-4 rounded-2xl border border-rose-200/80 flex items-center gap-3 text-rose-700">
-                                <i class="fas fa-exclamation-triangle text-rose-500 text-lg"></i>
+                            imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex items-center gap-3 text-slate-500">
+                                <i class="fas fa-info-circle text-slate-400 text-base"></i>
                                 <span class="text-xs font-bold">Chưa nộp ảnh minh chứng cho bài tập này.</span>
                             </div>`;
                         }
