@@ -1,20 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
 <head> 
-    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
+    <link class="no-print" rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trang review Đào tạo Chuyên viên Tái ký mới</title>
     
     <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script class="no-print" src="https://cdn.tailwindcss.com"></script>
     
     <!-- Google Fonts Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link class="no-print" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; display: flex; flex-direction: column; min-height: 100vh; color: #334155; background-color: #cbd5e1; overflow-x: hidden; }
@@ -35,13 +35,21 @@
         .active-thaotac { background-color: #fffbeb !important; border-color: #f59e0b !important; color: #b45309 !important; }
         .active-ungdung { background-color: #eff6ff !important; border-color: #3b82f6 !important; color: #1d4ed8 !important; }
         .active-tot { background-color: #f0fdf4 !important; border-color: #22c55e !important; color: #15803d !important; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #reviewHistoryModal, #reviewHistoryModal * { visibility: visible; }
+            #reviewHistoryModal { position: absolute; left: 0; top: 0; width: 100%; height: auto; background: white; z-index: 9999; }
+            .no-print { display: none !important; }
+            .print-break-inside-avoid { break-inside: avoid; }
+        }
     </style>
 </head>
 <body class="text-slate-600 antialiased">
 
-    <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
+    <div class="tech-bg no-print"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
-    <div class="min-h-screen flex flex-col bg-slate-200/80 backdrop-blur-[2px]">
+    <div class="min-h-screen flex flex-col bg-slate-200/80 backdrop-blur-[2px] no-print">
 
         <!-- TIÊU ĐỀ -->
         <header class="sticky top-0 z-50 bg-[#1b365d] border-b border-[#122543] px-6 lg:px-12 py-4 flex items-center justify-between shadow-md">
@@ -135,33 +143,39 @@
                         <div class="flex-grow overflow-y-auto custom-scroll space-y-4 pr-1.5">
                             
                             <!-- KHỐI 1: THÔNG TIN HỌC VIÊN & BUỔI REVIEW -->
-                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-3">
-                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
+                            <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm">
+                                <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-2 mb-3">
                                     <i class="fa-solid fa-user-check text-blue-500 mr-2"></i> 1. Thông tin buổi review
                                 </span>
                                 
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                    <div>
-                                        <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
-                                        <div class="relative">
-                                            <input type="text" id="repName" onblur="checkStudentPractice()" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Nhập đúng tên học viên...">
-                                            <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[8px] text-blue-400 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
-                                        </div>
-                                        <div class="flex items-center gap-2 mt-1.5 h-5">
-                                            <span id="studentHistoryTag" class="hidden text-[9px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 shadow-sm"></span>
-                                            <button type="button" id="btnCheckPractice" onclick="openPracticeModal()" class="hidden text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-sm transition-all flex items-center gap-1 border">
+                                <!-- DÒNG 1: HỌ TÊN HỌC VIÊN (FULL WIDTH KÈM TAG TIẾN ĐỘ) -->
+                                <div class="w-full mb-4">
+                                    <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN HỌC VIÊN *</label>
+                                    <div class="relative">
+                                        <!-- Tích hợp datalist gợi ý tên học viên tự động -->
+                                        <input type="text" id="repName" list="student-suggestions" onblur="checkStudentPractice()" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Nhập hoặc chọn tên học viên...">
+                                        <datalist id="student-suggestions"></datalist>
+                                        <span id="checkPracticeSpinner" class="hidden absolute right-3 top-[8px] text-blue-400 text-xs"><i class="fa-solid fa-spinner animate-spin"></i></span>
+                                    </div>
+                                    
+                                    <!-- VÙNG CHỨA TAG TRẢI DÀI FULL DÒNG - CÓ ID ĐỂ ẨN HIỆN AN TOÀN -->
+                                    <div id="practiceStatusWrapper" class="hidden flex-col gap-2 mt-2 w-full max-w-full overflow-hidden">
+                                        <div>
+                                            <button type="button" id="btnCheckPractice" onclick="showStudentPracticePDF()" class="text-[10px] font-bold px-2.5 py-1.5 rounded-xl shadow-sm transition-all flex items-center gap-1.5 border border-emerald-600 bg-emerald-500 hover:bg-emerald-600 text-white whitespace-nowrap cursor-pointer w-fit">
                                                 <i class="fa-solid fa-laptop-code"></i> <span id="txtPracticeStatus">Xem bài TH</span>
                                             </button>
                                         </div>
+                                        <!-- VÙNG CHỨA TAG TRÊN 1 DÒNG DUY NHẤT CÓ THANH CUỘN NGANG -->
+                                        <div id="studentHistoryTags" class="flex flex-nowrap items-center gap-1.5 overflow-x-auto custom-scroll pb-1 w-full"></div>
                                     </div>
+                                </div>
 
+                                <!-- DÒNG 2: TRAINER & NGÀNH HÀNG -->
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-3 border-t border-slate-200/60 pt-3">
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">HỌ TÊN TRAINER *</label>
                                         <input type="text" id="trainerName" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm" placeholder="Tên Trainer...">
                                     </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">NGÀNH HÀNG *</label>
                                         <select id="industry" required class="w-full text-xs px-2.5 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
@@ -169,6 +183,10 @@
                                             <option value="FNB">FNB (F&B)</option>
                                         </select>
                                     </div>
+                                </div>
+
+                                <!-- DÒNG 3: PHIÊN REVIEW, NGÀY, TRẠNG THÁI BÀI -->
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">PHIÊN REVIEW *</label>
                                         <select id="session" onchange="switchSessionAndCheck()" required class="w-full text-xs px-2 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
@@ -181,12 +199,9 @@
                                         <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">NGÀY REVIEW *</label>
                                         <input type="text" id="reviewDate" required class="w-full text-xs px-2.5 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 shadow-sm" placeholder="dd/mm/yyyy">
                                     </div>
-                                </div>
-
-                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                     <div>
                                         <label class="block text-[10px] font-bold text-slate-500 tracking-wider mb-1">BÀI THỰC HÀNH *</label>
-                                        <select id="homeworkStatus" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
+                                        <select id="homeworkStatus" required class="w-full text-xs px-2 py-2 border border-slate-200 rounded-lg bg-white text-slate-800 cursor-pointer shadow-sm">
                                             <option value="Đủ">Đủ bài thực hành</option>
                                             <option value="Thiếu">Thiếu bài thực hành</option>
                                             <option value="Cần làm lại">Cần làm lại bài</option>
@@ -196,7 +211,7 @@
                                 <input type="hidden" id="classCode" value="Tái ký">
                             </div>
 
-                            <!-- KHỐI 2: PHẦN TỰ ĐÁNH GIÁ (SLIDER + 1 Ô CHIA SẺ) -->
+                            <!-- KHỐI 2: PHẦN TỰ ĐÁNH GIÁ -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-3">
                                 <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
                                     <i class="fa-solid fa-face-smile text-blue-500 mr-2"></i> 2. Học viên Tự đánh giá
@@ -214,7 +229,7 @@
                                 </div>
                             </div>
 
-                            <!-- KHỐI 3: PHẢN XẠ TÌNH HUỐNG (TĂNG CHIỀU CAO GẤP 3 LẦN: rows=12) -->
+                            <!-- KHỐI 3: PHẢN XẠ TÌNH HUỐNG -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
                                 <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
                                     <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center">
@@ -225,7 +240,7 @@
                                 <textarea id="scenarioNotes" rows="12" required class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm leading-relaxed min-h-[220px]" placeholder="Ghi nhận câu hỏi thực hành (Có thể tick chọn nhanh tình huống ở cột bên trái)..."></textarea>
                             </div>
 
-                            <!-- KHỐI 4: NHẬN XẾT CỦA TRAINER (TĂNG CHIỀU CAO GẤP 3 LẦN: rows=9) -->
+                            <!-- KHỐI 4: NHẬN XẾT CỦA TRAINER -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
                                 <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
                                     <i class="fa-solid fa-comment-dots text-blue-500 mr-2"></i> 4. Nhận xét của Trainer
@@ -233,7 +248,7 @@
                                 <textarea id="trainerNotes" rows="9" class="w-full text-xs px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 bg-white text-slate-800 shadow-sm min-h-[160px]" placeholder="Điểm mạnh, điểm yếu, phần kiến thức đã nắm / chưa nắm..."></textarea>
                             </div>
 
-                            <!-- KHỐI 5: ĐÁNH GIÁ TỔNG KẾT (4 THANG) -->
+                            <!-- KHỐI 5: ĐÁNH GIÁ TỔNG KẾT -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2.5">
                                 <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
                                     <i class="fa-solid fa-square-poll-vertical text-blue-500 mr-2"></i> 5. Xếp loại năng lực buổi học *
@@ -247,7 +262,7 @@
                                 <input type="hidden" id="selectedRating" required value="">
                             </div>
 
-                            <!-- KHỐI 6: KHUYẾN NGHỊ / ACTION PLAN -->
+                            <!-- KHỐI 6: KHUYẾN NGHỊ -->
                             <div class="bg-slate-50/60 border border-slate-200 rounded-2xl p-3.5 shadow-sm space-y-2">
                                 <span class="text-[11px] font-bold text-blue-700 uppercase tracking-wider flex items-center border-b border-slate-200 pb-1.5">
                                     <i class="fa-solid fa-compass text-blue-500 mr-2"></i> 6. Khuyến nghị & Định hướng tiếp theo
@@ -267,9 +282,8 @@
                 </section>
             </div>
 
-            <!-- TAB 2: QUY TRÌNH & KẾ HOẠCH (FULL NGUYÊN VẸN BẢN GỐC) -->
+            <!-- TAB 2: QUY TRÌNH & KẾ HOẠCH -->
             <div id="main-content-handbook" class="hidden w-full flex-grow space-y-8">
-                
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     <!-- KHỐI 1: BỐI CẢNH VẬN HÀNH -->
                     <div class="glass-panel-ultra rounded-3xl p-6 lg:p-8 shadow-md space-y-4">
@@ -294,7 +308,7 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div class="p-4 bg-emerald-50 border border-emerald-100 rounded-2xl"><span class="text-xs font-bold text-[#15803d] uppercase block mb-1">Hiểu Sâu Bản Chất</span><p class="text-xs text-emerald-800/80 leading-relaxed">Đảm bảo nhân sự không chỉ dừng lại ở việc biết thao tác mà phải hiểu rõ tính năng giải quyết nghiệp vụ thực tế nào của khách.</p></div>
                             <div class="p-4 bg-sky-50 border border-sky-100 rounded-2xl"><span class="text-xs font-bold text-[#1d4ed8] uppercase block mb-1">Gắn Liền Ngành Hàng</span><p class="text-xs text-sky-800/80 leading-relaxed">Biết cách liên kết tính năng sản phẩm với từng mô hình ngành cụ thể.</p></div>
-                            <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl"><span class="text-xs font-bold text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi Ích</span><p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p></div>
+                            <div class="p-4 bg-purple-50 border border-purple-100 rounded-2xl"><span class="text-xs font-bold text-[#6b21a8] uppercase block mb-1">Xoáy Sâu Lợi ÍCH</span><p class="text-xs text-purple-800/80 leading-relaxed">Tránh tư vấn chung chung; biết xoáy vào nỗi đau để đưa ra giải pháp.</p></div>
                             <div class="p-4 bg-amber-50 border border-amber-100 rounded-2xl"><span class="text-xs font-bold text-[#b45309] uppercase block mb-1">Ngôn Ngữ Bán Hàng</span><p class="text-xs text-amber-800/80 leading-relaxed">Có khả năng diễn đạt ngắn gọn, trực diện, thuyết phục.</p></div>
                         </div>
                     </div>
@@ -331,7 +345,7 @@
     </div>
 
     <!-- MODAL IFRAME NHÚNG LINK (FULLSCREEN SÁT LỀ) -->
-    <div id="iframeModal" class="fixed inset-0 bg-slate-900/85 backdrop-blur-md z-[120] flex items-center justify-center hidden p-2 sm:p-3">
+    <div id="iframeModal" class="fixed inset-0 bg-slate-900/85 backdrop-blur-md z-[120] flex items-center justify-center hidden p-2 sm:p-3 no-print">
         <div class="bg-white rounded-2xl shadow-2xl w-[98vw] h-[95vh] max-w-none flex flex-col overflow-hidden border border-slate-200">
             <div class="flex items-center justify-between px-4 py-2.5 bg-[#1b365d] text-white flex-shrink-0">
                 <div class="flex items-center gap-2.5">
@@ -353,19 +367,26 @@
         </div>
     </div>
 
-    <!-- MODAL CHI TIẾT BÀI THỰC HÀNH (FULLSCREEN SÁT LỀ) -->
-    <div id="practiceModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-2 sm:p-3">
-        <div class="bg-white rounded-2xl shadow-2xl w-[98vw] h-[95vh] max-w-none flex flex-col relative border border-slate-200 p-5 md:p-6">
-            <button type="button" onclick="closePracticeModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors z-10"><i class="fa-solid fa-xmark"></i></button>
-            <h2 class="text-base font-bold text-slate-800 mb-2 flex items-center gap-2 border-b border-slate-100 pb-3">
-                <i class="fa-solid fa-laptop-code text-blue-600"></i> TIẾN ĐỘ THỰC HÀNH: <span id="practiceStudentName" class="text-blue-600"></span>
-            </h2>
-            <div id="practiceContent" class="flex-1 overflow-y-auto custom-scroll pr-2 space-y-4 mt-2"></div>
+    <!-- MODAL BÁO CÁO TIẾN ĐỘ VÀ IN PDF CHUẨN ĐẸP TỪ CODE 1 -->
+    <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[300] hidden flex-col transition-all">
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm no-print">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
+                <h1 class="text-base font-black text-slate-800">Báo Cáo Tiến Độ Thực Hành Học Viên</h1>
+                <span class="text-xs text-slate-500 font-medium ml-2">Tải PDF để lưu trữ & chấm điểm.</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-sm transition"><i class="fas fa-print"></i> In / Lưu PDF</button>
+                <button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto custom-scroll p-4 md:p-8 bg-slate-50 print:bg-white print:p-0">
+            <div class="max-w-4xl mx-auto space-y-6 print:space-y-4" id="reviewHistoryContainer"></div>
         </div>
     </div>
 
     <!-- MODAL STATUS -->
-    <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden">
+    <div id="statusModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden no-print">
         <div class="glass-panel-ultra rounded-3xl max-w-sm w-full p-6 text-center shadow-2xl mx-4 border border-white">
             <div id="modalIcon" class="w-12 h-12 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"></div>
             <h4 id="modalTitle" class="text-base font-bold text-slate-800 mb-2">Tiêu đề</h4>
@@ -375,7 +396,7 @@
     </div>
 
     <!-- FULLSCREEN ẢNH MODAL -->
-    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all">
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all no-print">
         <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
             <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
             <div class="flex items-center gap-3">
@@ -395,9 +416,11 @@
 
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec"; 
+        const PRACTICE_API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
         const SECURITY_TOKEN = "KIOT_RENEWAL_Q3_2026";
 
         let scenariosData = {};
+        let CODELAB_DATA = null; 
         let currentDay = 'day1';
         let currentRoadmap = 'Retail'; 
         let currentSelectedLesson = null;
@@ -412,7 +435,57 @@
 
         function updateScoreValue(val) { document.getElementById('scoreValue').textContent = `${val} / 10`; }
 
-        window.onload = function() { loadScenariosFromSheet(); };
+        window.onload = function() { 
+            loadScenariosFromSheet(); 
+            loadStudentSuggestions(); 
+            loadCodelabExercises(); 
+        };
+
+        // ================= TẢI GỢI Ý TÊN HỌC VIÊN =================
+        function loadStudentSuggestions() {
+            fetch(`${PRACTICE_API_URL}?action=getAllPracticeData`)
+            .then(res => res.json())
+            .then(response => {
+                if (response.status === "success" && response.data) {
+                    const studentNames = [...new Set(response.data.map(item => (item.hoVaTen || "").trim()))].filter(Boolean).sort();
+                    const datalist = document.getElementById('student-suggestions');
+                    if (datalist) {
+                        datalist.innerHTML = studentNames.map(name => `<option value="${escapeHtml(name)}">`).join('');
+                    }
+                }
+            })
+            .catch(err => console.error("Lỗi khi tải danh sách gợi ý học viên:", err));
+        }
+
+        // ================= TẢI GIÁO TRÌNH ĐỂ LẤY SỐ CÂU ĐỀ BÀI =================
+        function loadCodelabExercises() {
+            fetch(`${API_URL}?action=getExercises`)
+            .then(res => res.json())
+            .then(response => {
+                if (response.status === "success" && response.data) {
+                    CODELAB_DATA = response.data;
+                }
+            })
+            .catch(err => console.error("Lỗi tải thông tin giáo trình gốc:", err));
+        }
+
+        function getExerciseDetails(exerciseTitle) {
+            if (!CODELAB_DATA || !exerciseTitle) return null;
+            const targetTitle = cleanStr(exerciseTitle);
+            for (let key in CODELAB_DATA) {
+                const sessions = CODELAB_DATA[key];
+                if (!sessions) continue;
+                for (let s of sessions) {
+                    if (!s.exercises) continue;
+                    for (let ex of s.exercises) {
+                        if (ex.title && cleanStr(ex.title) === targetTitle) return ex;
+                    }
+                }
+            }
+            return null;
+        }
+
+        const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
 
         function loadScenariosFromSheet() {
             fetch(`${API_URL}?token=${SECURITY_TOKEN}&action=getScenarios`)
@@ -628,10 +701,10 @@
             currentDay = day;
             document.getElementById('session').value = day === 'day1' ? "Phiên 1 (Cuối Ngày 1)" : day === 'day2' ? "Phiên 2 (Cuối Ngày 2)" : "Phiên 3 (Cuối Ngày 3)";
             
-            ['day1', 'day2', 'day3'].forEach(item => {
-                const button = document.getElementById(`sub-tab-${item}`);
+            ['sub-tab-day1', 'sub-tab-day2', 'sub-tab-day3'].forEach(item => {
+                const button = document.getElementById(item);
                 if (button) {
-                    if (item === day) {
+                    if (item.endsWith(day)) {
                         button.classList.add('bg-emerald-500', 'text-white', 'shadow-sm');
                         button.classList.remove('text-slate-600');
                     } else {
@@ -825,43 +898,117 @@
             else if (rating === 'Tốt') element.className = "rating-btn py-2 text-[10px] font-bold rounded-lg active-tot transition-all shadow-sm";
         }
 
-        // ================= LOGIC TRA CỨU BÀI THỰC HÀNH =================
+        // ================= LOGIC TRA CỨU BÀI THỰC HÀNH KÈM THỐNG KÊ CHI TIẾT DÀN NGANG =================
         function checkStudentPractice() {
             const studentName = document.getElementById('repName').value.trim();
             const classCode = document.getElementById('classCode').value.trim();
             const btn = document.getElementById('btnCheckPractice');
             const txtStatus = document.getElementById('txtPracticeStatus');
             const spinner = document.getElementById('checkPracticeSpinner');
-            const tagEl = document.getElementById('studentHistoryTag');
+            const tagsContainer = document.getElementById('studentHistoryTags');
+            const statusWrapper = document.getElementById('practiceStatusWrapper');
             
-            if(!studentName || !classCode) { btn.classList.add('hidden'); tagEl.classList.add('hidden'); return; }
+            if(!studentName || !classCode) { 
+                statusWrapper.classList.add('hidden');
+                statusWrapper.classList.remove('flex');
+                tagsContainer.innerHTML = ''; 
+                return; 
+            }
 
-            spinner.classList.remove('hidden'); btn.classList.add('hidden');
+            spinner.classList.remove('hidden'); 
+            statusWrapper.classList.add('hidden');
+            statusWrapper.classList.remove('flex');
+            tagsContainer.innerHTML = '';
 
-            fetch(`${API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
+            fetch(`${PRACTICE_API_URL}?action=getPracticeByStudent&studentName=${encodeURIComponent(studentName)}&department=${encodeURIComponent(classCode)}`)
             .then(res => res.json()).then(data => {
                 spinner.classList.add('hidden');
-                btn.className = "text-[10px] font-bold px-2.5 py-0.5 rounded-md shadow-sm transition-all flex items-center gap-1 cursor-pointer text-white"; 
+                btn.className = "text-[10px] font-bold px-2.5 py-1.5 rounded-xl shadow-sm transition-all flex items-center gap-1.5 cursor-pointer text-white w-fit shrink-0"; 
 
                 if(data.status === 'success' && data.data && data.data.length > 0) {
                     currentStudentPracticeData = data.data;
-                    const latest = data.data[data.data.length - 1]; 
-                    
-                    tagEl.className = "text-[9px] font-bold px-2 py-0.5 rounded-md bg-blue-50 text-blue-600 border border-blue-200 shadow-sm flex items-center gap-1";
-                    tagEl.innerHTML = `<i class="fa-solid fa-clock-rotate-left"></i> ${latest.courseName || 'Retail'} - ${latest.session.split(':')[0] || ''}`;
-                    tagEl.classList.remove('hidden');
 
-                    btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600'); 
+                    const industry = document.getElementById('industry').value || currentRoadmap;
+                    const sessions = (CODELAB_DATA && CODELAB_DATA[industry]) ? CODELAB_DATA[industry] : [];
+
+                    // KHỚP NỐI & TÍNH TOÁN TIẾN ĐỘ THỰC TẾ TRÊN TỪNG BUỔI HỌC
+                    let tagsHtml = '';
+                    if (sessions.length > 0) {
+                        tagsHtml = sessions.map(s => {
+                            let requiredExs = [];
+                            s.exercises.forEach(ex => {
+                                if (!ex.isGroupHeader && ex.title) {
+                                    requiredExs.push(cleanStr(ex.title));
+                                }
+                            });
+
+                            const totalReq = requiredExs.length;
+                            if (totalReq === 0) return '';
+
+                            let doneCount = 0;
+                            requiredExs.forEach(reqTitle => {
+                                const isSubmitted = data.data.some(p => cleanStr(p.exerciseTitle) === reqTitle);
+                                if (isSubmitted) doneCount++;
+                            });
+
+                            let rawSessName = s.title.split('.')[0] || s.title;
+                            let shortText = rawSessName.replace(/Buổi\s*/gi, 'B'); // Ví dụ: B1A, B1B...
+                            
+                            const isFullyDone = doneCount === totalReq;
+                            const badgeColorClass = isFullyDone 
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200' 
+                                : doneCount > 0 
+                                    ? 'bg-amber-50 text-amber-700 border-amber-200' 
+                                    : 'bg-slate-50 text-slate-400 border-slate-200';
+
+                            // Thẻ micro-tag có thêm shrink-0 để không bị bóp méo khi cuộn ngang
+                            return `
+                                <span class="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-1 rounded-lg ${badgeColorClass} border shadow-sm select-none shrink-0" title="Tiến độ bài nộp: ${escapeHtml(s.title)}">
+                                    <span class="w-1.5 h-1.5 rounded-full ${isFullyDone ? 'bg-emerald-500' : doneCount > 0 ? 'bg-amber-500' : 'bg-slate-300'}"></span>
+                                    ${escapeHtml(shortText)}: ${doneCount}/${totalReq} bài
+                                </span>
+                            `;
+                        }).filter(Boolean).join('');
+                    } else {
+                        const uniqueSessions = [...new Set(data.data.map(p => {
+                            let rawSess = p.session.split('.')[0] || p.session; 
+                            return rawSess.trim();
+                        }))].sort();
+
+                        tagsHtml = uniqueSessions.map(sess => {
+                            let shortText = sess.replace(/Buổi\s*/gi, 'B');
+                            return `
+                                <span class="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-1 rounded-lg bg-blue-50 text-blue-600 border border-blue-100 shadow-sm select-none shrink-0" title="Đã nộp bài: ${escapeHtml(sess)}">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> ${escapeHtml(shortText)}
+                                </span>
+                            `;
+                        }).join('');
+                    }
+
+                    tagsContainer.innerHTML = tagsHtml;
+
+                    btn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'border-emerald-600'); 
                     txtStatus.innerText = `Xem bài TH (${data.data.length})`;
-                    btn.classList.remove('hidden');
+                    statusWrapper.classList.remove('hidden');
+                    statusWrapper.classList.add('flex');
+                    btn.parentElement.classList.remove('hidden');
                 } else {
                     currentStudentPracticeData = [];
-                    tagEl.classList.add('hidden');
-                    btn.classList.add('bg-rose-500', 'hover:bg-rose-600');
-                    txtStatus.innerText = `Chưa nộp bài nào`;
-                    btn.classList.remove('hidden');
+                    tagsContainer.innerHTML = `
+                        <span class="inline-flex items-center gap-1 text-[9px] font-bold px-2 py-1 rounded-lg bg-rose-50 text-rose-600 border border-rose-100 shadow-sm select-none shrink-0">
+                            Chưa có lịch sử thực hành
+                        </span>
+                    `;
+                    btn.classList.add('bg-rose-500', 'hover:bg-rose-600', 'border-rose-600');
+                    txtStatus.innerText = `Chưa nộp bài`;
+                    statusWrapper.classList.remove('hidden');
+                    statusWrapper.classList.add('flex');
+                    btn.parentElement.classList.remove('hidden');
                 }
-            }).catch(err => { spinner.classList.add('hidden'); console.error(err); });
+            }).catch(err => { 
+                spinner.classList.add('hidden'); 
+                console.error("Lỗi đồng bộ kiểm tra bài tập:", err); 
+            });
         }
 
         function getDirectImageUrl(url) { 
@@ -875,36 +1022,180 @@
         function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
         function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
 
-        function openPracticeModal() {
-            document.getElementById('practiceStudentName').innerText = document.getElementById('repName').value + " - Lớp: " + document.getElementById('classCode').value;
-            const container = document.getElementById('practiceContent');
-            if(currentStudentPracticeData.length === 0) {
-                container.innerHTML = `<div class="bg-red-50 p-6 rounded-2xl text-center border border-red-200"><p class="text-red-700 font-bold">Học viên này chưa nộp bài thực hành nào trên hệ thống!</p></div>`;
-            } else {
-                let html = ''; let grouped = {};
-                currentStudentPracticeData.forEach(p => {
-                    if(!grouped[p.session]) grouped[p.session] = {};
-                    grouped[p.session][p.exerciseTitle] = p; 
-                });
-                for(let session in grouped) {
-                    html += `<div class="mb-4"><h3 class="bg-blue-600 text-white px-3 py-1.5 rounded-t-xl font-bold uppercase text-[10px]">${session}</h3><div class="border border-blue-600/20 border-t-0 rounded-b-xl p-3 space-y-3 bg-white">`;
-                    for(let exTitle in grouped[session]) {
-                        let item = grouped[session][exTitle];
-                        let links = item.links ? item.links.split('\n') : [];
-                        let imgHtml = links.map((link, idx) => `<div class="w-28 h-16 relative group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(links).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(link)}" class="w-full h-full object-cover rounded-lg border border-slate-300"></div>`).join('');
-                        html += `<div class="bg-slate-50 p-3 rounded-xl border border-slate-200">
-                            <h4 class="text-xs font-bold text-slate-800 mb-1">${item.exerciseTitle}</h4>
-                            <div class="flex flex-wrap gap-2 mt-2">${imgHtml}</div>
-                        </div>`;
-                    }
-                    html += `</div></div>`;
-                }
-                container.innerHTML = html;
+        // ================= HIỂN THỊ CHI TIẾT BÀI LÀM DƯỚI DẠNG PDF BÁO CÁO TOÀN BỘ =================
+        function showStudentPracticePDF() {
+            const studentName = document.getElementById('repName').value.trim();
+            if (!studentName || currentStudentPracticeData.length === 0) {
+                alert("Không có dữ liệu bài thực hành để xuất báo cáo!");
+                return;
             }
-            document.getElementById('practiceModal').classList.remove('hidden');
+
+            const container = document.getElementById('reviewHistoryContainer');
+            if (!container) return;
+
+            const classCode = document.getElementById('classCode').value.trim();
+            const industry = document.getElementById('industry').value;
+            const session = document.getElementById('session').value;
+
+            let html = `
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-md print:bg-white print:text-slate-800 print:border-2 print:border-slate-300">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 pb-4 mb-4 gap-4">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black uppercase tracking-wide text-amber-300 print:text-blue-900">BÁO CÁO TOÀN BỘ BÀI TẬP THỰC HÀNH TÁI KÝ</h1>
+                        <p class="text-xs text-blue-200 print:text-slate-500 font-medium mt-1">Trung tâm Đào tạo & Kiểm tra KiotViet</p>
+                    </div>
+                    <div class="bg-white/10 print:bg-slate-100 px-4 py-2 rounded-2xl border border-white/10 border-slate-200 text-right shrink-0">
+                        <span class="text-[10px] font-black uppercase text-blue-200 print:text-slate-400 block">Tổng số bài đã nộp</span>
+                        <span class="text-lg font-black text-amber-400 print:text-amber-600">${currentStudentPracticeData.length} bài</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200">
+                        <span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-user mr-1"></i> Họ và tên:</span>
+                        <span class="font-bold text-sm text-white print:text-slate-800">${studentName}</span>
+                    </div>
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200">
+                        <span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-building mr-1"></i> Nhóm lớp:</span>
+                        <span class="font-bold text-sm text-white print:text-slate-800">${classCode}</span>
+                    </div>
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200">
+                        <span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-graduation-cap mr-1"></i> Ngành học:</span>
+                        <span class="font-bold text-sm text-amber-300 print:text-blue-700">${industry}</span>
+                    </div>
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200">
+                        <span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-book mr-1"></i> Phiên đánh giá:</span>
+                        <span class="font-bold text-xs md:text-sm text-white print:text-slate-800 break-words block">${session}</span>
+                    </div>
+                </div>
+            </div>`;
+
+            let grouped = {};
+            currentStudentPracticeData.forEach(p => { 
+                if(!grouped[p.session]) grouped[p.session] = {}; 
+                grouped[p.session][p.exerciseTitle] = p; 
+            });
+
+            for (let sess in grouped) {
+                html += `<h2 class="text-base font-black text-slate-700 border-b-2 border-slate-300 pb-2 mt-8 mb-4 uppercase tracking-widest print-break-inside-avoid print:mt-6"><i class="fas fa-bookmark text-blue-600 mr-2"></i> ${sess}</h2>`;
+
+                for (let exTitle in grouped[sess]) {
+                    let item = grouped[sess][exTitle];
+                    let theoryHtml = '';
+                    let questionStatsHtml = '';
+
+                    const exDetails = getExerciseDetails(exTitle);
+                    if (exDetails) {
+                        const totalQuestions = (exDetails.theory && exDetails.theory.length) ? exDetails.theory.length : 0;
+                        let answeredCount = 0;
+
+                        if (totalQuestions > 0) {
+                            theoryHtml = `<div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`;
+                            
+                            exDetails.theory.forEach((q, idx) => {
+                                const ansKey = `ans${idx + 1}`;
+                                const ans = (item && item[ansKey]) ? item[ansKey].toString().trim() : '';
+                                let ansDisplay = '';
+                                
+                                if (ans !== '') {
+                                    answeredCount++;
+                                    ansDisplay = `<span class="text-slate-800 font-semibold">${escapeHtml(ans)}</span>`;
+                                } else {
+                                    ansDisplay = `<span class="text-rose-500 font-bold italic">(Chưa trả lời)</span>`;
+                                }
+                                
+                                theoryHtml += `
+                                    <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                        <p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500"></i> ${escapeHtml(q)}</p>
+                                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg"><b>Đáp án:</b> ${ansDisplay}</p>
+                                    </div>`;
+                            });
+                            
+                            theoryHtml += `</div>`;
+
+                            const isFullyDone = answeredCount === totalQuestions;
+                            const statsColorClass = isFullyDone 
+                                ? 'text-emerald-700 bg-emerald-100 border border-emerald-300' 
+                                : 'text-amber-700 bg-amber-100 border border-amber-300';
+                            
+                            questionStatsHtml = `
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-lg ${statsColorClass}">
+                                    <i class="fa-solid fa-list-check"></i> Đã làm: ${answeredCount}/${totalQuestions} câu tự luận
+                                </span>
+                            `;
+                        } else {
+                            questionStatsHtml = `
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-lg bg-slate-100 border border-slate-200 text-slate-500">
+                                    <i class="fa-solid fa-info-circle"></i> Bài làm không chứa tự luận
+                                </span>
+                            `;
+                        }
+                    } else {
+                        let answeredCount = 0;
+                        let tempTheoryHtml = '';
+                        for (let i = 1; i <= 5; i++) {
+                            if (item[`ans${i}`] && item[`ans${i}`].toString().trim() !== "") {
+                                answeredCount++;
+                                tempTheoryHtml += `
+                                    <div class="bg-white p-3.5 rounded-xl border border-slate-200">
+                                        <p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500"></i> Câu hỏi tự luận ${i}</p>
+                                        <p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg"><b>Đáp án:</b> <span class="text-slate-800 font-semibold">${escapeHtml(item[`ans${i}`])}</span></p>
+                                    </div>`;
+                            }
+                        }
+                        if (answeredCount > 0) {
+                            theoryHtml = `<div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận đã trả lời:</p>${tempTheoryHtml}</div>`;
+                            questionStatsHtml = `
+                                <span class="inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-lg text-emerald-700 bg-emerald-100 border border-emerald-300">
+                                    <i class="fa-solid fa-list-check"></i> Đã nộp ${answeredCount} câu tự luận
+                                </span>
+                            `;
+                        }
+                    }
+
+                    let imgHtml = '';
+                    let links = item.links ? item.links.split('\n').filter(u => u.trim() !== '') : [];
+                    if (links.length > 0) {
+                        imgHtml = `<div class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${links.length}):</p><div class="flex flex-col gap-4 w-full">`;
+                        links.forEach((url, idx) => {
+                            imgHtml += `<div class="relative w-full bg-slate-100 border border-slate-300 rounded-none overflow-hidden cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(links).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(url)}" class="w-full h-auto max-h-[700px] object-contain block mx-auto rounded-none"></div>`;
+                        });
+                        imgHtml += `</div></div>`;
+                    } else {
+                        imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 text-slate-500 text-xs font-bold"><i class="fas fa-info-circle mr-1.5"></i>Chưa nộp ảnh minh chứng cho bài thực hành này.</div>`;
+                    }
+
+                    let fbHtml = item.feedback ? `<div class="bg-emerald-50 p-4 rounded-2xl border border-emerald-200 mt-3"><p class="text-[11px] font-black text-emerald-800 uppercase tracking-wider mb-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap">${escapeHtml(item.feedback)}</p></div>` : ``;
+
+                    html += `
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="text-xs font-black text-slate-800">${escapeHtml(exTitle)}</h3>
+                            <div class="flex flex-wrap items-center gap-2">
+                                ${questionStatsHtml}
+                                <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>
+                            </div>
+                        </div>
+                        ${theoryHtml}
+                        ${imgHtml}
+                        ${fbHtml}
+                    </div>`;
+                }
+            }
+
+            container.innerHTML = html;
+            document.getElementById('reviewHistoryModal').classList.remove('hidden');
+            document.getElementById('reviewHistoryModal').classList.add('flex');
         }
 
-        function closePracticeModal() { document.getElementById('practiceModal').classList.add('hidden'); }
+        // Đóng báo cáo PDF
+        function closeReviewHistory() {
+            const modal = document.getElementById('reviewHistoryModal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
 
         // ================= GỬI FORM LƯU =================
         function submitForm(event) {
@@ -978,8 +1269,13 @@
             document.getElementById('industry').value = currentRoadmap; 
             document.getElementById('selectedRating').value = "";
             document.querySelectorAll('.rating-btn').forEach(btn => btn.className = "rating-btn py-2 text-[10px] font-bold rounded-lg bg-white border-slate-200 text-slate-500 transition-all shadow-sm");
-            document.getElementById('btnCheckPractice').classList.add('hidden'); 
-            document.getElementById('studentHistoryTag').classList.add('hidden');
+            
+            const wrapper = document.getElementById('practiceStatusWrapper');
+            if (wrapper) {
+                wrapper.classList.add('hidden');
+                wrapper.classList.remove('flex');
+            }
+            document.getElementById('studentHistoryTags').innerHTML = '';
             currentStudentPracticeData = [];
         }
 
