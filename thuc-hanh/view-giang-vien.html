@@ -355,10 +355,15 @@
             
             fetch(SHEET_URL)
             .then(response => {
-                if(!response.ok) throw new Error("Không thể truy cập Google Sheet. Hãy kiểm tra lại link đã bật chia sẻ 'Bất kỳ ai có liên kết' chưa.");
+                if(!response.ok) throw new Error("Không thể truy cập Google Sheet.");
                 return response.text();
             })
             .then(csvText => {
+                // BẮT LỖI TỰ ĐỘNG: Nếu Google Sheet bị khóa riêng tư, nó sẽ trả về mã HTML thay vì dữ liệu
+                if (csvText.trim().startsWith("<!DOCTYPE") || csvText.trim().startsWith("<html")) {
+                    throw new Error("File Google Sheet ĐANG BỊ KHÓA! Vui lòng mở quyền Chia sẻ thành 'Bất kỳ ai có liên kết' (Anyone with the link).");
+                }
+
                 Papa.parse(csvText, {
                     header: true, skipEmptyLines: true,
                     complete: function(results) {
