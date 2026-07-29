@@ -352,7 +352,9 @@
             .then(r => r.json())
             .then(practiceRes => {
                 if(practiceRes.status === 'success') {
-                    allData = practiceRes.data.reverse(); 
+                    // BẮT LỖI AN TOÀN: Kiểm tra xem data có phải là mảng không trước khi reverse
+                    allData = Array.isArray(practiceRes.data) ? practiceRes.data.reverse() : []; 
+                    
                     if (typeof CODELAB_DATA === 'undefined') { alert("Lỗi: Không tìm thấy dữ liệu giáo trình (CODELAB_DATA) từ file codelab-data.js!"); return; }
                     initFilters(); initDashboardFilters();
                 } else {
