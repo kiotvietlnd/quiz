@@ -8,6 +8,8 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Thư viện hỗ trợ đọc trực tiếp từ Google Sheets -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -307,10 +309,12 @@
     <script src="codelab-data.js"></script>
 
     <script>
-        // CHỈ GỌI 1 API LẤY BÀI NỘP HỌC VIÊN
+        // 1. KHAI BÁO LINK GOOGLE SHEET CỦA BẠN ĐỂ ĐỌC DỮ LIỆU
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/1c30Tm9T6MSgjJV3WbrYcsxwXLvhXTok9VCgQA6XOYV0/export?format=csv&gid=0";
+        
+        // 2. API_URL ĐỂ LƯU NHẬN XÉT (Giữ nguyên)
         const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
 
-        // DANH SÁCH SẮP XẾP ƯU TIÊN BUỔI HỌC (ĐÃ ĐỒNG BỘ VỚI CODELAB-DATA)
         const SESSION_ORDER = {
             Retail: ["Buổi 1: Làm quen Phần mềm KiotViet", "Buổi 2: Trả lời câu hỏi thường gặp", "Buổi 3: Mobile App & Phần cứng"],
             FNB: ["Buổi 1: Làm quen Phần mềm KiotViet", "Buổi 2: Trả lời câu hỏi thường gặp", "Buổi 3: Mobile App & Phần cứng"]
@@ -345,24 +349,68 @@
             return text.replace(urlRegex, function(url) { return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800 font-bold break-all">${url}</a>`; });
         }
 
+        // HÀM MỚI: TẢI TRỰC TIẾP TỪ LINK GOOGLE SHEET (KHÔNG CẦN QUA API TRUNG GIAN)
         function fetchPracticeData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
             
-            fetch(`${API_URL}?action=getAllPracticeData`)
-            .then(r => r.json())
-            .then(practiceRes => {
-                if(practiceRes.status === 'success') {
-                    // BẮT LỖI AN TOÀN: Kiểm tra xem data có phải là mảng không trước khi reverse
-                    allData = Array.isArray(practiceRes.data) ? practiceRes.data.reverse() : []; 
-                    
-                    if (typeof CODELAB_DATA === 'undefined') { alert("Lỗi: Không tìm thấy dữ liệu giáo trình (CODELAB_DATA) từ file codelab-data.js!"); return; }
-                    initFilters(); initDashboardFilters();
-                } else {
-                    throw new Error(`Lỗi từ API Bài nộp: ${practiceRes.message}`);
-                }
-            }).catch(e => {
-                console.error("Fetch error: ", e); alert("Lỗi kết nối hoặc tải dữ liệu: " + e.message);
-            }).finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
+            fetch(SHEET_URL)
+            .then(response => {
+                if(!response.ok) throw new Error("Không thể truy cập Google Sheet. Hãy kiểm tra lại link đã bật chia sẻ 'Bất kỳ ai có liên kết' chưa.");
+                return response.text();
+            })
+            .then(csvText => {
+                Papa.parse(csvText, {
+                    header: true, skipEmptyLines: true,
+                    complete: function(results) {
+                        try {
+                            let parsed = [];
+                            results.data.forEach(row => {
+                                const keys = Object.keys(row);
+                                if(keys.length < 5) return;
+
+                                const timestamp = String(row["Ngày"] || row["Timestamp"] || row[keys[0]] || "").trim();
+                                const name = String(row["Họ và Tên"] || row["Họ và tên"] || row[keys[1]] || "").trim();
+                                const dept = String(row["Phòng ban"] || row["Phòng Ban"] || row[keys[2]] || "").trim();
+                                const course = String(row["Khóa"] || row["Khoá"] || row["Ngành hàng"] || row[keys[3]] || "").trim();
+                                const session = String(row["Buổi"] || row["Buổi học"] || row[keys[4]] || "").trim();
+                                const exerciseTitle = String(row["Tên bài học"] || row[keys[5]] || "").trim();
+
+                                if (!name || ['họ và tên', 'studentname'].includes(name.toLowerCase()) || ['ngày', 'timestamp'].includes(timestamp.toLowerCase())) return;
+
+                                let linkCol = keys.find(k => String(k).toLowerCase().includes('link'));
+                                let fbCol = keys.find(k => String(k).toLowerCase().includes('nhận xét'));
+
+                                parsed.push({
+                                    ngay: timestamp, hoVaTen: name, phongBan: dept, khoa: course, buoi: session, tenBaiHoc: exerciseTitle,
+                                    ans1: keys[6] ? String(row[keys[6]] || "").trim() : "",
+                                    ans2: keys[7] ? String(row[keys[7]] || "").trim() : "",
+                                    ans3: keys[8] ? String(row[keys[8]] || "").trim() : "",
+                                    ans4: keys[9] ? String(row[keys[9]] || "").trim() : "",
+                                    ans5: keys[10] ? String(row[keys[10]] || "").trim() : "",
+                                    linkDrive: linkCol ? String(row[linkCol] || "").trim() : (keys.length > 11 ? String(row[keys[11]] || "").trim() : ""),
+                                    nhanXet: fbCol ? String(row[fbCol] || "").trim() : (keys.length > 12 ? String(row[keys[12]] || "").trim() : "")
+                                });
+                            });
+                            
+                            // Lưu dữ liệu và đảo ngược để bài mới nhất hiện lên đầu
+                            allData = parsed.reverse(); 
+                            
+                            if (typeof CODELAB_DATA === 'undefined') { alert("Lỗi: Không tìm thấy dữ liệu giáo trình (CODELAB_DATA) từ file codelab-data.js!"); return; }
+                            
+                            initFilters(); 
+                            initDashboardFilters();
+                        } catch(e) {
+                            alert("Lỗi phân tích dữ liệu Excel: " + e.message);
+                        } finally {
+                            document.getElementById('loadingSpinner').classList.add('hidden');
+                        }
+                    }
+                });
+            })
+            .catch(error => {
+                alert("LỖI MẠNG: " + error.message);
+                document.getElementById('loadingSpinner').classList.add('hidden');
+            });
         }
 
         function formatDateTime(isoString) {
