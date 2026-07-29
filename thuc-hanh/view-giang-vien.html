@@ -309,8 +309,8 @@
     <script src="codelab-data.js"></script>
 
     <script>
-        // 1. KHAI BÁO LINK GOOGLE SHEET CỦA BẠN ĐỂ ĐỌC DỮ LIỆU
-        const SHEET_URL = "https://docs.google.com/spreadsheets/d/1c30Tm9T6MSgjJV3WbrYcsxwXLvhXTok9VCgQA6XOYV0/edit?usp=sharing";
+        // 1. SỬ DỤNG GVIZ API ĐỂ VƯỢT RÀO CẢN BẢO MẬT DOANH NGHIỆP
+        const SHEET_URL = "https://docs.google.com/spreadsheets/d/1c30Tm9T6MSgjJV3WbrYcsxwXLvhXTok9VCgQA6XOYV0/gviz/tq?tqx=out:csv&gid=0";
         
         // 2. API_URL ĐỂ LƯU NHẬN XÉT (Giữ nguyên)
         const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
@@ -349,19 +349,19 @@
             return text.replace(urlRegex, function(url) { return `<a href="${url}" target="_blank" rel="noopener noreferrer" class="text-blue-600 underline hover:text-blue-800 font-bold break-all">${url}</a>`; });
         }
 
-        // HÀM MỚI: TẢI TRỰC TIẾP TỪ LINK GOOGLE SHEET (KHÔNG CẦN QUA API TRUNG GIAN)
+        // HÀM MỚI: TẢI TRỰC TIẾP TỪ LINK GOOGLE SHEET (DÙNG GVIZ API)
         function fetchPracticeData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
             
             fetch(SHEET_URL)
             .then(response => {
-                if(!response.ok) throw new Error("Không thể truy cập Google Sheet.");
+                if(!response.ok) throw new Error("Không thể kết nối với máy chủ Google.");
                 return response.text();
             })
             .then(csvText => {
-                // BẮT LỖI TỰ ĐỘNG: Nếu Google Sheet bị khóa riêng tư, nó sẽ trả về mã HTML thay vì dữ liệu
+                // Cảnh báo nếu tài khoản công ty vẫn chặn gắt gao
                 if (csvText.trim().startsWith("<!DOCTYPE") || csvText.trim().startsWith("<html")) {
-                    throw new Error("File Google Sheet ĐANG BỊ KHÓA! Vui lòng mở quyền Chia sẻ thành 'Bất kỳ ai có liên kết' (Anyone with the link).");
+                    throw new Error("Tài khoản Doanh nghiệp KiotViet chặn tải trực tiếp. Hãy kiểm tra lại file Sheet đã chọn 'Bất kỳ ai có liên kết' chưa nhé!");
                 }
 
                 Papa.parse(csvText, {
