@@ -8,7 +8,6 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Thư viện hỗ trợ đọc trực tiếp từ Google Sheets -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -54,23 +53,23 @@
             </button>
         </div>
 
-        <div id="gradingFiltersSubmenu" class="hidden p-4 flex-1 overflow-y-auto flex flex-col sidebar-scrollbar space-y-6">
+        <div id="gradingFiltersSubmenu" class="hidden p-4 flex-1 overflow-y-auto flex flex-col sidebar-scrollbar space-y-5">
             <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1.5 px-1 border-b border-white/5 pb-2">
                 <i class="fas fa-filter"></i> BỘ LỌC CHẤM BÀI
             </p>
 
             <div>
-                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Ngành hàng</label>
-                <div class="flex gap-1 bg-slate-800 p-1 rounded-xl border border-slate-700">
-                    <label class="flex-1 cursor-pointer">
-                        <input type="radio" name="filterIndustry" value="Retail" checked onchange="updateFilters('industry')" class="sr-only peer">
-                        <div class="text-center py-2 text-xs rounded-lg font-bold text-slate-400 peer-checked:bg-blue-600 peer-checked:text-white transition-all shadow-sm">Retail</div>
-                    </label>
-                    <label class="flex-1 cursor-pointer">
-                        <input type="radio" name="filterIndustry" value="FNB" onchange="updateFilters('industry')" class="sr-only peer">
-                        <div class="text-center py-2 text-xs rounded-lg font-bold text-slate-400 peer-checked:bg-slate-600 peer-checked:text-white transition-all">F&B</div>
-                    </label>
-                </div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Khóa học</label>
+                <select id="filterCourse" onchange="updateFilters('course')" class="w-full bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-xl h-9 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 truncate">
+                    <option value="all">Tất cả khóa học</option>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Phòng ban</label>
+                <select id="filterDept" onchange="updateFilters('dept')" class="w-full bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-xl h-9 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 truncate">
+                    <option value="all">Tất cả phòng ban</option>
+                </select>
             </div>
 
             <div>
@@ -168,16 +167,22 @@
                             </div>
 
                             <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 ml-1">Ngành hàng</label>
-                                <select id="dashFilterIndustry" onchange="onDashIndustryChange()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors">
-                                    <option value="Retail" selected>Retail</option>
-                                    <option value="FNB">F&B</option>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 ml-1">Khóa học</label>
+                                <select id="dashFilterCourse" onchange="renderDashboardAnalytics()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors w-28 md:w-40 truncate">
+                                    <option value="all">Tất cả khóa</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 ml-1">Phòng ban</label>
+                                <select id="dashFilterDept" onchange="renderDashboardAnalytics()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors w-28 md:w-40 truncate">
+                                    <option value="all">Tất cả PB</option>
                                 </select>
                             </div>
 
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 ml-1">Buổi học</label>
-                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors w-full md:w-[320px] lg:w-[400px] truncate">
+                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors w-full md:w-[280px] lg:w-[320px] truncate">
                                 </select>
                             </div>
                         </div>
@@ -242,7 +247,7 @@
                         <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
                             <div>
                                 <h3 class="text-[15px] font-black text-blue-800 flex items-center gap-2 mb-2 uppercase tracking-wide"><i class="fas fa-user-graduate"></i> BÁO CÁO TIẾN ĐỘ CHI TIẾT</h3>
-                                <p class="text-xs font-semibold text-slate-500" id="progressStudentInfo">Học viên: -- | Ngành: -- | --</p>
+                                <p class="text-xs font-semibold text-slate-500" id="progressStudentInfo">Học viên: -- | Khóa: -- | --</p>
                             </div>
                             
                             <div class="flex flex-col md:flex-row items-end md:items-center gap-5 flex-1 max-w-lg">
@@ -312,13 +317,8 @@
         // 1. SỬ DỤNG GVIZ API ĐỂ VƯỢT RÀO CẢN BẢO MẬT DOANH NGHIỆP
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/1c30Tm9T6MSgjJV3WbrYcsxwXLvhXTok9VCgQA6XOYV0/gviz/tq?tqx=out:csv&gid=0";
         
-        // 2. API_URL ĐỂ LƯU NHẬN XÉT (Giữ nguyên)
+        // 2. API_URL ĐỂ LƯU NHẬN XÉT
         const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
-
-        const SESSION_ORDER = {
-            Retail: ["Buổi 1: Làm quen Phần mềm KiotViet", "Buổi 2: Trả lời câu hỏi thường gặp", "Buổi 3: Mobile App & Phần cứng"],
-            FNB: ["Buổi 1: Làm quen Phần mềm KiotViet", "Buổi 2: Trả lời câu hỏi thường gặp", "Buổi 3: Mobile App & Phần cứng"]
-        };
 
         let allData = [];
         let currentActiveTab = 'dashboard';
@@ -359,7 +359,6 @@
                 return response.text();
             })
             .then(csvText => {
-                // Cảnh báo nếu tài khoản công ty vẫn chặn gắt gao
                 if (csvText.trim().startsWith("<!DOCTYPE") || csvText.trim().startsWith("<html")) {
                     throw new Error("Tài khoản Doanh nghiệp KiotViet chặn tải trực tiếp. Hãy kiểm tra lại file Sheet đã chọn 'Bất kỳ ai có liên kết' chưa nhé!");
                 }
@@ -397,13 +396,10 @@
                                 });
                             });
                             
-                            // Lưu dữ liệu và đảo ngược để bài mới nhất hiện lên đầu
                             allData = parsed.reverse(); 
-                            
                             if (typeof CODELAB_DATA === 'undefined') { alert("Lỗi: Không tìm thấy dữ liệu giáo trình (CODELAB_DATA) từ file codelab-data.js!"); return; }
                             
                             initFilters(); 
-                            initDashboardFilters();
                         } catch(e) {
                             alert("Lỗi phân tích dữ liệu Excel: " + e.message);
                         } finally {
@@ -418,56 +414,60 @@
             });
         }
 
-        function formatDateTime(isoString) {
-            if (!isoString) return ''; const d = new Date(isoString); if (isNaN(d.getTime())) return isoString;
-            const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
-            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        // TỰ ĐỘNG LẤY DANH SÁCH KHÓA VÀ PHÒNG BAN TỪ GOOGLE SHEET
+        function initFilters() {
+            const courses = [...new Set(allData.map(e => (e.khoa || '').trim()))].filter(Boolean).sort();
+            const depts = [...new Set(allData.map(e => (e.phongBan || '').trim()))].filter(Boolean).sort();
+            
+            populateSelect('filterCourse', courses, 'Tất cả khóa học');
+            populateSelect('dashFilterCourse', courses, 'Tất cả khóa học');
+            populateSelect('filterDept', depts, 'Tất cả phòng ban');
+            populateSelect('dashFilterDept', depts, 'Tất cả phòng ban');
+
+            // Tự động lấy danh sách buổi học từ file codelab-data.js
+            const sessions = CODELAB_DATA.map(s => s.title);
+            let sessionHtmlSidebar = sessions.map((s, idx) => `
+                <label class="flex items-start gap-2.5 cursor-pointer text-xs text-slate-300 p-1.5 rounded-lg hover:bg-white/5 sidebar-radio">
+                    <input type="radio" name="filterSession" value="${s}" ${idx === 0 ? 'checked' : ''} onchange="updateFilters('session')">
+                    <span class="flex-1 pt-[1px] leading-tight">${s}</span>
+                </label>`).join('');
+            document.getElementById('radioSessionContainer').innerHTML = sessionHtmlSidebar;
+            
+            let sessionHtmlDash = `<option value="all">Tất cả buổi học</option>` + sessions.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
+            document.getElementById('dashFilterSession').innerHTML = sessionHtmlDash;
+
+            updateFilters('init');
         }
 
-        const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
+        function populateSelect(id, list, defaultLabel) {
+            const select = document.getElementById(id);
+            if (!select) return;
+            select.innerHTML = `<option value="all">${defaultLabel}</option>` + list.map(item => `<option value="${item}">${item}</option>`).join('');
+        }
 
-        function initFilters() { updateFilters('init'); }
-
+        // LỌC DỮ LIỆU ĐỘNG THEO KHÓA & PHÒNG BAN MỚI
         function updateFilters(source) {
-            const selInd = getRadioValue('filterIndustry') || 'Retail';
-            let dataByInd = allData.filter(e => e.khoa === selInd);
-            if (dataByInd.length === 0) dataByInd = allData;
+            const selCourse = document.getElementById('filterCourse').value;
+            const selDept = document.getElementById('filterDept').value;
+            const selSession = getRadioValue('filterSession');
 
-            if (source === 'init' || source === 'industry') {
-                let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
-                let formattedList = orderedSessions.map(s => `${selInd} - ${s}`);
+            let filtered = allData;
+            if (selCourse !== 'all') filtered = filtered.filter(e => e.khoa === selCourse);
+            if (selDept !== 'all') filtered = filtered.filter(e => e.phongBan === selDept);
 
-                let sessionHtml = formattedList.map((s, idx) => `
-                    <label class="flex items-start gap-2.5 cursor-pointer text-xs text-slate-300 p-1.5 rounded-lg hover:bg-white/5 sidebar-radio">
-                        <input type="radio" name="filterSession" value="${s}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()">
-                        <span class="flex-1 pt-[1px] leading-tight">${s}</span>
-                    </label>`).join('');
-                document.getElementById('radioSessionContainer').innerHTML = sessionHtml || '<p class="text-xs text-slate-400 p-1.5">Không có buổi học</p>';
+            const students = [...new Set(filtered.map(e => (e.hoVaTen || 'Ẩn Danh').trim()))].filter(Boolean).sort();
+            let studentHtml = students.map((sName, idx) => `
+                <label class="flex items-center gap-2.5 cursor-pointer text-xs text-slate-300 p-1.5 rounded-lg hover:bg-white/5 sidebar-radio">
+                    <input type="radio" name="filterStudent" value="${sName}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()">
+                    <span class="flex-1 pt-[1px] truncate" title="${sName}">${sName}</span>
+                </label>`).join('');
+            document.getElementById('radioStudentContainer').innerHTML = studentHtml || '<p class="text-xs text-slate-400 p-1.5">Không có học viên</p>';
 
-                const students = [...new Set(dataByInd.map(e => (e.hoVaTen || 'Ẩn Danh').trim()))].filter(Boolean).sort();
-                let studentHtml = students.map((sName, idx) => `
-                    <label class="flex items-center gap-2.5 cursor-pointer text-xs text-slate-300 p-1.5 rounded-lg hover:bg-white/5 sidebar-radio">
-                        <input type="radio" name="filterStudent" value="${sName}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()">
-                        <span class="flex-1 pt-[1px] truncate" title="${sName}">${sName}</span>
-                    </label>`).join('');
-                document.getElementById('radioStudentContainer').innerHTML = studentHtml || '<p class="text-xs text-slate-400 p-1.5">Không có học viên</p>';
-            }
             if (currentActiveTab === 'grading') renderCards();
+            if (currentActiveTab === 'dashboard') renderDashboardAnalytics();
         }
 
-        function onDashIndustryChange() {
-            const selInd = document.getElementById('dashFilterIndustry').value || 'Retail';
-            let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
-            let formattedList = orderedSessions.map(s => `${selInd} - ${s}`);
-            let selectEl = document.getElementById('dashFilterSession');
-            selectEl.innerHTML = formattedList.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
-            renderDashboardAnalytics();
-        }
-
-        function initDashboardFilters() { onDashIndustryChange(); }
-
-        // ĐÃ CHỈNH SỬA ĐỂ PHÙ HỢP CẤU TRÚC MẢNG TRONG CODELAB-DATA
-        function getRequiredExercisesTree(industry, sessionFilter) {
+        function getRequiredExercisesTree(course, sessionFilter) {
             if (!CODELAB_DATA || !Array.isArray(CODELAB_DATA)) return [];
             let tree = [];
             let cleanFilter = "";
@@ -494,7 +494,6 @@
             return tree;
         }
 
-        // ĐÃ CHỈNH SỬA ĐỂ PHÙ HỢP CẤU TRÚC MẢNG TRONG CODELAB-DATA
         function getExerciseDetails(exerciseTitle) {
             if (!CODELAB_DATA || !Array.isArray(CODELAB_DATA) || !exerciseTitle) return null;
             const targetTitle = cleanStr(exerciseTitle);
@@ -514,11 +513,12 @@
         }
 
         // ==========================================
-        // VIEW 1: RENDER DASHBOARD
+        // VIEW 1: RENDER DASHBOARD (CẬP NHẬT LỌC MỚI)
         // ==========================================
         function renderDashboardAnalytics() {
             const selTime = document.getElementById('dashFilterTime').value;
-            const selInd = document.getElementById('dashFilterIndustry').value;
+            const selCourse = document.getElementById('dashFilterCourse').value;
+            const selDept = document.getElementById('dashFilterDept').value;
             const selSession = document.getElementById('dashFilterSession').value;
 
             let filteredSubmissions = allData;
@@ -542,20 +542,24 @@
                 });
             }
 
-            if (selInd !== 'all') filteredSubmissions = filteredSubmissions.filter(e => e.khoa === selInd);
+            if (selCourse !== 'all') filteredSubmissions = filteredSubmissions.filter(e => e.khoa === selCourse);
+            if (selDept !== 'all') filteredSubmissions = filteredSubmissions.filter(e => e.phongBan === selDept);
 
-            let baseDataForStudents = selInd === 'all' ? allData : allData.filter(e => e.khoa === selInd);
+            let baseDataForStudents = allData;
+            if (selCourse !== 'all') baseDataForStudents = baseDataForStudents.filter(e => e.khoa === selCourse);
+            if (selDept !== 'all') baseDataForStudents = baseDataForStudents.filter(e => e.phongBan === selDept);
+
             const allStudentsMap = {};
             baseDataForStudents.forEach(e => {
                 const name = (e.hoVaTen || 'Ẩn Danh').trim();
-                if (name) { if (!allStudentsMap[name]) allStudentsMap[name] = { name: name, dept: e.phongBan || 'N/A', industry: e.khoa || 'Retail' }; }
+                if (name) { if (!allStudentsMap[name]) allStudentsMap[name] = { name: name, dept: e.phongBan || 'N/A', course: e.khoa || 'N/A' }; }
             });
 
             const studentList = Object.values(allStudentsMap);
             let submittedCount = 0; let totalAvgPercentSum = 0; let studentRankingData = [];
 
             studentList.forEach(st => {
-                let tree = getRequiredExercisesTree(st.industry, selSession);
+                let tree = getRequiredExercisesTree(st.course, selSession);
                 let totalReq = 0; let reqExTitlesForSession = [];
                 tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(ex => { totalReq++; reqExTitlesForSession.push(cleanStr(ex)); })));
 
@@ -573,7 +577,7 @@
                 });
                 if (hasSubmission) submittedCount++;
 
-                studentRankingData.push({ name: st.name, dept: st.dept, industry: st.industry, percent: percent, done: uniqueDone.length, total: totalReq, hasSubmitted: hasSubmission });
+                studentRankingData.push({ name: st.name, dept: st.dept, course: st.course, percent: percent, done: uniqueDone.length, total: totalReq, hasSubmitted: hasSubmission });
             });
 
             studentRankingData.sort((a,b) => b.percent - a.percent || b.done - a.done);
@@ -603,7 +607,7 @@
                             ${badge}
                             <div class="truncate">
                                 <p class="font-bold text-slate-800 text-sm truncate">${st.name}</p>
-                                <p class="text-[10px] text-slate-400 font-medium mt-0.5">Tái ký | <span class="text-blue-600 font-bold">${st.industry}</span></p>
+                                <p class="text-[10px] text-slate-400 font-medium mt-0.5">Khóa: <span class="text-blue-600 font-bold">${st.course}</span> | PB: ${st.dept}</p>
                             </div>
                         </div>
                         <div class="flex items-center gap-6 flex-1 max-w-[450px]">
@@ -645,19 +649,19 @@
         }
 
         // ==========================================
-        // VIEW 2: CHẤM BÀI TRỰC TUYẾN
+        // VIEW 2: CHẤM BÀI TRỰC TUYẾN (CẬP NHẬT LỌC MỚI)
         // ==========================================
         function renderCards() {
-            const selInd = getRadioValue('filterIndustry'); const selSession = getRadioValue('filterSession'); const selStudent = getRadioValue('filterStudent'); const selSubmissionState = getRadioValue('filterSubmissionState'); const selTime = getRadioValue('filterTime');
+            const selCourse = document.getElementById('filterCourse').value; const selSession = getRadioValue('filterSession'); const selStudent = getRadioValue('filterStudent'); const selSubmissionState = getRadioValue('filterSubmissionState'); const selTime = getRadioValue('filterTime');
             const container = document.getElementById('exercisesContainer');
             if (!container) return;
 
-            if (!selStudent || !selSession || !selInd) {
-                container.innerHTML = `<div class="bg-white rounded-3xl p-12 text-center text-slate-400 font-bold border border-slate-200">Vui lòng chọn cụ thể Ngành hàng, Buổi học và Học viên từ bộ lọc bên trái.</div>`;
+            if (!selStudent || !selSession || selCourse === 'all') {
+                container.innerHTML = `<div class="bg-white rounded-3xl p-12 text-center text-slate-400 font-bold border border-slate-200">Vui lòng chọn cụ thể Khóa học, Buổi học và Học viên từ bộ lọc bên trái.</div>`;
                 return;
             }
 
-            let tree = getRequiredExercisesTree(selInd, selSession); let requiredExerciseTitles = [];
+            let tree = getRequiredExercisesTree(selCourse, selSession); let requiredExerciseTitles = [];
             tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(ex => { if(!requiredExerciseTitles.includes(ex)) requiredExerciseTitles.push(ex); })));
 
             let studentSubmissions = allData.filter(e => cleanStr(e.hoVaTen) === cleanStr(selStudent));
@@ -685,7 +689,7 @@
             let totalReq = requiredExerciseTitles.length; let doneCount = requiredExerciseTitles.filter(t => studentSubmissions.some(s => cleanStr(s.tenBaiHoc) === cleanStr(t))).length;
             const percent = totalReq === 0 ? 0 : Math.min(100, Math.round((doneCount / totalReq) * 100));
 
-            document.getElementById('progressStudentInfo').innerText = `Học viên: ${selStudent} | Ngành: ${selInd} | ${selSession}`;
+            document.getElementById('progressStudentInfo').innerText = `Học viên: ${selStudent} | Khóa: ${selCourse} | ${selSession}`;
             document.getElementById('progressText').innerText = `Đã làm: ${doneCount}/${totalReq} bài`;
             document.getElementById('progressPercent').innerText = `${percent}%`;
             document.getElementById('progressBarFill').style.width = `${percent}%`;
@@ -721,7 +725,7 @@
                                 <h3 class="text-base font-bold text-slate-800 tracking-wide">${exTitle}</h3>
                                 <p class="text-xs font-medium text-slate-500 mt-1.5 flex items-center gap-2">
                                     <i class="fas fa-user-circle text-slate-400 text-sm"></i> <span class="text-blue-600 font-bold">${selStudent}</span> 
-                                    <span class="text-slate-300">|</span>Ngành: <span class="text-slate-700 font-bold">${selInd}</span>
+                                    <span class="text-slate-300">|</span>Khóa: <span class="text-slate-700 font-bold">${selCourse}</span>
                                 </p>
                             </div>
                             <div class="shrink-0">
@@ -741,7 +745,7 @@
                 const safeKey = `card-${idx}`;
                 
                 let badgeGroupHtml = `
-                    <button onclick="openStudentReportModal('${(item.hoVaTen||"").replace(/'/g, "\\'")}', '${(item.phongBan||"").replace(/'/g, "\\'")}', '${(item.khoa||"Retail").replace(/'/g, "\\'")}', '${(item.buoi||"").replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-colors">
+                    <button onclick="openStudentReportModal('${(item.hoVaTen||"").replace(/'/g, "\\'")}', '${(item.phongBan||"").replace(/'/g, "\\'")}', '${(item.khoa||"").replace(/'/g, "\\'")}', '${(item.buoi||"").replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-colors">
                         <i class="fas fa-file-pdf text-emerald-600"></i> Báo cáo PDF
                     </button>`;
                 
@@ -781,7 +785,7 @@
                             <h3 class="text-base font-bold text-slate-800 tracking-wide">${item.tenBaiHoc || 'Bài tập thực hành'}</h3>
                             <p class="text-[11px] font-medium text-slate-500 mt-2 flex items-center flex-wrap gap-2">
                                 <i class="fas fa-user-circle text-slate-400 text-sm"></i> <span class="text-blue-600 font-bold">${item.hoVaTen || 'Ẩn danh'}</span> 
-                                <span class="text-slate-300">|</span>Ngành: <span class="text-slate-700 font-bold">${item.khoa || 'Retail'}</span>
+                                <span class="text-slate-300">|</span>Khóa: <span class="text-slate-700 font-bold">${item.khoa || 'Không rõ'}</span>
                                 <span class="text-slate-300">|</span><i class="far fa-clock text-slate-400"></i> <span class="text-slate-700 font-semibold">${formatDateTime(item.ngay)}</span>
                             </p>
                         </div>
@@ -818,16 +822,16 @@
         }
 
         function openReportFromFilter() {
-            const selStudent = getRadioValue('filterStudent'); const selInd = getRadioValue('filterIndustry'); const selSession = getRadioValue('filterSession');
+            const selStudent = getRadioValue('filterStudent'); const selCourse = document.getElementById('filterCourse').value; const selSession = getRadioValue('filterSession');
             if (!selStudent) { alert("Vui lòng chọn học viên!"); return; }
             const match = allData.find(e => (e.hoVaTen||'').trim() === selStudent.trim());
-            openStudentReportModal(selStudent, match ? match.phongBan : 'N/A', selInd, selSession);
+            openStudentReportModal(selStudent, match ? match.phongBan : 'N/A', selCourse, selSession);
         }
 
-        function openStudentReportModal(studentName, studentDept, industry, sessionFilter) {
+        function openStudentReportModal(studentName, studentDept, course, sessionFilter) {
             const container = document.getElementById('reviewHistoryContainer'); if (!container) return;
-            if (!industry || industry === 'all') { const match = allData.find(e => (e.hoVaTen||'').trim() === studentName.trim()); industry = (match && match.khoa) ? match.khoa : 'Retail'; }
-            let tree = getRequiredExercisesTree(industry, sessionFilter || 'all');
+            if (!course || course === 'all') { const match = allData.find(e => (e.hoVaTen||'').trim() === studentName.trim()); course = (match && match.khoa) ? match.khoa : 'Không rõ'; }
+            let tree = getRequiredExercisesTree(course, sessionFilter || 'all');
             let totalReq = 0; let doneCount = 0; const studentSubmissions = allData.filter(e => cleanStr(e.hoVaTen) === cleanStr(studentName)); const doneTitles = studentSubmissions.map(e => cleanStr(e.tenBaiHoc));
             tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(exTitle => { totalReq++; if (doneTitles.includes(cleanStr(exTitle))) doneCount++; })));
             const percent = totalReq === 0 ? 0 : Math.min(100, Math.round((doneCount / totalReq) * 100));
@@ -847,7 +851,7 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs">
                     <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-200 print:text-slate-400 block mb-0.5"><i class="fas fa-user mr-1"></i> Họ và tên:</span><span class="font-bold text-sm text-white print:text-slate-800">${studentName}</span></div>
                     <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-200 print:text-slate-400 block mb-0.5"><i class="fas fa-building mr-1"></i> Phòng ban:</span><span class="font-bold text-sm text-white print:text-slate-800">${studentDept}</span></div>
-                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-200 print:text-slate-400 block mb-0.5"><i class="fas fa-graduation-cap mr-1"></i> Ngành học:</span><span class="font-bold text-sm text-amber-300 print:text-blue-700">${industry}</span></div>
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-200 print:text-slate-400 block mb-0.5"><i class="fas fa-graduation-cap mr-1"></i> Khóa học:</span><span class="font-bold text-sm text-amber-300 print:text-blue-700">${course}</span></div>
                     <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-200 print:text-slate-400 block mb-0.5"><i class="fas fa-book mr-1"></i> Buổi học:</span><span class="font-bold text-sm text-white print:text-slate-800 break-words block">${sessionFilter === 'all' ? 'Toàn bộ khóa học' : sessionFilter}</span></div>
                 </div>
             </div>`;
