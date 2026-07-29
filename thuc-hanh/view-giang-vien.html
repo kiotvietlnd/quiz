@@ -326,8 +326,17 @@
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
 
-        function getRadioValue(name) { const checked = document.querySelector(`input[name="${name}"]:checked`); return checked ? checked.value : ''; }
+        // --- BỔ SUNG 2 HÀM TIỆN ÍCH BỊ THIẾU ---
+        const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
+        
+        function formatDateTime(isoString) {
+            if (!isoString) return ''; const d = new Date(isoString); if (isNaN(d.getTime())) return isoString;
+            const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        }
+        // --------------------------------------
 
+        function getRadioValue(name) { const checked = document.querySelector(`input[name="${name}"]:checked`); return checked ? checked.value : ''; }
         function switchTab(tab) {
             currentActiveTab = tab;
             const dashView = document.getElementById('dashboardView'); const gradingView = document.getElementById('gradingView'); const gradingFiltersSubmenu = document.getElementById('gradingFiltersSubmenu'); const navDash = document.getElementById('navTabDashboard'); const navGrading = document.getElementById('navTabGrading'); const headerTitle = document.getElementById('headerTitle');
