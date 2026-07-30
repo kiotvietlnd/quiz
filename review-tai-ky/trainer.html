@@ -509,7 +509,7 @@
             });
         }
 
-        // ================= ĐỊNH DẠNG & TRÍCH XUẤT ĐÁP ÁN =================
+        // ================= ĐỊNH DẠNG & TRÍCH XUẤT ĐÁP ÁN (ĐÃ FIX LỖI) =================
         function splitTitle(fullTitle) {
             if (!fullTitle) return { code: "", lesson: "", scenario: "" };
             let code = "", lesson = "", scenario = "";
@@ -529,6 +529,7 @@
         function formatQuestionText(text) {
             if (!text) return "";
             let cleanText = text.replace(/\r\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            cleanText = cleanText.replace(/^[\s-•▪■:]+/, '').replace(/[\s-•▪■:]+$/, '');
             return escapeHtml(cleanText);
         }
 
@@ -555,10 +556,10 @@
             if (rest.startsWith(":")) rest = rest.substring(1).trim();
 
             const stopKeywords = [
-                "Phân biệt bản chất",
-                "Giải thích bản chất",
                 "Lợi ích thuyết phục gia hạn",
                 "Lợi ích thuyết phục",
+                "Phân biệt bản chất",
+                "Giải thích bản chất",
                 "Nhận diện nút thắt"
             ];
 
@@ -571,42 +572,73 @@
             }
 
             let result = rest.substring(0, cutIdx).trim();
-            result = result.replace(/[-•▪■:]+$/, '').trim();
-            result = result.replace(/^[-•▪■:]+/, '').trim();
+            result = result.replace(/^[\s-•▪■:]+/, '').trim();
+            result = result.replace(/[\s-•▪■:]+$/, '').trim();
             return escapeHtml(result);
         }
 
         function formatAnswerWithBullets(text) {
             if (!text) return "";
-            const keywords = ["Nhận diện nút thắt", "Giải pháp gợi ý", "Gợi ý giải pháp", "Giải thích bản chất", "Phân biệt bản chất", "Lợi ích thuyết phục gia hạn", "Lợi ích thuyết phục"];
-            let preparedText = text.replace(/\r\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
-            preparedText = escapeHtml(preparedText);
-            
-            keywords.forEach(kw => {
-                const regex = new RegExp(`\\s*(${kw}:?)\\s*`, 'gi');
-                preparedText = preparedText.replace(regex, `[SPLIT]$1`);
-            });
-            const rawParts = preparedText.split('[SPLIT]');
+            let cleanText = text.replace(/\r\n/g, ' ').replace(/\n/g, ' ').replace(/\s+/g, ' ').trim();
+            cleanText = cleanText.replace(/^[\s-•▪■:]+/, '');
+
+            // Sắp xếp các từ khóa dài trước từ khóa ngắn để tránh đè từ khóa (tránh lỗi ngắt chữ "ia hạn")
+            const keywords = [
+                "Lợi ích thuyết phục gia hạn",
+                "Lợi ích thuyết phục",
+                "Giải thích bản chất",
+                "Phân biệt bản chất",
+                "Nhận diện nút thắt",
+                "Gợi ý giải pháp",
+                "Giải pháp gợi ý"
+            ];
+
+            const patternStr = "(?:^|\\s*[-•▪■]?\\s*)(" + keywords.join("|") + ")\\s*:?\\s*";
+            const regex = new RegExp(patternStr, "gi");
+
+            let matches = [];
+            let match;
+            while ((match = regex.exec(cleanText)) !== null) {
+                matches.push({
+                    index: match.index,
+                    length: match[0].length,
+                    keywordMatched: match[1],
+                    endIndex: match.index + match[0].length
+                });
+            }
+
+            if (matches.length === 0) {
+                return `<div class="text-slate-700 text-xs leading-relaxed my-1">${escapeHtml(cleanText)}</div>`;
+            }
+
             let htmlOutput = [];
-            rawParts.forEach(part => {
-                const trimmedPart = part.trim();
-                if (!trimmedPart) return;
-                let matchedKeyword = null;
-                for (let kw of keywords) {
-                    if (trimmedPart.toLowerCase().startsWith(kw.toLowerCase())) { matchedKeyword = kw; break; }
+
+            if (matches[0].index > 0) {
+                let preText = cleanText.substring(0, matches[0].index).trim().replace(/[\s-•▪■:]+$/, '');
+                if (preText) {
+                    htmlOutput.push(`<div class="text-slate-700 text-xs leading-relaxed my-1">${escapeHtml(preText)}</div>`);
                 }
-                if (matchedKeyword) {
-                    let colonIdx = trimmedPart.indexOf(':');
-                    if (colonIdx === -1 || colonIdx > matchedKeyword.length + 2) colonIdx = matchedKeyword.length;
-                    const headerText = trimmedPart.substring(0, colonIdx).trim() + ':';
-                    let bodyText = trimmedPart.substring(colonIdx + 1).trim();
-                    
-                    htmlOutput.push(`<div class="text-emerald-700 font-extrabold text-xs mt-2 mb-1">${headerText}</div>`);
-                    if (bodyText) htmlOutput.push(`<div class="text-slate-700 text-xs font-normal leading-relaxed pl-2 border-l-2 border-emerald-200 mb-1">${bodyText}</div>`);
-                } else {
-                    htmlOutput.push(`<div class="text-slate-700 text-xs leading-relaxed my-1">${trimmedPart}</div>`);
+            }
+
+            for (let i = 0; i < matches.length; i++) {
+                const current = matches[i];
+                const next = matches[i + 1];
+
+                const headerText = current.keywordMatched.trim() + ":";
+                let bodyText = next 
+                    ? cleanText.substring(current.endIndex, next.index) 
+                    : cleanText.substring(current.endIndex);
+
+                bodyText = bodyText.trim()
+                    .replace(/^[\s-•▪■:]+/, '')
+                    .replace(/[\s-•▪■:]+$/, '');
+
+                htmlOutput.push(`<div class="text-emerald-700 font-extrabold text-xs mt-2 mb-1">${escapeHtml(headerText)}</div>`);
+                if (bodyText) {
+                    htmlOutput.push(`<div class="text-slate-700 text-xs font-normal leading-relaxed pl-2 border-l-2 border-emerald-200 mb-1">${escapeHtml(bodyText)}</div>`);
                 }
-            });
+            }
+
             return htmlOutput.join('');
         }
 
@@ -615,46 +647,29 @@
             return String(string).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
         }
 
-        // ================= CẬP NHẬT NÚT MỞ MODAL POPUP (IFRAME) =================
+        // ================= CẬP NHẬT NÚT DYNAMIC LINKS (BỎ NÚT TH1-TH5) =================
         function updateDynamicLinks() {
             const container = document.getElementById('dynamicLinksContainer');
             let html = '<div class="flex flex-wrap items-center gap-2 pb-1 w-full">';
 
-            let eLearnLink = ""; let practiceLink1 = ""; let practiceLink2 = "";
-            let textBtn1 = "Bài TH1"; let textBtn2 = "Bài TH2"; 
+            let eLearnLink = ""; 
             let markLink = "https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/view-giang-vien.html";
 
             if(currentRoadmap === 'Retail') {
-                if(currentDay === 'day1') {
+                if(currentDay === 'day1' || currentDay === 'day2') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-1.html`;
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-2.html`;
-                } else if(currentDay === 'day2') {
-                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-retail";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-3.html`; textBtn1 = "Bài TH3";
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-4.html`; textBtn2 = "Bài TH4";
                 } else if(currentDay === 'day3') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/retail-buoi-5.html`; textBtn1 = "Bài TH5";
                 }
             } else if (currentRoadmap === 'FNB') {
-                if(currentDay === 'day1') {
+                if(currentDay === 'day1' || currentDay === 'day2') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-1.html`;
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-2.html`;
-                } else if(currentDay === 'day2') {
-                    eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc-tai-ky/dao-tao-san-pham-fnb";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-3.html`; textBtn1 = "Bài TH3";
-                    practiceLink2 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-4.html`; textBtn2 = "Bài TH4";
                 } else if(currentDay === 'day3') {
                     eLearnLink = "https://kiotvietlnd.github.io/elearning/khoa-hoc/dao-tao-san-pham-ke-toan-01";
-                    practiceLink1 = `https://kiotvietlnd.github.io/quiz/thuc-hanh/tai-ky/fnb-buoi-5.html`; textBtn1 = "Bài TH5";
                 }
             }
 
             if(eLearnLink) html += `<button type="button" onclick="openIframeModal('${eLearnLink}', 'Khóa học E-learning')" class="px-2.5 py-1 bg-blue-50 text-blue-600 hover:bg-blue-100 rounded-lg text-[10px] font-bold transition border border-blue-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-book"></i> E-learning</button>`;
-            if(practiceLink1) html += `<button type="button" onclick="openIframeModal('${practiceLink1}', '${textBtn1}')" class="px-2.5 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition border border-indigo-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-file-signature"></i> ${textBtn1}</button>`;
-            if(practiceLink2) html += `<button type="button" onclick="openIframeModal('${practiceLink2}', '${textBtn2}')" class="px-2.5 py-1 bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg text-[10px] font-bold transition border border-indigo-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-file-signature"></i> ${textBtn2}</button>`;
             html += `<button type="button" onclick="openIframeModal('${markLink}', 'Chấm bài Giảng viên')" class="px-2.5 py-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 rounded-lg text-[10px] font-bold transition border border-emerald-200 cursor-pointer flex items-center gap-1"><i class="fa-solid fa-check-double"></i> Chấm bài</button>`;
 
             html += '</div>';
@@ -961,7 +976,6 @@
                                     ? 'bg-amber-50 text-amber-700 border-amber-200' 
                                     : 'bg-slate-50 text-slate-400 border-slate-200';
 
-                            // Thẻ micro-tag có thêm shrink-0 để không bị bóp méo khi cuộn ngang
                             return `
                                 <span class="inline-flex items-center gap-1 text-[9px] font-extrabold px-2 py-1 rounded-lg ${badgeColorClass} border shadow-sm select-none shrink-0" title="Tiến độ bài nộp: ${escapeHtml(s.title)}">
                                     <span class="w-1.5 h-1.5 rounded-full ${isFullyDone ? 'bg-emerald-500' : doneCount > 0 ? 'bg-amber-500' : 'bg-slate-300'}"></span>
