@@ -1,24 +1,86 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
+<html lang="vi" class="scroll-smooth h-full">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thực hành KiotViet</title>
+    
+    <!-- Tailwind CSS Configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: { 
+                extend: {
+                    colors: {
+                        kvBlue: '#166def',
+                        kvBlueHover: '#1259c7',
+                        themeAccent: '#14b8a6',
+                        themeAccentHover: '#0d9488'
+                    }
+                } 
+            }
+        }
+    </script>
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
-        #sidebar { background-color: #1b365d; } 
+        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; }
+        html, body { height: 100%; }
+        @media (min-width: 1024px) { html, body { overflow: hidden; } }
         
-        details.group summary::-webkit-details-marker { display: none; }
-        .group-header { padding: 12px 16px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #cbd5e1; border-bottom: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;}
-        .group-header:hover { background: rgba(255, 255, 255, 0.05); color: #fff; }
-        .step-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s; padding-left: 20px;}
-        .step-inactive { color: #94a3b8; } .step-inactive:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; }
-        .step-active { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; font-weight: 700; border-left: 3px solid #3b82f6; padding-left: 17px;}
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        
+        /* Tech Background với Glow Blobs */
+        .tech-bg { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            z-index: -10; 
+            background-color: #f0f4f8; 
+            overflow: hidden; 
+        }
+        .glow-blob-1 {
+            position: absolute;
+            top: -10%;
+            left: -10%;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(30, 58, 138, 0.15) 0%, rgba(30, 58, 138, 0) 70%);
+            filter: blur(120px);
+        }
+        .glow-blob-2 {
+            position: absolute;
+            bottom: -10%;
+            right: -10%;
+            width: 50vw;
+            height: 50vw;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(14, 165, 233, 0.15) 0%, rgba(14, 165, 233, 0) 70%);
+            filter: blur(120px);
+        }
+
+        .glass-panel-ultra { 
+            background: rgba(255, 255, 255, 0.85); 
+            backdrop-filter: blur(20px) saturate(180%); 
+            -webkit-backdrop-filter: blur(20px) saturate(180%); 
+            border: 1px solid rgba(255, 255, 255, 0.6); 
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.05); 
+        }
+
+        #sidebar { background-color: #1e3a8a; }
+        
+        .step-item { display: flex; align-items: flex-start; gap: 10px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.05); transition: all 0.2s; }
+        .step-inactive { color: #bae6fd; } 
+        .step-inactive:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+        .step-active { background-color: rgba(255, 255, 255, 0.15); color: #ffffff; font-weight: 700; border-left: 4px solid #38bdf8; padding-left: 12px; }
         .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid white; }
 
         @media print {
@@ -30,130 +92,140 @@
         }
     </style>
 </head>
-<body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200">
+<body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200 bg-[#f0f4f8]">
 
-    <!-- HEADER (Đã bỏ icon tên học viên) -->
-    <header class="bg-[#166def] border-b border-blue-600 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 no-print text-white shadow-sm">
-        <div class="flex items-center gap-4">
-            <a href="index.html" class="flex items-center gap-1.5 text-white hover:text-white/80 font-bold text-xs border border-white/20 bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">
-                <i class="fas fa-chevron-left text-white"></i>
-                <span class="hidden sm:inline text-white">Trang Chủ</span>
-            </a>
-            <button onclick="toggleSidebar()" class="md:hidden text-white text-lg"><i class="fas fa-bars text-white"></i></button>
-            <div class="h-6 w-px bg-white/20 hidden lg:block mx-2"></div>
-            <div class="font-bold text-sm text-white hidden lg:block truncate" id="sessionTitle">Đang tải...</div>
-        </div>
-        <div class="flex items-center gap-3 shrink-0">
-            <button onclick="fetchFeedback(true)" class="relative flex items-center gap-2 text-xs font-bold text-white bg-white/10 px-3 py-2 rounded-lg transition border border-white/20 hover:bg-white/20">
-                <i class="fas fa-sync-alt text-white"></i>
-                <span id="btnFeedbackText" class="hidden md:inline text-white">Tải Nhận Xét</span>
-                <span id="globalNotificationDot" class="hidden absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span></span>
-            </button>
-            <div class="flex items-center gap-2 text-xs font-bold text-white bg-white/10 border border-white/20 px-3 py-2 rounded-lg">
-                <span id="studentLabel" class="text-white">Chưa định danh</span>
+    <div class="tech-bg">
+        <div class="glow-blob-1"></div>
+        <div class="glow-blob-2"></div>
+    </div>
+
+    <!-- HEADER (Chiều cao chuẩn h-[72px] kèm Gradient) -->
+    <header class="h-[72px] shrink-0 text-white shadow-md z-30 flex items-center no-print" style="background: linear-gradient(135deg, #166def 0%, #166def 75%, #ffffff 85%, #14b8a6 100%);">
+        <div class="w-full mx-auto px-4 md:px-6 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3">
+                <a href="index.html" class="flex items-center gap-1.5 text-white hover:text-white/80 font-bold text-xs border border-white/20 bg-white/10 px-3 py-2 rounded-xl hover:bg-white/20 transition shadow-sm">
+                    <i class="fas fa-chevron-left text-white"></i>
+                    <span class="hidden sm:inline text-white">Trang Chủ</span>
+                </a>
+                <div class="h-6 w-px bg-white/20 hidden lg:block mx-1"></div>
+                <div class="font-black text-sm text-white hidden lg:block truncate max-w-md tracking-tight" id="sessionTitle">Đang tải...</div>
+            </div>
+
+            <div class="flex items-center gap-3 shrink-0">
+                <button onclick="fetchFeedback(true)" class="relative flex items-center gap-2 text-xs font-bold text-white bg-white/10 px-3 py-2 rounded-xl transition border border-white/20 hover:bg-white/20 shadow-sm">
+                    <i class="fas fa-sync-alt text-white"></i>
+                    <span id="btnFeedbackText" class="hidden md:inline text-white">Tải Nhận Xét</span>
+                    <span id="globalNotificationDot" class="hidden absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span></span>
+                </button>
+                <div class="flex items-center gap-2 text-xs font-bold text-white bg-white/10 border border-white/20 px-3.5 py-2 rounded-xl shadow-sm">
+                    <i class="fas fa-user-circle text-sky-200"></i>
+                    <span id="studentLabel" class="text-white">Chưa định danh</span>
+                </div>
+                <button onclick="toggleSidebar()" class="md:hidden w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white text-base transition shrink-0">
+                    <i class="fas fa-bars"></i>
+                </button>
             </div>
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
-        <!-- SIDEBAR -->
-        <aside id="sidebar" class="w-72 flex flex-col z-30 transition-all shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.15)] relative overflow-hidden hidden md:flex no-print">
-            <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#122543]">
-                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
-            </div>
-            
-            <div class="p-6 border-b border-white/10 bg-[#122543]/50 shrink-0">
-                <div class="flex justify-between items-end mb-2.5">
-                    <span class="text-xs font-extrabold text-blue-200 tracking-wider uppercase">TIẾN TRÌNH HỌC TẬP</span>
-                    <span id="progressPercentTxt" class="text-xl font-black text-white">0%</span>
-                </div>
-                <div class="w-full bg-[#1b365d] h-2 rounded-full overflow-hidden shadow-inner mb-3">
-                    <div id="sidebarProgressBar" class="bg-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></div>
-                </div>
-                <div class="flex justify-between items-center">
-                    <span id="progressCountTxt" class="text-xs font-medium text-slate-400">Hoàn thành: 0 / 0 bài</span>
-                    <span id="progressStatusBadge" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded font-bold">Đang học</span>
-                </div>
-            </div>
-
-            <div id="sidebarScroll" class="flex-1 overflow-y-auto custom-scrollbar">
-                <div id="stepList" class="flex flex-col"></div>
-            </div>
-
-            <!-- CHÂN SIDEBAR: NÚT XEM PDF (XANH LÁ) + NÚT TKB (CAM) -->
-            <div class="p-4 border-t border-white/10 bg-[#122543]/60 shrink-0 space-y-2">
-                <button onclick="showReviewHistory()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fas fa-file-pdf text-white text-sm"></i>
-                    <span>Xem & Tải Báo Cáo PDF</span>
-                </button>
-                <button onclick="openTkbModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-sm">
-                    <i class="fas fa-calendar-alt text-white text-sm"></i>
-                    <span>Thời khóa biểu Tuần 1</span>
-                </button>
-            </div>
-        </aside>
-
-        <!-- KHUNG LÀM BÀI -->
-        <main class="flex-1 overflow-y-auto custom-scrollbar relative p-2 md:p-4 bg-slate-50 flex flex-col no-print">
-            <div id="mainContent" class="w-full max-w-[98%] mx-auto bg-white border-2 border-slate-300 rounded-3xl shadow-sm p-4 md:p-6 mb-24 relative"></div>
+    <div class="flex flex-1 overflow-hidden relative">
+        <!-- KHUNG LÀM BÀI MAIN WORKSPACE (BÊN TRÁI) -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar relative p-4 md:p-8 bg-transparent flex flex-col no-print">
+            <div id="mainContent" class="w-full max-w-[1200px] mx-auto mb-24 relative"></div>
             
             <!-- THANH ĐIỀU HƯỚNG DƯỚI CÙNG -->
-            <div class="fixed bottom-0 right-0 bg-white/90 backdrop-blur border-t border-slate-200 p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-10 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
-                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2.5 text-sm text-slate-500 font-bold hover:text-blue-600 transition hover:bg-blue-50 rounded-xl disabled:opacity-40 disabled:hover:bg-transparent">
+            <div class="fixed bottom-0 left-0 bg-white/95 backdrop-blur border-t border-slate-200 p-3.5 md:px-8 flex justify-between items-center md:w-[calc(100%-320px)] w-full z-20 shadow-[0_-8px_30px_rgba(0,0,0,0.06)]">
+                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-2 px-5 py-2.5 text-xs text-slate-600 font-bold hover:text-blue-600 transition hover:bg-slate-100 rounded-xl disabled:opacity-40 disabled:hover:bg-transparent">
                     <i class="fas fa-chevron-left"></i> Bài học trước
                 </button>
                 <div id="rightNavGroup" class="flex items-center gap-2.5"></div>
             </div>
         </main>
-    </div>
 
-    <!-- MODAL THỜI KHÓA BIỂU TUẦN 1 (ĐÃ SỬA LỖI TRẮNG TRANG) -->
-<div id="tkbModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[200] hidden flex-col no-print transition-all">
-    <header class="bg-[#166def] text-white h-14 flex items-center justify-between px-6 shrink-0 shadow-md">
-        <div class="flex items-center gap-3">
-            <i class="fas fa-calendar-alt text-amber-300 text-lg"></i>
-            <h2 class="text-sm font-black tracking-wide uppercase">Thời Khóa Biểu Tuần 1</h2>
-        </div>
-        <div class="flex items-center gap-3">
-            <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-white/20">
-                <i class="fas fa-external-link-alt text-xs"></i>
-                <span class="hidden sm:inline">Mở trang riêng</span>
-            </a>
-            <button onclick="closeTkbModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
-                <i class="fas fa-times text-base"></i>
-            </button>
-        </div>
-    </header>
-    <div class="flex-1 w-full h-full bg-slate-100 relative overflow-hidden">
-        <!-- Vùng Đang tải (Spinner) -->
-        <div id="tkbLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
-            <div class="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
-            <p class="text-xs font-bold text-slate-600">Đang tải dữ liệu Thời khóa biểu...</p>
-        </div>
-        
-        <!-- Khung nhúng Iframe -->
-        <iframe id="tkbIframe" 
-                src="" 
-                onload="hideTkbLoader()"
-                onerror="handleTkbError()"
-                referrerpolicy="no-referrer"
-                allow="fullscreen"
-                class="w-full h-full border-0 relative z-20">
-        </iframe>
-
-        <!-- Khung dự phòng (khi bị trình duyệt chặn hoàn toàn) -->
-        <div id="tkbFallback" class="hidden absolute inset-0 bg-white z-30 flex flex-col items-center justify-center p-6 text-center">
-            <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mb-4">
-                <i class="fas fa-shield-alt"></i>
+        <!-- SIDEBAR NAVIGATION (CHUYỂN SANG BÊN PHẢI - CHIỀU RỘNG 320px) -->
+        <aside id="sidebar" class="w-[320px] flex flex-col z-30 transition-all shrink-0 border-l border-white/10 shadow-xl relative overflow-hidden hidden md:flex no-print bg-[#1e3a8a] text-white">
+            <div class="h-14 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#172554]">
+                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-5">
+                <button onclick="toggleSidebar()" class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center text-white"><i class="fas fa-times"></i></button>
             </div>
-            <h3 class="text-base font-bold text-slate-800 mb-2">Trình duyệt hạn chế nhúng trực tiếp trang này</h3>
-            <p class="text-xs text-slate-500 max-w-md mb-6 leading-relaxed">Do chính sách bảo mật chống nhúng khung của trình duyệt, vui lòng nhấn nút bên dưới để mở Thời khóa biểu trên cửa sổ mới.</p>
-            <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
-                <i class="fas fa-external-link-alt"></i> Mở Thời Khóa Biểu Trong Tab Mới
-            </a>
+            
+            <!-- KHUNG TIẾN TRÌNH HỌC TẬP THU NHỎ -->
+            <div class="p-5 border-b border-white/10 bg-[#172554]/70 shrink-0">
+                <div class="flex justify-between items-end mb-2">
+                    <span class="text-xs font-bold text-sky-300 tracking-wider uppercase">TIẾN TRÌNH HỌC TẬP</span>
+                    <span id="progressPercentTxt" class="text-lg font-black text-white tabular-nums">0%</span>
+                </div>
+                <div class="w-full bg-slate-900/50 h-2 rounded-full overflow-hidden shadow-inner mb-2.5">
+                    <div id="sidebarProgressBar" class="bg-gradient-to-r from-teal-400 to-emerald-400 h-full rounded-full transition-all duration-500 w-0"></div>
+                </div>
+                <div class="flex justify-between items-center text-xs text-sky-200 font-medium">
+                    <span id="progressCountTxt">Hoàn thành: 0 / 0 bài</span>
+                    <span id="progressStatusBadge" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] px-1.5 py-0.5 rounded font-bold">Đang học</span>
+                </div>
+            </div>
+
+            <div id="sidebarScroll" class="flex-1 overflow-y-auto custom-scrollbar py-2">
+                <div id="stepList" class="flex flex-col"></div>
+            </div>
+
+            <!-- CHÂN SIDEBAR: NÚT XEM PDF & THỜI KHÓA BIỂU -->
+            <div class="p-4 border-t border-white/10 bg-[#172554]/80 shrink-0 space-y-2">
+                <button onclick="showReviewHistory()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-md">
+                    <i class="fas fa-file-pdf text-white text-sm"></i>
+                    <span>Xem & Tải Báo Cáo PDF</span>
+                </button>
+                <button onclick="openTkbModal()" class="w-full bg-orange-500 hover:bg-orange-600 text-white font-bold py-2.5 px-3 rounded-xl transition text-xs flex items-center justify-center gap-2 shadow-md">
+                    <i class="fas fa-calendar-alt text-white text-sm"></i>
+                    <span>Thời khóa biểu Tuần 1</span>
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <!-- MODAL THỜI KHÓA BIỂU TUẦN 1 -->
+    <div id="tkbModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-md z-[200] hidden flex-col no-print transition-all">
+        <header class="bg-[#166def] text-white h-14 flex items-center justify-between px-6 shrink-0 shadow-md">
+            <div class="flex items-center gap-3">
+                <i class="fas fa-calendar-alt text-amber-300 text-lg"></i>
+                <h2 class="text-sm font-black tracking-wide uppercase">Thời Khóa Biểu Tuần 1</h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg text-xs font-bold transition flex items-center gap-1.5 border border-white/20">
+                    <i class="fas fa-external-link-alt text-xs"></i>
+                    <span class="hidden sm:inline">Mở trang riêng</span>
+                </a>
+                <button onclick="closeTkbModal()" class="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition">
+                    <i class="fas fa-times text-base"></i>
+                </button>
+            </div>
+        </header>
+        <div class="flex-1 w-full h-full bg-slate-100 relative overflow-hidden">
+            <div id="tkbLoader" class="absolute inset-0 flex flex-col items-center justify-center bg-white z-10">
+                <div class="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
+                <p class="text-xs font-bold text-slate-600">Đang tải dữ liệu Thời khóa biểu...</p>
+            </div>
+            
+            <iframe id="tkbIframe" 
+                    src="" 
+                    onload="hideTkbLoader()"
+                    onerror="handleTkbError()"
+                    referrerpolicy="no-referrer"
+                    allow="fullscreen"
+                    class="w-full h-full border-0 relative z-20">
+            </iframe>
+
+            <div id="tkbFallback" class="hidden absolute inset-0 bg-white z-30 flex flex-col items-center justify-center p-6 text-center">
+                <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mb-4">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3 class="text-base font-bold text-slate-800 mb-2">Trình duyệt hạn chế nhúng trực tiếp trang này</h3>
+                <p class="text-xs text-slate-500 max-w-md mb-6 leading-relaxed">Do chính sách bảo mật chống nhúng khung của trình duyệt, vui lòng nhấn nút bên dưới để mở Thời khóa biểu trên cửa sổ mới.</p>
+                <a href="https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1" target="_blank" rel="noopener noreferrer" class="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                    <i class="fas fa-external-link-alt"></i> Mở Thời Khóa Biểu Trong Tab Mới
+                </a>
+            </div>
         </div>
     </div>
-</div>
 
     <!-- MODAL HOÀN THÀNH -->
     <div id="completionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4 no-print">
@@ -193,6 +265,7 @@
         <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none"><button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-left text-lg"></i></button><img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"><button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-right text-lg"></i></button></div><div class="h-8 shrink-0"></div>
     </div>
 
+    <!-- LOGIC XỬ LÝ (GIỮ NGUYÊN 100%) -->
     <script>
         const API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
         const ADMIN_API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
@@ -253,70 +326,67 @@
             fetchMasterData();
         });
 
-        // XỬ LÝ NỘI DUNG VÀ SỬA LỖI TRẮNG TRANG CHO MODAL THỜI KHÓA BIỂU
-function openTkbModal() {
-    const modal = document.getElementById('tkbModal');
-    const iframe = document.getElementById('tkbIframe');
-    const loader = document.getElementById('tkbLoader');
-    const fallback = document.getElementById('tkbFallback');
+        function openTkbModal() {
+            const modal = document.getElementById('tkbModal');
+            const iframe = document.getElementById('tkbIframe');
+            const loader = document.getElementById('tkbLoader');
+            const fallback = document.getElementById('tkbFallback');
 
-    if (loader) loader.classList.remove('hidden');
-    if (fallback) fallback.classList.add('hidden');
+            if (loader) loader.classList.remove('hidden');
+            if (fallback) fallback.classList.add('hidden');
 
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
 
-    const targetUrl = "https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1";
-    
-    // Nạp đường dẫn cho Iframe
-    if (iframe && iframe.src !== targetUrl) {
-        iframe.src = targetUrl;
-    }
+            const targetUrl = "https://kiotvietlnd.github.io/training/tkb-tai-ky-tuan-1";
+            
+            if (iframe && iframe.src !== targetUrl) {
+                iframe.src = targetUrl;
+            }
 
-    // Tự động kiểm tra: Nếu sau 2.5 giây Iframe bị chặn trắng trang, tự động Fetch mã HTML bơm trực tiếp vào khung
-    setTimeout(() => {
-        if (loader && !loader.classList.contains('hidden')) {
-            fetch(targetUrl)
-            .then(r => {
-                if(!r.ok) throw new Error("Blocked");
-                return r.text();
-            })
-            .then(html => {
-                if(html && html.trim().length > 0) {
-                    const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    doc.open();
-                    doc.write(html);
-                    doc.close();
-                    hideTkbLoader();
-                } else {
-                    handleTkbError();
+            setTimeout(() => {
+                if (loader && !loader.classList.contains('hidden')) {
+                    fetch(targetUrl)
+                    .then(r => {
+                        if(!r.ok) throw new Error("Blocked");
+                        return r.text();
+                    })
+                    .then(html => {
+                        if(html && html.trim().length > 0) {
+                            const doc = iframe.contentDocument || iframe.contentWindow.document;
+                            doc.open();
+                            doc.write(html);
+                            doc.close();
+                            hideTkbLoader();
+                        } else {
+                            handleTkbError();
+                        }
+                    })
+                    .catch(err => {
+                        console.warn("Bị chặn iframe, chuyển sang chế độ dự phòng.");
+                        handleTkbError();
+                    });
                 }
-            })
-            .catch(err => {
-                console.warn("Bị chặn iframe, chuyển sang chế độ dự phòng.");
-                handleTkbError();
-            });
+            }, 2500);
         }
-    }, 2500);
-}
 
-function hideTkbLoader() {
-    const loader = document.getElementById('tkbLoader');
-    if (loader) loader.classList.add('hidden');
-}
+        function hideTkbLoader() {
+            const loader = document.getElementById('tkbLoader');
+            if (loader) loader.classList.add('hidden');
+        }
 
-function handleTkbError() {
-    const loader = document.getElementById('tkbLoader');
-    const fallback = document.getElementById('tkbFallback');
-    if (loader) loader.classList.add('hidden');
-    if (fallback) fallback.classList.remove('hidden');
-}
+        function handleTkbError() {
+            const loader = document.getElementById('tkbLoader');
+            const fallback = document.getElementById('tkbFallback');
+            if (loader) loader.classList.add('hidden');
+            if (fallback) fallback.classList.remove('hidden');
+        }
 
-function closeTkbModal() {
-    const modal = document.getElementById('tkbModal');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-}
+        function closeTkbModal() {
+            const modal = document.getElementById('tkbModal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
 
         function fetchMasterData() {
             fetch(`${API_URL}?action=getExercises`)
@@ -336,10 +406,10 @@ function closeTkbModal() {
         function showError(msg) {
             document.getElementById('sessionTitle').innerText = "Lỗi dữ liệu";
             document.getElementById('mainContent').innerHTML = `
-                <div class="p-10 text-center bg-rose-50 border border-rose-200 rounded-3xl shadow-sm">
+                <div class="p-10 text-center glass-panel-ultra border border-rose-200 rounded-3xl shadow-sm">
                     <i class="fas fa-exclamation-triangle text-5xl text-rose-500 mb-4"></i>
                     <h2 class='text-rose-700 font-black text-xl'>${msg}</h2>
-                    <button onclick="location.reload();" class="mt-6 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white text-sm font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i> Tải lại trang</button>
+                    <button onclick="location.reload();" class="mt-6 px-6 py-3 bg-rose-600 hover:bg-rose-700 text-white text-xs font-bold rounded-xl shadow-md transition"><i class="fas fa-sync-alt mr-2"></i> Tải lại trang</button>
                 </div>`;
         }
 
@@ -350,7 +420,7 @@ function closeTkbModal() {
             }).join('');
 
             let html = `
-                <div class="max-w-md mx-auto p-8 bg-white border border-slate-200 rounded-3xl shadow-lg text-center">
+                <div class="max-w-md mx-auto p-8 glass-panel-ultra border border-slate-200 rounded-3xl shadow-lg text-center">
                     <div class="w-16 h-16 bg-amber-100 text-amber-600 rounded-full flex items-center justify-center text-2xl mx-auto mb-4">
                         <i class="fas fa-compass"></i>
                     </div>
@@ -360,16 +430,16 @@ function closeTkbModal() {
                     <div class="space-y-4 text-left">
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">1. Chọn lộ trình đào tạo</label>
-                            <select id="selQuickRoadmap" onchange="onQuickRoadmapChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 outline-none">
+                            <select id="selQuickRoadmap" onchange="onQuickRoadmapChange()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none">
                                 ${roadmapOptions}
                             </select>
                         </div>
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5">2. Chọn buổi học</label>
-                            <select id="selQuickSession" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-700 outline-none">
+                            <select id="selQuickSession" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-3 py-2.5 text-xs font-bold text-slate-700 outline-none">
                             </select>
                         </div>
-                        <button onclick="applyQuickSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-md transition text-sm uppercase tracking-wider"><i class="fas fa-play mr-1.5"></i> Bắt đầu học</button>
+                        <button onclick="applyQuickSelection()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 rounded-xl shadow-md transition text-xs uppercase tracking-wider"><i class="fas fa-play mr-1.5"></i> Bắt đầu học</button>
                     </div>
                 </div>
             `;
@@ -570,16 +640,16 @@ function closeTkbModal() {
 
                 const isGroupCompleted = (groupDoneCount === groupExCount);
 
-                const li = document.createElement('li'); 
+                const li = document.createElement('div'); 
                 li.id = `step_item_${index}`;
                 li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; 
                 li.onclick = () => goToStep(index);
                 
-                let statusIcon = isGroupCompleted ? `<div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold shadow shrink-0"><i class="fas fa-check"></i></div>` : `<div class="w-5 h-5 rounded-full border-2 border-slate-600 text-transparent flex items-center justify-center text-[9px] shrink-0"></div>`;
+                let statusIcon = isGroupCompleted ? `<div class="w-4 h-4 rounded-full bg-emerald-400 text-slate-900 flex items-center justify-center text-[9px] font-bold shrink-0 mt-0.5"><i class="fas fa-check"></i></div>` : `<div class="w-4 h-4 rounded-full border border-sky-300/40 text-transparent flex items-center justify-center text-[9px] shrink-0 mt-0.5"></div>`;
                 
                 let progressBadge = isGroupCompleted 
-                    ? `<span class="ml-auto bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] px-1.5 py-0.5 rounded font-black flex items-center gap-1 shrink-0"><i class="fas fa-check text-[9px]"></i> ${groupDoneCount}/${groupExCount}</span>`
-                    : `<span class="ml-auto bg-white/10 text-blue-200 border border-white/10 text-[10px] px-1.5 py-0.5 rounded font-black shrink-0">${groupDoneCount}/${groupExCount}</span>`;
+                    ? `<span class="ml-auto bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] px-1.5 py-0.5 rounded-full font-black flex items-center gap-1 shrink-0"><i class="fas fa-check text-[8px]"></i> ${groupDoneCount}/${groupExCount}</span>`
+                    : `<span class="ml-auto bg-white/10 text-sky-200 border border-white/10 text-[9px] px-1.5 py-0.5 rounded-full font-black shrink-0">${groupDoneCount}/${groupExCount}</span>`;
 
                 let hasFeedback = false;
                 let hasUnread = false;
@@ -590,15 +660,15 @@ function closeTkbModal() {
                     }
                 });
 
-                const hasFeedbackIcon = hasFeedback ? `<span title="Có nhận xét" class="ml-auto text-amber-400 text-xs"><i class="fas fa-comment-dots"></i></span>` : '';
+                const hasFeedbackIcon = hasFeedback ? `<span title="Có nhận xét" class="ml-auto text-amber-300 text-xs"><i class="fas fa-comment-dots"></i></span>` : '';
                 const unreadBadge = hasUnread ? '<span class="notification-dot"></span>' : '';
                 let displayTitle = group.title.replace(/^(\d+)\.\s*/i, "Bài $1. ");
 
                 li.innerHTML = `
                     <div class="relative shrink-0 flex items-center">${statusIcon}${unreadBadge}</div>
-                    <div class="leading-snug text-[12px] flex-1 ml-3 flex items-start justify-between gap-2">
-                        <span class="break-words font-medium">${displayTitle}</span>
-                        <div class="flex items-center gap-1.5 shrink-0">
+                    <div class="leading-snug text-xs flex-1 ml-2 flex items-start justify-between gap-1.5">
+                        <span class="break-words font-semibold">${displayTitle}</span>
+                        <div class="flex items-center gap-1 shrink-0">
                             ${hasFeedbackIcon}
                             ${progressBadge}
                         </div>
@@ -612,8 +682,8 @@ function closeTkbModal() {
             document.getElementById('progressCountTxt').innerText = `Hoàn thành: ${completedCount} / ${totalRealExercises} bài`;
             
             const badge = document.getElementById('progressStatusBadge');
-            if (percent === 100) { badge.className = "bg-emerald-50 text-white border border-emerald-400 text-[10px] px-2 py-0.5 rounded font-bold shadow-[0_0_8px_rgba(52,211,153,0.5)]"; badge.innerText = "Hoàn tất"; } 
-            else { badge.className = "bg-amber-50/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded font-bold"; badge.innerText = "Đang học"; }
+            if (percent === 100) { badge.className = "bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-[9px] px-1.5 py-0.5 rounded font-bold"; badge.innerText = "Hoàn tất"; } 
+            else { badge.className = "bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[9px] px-1.5 py-0.5 rounded font-bold"; badge.innerText = "Đang học"; }
             updateGlobalNotification();
         }
 
@@ -640,9 +710,9 @@ function closeTkbModal() {
                 const btn = document.getElementById(`sub_nav_${idx}`);
                 if (btn) {
                     if (idx === subIdx) {
-                        btn.className = 'px-3 py-1.5 text-xs font-black rounded-lg transition-all border border-blue-600 bg-blue-600 text-white shadow-sm';
+                        btn.className = 'px-3 py-1.5 text-xs font-black rounded-xl transition-all border border-blue-600 bg-blue-600 text-white shadow-sm';
                     } else {
-                        btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
+                        btn.className = 'px-3 py-1.5 text-xs font-semibold rounded-xl transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
                     }
                 }
             });
@@ -704,20 +774,20 @@ function closeTkbModal() {
             let navButtonsHtml = group.exercises.map((ex, subIdx) => {
                 let match = ex.title.match(/^(\d+[a-z]+)/i);
                 let shortName = match ? match[1] : `Mục ${subIdx + 1}`;
-                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100">${shortName}</button>`;
+                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-semibold rounded-xl transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100">${shortName}</button>`;
             }).join('');
 
             let html = `
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-slate-200 pb-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6 border-b border-slate-200/80 pb-4">
                 <h1 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight leading-tight">${displayGroupTitle}</h1>
                 <div class="flex items-center gap-2 shrink-0 select-none">
-                    <button id="btnSubPrev" onclick="navigateSubExercise(-1)" title="Bài tập trước" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 flex items-center justify-center transition disabled:opacity-30 disabled:hover:bg-slate-100 disabled:hover:text-slate-600">
+                    <button id="btnSubPrev" onclick="navigateSubExercise(-1)" title="Bài tập trước" class="w-8 h-8 rounded-xl bg-white hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 flex items-center justify-center transition disabled:opacity-30 disabled:hover:bg-white shadow-sm">
                         <i class="fas fa-chevron-left text-xs"></i>
                     </button>
                     <div class="flex items-center gap-1.5 flex-wrap">
                         ${navButtonsHtml}
                     </div>
-                    <button id="btnSubNext" onclick="navigateSubExercise(1)" title="Bài tập sau" class="w-8 h-8 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 flex items-center justify-center transition disabled:opacity-30 disabled:hover:bg-slate-100 disabled:hover:text-slate-600">
+                    <button id="btnSubNext" onclick="navigateSubExercise(1)" title="Bài tập sau" class="w-8 h-8 rounded-xl bg-white hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 flex items-center justify-center transition disabled:opacity-30 disabled:hover:bg-white shadow-sm">
                         <i class="fas fa-chevron-right text-xs"></i>
                     </button>
                 </div>
@@ -735,9 +805,9 @@ function closeTkbModal() {
                     ex.theory.forEach((q, qIndex) => {
                         let ansVal = answersArr[qIndex] || '';
                         theoryHtml += `
-                        <div class="bg-slate-50/50 border border-slate-200 rounded-2xl overflow-hidden">
+                        <div class="bg-slate-50/70 border border-slate-200 rounded-2xl overflow-hidden">
                             <div class="bg-slate-100/80 p-3.5 border-b border-slate-200">
-                                <p class="text-slate-800 font-bold text-xs leading-relaxed"><span class="text-blue-500 mr-1"><i class="fas fa-question-circle"></i></span> ${parseLinks(q)}</p>
+                                <p class="text-slate-800 font-bold text-xs leading-relaxed"><span class="text-blue-600 mr-1"><i class="fas fa-question-circle"></i></span> ${parseLinks(q)}</p>
                             </div>
                             <textarea id="inpTextAnswer_${oIdx}_${qIndex}" rows="2" class="w-full p-4 focus:ring-0 outline-none font-medium text-slate-700 text-xs transition-all resize-none bg-white placeholder:font-normal" placeholder="Gõ câu trả lời của bạn vào đây..." oninput="saveDraft()">${ansVal}</textarea>
                         </div>`;
@@ -745,7 +815,6 @@ function closeTkbModal() {
                     theoryHtml += `</div>`;
                 }
 
-                // KHUNG YÊU CẦU ĐỀ BÀI: Nền xanh lá nhạt dịu mắt
                 let reqHtml = '';
                 if(ex.requirements && ex.requirements.length > 0) {
                     reqHtml = `<div class="mb-4"><ul class="space-y-2 text-xs text-slate-800 pl-4 border-l-4 border-emerald-500 bg-emerald-50/80 p-4 rounded-r-2xl leading-relaxed font-semibold shadow-sm">${ex.requirements.map(r => `<li>${parseLinks(r)}</li>`).join('')}</ul></div>`;
@@ -791,7 +860,6 @@ function closeTkbModal() {
                         </div>
                     `;
                 } else {
-                    // CẢNH BÁO CHƯA NỘP ẢNH: Màu xám dịu mắt
                     uploadAreaHtml = `
                         <div class="space-y-3">
                             <div id="dropzone_${oIdx}" 
@@ -838,7 +906,7 @@ function closeTkbModal() {
                                     <p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p>
                                     <button onclick="toggleFeedback(${oIdx})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button>
                                 </div>
-                                <p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${myData.feedback}</p>
+                                <p class="text-slate-700 text-xs whitespace-pre-wrap leading-relaxed">${myData.feedback}</p>
                             </div>
                         </div>` : ''}
                     </div>
@@ -857,7 +925,7 @@ function closeTkbModal() {
                         ${uploadAreaHtml}
 
                         <div class="flex items-center justify-end pt-1">
-                            <button id="btnSubmitStep_${oIdx}" onclick="uploadToGAS(${oIdx}, '${ex.title}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow transition font-bold text-xs flex items-center justify-center gap-1.5 shrink-0">
+                            <button id="btnSubmitStep_${oIdx}" onclick="uploadToGAS(${oIdx}, '${ex.title}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl shadow-md transition font-bold text-xs flex items-center justify-center gap-1.5 shrink-0">
                                 <i class="fas fa-paper-plane"></i>
                                 <span id="btnSubmitText_${oIdx}">${btnText}</span>
                             </button>
@@ -869,7 +937,7 @@ function closeTkbModal() {
             }).join('');
 
             html += `
-                <div class="w-full bg-white border-2 border-slate-300 rounded-3xl p-4 md:p-6 shadow-sm relative overflow-hidden">
+                <div class="w-full glass-panel-ultra border border-slate-200/80 rounded-3xl p-5 md:p-8 shadow-sm relative overflow-hidden bg-white/90">
                     ${sliderContentHtml}
                 </div>
             `;
@@ -894,7 +962,7 @@ function closeTkbModal() {
             let listHtml = ex.instructions.map(i => `<p class="py-2 border-b border-slate-100 flex items-start gap-2 text-slate-700 text-xs leading-relaxed font-semibold"><i class="fas fa-chevron-right text-slate-300 mt-1 shrink-0"></i> ${parseLinks(i)}</p>`).join('');
 
             modal.innerHTML = `
-                <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border-2 border-slate-400 relative mt-16 animate-fade-in-up">
+                <div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border border-slate-300 relative mt-16 animate-fade-in-up">
                     <button onclick="closeInstructionsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 transition"><i class="fas fa-times"></i></button>
                     <div class="flex items-center gap-2 mb-4">
                         <div class="bg-amber-100 text-amber-600 w-8 h-8 rounded-xl flex items-center justify-center text-sm"><i class="fas fa-lightbulb"></i></div>
@@ -947,7 +1015,7 @@ function closeTkbModal() {
                 const objectUrl = URL.createObjectURL(files[i]);
                 let fileName = files[i].name; if(fileName.length > 25) fileName = fileName.substring(0, 20) + '...';
                 html += `
-                <div class="relative border-2 border-blue-200 rounded-2xl overflow-hidden bg-slate-100 shadow-sm flex flex-col group">
+                <div class="relative border border-blue-200 rounded-2xl overflow-hidden bg-slate-100 shadow-sm flex flex-col group">
                     <div class="relative w-full overflow-hidden bg-white">
                         <img src="${objectUrl}" class="w-full h-auto max-h-[350px] object-contain">
                     </div>
@@ -1077,13 +1145,13 @@ function closeTkbModal() {
             if(isLastStep) { 
                 if(percent >= 100) {
                     rightNavGroup.innerHTML = `
-                        <button onclick="showCompletionModal()" class="flex items-center gap-2 px-6 py-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">
+                        <button onclick="showCompletionModal()" class="flex items-center gap-2 px-6 py-2.5 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">
                             Kết thúc buổi học <i class="fas fa-flag-checkered ml-1"></i>
                         </button>
                     `;
                 } else {
                     rightNavGroup.innerHTML = `
-                        <button onclick="window.location.href='index.html'" class="flex items-center gap-2 px-6 py-3 text-white bg-slate-600 hover:bg-slate-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">
+                        <button onclick="window.location.href='index.html'" class="flex items-center gap-2 px-6 py-2.5 text-white bg-slate-600 hover:bg-slate-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">
                             Quay về Trang chủ <i class="fas fa-home ml-1"></i>
                         </button>
                     `;
@@ -1091,7 +1159,7 @@ function closeTkbModal() {
             } 
             else { 
                 rightNavGroup.innerHTML = `
-                    <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-8 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">
+                    <button id="btnNext" onclick="nextStep()" class="flex items-center gap-2 px-7 py-2.5 text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">
                         Bài học sau <i class="fas fa-arrow-right ml-1"></i>
                     </button>
                 `;
@@ -1100,7 +1168,16 @@ function closeTkbModal() {
 
         function nextStep() { saveDraft(); if(currentStepIndex < window.groupedSteps.length - 1) goToStep(currentStepIndex + 1); }
         function prevStep() { saveDraft(); if(currentStepIndex > 0) goToStep(currentStepIndex - 1); }
-        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); sidebar.classList.toggle('z-50'); } }
+        function toggleSidebar() { 
+            const sidebar = document.getElementById('sidebar'); 
+            sidebar.classList.toggle('hidden'); 
+            if(window.innerWidth < 768) { 
+                sidebar.classList.toggle('fixed'); 
+                sidebar.classList.toggle('inset-y-0'); 
+                sidebar.classList.toggle('right-0'); 
+                sidebar.classList.toggle('z-50'); 
+            } 
+        }
 
         function showCompletionModal() {
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}');
