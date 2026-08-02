@@ -83,28 +83,7 @@
     </header>
 
     <main class="flex flex-1 overflow-hidden relative">
-        <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-blue-900/40 bg-[#073c6c] text-white relative z-20 shadow-lg justify-between h-full">
-            <div class="p-5 border-b border-blue-900/40 bg-[#052d52] shrink-0 flex items-center justify-between gap-2">
-                <h2 class="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2 select-none">
-                    <i class="fa-solid fa-layer-group"></i> Danh sách Bài học
-                </h2>
-                <button onclick="toggleSettingsModal(true)" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-blue-200 hover:text-white transition-colors focus:outline-none" title="Cài đặt ôn tập">
-                    <i class="fa-solid fa-gear text-sm"></i>
-                </button>
-            </div>
-            
-            <div class="flex-grow overflow-y-auto w-full p-3 space-y-1" id="category-sidebar-list"></div>
-
-            <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0 space-y-2">
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
-                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
-                </button>
-                <button id="get-certificate-btn" onclick="openCertificateForm()" class="w-full opacity-50 cursor-not-allowed bg-slate-600 text-slate-300 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs text-center border border-slate-500" disabled>
-                    <i class="fa-solid fa-lock"></i> Nhận chứng chỉ (0/0)
-                </button>
-            </div>
-        </aside>
-
+        <!-- Main Scroll Area -->
         <div id="main-scroll-area" class="flex-1 overflow-y-auto px-3 md:px-8 py-8 md:py-10 relative bg-[#f0f6ff] flex flex-col items-center">
             <div id="loading-screen" class="w-full flex flex-col items-center justify-center p-6 my-auto text-center max-w-md">
                 <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-kvBlue mb-4"></div>
@@ -137,7 +116,7 @@
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
                             <p>Sau khi hoàn thành tất cả bài ôn tập trắc nghiệm trong từng bài học cho khóa học, bạn có thể tải <strong>chứng chỉ hoàn thành ôn tập trắc nghiệm khóa học</strong>. Chứng chỉ này ghi nhận đã hoàn thành đầy đủ các bài tập trắc nghiệm trong khóa học, <span class="text-rose-600 font-bold">chưa phải là chứng nhận hoàn thành xong khóa học</span>.</p>
                             <p>Để hoàn thành khóa học, bạn cần đăng nhập vào hệ thống <a href="https://daotao.kiotviet.vn/khoa-hoc/tai-ky-dao-tao-san-pham-kiotviet-fnb" target="_blank" class="text-green-600 font-bold hover:underline">LMS</a> và làm bài test chính thức.</p>
-                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
+                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên phải, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-kvBlue mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
                             <p class="text-themeAccent font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao trong bài test chính thức trên LMS! 🚀</p>
                         </div>
                     </div>
@@ -223,9 +202,33 @@
                 </div>
             </div>
         </div>
+
+        <!-- Desktop Sidebar (Phải) -->
+        <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-l border-blue-900/40 bg-[#073c6c] text-white relative z-20 shadow-lg justify-between h-full">
+            <div class="p-5 border-b border-blue-900/40 bg-[#052d52] shrink-0 flex items-center justify-between gap-2">
+                <h2 class="text-xs font-bold text-blue-200 uppercase tracking-wider flex items-center gap-2 select-none">
+                    <i class="fa-solid fa-layer-group"></i> Danh sách Bài học
+                </h2>
+                <button onclick="toggleSettingsModal(true)" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-blue-200 hover:text-white transition-colors focus:outline-none" title="Cài đặt ôn tập">
+                    <i class="fa-solid fa-gear text-sm"></i>
+                </button>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto w-full p-3 space-y-1" id="category-sidebar-list"></div>
+
+            <div class="p-4 border-t border-blue-900/40 bg-[#052d52] shrink-0 space-y-2">
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-md text-center btn-interact">
+                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+                </button>
+                <button id="get-certificate-btn" onclick="openCertificateForm()" class="w-full opacity-50 cursor-not-allowed bg-slate-600 text-slate-300 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs text-center border border-slate-500" disabled>
+                    <i class="fa-solid fa-lock"></i> Nhận chứng chỉ (0/0)
+                </button>
+            </div>
+        </aside>
     </main>
 
-    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-[280px] bg-[#073c6c] text-white z-50 transform -translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl h-full">
+    <!-- Mobile Sidebar (Phải) -->
+    <div id="mobile-sidebar" class="fixed inset-y-0 right-0 w-[280px] bg-[#073c6c] text-white z-50 transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl h-full">
         <div class="p-4 border-b border-blue-900/40 flex items-center justify-between shrink-0 bg-[#052d52]">
             <span class="text-xs font-bold tracking-tight uppercase">Danh sách Bài học</span>
             <button onclick="window.toggleSidebar()" class="w-8 h-8 rounded-full hover:bg-white/10 flex items-center justify-center text-white"><i class="fa-solid fa-xmark text-sm"></i></button>
@@ -357,10 +360,10 @@
             const sidebar = document.getElementById('mobile-sidebar');
             if (!sidebar) return;
             if (forceState !== undefined) {
-                if (forceState) sidebar.classList.remove('-translate-x-full');
-                else sidebar.classList.add('-translate-x-full');
+                if (forceState) sidebar.classList.remove('translate-x-full');
+                else sidebar.classList.add('translate-x-full');
             } else {
-                sidebar.classList.toggle('-translate-x-full');
+                sidebar.classList.toggle('translate-x-full');
             }
         };
 
@@ -524,7 +527,7 @@
                     const buttons = document.querySelectorAll('.category-btn');
                     buttons.forEach(btn => {
                         if (btn.dataset.category === selectedCategory) {
-                            btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-l-4 border-themeAccent flex items-start justify-between text-xs font-bold focus:outline-none";
+                            btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-white bg-white/10 border-r-4 border-themeAccent flex items-start justify-between text-xs font-bold focus:outline-none";
                         } else {
                             btn.className = "category-btn w-full text-left py-3 px-4 rounded-xl text-blue-200 hover:bg-white/10 hover:text-white flex items-start justify-between text-xs font-semibold focus:outline-none";
                         }
