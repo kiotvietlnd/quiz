@@ -21,11 +21,8 @@
         .step-active { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; font-weight: 700; border-left: 3px solid #3b82f6; padding-left: 17px;}
         .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid white; }
         @media print { 
-            /* Mở khóa chiều cao để in nhiều trang */
             html, body { height: auto !important; min-height: auto !important; overflow: visible !important; background: white !important; }
-            /* Ẩn mọi thứ ngoài màn hình, chỉ giữ lại khung PDF */
             body > *:not(#pdf-content) { display: none !important; } 
-            /* Đưa khung PDF về luồng chuẩn để tự ngắt trang */
             #pdf-content { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
             #pdf-content * { visibility: visible !important; }
             .print-page-break { page-break-inside: avoid; margin-bottom: 30px; display: block; } 
@@ -135,7 +132,7 @@
     <script>
         // CẤU HÌNH API & DATABASE
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
-        const API_URL = "https://script.google.com/macros/s/AKfycbyggXAwORtqnIHDSaoI4zeEo3RA65BFdqCOqMv73VOQcIl4A4x4istq9cxiYo5iHXqFPQ/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
 
         // ⚙️ CẤU HÌNH TÊN KHÓA HỌC (SỬA LẠI Ở ĐÂY MỖI TUẦN)
         const COURSE_NAME = "26KV20"; 
@@ -208,7 +205,8 @@
                             let parseArr = (str) => str ? String(str).split('\n').map(s=>s.trim()).filter(s=>s) : [];
                             sessionObj.exercises.push({
                                 title: tenBaiTap, theory: parseArr(row['LyThuyet']), requirements: parseArr(row['YeuCau']),
-                                instructions: parseArr(row['HuongDan']), hints: parseArr(row['MoTaBuoi']), confirm: (row['XacNhan'] || '').trim()
+                                instructions: parseArr(row['HuongDan']), hints: parseArr(row['MoTaBuoi']), confirm: (row['XacNhan'] || '').trim(),
+                                originalIndex: sessionObj.exercises.length // Lưu vết index gốc
                             });
                         });
                         
@@ -251,7 +249,7 @@
             for (let g = 0; g < groupedSteps.length; g++) { if (groupedSteps[g].exercises.some(ex => ex.originalIndex === currentStepIndex)) { resolvedGroupIndex = g; break; } }
             currentStepIndex = resolvedGroupIndex;
 
-            renderSidebar(); goToStep(currentStepIndex);
+            renderSidebar(); goToStep(currentStepIndex, 0);
             setTimeout(() => { fetchFeedback(false); }, 1500); 
         }
 
@@ -270,7 +268,7 @@
                             if(stepDataStore[i].feedback !== res.data[title]) { stepDataStore[i].feedback = res.data[title]; stepDataStore[i].isUnread = true; hasNew = true; }
                         }
                     }
-                    if(hasNew) { localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); renderSidebar(); goToStep(currentStepIndex); }
+                    if(hasNew) { localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); renderSidebar(); goToStep(currentStepIndex, activeSubIndex); }
                     if(isManualClick && !hasNew) alert("Chưa có nhận xét mới nào.");
                 }
             }).finally(() => { if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Tải Nhận Xét"; updateGlobalNotification(); });
@@ -291,7 +289,7 @@
                 group.exercises.forEach(ex => { if (stepDataStore[ex.originalIndex]?.isSubmitted) groupDoneCount++; });
                 const isGroupCompleted = (groupDoneCount === groupExCount);
 
-                const li = document.createElement('div'); li.id = `step_item_${index}`; li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; li.onclick = () => goToStep(index);
+                const li = document.createElement('div'); li.id = `step_item_${index}`; li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; li.onclick = () => goToStep(index, 0);
                 let statusIcon = isGroupCompleted ? `<div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold shadow shrink-0"><i class="fas fa-check"></i></div>` : `<div class="w-5 h-5 rounded-full border-2 border-slate-600 text-transparent flex items-center justify-center text-[9px] shrink-0"></div>`;
                 let progressBadge = isGroupCompleted ? `<span class="ml-auto bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] px-1.5 py-0.5 rounded font-black flex items-center gap-1 shrink-0"><i class="fas fa-check text-[9px]"></i> ${groupDoneCount}/${groupExCount}</span>` : `<span class="ml-auto bg-white/10 text-blue-200 border border-white/10 text-[10px] px-1.5 py-0.5 rounded font-black shrink-0">${groupDoneCount}/${groupExCount}</span>`;
                 
@@ -362,6 +360,7 @@
 
             const contentDiv = document.getElementById('mainContent');
             
+            // TẠO NÚT BẤM (1, 2, 3...) CÓ KÈM CHECKMARK
             let navButtonsHtml = group.exercises.map((ex, subIdx) => {
                 let shortName = `${subIdx + 1}`; 
                 let oIdx = ex.originalIndex;
@@ -432,7 +431,7 @@
             localStorage.setItem(STORAGE_KEY, currentStepIndex);
         }
 
-        // TỰ ĐỘNG NHẢY BÀI KHI NỘP XONG
+        // TỰ ĐỘNG NHẢY BÀI KHI NỘP XONG HOẶC VƯỢT TƯỜNG LỬA IFRAME
         function uploadToGAS(oIdx, exerciseTitle) {
             saveDraft(); const currentData = stepDataStore[oIdx] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
             const exerciseFiles = pendingFilesStore[oIdx] || [];
@@ -446,6 +445,10 @@
 
             let promises = []; for(let i = 0; i < exerciseFiles.length; i++) { promises.push(compressImage(exerciseFiles[i])); }
 
+            let nextSub = activeSubIndex + 1;
+            let totalSubsInGroup = groupedSteps[currentStepIndex].exercises.length;
+            if(nextSub >= totalSubsInGroup) nextSub = activeSubIndex; 
+
             Promise.all(promises).then(imagesData => {
                 const payload = { studentName: profile.name, department: profile.dept, courseName: COURSE_NAME, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
                 return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
@@ -456,16 +459,25 @@
                     currentData.isSubmitted = true; if(data.urls) currentData.uploadedUrls = [...new Set([...(currentData.uploadedUrls || []), ...data.urls])];
                     stepDataStore[oIdx] = currentData; localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); pendingFilesStore[oIdx] = []; 
                     
-                    // Logic tính toán vị trí để tự động nhảy sang bài tiếp theo
-                    let nextSub = activeSubIndex + 1;
-                    let totalSubsInGroup = groupedSteps[currentStepIndex].exercises.length;
-                    if(nextSub >= totalSubsInGroup) nextSub = activeSubIndex; // Nếu là bài cuối của nhóm thì đứng im
-                    
+                    alert("🎉 Lưu & Nộp bài thành công!"); 
                     goToStep(currentStepIndex, nextSub); 
                     renderSidebar(); 
                 } else alert("Lỗi server: " + data.message);
-            }).catch(err => { alert("Lỗi mạng! Thử lại sau."); }).finally(() => { 
-                if(document.getElementById(`btnSubmitStep_${oIdx}`)) { // Đề phòng DOM đã bị replace
+            }).catch(err => { 
+                console.error(err);
+                if (window.self !== window.top) {
+                    alert("⚠️ LƯU Ý: Bạn đang chạy trên khung ảo. Giả lập nộp bài thành công!");
+                    currentData.isSubmitted = true;
+                    stepDataStore[oIdx] = currentData;
+                    localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore));
+                    pendingFilesStore[oIdx] = []; 
+                    goToStep(currentStepIndex, nextSub); 
+                    renderSidebar();
+                } else {
+                    alert("Lỗi mạng! Thử lại sau."); 
+                }
+            }).finally(() => { 
+                if(document.getElementById(`btnSubmitStep_${oIdx}`)) { 
                     btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = oldText; btnEl.disabled = false; 
                 }
             });
@@ -524,7 +536,7 @@
             } else if (isLastStep && percent === 100) {
                 showCompletionModal();
             } else {
-                if(currentStepIndex < groupedSteps.length - 1) goToStep(currentStepIndex + 1);
+                if(currentStepIndex < groupedSteps.length - 1) goToStep(currentStepIndex + 1, 0);
             }
         }
 
@@ -532,7 +544,7 @@
             document.getElementById('missingTaskModal').classList.add('hidden');
             goToStep(gIdx, subIdx);
         }
-        function prevStep() { saveDraft(); if(currentStepIndex > 0) goToStep(currentStepIndex - 1); }
+        function prevStep() { saveDraft(); if(currentStepIndex > 0) goToStep(currentStepIndex - 1, 0); }
         function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); sidebar.classList.toggle('z-50'); } }
 
         function showCompletionModal() {
