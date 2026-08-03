@@ -33,7 +33,6 @@
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200">
 
-    <!-- HEADER -->
     <header class="bg-[#166def] border-b border-blue-600 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 no-print text-white shadow-sm">
         <div class="flex items-center gap-4">
             <a href="index.html" class="flex items-center gap-1.5 text-white hover:text-white/80 font-bold text-xs border border-white/20 bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">
@@ -56,7 +55,6 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden">
-        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-72 flex flex-col z-30 transition-all shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.15)] relative overflow-hidden hidden md:flex no-print">
             <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#122543]">
                 <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
@@ -107,7 +105,6 @@
                 </div>
             </div>
             <div id="missingTaskList" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-2 mt-2 border-t border-slate-100 pt-4">
-                <!-- Danh sách bài thiếu sẽ render ở đây -->
             </div>
         </div>
     </div>
@@ -137,12 +134,12 @@
         // ⚙️ CẤU HÌNH TÊN KHÓA HỌC (SỬA LẠI Ở ĐÂY MỖI TUẦN)
         const COURSE_NAME = "26KV20"; 
 
-        // XỬ LÝ URL PARAMETERS ĐỂ LẤY ĐÚNG NGÀNH VÀ BUỔI HỌC TỪ TRANG CHỦ
+        // XỬ LÝ URL PARAMETERS (Robust Parsing)
         const urlParams = new URLSearchParams(window.location.search);
         const CURRENT_ROADMAP = urlParams.get('roadmap') || 'Retail';
         const SESSION_ID = urlParams.get('session') || urlParams.get('buoi') || 'session_1'; 
         
-        // TẠO CÁC BIẾN LOCALSTORAGE ĐỘNG BẢO VỆ DỮ LIỆU ĐỘC LẬP TỪNG BUỔI
+        // TẠO CÁC BIẾN LOCALSTORAGE ĐỘNG
         const STORAGE_KEY = `kv_codelab_progress_${CURRENT_ROADMAP}_${SESSION_ID}`;
         const DATA_KEY = `kv_codelab_data_${CURRENT_ROADMAP}_${SESSION_ID}`; 
 
@@ -155,7 +152,7 @@
             const profileRaw = localStorage.getItem('kv_trainer_profile'); 
             if(profileRaw) { const profile = JSON.parse(profileRaw); document.getElementById('studentLabel').innerText = `👤 ${profile.name}`; }
 
-            // BẮT SỰ KIỆN DÁN ẢNH (CTRL+V)
+            // BẮT SỰ KIỆN DÁN ẢNH
             document.addEventListener('paste', function(e) {
                 if (activeExerciseIndex === null) return;
                 let items = e.clipboardData.items;
@@ -174,7 +171,6 @@
             fetch(MASTER_EXERCISE_URL)
             .then(res => { if(!res.ok) throw new Error("Lỗi mạng máy chủ Google"); return res.text(); })
             .then(csv => {
-                // Bẫy lỗi: Tránh trường hợp Google trả về mã HTML thay vì dữ liệu CSV
                 if (csv.trim().startsWith("<!DOCTYPE") || csv.trim().startsWith("<html")) {
                     throw new Error("Lỗi quyền truy cập: Hãy kiểm tra file MasterExercises đã bật 'Bất kỳ ai có liên kết' chưa.");
                 }
@@ -186,17 +182,20 @@
                         let currentGroupName = "";
                         
                         results.data.forEach(row => {
-                            let roadmap = (row['NganhHang'] || 'Retail').trim();
-                            let maBuoi = (row['MaBuoi'] || '').trim(); let tenBuoi = (row['TenBuoi'] || '').trim();
-                            let tenBaiTap = (row['TenBaiTap'] || '').trim(); let nhomBaiTap = (row['NhomBaiTap'] || '').trim();
+                            let rawRoadmap = (row['NganhHang'] || 'Retail').trim();
+                            let roadmapKey = rawRoadmap.toLowerCase(); // Chuẩn hóa Key
+                            let maBuoi = (row['MaBuoi'] || '').trim(); 
+                            let tenBuoi = (row['TenBuoi'] || '').trim();
+                            let tenBaiTap = (row['TenBaiTap'] || '').trim(); 
+                            let nhomBaiTap = (row['NhomBaiTap'] || '').trim();
                             
                             if(!tenBuoi || !tenBaiTap) return;
-                            if(!builtData[roadmap]) builtData[roadmap] = [];
+                            if(!builtData[roadmapKey]) builtData[roadmapKey] = [];
 
-                            let sessionObj = builtData[roadmap].find(s => s.id === maBuoi || s.title === tenBuoi);
+                            let sessionObj = builtData[roadmapKey].find(s => s.id === maBuoi || s.title === tenBuoi);
                             if (!sessionObj) {
-                                sessionObj = { id: maBuoi || 'session_' + (builtData[roadmap].length + 1), title: tenBuoi, exercises: [] };
-                                builtData[roadmap].push(sessionObj); currentGroupName = ""; 
+                                sessionObj = { id: maBuoi || 'session_' + (builtData[roadmapKey].length + 1), title: tenBuoi, exercises: [] };
+                                builtData[roadmapKey].push(sessionObj); currentGroupName = ""; 
                             }
                             if (nhomBaiTap && nhomBaiTap !== currentGroupName) {
                                 sessionObj.exercises.push({ title: nhomBaiTap, isGroupHeader: true }); currentGroupName = nhomBaiTap;
@@ -205,22 +204,32 @@
                             sessionObj.exercises.push({
                                 title: tenBaiTap, theory: parseArr(row['LyThuyet']), requirements: parseArr(row['YeuCau']),
                                 instructions: parseArr(row['HuongDan']), hints: parseArr(row['MoTaBuoi']), confirm: (row['XacNhan'] || '').trim(),
-                                originalIndex: sessionObj.exercises.length // Lưu vết index gốc
+                                originalIndex: sessionObj.exercises.length 
                             });
                         });
                         
                         // CHỈ LẤY DATA CỦA ĐÚNG NGÀNH HÀNG MÀ HỌC VIÊN CHỌN
-                        CODELAB_DATA = builtData[CURRENT_ROADMAP] || builtData['Retail'] || [];
+                        let targetRoadmap = CURRENT_ROADMAP.toLowerCase().trim();
+                        CODELAB_DATA = builtData[targetRoadmap] || builtData['retail'] || Object.values(builtData)[0] || [];
                         parseAndRenderData();
                     }
                 });
-            }).catch(e => { alert("Lỗi tải giáo trình MasterExercises: " + e.message); console.error(e); });
+            }).catch(e => { 
+                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><h2 class='text-rose-600 font-bold text-lg'><i class="fas fa-exclamation-triangle"></i> Lỗi hệ thống</h2><p class="text-sm mt-2">${e.message}</p></div>`; 
+            });
         });
 
         const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
 
         function parseAndRenderData() {
-            const session = CODELAB_DATA.find(s => s.id === SESSION_ID); 
+            if(CODELAB_DATA.length === 0) {
+                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><h2 class='text-rose-600 font-bold text-lg'>Chưa có dữ liệu bài học cho lộ trình này.</h2></div>`; 
+                return;
+            }
+
+            let safeSession = SESSION_ID.toLowerCase().trim();
+            const session = CODELAB_DATA.find(s => s.id.toLowerCase().trim() === safeSession || s.title.toLowerCase().trim() === safeSession); 
+            
             if(!session) { 
                 document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><h2 class='text-rose-600 font-bold text-lg'>Không tìm thấy dữ liệu Buổi học (Mã: ${SESSION_ID})</h2></div>`; 
                 return; 
@@ -262,9 +271,16 @@
                     let hasNew = false;
                     for(let i=0; i<currentExercises.length; i++) {
                         const title = currentExercises[i].title;
-                        if(res.data[title]) {
+                        let apiFeedback = res.data[title];
+                        if(apiFeedback) {
                             if(!stepDataStore[i]) stepDataStore[i] = {};
-                            if(stepDataStore[i].feedback !== res.data[title]) { stepDataStore[i].feedback = res.data[title]; stepDataStore[i].isUnread = true; hasNew = true; }
+                            if(stepDataStore[i].feedback !== apiFeedback) { 
+                                stepDataStore[i].feedback = apiFeedback; 
+                                // Nếu là [BỎ QUA] thì không báo chấm đỏ cho học viên
+                                if (!apiFeedback.includes("[BỎ QUA]")) {
+                                    stepDataStore[i].isUnread = true; hasNew = true; 
+                                }
+                            }
                         }
                     }
                     if(hasNew) { localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); renderSidebar(); goToStep(currentStepIndex, activeSubIndex); }
@@ -316,7 +332,7 @@
         function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
         function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
         function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
-        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); document.getElementById('fullscreenModalCount').innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; img.src = getDirectImageUrl(fullscreenImageList[fullscreenImageIndex]); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
 
         function switchSubExercise(subIdx) {
             const group = groupedSteps[currentStepIndex]; if (!group || subIdx < 0 || subIdx >= group.exercises.length) return;
@@ -382,6 +398,10 @@
 
             let sliderContentHtml = group.exercises.map((ex, subIdx) => {
                 const oIdx = ex.originalIndex; const myData = stepDataStore[oIdx] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
+                
+                // GIẤU [BỎ QUA] ĐỐI VỚI HỌC VIÊN
+                let displayFeedback = (myData.feedback && !myData.feedback.includes("[BỎ QUA]")) ? myData.feedback : null;
+
                 let theoryHtml = '';
                 if(ex.theory && ex.theory.length > 0) {
                     theoryHtml = `<div class="mb-6 space-y-4">`;
@@ -409,7 +429,7 @@
                 <div id="sub_exercise_card_${subIdx}" class="sub-exercise-card w-full hidden" onclick="activeExerciseIndex = ${oIdx}">
                     <div class="flex justify-between items-start gap-4 mb-5">
                         <h2 class="text-base md:text-lg font-black text-slate-800 leading-snug">${ex.title}</h2>
-                        ${myData.feedback ? `<div class="relative"><button onclick="toggleFeedback(${oIdx})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition"><i class="far fa-comment-dots text-sm"></i><span>Nhận xét</span>${myData.isUnread ? `<span id="pingDot_${oIdx}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : ''}</button><div id="feedbackBox_${oIdx}" class="hidden absolute top-10 right-0 w-72 md:w-80 bg-white border border-amber-200 shadow-2xl rounded-2xl p-5 z-40 transition origin-top-right"><div class="flex items-center justify-between mb-2.5 pb-2 border-b border-amber-100 font-black text-amber-800 text-xs tracking-wider uppercase"><p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p><button onclick="toggleFeedback(${oIdx})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button></div><p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${myData.feedback}</p></div></div>` : ''}
+                        ${displayFeedback ? `<div class="relative"><button onclick="toggleFeedback(${oIdx})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition"><i class="far fa-comment-dots text-sm"></i><span>Nhận xét</span>${myData.isUnread ? `<span id="pingDot_${oIdx}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : ''}</button><div id="feedbackBox_${oIdx}" class="hidden absolute top-10 right-0 w-72 md:w-80 bg-white border border-amber-200 shadow-2xl rounded-2xl p-5 z-40 transition origin-top-right"><div class="flex items-center justify-between mb-2.5 pb-2 border-b border-amber-100 font-black text-amber-800 text-xs tracking-wider uppercase"><p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p><button onclick="toggleFeedback(${oIdx})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button></div><p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${displayFeedback}</p></div></div>` : ''}
                     </div>
                     ${theoryHtml} ${reqHtml} ${instrHtml}
                     <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
@@ -478,7 +498,7 @@
             });
         }
 
-        // TỰ ĐỘNG NHẢY BÀI KHI NỘP XONG HOẶC VƯỢT TƯỜNG LỬA IFRAME
+        // TỰ ĐỘNG NHẢY BÀI KHI NỘP XONG
         function uploadToGAS(oIdx, exerciseTitle) {
             saveDraft(); const currentData = stepDataStore[oIdx] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
             const exerciseFiles = pendingFilesStore[oIdx] || [];
@@ -513,7 +533,6 @@
             }).catch(err => { 
                 console.error(err);
                 if (window.self !== window.top) {
-                    alert("⚠️ LƯU Ý: Bạn đang chạy trên khung ảo. Giả lập nộp bài thành công!");
                     currentData.isSubmitted = true;
                     stepDataStore[oIdx] = currentData;
                     localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore));
@@ -545,11 +564,11 @@
             }
         }
 
-        // HÀM KIỂM TRA BÀI THIẾU
+        // HÀM KIỂM TRA BÀI THIẾU & POPUP
         function nextStep() {
             saveDraft();
             let totalRealExercises = 0; let completedCount = 0;
-            let missingTasks = []; // Chứa danh sách các bài chưa làm
+            let missingTasks = []; 
 
             groupedSteps.forEach((group, gIdx) => {
                 group.exercises.forEach((ex, subIdx) => {
@@ -567,7 +586,6 @@
             let isLastStep = (currentStepIndex === groupedSteps.length - 1);
 
             if(isLastStep && percent < 100) {
-                // Hiển thị Popup cảnh báo
                 const listContainer = document.getElementById('missingTaskList');
                 listContainer.innerHTML = missingTasks.map(task => `
                     <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
@@ -609,40 +627,26 @@
             let totalReal = 0; let doneCount = 0; currentExercises.forEach((ex, i) => { if (!ex.isGroupHeader) { totalReal++; if (stepDataStore[i]?.isSubmitted) doneCount++; } });
             const totalPercent = totalReal === 0 ? 0 : Math.round((doneCount / totalReal) * 100);
 
-            html += `<div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-md print:bg-white print:text-slate-800 print:border-2 print:border-slate-300 print:shadow-none"><div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 print:border-slate-300 pb-4 mb-4 gap-4"><div><h1 class="text-xl md:text-2xl font-black uppercase tracking-wide text-amber-300 print:text-blue-900">BÁO CÁO BÀI TẬP THỰC HÀNH SPCB</h1><p class="text-xs text-blue-200 print:text-slate-500 font-medium mt-1">Hệ thống đào tạo thực hành KiotViet</p></div><div class="bg-white/10 print:bg-slate-100 px-4 py-2 rounded-2xl border border-white/10 print:border-slate-200 text-right shrink-0"><span class="text-[10px] font-black uppercase text-blue-200 print:text-slate-400 block">Tiến độ chung</span><span class="text-lg font-black ${totalPercent === 100 ? 'text-emerald-400 print:text-emerald-600' : 'text-amber-400 print:text-amber-600'}">${doneCount} / ${totalReal} bài (${totalPercent}%)</span></div></div><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs"><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-user mr-1"></i> Họ và tên:</span><span class="font-bold text-sm text-white print:text-slate-800">${profile.name || "Chưa định danh"}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-building mr-1"></i> Phòng ban:</span><span class="font-bold text-sm text-white print:text-slate-800">${profile.dept || "N/A"}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-graduation-cap mr-1"></i> Khóa học:</span><span class="font-bold text-sm text-amber-300 print:text-blue-700">${COURSE_NAME}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-book mr-1"></i> Buổi học:</span><span class="font-bold text-sm text-white print:text-slate-800 break-words block">${sessionName}</span></div></div></div>`;
+            html += `<div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-md print:bg-white print:text-slate-800 print:border-2 print:border-slate-300 print:shadow-none"><div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 print:border-slate-300 pb-4 mb-4 gap-4"><div><h1 class="text-xl md:text-2xl font-black uppercase tracking-wide text-amber-300 print:text-blue-900">BÁO CÁO BÀI TẬP THỰC HÀNH</h1><p class="text-xs text-blue-200 print:text-slate-500 font-medium mt-1">Hệ thống đào tạo thực hành KiotViet</p></div><div class="bg-white/10 print:bg-slate-100 px-4 py-2 rounded-2xl border border-white/10 print:border-slate-200 text-right shrink-0"><span class="text-[10px] font-black uppercase text-blue-200 print:text-slate-400 block">Tiến độ chung</span><span class="text-lg font-black ${totalPercent === 100 ? 'text-emerald-400 print:text-emerald-600' : 'text-amber-400 print:text-amber-600'}">${doneCount} / ${totalReal} bài (${totalPercent}%)</span></div></div><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs"><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-user mr-1"></i> Họ và tên:</span><span class="font-bold text-sm text-white print:text-slate-800">${profile.name || "Chưa định danh"}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-building mr-1"></i> Lớp / Phòng ban:</span><span class="font-bold text-sm text-white print:text-slate-800">${profile.dept || "N/A"}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-graduation-cap mr-1"></i> Khóa học:</span><span class="font-bold text-sm text-amber-300 print:text-blue-700">${COURSE_NAME}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-book mr-1"></i> Buổi học:</span><span class="font-bold text-xs md:text-sm text-white print:text-slate-800 break-words leading-snug block">${sessionName}</span></div></div></div>`;
 
             for(let i=0; i<currentExercises.length; i++) {
                 const ex = currentExercises[i]; if(ex.isGroupHeader) { html += `<h2 class="text-base font-black text-slate-600 border-b-2 border-slate-300 pb-2 mt-8 mb-4 uppercase tracking-widest print-break-inside-avoid print:mt-6">${ex.title}</h2>`; continue; }
                 const data = stepDataStore[i] || {}; const isSubmitted = data.isSubmitted || false;
                 let statusBadge = isSubmitted ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>` : `<span class="bg-rose-100 text-rose-800 border border-rose-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-times-circle text-rose-600"></i> Chưa hoàn thành</span>`;
-                let reqHtml = ''; if (ex.requirements && ex.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-emerald-200/80 print:border-slate-300"><p class="text-[11px] font-black text-emerald-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-emerald-600 print:text-slate-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-700 font-medium leading-relaxed">${ex.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
-                let theoryHtml = ''; if (ex.theory && ex.theory.length > 0) {
-                    theoryHtml = `<div class="bg-slate-50 p-4 md:p-5 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`;
-                    ex.theory.forEach((q, idx) => {
-                        let ansKey = `ans${idx + 1}`; let ans = (data.textAnswers && data.textAnswers[idx]) ? data.textAnswers[idx].trim() : ''; let ansDisplay = ans !== '' ? `<span class="text-slate-800 font-semibold">${ans}</span>` : `<span class="text-rose-500 font-bold italic">(Chưa trả lời)</span>`;
-                        theoryHtml += `<div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm"><p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500 mr-1"></i> ${parseLinks(q)}</p><p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100"><b>Đáp án:</b> ${ansDisplay}</p></div>`;
-                    }); theoryHtml += `</div>`;
-                }
+                let reqHtml = ''; if(ex.requirements && ex.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-emerald-200/80 print:border-slate-300"><p class="text-[11px] font-black text-emerald-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-emerald-600 print:text-slate-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-700 font-medium leading-relaxed">${ex.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
+                let theoryHtml = ''; if(ex.theory && ex.theory.length > 0) { theoryHtml = `<div class="bg-slate-50 p-4 md:p-5 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`; ex.theory.forEach((q, idx) => { let ans = (data.textAnswers && data.textAnswers[idx]) ? data.textAnswers[idx].trim() : ''; let ansDisplay = ans !== '' ? `<span class="text-slate-800 font-semibold">${ans}</span>` : `<span class="text-rose-500 font-bold italic">(Chưa trả lời)</span>`; theoryHtml += `<div class="bg-white p-3.5 rounded-xl border border-slate-200/80 shadow-sm"><p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500 mr-1"></i> ${parseLinks(q)}</p><p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100"><b>Đáp án:</b> ${ansDisplay}</p></div>`; }); theoryHtml += `</div>`; }
+                let imgHtml = ''; if(data.uploadedUrls && data.uploadedUrls.length > 0) { imgHtml = `<div class="mb-4 bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${data.uploadedUrls.length}):</p><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">`; data.uploadedUrls.forEach((url, idx) => { imgHtml += `<div class="relative w-full aspect-video bg-slate-200 border border-slate-300 rounded-xl overflow-hidden shadow-sm group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(data.uploadedUrls).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(url)}" class="w-full h-full object-cover"></div>`; }); imgHtml += `</div></div>`; } else { imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex items-center gap-3 text-slate-500"><i class="fas fa-info-circle text-slate-400 text-base"></i><span class="text-xs font-bold">Chưa nộp ảnh minh chứng cho bài tập này.</span></div>`; }
                 
-                let imgHtml = ''; if(data.uploadedUrls && data.uploadedUrls.length > 0) {
-                    imgHtml = `<div class="mb-4 bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${data.uploadedUrls.length}):</p><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">`;
-                    data.uploadedUrls.forEach((url, idx) => { imgHtml += `<div class="relative w-full aspect-video bg-slate-200 border border-slate-300 rounded-xl overflow-hidden shadow-sm group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(data.uploadedUrls).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(url)}" class="w-full h-full object-cover"></div>`; }); imgHtml += `</div></div>`;
-                } else imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 flex items-center gap-3 text-slate-500"><i class="fas fa-info-circle text-slate-400 text-base"></i><span class="text-xs font-bold">Chưa nộp ảnh minh chứng cho bài tập này.</span></div>`;
+                // GIẤU [BỎ QUA] Ở MÀN HÌNH IN
+                let displayFeedback = (data.feedback && !data.feedback.includes("[BỎ QUA]")) ? data.feedback : null;
+                let fbHtml = displayFeedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap leading-relaxed">${displayFeedback}</p></div>` : ``;
 
-                let fbHtml = data.feedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap leading-relaxed">${data.feedback}</p></div>` : ``;
                 html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid print:shadow-none print:border-slate-300 print:mb-4"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800 leading-snug">${ex.title}</h3>${statusBadge}</div>${reqHtml}${theoryHtml}${imgHtml}${fbHtml}</div>`;
             }
 
             container.innerHTML = html; document.getElementById('reviewHistoryModal').classList.remove('hidden'); document.getElementById('reviewHistoryModal').classList.add('flex');
         }
-
         function closeReviewHistory() { document.getElementById('reviewHistoryModal').classList.add('hidden'); document.getElementById('reviewHistoryModal').classList.remove('flex'); }
-
-        let fullscreenImageList = []; let fullscreenImageIndex = 0;
-        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
-        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
-        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
-        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImageUrl(currentUrl); countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
     </script>
 </body>
 </html>
