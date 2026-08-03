@@ -331,10 +331,20 @@
 
         const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
         
-        function formatDateTime(isoString) {
-            if (!isoString) return ''; const d = new Date(isoString); if (isNaN(d.getTime())) return isoString;
-            const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
-            return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        function formatDateTime(dateStr) {
+            if (!dateStr) return ''; 
+            const parts = dateStr.split(' '); 
+            if(parts.length !== 2) return dateStr;
+            const dParts = parts[0].split('/'); 
+            if(dParts.length === 3) {
+                // Ép chuẩn ISO để JS không bị nhầm lẫn định dạng Mỹ
+                const d = new Date(`${dParts[2]}-${dParts[1]}-${dParts[0]}T${parts[1]}`);
+                if (!isNaN(d.getTime())) {
+                    const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
+                    return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${dParts[0]}/${dParts[1]}/${dParts[2]}`;
+                }
+            }
+            return dateStr;
         }
 
         function fetchData() {
@@ -982,7 +992,7 @@
                     
                     let statusBadge = isSubmitted ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>` : `<span class="bg-rose-100 text-rose-800 border border-rose-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-times-circle text-rose-600"></i> Chưa hoàn thành</span>`;
                     
-                    let reqHtml = ''; if (exDetails.requirements && exDetails.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80"><p class="text-[11px] font-black text-emerald-800 uppercase tracking-wider mb-2"><i class="fas fa-list-check text-emerald-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-700 font-medium">${exDetails.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
+                    let reqHtml = ''; if (exDetails.requirements && exDetails.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80"><p class="text-[11px] font-black text-emerald-800 uppercase tracking-wider mb-2"><i class="fas fa-list-check text-emerald-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-800 font-semibold leading-relaxed border-l-4 border-emerald-500 bg-emerald-100/50 p-4 rounded-r-xl">${exDetails.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
                     let theoryHtml = ''; if (exDetails.theory && exDetails.theory.length > 0) {
                         theoryHtml = `<div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`;
                         exDetails.theory.forEach((q, idx) => {
