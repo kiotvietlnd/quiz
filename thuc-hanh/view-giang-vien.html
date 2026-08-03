@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHẤM BÀI THỰC HÀNH TÁI KÝ</title>
+    <title>CHẤM BÀI THỰC HÀNH SPCB</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -25,13 +25,10 @@
         .sidebar-radio input[type="radio"] { accent-color: #3b82f6; width: 14px; height: 14px; margin-top: 1px; }
 
         @media print {
-            /* Mở khóa chiều cao để in nhiều trang */
             html, body { height: auto !important; min-height: auto !important; overflow: visible !important; background: white !important; }
-            /* Ẩn mọi thứ, chỉ giữ lại Modal chứa bài làm */
             body > *:not(#reviewHistoryModal) { display: none !important; }
-            /* Đưa khung bài làm về dạng tĩnh để không bị cắt trang */
             #reviewHistoryModal { display: block !important; position: static !important; width: 100% !important; height: auto !important; background: white !important; padding: 0 !important; }
-            #reviewHistoryModal * { visibility: visible !important; }
+            #reviewHistoryModal * { visibility: visible; }
             .no-print, header, button, aside { display: none !important; }
             .print-break-inside-avoid { break-inside: avoid; margin-bottom: 20px; display: block; }
             img { max-width: 100% !important; height: auto !important; max-height: 400px; object-fit: contain; }
@@ -223,7 +220,7 @@
                             <div class="space-y-3" id="dashboardRankingList"></div>
                         </div>
 
-                        <!-- BIỂU ĐỒ NỘP BÀI (ĐÃ CỐ ĐỊNH STICKY) -->
+                        <!-- BIỂU ĐỒ NỘP BÀI (CỐ ĐỊNH STICKY) -->
                         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between self-start sticky top-24">
                             <div>
                                 <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-wider mb-1 flex items-center gap-2">
@@ -318,13 +315,12 @@
     </div>
 
     <script>
-        // CẤU HÌNH API
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/1c30Tm9T6MSgjJV3WbrYcsxwXLvhXTok9VCgQA6XOYV0/gviz/tq?tqx=out:csv&gid=0";
-        const API_URL = "https://script.google.com/macros/s/AKfycbyggXAwORtqnIHDSaoI4zeEo3RA65BFdqCOqMv73VOQcIl4A4x4istq9cxiYo5iHXqFPQ/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
 
-        let MASTER_SYLLABUS = []; // Chứa giáo trình phẳng
-        let allData = []; // Chứa bài nộp học viên
+        let MASTER_SYLLABUS = []; 
+        let allData = []; 
         let currentActiveTab = 'dashboard';
         let chartSubmissionInstance = null;
 
@@ -338,11 +334,9 @@
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
         }
 
-        // TẢI ĐỒNG THỜI CẢ GIÁO TRÌNH VÀ BÀI NỘP
         function fetchData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
             
-            // 1. Lấy Giáo trình
             fetch(MASTER_EXERCISE_URL)
             .then(r => { if(!r.ok) throw new Error("Lỗi mạng Google Sheet Giáo trình"); return r.text(); })
             .then(csv => {
@@ -382,8 +376,6 @@
                             });
                         });
                         MASTER_SYLLABUS = builtData;
-                        
-                        // 2. Lấy Bài nộp học viên
                         fetchStudentData();
                     }
                 });
@@ -434,7 +426,7 @@
                                 });
                             });
                             
-                            allData = parsed.reverse(); // Đảo ngược để bản mới nhất lên đầu
+                            allData = parsed.reverse(); 
                             initFilters(); 
                         } catch(e) {
                             alert("Lỗi phân tích dữ liệu Bài nộp Excel: " + e.message);
@@ -450,7 +442,6 @@
             });
         }
 
-        // TỰ ĐỘNG KHỞI TẠO BỘ LỌC
         function initFilters() {
             const courses = [...new Set(allData.map(e => (e.khoa || '').trim()))].filter(Boolean).sort();
             const depts = [...new Set(allData.map(e => (e.phongBan || '').trim()))].filter(Boolean).sort();
@@ -460,7 +451,6 @@
             populateSelect('filterDept', depts, 'Tất cả phòng ban');
             populateSelect('dashFilterDept', depts, 'Tất cả phòng ban');
 
-            // Danh sách buổi học từ MASTER_SYLLABUS
             const sessions = MASTER_SYLLABUS.map(s => s.title);
             
             let sessionHtmlSidebar = sessions.map((s, idx) => `
@@ -501,7 +491,6 @@
         function updateFilters(source) {
             const selCourse = document.getElementById('filterCourse').value;
             const selDept = document.getElementById('filterDept').value;
-            const selSession = getRadioValue('filterSession');
 
             let filtered = allData;
             if (selCourse !== 'all') filtered = filtered.filter(e => e.khoa === selCourse);
@@ -566,10 +555,8 @@
             let submittedCount = 0; let totalAvgPercentSum = 0; let studentRankingData = [];
 
             studentList.forEach(st => {
-                // TÌM SỐ LƯỢNG BÀI TẬP YÊU CẦU THEO MASTER_SYLLABUS (Bỏ qua logic lọc theo Khóa)
                 let totalReq = 0; let reqExTitlesForSession = [];
                 
-                // Lọc Syllabus theo buổi học
                 let targetSessions = [];
                 if (selSession === 'all') {
                     targetSessions = MASTER_SYLLABUS;
@@ -682,6 +669,55 @@
         }
 
         // ==========================================
+        // CÁC HÀM NHẬN XÉT CỦA GIẢNG VIÊN
+        // ==========================================
+        
+        // SỬA: Hàm nối text thay vì ghi đè
+        function fillQuickFeedback(key, text) { 
+            const area = document.getElementById(`fb-${key}`); 
+            if (area) {
+                // Xóa chữ [BỎ QUA] nếu có, rồi nối thêm text
+                let currentVal = area.value.replace(/\[BỎ QUA\].*/g, '').trim();
+                area.value = currentVal ? currentVal + "\n" + text : text;
+            } 
+        }
+
+        // SỬA: Gửi ngầm chữ [BỎ QUA] lên API, nhưng KHÔNG hiện vào textarea
+        function skipFeedback(key, name, dept, exTitle, session) { 
+            const btn = document.getElementById(`btn-skip-${key}`); 
+            const origHtml = btn.innerHTML;
+            btn.innerHTML = `<i class="fas fa-spinner fa-spin"></i>`; 
+            btn.disabled = true;
+            
+            fetch(API_URL, { 
+                method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, 
+                body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: "[BỎ QUA]" })
+            }).then(r=>r.json()).then(res => {
+                if(res.status === 'success') { 
+                    btn.innerHTML = `<i class="fas fa-check"></i> Đã bỏ qua`; 
+                    btn.classList.add('text-emerald-600'); 
+                    setTimeout(()=> { 
+                        btn.innerHTML = origHtml; 
+                        btn.classList.remove('text-emerald-600'); 
+                        btn.disabled=false; 
+                        fetchStudentData(); // Tải lại để hiện nhãn ĐÃ BỎ QUA
+                    }, 1500);
+                } else alert("Lỗi lưu nhận xét!");
+            }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = origHtml; btn.disabled=false; });
+        }
+        
+        function saveFeedback(key, name, dept, exTitle, session) {
+            const feedback = document.getElementById(`fb-${key}`).value.trim(); 
+            const btn = document.getElementById(`btn-${key}`); 
+            btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`; btn.disabled = true;
+            fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
+            }).then(r=>r.json()).then(res => {
+                if(res.status === 'success') { btn.innerHTML = `<i class="fa-solid fa-check"></i> Đã chốt`; btn.classList.replace('bg-blue-600', 'bg-emerald-600'); setTimeout(()=> { btn.innerHTML = `<i class="fas fa-paper-plane"></i> Chốt nhận xét!`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; fetchStudentData(); }, 1500);
+                } else alert("Lỗi lưu nhận xét!");
+            }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = `<i class="fas fa-paper-plane"></i> Chốt nhận xét!`; btn.disabled=false; });
+        }
+
+        // ==========================================
         // VIEW 2: CHẤM BÀI TRỰC TUYẾN
         // ==========================================
         function renderCards() {
@@ -699,7 +735,6 @@
                 return;
             }
 
-            // Lấy danh sách bài tập từ Master Syllabus
             let sessionObj = MASTER_SYLLABUS.find(s => s.title === selSession);
             let requiredExerciseTitles = [];
             if(sessionObj) {
@@ -719,7 +754,6 @@
                 });
             }
 
-            // GHÉP NỐI VÀ ĐẾM SỐ LẦN NỘP BÀI (PHÁT HIỆN NỘP BỔ SUNG)
             let cardItems = [];
             requiredExerciseTitles.forEach(exTitle => {
                 const matches = studentSubmissions.filter(e => cleanStr(e.tenBaiHoc) === cleanStr(exTitle));
@@ -727,7 +761,7 @@
                     cardItems.push({ 
                         title: exTitle, 
                         isSubmitted: true, 
-                        record: matches[0], // Bản mới nhất
+                        record: matches[0], // Bản nộp mới nhất
                         isResubmitted: matches.length > 1 
                     });
                 } else {
@@ -758,7 +792,6 @@
             container.innerHTML = cardItems.map((cardObj, idx) => {
                 const exTitle = cardObj.title; const isSubmitted = cardObj.isSubmitted; const item = cardObj.record;
                 
-                // Tìm lại detail bài tập trong Master Syllabus
                 let exerciseDetails = {};
                 if(sessionObj) {
                     let found = sessionObj.exercises.find(e => cleanStr(e.title) === cleanStr(exTitle));
@@ -811,7 +844,6 @@
                         <i class="fas fa-file-pdf text-emerald-600"></i> PDF
                     </button>`;
                 
-                // HIỂN THỊ BADGE NỘP BỔ SUNG
                 if (cardObj.isResubmitted) {
                     badgeGroupHtml += `<span class="bg-purple-50 text-purple-600 border border-purple-200 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider shadow-sm"><i class="fas fa-history animate-spin-slow"></i> NỘP BỔ SUNG</span>`;
                 }
@@ -845,6 +877,8 @@
                 
                 let safeName = (item.hoVaTen || "").toString().replace(/'/g, "\\'"); let safeDept = (item.phongBan || "").toString().replace(/'/g, "\\'"); let safeEx = (item.tenBaiHoc || "").toString().replace(/'/g, "\\'"); let safeSession = (item.buoi || "").toString().replace(/'/g, "\\'");
 
+                let cleanFeedbackText = (item.nhanXet || '').replace(/\[BỎ QUA\]/g, '').trim();
+
                 return `
                 <div class="bg-white p-6 lg:p-8 rounded-3xl border border-slate-200 shadow-sm relative flex flex-col mb-6">
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-5 mb-5">
@@ -877,10 +911,10 @@
                         </div>
                         
                         <div class="flex flex-col sm:flex-row gap-3 items-end">
-                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[50px] p-4 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm resize-none text-slate-800 placeholder:text-slate-400" placeholder="Viết nhận xét chi tiết...">${item.nhanXet || ''}</textarea>
+                            <textarea id="fb-${safeKey}" class="flex-1 min-h-[50px] p-4 text-xs bg-white border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 shadow-sm resize-none text-slate-800 placeholder:text-slate-400" placeholder="Viết nhận xét chi tiết...">${cleanFeedbackText}</textarea>
                             <div class="flex flex-col gap-2 shrink-0 w-full sm:w-48">
                                 <button onclick="saveFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" id="btn-${safeKey}" class="px-6 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2 h-10 w-full"><i class="fas fa-paper-plane"></i> Chốt nhận xét!</button>
-                                <button onclick="skipFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" class="px-6 bg-slate-200 hover:bg-slate-300 text-slate-600 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 h-8 w-full"><i class="fas fa-ban"></i> Bỏ qua không chấm</button>
+                                <button id="btn-skip-${safeKey}" onclick="skipFeedback('${safeKey}', '${safeName}', '${safeDept}', '${safeEx}', '${safeSession}')" class="px-6 bg-slate-200 hover:bg-slate-300 text-slate-600 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 h-8 w-full"><i class="fas fa-ban"></i> Bỏ qua không chấm</button>
                             </div>
                         </div>
                     </div>
@@ -960,8 +994,10 @@
                         imgUrls.forEach((url, idx) => { imgHtml += `<div class="relative w-full bg-slate-100 border border-slate-300 rounded-none overflow-hidden cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImg(url)}" class="w-full h-auto max-h-[700px] object-contain block mx-auto rounded-none"></div>`; }); imgHtml += `</div></div>`;
                     } else imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 text-slate-500 text-xs font-bold"><i class="fas fa-info-circle mr-1.5"></i>Chưa nộp ảnh minh chứng cho bài tập này.</div>`;
 
-                    let fbHtml = (subRecord && subRecord.nhanXet) ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap">${subRecord.nhanXet}</p></div>` : ``;
-                    html += `<div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${exDetails.title}</h3>${statusBadge}</div>${reqHtml}${theoryHtml}${imgHtml}${fbHtml}</div>`;
+                    let displayFeedback = (subRecord && subRecord.nhanXet && !subRecord.nhanXet.includes("[BỎ QUA]")) ? subRecord.nhanXet : null;
+                    let fbHtml = displayFeedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap">${displayFeedback}</p></div>` : ``;
+                    
+                    html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${exDetails.title}</h3>${statusBadge}</div>${reqHtml}${theoryHtml}${imgHtml}${fbHtml}</div>`;
                 });
             }
 
@@ -976,17 +1012,6 @@
         function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
         function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
         function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
-
-        function skipFeedback(key, name, dept, exTitle, session) { document.getElementById(`fb-${key}`).value = "[BỎ QUA] Đã xem. Bài này không cần chấm điểm."; saveFeedback(key, name, dept, exTitle, session); }
-        
-        function saveFeedback(key, name, dept, exTitle, session) {
-            const feedback = document.getElementById(`fb-${key}`).value.trim(); const btn = document.getElementById(`btn-${key}`); btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Đang lưu...`; btn.disabled = true;
-            fetch(API_URL, { method: "POST", headers: { "Content-Type": "text/plain;charset=utf-8" }, body: JSON.stringify({ action: "update_feedback", studentName: name, department: dept, exerciseTitle: exTitle, session: session, feedback: feedback })
-            }).then(r=>r.json()).then(res => {
-                if(res.status === 'success') { btn.innerHTML = `<i class="fa-solid fa-check"></i> Đã chốt`; btn.classList.replace('bg-blue-600', 'bg-emerald-600'); setTimeout(()=> { btn.innerHTML = `<i class="fas fa-paper-plane"></i> Chốt nhận xét!`; btn.classList.replace('bg-emerald-600', 'bg-blue-600'); btn.disabled=false; fetchPracticeData(); }, 1500);
-                } else alert("Lỗi lưu nhận xét!");
-            }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = `<i class="fas fa-paper-plane"></i> Chốt nhận xét!`; btn.disabled=false; });
-        }
     </script>
 </body>
 </html>
