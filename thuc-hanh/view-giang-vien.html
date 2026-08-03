@@ -25,11 +25,16 @@
         .sidebar-radio input[type="radio"] { accent-color: #3b82f6; width: 14px; height: 14px; margin-top: 1px; }
 
         @media print {
-            body * { visibility: hidden; }
-            #reviewHistoryModal, #reviewHistoryModal * { visibility: visible; }
-            #reviewHistoryModal { position: absolute; left: 0; top: 0; width: 100%; height: auto; background: white; z-index: 9999; }
-            .no-print { display: none !important; }
-            .print-break-inside-avoid { break-inside: avoid; }
+            /* Mở khóa chiều cao để in nhiều trang */
+            html, body { height: auto !important; min-height: auto !important; overflow: visible !important; background: white !important; }
+            /* Ẩn mọi thứ, chỉ giữ lại Modal chứa bài làm */
+            body > *:not(#reviewHistoryModal) { display: none !important; }
+            /* Đưa khung bài làm về dạng tĩnh để không bị cắt trang */
+            #reviewHistoryModal { display: block !important; position: static !important; width: 100% !important; height: auto !important; background: white !important; padding: 0 !important; }
+            #reviewHistoryModal * { visibility: visible; }
+            .no-print, header, button { display: none !important; }
+            .print-break-inside-avoid { break-inside: avoid; margin-bottom: 20px; display: block; }
+            img { max-width: 100% !important; height: auto !important; max-height: 400px; object-fit: contain; }
         }
     </style>
 </head>
