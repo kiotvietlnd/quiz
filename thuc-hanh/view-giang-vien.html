@@ -25,13 +25,16 @@
         .sidebar-radio input[type="radio"] { accent-color: #3b82f6; width: 14px; height: 14px; margin-top: 1px; }
 
         @media print {
-            html, body { height: auto !important; min-height: auto !important; overflow: visible !important; background: white !important; }
-            body > *:not(#reviewHistoryModal) { display: none !important; }
-            #reviewHistoryModal { display: block !important; position: static !important; width: 100% !important; height: auto !important; background: white !important; padding: 0 !important; }
-            #reviewHistoryModal * { visibility: visible; }
-            .no-print, header, button, aside { display: none !important; }
-            .print-break-inside-avoid { break-inside: avoid; margin-bottom: 20px; display: block; }
-            img { max-width: 100% !important; height: auto !important; max-height: 400px; object-fit: contain; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            html, body { display: block !important; height: auto !important; min-height: auto !important; overflow: visible !important; background: white !important; margin: 0 !important; padding: 0 !important; }
+            body > * { display: none !important; }
+            #reviewHistoryModal { display: block !important; position: absolute !important; left: 0; top: 0; width: 100%; height: auto !important; z-index: 99999; background: white !important; }
+            #reviewHistoryModal * { visibility: visible; display: block; position: static !important; overflow: visible !important; }
+            #reviewHistoryModal .flex { display: flex !important; }
+            #reviewHistoryModal .grid { display: grid !important; }
+            .no-print, header, button, aside, .fixed { display: none !important; }
+            .print-break-inside-avoid { page-break-inside: avoid; margin-bottom: 30px; display: block !important; }
+            img { max-width: 100% !important; height: auto !important; max-height: 450px; object-fit: contain; display: block; margin: 0 auto; }
         }
     </style>
 </head>
