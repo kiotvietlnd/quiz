@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth">
+<html lang="vi" class="scroll-smooth h-full">
 <head>
-    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Đào Tạo Thực Hành KiotViet</title>
+    <title>Cổng Đào Tạo Tái Ký KiotViet</title>
+    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
@@ -12,210 +12,182 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <style>
-        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; color: #334155; background-color: #cbd5e1; }
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; color: #334155; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         
-        .tech-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -10; background: #cbd5e1; overflow: hidden; pointer-events: none; }
-        .glow-blob-1, .glow-blob-2 { position: absolute; width: 50vw; height: 50vw; filter: blur(140px); border-radius: 50%; transition: background 1.5s ease-in-out; }
-        .glow-blob-1 { top: -15%; left: -10%; background: rgba(37, 99, 235, 0.05); } 
-        .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.05); }
-
-        /* Ultra Glassmorphism Panel */
-        .glass-panel-ultra { 
-            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); 
-            backdrop-filter: blur(25px); 
-            -webkit-backdrop-filter: blur(25px); 
-            border: 1px solid rgba(226, 232, 240, 0.8); 
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); 
-        }
+        /* Hiệu ứng nền nhẹ nhàng */
+        .bg-pattern { background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 24px 24px; }
         
-        .clickable-card { cursor: pointer; transition: all 0.3s ease; }
-        .clickable-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); }
+        /* Card Hover Effects */
+        .course-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); border-color: #93c5fd; }
+        
+        .tab-btn.active { background-color: #1d4ed8; color: white; border-color: #1d4ed8; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.2); }
     </style>
 </head>
-<body class="h-screen flex flex-col overflow-hidden selection:bg-blue-200 selection:text-blue-900 relative">
+<body class="flex flex-col h-screen overflow-hidden bg-slate-50 bg-pattern">
 
-    <div class="tech-bg">
-        <div class="glow-blob-1"></div>
-        <div class="glow-blob-2"></div>
-    </div>
-
-    <!-- HEADER TỐI -->
-    <header class="bg-[#1b365d] border-b border-[#122543] h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 w-full shadow-md">
+    <!-- TOP NAVBAR SÁNG MÀU, CLEAN -->
+    <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 shrink-0 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 shadow-sm">
         <div class="flex items-center gap-4">
-            <button class="md:hidden text-slate-300 hover:text-white p-2 rounded-xl transition-colors">
-                <i class="fas fa-bars text-lg"></i>
-            </button>
-            <div class="flex items-center gap-1.5 font-bold text-sm text-white">
-                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" alt="KiotViet Logo" class="h-6">
-                <div class="h-6 w-px bg-blue-900/60 hidden lg:block mx-3"></div>
-                <span class="hidden lg:inline text-xs text-slate-300 font-medium">HỆ THỐNG BÀI TẬP THỰC HÀNH - ĐÀO TẠO SẢN PHẨM CƠ BẢN</span>
-            </div>
+            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-6">
+            <div class="h-6 w-px bg-slate-200 hidden lg:block mx-2"></div>
+            <span class="hidden lg:inline text-xs text-slate-500 font-bold uppercase tracking-wider">Hệ thống bài tập thực hành - SPCB</span>
         </div>
         
-        <div class="flex items-center gap-3 shrink-0">
-            <!-- Nút định danh -->
-            <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-xs font-bold text-slate-300 bg-blue-900/30 border border-blue-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-900/50 transition-all">
-                👤 Đang kiểm tra...
+        <div class="flex items-center gap-3">
+            <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl hover:bg-slate-200 hover:text-blue-600 transition-all cursor-pointer">
+                <i class="fas fa-user-circle text-slate-400 text-base"></i> Đang kiểm tra...
+            </button>
+            <button onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition">
+                <i class="fas fa-info-circle"></i>
             </button>
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
-        <!-- SIDEBAR HƯỚNG DẪN -->
-        <aside id="sidebar" class="w-72 bg-[#224472] flex flex-col z-30 transition-all duration-300 shrink-0 shadow-xl relative overflow-hidden hidden md:flex">
-            <div class="p-4 border-b border-white/10 shrink-0">
-                <h2 class="text-[10px] font-extrabold text-blue-200 uppercase tracking-widest px-1">
-                    <i class="fas fa-info-circle text-blue-300"></i> Hướng Dẫn Thực Hành
-                </h2>
+    <div class="flex flex-1 overflow-hidden relative">
+        
+        <!-- SIDEBAR HƯỚNG DẪN (CHUYỂN SANG BÊN TRÁI - GIAO DIỆN TRẮNG SẠCH) -->
+        <aside id="sidebar" class="w-80 flex flex-col z-30 transition-all duration-300 shrink-0 border-r border-slate-200 bg-white relative overflow-hidden hidden lg:flex shadow-sm">
+            <div class="p-5 border-b border-slate-100 shrink-0 flex items-center justify-between">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm border border-blue-100"><i class="fas fa-compass"></i></div>
+                    <h2 class="text-xs font-black text-slate-800 uppercase tracking-wider">HƯỚNG DẪN THỰC HÀNH</h2>
+                </div>
+                <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-slate-600"><i class="fas fa-times text-lg"></i></button>
             </div>
-            
-            <div id="sidebarScroll" class="flex-1 overflow-y-auto py-4 px-3 space-y-4 custom-scrollbar">
-                <div class="space-y-3">
-                    <div class="flex items-start gap-3 bg-blue-50/95 p-3 rounded-xl border border-blue-200/60 shadow-sm">
-                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">1</span>
-                        <p class="text-xs leading-relaxed text-slate-800 font-medium">
-                            <strong class="text-blue-900 font-black">Định danh:</strong> Bấm nút danh tính ở góc trên bên phải để khai báo <em class="not-italic text-blue-800 font-semibold">Họ tên, Phòng ban</em> trước khi làm.
-                        </p>
-                    </div>
-                    
-                    <div class="flex items-start gap-3 bg-blue-50/95 p-3 rounded-xl border border-blue-200/60 shadow-sm">
-                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">2</span>
-                        <p class="text-xs leading-relaxed text-slate-800 font-medium">
-                            <strong class="text-blue-900 font-black">Cách làm bài:</strong> Bấm vào từng Buổi học &rarr; Thực hành trên phần mềm KiotViet &rarr; Chụp màn hình &rarr; Nhấn <em class="not-italic text-blue-800 font-semibold">Nộp bài</em>.
-                        </p>
-                    </div>
 
-                    <div class="flex items-start gap-3 bg-blue-50/95 p-3 rounded-xl border border-blue-200/60 shadow-sm">
-                        <span class="bg-blue-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">3</span>
-                        <p class="text-xs leading-relaxed text-slate-800 font-medium">
-                            <strong class="text-blue-900 font-black">Hoàn thành:</strong> Đạt tiến độ 100% thì bấm nút "Kết thúc buổi học" ở bên trong để nhận Thẻ Xác Nhận.
-                        </p>
+            <div class="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-5">
+                <!-- Step 1 -->
+                <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center shrink-0 border border-blue-200">1</div>
+                    <div>
+                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-1">Định danh học viên</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Bấm nút danh tính ở góc trên bên phải để khai báo Họ tên & Phòng ban trước khi làm bài.</p>
+                    </div>
+                </div>
+                <!-- Step 2 -->
+                <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center shrink-0 border border-blue-200">2</div>
+                    <div>
+                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-1">Cách làm bài</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Chọn buổi học → Thực hành trên KiotViet → Chụp màn hình → Tải lên và nhấn <strong class="text-blue-600">Nộp bài</strong>.</p>
+                    </div>
+                </div>
+                <!-- Step 3 -->
+                <div class="flex items-start gap-3">
+                    <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center shrink-0 border border-blue-200">3</div>
+                    <div>
+                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-1">Hoàn thành</h4>
+                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Đạt tiến độ 100% thì bấm nút <strong class="text-emerald-600">"Kết thúc buổi học"</strong> để hệ thống ghi nhận.</p>
                     </div>
                 </div>
 
-                <div class="bg-amber-50/95 border border-amber-200/80 p-4 rounded-xl shadow-sm mt-6">
-                    <div class="flex items-center gap-2 text-amber-800 font-extrabold text-[10px] mb-1.5 uppercase tracking-wider">
-                        <i class="fas fa-clock"></i> Hạn Chót
+                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-6">
+                    <div class="flex items-center gap-2 text-amber-600 font-black text-[10px] uppercase tracking-wider mb-2">
+                        <i class="fas fa-clock"></i> Hạn Chót Nộp Bài
                     </div>
-                    <p class="text-[11px] text-slate-800 font-semibold leading-relaxed">
-                        Hoàn thành bài tập và gửi ảnh Xác Nhận hoàn thành lên Group Zalo trước <strong class="text-red-600 font-black">16:00</strong> ngày hôm nay.
+                    <p class="text-xs leading-relaxed font-bold text-slate-700">
+                        Vui lòng hoàn thành bài tập và gửi ảnh Xác Nhận lên Group Zalo trước <strong class="text-red-500">16:00</strong> ngày hôm nay.
                     </p>
                 </div>
             </div>
-            
-            <div class="p-4 border-t border-white/10 bg-black/20 shrink-0 text-center">
-                <span class="text-[9px] text-slate-400 font-extrabold uppercase tracking-wider">KiotViet Learning & Development</span>
+
+            <div class="p-4 border-t border-slate-100 bg-slate-50 shrink-0 text-center">
+                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">KiotViet L&D Department</span>
             </div>
         </aside>
 
-        <!-- KHUNG CHỨA NỘI DUNG CHÍNH -->
-        <div class="flex-grow flex flex-col h-full overflow-hidden relative w-full bg-slate-200/80 backdrop-blur-[2px]">
-            <main class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 pb-16">
-                <div class="max-w-5xl mx-auto w-full relative">
-                    
-                    <div class="glass-panel-ultra p-6 md:p-10 rounded-3xl border border-slate-100 shadow-md min-h-[500px]">
-                        
-                        <!-- Hướng dẫn nhanh cho Mobile -->
-                        <div class="md:hidden bg-blue-50 border border-blue-200/60 rounded-2xl p-4 mb-6 shadow-sm">
-                            <h3 class="text-xs font-black text-blue-800 mb-2.5 flex items-center gap-2"><i class="fas fa-info-circle"></i> Hướng Dẫn Thực Hành</h3>
-                            <div class="space-y-2 text-blue-900 text-xs leading-relaxed">
-                                <p><strong>1. Định danh:</strong> Bấm nút 👤 ở góc trên bên phải để khai báo thông tin.</p>
-                                <p><strong>2. Làm bài:</strong> Chụp ảnh màn hình &rarr; nhấn <em>Nộp bài</em> để lưu tiến độ.</p>
-                                <p><strong>3. Hạn chót:</strong> Gửi ảnh xác nhận 100% lên Zalo trước 16:00.</p>
-                            </div>
-                        </div>
-
-                        <!-- KHU VỰC TIÊU ĐỀ -->
-                        <div class="mb-8 text-center md:text-left pb-6 border-b border-slate-100">
-                            <h2 class="text-2xl md:text-3xl font-extrabold text-blue-700 tracking-tight leading-snug">BÀI TẬP THỰC HÀNH - ĐÀO TẠO SẢN PHẨM CƠ BẢN</h2>
-                            <p class="text-xs md:text-sm font-semibold text-slate-400 mt-1.5 uppercase tracking-wide">
-                                Cổng Khởi Hành (Vui lòng chọn buổi học để bắt đầu)
-                            </p>
-                        </div>
-
-                        <div class="flex items-center justify-between mb-6">
-                            <h3 class="text-[10px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                <i class="fas fa-route text-blue-500 text-sm"></i> Lộ trình thực hành của bạn
-                            </h3>
-                            <div id="roadmapSelectorArea" class="hidden flex items-center gap-2">
-                                <span class="text-xs font-bold text-slate-500">Ngành/Khóa:</span>
-                                <select id="roadmapSelector" onchange="changeRoadmap()" class="bg-slate-100 border border-slate-200 text-slate-700 text-xs font-bold rounded-lg px-2 py-1 outline-none focus:border-blue-400 cursor-pointer"></select>
-                            </div>
-                        </div>
-                        
-                        <!-- VÙNG RENDER DANH SÁCH BÀI TẬP TỰ ĐỘNG -->
-                        <div id="roadmapContainer" class="grid grid-cols-1 md:grid-cols-3 gap-6 relative min-h-[200px]">
-                            <!-- Spinner Loading -->
-                            <div class="absolute inset-0 flex flex-col items-center justify-center bg-white/50 z-10 backdrop-blur-sm rounded-xl">
-                                <div class="w-10 h-10 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-3"></div>
-                                <p class="text-xs font-bold text-slate-600">Đang tải giáo trình từ hệ thống...</p>
-                            </div>
-                        </div>
+        <!-- MAIN WORKSPACE -->
+        <main class="flex-1 overflow-y-auto custom-scrollbar relative px-4 md:px-8 lg:px-12 py-6 md:py-8">
+            <div class="max-w-6xl mx-auto w-full">
+                
+                <!-- HERO BANNER -->
+                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-blue-900/20 mb-8 relative overflow-hidden">
+                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl pointer-events-none"></div>
+                    <div class="relative z-10">
+                        <h2 id="heroGreeting" class="text-2xl md:text-4xl font-black tracking-tight mb-2">Chào mừng trở lại!</h2>
+                        <p class="text-blue-100 text-sm font-medium max-w-xl leading-relaxed">Hãy chọn lộ trình đào tạo bên dưới để tiếp tục hành trình nâng cao năng lực chuyên môn của bạn cùng KiotViet.</p>
                     </div>
-                    
-                    <footer class="text-center py-6 mt-8">
-                        <div class="flex flex-col items-center gap-2">
-                            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-4 opacity-40 grayscale">
-                            <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">© 2026 KiotViet Learning & Development</p>
-                        </div>
-                    </footer>
                 </div>
-            </main>
-        </div>
+
+                <!-- ROADMAP SELECTOR (PILL TABS) -->
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
+                        <i class="fas fa-layer-group text-blue-500"></i> Lộ trình Đào tạo
+                    </h3>
+                    
+                    <div id="roadmapTabs" class="hidden flex flex-wrap items-center gap-2 bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200">
+                        <!-- Render các nút Tabs ở đây -->
+                    </div>
+                </div>
+
+                <!-- COURSE GRID RENDER AREA -->
+                <div id="courseContainerView" class="min-h-[300px] relative">
+                    <!-- Spinner Loading -->
+                    <div id="loadingSpinner" class="absolute inset-0 flex flex-col items-center justify-center z-10 rounded-xl">
+                        <div class="w-12 h-12 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
+                        <p class="text-sm font-bold text-slate-500">Đang đồng bộ giáo trình...</p>
+                    </div>
+
+                    <div id="courseListRender" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-20">
+                        <!-- Render Cards -->
+                    </div>
+                </div>
+
+            </div>
+        </main>
     </div>
 
-    <!-- MODAL ĐĂNG NHẬP / ĐỊNH DANH -->
-    <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
-        <div class="glass-panel-ultra rounded-3xl shadow-2xl p-8 max-w-md w-full relative border-4 border-blue-500 text-center animate-fade-in-up">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-red-500 transition-colors">
-                <i class="fas fa-times"></i>
-            </button>
-            <div class="w-16 h-16 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 shadow-inner">
-                <i class="fas fa-user-shield"></i>
-            </div>
-            <h2 class="text-xl font-black text-slate-800 mb-2">Đăng Nhập Học Viên</h2>
-            <p class="text-xs text-slate-500 font-medium mb-6 leading-relaxed">Vui lòng nhập đúng thông tin để hệ thống ghi nhận kết quả và cấp chứng nhận thực hành cho bạn.</p>
-            
-            <div class="space-y-4 text-left">
+    <!-- MODAL ĐỊNH DANH HỌC VIÊN -->
+    <div id="authModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full relative border border-slate-100 animate-fade-in-up">
+            <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2 uppercase tracking-tight"><i class="fa-solid fa-user-check text-blue-600"></i> Định danh Học viên</h2>
+            <p class="text-xs text-slate-500 font-medium mb-6">Vui lòng nhập đúng thông tin để hệ thống ghi nhận kết quả và cấp chứng nhận thực hành.</p>
+            <div class="space-y-4">
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                        <i class="fas fa-user text-blue-500 w-4"></i> Họ và tên học viên *
-                    </label>
-                    <input type="text" id="inpName" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: Nguyễn Văn A">
+                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Họ và tên học viên *</label>
+                    <input type="text" id="inpName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" placeholder="VD: Nguyễn Văn A">
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">
-                        <i class="fas fa-building text-blue-500 w-4"></i> Phòng ban *
-                    </label>
-                    <input type="text" id="inpDept" class="w-full bg-slate-50/80 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:border-blue-400 focus:ring-4 focus:ring-blue-100/50 transition-all shadow-inner" placeholder="VD: Khối Kinh doanh">
+                    <label class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Phòng ban *</label>
+                    <input type="text" id="inpDept" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" placeholder="VD: DSSGN1">
                 </div>
-                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-3.5 rounded-xl shadow-lg transition-all flex items-center justify-center gap-2 mt-4">
-                    Lưu thông tin & Bắt đầu <i class="fas fa-chevron-right"></i>
+                <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-md shadow-blue-500/30 transition-all uppercase tracking-wider flex items-center justify-center gap-2 mt-2">
+                    Vào Hệ Thống <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </div>
     </div>
 
+    <!-- SCRIPT XỬ LÝ DỮ LIỆU -->
     <script>
-        // CẤU HÌNH API GIAO TIẾP
+        // CẤU HÌNH API
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
         const API_URL = "https://script.google.com/macros/s/AKfycbwcWr2golE6dLmqz6BoOAu1KspYmtVbjvY8fBE6A3oGOxA6EuQio54Ap-m-Qj3SLt5hwA/exec";
         
-        let MASTER_DATA = {}; // Biến chứa toàn bộ giáo trình được phân nhóm
+        let MASTER_DATA = {}; 
 
         document.addEventListener('DOMContentLoaded', () => {
             renderIdentity();
-            const profileRaw = localStorage.getItem('kv_trainer_profile');
-            if(!profileRaw) openAuthModal();
-            
-            fetchMasterData();
+            if(!localStorage.getItem('kv_trainer_profile')) {
+                openAuthModal();
+            } else {
+                fetchMasterData(); 
+            }
         });
 
+        // ==========================================
+        // 1. FETCH DATA TỪ SHEET
+        // ==========================================
         function fetchMasterData() {
+            document.getElementById('loadingSpinner').classList.remove('hidden');
+            
             fetch(MASTER_EXERCISE_URL)
-            .then(r => r.text())
+            .then(r => { if(!r.ok) throw new Error("Network"); return r.text(); })
             .then(csv => {
                 Papa.parse(csv, {
                     header: true, skipEmptyLines: true,
@@ -224,7 +196,8 @@
                     }
                 });
             }).catch(e => {
-                document.getElementById('roadmapContainer').innerHTML = `<div class="col-span-3 p-10 text-center"><p class="text-rose-600 font-bold"><i class="fas fa-exclamation-triangle"></i> Lỗi kết nối đến Google Sheet Giáo trình.</p></div>`;
+                document.getElementById('loadingSpinner').classList.add('hidden');
+                document.getElementById('courseListRender').innerHTML = `<div class="col-span-full p-10 text-center bg-white rounded-3xl border border-rose-200"><p class="text-rose-600 font-bold"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><br>Lỗi tải giáo trình từ Google Sheet.</p></div>`;
             });
         }
 
@@ -242,23 +215,14 @@
 
                 let session = MASTER_DATA[roadmap].find(s => s.id === maBuoi || s.title === tenBuoi);
                 if(!session) {
-                    session = { 
-                        id: maBuoi || 'session_'+(MASTER_DATA[roadmap].length+1), 
-                        title: tenBuoi, 
-                        desc: desc, 
-                        totalExercises: 0, 
-                        exercises: [] 
-                    };
+                    session = { id: maBuoi || 'session_'+(MASTER_DATA[roadmap].length+1), title: tenBuoi, desc: desc, totalExercises: 0, exercises: [] };
                     MASTER_DATA[roadmap].push(session);
                 }
-
                 if(tenBaiTap) {
-                    session.totalExercises++;
-                    session.exercises.push(tenBaiTap); // Lưu tên để check thông báo sau này
+                    session.totalExercises++; session.exercises.push(tenBaiTap); 
                 }
             });
 
-            // Xử lý logic chọn Lộ trình (NganhHang)
             const roadmaps = Object.keys(MASTER_DATA);
             let currentRoadmap = localStorage.getItem('kv_current_industry');
             
@@ -267,51 +231,57 @@
                 localStorage.setItem('kv_current_industry', currentRoadmap);
             }
 
-            // Nếu có nhiều lộ trình, hiện Dropdown chọn
+            // Render Tabs
             if (roadmaps.length > 1) {
-                const sel = document.getElementById('roadmapSelector');
-                sel.innerHTML = roadmaps.map(r => `<option value="${r}" ${r===currentRoadmap ? 'selected':''}>${r}</option>`).join('');
-                document.getElementById('roadmapSelectorArea').classList.remove('hidden');
+                const tabArea = document.getElementById('roadmapTabs');
+                tabArea.innerHTML = roadmaps.map(r => `
+                    <button onclick="changeRoadmap('${r}')" id="tab_${r}" class="tab-btn px-4 py-2 text-xs font-bold text-slate-600 rounded-xl border border-transparent transition-all hover:bg-white hover:border-slate-300 ${r === currentRoadmap ? 'active' : ''}">
+                        ${r.toUpperCase()}
+                    </button>
+                `).join('');
+                tabArea.classList.remove('hidden');
+                tabArea.classList.add('flex');
             }
 
-            renderRoadmap(currentRoadmap);
-            fetchGlobalNotifications(currentRoadmap); // Bắn API quét thông báo nhận xét
+            document.getElementById('loadingSpinner').classList.add('hidden');
+            renderCourseCards(currentRoadmap);
+            fetchGlobalNotifications(currentRoadmap);
         }
 
-        function changeRoadmap() {
-            const r = document.getElementById('roadmapSelector').value;
-            localStorage.setItem('kv_current_industry', r);
-            renderRoadmap(r);
-            fetchGlobalNotifications(r);
+        // ==========================================
+        // 2. RENDER GIAO DIỆN
+        // ==========================================
+        function changeRoadmap(industry) {
+            localStorage.setItem('kv_current_industry', industry);
+            // Đổi UI Tab
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.id === `tab_${industry}`) btn.classList.add('active');
+            });
+            renderCourseCards(industry);
+            fetchGlobalNotifications(industry);
         }
 
-        function renderRoadmap(currentRoadmap) {
-            const container = document.getElementById('roadmapContainer');
-            const sessions = MASTER_DATA[currentRoadmap] || [];
+        function renderCourseCards(industry) {
+            const container = document.getElementById('courseListRender');
+            const roadmapData = MASTER_DATA[industry];
 
-            if(sessions.length === 0) {
-                container.innerHTML = `<p class="col-span-3 text-center text-slate-500 font-bold mt-10">Chưa có dữ liệu bài học nào cho lộ trình này.</p>`;
+            if (!roadmapData || roadmapData.length === 0) {
+                container.innerHTML = `<div class="col-span-full bg-slate-50 border border-slate-200 p-12 text-center rounded-3xl text-slate-500"><i class="fas fa-box-open text-4xl mb-4 text-slate-300"></i><p class="font-bold text-sm">Chưa có dữ liệu bài học nào.</p></div>`;
                 return;
             }
 
-            // Bảng màu quay vòng tự động cho các Card (Xanh -> Cam -> Tím -> Lục)
-            const themes = [
-                { bg: 'from-blue-50/95 to-blue-100/70', border: 'border-blue-200 hover:border-blue-400', iconBg: 'bg-blue-600', textTitle: 'text-blue-700', textDesc: 'text-slate-600', btnText: 'text-blue-600' },
-                { bg: 'from-amber-50/95 to-amber-100/70', border: 'border-amber-200 hover:border-amber-400', iconBg: 'bg-amber-600', textTitle: 'text-amber-700', textDesc: 'text-slate-600', btnText: 'text-amber-700' },
-                { bg: 'from-purple-50/95 to-purple-100/70', border: 'border-purple-200 hover:border-purple-400', iconBg: 'bg-purple-600', textTitle: 'text-purple-700', textDesc: 'text-slate-600', btnText: 'text-purple-600' },
-                { bg: 'from-emerald-50/95 to-emerald-100/70', border: 'border-emerald-200 hover:border-emerald-400', iconBg: 'bg-emerald-600', textTitle: 'text-emerald-700', textDesc: 'text-slate-600', btnText: 'text-emerald-600' }
-            ];
+            // Theme màu sắc hiện đại cho Icon
+            const colors = ['bg-blue-100 text-blue-600', 'bg-emerald-100 text-emerald-600', 'bg-amber-100 text-amber-600', 'bg-purple-100 text-purple-600', 'bg-rose-100 text-rose-600'];
 
             let html = '';
-            sessions.forEach((sess, idx) => {
-                const theme = themes[idx % themes.length];
-                const prefix = currentRoadmap.toLowerCase().trim();
+            roadmapData.forEach((sess, idx) => {
+                const colorClass = colors[idx % colors.length];
+                const prefix = industry.toLowerCase().trim();
                 const safeSessionId = sess.id.toLowerCase().trim();
-                
-                // Trích xuất LocalStorage Key dựa trên logic của spcb.html
                 const DATA_KEY = `kv_data_${prefix}_${safeSessionId}`;
 
-                // Tính toán % tiến độ cục bộ (Đã lưu trong máy)
+                // Tính toán %
                 const savedData = localStorage.getItem(DATA_KEY);
                 let doneCount = 0;
                 if(savedData) {
@@ -320,83 +290,78 @@
                 }
                 const progressPercent = sess.totalExercises > 0 ? Math.round((doneCount/sess.totalExercises)*100) : 0;
                 const isDone = (progressPercent >= 100);
-                
-                const doneHtml = isDone ? `<div class="absolute top-4 right-4 bg-emerald-100/90 text-emerald-800 px-3 py-1 rounded-full text-[11px] font-black flex items-center gap-1 border border-emerald-300 shadow-sm"><i class="fas fa-check-circle"></i> Đã hoàn thành</div>` : '';
 
-                // Bóc tách tên buổi (VD: "Buổi 1: Test" -> Prefix "Buổi 1", Title "Test")
+                let badgeHtml = isDone ? `<div class="absolute top-4 right-4 bg-emerald-50 text-emerald-600 border border-emerald-200 px-2.5 py-1 rounded-lg text-[10px] font-black flex items-center gap-1.5"><i class="fas fa-check-circle"></i> Hoàn thành</div>` : '';
+
                 let displayTitle = sess.title;
-                let titlePrefix = `Buổi ${idx+1}`;
+                let titlePrefix = `${idx+1}`;
                 const match = sess.title.match(/^(Buổi\s*[^:\.]+)[:\.]\s*(.+)$/i);
-                if (match) {
-                    titlePrefix = match[1].trim();
-                    displayTitle = match[2].trim();
-                }
+                if (match) { displayTitle = match[2].trim(); }
 
-                // Default text nếu không có mô tả
-                let descText = sess.desc ? sess.desc.replace(/\n/g, '<br>') : 'Bấm vào để xem chi tiết các bài tập thực hành trong phần này.';
+                let descText = sess.desc ? sess.desc.replace(/\n/g, '<br>') : 'Bấm vào đây để xem chi tiết lý thuyết và bắt đầu làm các bài tập thực hành.';
+                const fileLink = `spcb.html?roadmap=${encodeURIComponent(industry)}&session=${encodeURIComponent(sess.id)}`;
 
                 html += `
-                <a href="spcb.html?roadmap=${encodeURIComponent(currentRoadmap)}&session=${encodeURIComponent(sess.id)}" class="group relative bg-gradient-to-br ${theme.bg} border ${theme.border} p-6 rounded-2xl transition-all duration-300 flex flex-col h-full clickable-card">
-                    <div id="notify_${safeSessionId}" class="hidden absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-black px-2.5 py-1.5 rounded-full border border-white shadow-md animate-bounce">Có Nhận xét</div>
-                    ${doneHtml}
+                <a href="${fileLink}" class="course-card relative bg-white border border-slate-200 p-6 rounded-2xl flex flex-col h-full group overflow-hidden">
+                    ${badgeHtml}
+                    <div id="notify_${safeSessionId}" class="hidden absolute top-4 right-4 bg-rose-500 text-white border border-rose-600 px-2.5 py-1 rounded-lg text-[10px] font-black flex items-center gap-1.5 animate-pulse z-10"><i class="fas fa-comment-dots"></i> Nhận xét</div>
                     
-                    <div class="w-max px-4 h-10 ${theme.iconBg} text-white rounded-xl flex items-center justify-center font-black text-sm mb-4 group-hover:scale-105 transition shadow-sm">${titlePrefix}</div>
-                    
-                    <h4 class="text-base font-black text-slate-800 mb-2 group-hover:${theme.textTitle} transition leading-snug">${displayTitle}</h4>
-                    <p class="${theme.textDesc} text-xs leading-relaxed mb-6 flex-1 line-clamp-3" title="Chi tiết">${descText}</p>
-                    
-                    <!-- Progress Bar -->
-                    <div class="w-full bg-white/60 rounded-full h-1.5 mb-3 overflow-hidden shadow-inner">
-                        <div class="${theme.iconBg} h-1.5 rounded-full transition-all duration-500" style="width: ${progressPercent > 100 ? 100 : progressPercent}%"></div>
+                    <div class="w-12 h-12 rounded-2xl ${colorClass} flex items-center justify-center font-black text-lg mb-5 shadow-sm">
+                        ${titlePrefix}
                     </div>
-                    <div class="flex justify-between items-center pt-2 mt-auto">
-                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">Tiến độ: ${progressPercent}%</span>
-                        <div class="${theme.btnText} font-bold text-xs flex items-center gap-1 group-hover:gap-2 transition-all">Vào học ngay <i class="fas fa-arrow-right"></i></div>
+                    
+                    <h4 class="text-base font-black text-slate-800 mb-2 group-hover:text-blue-600 transition-colors leading-snug pr-8">${displayTitle}</h4>
+                    <p class="text-slate-500 text-xs leading-relaxed mb-8 flex-1 font-medium line-clamp-3">${descText}</p>
+                    
+                    <div class="mt-auto">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tiến độ bài làm</span>
+                            <span class="text-xs font-black ${isDone ? 'text-emerald-600' : 'text-blue-600'}">${progressPercent}%</span>
+                        </div>
+                        <div class="w-full bg-slate-100 rounded-full h-2 mb-4 overflow-hidden shadow-inner">
+                            <div class="${isDone ? 'bg-emerald-500' : 'bg-blue-600'} h-2 rounded-full transition-all duration-1000" style="width: ${progressPercent > 100 ? 100 : progressPercent}%"></div>
+                        </div>
+                        <div class="w-full py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs flex items-center justify-center gap-2 group-hover:bg-blue-50 group-hover:text-blue-600 border border-slate-200 transition-colors">
+                            Vào bài học <i class="fas fa-arrow-right"></i>
+                        </div>
                     </div>
-                </a>
-                `;
+                </a>`;
             });
             container.innerHTML = html;
         }
 
-        // Tự động kiểm tra trên Server xem có nhận xét mới không
-        function fetchGlobalNotifications(currentRoadmap) {
+        // ==========================================
+        // 3. CÁC HÀM XỬ LÝ KHÁC
+        // ==========================================
+        function fetchGlobalNotifications(industry) {
+            if (!API_URL) return;
             const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
-            if(!profile || !API_URL) return;
-            
+            if(!profile) return;
+
             fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}`)
-            .then(r => r.json())
-            .then(res => {
-                if(res.status === 'success' && res.allData) {
-                    const sessions = MASTER_DATA[currentRoadmap] || [];
-                    sessions.forEach(sess => {
-                        const safeSessionId = sess.id.toLowerCase().trim();
-                        const prefix = currentRoadmap.toLowerCase().trim();
-                        const DATA_KEY = `kv_data_${prefix}_${safeSessionId}`;
-                        
-                        const apiSessionData = res.allData[sess.title] || {};
-                        let hasNew = false;
-                        
-                        const savedData = localStorage.getItem(DATA_KEY);
-                        let store = savedData ? JSON.parse(savedData) : {};
-                        
-                        // Kiểm tra so sánh với localStorage
-                        sess.exercises.forEach((exTitle, idx) => {
-                            if(apiSessionData[exTitle]) {
-                                if(!store[idx]) store[idx] = {};
-                                if(store[idx].feedback !== apiSessionData[exTitle]) hasNew = true;
-                            }
-                        });
-                        
-                        // Hoặc xem trong store cũ có cái nào chưa đọc không
-                        for(let key in store) { if(store[key].isUnread) hasNew = true; }
-                        
-                        const badgeId = `notify_${safeSessionId}`;
-                        const badgeEl = document.getElementById(badgeId);
-                        if(badgeEl && hasNew) badgeEl.classList.remove('hidden');
-                    });
+            .then(r => r.json()).then(res => {
+                if(res.status === 'success' && res.allData && MASTER_DATA[industry]) {
+                    MASTER_DATA[industry].forEach(session => { checkNotification(session, res.allData, industry); });
                 }
-            }).catch(e => console.log("Lỗi tải thông báo ngầm."));
+            }).catch(e => console.log("Lỗi tải thông báo"));
+        }
+
+        function checkNotification(sessionData, allApiData, industry) {
+            const apiSessionData = allApiData[sessionData.title] || {};
+            let hasNew = false;
+            const prefix = industry.toLowerCase().trim();
+            const safeSessionId = sessionData.id.toLowerCase().trim();
+            const store = JSON.parse(localStorage.getItem(`kv_data_${prefix}_${safeSessionId}`)) || {};
+            
+            sessionData.exercises.forEach((exTitle, i) => {
+                if(apiSessionData[exTitle]) {
+                    if(!store[i]) store[i] = {};
+                    if(store[i].feedback !== apiSessionData[exTitle]) hasNew = true;
+                }
+            });
+            for(let key in store) { if(store[key].isUnread) hasNew = true; }
+            const notifyEl = document.getElementById(`notify_${safeSessionId}`);
+            if(hasNew && notifyEl) notifyEl.classList.remove('hidden');
         }
 
         function renderIdentity() {
@@ -404,23 +369,35 @@
             const profileRaw = localStorage.getItem('kv_trainer_profile');
             if(profileRaw) {
                 const profile = JSON.parse(profileRaw);
-                btn.innerHTML = `👤 ${profile.name} <span class="hidden md:inline">- ${profile.dept}</span> <span class="text-[10px] font-normal opacity-70 underline ml-1">(Sửa)</span>`;
-                btn.className = "flex items-center gap-2 text-xs font-bold text-slate-300 bg-blue-900/30 border border-blue-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-blue-900/50 transition-all";
+                btn.innerHTML = `<div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border border-blue-200 shrink-0"><i class="fas fa-user text-[10px]"></i></div> <span class="truncate max-w-[150px]">${profile.name}</span> <span class="text-[10px] text-slate-400 font-normal ml-1 border-l border-slate-300 pl-2">Đổi</span>`;
+                btn.className = "flex items-center gap-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 pr-3 pl-1 py-1 rounded-full hover:bg-slate-50 transition-all cursor-pointer shadow-sm";
+                document.getElementById('heroGreeting').innerText = `Chào mừng, ${profile.name}! 👋`;
                 document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept;
             } else {
-                btn.innerHTML = `👤 Chưa định danh (Bấm để nhập)`;
-                btn.className = "flex items-center gap-2 text-xs font-bold text-red-200 bg-red-950/30 border border-red-900/40 px-3 py-2 rounded-lg cursor-pointer hover:bg-red-950/50 transition-all animate-pulse";
+                btn.innerHTML = `<i class="fas fa-user-circle text-base"></i> Chưa định danh`;
+                btn.className = "flex items-center gap-2 text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-4 py-2 rounded-xl hover:bg-rose-100 transition-all cursor-pointer animate-pulse";
             }
         }
 
         function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
         
+        function toTitleCase(str) { return str.toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '); }
+
         function saveProfile() {
-            const name = document.getElementById('inpName').value.trim(); const dept = document.getElementById('inpDept').value.trim();
-            if(!name || !dept) { alert("Vui lòng điền Họ tên và Phòng ban!"); return; }
+            let name = document.getElementById('inpName').value.trim(); 
+            let dept = document.getElementById('inpDept').value.trim(); 
+            if(!name || !dept) { alert("Vui lòng điền đủ Họ tên và Phòng ban!"); return; }
+            name = toTitleCase(name); 
+            
             localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
-            closeAuthModal(); renderIdentity(); location.reload();
+            closeAuthModal(); renderIdentity(); fetchMasterData(); 
+        }
+
+        function toggleSidebar() { 
+            const sidebar = document.getElementById('sidebar'); 
+            sidebar.classList.toggle('hidden'); 
+            if(window.innerWidth < 1024) { sidebar.classList.toggle('fixed'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); sidebar.classList.toggle('z-50'); } 
         }
     </script>
 </body>
