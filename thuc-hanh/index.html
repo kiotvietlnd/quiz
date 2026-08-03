@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Đào Tạo Tái Ký KiotViet</title>
+    <title>Cổng Đào Tạo Sales KiotViet</title>
     <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -277,9 +277,10 @@
             let html = '';
             roadmapData.forEach((sess, idx) => {
                 const colorClass = colors[idx % colors.length];
-                const prefix = industry.toLowerCase().trim();
-                const safeSessionId = sess.id.toLowerCase().trim();
-                const DATA_KEY = `kv_data_${prefix}_${safeSessionId}`;
+                const prefix = industry; // SỬA: Lấy chính xác chữ hoa/thường
+                const safeSessionId = sess.id;
+                // SỬA: Đồng bộ đúng tên biến với file spcb.html
+                const DATA_KEY = `kv_codelab_data_${prefix}_${safeSessionId}`;
 
                 // Tính toán %
                 const savedData = localStorage.getItem(DATA_KEY);
@@ -349,9 +350,7 @@
         function checkNotification(sessionData, allApiData, industry) {
             const apiSessionData = allApiData[sessionData.title] || {};
             let hasNew = false;
-            const prefix = industry.toLowerCase().trim();
-            const safeSessionId = sessionData.id.toLowerCase().trim();
-            const store = JSON.parse(localStorage.getItem(`kv_data_${prefix}_${safeSessionId}`)) || {};
+            const store = JSON.parse(localStorage.getItem(`kv_codelab_data_${industry}_${sessionData.id}`)) || {};
             
             sessionData.exercises.forEach((exTitle, i) => {
                 if(apiSessionData[exTitle]) {
