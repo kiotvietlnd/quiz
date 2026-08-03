@@ -691,8 +691,17 @@
 
             let cardItems = [];
             requiredExerciseTitles.forEach(exTitle => {
-                const match = studentSubmissions.find(e => cleanStr(e.tenBaiHoc) === cleanStr(exTitle));
-                cardItems.push(match ? { title: exTitle, isSubmitted: true, record: match } : { title: exTitle, isSubmitted: false, record: null });
+                const matches = studentSubmissions.filter(e => cleanStr(e.tenBaiHoc) === cleanStr(exTitle));
+                if (matches.length > 0) {
+                    cardItems.push({ 
+                        title: exTitle, 
+                        isSubmitted: true, 
+                        record: matches[0], // Lấy bản nộp mới nhất (đã được reverse)
+                        isResubmitted: matches.length > 1 // Nếu mảng có > 1 dòng tức là nộp nhiều lần
+                    });
+                } else {
+                    cardItems.push({ title: exTitle, isSubmitted: false, record: null, isResubmitted: false });
+                }
             });
 
             if (selSubmissionState === 'submitted') cardItems = cardItems.filter(item => item.isSubmitted);
@@ -759,13 +768,18 @@
                 const safeKey = `card-${idx}`;
                 
                 let badgeGroupHtml = `
-                    <button onclick="openStudentReportModal('${(item.hoVaTen||"").replace(/'/g, "\\'")}', '${(item.phongBan||"").replace(/'/g, "\\'")}', '${(item.khoa||"").replace(/'/g, "\\'")}', '${(item.buoi||"").replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-colors">
-                        <i class="fas fa-file-pdf text-emerald-600"></i> Báo cáo PDF
+                    <button onclick="openStudentReportModal('${(item.hoVaTen||"").replace(/'/g, "\\'")}', '${(item.phongBan||"").replace(/'/g, "\\'")}', '${(item.khoa||"").replace(/'/g, "\\'")}', '${(item.buoi||"").replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 rounded-full text-[11px] font-bold flex items-center gap-1.5 transition-colors shadow-sm">
+                        <i class="fas fa-file-pdf text-emerald-600"></i> PDF
                     </button>`;
                 
-                if (item.nhanXet && item.nhanXet.toString().includes("[BỎ QUA]")) badgeGroupHtml += `<span class="bg-slate-100 text-slate-500 border border-slate-300 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider"><i class="fas fa-ban"></i> ĐÃ BỎ QUA</span>`;
-                else if (item.nhanXet && item.nhanXet.toString().trim() !== "") badgeGroupHtml += `<span class="bg-blue-50 text-blue-700 border border-blue-200 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`;
-                else badgeGroupHtml += `<span class="bg-rose-50 text-rose-600 border border-rose-200 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider"><i class="fas fa-exclamation-circle"></i> CẦN CHẤM</span>`;
+                // NẾU NỘP BỔ SUNG, GẮN NHÃN MÀU TÍM
+                if (cardObj.isResubmitted) {
+                    badgeGroupHtml += `<span class="bg-purple-50 text-purple-600 border border-purple-200 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider shadow-sm"><i class="fas fa-history animate-spin-slow"></i> NỘP BỔ SUNG</span>`;
+                }
+
+                if (item.nhanXet && item.nhanXet.toString().includes("[BỎ QUA]")) badgeGroupHtml += `<span class="bg-slate-100 text-slate-500 border border-slate-300 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider shadow-sm"><i class="fas fa-ban"></i> ĐÃ BỎ QUA</span>`;
+                else if (item.nhanXet && item.nhanXet.toString().trim() !== "") badgeGroupHtml += `<span class="bg-blue-50 text-blue-700 border border-blue-200 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider shadow-sm"><i class="fas fa-check-circle"></i> ĐÃ CHẤM</span>`;
+                else badgeGroupHtml += `<span class="bg-rose-50 text-rose-600 border border-rose-200 text-[11px] px-3 py-1.5 rounded-full font-bold flex items-center gap-1.5 uppercase tracking-wider shadow-sm animate-pulse"><i class="fas fa-exclamation-circle"></i> CẦN CHẤM</span>`;
                 
                 let questions = exerciseDetails.theory || []; let theoryHtml = ''; let hasTheory = false;
                 if (questions.length > 0) {
