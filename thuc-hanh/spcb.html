@@ -135,7 +135,7 @@
     <script>
         // CẤU HÌNH API & DATABASE
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
-        const API_URL = "https://script.google.com/macros/s/AKfycbzsfV_oB4HM7C880PZ6IgsMoyckkuD3NUywaCTnjptau_1U7yVOzdrsOX-QczUXST7L6g/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbyggXAwORtqnIHDSaoI4zeEo3RA65BFdqCOqMv73VOQcIl4A4x4istq9cxiYo5iHXqFPQ/exec";
 
         // ⚙️ CẤU HÌNH TÊN KHÓA HỌC (SỬA LẠI Ở ĐÂY MỖI TUẦN)
         const COURSE_NAME = "26KV20"; 
@@ -176,8 +176,13 @@
 
             // TẢI GIÁO TRÌNH TỪ SHEET
             fetch(MASTER_EXERCISE_URL)
-            .then(res => { if(!res.ok) throw new Error("Lỗi mạng"); return res.text(); })
+            .then(res => { if(!res.ok) throw new Error("Lỗi mạng máy chủ Google"); return res.text(); })
             .then(csv => {
+                // Bẫy lỗi: Tránh trường hợp Google trả về mã HTML thay vì dữ liệu CSV
+                if (csv.trim().startsWith("<!DOCTYPE") || csv.trim().startsWith("<html")) {
+                    throw new Error("Lỗi quyền truy cập: Hãy kiểm tra file MasterExercises đã bật 'Bất kỳ ai có liên kết' chưa.");
+                }
+
                 Papa.parse(csv, {
                     header: true, skipEmptyLines: true,
                     complete: function(results) {
@@ -212,7 +217,7 @@
                         parseAndRenderData();
                     }
                 });
-            }).catch(e => { alert("Lỗi tải giáo trình MasterExercises."); });
+            }).catch(e => { alert("Lỗi tải giáo trình MasterExercises: " + e.message); console.error(e); });
         });
 
         const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
