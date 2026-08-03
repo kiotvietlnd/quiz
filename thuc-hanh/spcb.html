@@ -109,6 +109,10 @@
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
         const API_URL = "https://script.google.com/macros/s/AKfycbwcWr2golE6dLmqz6BoOAu1KspYmtVbjvY8fBE6A3oGOxA6EuQio54Ap-m-Qj3SLt5hwA/exec";
 
+        // ⚙️ CẤU HÌNH TÊN KHÓA HỌC (SỬA LẠI Ở ĐÂY MỖI TUẦN)
+        const COURSE_NAME = "26KV20"; 
+        // --------------------------------------------------------
+
         // XỬ LÝ URL PARAMETERS ĐỂ LẤY ĐÚNG NGÀNH VÀ BUỔI HỌC TỪ TRANG CHỦ
         const urlParams = new URLSearchParams(window.location.search);
         const CURRENT_ROADMAP = urlParams.get('roadmap') || 'Retail';
@@ -117,7 +121,6 @@
         // TẠO CÁC BIẾN LOCALSTORAGE ĐỘNG BẢO VỆ DỮ LIỆU ĐỘC LẬP TỪNG BUỔI
         const STORAGE_KEY = `kv_codelab_progress_${CURRENT_ROADMAP}_${SESSION_ID}`;
         const DATA_KEY = `kv_codelab_data_${CURRENT_ROADMAP}_${SESSION_ID}`; 
-        const COURSE_NAME = CURRENT_ROADMAP; 
 
         let CODELAB_DATA = [];
         let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFilesStore = {}; 
