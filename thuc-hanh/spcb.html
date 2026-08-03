@@ -25,6 +25,7 @@
 </head>
 <body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200">
 
+    <!-- HEADER -->
     <header class="bg-[#166def] border-b border-blue-600 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 no-print text-white shadow-sm">
         <div class="flex items-center gap-4">
             <a href="index.html" class="flex items-center gap-1.5 text-white hover:text-white/80 font-bold text-xs border border-white/20 bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">
@@ -47,6 +48,7 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden">
+        <!-- SIDEBAR -->
         <aside id="sidebar" class="w-72 flex flex-col z-30 transition-all shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.15)] relative overflow-hidden hidden md:flex no-print">
             <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#122543]">
                 <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 hover:text-white"><i class="fas fa-times"></i></button>
@@ -100,24 +102,26 @@
         <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none"><button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-left text-lg"></i></button><img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"><button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-right text-lg"></i></button></div>
     </div>
 
+    <div id="pdf-content" class="absolute -left-[9999px] top-0 bg-white p-10 text-gray-800" style="width: 210mm;"></div>
+
     <script>
         // CẤU HÌNH API & DATABASE
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
-        const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
-        const COURSE_NAME = "SPCB";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwcWr2golE6dLmqz6BoOAu1KspYmtVbjvY8fBE6A3oGOxA6EuQio54Ap-m-Qj3SLt5hwA/exec";
 
-        // XỬ LÝ URL PARAMETERS (spcb.html?buoi=session_1)
+        // XỬ LÝ URL PARAMETERS ĐỂ LẤY ĐÚNG NGÀNH VÀ BUỔI HỌC TỪ TRANG CHỦ
         const urlParams = new URLSearchParams(window.location.search);
-        const SESSION_ID = urlParams.get('buoi') || 'session_1'; 
+        const CURRENT_ROADMAP = urlParams.get('roadmap') || 'Retail';
+        const SESSION_ID = urlParams.get('session') || urlParams.get('buoi') || 'session_1'; 
         
-        // BIẾN LƯU TRỮ ĐỘNG THEO BUỔI HỌC
-        const STORAGE_KEY = `kv_progress_spcb_${SESSION_ID}`;
-        const DATA_KEY = `kv_data_spcb_${SESSION_ID}`; 
+        // TẠO CÁC BIẾN LOCALSTORAGE ĐỘNG BẢO VỆ DỮ LIỆU ĐỘC LẬP TỪNG BUỔI
+        const STORAGE_KEY = `kv_codelab_progress_${CURRENT_ROADMAP}_${SESSION_ID}`;
+        const DATA_KEY = `kv_codelab_data_${CURRENT_ROADMAP}_${SESSION_ID}`; 
+        const COURSE_NAME = CURRENT_ROADMAP; 
 
         let CODELAB_DATA = [];
-        let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {};
-        let pendingFilesStore = {}; let activeExerciseIndex = null; 
-        let groupedSteps = []; let activeSubIndex = 0; 
+        let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFilesStore = {}; 
+        let activeExerciseIndex = null; let groupedSteps = []; let activeSubIndex = 0; 
         let fullscreenImageList = []; let fullscreenImageIndex = 0;
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -139,23 +143,28 @@
                 }
             });
 
-            // TẢI GIÁO TRÌNH TỪ SHEET (GVIZ API)
+            // TẢI GIÁO TRÌNH TỪ SHEET
             fetch(MASTER_EXERCISE_URL)
             .then(res => { if(!res.ok) throw new Error("Lỗi mạng"); return res.text(); })
             .then(csv => {
                 Papa.parse(csv, {
                     header: true, skipEmptyLines: true,
                     complete: function(results) {
-                        let builtData = []; let currentGroupName = "";
+                        let builtData = {}; 
+                        let currentGroupName = "";
+                        
                         results.data.forEach(row => {
+                            let roadmap = (row['NganhHang'] || 'Retail').trim();
                             let maBuoi = (row['MaBuoi'] || '').trim(); let tenBuoi = (row['TenBuoi'] || '').trim();
                             let tenBaiTap = (row['TenBaiTap'] || '').trim(); let nhomBaiTap = (row['NhomBaiTap'] || '').trim();
+                            
                             if(!tenBuoi || !tenBaiTap) return;
+                            if(!builtData[roadmap]) builtData[roadmap] = [];
 
-                            let sessionObj = builtData.find(s => s.id === maBuoi || s.title === tenBuoi);
+                            let sessionObj = builtData[roadmap].find(s => s.id === maBuoi || s.title === tenBuoi);
                             if (!sessionObj) {
-                                sessionObj = { id: maBuoi || 'session_' + (builtData.length + 1), title: tenBuoi, exercises: [] };
-                                builtData.push(sessionObj); currentGroupName = ""; 
+                                sessionObj = { id: maBuoi || 'session_' + (builtData[roadmap].length + 1), title: tenBuoi, exercises: [] };
+                                builtData[roadmap].push(sessionObj); currentGroupName = ""; 
                             }
                             if (nhomBaiTap && nhomBaiTap !== currentGroupName) {
                                 sessionObj.exercises.push({ title: nhomBaiTap, isGroupHeader: true }); currentGroupName = nhomBaiTap;
@@ -166,7 +175,9 @@
                                 instructions: parseArr(row['HuongDan']), hints: parseArr(row['MoTaBuoi']), confirm: (row['XacNhan'] || '').trim()
                             });
                         });
-                        CODELAB_DATA = builtData;
+                        
+                        // CHỈ LẤY DATA CỦA ĐÚNG NGÀNH HÀNG MÀ HỌC VIÊN CHỌN
+                        CODELAB_DATA = builtData[CURRENT_ROADMAP] || builtData['Retail'] || [];
                         parseAndRenderData();
                     }
                 });
@@ -277,22 +288,26 @@
         function switchSubExercise(subIdx) {
             const group = groupedSteps[currentStepIndex]; if (!group || subIdx < 0 || subIdx >= group.exercises.length) return;
             activeSubIndex = subIdx;
+            
             document.querySelectorAll('.sub-exercise-card').forEach((card, idx) => {
                 if (idx === subIdx) { card.classList.remove('hidden'); activeExerciseIndex = group.exercises[idx].originalIndex; } 
                 else card.classList.add('hidden');
             });
+
+            // HIGHLIGHT TAB NÚT BẤM KHI CHUYỂN
             group.exercises.forEach((ex, idx) => {
                 const btn = document.getElementById(`sub_nav_${idx}`);
                 if (btn) {
                     let isSubDone = stepDataStore[ex.originalIndex] && stepDataStore[ex.originalIndex].isSubmitted;
                     if (idx === subIdx) {
-                        btn.className = 'px-3 py-1.5 text-xs font-black rounded-lg transition-all border border-blue-600 bg-blue-600 text-white shadow-sm flex items-center gap-1';
+                        btn.className = 'px-3 py-1.5 text-xs font-black rounded-lg transition-all border border-blue-600 bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1 min-w-[36px]';
                     } else {
                         let idleClass = isSubDone ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
-                        btn.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${idleClass} flex items-center gap-1`;
+                        btn.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${idleClass} flex items-center justify-center gap-1 min-w-[36px]`;
                     }
                 }
             });
+
             document.getElementById('btnSubPrev').disabled = (subIdx === 0);
             document.getElementById('btnSubNext').disabled = (subIdx === group.exercises.length - 1);
         }
@@ -310,16 +325,16 @@
             const activeLi = document.getElementById(`step_item_${index}`); if (activeLi) { activeLi.classList.add('step-active'); activeLi.classList.remove('step-inactive'); activeLi.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
 
             const contentDiv = document.getElementById('mainContent');
+            
+            // TẠO NÚT BẤM (1, 2, 3...) CÓ KÈM CHECKMARK
             let navButtonsHtml = group.exercises.map((ex, subIdx) => {
-                let match = ex.title.match(/^(\d+[a-z]+)/i); 
-                let shortName = match ? match[1] : `${subIdx + 1}`; // Bỏ chữ "Mục"
-                
+                let shortName = `${subIdx + 1}`; 
                 let oIdx = ex.originalIndex;
                 let isSubDone = stepDataStore[oIdx] && stepDataStore[oIdx].isSubmitted;
                 let doneIcon = isSubDone ? `<i class="fas fa-check-circle text-emerald-500 ml-1"></i>` : '';
                 let borderClass = isSubDone ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-600';
 
-                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${borderClass} hover:bg-slate-100 flex items-center gap-1">${shortName} ${doneIcon}</button>`;
+                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${borderClass} hover:bg-slate-100 flex items-center justify-center gap-1 min-w-[36px]">${shortName} ${doneIcon}</button>`;
             }).join('');
 
             let html = `
