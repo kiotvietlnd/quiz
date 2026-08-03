@@ -283,7 +283,15 @@
             });
             group.exercises.forEach((ex, idx) => {
                 const btn = document.getElementById(`sub_nav_${idx}`);
-                if (btn) btn.className = (idx === subIdx) ? 'px-3 py-1.5 text-xs font-black rounded-lg transition-all border border-blue-600 bg-blue-600 text-white shadow-sm' : 'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
+                if (btn) {
+                    let isSubDone = stepDataStore[ex.originalIndex] && stepDataStore[ex.originalIndex].isSubmitted;
+                    if (idx === subIdx) {
+                        btn.className = 'px-3 py-1.5 text-xs font-black rounded-lg transition-all border border-blue-600 bg-blue-600 text-white shadow-sm flex items-center gap-1';
+                    } else {
+                        let idleClass = isSubDone ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
+                        btn.className = `px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${idleClass} flex items-center gap-1`;
+                    }
+                }
             });
             document.getElementById('btnSubPrev').disabled = (subIdx === 0);
             document.getElementById('btnSubNext').disabled = (subIdx === group.exercises.length - 1);
@@ -303,8 +311,15 @@
 
             const contentDiv = document.getElementById('mainContent');
             let navButtonsHtml = group.exercises.map((ex, subIdx) => {
-                let match = ex.title.match(/^(\d+[a-z]+)/i); let shortName = match ? match[1] : `Mục ${subIdx + 1}`;
-                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all border border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100">${shortName}</button>`;
+                let match = ex.title.match(/^(\d+[a-z]+)/i); 
+                let shortName = match ? match[1] : `${subIdx + 1}`; // Bỏ chữ "Mục"
+                
+                let oIdx = ex.originalIndex;
+                let isSubDone = stepDataStore[oIdx] && stepDataStore[oIdx].isSubmitted;
+                let doneIcon = isSubDone ? `<i class="fas fa-check-circle text-emerald-500 ml-1"></i>` : '';
+                let borderClass = isSubDone ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-600';
+
+                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${borderClass} hover:bg-slate-100 flex items-center gap-1">${shortName} ${doneIcon}</button>`;
             }).join('');
 
             let html = `
