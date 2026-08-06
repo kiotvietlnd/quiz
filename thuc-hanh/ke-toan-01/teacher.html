@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi" class="scroll-smooth">
-<head>    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
+<head>    
+    <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard GV - Kế Toán 01</title>
+    <title>Kết quả thực hành - Bài tập Kế toán Hộ kinh doanh</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -18,7 +19,7 @@
         .glow-blob-1 { top: -15%; left: -10%; background: rgba(37, 99, 235, 0.05); } 
         .glow-blob-2 { bottom: -15%; right: -10%; background: rgba(16, 185, 129, 0.05); }
 
-        /* Ultra Glassmorphism Panel (Nền sáng) */
+        /* Ultra Glassmorphism Panel */
         .glass-panel-ultra { 
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.98), rgba(255, 255, 255, 0.92)); 
             backdrop-filter: blur(25px); 
@@ -27,30 +28,32 @@
             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.03), inset 0 1px 0 rgba(255, 255, 255, 1); 
         }
         
-        .student-item { transition: all 0.2s; cursor: pointer; }
-        .student-active { background-color: #2563eb !important; border-left: 4px solid #f59e0b !important; color: #ffffff !important; }
-        .student-active h3 { color: #ffffff !important; }
-        .student-active p { color: #bfdbfe !important; }
-        .student-active span { background-color: rgba(255,255,255,0.2) !important; color: #ffffff !important; border-color: rgba(255,255,255,0.1) !important; }
+        .student-item, .task-item { transition: all 0.2s; cursor: pointer; }
+        .item-active { background-color: #2563eb !important; border-left: 4px solid #f59e0b !important; color: #ffffff !important; }
+        .item-active h3 { color: #ffffff !important; }
+        .item-active p { color: #bfdbfe !important; }
         
         .random-spin { animation: highlight-pulse 0.1s infinite alternate; }
         @keyframes highlight-pulse { from { background-color: transparent; } to { background-color: rgba(59, 130, 246, 0.2); } }
 
         .toast-enter { transform: translateX(120%); opacity: 0; }
         .toast-visible { transform: translateX(0); opacity: 1; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        
-        /* Hiệu ứng Zoom ảnh Giảng viên */
-        .zoom-active { max-height: none !important; cursor: zoom-out !important; }
-        
-        #selTaskFilter option { background-color: #122543; color: #ffffff; }
+
+        @media print {
+            body * { visibility: hidden; }
+            #reviewHistoryModal, #reviewHistoryModal * { visibility: visible; }
+            #reviewHistoryModal { position: absolute; left: 0; top: 0; width: 100%; height: auto; background: white; z-index: 9999; }
+            .no-print { display: none !important; }
+            .print-break-inside-avoid { break-inside: avoid; }
+        }
     </style>
 </head>
 <body class="h-screen flex flex-col overflow-hidden selection:bg-blue-200">
 
-    <div class="tech-bg"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
+    <div class="tech-bg no-print"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
     <!-- POP-UP THÔNG BÁO REAL-TIME -->
-    <div id="toastNotification" class="fixed top-20 right-6 z-[100] bg-white border border-slate-100 shadow-xl rounded-2xl p-4 flex items-start gap-3.5 w-80 toast-enter">
+    <div id="toastNotification" class="fixed top-20 right-6 z-[100] bg-white border border-slate-100 shadow-xl rounded-2xl p-4 flex items-start gap-3.5 w-80 toast-enter no-print">
         <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 mt-0.5"><i class="fas fa-bell"></i></div>
         <div class="flex-1">
             <h4 class="text-xs font-bold text-slate-800" id="toastName">--</h4>
@@ -59,26 +62,20 @@
         <button onclick="closeToast()" class="text-slate-400 hover:text-slate-600 transition-colors p-1"><i class="fas fa-times text-xs"></i></button>
     </div>
 
-    <!-- TOP HEADER -->
-    <header class="h-16 bg-[#1b365d] border-b border-[#122543] px-6 py-4 flex items-center justify-between shadow-md shrink-0 w-full z-50 sticky top-0">
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="h-16 bg-[#1b365d] border-b border-[#122543] px-6 py-4 flex items-center justify-between shadow-md shrink-0 w-full z-50 sticky top-0 no-print">
         <div class="flex items-center gap-3">
             <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-8" alt="KiotViet Logo">
             <div class="h-5 w-px bg-blue-900/60 mx-1"></div>
-            <span class="font-bold text-slate-300 text-xs uppercase tracking-wider"><i class="fas fa-chalkboard-teacher text-blue-400 mr-1.5"></i> PORTAL GIẢNG VIÊN</span>
+            <span class="font-bold text-slate-300 text-xs uppercase tracking-wider">
+                <i class="fas fa-chalkboard-teacher text-blue-400 mr-1.5"></i> Kết quả thực hành - Bài tập Kế toán Hộ kinh doanh
+            </span>
         </div>
         
         <!-- THANH CÔNG CỤ -->
         <div class="flex items-center gap-3">
-            <div class="relative hidden md:flex items-center bg-[#122543]/60 rounded-xl border border-blue-900/40 p-1">
-                <span class="text-[10px] font-bold text-blue-300 pl-3 pr-2 uppercase"><i class="fas fa-filter"></i> Lọc Bài:</span>
-                <select id="selTaskFilter" onchange="filterStudents()" class="bg-transparent text-xs font-bold text-white focus:outline-none cursor-pointer pr-6 appearance-none">
-                    <option value="ALL">Hiển thị Tất cả</option>
-                </select>
-                <i class="fas fa-chevron-down text-blue-400 text-[9px] absolute right-3 pointer-events-none"></i>
-            </div>
-
             <button onclick="pickRandomStudent()" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md transition-all flex items-center gap-2 transform active:scale-95">
-                <i class="fas fa-dice"></i> Random
+                <i class="fas fa-dice"></i> Gọi ngẫu nhiên
             </button>
             <button onclick="manualFetch()" class="w-9 h-9 bg-blue-900/30 hover:bg-blue-900/50 text-blue-300 border border-blue-900/40 rounded-xl flex items-center justify-center transition-all" title="Làm mới">
                 <i class="fas fa-sync-alt text-xs" id="syncIcon"></i>
@@ -87,41 +84,119 @@
     </header>
 
     <div class="flex flex-1 overflow-hidden relative z-20">
-        <!-- SIDEBAR TRÁI (MÀU NỀN #224472 CHỨA CÁC KHỐI DANH MỤC SÁNG NHẠT, CHỮ ĐEN) -->
-        <aside class="w-[300px] bg-[#224472] border-r border-[#173052] flex flex-col shrink-0">
-            <div class="p-5 border-b border-white/10 shrink-0">
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
-                    <input type="text" id="inpSearch" onkeyup="filterStudents()" class="w-full text-xs pl-9 pr-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 font-bold shadow-inner" placeholder="Tìm tên hoặc phòng ban...">
-                </div>
-                <div class="flex justify-between items-center mt-3.5 px-1">
-                    <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest" id="lblCount">0 Học viên</span>
-                    <span id="syncStatusBadge" class="text-[10px] text-emerald-400 font-bold flex items-center gap-1.5"><i class="fas fa-satellite-dish animate-pulse"></i> Live Sync</span>
-                </div>
-            </div>
+        <!-- SIDEBAR TRÁI -->
+        <aside class="w-[320px] bg-[#1b365d] border-r border-[#122543] flex flex-col shrink-0 text-white no-print">
             
-            <div id="studentList" class="flex-1 overflow-y-auto custom-scrollbar flex flex-col p-3 space-y-2">
-                <div class="p-8 text-center text-slate-400 text-xs font-bold"><i class="fas fa-circle-notch fa-spin text-lg mb-2 text-blue-400"></i><br>Đang đồng bộ dữ liệu...</div>
+            <!-- 1. CHỌN CHẾ ĐỘ XEM (THEO HỌC VIÊN HOẶC THEO BÀI TẬP) -->
+            <div class="p-4 border-b border-white/10 bg-white/5 shrink-0">
+                <p class="text-[10px] font-black text-slate-300 uppercase tracking-wider mb-2">Chế độ hiển thị</p>
+                <div class="grid grid-cols-2 gap-2">
+                    <button onclick="setMode('student')" id="btnModeStudent" class="py-2 px-3 rounded-xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md flex items-center justify-center gap-1.5">
+                        <i class="fas fa-user-graduate"></i> Theo Học viên
+                    </button>
+                    <button onclick="setMode('task')" id="btnModeTask" class="py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white flex items-center justify-center gap-1.5">
+                        <i class="fas fa-tasks"></i> Theo Bài tập
+                    </button>
+                </div>
             </div>
+
+            <!-- 2. BỘ LỌC THỜI GIAN (THÁNG NÀY & THÁNG TRƯỚC) -->
+            <div class="p-4 border-b border-white/10 bg-black/10 shrink-0">
+                <p class="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                    <i class="fas fa-calendar-alt"></i> THỜI GIAN
+                </p>
+                <div class="grid grid-cols-2 gap-2 text-xs">
+                    <label class="flex items-center gap-1.5 cursor-pointer text-slate-200 p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+                        <input type="radio" name="filterTime" value="this_month" checked onchange="onFilterChange()" class="accent-blue-500">
+                        <span class="font-bold">Tháng này</span>
+                    </label>
+                    <label class="flex items-center gap-1.5 cursor-pointer text-slate-200 p-2 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 transition-colors">
+                        <input type="radio" name="filterTime" value="last_month" onchange="onFilterChange()" class="accent-blue-500">
+                        <span class="font-bold">Tháng trước</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3A. NỘI DUNG SUBMENU XEM THEO HỌC VIÊN -->
+            <div id="studentSubmenu" class="flex-1 overflow-hidden flex flex-col">
+                <div class="p-4 border-b border-white/10 shrink-0">
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3.5 top-3.5 text-slate-400 text-xs"></i>
+                        <input type="text" id="inpSearch" onkeyup="renderSidebar()" class="w-full text-xs pl-9 pr-4 py-2.5 border border-slate-300 rounded-xl focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-blue-500 bg-white text-slate-800 font-bold shadow-inner" placeholder="Tìm tên hoặc phòng ban...">
+                    </div>
+                    <div class="flex justify-between items-center mt-3 px-1">
+                        <span class="text-[10px] font-bold text-slate-300 uppercase tracking-widest" id="lblCount">0 Học viên</span>
+                        <span id="syncStatusBadge" class="text-[10px] text-emerald-400 font-bold flex items-center gap-1.5"><i class="fas fa-satellite-dish animate-pulse"></i> Live Sync</span>
+                    </div>
+                </div>
+                
+                <div id="studentList" class="flex-1 overflow-y-auto custom-scrollbar p-3 space-y-2">
+                    <div class="p-8 text-center text-slate-400 text-xs font-bold"><i class="fas fa-circle-notch fa-spin text-lg mb-2 text-blue-400"></i><br>Đang tải danh sách...</div>
+                </div>
+            </div>
+
+            <!-- 3B. NỘI DUNG SUBMENU XEM THEO BÀI TẬP -->
+            <div id="taskSubmenu" class="hidden flex-1 overflow-hidden flex flex-col p-4">
+                <p class="text-[10px] font-black text-blue-300 uppercase tracking-widest mb-2 flex items-center gap-1.5">
+                    <i class="fas fa-list-check"></i> CHỌN BÀI TẬP
+                </p>
+                <div class="mb-3">
+                    <select id="selTaskDropdown" onchange="onTaskDropdownChange()" class="w-full bg-slate-800 text-white text-xs font-bold border border-slate-600 rounded-xl p-3 outline-none focus:ring-2 focus:ring-blue-500">
+                        <option value="">-- Chọn bài tập --</option>
+                    </select>
+                </div>
+                <div id="taskList" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-1">
+                    <!-- Dynamic task list -->
+                </div>
+            </div>
+
         </aside>
 
-        <!-- MAIN PHẢI (NỀN TRẮNG ĐỤC TRONG SUỐT PHÁT SÁNG) -->
-        <main class="flex-1 overflow-y-auto p-6 md:p-8 relative custom-scrollbar bg-slate-200/80 backdrop-blur-[2px]">
+        <!-- MAIN PHẢI (WORKSPACE KHUNG LÀM BÀI) -->
+        <main class="flex-1 overflow-y-auto p-6 md:p-8 relative custom-scrollbar bg-slate-200/80 backdrop-blur-[2px] no-print">
             <div id="mainContent" class="max-w-4xl mx-auto h-full flex flex-col items-center justify-center">
                 <div class="w-20 h-20 rounded-2xl bg-white/80 border border-slate-100 flex items-center justify-center mb-5 shadow-sm">
                     <i class="fas fa-tv text-3xl text-blue-500"></i>
                 </div>
-                <h2 class="text-base font-extrabold text-slate-800 tracking-tight text-center uppercase">Chế Độ Chấm Bài Tốc Độ</h2>
-                <p class="text-slate-400 text-xs mt-2 text-center font-bold uppercase tracking-wider">Bấm vào tên học viên hoặc dùng nút <strong class="text-orange-500">Random</strong> để kiểm tra.</p>
+                <h2 class="text-base font-extrabold text-slate-800 tracking-tight text-center uppercase">Hệ Thống Chấm Bài Trực Tuyến</h2>
+                <p class="text-slate-500 text-xs mt-2 text-center font-bold uppercase tracking-wider">Chọn học viên hoặc bài tập từ menu bên trái để bắt đầu kiểm tra.</p>
             </div>
         </main>
     </div>
 
-    <!-- MODAL XEM ẢNH -->
-    <div id="imgModal" class="fixed inset-0 bg-slate-900/95 backdrop-blur-sm z-[150] hidden flex-col overflow-auto p-4 items-center justify-center">
-        <button onclick="document.getElementById('imgModal').classList.add('hidden')" class="fixed top-4 right-6 w-10 h-10 bg-white/10 hover:bg-red-500 text-white rounded-full flex items-center justify-center text-xl transition z-50"><i class="fas fa-times"></i></button>
-        <p class="fixed top-4 left-6 text-white/50 text-sm font-bold bg-black/40 px-3 py-1 rounded-lg z-50 pointer-events-none"><i class="fas fa-search-plus"></i> Bấm vào ảnh để phóng to/thu nhỏ</p>
-        <img id="fullImg" src="" onclick="toggleZoom(this)" class="max-w-full max-h-[90vh] object-contain rounded shadow-2xl transition-all duration-300 cursor-zoom-in m-auto mt-16 mb-16 border border-white/10">
+    <!-- MODAL BÁO CÁO PDF CHI TIẾT THEO HỌC VIÊN -->
+    <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[200] hidden flex-col transition-all">
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 shrink-0 shadow-sm no-print">
+            <div class="flex items-center gap-3">
+                <div class="bg-blue-100 text-blue-600 w-8 h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature"></i></div>
+                <h1 class="text-base font-black text-slate-800">Báo Cáo Tiến Độ Thực Hành Học Viên</h1>
+                <span class="text-xs text-slate-500 font-medium ml-2">Tải PDF để lưu trữ & xem kết quả.</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="window.print()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-sm transition"><i class="fas fa-print"></i> In / Lưu PDF</button>
+                <button onclick="closeReviewHistory()" class="w-8 h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times"></i></button>
+            </div>
+        </header>
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-4 md:p-8 bg-slate-50 print:bg-white print:p-0">
+            <div class="max-w-4xl mx-auto space-y-6 print:space-y-4" id="reviewHistoryContainer"></div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM ẢNH FULLSCREEN -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all no-print">
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0">
+            <span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span>
+            <div class="flex items-center gap-3">
+                <a id="fullscreenModalRawBtn" href="#" target="_blank" class="px-4 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-bold transition-all flex items-center gap-1.5"><i class="fas fa-external-link-alt"></i> Xem ảnh gốc</a>
+                <button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400 transition-colors"><i class="fas fa-times text-lg"></i></button>
+            </div>
+        </div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none">
+            <button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-left text-lg"></i></button>
+            <img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl">
+            <button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center border border-white/5"><i class="fas fa-chevron-right text-lg"></i></button>
+        </div>
+        <div class="h-8 shrink-0"></div>
     </div>
 
     <script>
@@ -132,26 +207,53 @@
         let globalDataString = "{}"; 
         let globalData = {}; 
         let uniqueTasks = new Set();
+        
+        let currentMode = 'student'; // 'student' hoặc 'task'
         let activeStudentName = null; 
+        let activeTaskName = null;
         let isFetching = false; 
-        let activeSlides = {}; // Quản lý slide ảnh cho từng nhiệm vụ của học viên
+        let activeSlides = {}; 
 
         document.addEventListener('DOMContentLoaded', () => { 
             silentFetch(true); 
             setInterval(() => { if(!isFetching) silentFetch(false); }, 10000);
         });
 
-        async function silentFetch(isFirstLoad) {
-            if(APP_SCRIPT_URL.includes("AKfycby9-k7Z") && isFirstLoad) return alert("LỖI: Chưa cập nhật APP_SCRIPT_URL!");
+        function getRadioValue(name) {
+            const checked = document.querySelector(`input[name="${name}"]:checked`);
+            return checked ? checked.value : 'this_month';
+        }
+
+        // BỘ LỌC THỜI GIAN: THÁNG NÀY & THÁNG TRƯỚC
+        function isDateInFilter(timeStr, filterTime) {
+            if (!timeStr) return false;
+
+            let taskDate = new Date(timeStr);
+            if (isNaN(taskDate.getTime())) {
+                let parts = timeStr.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+                if (parts) {
+                    taskDate = new Date(parts[3], parts[2] - 1, parts[1]);
+                } else {
+                    return true;
+                }
+            }
+
+            const now = new Date();
             
+            if (filterTime === 'this_month') {
+                return taskDate.getFullYear() === now.getFullYear() && taskDate.getMonth() === now.getMonth();
+            }
+            if (filterTime === 'last_month') {
+                const lastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+                return taskDate.getFullYear() === lastMonth.getFullYear() && taskDate.getMonth() === lastMonth.getMonth();
+            }
+            return true;
+        }
+
+        async function silentFetch(isFirstLoad) {
             isFetching = true;
             if(document.getElementById('syncIcon')) document.getElementById('syncIcon').classList.add('fa-spin');
             
-            const listContainer = document.getElementById('studentList');
-            if(isFirstLoad) {
-                listContainer.innerHTML = '<div class="p-8 text-center text-slate-400 text-xs font-bold"><i class="fas fa-circle-notch fa-spin text-lg mb-2 text-blue-400"></i><br>Đang tải dữ liệu gốc...</div>';
-            }
-
             try {
                 let r = await fetch(APP_SCRIPT_URL);
                 if (!r.ok) throw new Error("Mất kết nối Server");
@@ -167,16 +269,15 @@
                         extractUniqueTasks();
                         renderSidebar();
                         
-                        if(activeStudentName && globalData[activeStudentName]) viewStudent(activeStudentName);
+                        if(currentMode === 'student' && activeStudentName && globalData[activeStudentName]) {
+                            viewStudent(activeStudentName);
+                        } else if(currentMode === 'task' && activeTaskName) {
+                            viewTask(activeTaskName);
+                        }
                     }
-                } else {
-                    listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-xs font-bold border border-red-200 m-2">Lỗi GAS: ${res.message}</div>`;
                 }
             } catch (err) {
                 console.log("Lỗi Fetch:", err);
-                if(isFirstLoad) {
-                    listContainer.innerHTML = `<div class="p-6 text-center text-red-500 bg-red-50 rounded-xl text-xs font-bold border border-red-200 m-2">Lỗi kết nối!<br>Vui lòng kiểm tra lại.</div>`;
-                }
                 document.getElementById('syncStatusBadge').innerHTML = `<i class="fas fa-wifi text-red-500"></i> Offline`;
             } finally {
                 isFetching = false;
@@ -219,64 +320,187 @@
 
         function extractUniqueTasks() {
             uniqueTasks.clear();
+            const filterTime = getRadioValue('filterTime');
+
             Object.values(globalData).forEach(student => {
-                Object.keys(student.tasks).forEach(taskName => uniqueTasks.add(taskName));
+                if(student.tasks) {
+                    Object.entries(student.tasks).forEach(([taskName, taskObj]) => {
+                        if (isDateInFilter(taskObj.time, filterTime)) {
+                            uniqueTasks.add(taskName);
+                        }
+                    });
+                }
             });
-            const sel = document.getElementById('selTaskFilter');
-            let currentVal = sel.value;
-            let html = '<option value="ALL">Hiển thị Tất cả</option>';
-            Array.from(uniqueTasks).sort().forEach(t => html += `<option value="${t}">${t.split(': ')[0]}</option>`);
-            sel.innerHTML = html;
-            if(Array.from(uniqueTasks).includes(currentVal)) sel.value = currentVal;
+
+            const dropdown = document.getElementById('selTaskDropdown');
+            let currentVal = dropdown.value;
+            let optionsHtml = '<option value="">-- Chọn bài tập --</option>';
+            
+            Array.from(uniqueTasks).sort().forEach(t => {
+                optionsHtml += `<option value="${t}">${t}</option>`;
+            });
+            dropdown.innerHTML = optionsHtml;
+            if(Array.from(uniqueTasks).includes(currentVal)) dropdown.value = currentVal;
+        }
+
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('btnModeStudent').className = mode === 'student'
+                ? 'py-2 px-3 rounded-xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md flex items-center justify-center gap-1.5'
+                : 'py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white flex items-center justify-center gap-1.5';
+            
+            document.getElementById('btnModeTask').className = mode === 'task'
+                ? 'py-2 px-3 rounded-xl text-xs font-bold transition-all bg-blue-600 text-white shadow-md flex items-center justify-center gap-1.5'
+                : 'py-2 px-3 rounded-xl text-xs font-bold transition-all bg-white/10 text-slate-300 hover:bg-white/20 hover:text-white flex items-center justify-center gap-1.5';
+
+            if (mode === 'student') {
+                document.getElementById('studentSubmenu').classList.remove('hidden');
+                document.getElementById('taskSubmenu').classList.add('hidden');
+            } else {
+                document.getElementById('studentSubmenu').classList.add('hidden');
+                document.getElementById('taskSubmenu').classList.remove('hidden');
+            }
+            renderSidebar();
+        }
+
+        function resetMainContent() {
+            document.getElementById('mainContent').className = "max-w-4xl mx-auto h-full flex flex-col items-center justify-center";
+            document.getElementById('mainContent').innerHTML = `
+                <div class="w-20 h-20 rounded-2xl bg-white/80 border border-slate-100 flex items-center justify-center mb-5 shadow-sm">
+                    <i class="fas fa-tv text-3xl text-blue-500"></i>
+                </div>
+                <h2 class="text-base font-extrabold text-slate-800 tracking-tight text-center uppercase">Hệ Thống Chấm Bài Trực Tuyến</h2>
+                <p class="text-slate-500 text-xs mt-2 text-center font-bold uppercase tracking-wider">Chọn học viên hoặc bài tập từ menu bên trái để bắt đầu kiểm tra.</p>
+            `;
+        }
+
+        function onFilterChange() {
+            extractUniqueTasks();
+            renderSidebar();
+            
+            const filterTime = getRadioValue('filterTime');
+
+            if (currentMode === 'student') {
+                if (activeStudentName) {
+                    const student = globalData[activeStudentName];
+                    let validTasksCount = 0;
+                    if (student && student.tasks) {
+                        Object.values(student.tasks).forEach(t => {
+                            if (isDateInFilter(t.time, filterTime)) validTasksCount++;
+                        });
+                    }
+                    if (validTasksCount > 0) {
+                        viewStudent(activeStudentName);
+                    } else {
+                        activeStudentName = null;
+                        resetMainContent();
+                    }
+                }
+            } else if (currentMode === 'task') {
+                if (activeTaskName && uniqueTasks.has(activeTaskName)) {
+                    viewTask(activeTaskName);
+                } else {
+                    activeTaskName = null;
+                    resetMainContent();
+                }
+            }
         }
 
         function renderSidebar() {
-            const listContainer = document.getElementById('studentList');
-            const searchKeyword = document.getElementById('inpSearch').value.toLowerCase();
-            const taskFilter = document.getElementById('selTaskFilter').value;
-            
-            let html = ''; let count = 0;
-            const studentNames = Object.keys(globalData).sort();
-            
-            studentNames.forEach(name => {
-                const student = globalData[name];
-                let matchSearch = name.toLowerCase().includes(searchKeyword) || student.dept.toLowerCase().includes(searchKeyword);
-                let matchTask = taskFilter === 'ALL' ? true : !!student.tasks[taskFilter];
-                
-                if(matchSearch && matchTask) {
-                    count++;
-                    const taskCount = Object.keys(student.tasks).length;
-                    const isActive = (name === activeStudentName) ? 'student-active' : '';
-                    const badgeColor = isActive 
-                        ? `bg-white/20 text-white border-white/10` 
-                        : `bg-slate-100 text-slate-500 border-slate-200`;
+            const filterTime = getRadioValue('filterTime');
 
-                    const statusBadge = taskFilter !== 'ALL' 
-                        ? `<span class="text-emerald-500 text-[10px] font-bold"><i class="fas fa-check-circle"></i> Xong</span>`
-                        : `<span class="${badgeColor} text-[10px] font-bold px-1.5 py-0.5 rounded border">${taskCount} Bài</span>`;
+            if (currentMode === 'student') {
+                const listContainer = document.getElementById('studentList');
+                const searchKeyword = (document.getElementById('inpSearch').value || '').toLowerCase();
+                
+                let html = ''; let count = 0;
+                const studentNames = Object.keys(globalData).sort();
+                
+                studentNames.forEach(name => {
+                    const student = globalData[name];
+                    let matchSearch = name.toLowerCase().includes(searchKeyword) || student.dept.toLowerCase().includes(searchKeyword);
+                    
+                    let validTasksCount = 0;
+                    if (student.tasks) {
+                        Object.values(student.tasks).forEach(t => {
+                            if (isDateInFilter(t.time, filterTime)) validTasksCount++;
+                        });
+                    }
+
+                    // ĐÃ SỬA: CHỈ HIỂN THỊ HỌC VIÊN CÓ BÀI NỘP > 0 TRONG THỜI GIAN LỌC
+                    if(matchSearch && validTasksCount > 0) {
+                        count++;
+                        const isActive = (name === activeStudentName);
+                        const activeClass = isActive ? 'item-active' : '';
+                        
+                        // SỬA LỖI TƯƠNG PHẢN MÀU CHỮ CỦA NÚT SỐ BÀI ("0 bài")
+                        const badgeColor = isActive 
+                            ? `bg-amber-400 text-slate-900 border-amber-300 font-extrabold shadow-sm` 
+                            : `bg-slate-100 text-slate-700 border-slate-200 font-bold`;
+
+                        html += `
+                            <div class="student-item bg-white/90 hover:bg-white rounded-xl p-3 shadow-sm border border-slate-200 flex flex-col gap-1 transition-all duration-200 text-slate-800 ${activeClass}" data-name="${name}" onclick="viewStudent('${name}')">
+                                <div class="flex justify-between items-start">
+                                    <h3 class="font-bold text-[13px] truncate pr-2 text-slate-800">${name}</h3>
+                                    <span class="${badgeColor} text-[10px] px-2 py-0.5 rounded-lg border shrink-0">${validTasksCount} Bài</span>
+                                </div>
+                                <p class="text-[10px] text-slate-500 font-semibold truncate uppercase tracking-wider">${student.dept}</p>
+                            </div>
+                        `;
+                    }
+                });
+                
+                if(count === 0) html = '<div class="p-6 text-center text-slate-400 text-[12px] font-medium mt-2">Không có học viên nộp bài trong mốc thời gian này.</div>';
+                listContainer.innerHTML = html;
+                document.getElementById('lblCount').innerText = `${count} Học viên`;
+            } else {
+                const taskContainer = document.getElementById('taskList');
+                let html = '';
+                const sortedTasks = Array.from(uniqueTasks).sort();
+
+                sortedTasks.forEach(taskTitle => {
+                    const isActive = (taskTitle === activeTaskName);
+                    const activeClass = isActive ? 'item-active' : '';
+                    
+                    let doneCount = 0;
+                    Object.values(globalData).forEach(s => {
+                        if (s.tasks && s.tasks[taskTitle] && isDateInFilter(s.tasks[taskTitle].time, filterTime)) {
+                            doneCount++;
+                        }
+                    });
+
+                    const badgeColor = isActive 
+                        ? `bg-amber-400 text-slate-900 border-amber-300 font-extrabold shadow-sm` 
+                        : `bg-emerald-100 text-emerald-800 border-emerald-200 font-bold`;
 
                     html += `
-                        <div class="student-item bg-white/90 hover:bg-white rounded-xl p-3 shadow-sm border border-slate-200 flex flex-col gap-1 transition-all duration-200 text-slate-800 ${isActive}" data-name="${name}" onclick="viewStudent('${name}')">
-                            <div class="flex justify-between items-start">
-                                <h3 class="font-bold text-[13px] truncate pr-2 text-slate-800">${name}</h3>
-                                ${statusBadge}
+                        <div class="task-item bg-white/90 hover:bg-white rounded-xl p-3 shadow-sm border border-slate-200 flex flex-col gap-1 transition-all text-slate-800 ${activeClass}" onclick="selectTaskFromSidebar('${taskTitle}')">
+                            <div class="flex justify-between items-start gap-2">
+                                <h3 class="font-bold text-xs leading-snug text-slate-800 flex-1">${taskTitle}</h3>
+                                <span class="${badgeColor} text-[10px] px-2 py-0.5 rounded border shrink-0">${doneCount} đã nộp</span>
                             </div>
-                            <p class="text-[10px] text-slate-500 font-semibold truncate uppercase tracking-wider">${student.dept}</p>
                         </div>
                     `;
-                }
-            });
-            
-            if(count === 0) html = '<div class="p-6 text-center text-slate-400 text-[12px] font-medium mt-2">Không có dữ liệu.</div>';
-            listContainer.innerHTML = html;
-            document.getElementById('lblCount').innerText = `${count} Học viên`;
+                });
+
+                if(sortedTasks.length === 0) html = '<div class="p-6 text-center text-slate-400 text-xs font-medium">Không có bài tập trong mốc thời gian này.</div>';
+                taskContainer.innerHTML = html;
+            }
         }
 
-        function filterStudents() { renderSidebar(); }
+        function selectTaskFromSidebar(taskTitle) {
+            document.getElementById('selTaskDropdown').value = taskTitle;
+            viewTask(taskTitle);
+        }
+
+        function onTaskDropdownChange() {
+            const taskTitle = document.getElementById('selTaskDropdown').value;
+            if(taskTitle) viewTask(taskTitle);
+        }
 
         function pickRandomStudent() {
             const visibleItems = document.querySelectorAll('.student-item');
-            if(visibleItems.length === 0) return alert("Không có học viên nào để gọi!");
+            if(visibleItems.length === 0) return alert("Không có học viên nào trong danh sách!");
             
             let iterations = 0; const maxIterations = 15;
             const interval = setInterval(() => {
@@ -289,7 +513,8 @@
                 iterations++;
                 if(iterations >= maxIterations) {
                     clearInterval(interval);
-                    target.classList.remove('random-spin'); target.click(); 
+                    target.classList.remove('random-spin'); 
+                    target.click(); 
                 }
             }, 100);
         }
@@ -299,7 +524,6 @@
             if(match && match[1]) return `https://lh3.googleusercontent.com/d/${match[1]}`; return url; 
         }
 
-        // Hàm xử lý chuyển Slide điều hướng cho bài tập nộp nhiều ảnh
         function changeSlide(taskKey, dir, total) {
             let current = activeSlides[taskKey] || 0;
             document.getElementById(`${taskKey}-${current}`).classList.add('hidden');
@@ -311,35 +535,40 @@
             document.getElementById(`counter-${taskKey}`).innerText = `${current + 1} / ${total}`;
         }
 
+        // ==========================================
+        // 1. XEM THEO HỌC VIÊN
+        // ==========================================
         function viewStudent(name) {
             activeStudentName = name; 
-            document.querySelectorAll('.student-item').forEach(item => item.classList.remove('student-active'));
-            const activeEl = Array.from(document.querySelectorAll('.student-item')).find(el => el.getAttribute('data-name') === name);
-            if(activeEl) activeEl.classList.add('student-active');
+            renderSidebar();
 
+            const filterTime = getRadioValue('filterTime');
             const student = globalData[name];
-            const taskFilter = document.getElementById('selTaskFilter').value;
             const main = document.getElementById('mainContent');
             
-            // Xóa cache Slider cũ trước khi kết xuất của học viên mới
             activeSlides = {};
 
             let html = `
-                <div class="glass-panel-ultra p-5 rounded-3xl mb-6 flex justify-between items-center sticky top-0 z-10 shadow-sm border border-slate-100">
+                <div class="glass-panel-ultra p-5 rounded-3xl mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sticky top-0 z-10 shadow-sm border border-slate-100">
                     <div>
                         <h1 class="text-lg font-extrabold text-blue-700 tracking-tight">${student.name}</h1>
-                        <p class="text-[10px] text-slate-400 font-bold mt-0.5 uppercase tracking-wider"><i class="fas fa-briefcase text-slate-300 mr-1"></i> ${student.dept}</p>
+                        <p class="text-[10px] text-slate-500 font-bold mt-0.5 uppercase tracking-wider"><i class="fas fa-briefcase text-slate-400 mr-1"></i> ${student.dept}</p>
                     </div>
+                    <button onclick="openStudentReportModal('${student.name}')" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition flex items-center gap-2 shadow-md shrink-0">
+                        <i class="fas fa-file-pdf"></i> Xem Báo Cáo & In PDF
+                    </button>
                 </div>
-                <div class="w-full space-y-4 pb-20">
+                <div class="w-full space-y-5 pb-20">
             `;
 
+            let hasAnyTaskInTime = false;
+
             for(let taskName in student.tasks) {
-                if(taskFilter !== 'ALL' && taskName !== taskFilter) continue; 
-                
                 const task = student.tasks[taskName];
+                if (!isDateInFilter(task.time, filterTime)) continue;
+
+                hasAnyTaskInTime = true;
                 let imgHtml = '';
-                
                 let validImages = (task.images || []).filter(url => url && url.trim() !== '');
 
                 if(validImages.length > 0) {
@@ -348,25 +577,24 @@
                     if (validImages.length === 1) {
                         const directUrl = getDirectImageUrl(validImages[0]);
                         imgHtml = `
-                            <div class="relative w-full h-96 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 mt-3 cursor-zoom-in" onclick="openImage('${directUrl}')">
-                                <img src="${directUrl}" class="w-full h-full object-contain hover:scale-[1.01] transition-transform duration-300">
+                            <div class="relative w-full bg-slate-100 border-2 border-[#1b365d] rounded-2xl overflow-hidden mt-3 cursor-zoom-in group shadow-sm" onclick="openFullscreenModal(${JSON.stringify(validImages).replace(/"/g, '&quot;')}, 0)">
+                                <img src="${directUrl}" class="w-full h-auto max-h-[600px] object-contain block mx-auto group-hover:scale-[1.01] transition-transform duration-300">
                             </div>
                         `;
                     } else {
                         activeSlides[taskKey] = 0;
-                        
                         let slidesImages = validImages.map((url, i) => {
                             let hiddenClass = i === 0 ? "" : "hidden";
                             const directUrl = getDirectImageUrl(url);
-                            return `<img id="${taskKey}-${i}" src="${directUrl}" class="absolute inset-0 w-full h-full object-contain cursor-zoom-in transition-opacity duration-300 ${hiddenClass}" onclick="openImage('${directUrl}')">`;
+                            return `<img id="${taskKey}-${i}" src="${directUrl}" class="absolute inset-0 w-full h-full object-contain cursor-zoom-in transition-opacity duration-300 ${hiddenClass}" onclick="openFullscreenModal(${JSON.stringify(validImages).replace(/"/g, '&quot;')}, ${i})">`;
                         }).join('');
                         
                         imgHtml = `
-                            <div class="relative w-full h-96 bg-slate-100 rounded-xl overflow-hidden border border-slate-200 mt-3">
+                            <div class="relative w-full h-[500px] bg-slate-100 border-2 border-[#1b365d] rounded-2xl overflow-hidden mt-3 shadow-sm">
                                 ${slidesImages}
-                                <button type="button" onclick="changeSlide('${taskKey}', -1, ${validImages.length})" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-left text-sm"></i></button>
-                                <button type="button" onclick="changeSlide('${taskKey}', 1, ${validImages.length})" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/50 hover:bg-black/75 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-right text-sm"></i></button>
-                                <span id="counter-${taskKey}" class="absolute bottom-3 right-3 bg-black/60 text-white text-[10px] px-2.5 py-1 rounded font-bold">1 / ${validImages.length}</span>
+                                <button type="button" onclick="changeSlide('${taskKey}', -1, ${validImages.length})" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-left text-sm"></i></button>
+                                <button type="button" onclick="changeSlide('${taskKey}', 1, ${validImages.length})" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 hover:bg-black/80 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-right text-sm"></i></button>
+                                <span id="counter-${taskKey}" class="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] px-2.5 py-1 rounded font-bold">1 / ${validImages.length}</span>
                             </div>
                         `;
                     }
@@ -380,12 +608,21 @@
                 }
 
                 html += `
-                    <div class="glass-panel-ultra p-6 rounded-3xl shadow-sm border border-slate-100">
-                        <div class="flex justify-between items-start mb-4 border-b border-slate-100 pb-3">
-                            <h3 class="font-extrabold text-slate-800 text-[14px] border-l-4 border-blue-500 pl-2.5 leading-tight">${taskName}</h3>
-                            <span class="text-[10px] text-slate-400 font-bold bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-200/50"><i class="far fa-clock"></i> Nộp: ${task.time.split(' ')[1]}</span>
+                    <div class="glass-panel-ultra p-6 rounded-3xl shadow-md border border-slate-100">
+                        <div class="flex justify-between items-start mb-3 border-b border-slate-100 pb-3">
+                            <h3 class="font-extrabold text-slate-800 text-sm border-l-4 border-blue-600 pl-2.5 leading-tight">${taskName}</h3>
+                            <span class="text-[10px] text-slate-500 font-bold bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200"><i class="far fa-clock"></i> Nộp: ${task.time}</span>
                         </div>
                         ${imgHtml}
+                    </div>
+                `;
+            }
+
+            if (!hasAnyTaskInTime) {
+                html += `
+                    <div class="glass-panel-ultra p-10 rounded-3xl text-center text-slate-400 font-bold border border-slate-100">
+                        <i class="fas fa-info-circle text-3xl mb-2 text-slate-300"></i><br>
+                        Học viên không có bài nộp nào trong mốc thời gian chọn.
                     </div>
                 `;
             }
@@ -395,15 +632,233 @@
             main.innerHTML = html;
         }
 
-        function openImage(url) {
-            document.getElementById('fullImg').src = url;
-            document.getElementById('fullImg').classList.remove('zoom-active'); // Đặt lại trạng thái zoom
-            document.getElementById('imgModal').classList.remove('hidden');
-            document.getElementById('imgModal').classList.add('flex');
+        // ==========================================
+        // 2. XEM THEO BÀI TẬP (CHỈ HIỂN THỊ HỌC VIÊN CÓ HOẠT ĐỘNG TRONG THỜI GIAN LỌC)
+        // ==========================================
+        function viewTask(taskTitle) {
+            activeTaskName = taskTitle;
+            renderSidebar();
+
+            const filterTime = getRadioValue('filterTime');
+            const main = document.getElementById('mainContent');
+            
+            // CHỈ LỌC CÁC HỌC VIÊN CÓ ÍT NHẤT 1 BÀI NỘP TRONG MỐC THỜI GIAN CHỌN
+            const activeStudents = Object.values(globalData)
+                .filter(student => {
+                    if (!student.tasks) return false;
+                    return Object.values(student.tasks).some(t => isDateInFilter(t.time, filterTime));
+                })
+                .sort((a,b) => a.name.localeCompare(b.name, 'vi'));
+
+            activeSlides = {};
+
+            let html = `
+                <div class="glass-panel-ultra p-5 rounded-3xl mb-6 sticky top-0 z-10 shadow-sm border border-slate-100 flex justify-between items-center">
+                    <div>
+                        <span class="text-[10px] font-black text-blue-600 uppercase tracking-wider block mb-0.5">BÀI TẬP ĐANG XEM:</span>
+                        <h1 class="text-base font-extrabold text-slate-800 leading-tight">${taskTitle}</h1>
+                    </div>
+                    <span class="text-xs font-bold text-slate-500 bg-slate-100 px-3 py-1.5 rounded-xl border border-slate-200">${activeStudents.length} Học viên</span>
+                </div>
+                <div class="w-full space-y-6 pb-20">
+            `;
+
+            activeStudents.forEach(student => {
+                const task = student.tasks ? student.tasks[taskTitle] : null;
+                const isSubmittedInTime = task && isDateInFilter(task.time, filterTime);
+
+                if (isSubmittedInTime) {
+                    let validImages = (task.images || []).filter(url => url && url.trim() !== '');
+                    let imgHtml = '';
+
+                    if(validImages.length > 0) {
+                        let taskKey = 'slide_task_' + student.name.replace(/[^a-zA-Z0-9]/g, '');
+                        
+                        if (validImages.length === 1) {
+                            const directUrl = getDirectImageUrl(validImages[0]);
+                            imgHtml = `
+                                <div class="relative w-full bg-slate-100 border-2 border-[#1b365d] rounded-2xl overflow-hidden mt-3 cursor-zoom-in group shadow-sm" onclick="openFullscreenModal(${JSON.stringify(validImages).replace(/"/g, '&quot;')}, 0)">
+                                    <img src="${directUrl}" class="w-full h-auto max-h-[600px] object-contain block mx-auto group-hover:scale-[1.01] transition-transform duration-300">
+                                </div>
+                            `;
+                        } else {
+                            activeSlides[taskKey] = 0;
+                            let slidesImages = validImages.map((url, i) => {
+                                let hiddenClass = i === 0 ? "" : "hidden";
+                                const directUrl = getDirectImageUrl(url);
+                                return `<img id="${taskKey}-${i}" src="${directUrl}" class="absolute inset-0 w-full h-full object-contain cursor-zoom-in transition-opacity duration-300 ${hiddenClass}" onclick="openFullscreenModal(${JSON.stringify(validImages).replace(/"/g, '&quot;')}, ${i})">`;
+                            }).join('');
+                            
+                            imgHtml = `
+                                <div class="relative w-full h-[500px] bg-slate-100 border-2 border-[#1b365d] rounded-2xl overflow-hidden mt-3 shadow-sm">
+                                    ${slidesImages}
+                                    <button type="button" onclick="changeSlide('${taskKey}', -1, ${validImages.length})" class="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-left text-sm"></i></button>
+                                    <button type="button" onclick="changeSlide('${taskKey}', 1, ${validImages.length})" class="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-black/60 text-white flex items-center justify-center transition-all z-10"><i class="fas fa-chevron-right text-sm"></i></button>
+                                    <span id="counter-${taskKey}" class="absolute bottom-3 right-3 bg-black/70 text-white text-[10px] px-2.5 py-1 rounded font-bold">1 / ${validImages.length}</span>
+                                </div>
+                            `;
+                        }
+                    }
+
+                    html += `
+                        <div class="glass-panel-ultra p-6 rounded-3xl border border-slate-100 shadow-md">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-3 mb-3">
+                                <div>
+                                    <h3 class="font-extrabold text-blue-700 text-sm">${student.name}</h3>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase">${student.dept}</p>
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-xs px-3 py-1 rounded-xl font-bold flex items-center gap-1.5 shadow-sm">
+                                        <i class="fas fa-check-circle text-emerald-600"></i> ĐÃ NỘP BÀI
+                                    </span>
+                                    <span class="text-[10px] text-slate-500 font-bold bg-slate-100 px-2.5 py-1 rounded-lg border border-slate-200"><i class="far fa-clock"></i> ${task.time}</span>
+                                </div>
+                            </div>
+                            ${imgHtml}
+                        </div>
+                    `;
+                } else {
+                    html += `
+                        <div class="glass-panel-ultra p-6 rounded-3xl border border-rose-200 shadow-sm bg-rose-50/20">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h3 class="font-extrabold text-slate-800 text-sm">${student.name}</h3>
+                                    <p class="text-[10px] text-slate-400 font-bold uppercase">${student.dept}</p>
+                                </div>
+                                <span class="bg-rose-100 text-rose-800 border border-rose-300 text-xs px-3 py-1 rounded-xl font-bold flex items-center gap-1.5 shadow-sm">
+                                    <i class="fas fa-times-circle text-rose-500"></i> CHƯA NỘP BÀI
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            html += `</div>`;
+            main.className = "max-w-4xl mx-auto h-full flex flex-col justify-start";
+            main.innerHTML = html;
         }
 
-        function toggleZoom(imgEl) {
-            imgEl.classList.toggle('zoom-active');
+        // ==========================================
+        // 3. MỞ BÁO CÁO PDF THEO HỌC VIÊN
+        // ==========================================
+        function openStudentReportModal(studentName) {
+            const student = globalData[studentName];
+            if (!student) return;
+
+            const filterTime = getRadioValue('filterTime');
+            const container = document.getElementById('reviewHistoryContainer');
+            
+            let submittedTasks = [];
+            if(student.tasks) {
+                Object.entries(student.tasks).forEach(([tName, tObj]) => {
+                    if (isDateInFilter(tObj.time, filterTime)) {
+                        submittedTasks.push({ title: tName, ...tObj });
+                    }
+                });
+            }
+
+            let html = `
+            <div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-md print:bg-white print:text-slate-800 print:border-2 print:border-slate-300">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 pb-4 mb-4 gap-4">
+                    <div>
+                        <h1 class="text-xl md:text-2xl font-black uppercase tracking-wide text-amber-300 print:text-blue-900">BÁO CÁO TIẾN ĐỘ THỰC HÀNH HỌC VIÊN</h1>
+                        <p class="text-xs text-blue-200 print:text-slate-500 font-medium mt-1">Hệ thống Đào tạo KiotViet</p>
+                    </div>
+                    <div class="bg-white/10 print:bg-slate-100 px-4 py-2 rounded-2xl border border-white/10 border-slate-200 text-right shrink-0">
+                        <span class="text-[10px] font-black uppercase text-blue-200 print:text-slate-400 block">Số bài đã nộp</span>
+                        <span class="text-lg font-black text-amber-300 print:text-blue-900">${submittedTasks.length} Bài</span>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200">
+                        <span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-user mr-1"></i> Họ và tên:</span>
+                        <span class="font-bold text-sm text-white print:text-slate-800">${student.name}</span>
+                    </div>
+                    <div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200">
+                        <span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-building mr-1"></i> Phòng ban / Lớp:</span>
+                        <span class="font-bold text-sm text-white print:text-slate-800">${student.dept}</span>
+                    </div>
+                </div>
+            </div>`;
+
+            if (submittedTasks.length === 0) {
+                html += `<div class="bg-white p-8 rounded-3xl border border-slate-200 text-center text-slate-400 font-bold">Học viên chưa nộp bài nào trong mốc thời gian chọn.</div>`;
+            } else {
+                submittedTasks.forEach(task => {
+                    let validImages = (task.images || []).filter(u => u && u.trim() !== '');
+                    let imgHtml = '';
+
+                    if (validImages.length > 0) {
+                        imgHtml = `<div class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${validImages.length}):</p><div class="flex flex-col gap-4 w-full">`;
+                        validImages.forEach((url, idx) => {
+                            imgHtml += `<div class="relative w-full bg-slate-100 border border-slate-300 rounded-none overflow-hidden cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(validImages).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(url)}" class="w-full h-auto max-h-[700px] object-contain block mx-auto rounded-none"></div>`;
+                        });
+                        imgHtml += `</div></div>`;
+                    } else {
+                        imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 text-slate-500 text-xs font-bold"><i class="fas fa-info-circle mr-1.5"></i>Chưa nộp ảnh minh chứng cho bài tập này.</div>`;
+                    }
+
+                    html += `
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid">
+                        <div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
+                            <h3 class="text-base font-black text-slate-800">${task.title}</h3>
+                            <span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành (${task.time})</span>
+                        </div>
+                        ${imgHtml}
+                    </div>`;
+                });
+            }
+
+            container.innerHTML = html;
+            document.getElementById('reviewHistoryModal').classList.remove('hidden');
+            document.getElementById('reviewHistoryModal').classList.add('flex');
+        }
+
+        function closeReviewHistory() {
+            document.getElementById('reviewHistoryModal').classList.add('hidden');
+            document.getElementById('reviewHistoryModal').classList.remove('flex');
+        }
+
+        // PHÓNG TO ẢNH FULLSCREEN
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
+        function openFullscreenModal(urls, idx) { 
+            fullscreenImageList = urls; 
+            fullscreenImageIndex = idx; 
+            updateFullscreenModal(); 
+            document.getElementById('fullscreenModal').classList.remove('hidden'); 
+            document.getElementById('fullscreenModal').classList.add('flex'); 
+        }
+
+        function closeFullscreenModal() { 
+            document.getElementById('fullscreenModal').classList.add('hidden'); 
+            document.getElementById('fullscreenModal').classList.remove('flex'); 
+        }
+
+        function changeFullscreenImg(dir) { 
+            if (fullscreenImageList.length === 0) return; 
+            fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; 
+            updateFullscreenModal(); 
+        }
+
+        function updateFullscreenModal() { 
+            const img = document.getElementById('fullscreenModalImg'); 
+            const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); 
+            const countText = document.getElementById('fullscreenModalCount'); 
+            const currentUrl = fullscreenImageList[fullscreenImageIndex]; 
+            img.src = getDirectImageUrl(currentUrl); 
+            viewRawBtn.href = currentUrl; 
+            countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; 
+            const prevBtn = document.getElementById('fullscreenModalPrev'); 
+            const nextBtn = document.getElementById('fullscreenModalNext'); 
+            if (fullscreenImageList.length <= 1) { 
+                prevBtn.classList.add('hidden'); 
+                nextBtn.classList.add('hidden'); 
+            } else { 
+                prevBtn.classList.remove('hidden'); 
+                nextBtn.classList.remove('hidden'); 
+            } 
         }
     </script>
 </body>
