@@ -7,7 +7,6 @@
     <title>CHẤM BÀI THỰC HÀNH TÁI KÝ</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -24,7 +23,7 @@
         .glass-panel-dark { background: rgba(27, 54, 93, 0.98); backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px); border-right: 1px solid rgba(255, 255, 255, 0.1); box-shadow: 4px 0 24px rgba(27, 54, 93, 0.2); }
 
         .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; } 
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.2); border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(203, 213, 225, 0.8); border-radius: 3px; }
 
         @media print {
             body * { visibility: hidden; }
@@ -39,7 +38,7 @@
 
     <div class="tech-bg no-print"><div class="glow-blob-1" id="blob-1"></div><div class="glow-blob-2" id="blob-2"></div></div>
 
-    <!-- SIDEBAR NAVIGATION & BỘ LỌC -->
+    <!-- SIDEBAR NAVIGATION CHÍNH (BÊN TRÁI) -->
     <aside id="sidebar" class="w-80 glass-panel-dark flex flex-col z-30 transition-all duration-300 flex-shrink-0 text-sm relative overflow-hidden no-print">
         
         <!-- LOGO HEADER -->
@@ -60,7 +59,7 @@
             </button>
         </div>
 
-        <!-- BỘ LỌC CỦA CHẤM BÀI TRỰC TUYẾN (SẼ ẨN KHI XEM DASHBOARD) -->
+        <!-- BỘ LỌC CỦA CHẤM BÀI TRỰC TUYẾN -->
         <div id="gradingFiltersSubmenu" class="hidden p-4 flex-1 overflow-y-auto flex flex-col custom-scrollbar relative z-10 space-y-5">
             <p class="text-[10px] font-black text-blue-300 uppercase tracking-widest flex items-center gap-1.5 border-b border-white/10 pb-2">
                 <i class="fas fa-filter"></i> BỘ LỌC CHẤM BÀI
@@ -69,14 +68,18 @@
             <!-- 1. Ngành hàng -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Ngành hàng</label>
-                <div class="flex gap-1.5">
+                <div class="flex gap-1">
+                    <label class="flex-1 cursor-pointer">
+                        <input type="radio" name="filterIndustry" value="all" onchange="updateFilters('industry')" class="sr-only peer">
+                        <div class="text-center py-2 text-[10px] md:text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-purple-600 peer-checked:border-purple-600 transition-all">Tất cả</div>
+                    </label>
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="filterIndustry" value="Retail" checked onchange="updateFilters('industry')" class="sr-only peer">
-                        <div class="text-center py-2 text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-all">Retail</div>
+                        <div class="text-center py-2 text-[10px] md:text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-blue-600 peer-checked:border-blue-600 transition-all">Retail</div>
                     </label>
                     <label class="flex-1 cursor-pointer">
                         <input type="radio" name="filterIndustry" value="FNB" onchange="updateFilters('industry')" class="sr-only peer">
-                        <div class="text-center py-2 text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-orange-600 peer-checked:border-orange-600 transition-all">F&B</div>
+                        <div class="text-center py-2 text-[10px] md:text-xs rounded-xl font-bold bg-white/10 text-white border border-white/10 peer-checked:bg-orange-600 peer-checked:border-orange-600 transition-all">F&B</div>
                     </label>
                 </div>
             </div>
@@ -92,7 +95,7 @@
             <!-- 3. Học viên -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Học viên</label>
-                <div id="radioStudentContainer" class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5">
+                <div id="radioStudentContainer" class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5 max-h-48 overflow-y-auto custom-scrollbar">
                     <!-- Dynamic radio options -->
                 </div>
             </div>
@@ -121,19 +124,19 @@
                 <label class="block text-[10px] font-bold text-slate-300 uppercase tracking-wider mb-2">Thời gian nộp bài</label>
                 <div class="space-y-1 bg-black/20 p-2 rounded-xl border border-white/5">
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-white p-1.5 rounded-lg hover:bg-white/10">
-                        <input type="radio" name="filterTime" value="all" onchange="toggleCustomTime(); updateFilters('time')" class="accent-blue-500">
+                        <input type="radio" name="filterTime" value="all" onchange="updateFilters('time')" class="accent-blue-500">
                         <span>Tất cả thời gian</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-white p-1.5 rounded-lg hover:bg-white/10">
-                        <input type="radio" name="filterTime" value="today" onchange="toggleCustomTime(); updateFilters('time')" class="accent-blue-500">
+                        <input type="radio" name="filterTime" value="today" onchange="updateFilters('time')" class="accent-blue-500">
                         <span>Hôm nay</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-white p-1.5 rounded-lg hover:bg-white/10">
-                        <input type="radio" name="filterTime" value="this_week" checked onchange="toggleCustomTime(); updateFilters('time')" class="accent-blue-500">
+                        <input type="radio" name="filterTime" value="this_week" checked onchange="updateFilters('time')" class="accent-blue-500">
                         <span>Tuần này</span>
                     </label>
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-white p-1.5 rounded-lg hover:bg-white/10">
-                        <input type="radio" name="filterTime" value="last_week" onchange="toggleCustomTime(); updateFilters('time')" class="accent-blue-500">
+                        <input type="radio" name="filterTime" value="last_week" onchange="updateFilters('time')" class="accent-blue-500">
                         <span>Tuần trước</span>
                     </label>
                 </div>
@@ -180,7 +183,7 @@
         </header>
 
         <div class="flex-1 overflow-auto p-6 md:p-8 relative pb-28 custom-scrollbar">
-            <div class="max-w-6xl mx-auto w-full space-y-8">
+            <div class="max-w-7xl mx-auto w-full">
                 
                 <!-- Loading Spinner -->
                 <div id="loadingSpinner" class="flex flex-col items-center justify-center py-20 hidden">
@@ -191,78 +194,37 @@
                 <!-- ========================================== -->
                 <!-- VIEW 1: TRANG DASHBOARD BÁO CÁO TIẾN ĐỘ -->
                 <!-- ========================================== -->
-                <div id="dashboardView" class="space-y-6">
+                <div id="dashboardView" class="flex flex-col lg:flex-row items-start gap-6">
                     
-                    <!-- BỘ LỌC RIÊNG DÀNH CHO DASHBOARD -->
-                    <div class="glass-panel-ultra p-5 rounded-3xl border border-slate-200 shadow-sm bg-white flex flex-wrap items-center justify-between gap-4">
-                        <div class="flex items-center gap-2.5">
-                            <span class="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold"><i class="fas fa-sliders-h"></i></span>
-                            <div>
-                                <h2 class="text-xs font-black text-slate-800 uppercase tracking-wider">Bộ Lọc Báo Cáo Dashboard</h2>
-                                <p class="text-[10px] text-slate-400 font-medium">Tùy chỉnh tiêu chí phân tích tiến độ</p>
-                            </div>
-                        </div>
+                    <!-- BÊN TRÁI: SCORECARDS & BẢNG XẾP HẠNG -->
+                    <div class="flex-1 w-full space-y-6">
                         
-                        <div class="flex flex-wrap items-center gap-3">
-                            <!-- 1. Thời gian (Mặc định: Tuần này) -->
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Thời gian</label>
-                                <select id="dashFilterTime" onchange="renderDashboardAnalytics()" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="this_week" selected>Tuần này</option>
-                                    <option value="today">Hôm nay</option>
-                                    <option value="last_week">Tuần trước</option>
-                                    <option value="all">Tất cả thời gian</option>
-                                </select>
+                        <!-- 2 SCORECARD TỔNG QUAN -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                            <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
+                                <div class="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-users"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Học Viên</p>
+                                    <p class="text-2xl font-black text-slate-800"><span id="kpiTotalStudents">0</span> <span class="text-xs text-slate-400 font-medium">người</span></p>
+                                </div>
                             </div>
 
-                            <!-- 2. Ngành hàng (Mặc định: Retail) -->
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ngành hàng</label>
-                                <select id="dashFilterIndustry" onchange="onDashIndustryChange()" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                    <option value="Retail" selected>Retail</option>
-                                    <option value="FNB">F&B</option>
-                                </select>
-                            </div>
-
-                            <!-- 3. Buổi học (ĐÃ MỞ RỘNG KÍCH THƯỚC TRÁNH BỊ CẮT CHỮ) -->
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Buổi học</label>
-                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-100 border border-slate-300 text-slate-800 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-[380px] truncate">
-                                    <!-- Populated dynamically -->
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2 SCORECARD TỔNG QUAN -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
-                            <div class="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-users"></i></div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Học Viên</p>
-                                <p class="text-2xl font-black text-slate-800"><span id="kpiTotalStudents">0</span> <span class="text-xs text-slate-400 font-medium">người</span></p>
+                            <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
+                                <div class="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-chart-line"></i></div>
+                                <div>
+                                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tiến Độ Trung Bình</p>
+                                    <p class="text-2xl font-black text-emerald-600" id="kpiAvgProgress">0%</p>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
-                            <div class="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-chart-line"></i></div>
-                            <div>
-                                <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tiến Độ Trung Bình</p>
-                                <p class="text-2xl font-black text-emerald-600" id="kpiAvgProgress">0%</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- KHUNG CHÍNH: BẢNG XẾP HẠNG + BIỂU ĐỒ DONUT NỘP BÀI -->
-                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                        
-                        <!-- BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP -->
-                        <div class="lg:col-span-2 glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md bg-white">
+                        <!-- KHUNG BẢNG XẾP HẠNG TIẾN ĐỘ -->
+                        <div class="glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md bg-white w-full">
                             <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
                                 <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
                                     <i class="fas fa-trophy text-amber-500"></i> BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP
                                 </h3>
-                                <span class="text-xs text-slate-400 font-bold" id="rankingStudentCountText">Hiển thị toàn bộ học viên</span>
+                                <span class="text-xs text-slate-400 font-bold" id="rankingStudentCountText">Hiển thị danh sách học viên</span>
                             </div>
                             
                             <div class="space-y-3" id="dashboardRankingList">
@@ -270,31 +232,61 @@
                             </div>
                         </div>
 
-                        <!-- BIỂU ĐỒ DONUT: TỶ LỆ HỌC VIÊN ĐÃ NỘP BÀI & CHƯA NỘP BÀI -->
-                        <div class="glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md bg-white flex flex-col justify-between">
+                    </div>
+
+                    <!-- BÊN PHẢI: BỘ LỌC BÁO CÁO DASHBOARD (SIDEBAR BÊN PHẢI) -->
+                    <div class="w-full lg:w-80 shrink-0 glass-panel-ultra p-5 rounded-3xl border border-slate-200 shadow-sm bg-white space-y-5 sticky top-0">
+                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
+                            <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm"><i class="fas fa-sliders-h"></i></span>
                             <div>
-                                <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider mb-1 flex items-center gap-2">
-                                    <i class="fas fa-pie-chart text-blue-500"></i> Tỷ Lệ Nộp Bài Học Viên
-                                </h3>
-                                <p class="text-[10px] text-slate-400 font-medium mb-4">Dựa theo buổi & thời gian lọc trên Dashboard</p>
-                            </div>
-
-                            <div class="relative min-h-[220px] flex items-center justify-center my-auto">
-                                <canvas id="chartSubmissionStatus"></canvas>
-                            </div>
-
-                            <div class="grid grid-cols-2 gap-3 pt-4 border-t border-slate-100 text-center mt-4">
-                                <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
-                                    <span class="block text-emerald-600 text-xl font-black" id="statSubmittedCount">0</span>
-                                    <span class="text-[10px] text-slate-500 font-extrabold uppercase">Đã nộp bài</span>
-                                </div>
-                                <div class="bg-rose-50 p-3 rounded-2xl border border-rose-100">
-                                    <span class="block text-rose-500 text-xl font-black" id="statNotSubmittedCount">0</span>
-                                    <span class="text-[10px] text-slate-500 font-extrabold uppercase">Chưa nộp bài</span>
-                                </div>
+                                <h2 class="text-xs font-black text-slate-800 uppercase tracking-wider">BỘ LỌC DASHBOARD</h2>
+                                <p class="text-[10px] text-slate-400 font-medium">Tùy chỉnh chọn nhiều tiêu chí</p>
                             </div>
                         </div>
 
+                        <!-- 1. Thời gian -->
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Thời gian</label>
+                            <select id="dashFilterTime" onchange="renderDashboardAnalytics()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl h-10 px-3 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option value="this_week" selected>Tuần này</option>
+                                <option value="today">Hôm nay</option>
+                                <option value="last_week">Tuần trước</option>
+                                <option value="all">Tất cả thời gian</option>
+                            </select>
+                        </div>
+
+                        <!-- 2. Ngành hàng (Checkboxes) -->
+                        <div>
+                            <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Ngành hàng (Chọn nhiều)</label>
+                            <div class="space-y-1.5 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
+                                <label class="flex items-center gap-2 text-xs font-bold text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer">
+                                    <input type="checkbox" id="dashIndRetail" value="Retail" checked onchange="onDashIndustryChange()" class="accent-blue-600 w-4 h-4 rounded cursor-pointer">
+                                    <span>Retail</span>
+                                </label>
+                                <label class="flex items-center gap-2 text-xs font-bold text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer">
+                                    <input type="checkbox" id="dashIndFNB" value="FNB" checked onchange="onDashIndustryChange()" class="accent-orange-600 w-4 h-4 rounded cursor-pointer">
+                                    <span>F&B</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- 3. Buổi học (Hiển thị HẾT giá trị tùy chọn trực tiếp trong khung cuộn, không dùng Dropdown) -->
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider">Buổi học (Chọn nhiều)</label>
+                                <span id="dashSessionLabel" class="text-[10px] font-extrabold text-blue-600">Tất cả</span>
+                            </div>
+
+                            <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80 max-h-80 overflow-y-auto custom-scrollbar space-y-1">
+                                <label class="flex items-center gap-2 p-1.5 hover:bg-blue-100/50 rounded-lg cursor-pointer font-extrabold text-xs text-blue-700 border-b border-slate-200 pb-2 mb-1">
+                                    <input type="checkbox" id="dashSessionSelectAll" checked onchange="toggleAllDashSessions(this)" class="accent-blue-600 w-4 h-4 rounded cursor-pointer">
+                                    <span>Chọn tất cả buổi học</span>
+                                </label>
+                                <div id="dashSessionCheckboxContainer" class="space-y-1">
+                                    <!-- Populated dynamically with checkboxes -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                 </div>
@@ -379,7 +371,7 @@
         const API_URL = "https://script.google.com/macros/s/AKfycbwODcEPPvuFTlbpamupEH0p4uzyGfghRRjSdUEUPlWWZSc2Y4ZyFH1MBOAF94q2fGhzHA/exec";
         const EXERCISE_API_URL = "https://script.google.com/macros/s/AKfycbwGsc46qPf5M-ml7SLra_oTJ9TJ39wd9gRvT4Ez1kPoAeFKTPMmmbBWZAM6Oe3wYVj6kg/exec";
 
-        // DANH SÁCH SẮP XẾP ƯU TIÊN BUỔI HỌC THEO YÊU CẦU
+        // DANH SÁCH SẮP XẾP ƯU TIÊN BUỔI HỌC
         const SESSION_ORDER = {
             Retail: [
                 "Buổi 1A. Tổng quan Hàng hóa ngành Bán Lẻ",
@@ -400,7 +392,6 @@
         let allData = [];
         let CODELAB_DATA = null;
         let currentActiveTab = 'dashboard';
-        let chartSubmissionInstance = null;
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
 
@@ -450,15 +441,6 @@
             });
         }
 
-        function toggleCustomTime() {
-            const val = getRadioValue('filterTime');
-            const box = document.getElementById('customTimeBox');
-            if (box) {
-                if (val === 'custom') box.classList.remove('hidden');
-                else box.classList.add('hidden');
-            }
-        }
-
         function fetchPracticeData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
             
@@ -485,12 +467,75 @@
             .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
         }
 
+        function parseDate(dateVal) {
+            if (!dateVal) return null;
+            if (dateVal instanceof Date) return dateVal;
+            
+            if (typeof dateVal === 'string') {
+                let str = dateVal.trim();
+                if (str.includes('/')) {
+                    const parts = str.split(/[\sT\/:-]+/);
+                    if (parts.length >= 3) {
+                        const day = parseInt(parts[0], 10);
+                        const month = parseInt(parts[1], 10) - 1;
+                        const year = parseInt(parts[2], 10);
+                        const hour = parts[3] ? parseInt(parts[3], 10) : 0;
+                        const min = parts[4] ? parseInt(parts[4], 10) : 0;
+                        const sec = parts[5] ? parseInt(parts[5], 10) : 0;
+                        if (year > 1000) {
+                            return new Date(year, month, day, hour, min, sec);
+                        }
+                    }
+                }
+                const d = new Date(str);
+                if (!isNaN(d.getTime())) return d;
+            }
+            return null;
+        }
+
         function formatDateTime(isoString) {
             if (!isoString) return '';
-            const d = new Date(isoString);
-            if (isNaN(d.getTime())) return isoString;
+            const d = parseDate(isoString);
+            if (!d || isNaN(d.getTime())) return isoString;
             const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
             return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')} - ${days[d.getDay()]}, ${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+        }
+
+        function filterDataByTime(dataArray, timeFilter) {
+            if (!timeFilter || timeFilter === 'all') return dataArray;
+            
+            const now = new Date(); 
+            const currentYear = now.getFullYear();
+            const currentMonth = now.getMonth();
+            const currentDate = now.getDate();
+            const currentDayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
+
+            const startOfToday = new Date(currentYear, currentMonth, currentDate, 0, 0, 0, 0);
+            const endOfToday = new Date(currentYear, currentMonth, currentDate, 23, 59, 59, 999);
+
+            const startOfThisWeek = new Date(startOfToday);
+            startOfThisWeek.setDate(currentDate - currentDayOfWeek + 1);
+
+            const endOfThisWeek = new Date(startOfThisWeek);
+            endOfThisWeek.setDate(startOfThisWeek.getDate() + 6);
+            endOfThisWeek.setHours(23, 59, 59, 999);
+
+            const startOfLastWeek = new Date(startOfThisWeek);
+            startOfLastWeek.setDate(startOfThisWeek.getDate() - 7);
+
+            const endOfLastWeek = new Date(startOfThisWeek);
+            endOfLastWeek.setDate(startOfThisWeek.getDate() - 1);
+            endOfLastWeek.setHours(23, 59, 59, 999);
+
+            return dataArray.filter(e => {
+                const rowDate = parseDate(e.ngay);
+                if (!rowDate) return false;
+
+                if (timeFilter === 'today') return rowDate >= startOfToday && rowDate <= endOfToday;
+                if (timeFilter === 'this_week') return rowDate >= startOfThisWeek && rowDate <= endOfThisWeek;
+                if (timeFilter === 'last_week') return rowDate >= startOfLastWeek && rowDate <= endOfLastWeek;
+                return true;
+            });
         }
 
         const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
@@ -501,23 +546,35 @@
 
         function updateFilters(source) {
             const selInd = getRadioValue('filterIndustry') || 'Retail';
-            let dataByInd = allData.filter(e => e.khoa === selInd);
-            if (dataByInd.length === 0) dataByInd = allData;
+            const selTime = getRadioValue('filterTime') || 'this_week';
 
-            if (source === 'init' || source === 'industry') {
-                // 1. Buổi học Sidebar (LẤY THEO THỨ TỰ ƯU TIÊN PHÂN LOẠI)
-                let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
-                let formattedList = orderedSessions.map(s => `${selInd} - ${s}`);
+            let dataByInd = (selInd === 'all') ? allData : allData.filter(e => e.khoa === selInd);
+            
+            if (source === 'init' || source === 'industry' || source === 'time') {
+                let formattedList = [];
+                if (selInd === 'all') {
+                    formattedList.push({ val: 'all', label: 'Tất cả buổi học' });
+                    Object.keys(SESSION_ORDER).forEach(ind => {
+                        SESSION_ORDER[ind].forEach(s => {
+                            formattedList.push({ val: `${ind} - ${s}`, label: `[${ind}] ${s}` });
+                        });
+                    });
+                } else {
+                    let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
+                    formattedList = orderedSessions.map(s => ({ val: `${selInd} - ${s}`, label: s }));
+                }
 
-                let sessionHtml = formattedList.map((s, idx) => `
+                let sessionHtml = formattedList.map((item, idx) => `
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-200 p-1.5 rounded-lg hover:bg-white/10">
-                        <input type="radio" name="filterSession" value="${s}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()" class="accent-blue-500">
-                        <span class="truncate">${s}</span>
+                        <input type="radio" name="filterSession" value="${item.val}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()" class="accent-blue-500">
+                        <span class="truncate" title="${item.label}">${item.label}</span>
                     </label>`).join('');
                 document.getElementById('radioSessionContainer').innerHTML = sessionHtml || '<p class="text-xs text-slate-400 p-1.5">Không có buổi học</p>';
 
-                // 2. Học viên Sidebar
-                const students = [...new Set(dataByInd.map(e => (e.hoVaTen || 'Ẩn Danh').trim()))].filter(Boolean).sort();
+                let timeFilteredData = filterDataByTime(dataByInd, selTime);
+                let studentSource = timeFilteredData.length > 0 ? timeFilteredData : dataByInd;
+
+                const students = [...new Set(studentSource.map(e => (e.hoVaTen || 'Ẩn Danh').trim()))].filter(Boolean).sort();
                 let studentHtml = students.map((sName, idx) => `
                     <label class="flex items-center gap-2 cursor-pointer text-xs text-slate-200 p-1.5 rounded-lg hover:bg-white/10">
                         <input type="radio" name="filterStudent" value="${sName}" ${idx === 0 ? 'checked' : ''} onchange="renderCards()" class="accent-blue-500">
@@ -529,27 +586,119 @@
             if (currentActiveTab === 'grading') renderCards();
         }
 
-        // CẬP NHẬT BUỔI HỌC TRÊN DASHBOARD THEO THỨ TỰ ƯU TIÊN SẮP XẾP
+        // ==========================================
+        // XỬ LÝ BỘ LỌC MULTI-SELECT SIDEBAR DASHBOARD
+        // ==========================================
+        function getSelectedDashIndustries() {
+            let selected = [];
+            if (document.getElementById('dashIndRetail')?.checked) selected.push('Retail');
+            if (document.getElementById('dashIndFNB')?.checked) selected.push('FNB');
+            return selected;
+        }
+
         function onDashIndustryChange() {
-            const selInd = document.getElementById('dashFilterIndustry').value || 'Retail';
+            const industries = getSelectedDashIndustries();
+            const container = document.getElementById('dashSessionCheckboxContainer');
+            if (!container) return;
 
-            let orderedSessions = SESSION_ORDER[selInd] || SESSION_ORDER['Retail'];
-            let formattedList = orderedSessions.map(s => `${selInd} - ${s}`);
+            let html = '';
+            industries.forEach(ind => {
+                let sessions = SESSION_ORDER[ind] || [];
+                sessions.forEach(s => {
+                    let val = `${ind} - ${s}`;
+                    html += `
+                    <label class="flex items-start gap-2 p-1.5 hover:bg-slate-200/50 rounded-lg cursor-pointer text-slate-700 text-xs font-medium">
+                        <input type="checkbox" name="dashSessionItem" value="${val}" checked onchange="onDashSessionCheckboxChange()" class="accent-blue-600 w-4 h-4 rounded cursor-pointer shrink-0 mt-0.5">
+                        <span class="leading-tight" title="[${ind}] ${s}"><b class="text-blue-600">[${ind}]</b> ${s}</span>
+                    </label>`;
+                });
+            });
 
-            let selectEl = document.getElementById('dashFilterSession');
-            selectEl.innerHTML = formattedList.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
+            container.innerHTML = html || '<p class="text-slate-400 text-[11px] p-2">Vui lòng chọn ít nhất 1 ngành hàng</p>';
 
+            const selectAllCb = document.getElementById('dashSessionSelectAll');
+            if (selectAllCb) selectAllCb.checked = true;
+
+            updateDashSessionLabel();
             renderDashboardAnalytics();
+        }
+
+        function toggleAllDashSessions(masterCb) {
+            const checkboxes = document.querySelectorAll('input[name="dashSessionItem"]');
+            checkboxes.forEach(cb => cb.checked = masterCb.checked);
+            updateDashSessionLabel();
+            renderDashboardAnalytics();
+        }
+
+        function onDashSessionCheckboxChange() {
+            const checkboxes = document.querySelectorAll('input[name="dashSessionItem"]');
+            const checked = document.querySelectorAll('input[name="dashSessionItem"]:checked');
+            const selectAllCb = document.getElementById('dashSessionSelectAll');
+            if (selectAllCb) {
+                selectAllCb.checked = (checkboxes.length > 0 && checkboxes.length === checked.length);
+            }
+            updateDashSessionLabel();
+            renderDashboardAnalytics();
+        }
+
+        function updateDashSessionLabel() {
+            const labelEl = document.getElementById('dashSessionLabel');
+            if (!labelEl) return;
+
+            const checked = document.querySelectorAll('input[name="dashSessionItem"]:checked');
+            const total = document.querySelectorAll('input[name="dashSessionItem"]');
+
+            if (checked.length === 0) {
+                labelEl.innerText = 'Chưa chọn';
+            } else if (checked.length === total.length && total.length > 0) {
+                labelEl.innerText = 'Tất cả (' + total.length + ')';
+            } else {
+                labelEl.innerText = `${checked.length}/${total.length} buổi`;
+            }
+        }
+
+        function getSelectedDashSessions() {
+            const checked = document.querySelectorAll('input[name="dashSessionItem"]:checked');
+            return Array.from(checked).map(cb => cb.value);
         }
 
         function initDashboardFilters() {
             onDashIndustryChange();
         }
 
+        function getRequiredExercisesTitlesForMultipleSessions(studentIndustry, selectedSessions) {
+            if (!CODELAB_DATA || !selectedSessions || selectedSessions.length === 0) return [];
+            let titles = [];
+
+            let indKeys = CODELAB_DATA[studentIndustry] ? [studentIndustry] : Object.keys(CODELAB_DATA);
+
+            indKeys.forEach(indKey => {
+                if (!CODELAB_DATA[indKey]) return;
+                CODELAB_DATA[indKey].forEach(s => {
+                    let isMatched = selectedSessions.some(sel => {
+                        let rawName = sel.includes(' - ') ? sel.split(' - ').slice(1).join(' - ') : sel;
+                        let cleanSel = cleanStr(rawName);
+                        let cleanTitle = cleanStr(s.title);
+                        return cleanTitle.includes(cleanSel) || cleanSel.includes(cleanTitle);
+                    });
+
+                    if (isMatched) {
+                        s.exercises.forEach(ex => {
+                            if (!ex.isGroupHeader && ex.title) {
+                                let cleanEx = cleanStr(ex.title);
+                                if (!titles.includes(cleanEx)) titles.push(cleanEx);
+                            }
+                        });
+                    }
+                });
+            });
+            return titles;
+        }
+
         function getRequiredExercisesTree(industry, sessionFilter) {
             if (!CODELAB_DATA) return [];
             let tree = [];
-            let targetIndustries = (industry === 'all') ? Object.keys(CODELAB_DATA) : [industry];
+            let targetIndustries = (industry === 'all' || !industry) ? Object.keys(CODELAB_DATA) : [industry];
 
             let cleanFilter = "";
             if (sessionFilter && sessionFilter !== 'all') {
@@ -608,39 +757,26 @@
         // VIEW 1: RENDER DASHBOARD BÁO CÁO PHÂN TÍCH
         // ==========================================
         function renderDashboardAnalytics() {
+            const selectedIndustries = getSelectedDashIndustries();
+            const selectedSessions = getSelectedDashSessions();
             const selTime = document.getElementById('dashFilterTime').value;
-            const selInd = document.getElementById('dashFilterIndustry').value;
-            const selSession = document.getElementById('dashFilterSession').value;
 
-            // 1. Filter bài nộp theo Bộ Lọc Dashboard
+            // 1. Lọc bài nộp theo Ngành hàng & Thời gian
             let filteredSubmissions = allData;
-
-            if (selTime !== 'all') {
-                const now = new Date(); now.setHours(0,0,0,0);
-                const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
-                filteredSubmissions = filteredSubmissions.filter(e => {
-                    const rowDate = new Date(e.ngay); if(isNaN(rowDate.getTime())) return false;
-                    rowDate.setHours(0,0,0,0);
-                    if (selTime === 'today') return rowDate.getTime() === now.getTime();
-                    if (selTime === 'this_week') {
-                        const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - dayOfWeek + 1);
-                        return rowDate >= startOfWeek && rowDate <= now;
-                    }
-                    if (selTime === 'last_week') {
-                        const endOfLastWeek = new Date(now); endOfLastWeek.setDate(now.getDate() - dayOfWeek);
-                        const startOfLastWeek = new Date(endOfLastWeek); startOfLastWeek.setDate(endOfLastWeek.getDate() - 6);
-                        return rowDate >= startOfLastWeek && rowDate <= endOfLastWeek;
-                    }
-                    return true;
-                });
+            if (selectedIndustries.length > 0) {
+                filteredSubmissions = filteredSubmissions.filter(e => selectedIndustries.includes(e.khoa));
+            } else {
+                filteredSubmissions = [];
             }
+            filteredSubmissions = filterDataByTime(filteredSubmissions, selTime);
 
-            if (selInd !== 'all') filteredSubmissions = filteredSubmissions.filter(e => e.khoa === selInd);
+            // 2. Lấy danh sách học viên active thuộc các ngành đang chọn
+            let studentSource = (selTime === 'all') 
+                ? (selectedIndustries.length === 0 ? [] : allData.filter(e => selectedIndustries.includes(e.khoa))) 
+                : filteredSubmissions;
 
-            // 2. Lấy danh sách toàn bộ học viên thuộc ngành chọn
-            let baseDataForStudents = selInd === 'all' ? allData : allData.filter(e => e.khoa === selInd);
             const allStudentsMap = {};
-            baseDataForStudents.forEach(e => {
+            studentSource.forEach(e => {
                 const name = (e.hoVaTen || 'Ẩn Danh').trim();
                 if (name) {
                     if (!allStudentsMap[name]) {
@@ -656,18 +792,11 @@
             let studentRankingData = [];
 
             studentList.forEach(st => {
-                // Lấy cây bài tập chuẩn thuộc RIÊNG Buổi học chọn
-                let tree = getRequiredExercisesTree(st.industry, selSession);
-                let totalReq = 0;
-                let reqExTitlesForSession = [];
+                // Lấy các bài tập bắt buộc thuộc các buổi học được tích chọn
+                let reqExTitlesForSession = getRequiredExercisesTitlesForMultipleSessions(st.industry, selectedSessions);
+                let totalReq = reqExTitlesForSession.length;
 
-                tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(ex => {
-                    totalReq++;
-                    reqExTitlesForSession.push(cleanStr(ex));
-                })));
-
-                // SỬA LỖI 104%: CHỈ ĐẾM NHỮNG BÀI NỘP THUỘC RIÊNG BUỔI HỌC ĐANG CHỌN
-                const studentSubmissions = allData.filter(e => (e.hoVaTen||'').trim() === st.name);
+                const studentSubmissions = filteredSubmissions.filter(e => cleanStr(e.hoVaTen) === cleanStr(st.name));
                 const doneInSession = studentSubmissions
                     .map(e => cleanStr(e.tenBaiHoc))
                     .filter(title => reqExTitlesForSession.includes(title));
@@ -675,15 +804,10 @@
                 const uniqueDone = [...new Set(doneInSession)];
 
                 const rawPercent = totalReq === 0 ? 0 : Math.round((uniqueDone.length / totalReq) * 100);
-                const percent = Math.min(100, rawPercent); // Giới hạn tối đa 100%
+                const percent = Math.min(100, rawPercent); 
                 totalAvgPercentSum += percent;
 
-                // Kiểm tra xem học viên có bài nộp nào khớp bộ lọc buổi & thời gian không
-                const hasSubmission = filteredSubmissions.some(e => {
-                    if ((e.hoVaTen||'').trim() !== st.name) return false;
-                    return reqExTitlesForSession.includes(cleanStr(e.tenBaiHoc));
-                });
-
+                const hasSubmission = studentSubmissions.some(e => reqExTitlesForSession.includes(cleanStr(e.tenBaiHoc)));
                 if (hasSubmission) submittedCount++;
 
                 studentRankingData.push({
@@ -704,12 +828,12 @@
             let avgGlobalProgress = studentList.length === 0 ? 0 : Math.round(totalAvgPercentSum / studentList.length);
             document.getElementById('kpiAvgProgress').innerText = `${avgGlobalProgress}%`;
 
-            // HIỂN THỊ ĐẦY ĐỦ BẢNG XẾP HẠNG
+            // HIỂN THỊ BẢNG XẾP HẠNG
             document.getElementById('rankingStudentCountText').innerText = `Tổng cộng: ${studentRankingData.length} học viên`;
             
             let rankingHtml = '';
             if (studentRankingData.length === 0) {
-                rankingHtml = `<div class="text-center py-8 text-slate-400 text-xs font-bold">Không có học viên nào khớp bộ lọc!</div>`;
+                rankingHtml = `<div class="text-center py-8 text-slate-400 text-xs font-bold">Không có học viên nào khớp tiêu chí lọc!</div>`;
             } else {
                 studentRankingData.forEach((st, idx) => {
                     let badge = `<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0">${idx + 1}</span>`;
@@ -723,14 +847,14 @@
 
                     rankingHtml += `
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-slate-50 hover:bg-blue-50/50 rounded-2xl border border-slate-100 transition shadow-sm">
-                        <div class="flex items-center gap-3 min-w-[200px]">
+                        <div class="flex items-center gap-3 min-w-[220px]">
                             ${badge}
                             <div class="truncate">
                                 <p class="font-extrabold text-slate-800 text-xs truncate">${st.name}</p>
                                 <p class="text-[10px] text-slate-400 font-medium">${st.dept} | <span class="text-blue-600 font-bold">${st.industry}</span></p>
                             </div>
                         </div>
-                        <div class="flex items-center gap-4 flex-1 max-w-md">
+                        <div class="flex items-center gap-4 flex-1">
                             <div class="flex-1">
                                 <div class="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
                                     <span>Đã làm: ${st.done}/${st.total} bài</span>
@@ -748,37 +872,6 @@
                 });
             }
             document.getElementById('dashboardRankingList').innerHTML = rankingHtml;
-
-            // Biểu đồ Donut: Đã nộp bài vs Chưa nộp bài
-            let notSubmittedCount = studentList.length - submittedCount;
-            document.getElementById('statSubmittedCount').innerText = submittedCount;
-            document.getElementById('statNotSubmittedCount').innerText = notSubmittedCount;
-
-            renderChartSubmissionStatus(submittedCount, notSubmittedCount);
-        }
-
-        function renderChartSubmissionStatus(submitted, notSubmitted) {
-            const ctx = document.getElementById('chartSubmissionStatus').getContext('2d');
-            if (chartSubmissionInstance) chartSubmissionInstance.destroy();
-
-            chartSubmissionInstance = new Chart(ctx, {
-                type: 'doughnut',
-                data: {
-                    labels: ['Đã nộp bài', 'Chưa nộp bài'],
-                    datasets: [{
-                        data: [submitted, notSubmitted],
-                        backgroundColor: ['#10b981', '#f43f5e'],
-                        borderWidth: 3,
-                        borderColor: '#ffffff'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: { legend: { display: false } },
-                    cutout: '72%'
-                }
-            });
         }
 
         // ==========================================
@@ -809,26 +902,7 @@
 
             // 2. Bài nộp thực tế của Học viên
             let studentSubmissions = allData.filter(e => cleanStr(e.hoVaTen) === cleanStr(selStudent));
-
-            if (selTime !== 'all') {
-                const now = new Date(); now.setHours(0,0,0,0);
-                const dayOfWeek = now.getDay() === 0 ? 7 : now.getDay();
-                studentSubmissions = studentSubmissions.filter(e => {
-                    const rowDate = new Date(e.ngay); if(isNaN(rowDate.getTime())) return false;
-                    rowDate.setHours(0,0,0,0);
-                    if (selTime === 'today') return rowDate.getTime() === now.getTime();
-                    if (selTime === 'this_week') {
-                        const startOfWeek = new Date(now); startOfWeek.setDate(now.getDate() - dayOfWeek + 1);
-                        return rowDate >= startOfWeek && rowDate <= now;
-                    }
-                    if (selTime === 'last_week') {
-                        const endOfLastWeek = new Date(now); endOfLastWeek.setDate(now.getDate() - dayOfWeek);
-                        const startOfLastWeek = new Date(endOfLastWeek); startOfLastWeek.setDate(endOfLastWeek.getDate() - 6);
-                        return rowDate >= startOfLastWeek && rowDate <= endOfLastWeek;
-                    }
-                    return true;
-                });
-            }
+            studentSubmissions = filterDataByTime(studentSubmissions, selTime);
 
             // 3. Ghép nối bài tập Đã nộp & Chưa nộp
             let cardItems = [];
@@ -861,7 +935,7 @@
                 });
             }
 
-            // 6. SẮP XẾP CÁC BÀI TẬP THEO THEO THỨ TỰ ALPHABET (A-Z)
+            // 6. SẮP XẾP CÁC BÀI TẬP THEO THỨ TỰ ALPHABET (A-Z)
             cardItems.sort((a, b) => a.title.localeCompare(b.title, 'vi', { numeric: true, sensitivity: 'base' }));
 
             // Cập nhật Tiến độ Cá nhân
@@ -870,7 +944,7 @@
             let doneCount = requiredExerciseTitles.filter(t => studentSubmissions.some(s => cleanStr(s.tenBaiHoc) === cleanStr(t))).length;
             const percent = totalReq === 0 ? 0 : Math.min(100, Math.round((doneCount / totalReq) * 100));
 
-            document.getElementById('progressStudentInfo').innerText = `Học viên: ${selStudent} | Ngành: ${selInd} | ${selSession}`;
+            document.getElementById('progressStudentInfo').innerText = `Học viên: ${selStudent} | Ngành: ${selInd === 'all' ? 'Tất cả' : selInd} | Buổi: ${selSession === 'all' ? 'Tất cả buổi' : selSession}`;
             document.getElementById('progressText').innerText = `Đã làm: ${doneCount}/${totalReq} bài`;
             document.getElementById('progressPercent').innerText = `${percent}%`;
             document.getElementById('progressBarFill').style.width = `${percent}%`;
