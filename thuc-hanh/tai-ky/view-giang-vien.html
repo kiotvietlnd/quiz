@@ -185,69 +185,97 @@
         <div class="flex-1 overflow-auto p-6 md:p-8 relative pb-28 custom-scrollbar">
             <div class="max-w-7xl mx-auto w-full">
                 
-                <!-- Loading Spinner -->
-                <div id="loadingSpinner" class="flex flex-col items-center justify-center py-20 hidden">
-                    <div class="w-12 h-12 border-4 border-slate-300 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                    <p class="font-bold text-slate-700 text-sm">Đang tải và phân tích dữ liệu...</p>
-                </div>
-
                 <!-- ========================================== -->
                 <!-- VIEW 1: TRANG DASHBOARD BÁO CÁO TIẾN ĐỘ -->
                 <!-- ========================================== -->
-                <div id="dashboardView" class="flex flex-col lg:flex-row items-start gap-6">
+                <div id="dashboardView" class="flex flex-col lg:flex-row items-start gap-6 relative">
                     
                     <!-- BÊN TRÁI: SCORECARDS & BẢNG XẾP HẠNG -->
                     <div class="flex-1 w-full space-y-6">
                         
-                        <!-- 2 SCORECARD TỔNG QUAN -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                            <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
-                                <div class="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-users"></i></div>
-                                <div>
-                                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Học Viên</p>
-                                    <p class="text-2xl font-black text-slate-800"><span id="kpiTotalStudents">0</span> <span class="text-xs text-slate-400 font-medium">người</span></p>
-                                </div>
+                        <!-- SKELETON LOADER -->
+                        <div id="dashSkeleton" class="space-y-6 animate-pulse hidden">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="h-24 bg-slate-200/80 rounded-3xl"></div>
+                                <div class="h-24 bg-slate-200/80 rounded-3xl"></div>
                             </div>
-
-                            <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
-                                <div class="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-chart-line"></i></div>
-                                <div>
-                                    <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tiến Độ Trung Bình</p>
-                                    <p class="text-2xl font-black text-emerald-600" id="kpiAvgProgress">0%</p>
-                                </div>
-                            </div>
+                            <div class="h-96 bg-slate-200/80 rounded-3xl"></div>
                         </div>
 
-                        <!-- KHUNG BẢNG XẾP HẠNG TIẾN ĐỘ -->
-                        <div class="glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md bg-white w-full">
-                            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
-                                <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
-                                    <i class="fas fa-trophy text-amber-500"></i> BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP
-                                </h3>
-                                <span class="text-xs text-slate-400 font-bold" id="rankingStudentCountText">Hiển thị danh sách học viên</span>
+                        <!-- KẾT QUẢ THỰC -->
+                        <div id="dashRealContent" class="space-y-6">
+                            <!-- 2 SCORECARD TỔNG QUAN -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                                <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
+                                    <div class="h-12 w-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-users"></i></div>
+                                    <div>
+                                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tổng Học Viên</p>
+                                        <p class="text-2xl font-black text-slate-800"><span id="kpiTotalStudents">--</span> <span class="text-xs text-slate-400 font-medium">người</span></p>
+                                    </div>
+                                </div>
+
+                                <div class="glass-panel-ultra p-5 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm bg-white">
+                                    <div class="h-12 w-12 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-xl shrink-0"><i class="fas fa-chart-line"></i></div>
+                                    <div>
+                                        <p class="text-[10px] font-black uppercase text-slate-400 tracking-wider">Tiến Độ Trung Bình</p>
+                                        <p class="text-2xl font-black text-emerald-600" id="kpiAvgProgress">--%</p>
+                                    </div>
+                                </div>
                             </div>
-                            
-                            <div class="space-y-3" id="dashboardRankingList">
-                                <!-- Render đầy đủ toàn bộ học viên -->
+
+                            <!-- KHUNG BẢNG XẾP HẠNG TIẾN ĐỘ -->
+                            <div class="glass-panel-ultra p-6 rounded-3xl border border-slate-200 shadow-md bg-white w-full">
+                                
+                                <!-- HEADER & THANH TÌM KIẾM -->
+                                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 mb-4 border-b border-slate-100">
+                                    <div>
+                                        <h3 class="text-sm font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
+                                            <i class="fas fa-trophy text-amber-500"></i> BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP
+                                        </h3>
+                                        <span class="text-[11px] text-slate-400 font-medium" id="rankingStudentCountText">Đang cập nhật...</span>
+                                    </div>
+
+                                    <div class="flex flex-wrap items-center gap-3">
+                                        <div class="relative min-w-[200px]">
+                                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                            <input type="text" id="dashStudentSearch" oninput="renderDashboardAnalytics()" placeholder="Tìm tên học viên..." class="w-full h-8 pl-8 pr-3 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-inner">
+                                        </div>
+
+                                        <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl">
+                                            <button type="button" onclick="setDashStatusPill('all')" id="pillDashAll" class="px-2.5 py-1 text-[10px] font-extrabold rounded-lg transition-all bg-white text-blue-600 shadow-sm">Tất cả</button>
+                                            <button type="button" onclick="setDashStatusPill('submitted')" id="pillDashSubmitted" class="px-2.5 py-1 text-[10px] font-bold text-slate-500 rounded-lg transition-all hover:bg-slate-200/50">Đã nộp</button>
+                                            <button type="button" onclick="setDashStatusPill('unsubmitted')" id="pillDashUnsubmitted" class="px-2.5 py-1 text-[10px] font-bold text-slate-500 rounded-lg transition-all hover:bg-slate-200/50">Chưa nộp</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="space-y-3" id="dashboardRankingList">
+                                    <!-- Dynamic Ranking Cards -->
+                                </div>
                             </div>
                         </div>
 
                     </div>
 
-                    <!-- BÊN PHẢI: BỘ LỌC BÁO CÁO DASHBOARD (SIDEBAR BÊN PHẢI) -->
-                    <div class="w-full lg:w-80 shrink-0 glass-panel-ultra p-5 rounded-3xl border border-slate-200 shadow-sm bg-white space-y-5 sticky top-0">
-                        <div class="flex items-center gap-2.5 pb-3 border-b border-slate-100">
-                            <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm"><i class="fas fa-sliders-h"></i></span>
-                            <div>
-                                <h2 class="text-xs font-black text-slate-800 uppercase tracking-wider">BỘ LỌC DASHBOARD</h2>
-                                <p class="text-[10px] text-slate-400 font-medium">Tùy chỉnh chọn nhiều tiêu chí</p>
+                    <!-- BÊN PHẢI: BỘ LỌC BÁO CÁO DASHBOARD -->
+                    <div id="dashFilterSidebar" class="w-full lg:w-80 shrink-0 glass-panel-ultra p-5 rounded-3xl border border-slate-200 shadow-sm bg-white space-y-5 sticky top-6 z-20 transition-all">
+                        <div class="flex items-center justify-between pb-3 border-b border-slate-100">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-sm"><i class="fas fa-sliders-h"></i></span>
+                                <div>
+                                    <h2 class="text-xs font-black text-slate-800 uppercase tracking-wider">BỘ LỌC DASHBOARD</h2>
+                                    <p class="text-[10px] text-slate-400 font-medium">Tùy chỉnh tiêu chí</p>
+                                </div>
                             </div>
+                            <button onclick="resetDashFilters()" title="Đặt lại bộ lọc" class="text-[10px] font-extrabold text-blue-600 hover:text-blue-800 bg-blue-50 px-2.5 py-1 rounded-lg border border-blue-100 transition shadow-sm flex items-center gap-1">
+                                <i class="fas fa-undo-alt text-[9px]"></i> Đặt lại
+                            </button>
                         </div>
 
                         <!-- 1. Thời gian -->
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Thời gian</label>
-                            <select id="dashFilterTime" onchange="renderDashboardAnalytics()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl h-10 px-3 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <select id="dashFilterTime" onchange="renderDashboardAnalytics()" class="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-xl h-10 px-3 font-bold focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-inner">
                                 <option value="this_week" selected>Tuần này</option>
                                 <option value="today">Hôm nay</option>
                                 <option value="last_week">Tuần trước</option>
@@ -255,36 +283,49 @@
                             </select>
                         </div>
 
-                        <!-- 2. Ngành hàng (Checkboxes) -->
+                        <!-- 2. Ngành hàng (Checkboxes - Mặc định chọn cả Retail & FNB) -->
                         <div>
                             <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider mb-2">Ngành hàng (Chọn nhiều)</label>
                             <div class="space-y-1.5 bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80">
-                                <label class="flex items-center gap-2 text-xs font-bold text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer">
-                                    <input type="checkbox" id="dashIndRetail" value="Retail" checked onchange="onDashIndustryChange()" class="accent-blue-600 w-4 h-4 rounded cursor-pointer">
+                                <label class="flex items-center gap-2 text-xs font-bold text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer transition">
+                                    <input type="checkbox" id="dashIndRetail" value="Retail" checked onchange="renderDashboardAnalytics()" class="accent-blue-600 w-4 h-4 rounded cursor-pointer">
                                     <span>Retail</span>
                                 </label>
-                                <label class="flex items-center gap-2 text-xs font-bold text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer">
-                                    <input type="checkbox" id="dashIndFNB" value="FNB" checked onchange="onDashIndustryChange()" class="accent-orange-600 w-4 h-4 rounded cursor-pointer">
+                                <label class="flex items-center gap-2 text-xs font-bold text-slate-700 p-1.5 rounded-lg hover:bg-slate-200/50 cursor-pointer transition">
+                                    <input type="checkbox" id="dashIndFNB" value="FNB" checked onchange="renderDashboardAnalytics()" class="accent-orange-600 w-4 h-4 rounded cursor-pointer">
                                     <span>F&B</span>
                                 </label>
                             </div>
                         </div>
 
-                        <!-- 3. Buổi học (Hiển thị HẾT giá trị tùy chọn trực tiếp trong khung cuộn, không dùng Dropdown) -->
+                        <!-- 3. Buổi học (5 LỰA CHỌN: 1A, 1B, 2A, 2B, 3 - DẠNG CHỌN 1, MẶC ĐỊNH LỌC 1A) -->
                         <div>
                             <div class="flex items-center justify-between mb-2">
-                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider">Buổi học (Chọn nhiều)</label>
-                                <span id="dashSessionLabel" class="text-[10px] font-extrabold text-blue-600">Tất cả</span>
+                                <label class="block text-[10px] font-black text-slate-400 uppercase tracking-wider">Buổi học (Chọn 1)</label>
+                                <span id="dashSessionLabel" class="text-[10px] font-extrabold text-blue-600">Đã chọn: 1A</span>
                             </div>
 
-                            <div class="bg-slate-50 p-2.5 rounded-2xl border border-slate-200/80 max-h-80 overflow-y-auto custom-scrollbar space-y-1">
-                                <label class="flex items-center gap-2 p-1.5 hover:bg-blue-100/50 rounded-lg cursor-pointer font-extrabold text-xs text-blue-700 border-b border-slate-200 pb-2 mb-1">
-                                    <input type="checkbox" id="dashSessionSelectAll" checked onchange="toggleAllDashSessions(this)" class="accent-blue-600 w-4 h-4 rounded cursor-pointer">
-                                    <span>Chọn tất cả buổi học</span>
+                            <div class="grid grid-cols-5 gap-1.5 bg-slate-50 p-2 rounded-2xl border border-slate-200/80">
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="dashSessionCode" value="1A" checked onchange="onDashSessionRadioChange()" class="sr-only peer">
+                                    <div class="text-center py-2 text-xs font-black rounded-xl bg-white text-slate-700 border border-slate-200 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 shadow-sm transition-all hover:border-blue-400">1A</div>
                                 </label>
-                                <div id="dashSessionCheckboxContainer" class="space-y-1">
-                                    <!-- Populated dynamically with checkboxes -->
-                                </div>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="dashSessionCode" value="1B" onchange="onDashSessionRadioChange()" class="sr-only peer">
+                                    <div class="text-center py-2 text-xs font-black rounded-xl bg-white text-slate-700 border border-slate-200 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 shadow-sm transition-all hover:border-blue-400">1B</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="dashSessionCode" value="2A" onchange="onDashSessionRadioChange()" class="sr-only peer">
+                                    <div class="text-center py-2 text-xs font-black rounded-xl bg-white text-slate-700 border border-slate-200 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 shadow-sm transition-all hover:border-blue-400">2A</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="dashSessionCode" value="2B" onchange="onDashSessionRadioChange()" class="sr-only peer">
+                                    <div class="text-center py-2 text-xs font-black rounded-xl bg-white text-slate-700 border border-slate-200 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 shadow-sm transition-all hover:border-blue-400">2B</div>
+                                </label>
+                                <label class="cursor-pointer">
+                                    <input type="radio" name="dashSessionCode" value="3" onchange="onDashSessionRadioChange()" class="sr-only peer">
+                                    <div class="text-center py-2 text-xs font-black rounded-xl bg-white text-slate-700 border border-slate-200 peer-checked:bg-blue-600 peer-checked:text-white peer-checked:border-blue-600 shadow-sm transition-all hover:border-blue-400">3</div>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -392,6 +433,7 @@
         let allData = [];
         let CODELAB_DATA = null;
         let currentActiveTab = 'dashboard';
+        let dashStatusFilter = 'all';
 
         document.addEventListener('DOMContentLoaded', fetchPracticeData);
 
@@ -441,8 +483,24 @@
             });
         }
 
+        function setDashboardLoading(isLoading) {
+            const skeleton = document.getElementById('dashSkeleton');
+            const realContent = document.getElementById('dashRealContent');
+            const filterSidebar = document.getElementById('dashFilterSidebar');
+
+            if (isLoading) {
+                if (skeleton) skeleton.classList.remove('hidden');
+                if (realContent) realContent.classList.add('hidden');
+                if (filterSidebar) filterSidebar.classList.add('pointer-events-none', 'opacity-50');
+            } else {
+                if (skeleton) skeleton.classList.add('hidden');
+                if (realContent) realContent.classList.remove('hidden');
+                if (filterSidebar) filterSidebar.classList.remove('pointer-events-none', 'opacity-50');
+            }
+        }
+
         function fetchPracticeData() {
-            document.getElementById('loadingSpinner').classList.remove('hidden');
+            setDashboardLoading(true);
             
             Promise.all([
                 fetch(`${API_URL}?action=getAllPracticeData`).then(r => r.json()),
@@ -454,6 +512,13 @@
                     CODELAB_DATA = exercisesRes.data;
                     initFilters();
                     initDashboardFilters();
+
+                    // CỬA SỔ TẢI DỮ LIỆU THÀNH CÔNG: TỰ ĐỘNG CHẠY HÀM RENDER ĐỂ HIỂN THỊ DỮ LIỆU NGAY LẬP TỨC
+                    if (currentActiveTab === 'dashboard') {
+                        renderDashboardAnalytics();
+                    } else {
+                        renderCards();
+                    }
                 } else {
                     let errorMessages = [];
                     if (practiceRes.status !== 'success') errorMessages.push(`Bài nộp: ${practiceRes.message}`);
@@ -464,7 +529,7 @@
                 console.error("Fetch error: ", e);
                 alert("Lỗi tải dữ liệu: " + e.message);
             })
-            .finally(() => document.getElementById('loadingSpinner').classList.add('hidden'));
+            .finally(() => setDashboardLoading(false));
         }
 
         function parseDate(dateVal) {
@@ -587,7 +652,7 @@
         }
 
         // ==========================================
-        // XỬ LÝ BỘ LỌC MULTI-SELECT SIDEBAR DASHBOARD
+        // XỬ LÝ BỘ LỌC DASHBOARD VỚI BUỔI HỌC DẠNG CHỌN 1 (RADIO: 1A, 1B, 2A, 2B, 3)
         // ==========================================
         function getSelectedDashIndustries() {
             let selected = [];
@@ -596,47 +661,12 @@
             return selected;
         }
 
-        function onDashIndustryChange() {
-            const industries = getSelectedDashIndustries();
-            const container = document.getElementById('dashSessionCheckboxContainer');
-            if (!container) return;
-
-            let html = '';
-            industries.forEach(ind => {
-                let sessions = SESSION_ORDER[ind] || [];
-                sessions.forEach(s => {
-                    let val = `${ind} - ${s}`;
-                    html += `
-                    <label class="flex items-start gap-2 p-1.5 hover:bg-slate-200/50 rounded-lg cursor-pointer text-slate-700 text-xs font-medium">
-                        <input type="checkbox" name="dashSessionItem" value="${val}" checked onchange="onDashSessionCheckboxChange()" class="accent-blue-600 w-4 h-4 rounded cursor-pointer shrink-0 mt-0.5">
-                        <span class="leading-tight" title="[${ind}] ${s}"><b class="text-blue-600">[${ind}]</b> ${s}</span>
-                    </label>`;
-                });
-            });
-
-            container.innerHTML = html || '<p class="text-slate-400 text-[11px] p-2">Vui lòng chọn ít nhất 1 ngành hàng</p>';
-
-            const selectAllCb = document.getElementById('dashSessionSelectAll');
-            if (selectAllCb) selectAllCb.checked = true;
-
-            updateDashSessionLabel();
-            renderDashboardAnalytics();
+        function getSelectedDashSessionCode() {
+            const checked = document.querySelector('input[name="dashSessionCode"]:checked');
+            return checked ? checked.value : '1A';
         }
 
-        function toggleAllDashSessions(masterCb) {
-            const checkboxes = document.querySelectorAll('input[name="dashSessionItem"]');
-            checkboxes.forEach(cb => cb.checked = masterCb.checked);
-            updateDashSessionLabel();
-            renderDashboardAnalytics();
-        }
-
-        function onDashSessionCheckboxChange() {
-            const checkboxes = document.querySelectorAll('input[name="dashSessionItem"]');
-            const checked = document.querySelectorAll('input[name="dashSessionItem"]:checked');
-            const selectAllCb = document.getElementById('dashSessionSelectAll');
-            if (selectAllCb) {
-                selectAllCb.checked = (checkboxes.length > 0 && checkboxes.length === checked.length);
-            }
+        function onDashSessionRadioChange() {
             updateDashSessionLabel();
             renderDashboardAnalytics();
         }
@@ -644,30 +674,62 @@
         function updateDashSessionLabel() {
             const labelEl = document.getElementById('dashSessionLabel');
             if (!labelEl) return;
-
-            const checked = document.querySelectorAll('input[name="dashSessionItem"]:checked');
-            const total = document.querySelectorAll('input[name="dashSessionItem"]');
-
-            if (checked.length === 0) {
-                labelEl.innerText = 'Chưa chọn';
-            } else if (checked.length === total.length && total.length > 0) {
-                labelEl.innerText = 'Tất cả (' + total.length + ')';
-            } else {
-                labelEl.innerText = `${checked.length}/${total.length} buổi`;
-            }
+            const code = getSelectedDashSessionCode();
+            labelEl.innerText = `Đã chọn: ${code}`;
+            labelEl.className = 'text-[10px] font-extrabold text-blue-600';
         }
 
-        function getSelectedDashSessions() {
-            const checked = document.querySelectorAll('input[name="dashSessionItem"]:checked');
-            return Array.from(checked).map(cb => cb.value);
+        function resetDashFilters() {
+            document.getElementById('dashFilterTime').value = 'this_week';
+            if (document.getElementById('dashIndRetail')) document.getElementById('dashIndRetail').checked = true;
+            if (document.getElementById('dashIndFNB')) document.getElementById('dashIndFNB').checked = true;
+            
+            // Đặt lại mặc định radio 1A
+            const radios = document.querySelectorAll('input[name="dashSessionCode"]');
+            radios.forEach(r => {
+                r.checked = (r.value === '1A');
+            });
+
+            const searchInput = document.getElementById('dashStudentSearch');
+            if (searchInput) searchInput.value = '';
+            
+            setDashStatusPill('all');
+            updateDashSessionLabel();
+            renderDashboardAnalytics();
+        }
+
+        function setDashStatusPill(status) {
+            dashStatusFilter = status;
+            ['all', 'submitted', 'unsubmitted'].forEach(s => {
+                const btn = document.getElementById('pillDash' + s.charAt(0).toUpperCase() + s.slice(1));
+                if (btn) {
+                    if (s === status) {
+                        btn.className = "px-2.5 py-1 text-[10px] font-extrabold rounded-lg transition-all bg-white text-blue-600 shadow-sm";
+                    } else {
+                        btn.className = "px-2.5 py-1 text-[10px] font-bold text-slate-500 rounded-lg transition-all hover:bg-slate-200/50";
+                    }
+                }
+            });
+            renderDashboardAnalytics();
         }
 
         function initDashboardFilters() {
-            onDashIndustryChange();
+            updateDashSessionLabel();
         }
 
-        function getRequiredExercisesTitlesForMultipleSessions(studentIndustry, selectedSessions) {
-            if (!CODELAB_DATA || !selectedSessions || selectedSessions.length === 0) return [];
+        function isSessionMatchCode(sessionTitle, code) {
+            const cleanTitle = cleanStr(sessionTitle);
+            const cleanCode = cleanStr(code);
+            if (cleanCode === '1a') return cleanTitle.includes('1a');
+            if (cleanCode === '1b') return cleanTitle.includes('1b');
+            if (cleanCode === '2a') return cleanTitle.includes('2a');
+            if (cleanCode === '2b') return cleanTitle.includes('2b');
+            if (cleanCode === '3') return cleanTitle.includes('buổi 3') || cleanTitle.includes('3.');
+            return false;
+        }
+
+        function getRequiredExercisesTitlesForCodes(studentIndustry, selectedCodes) {
+            if (!CODELAB_DATA || !selectedCodes || selectedCodes.length === 0) return [];
             let titles = [];
 
             let indKeys = CODELAB_DATA[studentIndustry] ? [studentIndustry] : Object.keys(CODELAB_DATA);
@@ -675,12 +737,7 @@
             indKeys.forEach(indKey => {
                 if (!CODELAB_DATA[indKey]) return;
                 CODELAB_DATA[indKey].forEach(s => {
-                    let isMatched = selectedSessions.some(sel => {
-                        let rawName = sel.includes(' - ') ? sel.split(' - ').slice(1).join(' - ') : sel;
-                        let cleanSel = cleanStr(rawName);
-                        let cleanTitle = cleanStr(s.title);
-                        return cleanTitle.includes(cleanSel) || cleanSel.includes(cleanTitle);
-                    });
+                    let isMatched = selectedCodes.some(code => isSessionMatchCode(s.title, code));
 
                     if (isMatched) {
                         s.exercises.forEach(ex => {
@@ -758,8 +815,10 @@
         // ==========================================
         function renderDashboardAnalytics() {
             const selectedIndustries = getSelectedDashIndustries();
-            const selectedSessions = getSelectedDashSessions();
-            const selTime = document.getElementById('dashFilterTime').value;
+            const selectedCode = getSelectedDashSessionCode();
+            const selectedCodes = [selectedCode]; // Mã buổi dạng mảng 1 phần tử
+            const selTime = document.getElementById('dashFilterTime')?.value || 'this_week';
+            const searchQuery = cleanStr(document.getElementById('dashStudentSearch')?.value || '');
 
             // 1. Lọc bài nộp theo Ngành hàng & Thời gian
             let filteredSubmissions = allData;
@@ -770,7 +829,7 @@
             }
             filteredSubmissions = filterDataByTime(filteredSubmissions, selTime);
 
-            // 2. Lấy danh sách học viên active thuộc các ngành đang chọn
+            // 2. Lấy danh sách học viên active
             let studentSource = (selTime === 'all') 
                 ? (selectedIndustries.length === 0 ? [] : allData.filter(e => selectedIndustries.includes(e.khoa))) 
                 : filteredSubmissions;
@@ -785,15 +844,18 @@
                 }
             });
 
-            const studentList = Object.values(allStudentsMap);
+            let studentList = Object.values(allStudentsMap);
+
+            if (searchQuery) {
+                studentList = studentList.filter(st => cleanStr(st.name).includes(searchQuery));
+            }
 
             let submittedCount = 0;
             let totalAvgPercentSum = 0;
             let studentRankingData = [];
 
             studentList.forEach(st => {
-                // Lấy các bài tập bắt buộc thuộc các buổi học được tích chọn
-                let reqExTitlesForSession = getRequiredExercisesTitlesForMultipleSessions(st.industry, selectedSessions);
+                let reqExTitlesForSession = getRequiredExercisesTitlesForCodes(st.industry, selectedCodes);
                 let totalReq = reqExTitlesForSession.length;
 
                 const studentSubmissions = filteredSubmissions.filter(e => cleanStr(e.hoVaTen) === cleanStr(st.name));
@@ -807,8 +869,11 @@
                 const percent = Math.min(100, rawPercent); 
                 totalAvgPercentSum += percent;
 
-                const hasSubmission = studentSubmissions.some(e => reqExTitlesForSession.includes(cleanStr(e.tenBaiHoc)));
-                if (hasSubmission) submittedCount++;
+                const hasSubmitted = studentSubmissions.some(e => reqExTitlesForSession.includes(cleanStr(e.tenBaiHoc)));
+                if (hasSubmitted) submittedCount++;
+
+                if (dashStatusFilter === 'submitted' && !hasSubmitted) return;
+                if (dashStatusFilter === 'unsubmitted' && hasSubmitted) return;
 
                 studentRankingData.push({
                     name: st.name,
@@ -817,7 +882,7 @@
                     percent: percent,
                     done: uniqueDone.length,
                     total: totalReq,
-                    hasSubmitted: hasSubmission
+                    hasSubmitted: hasSubmitted
                 });
             });
 
@@ -833,7 +898,12 @@
             
             let rankingHtml = '';
             if (studentRankingData.length === 0) {
-                rankingHtml = `<div class="text-center py-8 text-slate-400 text-xs font-bold">Không có học viên nào khớp tiêu chí lọc!</div>`;
+                rankingHtml = `
+                <div class="bg-slate-50 border border-slate-200 border-dashed rounded-2xl p-8 text-center my-4 space-y-2">
+                    <i class="fas fa-search-minus text-3xl text-slate-300"></i>
+                    <p class="font-bold text-slate-600 text-xs">Không tìm thấy học viên nào phù hợp với bộ lọc hiện tại!</p>
+                    <p class="text-[11px] text-slate-400">Hãy thử mở rộng mốc thời gian hoặc chuyển mã buổi học ở bộ lọc bên phải.</p>
+                </div>`;
             } else {
                 studentRankingData.forEach((st, idx) => {
                     let badge = `<span class="w-6 h-6 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center font-bold text-xs shrink-0">${idx + 1}</span>`;
@@ -844,6 +914,16 @@
                     let statusDot = st.hasSubmitted 
                         ? `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200"><i class="fas fa-check-circle"></i> Đã nộp</span>`
                         : `<span class="inline-flex items-center gap-1 text-[10px] font-bold text-rose-500 bg-rose-50 px-2.5 py-1 rounded-lg border border-rose-200"><i class="fas fa-minus-circle"></i> Chưa nộp</span>`;
+
+                    let progressColorClass = "bg-blue-600";
+                    let percentTextColorClass = "text-blue-600";
+                    if (st.percent >= 70) {
+                        progressColorClass = "bg-emerald-500";
+                        percentTextColorClass = "text-emerald-600";
+                    } else if (st.percent < 30) {
+                        progressColorClass = "bg-rose-500";
+                        percentTextColorClass = "text-rose-600";
+                    }
 
                     rankingHtml += `
                     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 bg-slate-50 hover:bg-blue-50/50 rounded-2xl border border-slate-100 transition shadow-sm">
@@ -858,10 +938,10 @@
                             <div class="flex-1">
                                 <div class="flex justify-between text-[10px] font-bold text-slate-500 mb-1">
                                     <span>Đã làm: ${st.done}/${st.total} bài</span>
-                                    <span class="${st.percent === 100 ? 'text-emerald-600':'text-blue-600'} font-black">${st.percent}%</span>
+                                    <span class="${percentTextColorClass} font-black">${st.percent}%</span>
                                 </div>
                                 <div class="w-full bg-slate-200 h-2 rounded-full overflow-hidden shadow-inner">
-                                    <div class="${st.percent === 100 ? 'bg-emerald-500':'bg-blue-600'} h-full rounded-full transition-all duration-500" style="width: ${st.percent}%"></div>
+                                    <div class="${progressColorClass} h-full rounded-full transition-all duration-500" style="width: ${st.percent}%"></div>
                                 </div>
                             </div>
                             <div class="shrink-0">
@@ -893,18 +973,15 @@
                 return;
             }
 
-            // 1. Danh sách bài tập cần làm trong buổi học này
             let tree = getRequiredExercisesTree(selInd, selSession);
             let requiredExerciseTitles = [];
             tree.forEach(ss => ss.groups.forEach(gr => gr.exercises.forEach(ex => {
                 if(!requiredExerciseTitles.includes(ex)) requiredExerciseTitles.push(ex);
             })));
 
-            // 2. Bài nộp thực tế của Học viên
             let studentSubmissions = allData.filter(e => cleanStr(e.hoVaTen) === cleanStr(selStudent));
             studentSubmissions = filterDataByTime(studentSubmissions, selTime);
 
-            // 3. Ghép nối bài tập Đã nộp & Chưa nộp
             let cardItems = [];
 
             requiredExerciseTitles.forEach(exTitle => {
@@ -916,14 +993,12 @@
                 }
             });
 
-            // 4. Lọc theo Tình trạng Nộp / Chưa nộp
             if (selSubmissionState === 'submitted') {
                 cardItems = cardItems.filter(item => item.isSubmitted);
             } else if (selSubmissionState === 'unsubmitted') {
                 cardItems = cardItems.filter(item => !item.isSubmitted);
             }
 
-            // 5. Lọc theo Trạng thái Chấm điểm
             if (selStatus !== 'all') {
                 cardItems = cardItems.filter(item => {
                     if (!item.isSubmitted) return false;
@@ -935,10 +1010,8 @@
                 });
             }
 
-            // 6. SẮP XẾP CÁC BÀI TẬP THEO THỨ TỰ ALPHABET (A-Z)
             cardItems.sort((a, b) => a.title.localeCompare(b.title, 'vi', { numeric: true, sensitivity: 'base' }));
 
-            // Cập nhật Tiến độ Cá nhân
             const progressPanel = document.getElementById('studentProgressPanel');
             let totalReq = requiredExerciseTitles.length;
             let doneCount = requiredExerciseTitles.filter(t => studentSubmissions.some(s => cleanStr(s.tenBaiHoc) === cleanStr(t))).length;
@@ -955,7 +1028,6 @@
                 return;
             }
 
-            // Render Cards
             container.innerHTML = cardItems.map((cardObj, idx) => {
                 const exTitle = cardObj.title;
                 const isSubmitted = cardObj.isSubmitted;
