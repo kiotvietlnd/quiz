@@ -1,383 +1,249 @@
 <!DOCTYPE html>
-<html lang="vi" class="scroll-smooth h-full">
+<html lang="vi" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cổng Đào Tạo Sales KiotViet</title>
+    <title>Thực Hành Sản Phẩm Cơ Bản (SPCB)</title>
     <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
     <style>
-        body { font-family: 'Inter', sans-serif; font-size: 14px; -webkit-tap-highlight-color: transparent; background-color: #f8fafc; color: #334155; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
         .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
-        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-        
-        /* Hiệu ứng nền nhẹ nhàng */
-        .bg-pattern { background-image: radial-gradient(#e2e8f0 1px, transparent 1px); background-size: 24px 24px; }
-        
-        /* Card Hover Effects */
-        .course-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .course-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); border-color: #93c5fd; }
-        
-        .tab-btn.active { background-color: #1d4ed8; color: white; border-color: #1d4ed8; box-shadow: 0 4px 6px -1px rgba(29, 78, 216, 0.2); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+        #sidebar { background-color: #1b365d; } 
+        .group-header { padding: 12px 16px; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em; color: #cbd5e1; border-bottom: 1px solid rgba(255, 255, 255, 0.05); background: rgba(0,0,0,0.1); cursor: pointer; transition: all 0.2s;}
+        .step-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 16px; cursor: pointer; border-bottom: 1px solid rgba(255,255,255,0.02); transition: all 0.2s; padding-left: 20px;}
+        .step-inactive { color: #94a3b8; } .step-inactive:hover { background: rgba(255, 255, 255, 0.05); color: #ffffff; }
+        .step-active { background-color: rgba(37, 99, 235, 0.2); color: #60a5fa; font-weight: 700; border-left: 3px solid #3b82f6; padding-left: 17px;}
+        .notification-dot { position: absolute; top: -1px; right: -1px; width: 9px; height: 9px; background-color: #ef4444; border-radius: 50%; border: 2px solid white; }
+        @media print { 
+            html, body { display: block !important; height: auto !important; min-height: auto !important; overflow: visible !important; background: white !important; margin: 0; padding: 0;}
+            body > *:not(#pdf-content) { display: none !important; } 
+            #pdf-content { display: block !important; position: static !important; width: 100% !important; padding: 0 !important; margin: 0 !important; }
+            #pdf-content * { visibility: visible !important; }
+            .print-page-break { page-break-inside: avoid; margin-bottom: 30px; display: block; } 
+            img { max-width: 100% !important; height: auto !important; max-height: 400px; object-fit: contain; } 
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
-<body class="flex flex-col h-screen overflow-hidden bg-slate-50 bg-pattern">
+<body class="flex flex-col h-screen overflow-hidden relative selection:bg-blue-200">
 
-    <!-- TOP NAVBAR -->
-    <header class="h-16 bg-white/80 backdrop-blur-md border-b border-slate-200 shrink-0 sticky top-0 z-40 flex items-center justify-between px-4 md:px-8 shadow-sm">
-        <div class="flex items-center gap-4">
-            <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-6">
-            <div class="h-6 w-px bg-slate-200 hidden lg:block mx-2"></div>
-            <span class="hidden lg:inline text-xs text-slate-500 font-bold uppercase tracking-wider">Hệ thống bài tập thực hành - SPCB</span>
+    <header class="bg-[#166def] border-b border-blue-600 h-16 flex items-center justify-between px-4 md:px-6 z-20 shrink-0 sticky top-0 no-print text-white shadow-sm">
+        <div class="flex items-center gap-3 md:gap-4">
+            <a href="index.html" class="flex items-center gap-1.5 text-white hover:text-white/80 font-bold text-xs border border-white/20 bg-white/10 px-3 py-1.5 rounded-lg hover:bg-white/20 transition">
+                <i class="fas fa-chevron-left text-white"></i><span class="hidden md:inline text-white">Trang Chủ</span>
+            </a>
+            <button onclick="toggleSidebar()" class="md:hidden text-white text-lg"><i class="fas fa-bars text-white"></i></button>
+            <div class="h-6 w-px bg-white/20 hidden md:block mx-1 md:mx-2"></div>
+            <div class="font-bold text-sm md:text-base text-white truncate max-w-[150px] md:max-w-md" id="sessionTitle"><i class="fas fa-spinner fa-spin"></i> Đang tải dữ liệu...</div>
         </div>
-        
-        <div class="flex items-center gap-3">
-            <button id="btnIdentity" onclick="openAuthModal()" class="flex items-center gap-2 text-xs font-bold text-slate-600 bg-slate-100 border border-slate-200 px-4 py-2 rounded-xl hover:bg-slate-200 hover:text-blue-600 transition-all cursor-pointer">
-                <i class="fas fa-user-circle text-slate-400 text-base"></i> Đang kiểm tra...
+        <div class="flex items-center gap-2 md:gap-3 shrink-0">
+            <button onclick="fetchFeedback(true)" class="relative flex items-center gap-2 text-[10px] md:text-xs font-bold text-white bg-white/10 px-2 md:px-3 py-2 rounded-lg transition border border-white/20 hover:bg-white/20">
+                <i class="fas fa-sync-alt text-white"></i>
+                <span id="btnFeedbackText" class="hidden md:inline text-white">Tải Nhận Xét</span>
+                <span id="globalNotificationDot" class="hidden absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span></span>
             </button>
-            <button onclick="toggleSidebar()" class="lg:hidden w-10 h-10 rounded-xl bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-600 transition">
-                <i class="fas fa-info-circle"></i>
-            </button>
+            <div class="flex items-center gap-2 text-[10px] md:text-xs font-bold text-white bg-white/10 border border-white/20 px-2 md:px-3 py-2 rounded-lg">
+                <span id="studentLabel" class="text-white truncate max-w-[80px] md:max-w-none">Chưa định danh</span>
+            </div>
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden relative">
-        
-        <!-- SIDEBAR HƯỚNG DẪN -->
-        <aside id="sidebar" class="w-80 flex flex-col z-30 transition-all duration-300 shrink-0 border-r border-slate-200 bg-white relative overflow-hidden hidden lg:flex shadow-sm">
-            <div class="p-5 border-b border-slate-100 shrink-0 flex items-center justify-between">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center text-sm border border-blue-100"><i class="fas fa-compass"></i></div>
-                    <h2 class="text-xs font-black text-slate-800 uppercase tracking-wider">HƯỚNG DẪN THỰC HÀNH</h2>
-                </div>
-                <button onclick="toggleSidebar()" class="lg:hidden text-slate-400 hover:text-slate-600"><i class="fas fa-times text-lg"></i></button>
+    <div class="flex flex-1 overflow-hidden">
+        <aside id="sidebar" class="w-72 flex flex-col z-[100] transition-all shrink-0 shadow-[4px_0_24px_rgba(0,0,0,0.15)] relative overflow-hidden hidden md:flex no-print h-full">
+            <div class="h-16 flex items-center px-4 border-b border-white/10 justify-between md:hidden bg-[#122543]">
+                <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal-White.svg" class="h-6"><button onclick="toggleSidebar()" class="text-white/50 hover:text-white"><i class="fas fa-times text-xl"></i></button>
             </div>
-
-            <div class="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-5">
-                <div class="flex items-start gap-3">
-                    <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center shrink-0 border border-blue-200">1</div>
-                    <div>
-                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-1">Định danh học viên</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Bấm nút danh tính ở góc trên bên phải để khai báo Họ tên & Phòng ban trước khi làm bài.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-3">
-                    <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center shrink-0 border border-blue-200">2</div>
-                    <div>
-                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-1">Cách làm bài</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Chọn buổi học → Thực hành trên KiotViet → Chụp màn hình → Tải lên và nhấn <strong class="text-blue-600">Nộp bài</strong>.</p>
-                    </div>
-                </div>
-                <div class="flex items-start gap-3">
-                    <div class="w-7 h-7 rounded-full bg-blue-100 text-blue-600 font-black text-xs flex items-center justify-center shrink-0 border border-blue-200">3</div>
-                    <div>
-                        <h4 class="text-xs font-black text-slate-800 uppercase tracking-wider mb-1">Hoàn thành</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-medium">Đạt tiến độ 100% thì bấm nút <strong class="text-emerald-600">"Kết thúc buổi học"</strong> để hệ thống ghi nhận.</p>
-                    </div>
-                </div>
-
-                <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mt-6">
-                    <div class="flex items-center gap-2 text-amber-600 font-black text-[10px] uppercase tracking-wider mb-2">
-                        <i class="fas fa-clock"></i> Hạn Chót Nộp Bài
-                    </div>
-                    <p class="text-xs leading-relaxed font-bold text-slate-700">
-                        Vui lòng hoàn thành bài tập và gửi ảnh Xác Nhận lên Group Zalo trước <strong class="text-red-500">16:00</strong> hàng ngày.
-                    </p>
-                </div>
+            <div class="p-6 border-b border-white/10 bg-[#122543]/50 shrink-0">
+                <div class="flex justify-between items-end mb-2.5"><span class="text-xs font-extrabold text-blue-200 tracking-wider uppercase">TIẾN TRÌNH HỌC TẬP</span><span id="progressPercentTxt" class="text-xl font-black text-white">0%</span></div>
+                <div class="w-full bg-[#1b365d] h-2 rounded-full overflow-hidden shadow-inner mb-3"><div id="sidebarProgressBar" class="bg-emerald-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_10px_rgba(52,211,153,0.8)]"></div></div>
+                <div class="flex justify-between items-center"><span id="progressCountTxt" class="text-[11px] font-medium text-slate-400">Hoàn thành: 0 / 0 bài</span><span id="progressStatusBadge" class="bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded font-bold">Đang học</span></div>
             </div>
-
-            <div class="p-4 border-t border-slate-100 bg-slate-50 shrink-0 text-center">
-                <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">KiotViet L&D Department</span>
+            <div id="sidebarScroll" class="flex-1 overflow-y-auto custom-scrollbar"><div id="stepList" class="flex flex-col"></div></div>
+            <div class="p-4 border-t border-white/10 bg-[#122543]/60 shrink-0 space-y-2">
+                <button onclick="showReviewHistory()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-3 rounded-xl transition text-[11px] md:text-xs flex items-center justify-center gap-2 shadow-sm"><i class="fas fa-file-pdf text-white text-sm"></i><span>Xem & Tải Báo Cáo PDF</span></button>
             </div>
         </aside>
 
-        <!-- MAIN WORKSPACE -->
-        <main class="flex-1 overflow-y-auto custom-scrollbar relative px-4 md:px-8 lg:px-12 py-6 md:py-8">
-            <div class="max-w-6xl mx-auto w-full">
-                
-                <!-- HERO BANNER -->
-                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 rounded-3xl p-6 md:p-10 text-white shadow-lg shadow-blue-900/20 mb-8 relative overflow-hidden">
-                    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-64 h-64 bg-white opacity-10 rounded-full blur-3xl pointer-events-none"></div>
-                    <div class="relative z-10">
-                        <h2 id="heroGreeting" class="text-2xl md:text-4xl font-black tracking-tight mb-2">Chào mừng trở lại!</h2>
-                        <p class="text-blue-100 text-sm font-medium max-w-xl leading-relaxed">Chào mừng bạn quay trở lại với bài tập thực hành Sản phẩm cơ bản.</p>
-                    </div>
-                </div>
-
-                <!-- ROADMAP SELECTOR (PILL TABS) -->
-                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-                    <h3 class="text-sm font-black text-slate-800 uppercase tracking-widest flex items-center gap-2">
-                        <i class="fas fa-layer-group text-blue-500"></i> Lộ trình Đào tạo
-                    </h3>
-                    
-                    <div id="roadmapTabs" class="hidden flex flex-wrap items-center gap-2 bg-slate-200/50 p-1.5 rounded-2xl border border-slate-200">
-                        <!-- Render các nút Tabs ở đây -->
-                    </div>
-                </div>
-
-                <!-- COURSE GRID RENDER AREA -->
-                <div id="courseContainerView" class="min-h-[300px] relative">
-                    <!-- Spinner Loading -->
-                    <div id="loadingSpinner" class="absolute inset-0 flex flex-col items-center justify-center z-10 rounded-xl">
-                        <div class="w-12 h-12 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin mb-4"></div>
-                        <p class="text-sm font-bold text-slate-500">Đang đồng bộ giáo trình...</p>
-                    </div>
-
-                    <div id="courseListRender" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 relative z-20">
-                        <!-- Render Cards -->
-                    </div>
-                </div>
-
+        <main class="flex-1 overflow-y-auto custom-scrollbar relative p-0 sm:p-2 md:p-6 bg-slate-50 flex flex-col no-print">
+            <div id="mainContent" class="w-full max-w-[100%] lg:max-w-[95%] xl:max-w-5xl mx-auto bg-white sm:border-2 border-slate-200 sm:rounded-3xl shadow-sm p-4 sm:p-6 md:p-8 mb-24 relative min-h-full"></div>
+            
+            <div class="fixed bottom-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-200 p-3 md:p-4 flex justify-between items-center md:w-[calc(100%-18rem)] w-full z-20 shadow-[0_-10px_30px_rgba(0,0,0,0.05)]">
+                <button id="btnPrev" onclick="prevStep()" class="flex items-center gap-1.5 md:gap-2 px-3 md:px-5 py-2.5 text-xs md:text-sm text-slate-500 font-bold hover:text-blue-600 transition hover:bg-blue-50 rounded-xl disabled:opacity-40 disabled:hover:bg-transparent"><i class="fas fa-chevron-left"></i> Bài trước</button>
+                <div id="rightNavGroup" class="flex items-center gap-2.5"></div>
             </div>
         </main>
     </div>
+
+    <!-- MODAL NHẮC NHỞ QUAY LẠI LÀM BÀI -->
+    <div id="reminderModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden p-4 no-print transition-all">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-sm w-full relative border-t-4 border-amber-500 animate-fade-in-up flex flex-col text-center">
+            <button onclick="document.getElementById('reminderModal').classList.add('hidden')" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 transition"><i class="fas fa-times"></i></button>
+            <div class="w-16 h-16 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-3xl mx-auto mb-4"><i class="fas fa-hourglass-half animate-pulse"></i></div>
+            <h2 class="text-xl font-black text-slate-800 uppercase tracking-tight mb-2">Chào mừng trở lại!</h2>
+            <p class="text-sm font-medium text-slate-600 mb-6 leading-relaxed">Bạn vẫn còn <strong id="remindLeftCount" class="text-amber-600 font-black text-lg">0</strong> bài tập thực hành chưa hoàn thành trong buổi học này.</p>
+            <button onclick="document.getElementById('reminderModal').classList.add('hidden')" class="w-full bg-amber-500 hover:bg-amber-600 text-white font-black py-3 rounded-xl shadow-md transition-all uppercase text-sm tracking-wider">Tiếp tục làm bài <i class="fas fa-play ml-1"></i></button>
+        </div>
+    </div>
+
+    <!-- MODAL HOÀN THÀNH -->
+    <div id="completionModal" class="fixed inset-0 bg-slate-900/80 backdrop-blur-sm z-[200] flex items-center justify-center hidden p-4 no-print transition-all">
+        <div class="bg-white rounded-[2rem] shadow-2xl p-6 md:p-8 max-w-md w-full relative border border-emerald-200 flex flex-col items-center animate-fade-in-up">
+            <button onclick="closeCompletionModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 transition"><i class="fas fa-times"></i></button>
+            <h2 class="text-xl md:text-2xl font-black text-slate-800 mb-4 md:mb-6 uppercase tracking-tight text-center">HOÀN THÀNH XUẤT SẮC!</h2>
+            <div class="w-20 h-20 md:w-24 md:h-24 bg-gradient-to-tr from-emerald-400 to-teal-400 text-white rounded-full flex items-center justify-center text-4xl md:text-5xl mb-6 shadow-lg ring-8 ring-emerald-50"><i class="fas fa-trophy"></i></div>
+            <p class="text-xs md:text-sm text-slate-500 font-medium text-center mb-8 px-2 md:px-4 leading-relaxed">Xin chúc mừng! Tiến độ của bạn đã đạt 100%. Bạn có thể xem lại toàn bộ bài làm hoặc tải báo cáo PDF để gửi lên nhóm.</p>
+            <div class="w-full flex flex-col gap-3">
+                <button onclick="showReviewHistory()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-black py-3 md:py-3.5 rounded-xl shadow-md transition-all flex items-center justify-center gap-2 text-xs md:text-sm"><i class="fas fa-file-pdf"></i> Xem Toàn bộ bài làm & Xuất PDF</button>
+                <a href="index.html" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 md:py-3.5 rounded-xl transition-all text-center text-xs md:text-sm">Về Trang chủ</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL CẢNH BÁO THIẾU BÀI TẬP -->
+    <div id="missingTaskModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[150] flex items-center justify-center hidden p-4 no-print transition-all">
+        <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-lg w-full relative border-t-4 border-rose-500 animate-fade-in-up flex flex-col max-h-[85vh]">
+            <button onclick="document.getElementById('missingTaskModal').classList.add('hidden')" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-rose-500 flex items-center justify-center transition-colors"><i class="fas fa-times"></i></button>
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-rose-100 text-rose-500 flex items-center justify-center text-xl md:text-2xl shrink-0"><i class="fas fa-clipboard-list"></i></div>
+                <div>
+                    <h2 class="text-base md:text-lg font-black text-slate-800 uppercase tracking-tight">Chưa hoàn thành đủ bài</h2>
+                    <p class="text-[11px] md:text-xs font-medium text-slate-500">Bạn cần hoàn thành các bài dưới đây trước khi Kết thúc:</p>
+                </div>
+            </div>
+            <div id="missingTaskList" class="flex-1 overflow-y-auto custom-scrollbar space-y-2 pr-2 mt-2 border-t border-slate-100 pt-4"></div>
+        </div>
+    </div>
+
+    <!-- MODAL XEM LẠI LỊCH SỬ BÀI LÀM -->
+    <div id="reviewHistoryModal" class="fixed inset-0 bg-slate-100 z-[120] hidden flex-col transition-all">
+        <header class="bg-white border-b border-slate-200 h-14 md:h-16 flex items-center justify-between px-4 md:px-6 shrink-0 shadow-sm no-print">
+            <div class="flex items-center gap-2 md:gap-3"><div class="bg-blue-100 text-blue-600 w-7 h-7 md:w-8 md:h-8 rounded-lg flex items-center justify-center"><i class="fas fa-file-signature text-sm"></i></div><h1 class="text-sm md:text-base font-black text-slate-800">Báo Cáo Tổng Hợp Bài Làm</h1></div>
+            <div class="flex items-center gap-2 md:gap-3"><button onclick="window.print()" class="px-3 py-1.5 md:px-5 md:py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[11px] md:text-xs rounded-lg flex items-center gap-1.5 md:gap-2 shadow-sm transition"><i class="fas fa-print"></i> <span class="hidden sm:inline">In / Lưu PDF</span></button><button onclick="closeReviewHistory()" class="w-7 h-7 md:w-8 md:h-8 bg-slate-100 hover:bg-slate-200 rounded-full text-slate-600 flex items-center justify-center transition"><i class="fas fa-times text-sm"></i></button></div>
+        </header>
+        <div class="flex-1 overflow-y-auto custom-scrollbar p-3 md:p-6 lg:p-8 bg-slate-50 print:bg-white print:p-0"><div class="max-w-4xl mx-auto space-y-6 print:space-y-4" id="reviewHistoryContainer"></div></div>
+    </div>
+
+    <!-- FULLSCREEN ẢNH -->
+    <div id="fullscreenModal" class="fixed inset-0 bg-slate-950/95 z-[250] hidden flex-col justify-between items-center p-4 transition-all no-print">
+        <div class="w-full flex justify-between items-center px-4 md:px-10 h-16 shrink-0"><span id="fullscreenModalCount" class="text-xs font-bold text-slate-400">Ảnh 1 / 1</span><div class="flex items-center gap-3"><button onclick="closeFullscreenModal()" class="w-10 h-10 flex items-center justify-center rounded-xl bg-white/10 hover:bg-red-500/20 text-white hover:text-red-400"><i class="fas fa-times text-lg"></i></button></div></div>
+        <div class="relative flex-1 w-full flex items-center justify-center max-h-[calc(100vh-140px)] select-none"><button id="fullscreenModalPrev" onclick="changeFullscreenImg(-1)" class="absolute left-4 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-left text-base md:text-lg"></i></button><img id="fullscreenModalImg" src="" class="max-w-full max-h-full object-contain rounded-lg shadow-2xl"><button id="fullscreenModalNext" onclick="changeFullscreenImg(1)" class="absolute right-4 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center"><i class="fas fa-chevron-right text-base md:text-lg"></i></button></div>
+    </div>
+
+    <div id="pdf-content" class="absolute -left-[9999px] top-0 bg-white p-10 text-gray-800" style="width: 210mm;"></div>
 
     <!-- MODAL ĐỊNH DANH HỌC VIÊN -->
     <div id="authModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] flex items-center justify-center hidden p-4">
         <div class="bg-white rounded-3xl shadow-2xl p-6 md:p-8 max-w-md w-full relative border border-slate-100 animate-fade-in-up">
             <h2 class="text-xl font-black text-slate-800 mb-1 flex items-center gap-2 uppercase tracking-tight"><i class="fa-solid fa-user-check text-blue-600"></i> Định danh Học viên</h2>
-            <p class="text-xs text-slate-500 font-medium mb-6">Vui lòng nhập đúng thông tin để hệ thống ghi nhận kết quả và cấp chứng nhận thực hành.</p>
+            <p class="text-xs text-slate-500 font-medium mb-6">Vui lòng nhập thông tin để hệ thống ghi nhận kết quả và cấp chứng nhận thực hành.</p>
             <div class="space-y-4">
                 <div>
                     <label class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Họ và tên học viên *</label>
-                    <input type="text" id="inpName" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" placeholder="VD: Nguyễn Văn A">
+                    <input type="text" id="inpName" onkeydown="if(event.key === 'Enter') saveProfile()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" placeholder="VD: Nguyễn Văn A">
                 </div>
                 <div>
                     <label class="block text-[11px] font-black text-slate-400 uppercase tracking-wider mb-1.5">Phòng ban *</label>
-                    <input type="text" id="inpDept" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" placeholder="VD: DSSGN1">
+                    <input type="text" id="inpDept" onkeydown="if(event.key === 'Enter') saveProfile()" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-bold text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white transition" placeholder="VD: Khối Kinh doanh">
                 </div>
                 <button onclick="saveProfile()" class="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-black py-3.5 px-4 rounded-xl shadow-md shadow-blue-500/30 transition-all uppercase tracking-wider flex items-center justify-center gap-2 mt-2">
-                    Vào Hệ Thống <i class="fas fa-arrow-right"></i>
+                    Vào Làm Bài <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT XỬ LÝ DỮ LIỆU -->
     <script>
-        // CẤU HÌNH API
+        // CẤU HÌNH API & DATABASE
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
         const API_URL = "https://script.google.com/macros/s/AKfycbyggXAwORtqnIHDSaoI4zeEo3RA65BFdqCOqMv73VOQcIl4A4x4istq9cxiYo5iHXqFPQ/exec";
+
+        // ⚙️ CẤU HÌNH TÊN KHÓA HỌC (SỬA LẠI Ở ĐÂY MỖI TUẦN)
+        const COURSE_NAME = "26KV20"; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const CURRENT_ROADMAP = urlParams.get('roadmap') || 'Retail';
+        const SESSION_ID = urlParams.get('session') || urlParams.get('buoi') || 'session_1'; 
         
-        let MASTER_DATA = {}; 
+        const STORAGE_KEY = `kv_codelab_progress_${CURRENT_ROADMAP}_${SESSION_ID}`;
+        const DATA_KEY = `kv_codelab_data_${CURRENT_ROADMAP}_${SESSION_ID}`; 
+
+        let CODELAB_DATA = [];
+        let currentStepIndex = 0; let currentExercises = []; let stepDataStore = {}; let pendingFilesStore = {}; 
+        let activeExerciseIndex = null; let groupedSteps = []; let activeSubIndex = 0; 
+        let fullscreenImageList = []; let fullscreenImageIndex = 0;
 
         document.addEventListener('DOMContentLoaded', () => {
-            renderIdentity();
-            if(!localStorage.getItem('kv_trainer_profile')) {
-                openAuthModal();
-            } else {
-                fetchMasterData(); 
-            }
-        });
+            const profileRaw = localStorage.getItem('kv_trainer_profile'); 
+            if(profileRaw) { const profile = JSON.parse(profileRaw); document.getElementById('studentLabel').innerText = `👤 ${profile.name}`; } else { openAuthModal(); }
 
-        // ==========================================
-        // 1. FETCH DATA TỪ SHEET
-        // ==========================================
-        function fetchMasterData() {
-            document.getElementById('loadingSpinner').classList.remove('hidden');
-            
+            document.addEventListener('paste', function(e) {
+                if (activeExerciseIndex === null) return;
+                let items = e.clipboardData.items;
+                for (let i = 0; i < items.length; i++) {
+                    if (items[i].type.indexOf("image") !== -1) {
+                        let file = items[i].getAsFile();
+                        let newFile = new File([file], "Anh_Dan_" + Math.floor(Math.random()*1000) + ".png", {type: file.type});
+                        if (!pendingFilesStore[activeExerciseIndex]) pendingFilesStore[activeExerciseIndex] = [];
+                        pendingFilesStore[activeExerciseIndex].push(newFile);
+                        renderFileTagsForExercise(activeExerciseIndex);
+                    }
+                }
+            });
+
             fetch(MASTER_EXERCISE_URL)
-            .then(r => { if(!r.ok) throw new Error("Network"); return r.text(); })
+            .then(res => { if(!res.ok) throw new Error("Lỗi mạng máy chủ Google"); return res.text(); })
             .then(csv => {
+                if (csv.trim().startsWith("<!DOCTYPE") || csv.trim().startsWith("<html")) {
+                    throw new Error("Lỗi quyền truy cập: Hãy kiểm tra file MasterExercises đã bật 'Bất kỳ ai có liên kết' chưa.");
+                }
+
                 Papa.parse(csv, {
                     header: true, skipEmptyLines: true,
                     complete: function(results) {
-                        processData(results.data);
+                        let builtData = {}; 
+                        let currentGroupName = "";
+                        
+                        results.data.forEach(row => {
+                            let roadmap = (row['NganhHang'] || 'Retail').trim();
+                            let maBuoi = (row['MaBuoi'] || '').trim(); let tenBuoi = (row['TenBuoi'] || '').trim();
+                            let tenBaiTap = (row['TenBaiTap'] || '').trim(); let nhomBaiTap = (row['NhomBaiTap'] || '').trim();
+                            
+                            if(!tenBuoi || !tenBaiTap) return;
+                            if(!builtData[roadmap]) builtData[roadmap] = [];
+
+                            let sessionObj = builtData[roadmap].find(s => s.id === maBuoi || s.title === tenBuoi);
+                            if (!sessionObj) {
+                                sessionObj = { id: maBuoi || 'session_' + (builtData[roadmap].length + 1), title: tenBuoi, exercises: [] };
+                                builtData[roadmap].push(sessionObj); currentGroupName = ""; 
+                            }
+                            if (nhomBaiTap && nhomBaiTap !== currentGroupName) {
+                                sessionObj.exercises.push({ title: nhomBaiTap, isGroupHeader: true }); currentGroupName = nhomBaiTap;
+                            }
+                            let parseArr = (str) => str ? String(str).split('\n').map(s=>s.trim()).filter(s=>s) : [];
+                            sessionObj.exercises.push({
+                                title: tenBaiTap, theory: parseArr(row['LyThuyet']), requirements: parseArr(row['YeuCau']),
+                                instructions: parseArr(row['HuongDan']), hints: parseArr(row['MoTaBuoi']), confirm: (row['XacNhan'] || '').trim(),
+                                originalIndex: sessionObj.exercises.length 
+                            });
+                        });
+                        
+                        // CHỈ LẤY DATA CỦA ĐÚNG NGÀNH HÀNG MÀ HỌC VIÊN CHỌN
+                        CODELAB_DATA = builtData[CURRENT_ROADMAP] || builtData['Retail'] || builtData[Object.keys(builtData)[0]] || [];
+                        parseAndRenderData();
                     }
                 });
-            }).catch(e => {
-                document.getElementById('loadingSpinner').classList.add('hidden');
-                document.getElementById('courseListRender').innerHTML = `<div class="col-span-full p-10 text-center bg-white rounded-3xl border border-rose-200"><p class="text-rose-600 font-bold"><i class="fas fa-exclamation-triangle text-3xl mb-2"></i><br>Lỗi tải giáo trình từ Google Sheet.</p></div>`;
+            }).catch(e => { 
+                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><h2 class='text-rose-600 font-bold text-lg'><i class="fas fa-exclamation-triangle"></i> Lỗi hệ thống</h2><p class="text-sm mt-2">${e.message}</p></div>`; 
             });
-        }
+        });
 
-        function processData(data) {
-            MASTER_DATA = {};
-            data.forEach(row => {
-                let roadmap = (row['NganhHang'] || 'Retail').trim();
-                let maBuoi = (row['MaBuoi'] || '').trim();
-                let tenBuoi = (row['TenBuoi'] || '').trim();
-                let desc = (row['MoTaBuoi'] || '').trim();
-                let tenBaiTap = (row['TenBaiTap'] || '').trim();
-
-                if(!tenBuoi) return;
-                if(!MASTER_DATA[roadmap]) MASTER_DATA[roadmap] = [];
-
-                let session = MASTER_DATA[roadmap].find(s => s.id === maBuoi || s.title === tenBuoi);
-                if(!session) {
-                    session = { id: maBuoi || 'session_'+(MASTER_DATA[roadmap].length+1), title: tenBuoi, desc: desc, totalExercises: 0, exercises: [] };
-                    MASTER_DATA[roadmap].push(session);
-                }
-                if(tenBaiTap) {
-                    session.totalExercises++; session.exercises.push(tenBaiTap); 
-                }
-            });
-
-            const roadmaps = Object.keys(MASTER_DATA);
-            let currentRoadmap = localStorage.getItem('kv_current_industry');
-            
-            if (!currentRoadmap || !roadmaps.includes(currentRoadmap)) {
-                currentRoadmap = roadmaps[0] || 'Retail';
-                localStorage.setItem('kv_current_industry', currentRoadmap);
-            }
-
-            // Render Tabs
-            if (roadmaps.length > 1) {
-                const tabArea = document.getElementById('roadmapTabs');
-                tabArea.innerHTML = roadmaps.map(r => `
-                    <button onclick="changeRoadmap('${r}')" id="tab_${r}" class="tab-btn px-4 py-2 text-xs font-bold text-slate-600 rounded-xl border border-transparent transition-all hover:bg-white hover:border-slate-300 ${r === currentRoadmap ? 'active' : ''}">
-                        ${r.toUpperCase()}
-                    </button>
-                `).join('');
-                tabArea.classList.remove('hidden');
-                tabArea.classList.add('flex');
-            }
-
-            document.getElementById('loadingSpinner').classList.add('hidden');
-            renderCourseCards(currentRoadmap);
-            fetchGlobalNotifications(currentRoadmap);
-        }
-
-        // ==========================================
-        // 2. RENDER GIAO DIỆN
-        // ==========================================
-        function changeRoadmap(industry) {
-            localStorage.setItem('kv_current_industry', industry);
-            // Đổi UI Tab
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.id === `tab_${industry}`) btn.classList.add('active');
-            });
-            renderCourseCards(industry);
-            fetchGlobalNotifications(industry);
-        }
-
-        function renderCourseCards(industry) {
-            const container = document.getElementById('courseListRender');
-            const roadmapData = MASTER_DATA[industry];
-
-            if (!roadmapData || roadmapData.length === 0) {
-                container.innerHTML = `<div class="col-span-full bg-slate-50 border border-slate-200 p-12 text-center rounded-3xl text-slate-500"><i class="fas fa-box-open text-4xl mb-4 text-slate-300"></i><p class="font-bold text-sm">Chưa có dữ liệu bài học nào.</p></div>`;
-                return;
-            }
-
-            // Theme màu sắc hiện đại cho Icon
-            const colors = ['bg-blue-100 text-blue-600', 'bg-emerald-100 text-emerald-600', 'bg-amber-100 text-amber-600', 'bg-purple-100 text-purple-600', 'bg-rose-100 text-rose-600'];
-
-            let html = '';
-            roadmapData.forEach((sess, idx) => {
-                const colorClass = colors[idx % colors.length];
-                const prefix = industry; 
-                const safeSessionId = sess.id;
-                
-                // ĐỒNG BỘ CHÍNH XÁC TÊN BIẾN VỚI SPCB.HTML
-                const DATA_KEY = `kv_codelab_data_${prefix}_${safeSessionId}`;
-
-                // Tính toán % tiến độ
-                const savedData = localStorage.getItem(DATA_KEY);
-                let doneCount = 0;
-                if(savedData) {
-                    const store = JSON.parse(savedData);
-                    for(let key in store) { if(store[key].isSubmitted) doneCount++; }
-                }
-                const progressPercent = sess.totalExercises > 0 ? Math.round((doneCount/sess.totalExercises)*100) : 0;
-                const isDone = (progressPercent >= 100);
-
-                let badgeHtml = isDone ? `<div class="absolute top-4 right-4 bg-emerald-50 text-emerald-600 border border-emerald-200 px-2.5 py-1 rounded-lg text-[10px] font-black flex items-center gap-1.5"><i class="fas fa-check-circle"></i> Hoàn thành</div>` : '';
-
-                let displayTitle = sess.title;
-                let titlePrefix = `${idx+1}`;
-                const match = sess.title.match(/^(Buổi\s*[^:\.]+)[:\.]\s*(.+)$/i);
-                if (match) { displayTitle = match[2].trim(); }
-
-                let descText = sess.desc ? sess.desc.replace(/\n/g, '<br>') : 'Bấm vào đây để xem chi tiết lý thuyết và bắt đầu làm các bài tập thực hành.';
-                const fileLink = `spcb.html?roadmap=${encodeURIComponent(industry)}&session=${encodeURIComponent(sess.id)}`;
-
-                html += `
-                <a href="${fileLink}" class="course-card relative bg-white border border-slate-200 p-6 rounded-2xl flex flex-col h-full group overflow-hidden">
-                    ${badgeHtml}
-                    <div id="notify_${safeSessionId}" class="hidden absolute top-4 right-4 bg-rose-500 text-white border border-rose-600 px-2.5 py-1 rounded-lg text-[10px] font-black flex items-center gap-1.5 animate-pulse z-10"><i class="fas fa-comment-dots"></i> Nhận xét</div>
-                    
-                    <div class="w-12 h-12 rounded-2xl ${colorClass} flex items-center justify-center font-black text-lg mb-5 shadow-sm">
-                        ${titlePrefix}
-                    </div>
-                    
-                    <h4 class="text-base font-black text-slate-800 mb-2 group-hover:text-blue-600 transition-colors leading-snug pr-8">${displayTitle}</h4>
-                    <p class="text-slate-500 text-xs leading-relaxed mb-8 flex-1 font-medium line-clamp-3">${descText}</p>
-                    
-                    <div class="mt-auto">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Tiến độ bài làm</span>
-                            <span class="text-xs font-black ${isDone ? 'text-emerald-600' : 'text-blue-600'}">${progressPercent}%</span>
-                        </div>
-                        <div class="w-full bg-slate-100 rounded-full h-2 mb-4 overflow-hidden shadow-inner">
-                            <div class="${isDone ? 'bg-emerald-500' : 'bg-blue-600'} h-2 rounded-full transition-all duration-1000" style="width: ${progressPercent > 100 ? 100 : progressPercent}%"></div>
-                        </div>
-                        <div class="w-full py-2.5 rounded-xl bg-slate-50 text-slate-600 font-bold text-xs flex items-center justify-center gap-2 group-hover:bg-blue-50 group-hover:text-blue-600 border border-slate-200 transition-colors">
-                            Vào bài học <i class="fas fa-arrow-right"></i>
-                        </div>
-                    </div>
-                </a>`;
-            });
-            container.innerHTML = html;
-        }
-
-        // ==========================================
-        // 3. CÁC HÀM XỬ LÝ KHÁC
-        // ==========================================
-        function fetchGlobalNotifications(industry) {
-            if (!API_URL) return;
-            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile'));
-            if(!profile) return;
-
-            fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}`)
-            .then(r => r.json()).then(res => {
-                if(res.status === 'success' && res.allData && MASTER_DATA[industry]) {
-                    MASTER_DATA[industry].forEach(session => { checkNotification(session, res.allData, industry); });
-                }
-            }).catch(e => console.log("Lỗi tải thông báo"));
-        }
-
-        // FIX LỖI CRASH KHI GỌI TÌM BIẾN safeSessionId
-        function checkNotification(sessionData, allApiData, industry) {
-            const apiSessionData = allApiData[sessionData.title] || {};
-            let hasNew = false;
-            
-            const store = JSON.parse(localStorage.getItem(`kv_codelab_data_${industry}_${sessionData.id}`)) || {};
-            
-            sessionData.exercises.forEach((exTitle, i) => {
-                if(apiSessionData[exTitle]) {
-                    if(!store[i]) store[i] = {};
-                    if(store[i].feedback !== apiSessionData[exTitle]) hasNew = true;
-                }
-            });
-            for(let key in store) { if(store[key].isUnread) hasNew = true; }
-            
-            const notifyEl = document.getElementById(`notify_${sessionData.id}`);
-            if(hasNew && notifyEl) notifyEl.classList.remove('hidden');
-        }
-
-        function renderIdentity() {
-            const btn = document.getElementById('btnIdentity'); 
-            const profileRaw = localStorage.getItem('kv_trainer_profile');
-            if(profileRaw) {
-                const profile = JSON.parse(profileRaw);
-                btn.innerHTML = `<div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center border border-blue-200 shrink-0"><i class="fas fa-user text-[10px]"></i></div> <span class="truncate max-w-[150px]">${profile.name}</span> <span class="text-[10px] text-slate-400 font-normal ml-1 border-l border-slate-300 pl-2">Đổi</span>`;
-                btn.className = "flex items-center gap-2 text-xs font-bold text-slate-700 bg-white border border-slate-200 pr-3 pl-1 py-1 rounded-full hover:bg-slate-50 transition-all cursor-pointer shadow-sm";
-                document.getElementById('heroGreeting').innerText = `Chào mừng, ${profile.name}! 👋`;
-                document.getElementById('inpName').value = profile.name; document.getElementById('inpDept').value = profile.dept;
-            } else {
-                btn.innerHTML = `<i class="fas fa-user-circle text-base"></i> Chưa định danh`;
-                btn.className = "flex items-center gap-2 text-xs font-bold text-rose-600 bg-rose-50 border border-rose-200 px-4 py-2 rounded-xl hover:bg-rose-100 transition-all cursor-pointer animate-pulse";
-            }
-        }
+        const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
 
         function openAuthModal() { document.getElementById('authModal').classList.remove('hidden'); }
         function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); }
@@ -391,14 +257,512 @@
             name = toTitleCase(name); 
             
             localStorage.setItem('kv_trainer_profile', JSON.stringify({ name: name, dept: dept }));
-            closeAuthModal(); renderIdentity(); location.reload();
+            closeAuthModal(); 
+            document.getElementById('studentLabel').innerText = `👤 ${name}`;
+            fetchFeedback(false);
         }
 
-        function toggleSidebar() { 
-            const sidebar = document.getElementById('sidebar'); 
-            sidebar.classList.toggle('hidden'); 
-            if(window.innerWidth < 1024) { sidebar.classList.toggle('fixed'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); sidebar.classList.toggle('z-50'); } 
+        function parseAndRenderData() {
+            if(CODELAB_DATA.length === 0) {
+                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><h2 class='text-rose-600 font-bold text-lg'>Chưa có dữ liệu bài học cho lộ trình này.</h2></div>`; 
+                return;
+            }
+
+            let safeSession = SESSION_ID.toLowerCase().trim();
+            const session = CODELAB_DATA.find(s => s.id.toLowerCase().trim() === safeSession || s.title.toLowerCase().trim() === safeSession); 
+            
+            if(!session) { 
+                document.getElementById('mainContent').innerHTML = `<div class="p-10 text-center"><h2 class='text-rose-600 font-bold text-lg'>Không tìm thấy dữ liệu Buổi học (Mã: ${SESSION_ID})</h2></div>`; 
+                return; 
+            }
+
+            document.getElementById('sessionTitle').innerText = session.title; 
+            currentExercises = session.exercises;
+            
+            const savedState = localStorage.getItem(STORAGE_KEY); if(savedState) currentStepIndex = parseInt(savedState) || 0;
+            const savedData = localStorage.getItem(DATA_KEY); if(savedData) stepDataStore = JSON.parse(savedData);
+
+            groupedSteps = []; let currentGroup = null;
+            currentExercises.forEach((ex, index) => {
+                if (ex.isGroupHeader) {
+                    if (currentGroup) groupedSteps.push(currentGroup);
+                    currentGroup = { title: ex.title, exercises: [], groupHeaderIndex: index };
+                } else {
+                    if (!currentGroup) currentGroup = { title: "Bài tập chính", exercises: [], groupHeaderIndex: 0 };
+                    currentGroup.exercises.push({ ...ex, originalIndex: index });
+                }
+            });
+            if (currentGroup) groupedSteps.push(currentGroup);
+
+            let resolvedGroupIndex = 0;
+            for (let g = 0; g < groupedSteps.length; g++) { if (groupedSteps[g].exercises.some(ex => ex.originalIndex === currentStepIndex)) { resolvedGroupIndex = g; break; } }
+            currentStepIndex = resolvedGroupIndex;
+
+            renderSidebar(); goToStep(currentStepIndex, 0);
+            
+            checkAndShowWelcomeReminder();
+            setTimeout(() => { fetchFeedback(false); }, 1500); 
         }
+
+        function checkAndShowWelcomeReminder() {
+            let totalReal = 0; let done = 0;
+            currentExercises.forEach(ex => { if(!ex.isGroupHeader) { totalReal++; if(stepDataStore[currentExercises.indexOf(ex)]?.isSubmitted) done++; } });
+            const percent = totalReal === 0 ? 0 : Math.round((done / totalReal) * 100);
+            const leftCount = totalReal - done;
+            
+            if (percent > 0 && percent < 100 && !sessionStorage.getItem(`reminded_${SESSION_ID}`)) {
+                document.getElementById('remindLeftCount').innerText = leftCount;
+                document.getElementById('reminderModal').classList.remove('hidden');
+                sessionStorage.setItem(`reminded_${SESSION_ID}`, 'true'); 
+            }
+        }
+
+        function fetchFeedback(isManualClick) {
+            const profileRaw = localStorage.getItem('kv_trainer_profile'); if(!profileRaw) return;
+            const profile = JSON.parse(profileRaw); const sessionName = document.getElementById('sessionTitle').innerText;
+            if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Đang tải...";
+            fetch(`${API_URL}?studentName=${encodeURIComponent(profile.name)}&session=${encodeURIComponent(sessionName)}`)
+            .then(r => r.json()).then(res => {
+                if(res.status === 'success' && res.data) {
+                    let hasNew = false;
+                    for(let i=0; i<currentExercises.length; i++) {
+                        const title = currentExercises[i].title;
+                        if(res.data[title]) {
+                            if(!stepDataStore[i]) stepDataStore[i] = {};
+                            if(stepDataStore[i].feedback !== res.data[title]) { 
+                                stepDataStore[i].feedback = res.data[title]; 
+                                if (!res.data[title].includes("[BỎ QUA]")) {
+                                    stepDataStore[i].isUnread = true; hasNew = true; 
+                                }
+                            }
+                        }
+                    }
+                    if(hasNew) { localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); renderSidebar(); goToStep(currentStepIndex, activeSubIndex); }
+                    if(isManualClick && !hasNew) alert("Chưa có nhận xét mới nào.");
+                }
+            }).finally(() => { if(isManualClick) document.getElementById('btnFeedbackText').innerText = "Tải Nhận Xét"; updateGlobalNotification(); });
+        }
+
+        function updateGlobalNotification() {
+            let hasAnyUnread = false; for(let key in stepDataStore) { if(stepDataStore[key].isUnread) { hasAnyUnread = true; break; } }
+            const dot = document.getElementById('globalNotificationDot'); if(hasAnyUnread) dot.classList.remove('hidden'); else dot.classList.add('hidden');
+        }
+
+        function renderSidebar() {
+            const listUl = document.getElementById('stepList'); listUl.innerHTML = ''; 
+            let totalRealExercises = 0; let completedCount = 0;
+            currentExercises.forEach((ex) => { if (!ex.isGroupHeader) { totalRealExercises++; if (stepDataStore[currentExercises.indexOf(ex)]?.isSubmitted) completedCount++; } });
+
+            groupedSteps.forEach((group, index) => {
+                let groupExCount = group.exercises.length; let groupDoneCount = 0;
+                group.exercises.forEach(ex => { if (stepDataStore[ex.originalIndex]?.isSubmitted) groupDoneCount++; });
+                const isGroupCompleted = (groupDoneCount === groupExCount);
+
+                const li = document.createElement('div'); li.id = `step_item_${index}`; li.className = `step-item ${index === currentStepIndex ? 'step-active' : 'step-inactive'}`; li.onclick = () => goToStep(index, 0);
+                let statusIcon = isGroupCompleted ? `<div class="w-5 h-5 rounded-full bg-emerald-500 text-white flex items-center justify-center text-[9px] font-bold shadow shrink-0"><i class="fas fa-check"></i></div>` : `<div class="w-5 h-5 rounded-full border-2 border-slate-600 text-transparent flex items-center justify-center text-[9px] shrink-0"></div>`;
+                let progressBadge = isGroupCompleted ? `<span class="ml-auto bg-emerald-400 text-emerald-900 text-[10px] px-1.5 py-0.5 rounded font-black flex items-center gap-1 shrink-0 shadow-sm"><i class="fas fa-check text-[9px]"></i> ${groupDoneCount}/${groupExCount}</span>` : `<span class="ml-auto bg-white/10 text-blue-200 border border-white/10 text-[10px] px-1.5 py-0.5 rounded font-black shrink-0">${groupDoneCount}/${groupExCount}</span>`;
+                
+                let hasUnread = group.exercises.some(ex => stepDataStore[ex.originalIndex]?.isUnread);
+                const unreadBadge = hasUnread ? '<span class="notification-dot"></span>' : '';
+                
+                li.innerHTML = `<div class="relative shrink-0 flex items-center">${statusIcon}${unreadBadge}</div><div class="leading-snug text-[12px] flex-1 ml-3 flex items-start justify-between gap-2"><span class="break-words font-medium">${group.title}</span><div class="flex items-center gap-1.5 shrink-0">${progressBadge}</div></div>`;
+                listUl.appendChild(li);
+            });
+
+            const percent = totalRealExercises === 0 ? 0 : Math.round((completedCount / totalRealExercises) * 100);
+            document.getElementById('progressPercentTxt').innerText = `${percent}%`;
+            document.getElementById('sidebarProgressBar').style.width = `${percent}%`;
+            document.getElementById('progressCountTxt').innerText = `Hoàn thành: ${completedCount} / ${totalRealExercises} bài`;
+            
+            const badge = document.getElementById('progressStatusBadge');
+            if (percent === 100) { badge.className = "bg-emerald-400 text-emerald-900 text-[10px] px-2 py-0.5 rounded font-black shadow-[0_0_8px_rgba(52,211,153,0.5)]"; badge.innerText = "Hoàn tất"; } 
+            else { badge.className = "bg-amber-500/20 text-amber-300 border border-amber-500/30 text-[10px] px-2 py-0.5 rounded font-bold"; badge.innerText = "Đang học"; }
+            updateGlobalNotification();
+        }
+
+        function parseLinks(text) { if (!text) return ""; const urlRegex = /(https?:\/\/[^\s<]+)/g; return text.replace(urlRegex, function(url) { return `<a href="${url}" target="_blank" class="text-blue-600 underline hover:text-blue-800 font-bold break-all">${url}</a>`; }); }
+        function getDirectImageUrl(url) { if(!url) return ""; let m = url.match(/\/d\/(.+?)\//); if(!m) m = url.match(/id=(.+?)(&|$)/); return m ? `https://lh3.googleusercontent.com/d/${m[1]}` : url; }
+        
+        function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
+        function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
+        function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); document.getElementById('fullscreenModalCount').innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; img.src = getDirectImageUrl(fullscreenImageList[fullscreenImageIndex]); }
+
+        function switchSubExercise(subIdx) {
+            const group = groupedSteps[currentStepIndex]; if (!group || subIdx < 0 || subIdx >= group.exercises.length) return;
+            activeSubIndex = subIdx;
+            
+            document.querySelectorAll('.sub-exercise-card').forEach((card, idx) => {
+                if (idx === subIdx) { card.classList.remove('hidden'); activeExerciseIndex = group.exercises[idx].originalIndex; } 
+                else card.classList.add('hidden');
+            });
+
+            group.exercises.forEach((ex, idx) => {
+                const btn = document.getElementById(`sub_nav_${idx}`);
+                if (btn) {
+                    let isSubDone = stepDataStore[ex.originalIndex] && stepDataStore[ex.originalIndex].isSubmitted;
+                    if (idx === subIdx) {
+                        btn.className = 'px-3 md:px-4 py-1.5 md:py-2 text-xs font-black rounded-lg transition-all border border-blue-600 bg-blue-600 text-white shadow-sm flex items-center justify-center gap-1 min-w-[36px]';
+                    } else {
+                        let idleClass = isSubDone ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-600 hover:bg-slate-100';
+                        btn.className = `px-3 md:px-4 py-1.5 md:py-2 text-xs font-bold rounded-lg transition-all border ${idleClass} flex items-center justify-center gap-1 min-w-[36px]`;
+                    }
+                }
+            });
+
+            updateBottomNav();
+        }
+        function navigateSubExercise(dir) { switchSubExercise(activeSubIndex + dir); }
+
+        function onDragOver(e, oIdx) { e.preventDefault(); const el = document.getElementById(`dropzone_${oIdx}`); if (el) el.classList.add('border-blue-500', 'bg-blue-50/50'); }
+        function onDragLeave(e, oIdx) { e.preventDefault(); const el = document.getElementById(`dropzone_${oIdx}`); if (el) el.classList.remove('border-blue-500', 'bg-blue-50/50'); }
+        function onDrop(e, oIdx) { e.preventDefault(); const el = document.getElementById(`dropzone_${oIdx}`); if (el) el.classList.remove('border-blue-500', 'bg-blue-50/50'); const files = e.dataTransfer.files; if (files.length === 0) return; if (!pendingFilesStore[oIdx]) pendingFilesStore[oIdx] = []; for (let i = 0; i < files.length; i++) { if (files[i].type.startsWith('image/')) pendingFilesStore[oIdx].push(files[i]); } renderFileTagsForExercise(oIdx); }
+
+        function goToStep(index, targetSub = 0) {
+            saveDraft(); if(index < 0 || index >= groupedSteps.length) return;
+            currentStepIndex = index; const group = groupedSteps[index];
+
+            document.querySelectorAll('.step-item').forEach(li => { li.classList.remove('step-active'); li.classList.add('step-inactive'); });
+            const activeLi = document.getElementById(`step_item_${index}`); if (activeLi) { activeLi.classList.add('step-active'); activeLi.classList.remove('step-inactive'); activeLi.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
+
+            const contentDiv = document.getElementById('mainContent');
+            
+            let navButtonsHtml = group.exercises.map((ex, subIdx) => {
+                let shortName = `${subIdx + 1}`; 
+                let oIdx = ex.originalIndex;
+                let isSubDone = stepDataStore[oIdx] && stepDataStore[oIdx].isSubmitted;
+                let doneIcon = isSubDone ? `<i class="fas fa-check-circle text-emerald-500 ml-1"></i>` : '';
+                let borderClass = isSubDone ? 'border-emerald-300 bg-emerald-50 text-emerald-700' : 'border-slate-200 bg-slate-50 text-slate-600';
+
+                return `<button id="sub_nav_${subIdx}" onclick="switchSubExercise(${subIdx})" class="px-3 py-1.5 text-xs font-bold rounded-lg transition-all border ${borderClass} hover:bg-slate-100 flex items-center justify-center gap-1 min-w-[36px]">${shortName} ${doneIcon}</button>`;
+            }).join('');
+
+            let html = `
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 border-b border-slate-200 pb-4">
+                <h1 class="text-xl md:text-2xl font-black text-slate-800 tracking-tight leading-tight">${group.title}</h1>
+                <div class="flex items-center gap-2 shrink-0 select-none overflow-x-auto custom-scrollbar pb-2 md:pb-0 w-full md:w-auto">
+                    <button onclick="navigateSubExercise(-1)" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 flex items-center justify-center transition shrink-0"><i class="fas fa-chevron-left text-xs"></i></button>
+                    <div class="flex items-center gap-1.5">${navButtonsHtml}</div>
+                    <button onclick="navigateSubExercise(1)" class="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-slate-100 hover:bg-blue-50 hover:text-blue-600 text-slate-600 border border-slate-200 flex items-center justify-center transition shrink-0"><i class="fas fa-chevron-right text-xs"></i></button>
+                </div>
+            </div>`;
+
+            let sliderContentHtml = group.exercises.map((ex, subIdx) => {
+                const oIdx = ex.originalIndex; const myData = stepDataStore[oIdx] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
+                let displayFeedback = (myData.feedback && !myData.feedback.includes("[BỎ QUA]")) ? myData.feedback : null;
+
+                let theoryHtml = '';
+                if(ex.theory && ex.theory.length > 0) {
+                    theoryHtml = `<div class="mb-6 space-y-4">`;
+                    ex.theory.forEach((q, qIndex) => {
+                        let ansVal = (myData.textAnswers || [])[qIndex] || '';
+                        theoryHtml += `<div class="bg-slate-50/50 border border-slate-200 rounded-2xl overflow-hidden"><div class="bg-slate-100/80 p-3.5 border-b border-slate-200"><p class="text-slate-800 font-bold text-xs leading-relaxed"><span class="text-blue-500 mr-1"><i class="fas fa-question-circle"></i></span> ${parseLinks(q)}</p></div><textarea id="inpTextAnswer_${oIdx}_${qIndex}" rows="2" class="w-full p-4 focus:ring-0 outline-none font-medium text-slate-700 text-xs md:text-sm transition-all resize-none bg-white" placeholder="Gõ câu trả lời của bạn vào đây..." oninput="saveDraft()">${ansVal}</textarea></div>`;
+                    }); theoryHtml += `</div>`;
+                }
+
+                // KHẮC PHỤC LỖI TỰ NHÂN ĐÔI SỐ LÝ THUYẾT - Đã bỏ thẻ Ul
+                let reqHtml = ''; 
+                if(ex.requirements && ex.requirements.length > 0) {
+                    reqHtml = `<div class="mb-5"><div class="space-y-2 text-xs md:text-sm text-slate-800 border-l-4 border-emerald-500 bg-emerald-50/80 p-4 rounded-r-2xl leading-relaxed font-semibold shadow-sm">${ex.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
+                }
+
+                let instrHtml = ''; if(ex.instructions && ex.instructions.length > 0) instrHtml = `<div class="mb-6"><button onclick="openInstructionsModal(${oIdx})" class="inline-flex items-center gap-1.5 px-4 py-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 rounded-xl text-xs font-bold transition shadow-sm"><i class="fas fa-lightbulb"></i> Xem hướng dẫn thao tác</button></div>`;
+
+                let uploadAreaHtml = ""; let btnText = "Lưu & Nộp bài này";
+                let validUrls = (myData.uploadedUrls || []).filter(url => url && url.trim() !== '');
+
+                if (myData.isSubmitted && validUrls.length > 0) {
+                    btnText = "Nộp bổ sung";
+                    let imagesHtml = validUrls.map((url, i) => `<div class="relative w-full aspect-video bg-white border border-slate-200 rounded-xl overflow-hidden cursor-zoom-in group shadow-sm flex items-center justify-center" onclick="openFullscreenModal(${JSON.stringify(validUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${getDirectImageUrl(url)}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"><div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><span class="bg-black/60 text-white text-[10px] px-2 py-1 rounded-lg font-bold"><i class="fas fa-search-plus"></i> Xem</span></div></div>`).join('');
+                    uploadAreaHtml = `<div class="space-y-4"><div class="p-4 bg-emerald-50/50 border border-emerald-200 border-dashed rounded-2xl"><p class="text-xs font-black text-emerald-600 flex items-center gap-1.5 mb-3"><i class="fas fa-check-circle"></i> ĐÃ NỘP ẢNH MINH CHỨNG:</p><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">${imagesHtml}</div></div><div class="relative flex items-center gap-3 bg-slate-50 p-3 border border-slate-200 rounded-2xl hover:border-blue-400 transition-colors"><button class="relative px-4 py-2 bg-white border border-slate-300 hover:bg-slate-100 text-slate-700 rounded-xl text-xs font-bold shadow-sm transition"><i class="fas fa-plus mr-1"></i> Nộp bổ sung ảnh<input type="file" multiple accept="image/*" onchange="handleFileSelectForExercise(event, ${oIdx})" class="absolute inset-0 opacity-0 cursor-pointer"></button><p class="text-[10px] text-slate-400 italic hidden md:block">...hoặc ấn <strong class="bg-white border px-1.5 py-0.5 rounded shadow-sm text-slate-500 font-bold">Ctrl + V</strong> để dán.</p></div></div>`;
+                } else {
+                    uploadAreaHtml = `<div class="space-y-3"><div id="dropzone_${oIdx}" ondragover="onDragOver(event, ${oIdx})" ondragleave="onDragLeave(event, ${oIdx})" ondrop="onDrop(event, ${oIdx})" class="relative w-full bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl flex items-center justify-between p-4 md:p-6 transition-all select-none group cursor-pointer"><input type="file" multiple accept="image/*" onchange="handleFileSelectForExercise(event, ${oIdx})" class="absolute inset-0 opacity-0 cursor-pointer z-10"><div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 pointer-events-none"><div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-200 text-blue-600 group-hover:scale-105 transition-transform shrink-0"><i class="fas fa-cloud-upload-alt text-xl"></i></div><div><p class="text-xs md:text-sm font-bold text-slate-700">Kéo thả ảnh vào đây hoặc click chọn tệp</p><p class="text-[10px] md:text-xs text-slate-400 mt-1">Hỗ trợ dán trực tiếp bằng <strong class="bg-white border px-1 py-0.5 rounded text-slate-600 font-bold">Ctrl + V</strong></p></div></div></div><div class="bg-slate-100 border border-slate-200 p-2.5 rounded-xl flex items-center gap-2"><i class="fas fa-info-circle text-slate-400 text-xs"></i><span class="text-[11px] text-slate-500 font-bold">Chưa nộp ảnh minh chứng.</span></div></div>`;
+                }
+
+                return `
+                <div id="sub_exercise_card_${subIdx}" class="sub-exercise-card w-full hidden" onclick="activeExerciseIndex = ${oIdx}">
+                    <div class="flex justify-between items-start gap-4 mb-5">
+                        <h2 class="text-base md:text-lg font-black text-slate-800 leading-snug">${ex.title}</h2>
+                        ${displayFeedback ? `<div class="relative"><button onclick="toggleFeedback(${oIdx})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition"><i class="far fa-comment-dots text-sm"></i><span class="hidden sm:inline">Nhận xét</span>${myData.isUnread ? `<span id="pingDot_${oIdx}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : ''}</button><div id="feedbackBox_${oIdx}" class="hidden absolute top-10 right-0 w-72 md:w-80 bg-white border border-amber-200 shadow-2xl rounded-2xl p-5 z-40 transition origin-top-right"><div class="flex items-center justify-between mb-2.5 pb-2 border-b border-amber-100 font-black text-amber-800 text-xs tracking-wider uppercase"><p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p><button onclick="toggleFeedback(${oIdx})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button></div><p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${displayFeedback}</p></div></div>` : ''}
+                    </div>
+                    ${reqHtml} ${theoryHtml} ${instrHtml}
+                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
+                        ${ex.confirm ? `<div class="bg-indigo-50/50 border border-indigo-100/50 p-3 md:p-4 rounded-xl flex gap-2.5 items-center"><i class="fas fa-camera text-indigo-500 text-sm"></i><p class="text-xs md:text-sm font-bold text-indigo-900 leading-relaxed">${parseLinks(ex.confirm)}</p></div>` : ''}
+                        ${uploadAreaHtml}
+                        <div class="flex items-center justify-end pt-2 mt-4 border-t border-slate-100"><button id="btnSubmitStep_${oIdx}" onclick="uploadToGAS(${oIdx}, '${ex.title.replace(/'/g, "\\'")}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3.5 rounded-xl shadow-md transition font-bold text-xs md:text-sm flex items-center justify-center gap-2 shrink-0"><i class="fas fa-paper-plane"></i><span id="btnSubmitText_${oIdx}">${btnText}</span></button></div>
+                        <div id="fileTags_${oIdx}" class="mt-3 flex flex-wrap gap-1.5 empty:hidden"></div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            contentDiv.innerHTML = `${html} <div class="w-full relative overflow-hidden">${sliderContentHtml}</div>`;
+            
+            activeSubIndex = targetSub; 
+            switchSubExercise(targetSub); 
+            updateBottomNav(); 
+            if(targetSub === 0) document.querySelector('main').scrollTo(0, 0); 
+            localStorage.setItem(STORAGE_KEY, currentStepIndex);
+        }
+
+        function openInstructionsModal(oIdx) {
+            const ex = currentExercises[oIdx]; if (!ex || !ex.instructions) return; closeInstructionsModal();
+            const modal = document.createElement('div'); modal.id = 'instructionsModal'; modal.className = 'fixed inset-0 bg-slate-900/25 backdrop-blur-sm z-[300] flex justify-end items-start p-4 md:p-6 no-print';
+            let listHtml = ex.instructions.map(i => `<p class="py-2 border-b border-slate-100 flex items-start gap-2 text-slate-700 text-xs md:text-sm leading-relaxed font-semibold"><i class="fas fa-chevron-right text-slate-300 mt-1 shrink-0"></i> ${parseLinks(i)}</p>`).join('');
+            modal.innerHTML = `<div class="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-md border-2 border-slate-400 relative mt-16 animate-fade-in-up"><button onclick="closeInstructionsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600 w-8 h-8 flex justify-center items-center rounded-full hover:bg-slate-100 transition"><i class="fas fa-times"></i></button><div class="flex items-center gap-2 mb-4"><div class="bg-amber-100 text-amber-600 w-8 h-8 rounded-xl flex items-center justify-center text-sm"><i class="fas fa-lightbulb"></i></div><h3 class="text-base font-black text-slate-800 uppercase tracking-tight">Hướng dẫn thao tác</h3></div><div class="max-h-96 overflow-y-auto custom-scrollbar pr-2 space-y-1">${listHtml}</div><button onclick="closeInstructionsModal()" class="w-full mt-6 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 rounded-xl transition text-xs">Đã hiểu</button></div>`;
+            document.body.appendChild(modal);
+        }
+        function closeInstructionsModal() { const modal = document.getElementById('instructionsModal'); if (modal) modal.remove(); }
+        function toggleFeedback(index) { const box = document.getElementById(`feedbackBox_${index}`); if(box.classList.contains('hidden')) { box.classList.remove('hidden'); if(stepDataStore[index] && stepDataStore[index].isUnread) { stepDataStore[index].isUnread = false; localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); const pingDot = document.getElementById(`pingDot_${index}`); if(pingDot) pingDot.remove(); renderSidebar(); } } else { box.classList.add('hidden'); } }
+
+        function handleFileSelectForExercise(event, oIdx) { const files = event.target.files; if(files.length === 0) return; if (!pendingFilesStore[oIdx]) pendingFilesStore[oIdx] = []; for(let i=0; i<files.length; i++) { pendingFilesStore[oIdx].push(files[i]); } renderFileTagsForExercise(oIdx); event.target.value = ''; }
+        
+        function renderFileTagsForExercise(oIdx) {
+            const tagContainer = document.getElementById(`fileTags_${oIdx}`); if(!tagContainer) return; const files = pendingFilesStore[oIdx] || []; if (files.length === 0) { tagContainer.innerHTML = ''; return; }
+            let html = '<div class="w-full mt-4 p-4 bg-blue-50/50 border border-blue-200 border-dashed rounded-2xl"><p class="text-xs font-bold text-blue-700 mb-3 flex items-center gap-1.5"><i class="fas fa-cloud-upload-alt"></i> Ảnh đang chờ nộp:</p><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">';
+            for(let i=0; i<files.length; i++) { 
+                const objectUrl = URL.createObjectURL(files[i]); let fileName = files[i].name; 
+                html += `<div class="relative bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm aspect-video flex flex-col group"><div class="flex-1 w-full bg-slate-100 relative"><img src="${objectUrl}" class="w-full h-full object-cover absolute inset-0"></div><div class="p-2 flex items-center justify-between text-[10px] font-medium text-slate-600 bg-white"><span class="truncate pr-1">${fileName}</span><button onclick="removeFileForExercise(${oIdx}, ${i})" class="text-red-500 hover:text-red-700 bg-red-50 w-6 h-6 rounded-md flex items-center justify-center shrink-0"><i class="fas fa-trash-alt"></i></button></div></div>`; 
+            }
+            html += '</div></div>'; tagContainer.innerHTML = html;
+        }
+        function removeFileForExercise(oIdx, fileIndex) { if (pendingFilesStore[oIdx]) { pendingFilesStore[oIdx].splice(fileIndex, 1); renderFileTagsForExercise(oIdx); } }
+
+        function saveDraft() {
+            if (!groupedSteps || !groupedSteps[currentStepIndex]) return;
+            groupedSteps[currentStepIndex].exercises.forEach(ex => {
+                const oIdx = ex.originalIndex; if(!stepDataStore[oIdx]) stepDataStore[oIdx] = { textAnswers: [], uploadedUrls: [], isSubmitted: false, feedback: "" };
+                if(ex.theory && ex.theory.length > 0) {
+                    let ansArr = []; for(let qIndex = 0; qIndex < ex.theory.length; qIndex++) { const textEl = document.getElementById(`inpTextAnswer_${oIdx}_${qIndex}`); if(textEl) ansArr.push(textEl.value); else ansArr.push(""); }
+                    stepDataStore[oIdx].textAnswers = ansArr;
+                }
+            });
+            localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore));
+        }
+
+        // TĂNG ĐỘ PHÂN GIẢI LÊN FULL HD, TỶ LỆ 0.95 CHO ẢNH NÉT RÕ MÀ DUNG LƯỢNG VẪN NHẸ
+        function compressImage(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader(); reader.readAsDataURL(file);
+                reader.onload = event => {
+                    const img = new Image(); img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas'); const MAX_WIDTH = 1920; 
+                        let width = img.width; let height = img.height;
+                        if (width > MAX_WIDTH) { height = Math.round((height * MAX_WIDTH) / width); width = MAX_WIDTH; }
+                        canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.95).split(',')[1];
+                        resolve({ mimeType: 'image/jpeg', base64Data: compressedBase64 });
+                    };
+                }; reader.onerror = error => reject(error);
+            });
+        }
+
+        // UPLOAD VÀ TỰ ĐỘNG CHUYỂN BÀI MƯỢT MÀ
+        function uploadToGAS(oIdx, exerciseTitle) {
+            saveDraft(); const currentData = stepDataStore[oIdx] || { textAnswers: [], uploadedUrls: [], isSubmitted: false };
+            const exerciseFiles = pendingFilesStore[oIdx] || [];
+            if (exerciseFiles.length === 0 && (!currentData.uploadedUrls || currentData.uploadedUrls.length === 0)) { alert("❌ LỖI: Bắt buộc phải đính kèm ảnh chụp màn hình để nộp bài!"); return; }
+            
+            const profileRaw = localStorage.getItem('kv_trainer_profile'); if (!profileRaw) { window.location.href = 'index.html'; return; }
+            const profile = JSON.parse(profileRaw);
+
+            const btnEl = document.getElementById(`btnSubmitStep_${oIdx}`); const txtEl = document.getElementById(`btnSubmitText_${oIdx}`); const oldText = txtEl.innerText;
+            btnEl.classList.replace('bg-blue-600', 'bg-slate-400'); btnEl.classList.add('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Đang tải lên...`; btnEl.disabled = true;
+
+            let promises = []; for(let i = 0; i < exerciseFiles.length; i++) { promises.push(compressImage(exerciseFiles[i])); }
+
+            let nextSub = activeSubIndex + 1;
+            let totalSubsInGroup = groupedSteps[currentStepIndex].exercises.length;
+            if(nextSub >= totalSubsInGroup) nextSub = activeSubIndex; 
+
+            Promise.all(promises).then(imagesData => {
+                const payload = { studentName: profile.name, department: profile.dept, courseName: COURSE_NAME, session: document.getElementById('sessionTitle').innerText, exerciseTitle: exerciseTitle, textAnswers: currentData.textAnswers || [], images: imagesData };
+                return fetch(API_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(payload) });
+            })
+            .then(r => r.json())
+            .then(data => {
+                if(data.status === 'success') {
+                    currentData.isSubmitted = true; if(data.urls) currentData.uploadedUrls = [...new Set([...(currentData.uploadedUrls || []), ...data.urls])];
+                    stepDataStore[oIdx] = currentData; localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore)); pendingFilesStore[oIdx] = []; 
+                    
+                    goToStep(currentStepIndex, nextSub); 
+                    renderSidebar(); 
+                } else alert("Lỗi server: " + data.message);
+            }).catch(err => { 
+                console.error(err);
+                if (window.self !== window.top) {
+                    currentData.isSubmitted = true;
+                    stepDataStore[oIdx] = currentData;
+                    localStorage.setItem(DATA_KEY, JSON.stringify(stepDataStore));
+                    pendingFilesStore[oIdx] = []; 
+                    
+                    goToStep(currentStepIndex, nextSub); 
+                    renderSidebar();
+                } else {
+                    alert("Lỗi mạng! Thử lại sau."); 
+                }
+            }).finally(() => { 
+                if(document.getElementById(`btnSubmitStep_${oIdx}`)) { 
+                    btnEl.classList.replace('bg-slate-400', 'bg-blue-600'); btnEl.classList.remove('cursor-not-allowed', 'animate-pulse'); txtEl.innerHTML = oldText; btnEl.disabled = false; 
+                }
+            });
+        }
+
+        // TỐI ƯU HÓA THANH ĐIỀU HƯỚNG BÊN DƯỚI ĐÁY 
+        function updateBottomNav() {
+            let isFirstGroup = (currentStepIndex === 0);
+            let isFirstSubInGroup = (activeSubIndex === 0);
+            document.getElementById('btnPrev').disabled = (isFirstGroup && isFirstSubInGroup);
+            
+            let isLastGroup = (currentStepIndex === groupedSteps.length - 1);
+            let isLastSubInGroup = (activeSubIndex === groupedSteps[currentStepIndex].exercises.length - 1);
+            let isAbsolutelyLastStep = isLastGroup && isLastSubInGroup;
+            
+            const rightNavGroup = document.getElementById('rightNavGroup');
+            if(isAbsolutelyLastStep) { 
+                rightNavGroup.innerHTML = `<button onclick="nextStep()" class="flex items-center gap-2 px-6 py-3 text-white bg-emerald-600 hover:bg-emerald-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">Kết thúc buổi học <i class="fas fa-flag-checkered ml-1"></i></button>`;
+            } else {
+                rightNavGroup.innerHTML = `<button onclick="nextStep()" class="flex items-center gap-2 px-8 py-3 text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md transition font-black text-xs uppercase tracking-wider">Bài học sau <i class="fas fa-arrow-right ml-1"></i></button>`;
+            }
+        }
+
+        function nextStep() {
+            saveDraft();
+            let totalRealExercises = 0; let completedCount = 0;
+            let missingTasks = []; 
+
+            groupedSteps.forEach((group, gIdx) => {
+                group.exercises.forEach((ex, subIdx) => {
+                    totalRealExercises++;
+                    const oIdx = ex.originalIndex;
+                    if (stepDataStore[oIdx] && stepDataStore[oIdx].isSubmitted) {
+                        completedCount++;
+                    } else {
+                        missingTasks.push({ groupTitle: group.title, exTitle: ex.title, gIdx: gIdx, subIdx: subIdx });
+                    }
+                });
+            });
+
+            const percent = totalRealExercises === 0 ? 0 : Math.round((completedCount / totalRealExercises) * 100);
+            let isLastGroup = (currentStepIndex === groupedSteps.length - 1);
+            let isLastSubInGroup = (activeSubIndex === groupedSteps[currentStepIndex].exercises.length - 1);
+            let isAbsolutelyLastStep = isLastGroup && isLastSubInGroup;
+
+            if(isAbsolutelyLastStep) {
+                if (percent < 100) {
+                    const listContainer = document.getElementById('missingTaskList');
+                    listContainer.innerHTML = missingTasks.map(task => `
+                        <div class="flex items-center justify-between bg-slate-50 p-3 rounded-xl border border-slate-200">
+                            <div>
+                                <p class="text-[10px] text-slate-400 font-bold uppercase">${task.groupTitle}</p>
+                                <p class="text-xs font-black text-slate-700">${task.exTitle}</p>
+                            </div>
+                            <button onclick="jumpToMissingTask(${task.gIdx}, ${task.subIdx})" class="px-3 py-1.5 bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-lg text-xs font-bold transition flex items-center gap-1.5 shrink-0">Làm bù <i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    `).join('');
+                    document.getElementById('missingTaskModal').classList.remove('hidden');
+                } else {
+                    showCompletionModal();
+                }
+            } else {
+                if (!isLastSubInGroup) {
+                    goToStep(currentStepIndex, activeSubIndex + 1);
+                } else {
+                    goToStep(currentStepIndex + 1, 0);
+                }
+            }
+        }
+
+        function prevStep() { 
+            saveDraft(); 
+            if (activeSubIndex > 0) {
+                goToStep(currentStepIndex, activeSubIndex - 1);
+            } else if (currentStepIndex > 0) {
+                let prevGroupExCount = groupedSteps[currentStepIndex - 1].exercises.length;
+                goToStep(currentStepIndex - 1, prevGroupExCount - 1);
+            }
+        }
+
+        function jumpToMissingTask(gIdx, subIdx) {
+            document.getElementById('missingTaskModal').classList.add('hidden');
+            goToStep(gIdx, subIdx);
+        }
+
+        function toggleSidebar() { const sidebar = document.getElementById('sidebar'); sidebar.classList.toggle('hidden'); if(window.innerWidth < 768) { sidebar.classList.toggle('absolute'); sidebar.classList.toggle('inset-y-0'); sidebar.classList.toggle('left-0'); sidebar.classList.toggle('z-[100]'); } }
+
+        function showCompletionModal() {
+            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}');
+            document.getElementById('certName').innerText = profile.name || "N/A"; document.getElementById('certDept').innerText = profile.dept || "N/A"; document.getElementById('certSession').innerText = document.getElementById('sessionTitle').innerText;
+            const now = new Date(); document.getElementById('certTime').innerText = `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')} ngày ${String(now.getDate()).padStart(2,'0')}/${String(now.getMonth()+1).padStart(2,'0')}/${now.getFullYear()}`;
+            
+            document.getElementById('completionModal').classList.remove('hidden');
+            document.getElementById('completionModal').classList.add('flex');
+            
+            // KÍCH HOẠT BẮN PHÁO BÔNG BẰNG THƯ VIỆN ĐÃ CHÈN
+            try {
+                var duration = 3 * 1000; var animationEnd = Date.now() + duration; var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 999999 };
+                function randomInRange(min, max) { return Math.random() * (max - min) + min; }
+                var interval = setInterval(function() {
+                    var timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) { return clearInterval(interval); }
+                    var particleCount = 50 * (timeLeft / duration);
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+                    confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+                }, 250);
+            } catch(e) { console.warn("Lỗi pháo bông", e); }
+        }
+        function closeCompletionModal() { document.getElementById('completionModal').classList.add('hidden'); document.getElementById('completionModal').classList.remove('flex');}
+
+        function showReviewHistory() {
+            document.getElementById('completionModal').classList.add('hidden');
+            document.getElementById('completionModal').classList.remove('flex');
+            const container = document.getElementById('reviewHistoryContainer'); let html = '';
+            const profile = JSON.parse(localStorage.getItem('kv_trainer_profile') || '{}'); const sessionName = document.getElementById('sessionTitle').innerText;
+            let totalReal = 0; let doneCount = 0; currentExercises.forEach((ex, i) => { if (!ex.isGroupHeader) { totalReal++; if (stepDataStore[i]?.isSubmitted) doneCount++; } });
+            const totalPercent = totalReal === 0 ? 0 : Math.round((doneCount / totalReal) * 100);
+
+            html += `<div class="bg-gradient-to-r from-blue-900 to-indigo-900 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-md print:bg-white print:text-slate-800 print:border-2 print:border-slate-300 print:shadow-none"><div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-white/20 print:border-slate-300 pb-4 mb-4 gap-4"><div><h1 class="text-xl md:text-2xl font-black uppercase tracking-wide text-amber-300 print:text-blue-900">BÁO CÁO BÀI TẬP THỰC HÀNH SPCB</h1><p class="text-xs text-blue-200 print:text-slate-500 font-medium mt-1">Trung tâm Đào tạo & Kiểm tra KiotViet</p></div><div class="bg-white/10 print:bg-slate-100 px-4 py-2 rounded-2xl border border-white/10 print:border-slate-200 text-right shrink-0"><span class="text-[10px] font-black uppercase text-blue-200 print:text-slate-400 block">Tiến độ chung</span><span class="text-lg font-black ${totalPercent === 100 ? 'text-emerald-400 print:text-emerald-600' : 'text-amber-400 print:text-amber-600'}">${doneCount} / ${totalReal} bài (${totalPercent}%)</span></div></div><div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs"><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-user mr-1"></i> Họ và tên:</span><span class="font-bold text-sm text-white print:text-slate-800">${profile.name || "Chưa định danh"}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-building mr-1"></i> Lớp / Phòng ban:</span><span class="font-bold text-sm text-white print:text-slate-800">${profile.dept || "N/A"}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-graduation-cap mr-1"></i> Khóa học:</span><span class="font-bold text-sm text-amber-300 print:text-blue-700">${COURSE_NAME}</span></div><div class="bg-white/10 print:bg-slate-50 p-3 rounded-xl border border-white/10 print:border-slate-200"><span class="text-[10px] uppercase font-bold text-blue-300 print:text-slate-400 block mb-0.5"><i class="fas fa-book mr-1"></i> Buổi học:</span><span class="font-bold text-sm text-white print:text-slate-800 break-words block">${sessionName}</span></div></div></div>`;
+
+            for(let i=0; i<currentExercises.length; i++) {
+                const ex = currentExercises[i]; if(ex.isGroupHeader) { html += `<h2 class="text-base font-black text-slate-600 border-b-2 border-slate-300 pb-2 mt-8 mb-4 uppercase tracking-widest print-break-inside-avoid print:mt-6">${ex.title}</h2>`; continue; }
+                const data = stepDataStore[i] || {}; const isSubmitted = data.isSubmitted || false;
+                let statusBadge = isSubmitted ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>` : `<span class="bg-rose-100 text-rose-800 border border-rose-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-times-circle text-rose-600"></i> Chưa hoàn thành</span>`;
+                
+                // IN PDF: LOẠI BỎ THẺ UL
+                let reqHtml = ''; if (ex.requirements && ex.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-emerald-200/80 print:border-slate-300"><p class="text-[11px] font-black text-emerald-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-emerald-600 print:text-slate-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-800 font-semibold leading-relaxed border-l-4 border-emerald-500 bg-emerald-100/50 p-4 rounded-r-xl">${ex.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
+                
+                let theoryHtml = ''; if (ex.theory && ex.theory.length > 0) {
+                    theoryHtml = `<div class="bg-slate-50 p-4 md:p-5 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`;
+                    ex.theory.forEach((q, idx) => {
+                        let ans = (data.textAnswers && data.textAnswers[idx]) ? String(data.textAnswers[idx]).trim() : ''; 
+                        let ansDisplay = ans !== '' ? `<span class="text-slate-800 font-semibold">${parseLinks(ans)}</span>` : `<span class="text-rose-500 font-bold italic">(Chưa trả lời)</span>`;
+                        theoryHtml += `<div class="bg-white p-3.5 rounded-xl border border-slate-200"><p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500 mr-1"></i> ${parseLinks(q)}</p><p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100"><b>Đáp án:</b> ${ansDisplay}</p></div>`;
+                    }); theoryHtml += `</div>`;
+                }
+                
+                let imgHtml = ''; if(data.uploadedUrls && data.uploadedUrls.length > 0) {
+                    imgHtml = `<div class="mb-4 bg-slate-50 p-4 md:p-5 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${data.uploadedUrls.length}):</p><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">`;
+                    data.uploadedUrls.forEach((url, idx) => { imgHtml += `<div class="relative w-full aspect-square bg-slate-100 border border-slate-200 rounded-xl overflow-hidden shadow-sm group cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(data.uploadedUrls).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImageUrl(url)}" class="w-full h-full object-cover"></div>`; }); imgHtml += `</div></div>`;
+                } else imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 text-slate-500 text-xs font-bold"><i class="fas fa-info-circle mr-1.5"></i>Chưa nộp ảnh minh chứng cho bài tập này.</div>`;
+
+                let displayFeedback = (data.feedback && !data.feedback.includes("[BỎ QUA]")) ? data.feedback : null;
+                let fbHtml = displayFeedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap leading-relaxed">${displayFeedback}</p></div>` : ``;
+                
+                html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid print:shadow-none print:border-slate-300 print:mb-4"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${ex.title}</h3>${statusBadge}</div>${reqHtml}${theoryHtml}${imgHtml}${fbHtml}</div>`;
+            }
+
+            container.innerHTML = html; 
+            
+            // XÓA PHẦN BỊ ẨN KHI IN ĐỂ TRÁNH LỖI PDF
+            if (document.getElementById('pdf-content')) {
+                document.getElementById('pdf-content').innerHTML = html;
+            }
+
+            document.getElementById('reviewHistoryModal').classList.remove('hidden'); 
+            document.getElementById('reviewHistoryModal').classList.add('flex');
+        }
+
+        function closeReviewHistory() { document.getElementById('reviewHistoryModal').classList.add('hidden'); document.getElementById('reviewHistoryModal').classList.remove('flex'); }
     </script>
 </body>
 </html>
