@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luyện thi Trắc nghiệm - Đào tạo Sản phẩm cơ bản - Buổi 2B (Tái ký FNB)</title>
+    <title>Luyện thi Trắc nghiệm - Đào tạo Sản phẩm cơ bản - Buổi 2A (Tái ký FNB)</title>
     
     <!-- Tailwind CSS Configuration -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -72,7 +72,7 @@
                 </a>
                 
                 <div class="hidden md:block border-l border-white/20 pl-3">
-                    <h1 class="text-xs sm:text-sm font-bold tracking-tight text-white uppercase">Luyện thi Trắc nghiệm - Đào tạo Sản phẩm cơ bản - Buổi 2B (Tái ký FNB)</h1>
+                    <h1 class="text-xs sm:text-sm font-bold tracking-tight text-white uppercase">Luyện thi Trắc nghiệm - Đào tạo Sản phẩm cơ bản - Buổi 2A (Tái ký FNB)</h1>
                     <p class="text-[10px] text-blue-100 font-bold uppercase">Chuyên trang Ôn tập dành cho Chuyên viên tư vấn KiotViet</p>
                 </div>
             </div>
@@ -121,7 +121,7 @@
                             <button onclick="resumeQuiz()" class="bg-amber-500 hover:bg-amber-600 text-white font-extrabold py-2.5 px-5 rounded-full text-xs shadow-md transition-all shrink-0">Làm tiếp bài cũ <i class="fa-solid fa-forward"></i></button>
                         </div>
                         <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-kvBlue/10 text-kvBlue text-xs font-bold rounded-full mb-5 uppercase tracking-wider"><i class="fa-solid fa-ranking-star"></i> CHUYÊN TRANG ÔN TẬP TRẮC NGHIỆM</span>
-                        <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 mb-5 leading-snug">Chào mừng bạn đến với chuyên trang Luyện thi của Khóa học Đào tạo Sản phẩm cơ bản - Buổi 2B (Tái ký FNB)</h2>
+                        <h2 class="text-2xl md:text-3xl font-black tracking-tight text-slate-900 mb-5 leading-snug">Chào mừng bạn đến với chuyên trang Luyện thi của Khóa học Đào tạo Sản phẩm cơ bản - Buổi 2A (Tái ký FNB)</h2>
                         
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
                             <p>Sau khi hoàn thành tất cả bài ôn tập trắc nghiệm trong từng bài học của khóa học, bạn có thể tải <strong>chứng chỉ hoàn thành ôn tập trắc nghiệm khóa học</strong>. Chứng chỉ này ghi nhận đã hoàn thành đầy đủ các bài tập trắc nghiệm trong khóa học, <span class="text-rose-600 font-bold">chưa phải là chứng nhận hoàn thành xong khóa học</span>.</p>
@@ -339,7 +339,7 @@
             <p class="text-[11px] text-slate-500 mt-3 text-center">💡 <span class="font-bold">Mẹo nhỏ:</span> Bạn có thể nhấp nút "Tải xuống chứng chỉ" dưới đây để lưu về máy xem chi tiết!</p>
             <div class="w-full flex gap-3 mt-6">
                 <button onclick="toggleCertificatePreviewModal(false)" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-3 px-4 rounded-xl text-xs text-center focus:outline-none">Đóng cửa sổ</button>
-                <a id="download-certificate-link" href="#" download="Chung_Chi_Tai_Ky_FNB_2B.png" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-2">Tải xuống chứng chỉ <i class="fa-solid fa-download"></i></a>
+                <a id="download-certificate-link" href="#" download="Chung_Chi_Tai_Ky_FNB_2A.png" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white font-extrabold py-3 px-4 rounded-xl text-xs shadow-md flex items-center justify-center gap-2">Tải xuống chứng chỉ <i class="fa-solid fa-download"></i></a>
             </div>
         </div>
     </div>
@@ -347,7 +347,7 @@
     <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
         const spreadsheetId = '1AW-Gxzp_z2-_9nEEfpqy-4T9SHFxFThI3oaIVe7-ARM';
-        const sheetName = 'FNB TK2B'; 
+        const sheetName = 'FNB TK2A'; 
         const dataUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
         const certDatabaseAppUrl = 'https://script.google.com/macros/s/AKfycbzMHULnGN2yDupA1rG5eadbR5_EU9iUjHbULR_D-36kvs5ZYmo8sVvJsCrBtoZNLuJr/exec';
 
@@ -963,7 +963,7 @@
             const mm = String(now.getMonth() + 1).padStart(2, '0');
             const dd = String(now.getDate()).padStart(2, '0');
             const randomString = Math.random().toString(36).substring(2, 6).toUpperCase();
-            return `KV-FNB2B-${yyyy}${mm}${dd}-${randomString}`;
+            return `KV-FNB2A-${yyyy}${mm}${dd}-${randomString}`;
         }
 
         async function sendCertificateToDatabase(certData) {
@@ -995,7 +995,7 @@
             const timeStr = now.toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', hour12: false });
             const fullDateTimeStr = `${dateStr} ${timeStr}`;
 
-            const certRecord = { certCode: uniqueCertCode, fullName: nameInput, department: deptInput, courseName: 'Đào tạo Sản phẩm cơ bản - Buổi 2B (Tái ký FNB)', issueDate: fullDateTimeStr };
+            const certRecord = { certCode: uniqueCertCode, fullName: nameInput, department: deptInput, courseName: 'Đào tạo Sản phẩm cơ bản - Buổi 2A (Tái ký FNB)', issueDate: fullDateTimeStr };
             localStorage.setItem(lsKeys.issuedCertificate, JSON.stringify(certRecord));
             sendCertificateToDatabase(certRecord);
             renderCertificateAndShow(certRecord);
@@ -1033,7 +1033,7 @@
             
             ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(500, 170); ctx.lineTo(914, 170); ctx.stroke();
             
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 54px Arial, Helvetica, sans-serif'; ctx.fillText('CHỨNG CHỈ HOÀN THÀNH', 707, 240);
+            ctx.fillStyle = '#0f172A'; ctx.font = 'bold 54px Arial, Helvetica, sans-serif'; ctx.fillText('CHỨNG CHỈ HOÀN THÀNH', 707, 240);
             ctx.fillStyle = '#475569'; ctx.font = 'italic 20px Arial, Helvetica, sans-serif'; ctx.fillText('Chứng chỉ hoàn thành khóa học trắc nghiệm dành cho', 707, 310);
             ctx.fillStyle = '#0891b2'; ctx.font = 'bold 50px Arial, Helvetica, sans-serif'; ctx.fillText(certData.fullName.toUpperCase(), 707, 400);
             
@@ -1041,11 +1041,11 @@
             
             ctx.fillStyle = '#1e293b'; ctx.font = 'bold 22px Arial, Helvetica, sans-serif'; ctx.fillText(`Phòng ban: ${certData.department}`, 707, 480);
             ctx.fillStyle = '#334155'; ctx.font = '20px Arial, Helvetica, sans-serif'; ctx.fillText('Đã hoàn thành đầy đủ các bài học ôn tập trắc nghiệm của khóa học:', 707, 540);
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 30px Arial, Helvetica, sans-serif'; ctx.fillText(certData.courseName, 707, 600);
+            ctx.fillStyle = '#0f172A'; ctx.font = 'bold 30px Arial, Helvetica, sans-serif'; ctx.fillText(certData.courseName, 707, 600);
             ctx.fillStyle = '#64748b'; ctx.font = '16px Arial, Helvetica, sans-serif'; ctx.fillText(`Mã chứng chỉ: ${certData.certCode}`, 707, 650);
             
             ctx.fillStyle = '#475569'; ctx.font = '16px Arial, Helvetica, sans-serif'; ctx.fillText('Ngày Hoàn Thành', 320, 750);
-            ctx.fillStyle = '#0f172a'; ctx.font = 'bold 18px Arial, Helvetica, sans-serif'; ctx.fillText(certData.issueDate, 320, 800);
+            ctx.fillStyle = '#0f172A'; ctx.font = 'bold 18px Arial, Helvetica, sans-serif'; ctx.fillText(certData.issueDate, 320, 800);
             ctx.strokeStyle = '#cbd5e1'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(220, 825); ctx.lineTo(420, 825); ctx.stroke();
             
             ctx.fillStyle = '#475569'; ctx.font = '16px Arial, Helvetica, sans-serif'; ctx.fillText('Team Đào tạo KiotViet', 1094, 750);
@@ -1060,7 +1060,7 @@
             const downloadLink = document.getElementById('download-certificate-link');
             downloadLink.href = dataUrlString;
             const safeName = certData.fullName.replace(/[^a-zA-Z0-9\s]/g, "").replace(/\s+/g, "_");
-            downloadLink.download = `Chung_Chi_Tai_Ky_FNB_2B_${safeName}.png`;
+            downloadLink.download = `Chung_Chi_Tai_Ky_FNB_2A_${safeName}.png`;
             toggleCertificatePreviewModal(true);
         }
 
