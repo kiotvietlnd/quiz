@@ -428,13 +428,18 @@
 
                 let theoryHtml = '';
                 if(ex.theory && ex.theory.length > 0) {
-                    theoryHtml = `<div class="mb-6 space-y-4">`;
+                    theoryHtml = `
+                    <div class="mb-6">
+                        <h3 class="text-sm font-black text-blue-700 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-2">
+                            <i class="fas fa-pen-nib"></i> PHẦN 1: TRẢ LỜI LÝ THUYẾT
+                        </h3>
+                        <div class="space-y-4">`;
                     ex.theory.forEach((q, qIndex) => {
                         let ansVal = (myData.textAnswers || [])[qIndex] || '';
                         theoryHtml += `<div class="bg-slate-50/50 border border-slate-200 rounded-2xl overflow-hidden"><div class="bg-slate-100/80 p-3.5 border-b border-slate-200"><p class="text-slate-800 font-bold text-xs leading-relaxed"><span class="text-blue-500 mr-1"><i class="fas fa-question-circle"></i></span> ${parseLinks(q)}</p></div><textarea id="inpTextAnswer_${oIdx}_${qIndex}" rows="2" class="w-full p-4 focus:ring-0 outline-none font-medium text-slate-700 text-xs md:text-sm transition-all resize-none bg-white" placeholder="Gõ câu trả lời của bạn vào đây..." oninput="saveDraft()">${ansVal}</textarea></div>`;
-                    }); theoryHtml += `</div>`;
+                    }); 
+                    theoryHtml += `</div></div>`;
                 }
-
                 let reqHtml = ''; 
                 if(ex.requirements && ex.requirements.length > 0) {
                     reqHtml = `<div class="mb-5"><div class="space-y-2 text-xs md:text-sm text-slate-800 border-l-4 border-emerald-500 bg-emerald-50/80 p-4 rounded-r-2xl leading-relaxed font-semibold shadow-sm">${ex.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
