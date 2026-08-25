@@ -453,18 +453,33 @@
                     uploadAreaHtml = `<div class="space-y-3"><div id="dropzone_${oIdx}" ondragover="onDragOver(event, ${oIdx})" ondragleave="onDragLeave(event, ${oIdx})" ondrop="onDrop(event, ${oIdx})" class="relative w-full bg-slate-50 border-2 border-dashed border-slate-300 hover:border-blue-400 rounded-2xl flex items-center justify-between p-4 md:p-6 transition-all select-none group cursor-pointer"><input type="file" multiple accept="image/*" onchange="handleFileSelectForExercise(event, ${oIdx})" class="absolute inset-0 opacity-0 cursor-pointer z-10"><div class="flex flex-col md:flex-row md:items-center gap-3 md:gap-4 pointer-events-none"><div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm border border-slate-200 text-blue-600 group-hover:scale-105 transition-transform shrink-0"><i class="fas fa-cloud-upload-alt text-xl"></i></div><div><p class="text-xs md:text-sm font-bold text-slate-700">Kéo thả ảnh vào đây hoặc click chọn tệp</p><p class="text-[10px] md:text-xs text-slate-400 mt-1">Hỗ trợ dán trực tiếp bằng <strong class="bg-white border px-1 py-0.5 rounded text-slate-600 font-bold">Ctrl + V</strong></p></div></div></div><div class="bg-slate-100 border border-slate-200 p-2.5 rounded-xl flex items-center gap-2"><i class="fas fa-info-circle text-slate-400 text-xs"></i><span class="text-[11px] text-slate-500 font-bold">Chưa nộp ảnh minh chứng.</span></div></div>`;
                 }
 
+                // NẾU CÓ BÀI TẬP THỰC HÀNH THÌ MỚI HIỂN THỊ TIÊU ĐỀ "PHẦN THỰC HÀNH"
+                let practiceHeaderHtml = '';
+                if (ex.requirements.length > 0 || ex.instructions.length > 0 || ex.confirm || uploadAreaHtml) {
+                    practiceHeaderHtml = `<h3 class="text-sm font-black text-emerald-700 uppercase tracking-wider mb-4 flex items-center gap-2 border-b border-slate-100 pb-2"><i class="fas fa-laptop-code"></i> ${practiceHeaderTitle}</h3>`;
+                }
+
                 return `
                 <div id="sub_exercise_card_${subIdx}" class="sub-exercise-card w-full hidden" onclick="activeExerciseIndex = ${oIdx}">
-                    <div class="flex justify-between items-start gap-4 mb-5">
-                        <h2 class="text-base md:text-lg font-black text-slate-800 leading-snug">${ex.title}</h2>
+                    <div class="flex justify-between items-start gap-4 mb-4 border-b border-slate-100 pb-4">
+                        <h2 class="text-base md:text-xl font-black text-slate-800 leading-snug">${ex.title}</h2>
                         ${displayFeedback ? `<div class="relative"><button onclick="toggleFeedback(${oIdx})" class="relative flex items-center gap-1.5 bg-amber-50 text-amber-700 hover:bg-amber-100 border border-amber-300 px-3 py-1.5 rounded-xl text-xs font-bold shadow-sm transition"><i class="far fa-comment-dots text-sm"></i><span class="hidden sm:inline">Nhận xét</span>${myData.isUnread ? `<span id="pingDot_${oIdx}" class="absolute -top-1 -right-1 flex h-3 w-3"><span class="animate-ping absolute h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative rounded-full h-3 w-3 bg-red-500 border border-white"></span></span>` : ''}</button><div id="feedbackBox_${oIdx}" class="hidden absolute top-10 right-0 w-72 md:w-80 bg-white border border-amber-200 shadow-2xl rounded-2xl p-5 z-40 transition origin-top-right"><div class="flex items-center justify-between mb-2.5 pb-2 border-b border-amber-100 font-black text-amber-800 text-xs tracking-wider uppercase"><p><i class="fas fa-chalkboard-teacher"></i> Giảng viên nhận xét:</p><button onclick="toggleFeedback(${oIdx})" class="text-slate-400 hover:text-slate-700"><i class="fas fa-times"></i></button></div><p class="text-slate-700 text-sm whitespace-pre-wrap leading-relaxed">${displayFeedback}</p></div></div>` : ''}
                     </div>
-                    ${reqHtml} ${theoryHtml} ${instrHtml}
-                    <div class="mt-4 pt-4 border-t border-slate-100 space-y-3">
-                        ${ex.confirm ? `<div class="bg-indigo-50/50 border border-indigo-100/50 p-3 md:p-4 rounded-xl flex gap-2.5 items-center"><i class="fas fa-camera text-indigo-500 text-sm"></i><p class="text-xs md:text-sm font-bold text-indigo-900 leading-relaxed">${parseLinks(ex.confirm)}</p></div>` : ''}
-                        ${uploadAreaHtml}
-                        <div class="flex items-center justify-end pt-2 mt-4 border-t border-slate-100"><button id="btnSubmitStep_${oIdx}" onclick="uploadToGAS(${oIdx}, '${ex.title.replace(/'/g, "\\'")}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3.5 rounded-xl shadow-md transition font-bold text-xs md:text-sm flex items-center justify-center gap-2 shrink-0"><i class="fas fa-paper-plane"></i><span id="btnSubmitText_${oIdx}">${btnText}</span></button></div>
-                        <div id="fileTags_${oIdx}" class="mt-3 flex flex-wrap gap-1.5 empty:hidden"></div>
+                    
+                    <!-- 1. LÝ THUYẾT NẰM NGAY DƯỚI TIÊU ĐỀ BÀI TẬP -->
+                    ${theoryHtml} 
+                    
+                    <!-- 2. PHẦN THỰC HÀNH GOM NHÓM LẠI VỚI NHAU -->
+                    <div class="${(ex.theory && ex.theory.length > 0) ? 'mt-8 pt-2' : 'mt-2'}">
+                        ${practiceHeaderHtml}
+                        ${reqHtml} 
+                        ${instrHtml}
+                        <div class="space-y-3 mt-4">
+                            ${ex.confirm ? `<div class="bg-indigo-50/50 border border-indigo-100/50 p-3 md:p-4 rounded-xl flex gap-2.5 items-center"><i class="fas fa-camera text-indigo-500 text-sm mt-0.5"></i><p class="text-xs md:text-sm font-bold text-indigo-900 leading-relaxed">${parseLinks(ex.confirm)}</p></div>` : ''}
+                            ${uploadAreaHtml}
+                            <div class="flex items-center justify-end pt-2 mt-4 border-t border-slate-100"><button id="btnSubmitStep_${oIdx}" onclick="uploadToGAS(${oIdx}, '${ex.title.replace(/'/g, "\\'")}')" class="w-full md:w-auto bg-blue-600 hover:bg-blue-700 text-white px-6 md:px-8 py-3.5 rounded-xl shadow-md transition font-bold text-xs md:text-sm flex items-center justify-center gap-2 shrink-0"><i class="fas fa-paper-plane"></i><span id="btnSubmitText_${oIdx}">${btnText}</span></button></div>
+                            <div id="fileTags_${oIdx}" class="mt-3 flex flex-wrap gap-1.5 empty:hidden"></div>
+                        </div>
                     </div>
                 </div>`;
             }).join('');
@@ -730,7 +745,8 @@
                 let displayFeedback = (data.feedback && !data.feedback.includes("[BỎ QUA]")) ? data.feedback : null;
                 let fbHtml = displayFeedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap leading-relaxed">${displayFeedback}</p></div>` : ``;
                 
-                html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid print:shadow-none print:border-slate-300 print:mb-4"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${ex.title}</h3>${statusBadge}</div>${reqHtml}${theoryHtml}${imgHtml}${fbHtml}</div>`;
+                // SẮP XẾP LẠI THỨ TỰ IN: LÝ THUYẾT TRƯỚC, RỒI MỚI TỚI YÊU CẦU THỰC HÀNH VÀ ẢNH
+                html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid print:shadow-none print:border-slate-300 print:mb-4"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${ex.title}</h3>${statusBadge}</div>${theoryHtml}${reqHtml}${imgHtml}${fbHtml}</div>`;
             }
 
             container.innerHTML = html; 
