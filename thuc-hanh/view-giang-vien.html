@@ -4,7 +4,7 @@
     <link rel="icon" type="image/png" href="https://cdn-kvweb.kiotviet.vn/kiotviet-website/wp-content/uploads/2023/10/31095822/64x64.png" sizes="64x64">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CHẤM BÀI THỰC HÀNH SPCB</title>
+    <title>CHẤM BÀI THỰC HÀNH SPCB - GIẢNG VIÊN</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -63,6 +63,15 @@
                 <i class="fas fa-filter"></i> BỘ LỌC CHẤM BÀI
             </p>
 
+            <!-- 1. Ngành hàng Sidebar (Lọc nhanh) -->
+            <div>
+                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Ngành hàng</label>
+                <div id="sidebarIndustryTabs" class="flex flex-wrap gap-1 bg-[#162032] p-1 rounded-xl border border-white/5">
+                    <!-- Dynamic tabs -->
+                </div>
+            </div>
+
+            <!-- 2. Khóa học & Phòng ban -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 px-1">Khóa học</label>
                 <select id="filterCourse" onchange="updateFilters('course')" class="w-full bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-xl h-9 px-3 focus:outline-none focus:ring-2 focus:ring-blue-500 truncate">
@@ -77,16 +86,19 @@
                 </select>
             </div>
 
+            <!-- 3. Buổi học -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Buổi học</label>
                 <div id="radioSessionContainer" class="space-y-1 bg-[#162032] p-2 rounded-xl border border-white/5 max-h-48 overflow-y-auto sidebar-scrollbar"></div>
             </div>
 
+            <!-- 4. Học viên -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Học viên</label>
                 <div id="radioStudentContainer" class="space-y-1 bg-[#162032] p-2 rounded-xl border border-white/5 max-h-48 overflow-y-auto sidebar-scrollbar"></div>
             </div>
 
+            <!-- 5. Tình trạng nộp bài -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Tình trạng nộp bài</label>
                 <div class="space-y-1 bg-[#162032] p-2 rounded-xl border border-white/5">
@@ -105,6 +117,7 @@
                 </div>
             </div>
 
+            <!-- 6. Thời gian nộp bài -->
             <div>
                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2 px-1">Thời gian nộp bài</label>
                 <div class="space-y-1 bg-[#162032] p-2 rounded-xl border border-white/5">
@@ -151,12 +164,24 @@
 
                 <!-- VIEW 1: DASHBOARD -->
                 <div id="dashboardView" class="space-y-6">
-                    <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <span class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg"><i class="fas fa-sliders-h"></i></span>
+                    
+                    <!-- BỘ LỌC BÁO CÁO DASHBOARD -->
+                    <div class="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                        <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-100 pb-3">
+                            <div class="flex items-center gap-3">
+                                <span class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-lg"><i class="fas fa-sliders-h"></i></span>
+                                <div>
+                                    <h2 class="text-[13px] font-black text-slate-800 uppercase tracking-wide">Bộ Lọc Báo Cáo Dashboard</h2>
+                                    <p class="text-[11px] text-slate-500 font-medium">Tùy chỉnh tiêu chí phân tích tiến độ</p>
+                                </div>
+                            </div>
+
+                            <!-- NGÀNH HÀNG MULTI-CHECKBOX (CHỌN NHIỀU NHƯ HÌNH THAM KHẢO) -->
                             <div>
-                                <h2 class="text-[13px] font-black text-slate-800 uppercase tracking-wide">Bộ Lọc Báo Cáo Dashboard</h2>
-                                <p class="text-[11px] text-slate-500 font-medium">Tùy chỉnh tiêu chí phân tích tiến độ</p>
+                                <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Ngành hàng (Chọn nhiều)</label>
+                                <div id="dashIndustryCheckboxes" class="flex flex-wrap items-center gap-2 p-1.5 bg-slate-50 border border-slate-200 rounded-xl">
+                                    <!-- Populated dynamically -->
+                                </div>
                             </div>
                         </div>
                         
@@ -187,12 +212,13 @@
 
                             <div>
                                 <label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1.5 ml-1">Buổi học</label>
-                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors w-full md:w-[280px] lg:w-[320px] truncate">
+                                <select id="dashFilterSession" onchange="renderDashboardAnalytics()" class="bg-slate-50 border border-slate-200 text-slate-700 text-xs rounded-xl h-9 px-3 font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 hover:border-blue-300 transition-colors w-full md:w-[260px] lg:w-[300px] truncate">
                                 </select>
                             </div>
                         </div>
                     </div>
 
+                    <!-- 2 SCORECARDS -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div class="bg-white p-6 rounded-3xl flex items-center gap-4 border border-slate-200 shadow-sm">
                             <div class="h-14 w-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shrink-0"><i class="fas fa-users"></i></div>
@@ -211,25 +237,39 @@
                         </div>
                     </div>
 
+                    <!-- BẢNG XẾP HẠNG & BIỂU ĐỒ -->
                     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-                        <!-- BẢNG XẾP HẠNG -->
-                        <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm">
-                            <div class="flex items-center justify-between pb-4 mb-4 border-b border-slate-100">
+                        <!-- CỘT BẢNG XẾP HẠNG -->
+                        <div class="lg:col-span-2 bg-white p-6 rounded-3xl border border-slate-200 shadow-sm space-y-4">
+                            <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
                                 <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-wider flex items-center gap-2">
                                     <i class="fas fa-trophy text-amber-500"></i> BẢNG XẾP HẠNG TIẾN ĐỘ HỌC TẬP
                                 </h3>
-                                <span class="text-xs text-slate-400 font-semibold" id="rankingStudentCountText">Hiển thị toàn bộ học viên</span>
+
+                                <!-- Ô TÌM KIẾM HỌC VIÊN REALTIME & NÚT LỌC TRẠNG THÁI -->
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <div class="relative">
+                                        <i class="fas fa-search absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                                        <input type="text" id="dashSearchStudent" oninput="onDashSearchChange()" placeholder="Tìm tên học viên..." class="pl-8 pr-3 py-1.5 bg-slate-100 border border-slate-200 rounded-xl text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-blue-500 w-36 sm:w-48">
+                                    </div>
+                                    <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-xs font-bold">
+                                        <button onclick="setDashStatusFilter('all')" id="pill_status_all" class="px-2.5 py-1 rounded-lg transition-all bg-white text-blue-600 shadow-sm">Tất cả</button>
+                                        <button onclick="setDashStatusFilter('submitted')" id="pill_status_submitted" class="px-2.5 py-1 rounded-lg transition-all text-slate-500 hover:text-slate-900">Đã nộp</button>
+                                        <button onclick="setDashStatusFilter('unsubmitted')" id="pill_status_unsubmitted" class="px-2.5 py-1 rounded-lg transition-all text-slate-500 hover:text-slate-900">Chưa nộp</button>
+                                    </div>
+                                </div>
                             </div>
+
                             <div class="space-y-3" id="dashboardRankingList"></div>
                         </div>
 
-                        <!-- BIỂU ĐỒ NỘP BÀI (CỐ ĐỊNH STICKY) -->
+                        <!-- CỘT BIỂU ĐỒ DONUT (STICKY CỐ ĐỊNH) -->
                         <div class="bg-white p-6 rounded-3xl border border-slate-200 shadow-sm flex flex-col justify-between self-start sticky top-24">
                             <div>
                                 <h3 class="text-[13px] font-black text-slate-800 uppercase tracking-wider mb-1 flex items-center gap-2">
                                     <i class="fas fa-pie-chart text-blue-500"></i> Tỷ Lệ Nộp Bài Học Viên
                                 </h3>
-                                <p class="text-[11px] text-slate-400 font-medium mb-6">Dựa theo buổi & thời gian lọc trên Dashboard</p>
+                                <p class="text-[11px] text-slate-400 font-medium mb-6">Dựa theo tiêu chí lọc trên Dashboard</p>
                             </div>
                             <div class="relative min-h-[220px] flex items-center justify-center my-auto">
                                 <canvas id="chartSubmissionStatus"></canvas>
@@ -318,26 +358,34 @@
     </div>
 
     <script>
+        // CẤU HÌNH API
         const MASTER_EXERCISE_URL = "https://docs.google.com/spreadsheets/d/1WDPrOXuRWln6TT7xSMk54bhaqB8wwxdq-nU8325yV7U/gviz/tq?tqx=out:csv&gid=443641711";
         const SHEET_URL = "https://docs.google.com/spreadsheets/d/1c30Tm9T6MSgjJV3WbrYcsxwXLvhXTok9VCgQA6XOYV0/gviz/tq?tqx=out:csv&gid=0";
-        const API_URL = "https://script.google.com/macros/s/AKfycbz-4pJyOK87mPmdF1CbWXloGiFkGblq1f2AHV7RyfweZhw9URMJGM-V0Vh20qeGeIlyDw/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbyggXAwORtqnIHDSaoI4zeEo3RA65BFdqCOqMv73VOQcIl4A4x4istq9cxiYo5iHXqFPQ/exec";
 
-        let MASTER_SYLLABUS = []; 
-        let allData = []; 
+        let MASTER_SYLLABUS = []; // Chứa giáo trình phẳng kèm theo Roadmap
+        let MASTER_ROADMAPS = []; // Danh sách các ngành hàng (Retail, FNB, Booking...)
+        let allData = []; // Chứa bài nộp học viên
         let currentActiveTab = 'dashboard';
         let chartSubmissionInstance = null;
+
+        // STATE BỘ LỌC MỚI
+        let selectedDashIndustries = new Set(); // Multi-select ngành hàng Dashboard
+        let sidebarSelectedIndustry = 'all'; // Tab ngành hàng Sidebar
+        let dashSearchKeyword = '';
+        let dashStatusFilter = 'all'; // 'all' | 'submitted' | 'unsubmitted'
 
         document.addEventListener('DOMContentLoaded', fetchData);
 
         const cleanStr = (str) => str ? str.toString().normalize('NFC').toLowerCase().replace(/\s+/g, ' ').trim() : '';
         
+        // SỬA LỖI ĐỌC NGÀY THÁNG CHUẨN VIỆT NAM (Tránh nhầm lẫn định dạng Mỹ)
         function formatDateTime(dateStr) {
             if (!dateStr) return ''; 
             const parts = dateStr.split(' '); 
             if(parts.length !== 2) return dateStr;
             const dParts = parts[0].split('/'); 
             if(dParts.length === 3) {
-                // Ép chuẩn ISO để JS không bị nhầm lẫn định dạng Mỹ
                 const d = new Date(`${dParts[2]}-${dParts[1]}-${dParts[0]}T${parts[1]}`);
                 if (!isNaN(d.getTime())) {
                     const days = ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'];
@@ -347,28 +395,32 @@
             return dateStr;
         }
 
+        // TẢI DỮ LIỆU TỪ GOOGLE SHEET
         function fetchData() {
             document.getElementById('loadingSpinner').classList.remove('hidden');
             
             fetch(MASTER_EXERCISE_URL)
-            .then(r => { if(!r.ok) throw new Error("Lỗi mạng Google Sheet Giáo trình"); return r.text(); })
+            .then(r => { if(!r.ok) throw new Error("Lỗi kết nối Google Sheet Giáo trình"); return r.text(); })
             .then(csv => {
                 Papa.parse(csv, {
                     header: true, skipEmptyLines: true,
                     complete: function(results) {
                         let builtData = []; 
                         let currentGroupName = "";
+                        let roadmapsSet = new Set();
                         
                         results.data.forEach(row => {
+                            let roadmap = (row['NganhHang'] || 'Retail').trim();
                             let tenBuoi = (row['TenBuoi'] || '').trim();
                             let tenBaiTap = (row['TenBaiTap'] || '').trim(); 
                             let nhomBaiTap = (row['NhomBaiTap'] || '').trim();
                             
                             if(!tenBuoi || !tenBaiTap) return;
+                            if(roadmap) roadmapsSet.add(roadmap);
 
-                            let sessionObj = builtData.find(s => s.title === tenBuoi);
+                            let sessionObj = builtData.find(s => s.title === tenBuoi && s.roadmap === roadmap);
                             if (!sessionObj) {
-                                sessionObj = { title: tenBuoi, exercises: [] };
+                                sessionObj = { title: tenBuoi, roadmap: roadmap, exercises: [] };
                                 builtData.push(sessionObj); 
                                 currentGroupName = ""; 
                             }
@@ -388,7 +440,11 @@
                                 confirm: (row['XacNhan'] || '').trim()
                             });
                         });
+
                         MASTER_SYLLABUS = builtData;
+                        MASTER_ROADMAPS = Array.from(roadmapsSet);
+                        selectedDashIndustries = new Set(MASTER_ROADMAPS); // Mặc định chọn tất cả ngành
+                        
                         fetchStudentData();
                     }
                 });
@@ -455,6 +511,7 @@
             });
         }
 
+        // KHỞI TẠO BỘ LỌC ĐA NĂNG
         function initFilters() {
             const courses = [...new Set(allData.map(e => (e.khoa || '').trim()))].filter(Boolean).sort();
             const depts = [...new Set(allData.map(e => (e.phongBan || '').trim()))].filter(Boolean).sort();
@@ -464,19 +521,49 @@
             populateSelect('filterDept', depts, 'Tất cả phòng ban');
             populateSelect('dashFilterDept', depts, 'Tất cả phòng ban');
 
-            const sessions = MASTER_SYLLABUS.map(s => s.title);
-            
+            // 1. Render Tabs Ngành hàng Sidebar
+            const sidebarTabsContainer = document.getElementById('sidebarIndustryTabs');
+            let sidebarTabsHtml = `<button onclick="onSidebarIndustryTabChange('all')" id="side_tab_all" class="px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-blue-600 text-white shadow-sm">Tất cả</button>`;
+            MASTER_ROADMAPS.forEach(rm => {
+                sidebarTabsHtml += `<button onclick="onSidebarIndustryTabChange('${rm}')" id="side_tab_${rm}" class="px-2.5 py-1 text-[11px] font-bold text-slate-300 hover:text-white rounded-lg transition-all">${rm}</button>`;
+            });
+            sidebarTabsContainer.innerHTML = sidebarTabsHtml;
+
+            // 2. Render Checkboxes Ngành hàng Dashboard
+            const dashCheckboxesContainer = document.getElementById('dashIndustryCheckboxes');
+            let dashCheckboxesHtml = '';
+            MASTER_ROADMAPS.forEach(rm => {
+                dashCheckboxesHtml += `
+                <label class="flex items-center gap-1.5 cursor-pointer text-xs font-bold text-slate-700 select-none px-1">
+                    <input type="checkbox" value="${rm}" checked onchange="onDashIndustryCheckboxChange(this)" class="w-4 h-4 rounded text-blue-600 focus:ring-0 cursor-pointer accent-blue-600">
+                    <span>${rm}</span>
+                </label>`;
+            });
+            dashCheckboxesContainer.innerHTML = dashCheckboxesHtml;
+
+            // 3. Render Dropdown Buổi học
+            updateSessionsDropdown();
+
+            updateFilters('init');
+        }
+
+        function updateSessionsDropdown() {
+            let filteredSyllabus = MASTER_SYLLABUS;
+            if (sidebarSelectedIndustry !== 'all') {
+                filteredSyllabus = MASTER_SYLLABUS.filter(s => s.roadmap === sidebarSelectedIndustry);
+            }
+            const sessions = [...new Set(filteredSyllabus.map(s => s.title))];
+
             let sessionHtmlSidebar = sessions.map((s, idx) => `
                 <label class="flex items-start gap-2.5 cursor-pointer text-xs text-slate-300 p-1.5 rounded-lg hover:bg-white/5 sidebar-radio">
                     <input type="radio" name="filterSession" value="${s}" ${idx === 0 ? 'checked' : ''} onchange="updateFilters('session')">
                     <span class="flex-1 pt-[1px] leading-tight">${s}</span>
                 </label>`).join('');
-            document.getElementById('radioSessionContainer').innerHTML = sessionHtmlSidebar;
+            document.getElementById('radioSessionContainer').innerHTML = sessionHtmlSidebar || '<p class="text-xs text-slate-400 p-1.5">Không có buổi học</p>';
             
-            let sessionHtmlDash = `<option value="all">Tất cả buổi học</option>` + sessions.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
+            const allSessions = [...new Set(MASTER_SYLLABUS.map(s => s.title))];
+            let sessionHtmlDash = `<option value="all">Tất cả buổi học</option>` + allSessions.map((s, idx) => `<option value="${s}" ${idx===0 ? 'selected':''}>${s}</option>`).join('');
             document.getElementById('dashFilterSession').innerHTML = sessionHtmlDash;
-
-            updateFilters('init');
         }
 
         function populateSelect(id, list, defaultLabel) {
@@ -501,6 +588,45 @@
             }
         }
 
+        // SỰ KIỆN LỌC NGÀNH HÀNG SIDEBAR
+        function onSidebarIndustryTabChange(ind) {
+            sidebarSelectedIndustry = ind;
+            document.querySelectorAll('#sidebarIndustryTabs button').forEach(btn => {
+                btn.className = "px-2.5 py-1 text-[11px] font-bold text-slate-300 hover:text-white rounded-lg transition-all";
+            });
+            const activeBtn = document.getElementById(`side_tab_${ind}`);
+            if (activeBtn) activeBtn.className = "px-2.5 py-1 text-[11px] font-black rounded-lg transition-all bg-blue-600 text-white shadow-sm";
+            
+            updateSessionsDropdown();
+            updateFilters('industry');
+        }
+
+        // SỰ KIỆN MULTI-CHECKBOX NGÀNH HÀNG DASHBOARD
+        function onDashIndustryCheckboxChange(el) {
+            if (el.checked) selectedDashIndustries.add(el.value);
+            else selectedDashIndustries.delete(el.value);
+            renderDashboardAnalytics();
+        }
+
+        // SỰ KIỆN TÌM KIẾM HỌC VIÊN DASHBOARD
+        function onDashSearchChange() {
+            dashSearchKeyword = document.getElementById('dashSearchStudent').value.trim().toLowerCase();
+            renderDashboardAnalytics();
+        }
+
+        // SỰ KIỆN NÚT LỌC TRẠNG THÁI DASHBOARD
+        function setDashStatusFilter(status) {
+            dashStatusFilter = status;
+            ['all', 'submitted', 'unsubmitted'].forEach(st => {
+                const btn = document.getElementById(`pill_status_${st}`);
+                if (btn) {
+                    if (st === status) btn.className = "px-2.5 py-1 rounded-lg transition-all bg-white text-blue-600 shadow-sm font-bold";
+                    else btn.className = "px-2.5 py-1 rounded-lg transition-all text-slate-500 hover:text-slate-900 font-semibold";
+                }
+            });
+            renderDashboardAnalytics();
+        }
+
         function updateFilters(source) {
             const selCourse = document.getElementById('filterCourse').value;
             const selDept = document.getElementById('filterDept').value;
@@ -522,7 +648,7 @@
         }
 
         // ==========================================
-        // VIEW 1: RENDER DASHBOARD
+        // VIEW 1: RENDER DASHBOARD (TÍCH HỢP BỘ LỌC MỚI)
         // ==========================================
         function renderDashboardAnalytics() {
             const selTime = document.getElementById('dashFilterTime').value;
@@ -567,26 +693,23 @@
             const studentList = Object.values(allStudentsMap);
             let submittedCount = 0; let totalAvgPercentSum = 0; let studentRankingData = [];
 
-            studentList.forEach(st => {
-                let totalReq = 0; let reqExTitlesForSession = [];
-                
-                let targetSessions = [];
-                if (selSession === 'all') {
-                    targetSessions = MASTER_SYLLABUS;
-                } else {
-                    let sObj = MASTER_SYLLABUS.find(s => s.title === selSession);
-                    if (sObj) targetSessions.push(sObj);
-                }
+            // Lọc Giáo trình theo Multi-Select Ngành hàng & Buổi học
+            let targetSessions = MASTER_SYLLABUS.filter(s => selectedDashIndustries.has(s.roadmap));
+            if (selSession !== 'all') {
+                targetSessions = targetSessions.filter(s => s.title === selSession);
+            }
 
-                targetSessions.forEach(ss => {
-                    ss.exercises.forEach(ex => {
-                        if (!ex.isGroupHeader) {
-                            totalReq++;
-                            reqExTitlesForSession.push(cleanStr(ex.title));
-                        }
-                    });
+            let totalReq = 0; let reqExTitlesForSession = [];
+            targetSessions.forEach(ss => {
+                ss.exercises.forEach(ex => {
+                    if (!ex.isGroupHeader) {
+                        totalReq++;
+                        reqExTitlesForSession.push(cleanStr(ex.title));
+                    }
                 });
+            });
 
+            studentList.forEach(st => {
                 const studentSubmissions = allData.filter(e => (e.hoVaTen||'').trim() === st.name);
                 const doneInSession = studentSubmissions.map(e => cleanStr(e.tenBaiHoc)).filter(title => reqExTitlesForSession.includes(title));
                 const uniqueDone = [...new Set(doneInSession)];
@@ -601,16 +724,35 @@
                 });
                 if (hasSubmission) submittedCount++;
 
-                studentRankingData.push({ name: st.name, dept: st.dept, course: st.course, percent: percent, done: uniqueDone.length, total: totalReq, hasSubmitted: hasSubmission });
+                studentRankingData.push({ 
+                    name: st.name, 
+                    dept: st.dept, 
+                    course: st.course, 
+                    percent: percent, 
+                    done: uniqueDone.length, 
+                    total: totalReq, 
+                    hasSubmitted: hasSubmission 
+                });
             });
+
+            // LỌC THEO NÚT TRẠNG THÁI [Đã nộp / Chưa nộp]
+            if (dashStatusFilter === 'submitted') {
+                studentRankingData = studentRankingData.filter(st => st.hasSubmitted);
+            } else if (dashStatusFilter === 'unsubmitted') {
+                studentRankingData = studentRankingData.filter(st => !st.hasSubmitted);
+            }
+
+            // LỌC THEO Ô TÌM KIẾM HỌC VIÊN REALTIME
+            if (dashSearchKeyword) {
+                studentRankingData = studentRankingData.filter(st => st.name.toLowerCase().includes(dashSearchKeyword));
+            }
 
             studentRankingData.sort((a,b) => b.percent - a.percent || b.done - a.done);
 
             document.getElementById('kpiTotalStudents').innerText = studentList.length;
             let avgGlobalProgress = studentList.length === 0 ? 0 : Math.round(totalAvgPercentSum / studentList.length);
             document.getElementById('kpiAvgProgress').innerText = `${avgGlobalProgress}%`;
-            document.getElementById('rankingStudentCountText').innerText = `Tổng cộng: ${studentRankingData.length} học viên`;
-            
+
             let rankingHtml = '';
             if (studentRankingData.length === 0) {
                 rankingHtml = `<div class="text-center py-8 text-slate-400 text-xs font-bold">Không có học viên nào khớp bộ lọc!</div>`;
@@ -684,18 +826,14 @@
         // ==========================================
         // CÁC HÀM NHẬN XÉT CỦA GIẢNG VIÊN
         // ==========================================
-        
-        // SỬA: Hàm nối text thay vì ghi đè
         function fillQuickFeedback(key, text) { 
             const area = document.getElementById(`fb-${key}`); 
             if (area) {
-                // Xóa chữ [BỎ QUA] nếu có, rồi nối thêm text
                 let currentVal = area.value.replace(/\[BỎ QUA\].*/g, '').trim();
                 area.value = currentVal ? currentVal + "\n" + text : text;
             } 
         }
 
-        // SỬA: Gửi ngầm chữ [BỎ QUA] lên API, nhưng KHÔNG hiện vào textarea
         function skipFeedback(key, name, dept, exTitle, session) { 
             const btn = document.getElementById(`btn-skip-${key}`); 
             const origHtml = btn.innerHTML;
@@ -713,7 +851,7 @@
                         btn.innerHTML = origHtml; 
                         btn.classList.remove('text-emerald-600'); 
                         btn.disabled=false; 
-                        fetchStudentData(); // Tải lại để hiện nhãn ĐÃ BỎ QUA
+                        fetchStudentData(); 
                     }, 1500);
                 } else alert("Lỗi lưu nhận xét!");
             }).catch(e => { alert("Lỗi mạng!"); btn.innerHTML = origHtml; btn.disabled=false; });
@@ -767,6 +905,7 @@
                 });
             }
 
+            // GHÉP NỐI VÀ ĐẾM SỐ LẦN NỘP BÀI (PHÁT HIỆN NỘP BỔ SUNG)
             let cardItems = [];
             requiredExerciseTitles.forEach(exTitle => {
                 const matches = studentSubmissions.filter(e => cleanStr(e.tenBaiHoc) === cleanStr(exTitle));
@@ -774,7 +913,7 @@
                     cardItems.push({ 
                         title: exTitle, 
                         isSubmitted: true, 
-                        record: matches[0], // Bản nộp mới nhất
+                        record: matches[0], 
                         isResubmitted: matches.length > 1 
                     });
                 } else {
@@ -817,10 +956,8 @@
                     requirementsHtml = `
                     <div class="mb-5">
                         <p class="mb-2 font-bold text-[10px] text-slate-400 uppercase tracking-widest">Yêu cầu đề bài:</p>
-                        <div class="bg-[#f0fdf4] border-l-4 border-emerald-500 p-4 rounded-r-xl">
-                            <ul class="space-y-2 text-xs text-slate-800 font-medium ml-4 list-decimal marker:text-emerald-600 marker:font-bold">
-                                ${requirements.map(r => `<li>${parseLinks(r)}</li>`).join('')}
-                            </ul>
+                        <div class="space-y-2 text-xs md:text-sm text-slate-800 border-l-4 border-emerald-500 bg-emerald-100/50 p-4 rounded-r-xl font-semibold shadow-sm">
+                            ${requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}
                         </div>
                     </div>`;
                 }
@@ -869,7 +1006,7 @@
                 if (questions.length > 0) {
                     hasTheory = true;
                     if (item.ans1 || item.ans2 || item.ans3 || item.ans4 || item.ans5) {
-                        theoryHtml = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 h-full space-y-4"><span class="text-blue-600 uppercase text-[11px] font-black"><i class="fas fa-user-edit mr-1.5"></i>Nội dung tự luận</span><div class="space-y-3">`;
+                        theoryHtml = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 h-full space-y-4"><span class="text-blue-600 uppercase text-[11px] font-black"><i class="fas fa-user-edit mr-1.5"></i>PHẦN 1: CÂU HỎI TỰ LUẬN</span><div class="space-y-3">`;
                         for(let i=1; i<=5; i++) {
                             if(item[`ans${i}`]) {
                                 let qText = questions[i-1] ? questions[i-1] : `Câu hỏi ${i}`;
@@ -882,9 +1019,9 @@
 
                 let imgUrls = (item.linkDrive || "").toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")); let imgHtml = '';
                 if (imgUrls.length > 0) {
-                    let imagesListHtml = imgUrls.map((url, i) => `<div class="relative w-full bg-slate-100 border border-slate-300 cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${getDirectImg(url)}" class="w-full h-auto max-h-[500px] object-contain block" alt="Minh chứng"></div>`).join('');
-                    imgHtml = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4"><span class="text-slate-600 uppercase text-[11px] font-black"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh (${imgUrls.length})</span><div class="flex flex-col gap-4">${imagesListHtml}</div></div>`;
-                } else imgHtml = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4"><span class="text-slate-500 uppercase text-[11px] font-black"><i class="fas fa-images mr-1.5"></i>Minh chứng hình ảnh</span><div class="bg-white border border-slate-200 border-dashed rounded-xl p-6 text-center"><i class="fas fa-info-circle text-2xl text-slate-400 mb-2"></i><br><span class="text-xs font-bold text-slate-500">Chưa nộp ảnh minh chứng</span></div></div>`;
+                    let imagesListHtml = imgUrls.map((url, i) => `<div class="relative w-full bg-slate-100 border border-slate-300 cursor-zoom-in rounded-xl overflow-hidden shadow-sm" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${i})"><img src="${getDirectImg(url)}" class="w-full h-auto max-h-[500px] object-contain block" alt="Minh chứng"></div>`).join('');
+                    imgHtml = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4"><span class="text-slate-600 uppercase text-[11px] font-black"><i class="fas fa-images mr-1.5"></i>PHẦN 2: MINH CHỨNG HÌNH ẢNH (${imgUrls.length})</span><div class="flex flex-col gap-4">${imagesListHtml}</div></div>`;
+                } else imgHtml = `<div class="bg-slate-50 border border-slate-200 rounded-2xl p-5 space-y-4"><span class="text-slate-500 uppercase text-[11px] font-black"><i class="fas fa-images mr-1.5"></i>PHẦN 2: MINH CHỨNG HÌNH ẢNH</span><div class="bg-white border border-slate-200 border-dashed rounded-xl p-6 text-center"><i class="fas fa-info-circle text-2xl text-slate-400 mb-2"></i><br><span class="text-xs font-bold text-slate-500">Chưa nộp ảnh minh chứng</span></div></div>`;
 
                 let exerciseContentHtml = !hasTheory ? `<div class="mb-5 w-full">${imgHtml}</div>` : `<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-5 items-stretch"><div class="h-full">${theoryHtml}</div><div class="h-full">${imgHtml}</div></div>`;
                 
@@ -915,10 +1052,10 @@
                         <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-3"><i class="fas fa-comment-dots text-blue-500 mr-1.5"></i>Ghi Nhận xét của giảng viên</label>
                         
                         <div class="flex items-center gap-2 mb-3">
-                            <button type="button" onclick="fillQuickFeedback('${safeKey}', 'Đạt yêu cầu!')" class="px-4 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5">
+                            <button type="button" onclick="fillQuickFeedback('${safeKey}', 'Đạt yêu cầu!')" class="px-4 py-1.5 bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm">
                                 <i class="fas fa-check-circle"></i> Đạt yêu cầu!
                             </button>
-                            <button type="button" onclick="fillQuickFeedback('${safeKey}', 'Chưa đạt yêu cầu!')" class="px-4 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5">
+                            <button type="button" onclick="fillQuickFeedback('${safeKey}', 'Chưa đạt yêu cầu!')" class="px-4 py-1.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-full text-xs font-bold transition-colors flex items-center gap-1.5 shadow-sm">
                                 <i class="fas fa-times-circle"></i> Chưa đạt yêu cầu!
                             </button>
                         </div>
@@ -960,7 +1097,7 @@
                 });
             }
 
-            const percent = totalReq === 0 ? 0 : Math.min(100, Math.round((doneCount / totalReq) * 100));
+            const percent = totalReq === 0 ? 0 : Math.round((doneCount / totalReq) * 100);
 
             let html = `
             <div class="bg-blue-600 text-white rounded-3xl p-6 md:p-8 mb-8 shadow-sm print:bg-white print:text-slate-800 print:border-2 print:border-slate-300">
@@ -992,25 +1129,27 @@
                     
                     let statusBadge = isSubmitted ? `<span class="bg-emerald-100 text-emerald-800 border border-emerald-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-check-circle text-emerald-600"></i> Đã hoàn thành</span>` : `<span class="bg-rose-100 text-rose-800 border border-rose-300 text-[11px] px-3 py-1 rounded-xl font-bold flex items-center gap-1 shrink-0"><i class="fas fa-times-circle text-rose-600"></i> Chưa hoàn thành</span>`;
                     
-                    let reqHtml = ''; if (exDetails.requirements && exDetails.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 p-3.5 rounded-2xl border border-emerald-200/80"><p class="text-[11px] font-black text-emerald-800 uppercase tracking-wider mb-2"><i class="fas fa-list-check text-emerald-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-800 font-semibold leading-relaxed border-l-4 border-emerald-500 bg-emerald-100/50 p-4 rounded-r-xl">${exDetails.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
+                    let reqHtml = ''; if (exDetails.requirements && exDetails.requirements.length > 0) reqHtml = `<div class="mb-4 bg-emerald-50/80 print:bg-slate-50 p-3.5 rounded-2xl border border-emerald-200/80 print:border-slate-300"><p class="text-[11px] font-black text-emerald-800 print:text-slate-700 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-list-check text-emerald-600 print:text-slate-600"></i> Yêu cầu đề bài:</p><div class="space-y-1.5 text-xs text-slate-800 font-semibold leading-relaxed border-l-4 border-emerald-500 bg-emerald-100/50 p-4 rounded-r-xl">${exDetails.requirements.map(r => `<p>${parseLinks(r)}</p>`).join('')}</div></div>`;
+                    
                     let theoryHtml = ''; if (exDetails.theory && exDetails.theory.length > 0) {
-                        theoryHtml = `<div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`;
+                        theoryHtml = `<div class="bg-slate-50 p-4 rounded-2xl mb-4 border border-slate-200 space-y-3"><p class="text-[11px] font-black text-blue-600 uppercase tracking-wider mb-2 flex items-center gap-1.5"><i class="fas fa-pen-to-square"></i> Câu hỏi tự luận:</p>`;
                         exDetails.theory.forEach((q, idx) => {
                             let ansKey = `ans${idx + 1}`; let ans = (subRecord && subRecord[ansKey]) ? subRecord[ansKey].toString().trim() : ''; let ansDisplay = ans !== '' ? `<span class="text-slate-800 font-semibold">${parseLinks(ans)}</span>` : `<span class="text-rose-500 font-bold italic">(Chưa trả lời)</span>`;
-                            theoryHtml += `<div class="bg-white p-3.5 rounded-xl border border-slate-200"><p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500"></i> ${parseLinks(q)}</p><p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg"><b>Đáp án:</b> ${ansDisplay}</p></div>`;
+                            theoryHtml += `<div class="bg-white p-3.5 rounded-xl border border-slate-200"><p class="text-xs font-bold text-slate-800 mb-1.5"><i class="fas fa-question-circle text-blue-500 mr-1"></i> ${parseLinks(q)}</p><p class="text-xs text-slate-600 bg-slate-50 p-2.5 rounded-lg border border-slate-100"><b>Đáp án:</b> ${ansDisplay}</p></div>`;
                         }); theoryHtml += `</div>`;
                     }
                     
                     let imgHtml = ''; let imgUrls = subRecord && subRecord.linkDrive ? subRecord.linkDrive.toString().split(/[\n,]+/).map(u => u.trim()).filter(u => u.startsWith("http")) : [];
                     if (imgUrls.length > 0) {
-                        imgHtml = `<div class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${imgUrls.length}):</p><div class="flex flex-col gap-4 w-full">`;
+                        imgHtml = `<div class="mb-4 bg-slate-50 p-4 rounded-2xl border border-slate-200"><p class="text-[11px] font-black text-emerald-600 uppercase tracking-wider mb-3 flex items-center gap-1.5"><i class="fas fa-images"></i> Ảnh minh chứng đã nộp (${imgUrls.length}):</p><div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">`;
                         imgUrls.forEach((url, idx) => { imgHtml += `<div class="relative w-full bg-slate-100 border border-slate-300 rounded-none overflow-hidden cursor-zoom-in" onclick="openFullscreenModal(${JSON.stringify(imgUrls).replace(/"/g, '&quot;')}, ${idx})"><img src="${getDirectImg(url)}" class="w-full h-auto max-h-[700px] object-contain block mx-auto rounded-none"></div>`; }); imgHtml += `</div></div>`;
                     } else imgHtml = `<div class="mb-4 bg-slate-100 p-4 rounded-2xl border border-slate-200 text-slate-500 text-xs font-bold"><i class="fas fa-info-circle mr-1.5"></i>Chưa nộp ảnh minh chứng cho bài tập này.</div>`;
 
                     let displayFeedback = (subRecord && subRecord.nhanXet && !subRecord.nhanXet.includes("[BỎ QUA]")) ? subRecord.nhanXet : null;
-                    let fbHtml = displayFeedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap">${displayFeedback}</p></div>` : ``;
+                    let fbHtml = displayFeedback ? `<div class="bg-amber-50 p-4 rounded-2xl border border-amber-200 mt-3"><p class="text-[11px] font-black text-amber-800 uppercase tracking-wider mb-1.5 flex items-center gap-1.5"><i class="fas fa-comment-dots"></i> Giảng viên nhận xét:</p><p class="text-xs font-bold text-slate-800 whitespace-pre-wrap">${displayFeedback}</p></div>` : ``;
                     
-                    html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${exDetails.title}</h3>${statusBadge}</div>${reqHtml}${theoryHtml}${imgHtml}${fbHtml}</div>`;
+                    // SẮP XẾP LẠI THỨ TỰ IN: LÝ THUYẾT TRƯỚC, RỒI MỚI TỚI YÊU CẦU THỰC HÀNH VÀ ẢNH
+                    html += `<div class="bg-white p-5 md:p-6 rounded-3xl border border-slate-200 shadow-sm mb-6 print-break-inside-avoid"><div class="flex items-start justify-between gap-4 mb-4 pb-3 border-b border-slate-100"><h3 class="text-base font-black text-slate-800">${exDetails.title}</h3>${statusBadge}</div>${theoryHtml}${reqHtml}${imgHtml}${fbHtml}</div>`;
                 });
             }
 
@@ -1024,7 +1163,7 @@
         function openFullscreenModal(urls, idx) { fullscreenImageList = urls; fullscreenImageIndex = idx; updateFullscreenModal(); document.getElementById('fullscreenModal').classList.remove('hidden'); document.getElementById('fullscreenModal').classList.add('flex'); }
         function closeFullscreenModal() { document.getElementById('fullscreenModal').classList.add('hidden'); document.getElementById('fullscreenModal').classList.remove('flex'); }
         function changeFullscreenImg(dir) { if (fullscreenImageList.length === 0) return; fullscreenImageIndex = (fullscreenImageIndex + dir + fullscreenImageList.length) % fullscreenImageList.length; updateFullscreenModal(); }
-        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
+        function updateFullscreenModal() { const img = document.getElementById('fullscreenModalImg'); const viewRawBtn = document.getElementById('fullscreenModalRawBtn'); const countText = document.getElementById('fullscreenModalCount'); const currentUrl = fullscreenImageList[fullscreenImageIndex]; img.src = getDirectImg(currentUrl); viewRawBtn.href = currentUrl; countText.innerText = `Ảnh ${fullscreenImageIndex + 1} / ${fullscreenImageList.length}`; const prevBtn = document.getElementById('fullscreenModalPrev'); const nextBtn = document.getElementById('fullscreenModalNext'); if (fullscreenImageList.length <= 1) { prevBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); } else { prevBtn.classList.remove('hidden'); nextBtn.classList.remove('hidden'); } }
     </script>
 </body>
 </html>
