@@ -77,7 +77,7 @@
                 </div>
             </div>
 
-            <!-- Cụm nút điều hướng: Nút Github xám đặt trước, nút LMS cam đặt sau -->
+            <!-- Cụm nút điều hướng: Nút Github xám đặt TRƯỚC, nút LMS cam đặt SAU -->
             <div class="flex items-center gap-2 sm:gap-2.5">
                 <a href="https://kiotvietlnd.github.io/elearning/" target="_blank" rel="noopener noreferrer" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
                     <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
@@ -216,7 +216,7 @@
             </div>
         </div>
 
-        <!-- RIGHT SIDEBAR -->
+        <!-- RIGHT SIDEBAR (BÊN PHẢI NỀN TRẮNG, Ô BÀI HỌC NỀN XANH DƯƠNG SÁNG NHẠT, TEXT NAVY BOLD) -->
         <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-l border-slate-200 bg-white text-slate-800 relative z-20 shadow-md justify-between h-full">
             <!-- Header Sidebar + Nút Luyện đề ngẫu nhiên xanh lá đặt trên cùng -->
             <div class="p-4 border-b border-slate-200 bg-slate-50/80 shrink-0 space-y-3">
@@ -665,11 +665,12 @@
             });
         }
 
-        // Chế độ Luyện đề ngẫu nhiên với thuật toán Ultra 40 câu
+        // Chế độ Luyện đề ngẫu nhiên với thuật toán Ultra 40 câu: Ưu tiên chọn ít nhất 1 câu hỏi từ mỗi bài học
         function startGeneralQuiz() {
             const countSelect = document.querySelector('input[name="general-count"]:checked').value;
             const targetCount = parseInt(countSelect, 10);
 
+            // Gom nhóm câu hỏi theo từng Category
             const questionsByCat = {};
             categoriesGlobal.forEach(cat => { questionsByCat[cat] = []; });
             allQuestions.forEach(q => {
@@ -681,7 +682,7 @@
             let selectedPool = [];
             let remainingPool = [];
 
-            // Ưu tiên lấy ít nhất 1 câu từ mỗi bài học
+            // Ưu tiên lấy ít nhất 1 câu từ mỗi bài học nếu targetCount >= số lượng bài học
             if (targetCount >= categoriesGlobal.length) {
                 categoriesGlobal.forEach(cat => {
                     const catQuestions = shuffle([...questionsByCat[cat]]);
@@ -696,6 +697,7 @@
                 remainingPool = [...allQuestions];
             }
 
+            // Lấy thêm số câu ngẫu nhiên còn lại cho đủ targetCount
             remainingPool = shuffle(remainingPool);
             const needed = targetCount - selectedPool.length;
             if (needed > 0) {
