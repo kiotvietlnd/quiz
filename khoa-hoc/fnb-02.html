@@ -71,28 +71,48 @@
                     <img src="https://logo.kiotviet.vn/KiotViet-Logo-Horizontal.svg" alt="KiotViet Logo" class="h-4 sm:h-5">
                 </a>
                 
-                <div class="hidden md:block border-l border-white/20 pl-3">
+                <div class="border-l border-white/20 pl-3">
                     <h1 class="text-xs sm:text-sm font-bold tracking-tight text-white uppercase">Luyện thi Trắc nghiệm - Đào tạo Sản phẩm - FNB 02</h1>
                     <p class="text-[10px] text-blue-100 font-bold uppercase">Chuyên trang Ôn tập dành cho Chuyên viên tư vấn KiotViet</p>
                 </div>
             </div>
-
-            <!-- Nút Học liệu màu xám ĐẶT TRƯỚC nút LMS màu cam -->
-            <div class="flex items-center gap-2 sm:gap-2.5">
-                <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/fnb-02" target="_blank" rel="noopener noreferrer" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-2 px-3.5 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
-                    <i class="fa-brands fa-github text-sm"></i> <span class="hidden sm:inline">Học liệu Github</span>
-                </a>
-                <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-fnb-02/" target="_blank" rel="noopener noreferrer" class="bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white font-bold py-2 px-4 rounded-full shadow-md text-xs transition-all flex items-center gap-1.5 transform hover:scale-105 active:scale-95">
-                    <i class="fa-solid fa-graduation-cap"></i> <span class="hidden sm:inline">Khóa học LMS</span>
-                </a>
-            </div>
         </div>
     </header>
 
-    <!-- Khung chính: Main bên trái, Sidebar bên phải -->
+    <!-- Khung chính: Sidebar bên trái, Main bên phải -->
     <main class="flex flex-1 overflow-hidden relative flex-row">
         
-        <!-- Khu vực nội dung bài thi / ôn tập (BÊN TRÁI) -->
+        <!-- LEFT SIDEBAR (BÊN TRÁI NỀN TRẮNG, Ô BÀI HỌC NỀN XANH DƯƠNG SÁNG NHẠT, TEXT NAVY BOLD) -->
+        <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-slate-200 bg-white text-slate-800 relative z-20 shadow-md justify-between h-full">
+            <!-- Header Sidebar + Nút Luyện đề ngẫu nhiên màu xanh lá trên cùng -->
+            <div class="p-4 border-b border-slate-200 bg-slate-50/80 shrink-0 space-y-3">
+                <div class="flex items-center justify-between gap-2">
+                    <h2 class="text-xs font-extrabold text-[#0f2c59] uppercase tracking-wider flex items-center gap-2 select-none">
+                        <i class="fa-solid fa-layer-group text-kvBlue"></i> Danh sách Bài học
+                    </h2>
+                    <button onclick="toggleSettingsModal(true)" class="w-8 h-8 rounded-full hover:bg-slate-200/70 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors focus:outline-none" title="Cài đặt ôn tập">
+                        <i class="fa-solid fa-gear text-sm"></i>
+                    </button>
+                </div>
+                <!-- Nút Luyện đề ngẫu nhiên xanh lá đặt trên cùng -->
+                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-sm text-center btn-interact">
+                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
+                </button>
+            </div>
+            
+            <!-- Danh sách bài học cuộn -->
+            <div class="flex-grow overflow-y-auto w-full p-3 space-y-2" id="category-sidebar-list"></div>
+
+            <!-- Phần Nhận chứng chỉ ở DƯỚI CÙNG SIDEBAR kèm tooltip mô tả -->
+            <div class="p-4 border-t border-slate-200 bg-slate-50 shrink-0 space-y-1.5" title="Sau khi hoàn thành tất cả bài ôn tập trắc nghiệm trong từng bài học của khóa học, bạn có thể tải chứng chỉ hoàn thành ôn tập trắc nghiệm khóa học.">
+                <button id="get-certificate-btn" onclick="openCertificateForm()" class="w-full opacity-50 cursor-not-allowed bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs text-center border border-slate-300" disabled>
+                    <i class="fa-solid fa-lock"></i> Nhận chứng chỉ (0/0)
+                </button>
+                <p class="text-[10px] text-slate-400 text-center leading-tight">Hoàn thành 100% bài học để mở khóa chứng chỉ</p>
+            </div>
+        </aside>
+
+        <!-- Khu vực nội dung bài thi / ôn tập (BÊN PHẢI) -->
         <div id="main-scroll-area" class="flex-1 overflow-y-auto px-3 md:px-8 py-6 md:py-8 relative bg-[#f0f6ff] flex flex-col items-center min-w-0">
             <div id="loading-screen" class="w-full flex flex-col items-center justify-center p-6 my-auto text-center max-w-md">
                 <div class="animate-spin rounded-full h-10 w-10 border-b-2 border-kvBlue mb-4"></div>
@@ -125,9 +145,8 @@
                         
                         <div class="space-y-4 text-slate-600 text-sm leading-relaxed mb-8">
                             <p>Sau khi hoàn thành tất cả bài ôn tập trắc nghiệm trong từng bài học của khóa học, bạn có thể tải <strong>chứng chỉ hoàn thành ôn tập trắc nghiệm khóa học</strong>. Chứng chỉ này ghi nhận đã hoàn thành đầy đủ các bài tập trắc nghiệm trong khóa học, <span class="text-rose-600 font-bold">chưa phải là chứng nhận hoàn thành xong khóa học</span>.</p>
-                            <p>Để hoàn thành khóa học chính thức, bạn cần đăng nhập vào hệ thống <a href="https://daotao.kiotviet.vn/khoa-hoc/dvkh-dao-tao-san-pham-fnb-02/" target="_blank" class="text-amber-600 font-bold hover:underline">LMS</a> và làm bài kiểm tra chính thức.</p>
-                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên phải, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-emerald-600 mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
-                            <p class="text-cyan-600 font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao trong bài test chính thức trên LMS! 🚀</p>
+                            <p>Bạn có thể lựa chọn nội dung muốn ôn tập ở thanh danh mục bên trái, hoặc chọn chế độ <strong><i class="fa-solid fa-cube text-emerald-600 mx-1"></i>Luyện đề ngẫu nhiên</strong> với các tùy chọn đa dạng.</p>
+                            <p class="text-cyan-600 font-bold pt-2 text-base">Chúc bạn ôn tập hiệu quả và đạt kết quả cao! 🚀</p>
                         </div>
                     </div>
                 </div>
@@ -205,9 +224,8 @@
                                 <span id="result-percent" class="text-3xl font-black text-cyan-600"></span>
                             </div>
                         </div>
-                        <div class="flex flex-col sm:flex-row justify-center gap-4 mt-2">
-                            <a href="https://kiotvietlnd.github.io/elearning/khoa-hoc-dvkh/fnb-02" target="_blank" rel="noopener noreferrer" class="bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-full text-sm flex items-center justify-center gap-1.5 transform hover:scale-105 active:scale-95 shadow-md"><i class="fa-brands fa-github text-lg"></i> Học lại bài này trên Github</a>
-                            <button onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-6 rounded-full text-sm shadow-md btn-interact flex items-center justify-center gap-2"><i class="fa-solid fa-rotate-right"></i> Ôn tập lại lượt này</button>
+                        <div class="flex justify-center mt-2">
+                            <button onclick="playAgain()" class="bg-kvBlue hover:bg-kvBlueHover text-white font-bold py-3 px-8 rounded-full text-sm shadow-md btn-interact flex items-center justify-center gap-2"><i class="fa-solid fa-rotate-right"></i> Ôn tập lại lượt này</button>
                         </div>
                     </div>
                     <h3 class="font-bold text-slate-400 mb-4 px-2 text-xs uppercase tracking-wider">Đáp án bạn đã chọn:</h3>
@@ -215,40 +233,10 @@
                 </div>
             </div>
         </div>
-
-        <!-- RIGHT SIDEBAR (BÊN PHẢI NỀN TRẮNG, Ô BÀI HỌC NỀN XANH DƯƠNG SÁNG NHẠT, TEXT NAVY BOLD) -->
-        <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-l border-slate-200 bg-white text-slate-800 relative z-20 shadow-md justify-between h-full">
-            <!-- Header Sidebar + Nút Luyện đề ngẫu nhiên màu xanh lá trên cùng -->
-            <div class="p-4 border-b border-slate-200 bg-slate-50/80 shrink-0 space-y-3">
-                <div class="flex items-center justify-between gap-2">
-                    <h2 class="text-xs font-extrabold text-[#0f2c59] uppercase tracking-wider flex items-center gap-2 select-none">
-                        <i class="fa-solid fa-layer-group text-kvBlue"></i> Danh sách Bài học
-                    </h2>
-                    <button onclick="toggleSettingsModal(true)" class="w-8 h-8 rounded-full hover:bg-slate-200/70 flex items-center justify-center text-slate-500 hover:text-slate-800 transition-colors focus:outline-none" title="Cài đặt ôn tập">
-                        <i class="fa-solid fa-gear text-sm"></i>
-                    </button>
-                </div>
-                <!-- Nút Luyện đề ngẫu nhiên xanh lá đặt trên cùng -->
-                <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-sm text-center btn-interact">
-                    <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
-                </button>
-            </div>
-            
-            <!-- Danh sách bài học cuộn -->
-            <div class="flex-grow overflow-y-auto w-full p-3 space-y-2" id="category-sidebar-list"></div>
-
-            <!-- Phần Nhận chứng chỉ ở DƯỚI CÙNG SIDEBAR kèm tooltip mô tả -->
-            <div class="p-4 border-t border-slate-200 bg-slate-50 shrink-0 space-y-1.5" title="Sau khi hoàn thành tất cả bài ôn tập trắc nghiệm trong từng bài học của khóa học, bạn có thể tải chứng chỉ hoàn thành ôn tập trắc nghiệm khóa học.">
-                <button id="get-certificate-btn" onclick="openCertificateForm()" class="w-full opacity-50 cursor-not-allowed bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs text-center border border-slate-300" disabled>
-                    <i class="fa-solid fa-lock"></i> Nhận chứng chỉ (0/0)
-                </button>
-                <p class="text-[10px] text-slate-400 text-center leading-tight">Hoàn thành 100% bài học để mở khóa chứng chỉ</p>
-            </div>
-        </aside>
     </main>
 
-    <!-- MOBILE DRAWER MENU (BÊN PHẢI) -->
-    <div id="mobile-sidebar" class="fixed inset-y-0 right-0 w-[290px] bg-white text-slate-800 z-50 transform translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl h-full border-l border-slate-200">
+    <!-- MOBILE DRAWER MENU (BÊN TRÁI) -->
+    <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-[290px] bg-white text-slate-800 z-50 transform -translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl h-full border-r border-slate-200">
         <div class="p-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-slate-50">
             <span class="text-xs font-black uppercase text-[#0f2c59] tracking-wider">Danh sách Bài học</span>
             <button onclick="window.toggleSidebar(false)" class="w-8 h-8 rounded-full hover:bg-slate-200 flex items-center justify-center text-slate-600"><i class="fa-solid fa-xmark text-sm"></i></button>
@@ -382,10 +370,10 @@
             const sidebar = document.getElementById('mobile-sidebar');
             if (!sidebar) return;
             if (forceState !== undefined) {
-                if (forceState) sidebar.classList.remove('translate-x-full');
-                else sidebar.classList.add('translate-x-full');
+                if (forceState) sidebar.classList.remove('-translate-x-full');
+                else sidebar.classList.add('-translate-x-full');
             } else {
-                sidebar.classList.toggle('translate-x-full');
+                sidebar.classList.toggle('-translate-x-full');
             }
         };
 
@@ -670,7 +658,6 @@
             const countSelect = document.querySelector('input[name="general-count"]:checked').value;
             const targetCount = parseInt(countSelect, 10);
 
-            // Gom nhóm câu hỏi theo từng Category
             const questionsByCat = {};
             categoriesGlobal.forEach(cat => { questionsByCat[cat] = []; });
             allQuestions.forEach(q => {
@@ -682,7 +669,6 @@
             let selectedPool = [];
             let remainingPool = [];
 
-            // Ưu tiên chọn 1 câu từ mỗi bài học trước nếu số lượng câu yêu cầu >= số lượng bài học
             if (targetCount >= categoriesGlobal.length) {
                 categoriesGlobal.forEach(cat => {
                     const catQuestions = shuffle([...questionsByCat[cat]]);
@@ -697,7 +683,6 @@
                 remainingPool = [...allQuestions];
             }
 
-            // Lấy thêm số câu ngẫu nhiên còn lại từ kho câu hỏi cho đủ targetCount
             remainingPool = shuffle(remainingPool);
             const needed = targetCount - selectedPool.length;
             if (needed > 0) {
