@@ -82,9 +82,8 @@
     <!-- Khung chính: Sidebar bên trái, Main bên phải -->
     <main class="flex flex-1 overflow-hidden relative flex-row">
         
-        <!-- LEFT SIDEBAR (BÊN TRÁI NỀN TRẮNG, Ô BÀI HỌC NỀN XANH DƯƠNG SÁNG NHẠT, TEXT NAVY BOLD) -->
+        <!-- LEFT SIDEBAR -->
         <aside class="hidden lg:flex flex-col w-[320px] shrink-0 border-r border-slate-200 bg-white text-slate-800 relative z-20 shadow-md justify-between h-full">
-            <!-- Header Sidebar + Nút Luyện đề ngẫu nhiên màu xanh lá trên cùng -->
             <div class="p-4 border-b border-slate-200 bg-slate-50/80 shrink-0 space-y-3">
                 <div class="flex items-center justify-between gap-2">
                     <h2 class="text-xs font-extrabold text-[#0f2c59] uppercase tracking-wider flex items-center gap-2 select-none">
@@ -94,7 +93,7 @@
                         <i class="fa-solid fa-gear text-sm"></i>
                     </button>
                 </div>
-                <!-- Nút Luyện đề ngẫu nhiên xanh lá đặt trên cùng -->
+                <!-- Nút Luyện đề ngẫu nhiên -->
                 <button id="general-mode-btn" onclick="selectGeneralMode()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-black py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs shadow-sm text-center btn-interact">
                     <i class="fa-solid fa-cube"></i> Luyện đề ngẫu nhiên
                 </button>
@@ -103,7 +102,7 @@
             <!-- Danh sách bài học cuộn -->
             <div class="flex-grow overflow-y-auto w-full p-3 space-y-2" id="category-sidebar-list"></div>
 
-            <!-- Phần Nhận chứng chỉ ở DƯỚI CÙNG SIDEBAR kèm tooltip mô tả -->
+            <!-- Phần Nhận chứng chỉ ở DƯỚI CÙNG SIDEBAR -->
             <div class="p-4 border-t border-slate-200 bg-slate-50 shrink-0 space-y-1.5" title="Sau khi hoàn thành tất cả bài ôn tập trắc nghiệm trong từng bài học của khóa học, bạn có thể tải chứng chỉ hoàn thành ôn tập trắc nghiệm khóa học.">
                 <button id="get-certificate-btn" onclick="openCertificateForm()" class="w-full opacity-50 cursor-not-allowed bg-slate-200 text-slate-400 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-xs text-center border border-slate-300" disabled>
                     <i class="fa-solid fa-lock"></i> Nhận chứng chỉ (0/0)
@@ -151,7 +150,7 @@
                     </div>
                 </div>
 
-                <!-- Cấu hình Luyện đề ngẫu nhiên (Flash 5, Pro 10, Ultra 40) -->
+                <!-- Cấu hình Luyện đề ngẫu nhiên -->
                 <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left mb-auto mt-auto">
                     <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-black rounded-full mb-6"><i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">Luyện đề ngẫu nhiên</h2>
@@ -235,7 +234,7 @@
         </div>
     </main>
 
-    <!-- MOBILE DRAWER MENU (BÊN TRÁI) -->
+    <!-- MOBILE DRAWER MENU -->
     <div id="mobile-sidebar" class="fixed inset-y-0 left-0 w-[290px] bg-white text-slate-800 z-50 transform -translate-x-full transition-transform duration-300 lg:hidden flex flex-col shadow-2xl h-full border-r border-slate-200">
         <div class="p-4 border-b border-slate-200 flex items-center justify-between shrink-0 bg-slate-50">
             <span class="text-xs font-black uppercase text-[#0f2c59] tracking-wider">Danh sách Bài học</span>
@@ -334,7 +333,8 @@
 
     <!-- LOGIC VẬN HÀNH TRẮC NGHIỆM -->
     <script>
-        const spreadsheetId = '1AW-Gxzp_z2-_9nEEfpqy-4T9SHFxFThI3oaIVe7-ARM';
+        // CẬP NHẬT GOOGLE SHEET ID MỚI VÀ SHEET RETAIL 02
+        const spreadsheetId = '1F8D254649P2sVZCG_HQ7_Zh15jT6TOCFCfySNgHS6M8';
         const sheetName = 'Retail 02'; 
         const dataUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/gviz/tq?tqx=out:json&sheet=${encodeURIComponent(sheetName)}`;
         const certDatabaseAppUrl = 'https://script.google.com/macros/s/AKfycbzMHULnGN2yDupA1rG5eadbR5_EU9iUjHbULR_D-36kvs5ZYmo8sVvJsCrBtoZNLuJr/exec';
@@ -360,6 +360,14 @@
         let fontScale = parseFloat(localStorage.getItem(lsKeys.fontScale) || '0.9');
         let categoriesGlobal = [];
         let categoryCountsGlobal = {};
+
+        // HÀM ẨN TIỀN TỐ TÊN KHÓA HỌC KHI HIỂN THỊ TRÊN GIAO DIỆN
+        function formatCategoryName(name) {
+            if (!name) return '';
+            const regex = new RegExp(`^\\s*(${sheetName}|Retail\\s*02)\\s*[-–—:]\\s*`, 'i');
+            const clean = name.replace(regex, '').trim();
+            return clean || name;
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             fetchData();
@@ -418,6 +426,7 @@
             }
         }
 
+        // ĐỌC VÀ XỬ LÝ DỮ LIỆU THEO FORMAT SHEET MỚI
         function processQuizData(data) {
             if (!data || data.length === 0 || !data[0]) {
                 showErrorScreen("Bảng dữ liệu trống.");
@@ -431,31 +440,40 @@
 
             for (let i = 0; i < data.length; i++) {
                 const row = data[i];
-                if (!row || row.length < 7) continue;
+                if (!row || row.length < 8) continue;
 
-                const col0Val = row[0] ? row[0].toString().trim() : '';
-                const col3Val = row[3] ? row[3].toString().trim() : '';
+                const col0Val = row[0] ? row[0].toString().trim().toLowerCase() : '';
+                const col4Val = row[4] ? row[4].toString().trim().toLowerCase() : '';
 
-                if (col0Val === 'Ngành Hàng' || col3Val.includes('Tiêu đề câu hỏi')) continue;
+                // Bỏ qua dòng tiêu đề
+                if (col0Val.includes('loại câu hỏi') || col4Val.includes('câu hỏi')) continue;
 
                 const category = row[1] ? row[1].toString().trim() : 'Chủ đề khác';
-                const questionText = row[3] ? row[3].toString().trim() : '';
+                const questionText = row[4] ? row[4].toString().trim() : '';
                 if (questionText === '') continue;
 
-                const rawAnsKey = row[5] ? row[5].toString().trim().toUpperCase() : '';
-                const correctIndex = validKeys.indexOf(rawAnsKey);
+                const explanation = row[5] ? row[5].toString().trim() : '';
+                const rawAnsVal = row[6] ? row[6].toString().trim().toUpperCase() : '';
 
+                // Hỗ trợ đáp án đúng dạng số (1, 2, 3...) hoặc chữ cái (A, B, C...)
+                let correctIndex = -1;
+                if (/^[1-9]\d*$/.test(rawAnsVal)) {
+                    correctIndex = parseInt(rawAnsVal, 10) - 1;
+                } else if (validKeys.includes(rawAnsVal)) {
+                    correctIndex = validKeys.indexOf(rawAnsVal);
+                }
+
+                // Lấy các phương án trả lời từ Cột 7 trở đi
                 const options = [];
-                for (let j = 6; j <= 11; j++) {
-                    if (j >= row.length) break;
+                for (let j = 7; j < row.length; j++) {
                     const optionText = row[j] ? row[j].toString().trim() : '';
-                    const optionKey = validKeys[j - 6];
-                    if (optionText !== '' && optionKey) {
+                    if (optionText !== '') {
+                        const optionKey = validKeys[options.length] || String.fromCharCode(65 + options.length);
                         options.push({ text: optionText, key: optionKey });
                     }
                 }
 
-                if (correctIndex !== -1 && options.length >= 2) {
+                if (correctIndex >= 0 && correctIndex < options.length && options.length >= 2) {
                     categories.add(category);
                     categoryCounts[category] = (categoryCounts[category] || 0) + 1;
                     allQuestions.push({
@@ -463,13 +481,14 @@
                         question: questionText,
                         options: options,
                         correctIndex: correctIndex,
-                        answerKey: rawAnsKey
+                        answerKey: options[correctIndex].key,
+                        explanation: explanation
                     });
                 }
             }
 
             if (allQuestions.length === 0) {
-                showErrorScreen("Không tìm thấy câu hỏi hợp lệ.");
+                showErrorScreen("Không tìm thấy câu hỏi hợp lệ trong bảng dữ liệu.");
                 return;
             }
 
@@ -485,6 +504,7 @@
             checkCertificateUnlockStatus();
         }
 
+        // TẠO DANH SÁCH BÀI HỌC VỚI TIỀN TỐ ĐÃ ĐƯỢC ẨN
         function buildCategorySidebar(categories, counts) {
             const container = document.getElementById('category-sidebar-list');
             const mobileContainer = document.getElementById('mobile-sidebar-nav-list');
@@ -495,10 +515,11 @@
                 const qCount = counts[cat] || 0;
                 const isPassed = passedCats.includes(cat);
                 const badgeColor = isPassed ? "bg-emerald-100 text-emerald-800 border-emerald-300" : "bg-white text-[#0f2c59] border-blue-200";
+                const displayName = formatCategoryName(cat);
                 
                 listHtml += `
                     <button class="category-btn w-full text-left p-2.5 rounded-xl bg-blue-50/70 hover:bg-blue-100/80 border border-blue-200/80 flex items-center justify-between text-xs font-bold text-[#0f2c59] transition-all focus:outline-none" data-category="${cat}" onclick="selectCategory('${cat}'); toggleSidebar(false);">
-                        <span class="whitespace-normal break-words mr-2 leading-snug flex-1">${cat}</span>
+                        <span class="whitespace-normal break-words mr-2 leading-snug flex-1">${displayName}</span>
                         <span class="text-[10px] ${badgeColor} px-2 py-0.5 rounded-full shrink-0 font-bold border tabular-nums">${qCount} câu</span>
                     </button>
                 `;
@@ -523,7 +544,7 @@
                     const state = JSON.parse(savedStateRaw);
                     if (state && state.currentQuizSet && state.currentQuizSet.length > 0) {
                         document.getElementById('resume-container').classList.remove('hidden');
-                        const topicName = state.isGeneralMode ? "Luyện đề ngẫu nhiên" : state.selectedCategory;
+                        const topicName = state.isGeneralMode ? "Luyện đề ngẫu nhiên" : formatCategoryName(state.selectedCategory);
                         const answered = state.userAnswers ? state.userAnswers.filter(ans => ans.selectedIdx !== null).length : 0;
                         document.getElementById('resume-info').textContent = `Chủ đề: ${topicName} | Tiến trình: ${answered}/${state.currentQuizSet.length} câu`;
                     }
@@ -653,7 +674,6 @@
             });
         }
 
-        // Chế độ Luyện đề ngẫu nhiên với logic Ultra 40 câu: Ưu tiên mỗi bài học có ít nhất 1 câu
         function startGeneralQuiz() {
             const countSelect = document.querySelector('input[name="general-count"]:checked').value;
             const targetCount = parseInt(countSelect, 10);
@@ -749,7 +769,9 @@
             const progress = (currentIndex / currentQuizSet.length) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
             document.getElementById('question-index').textContent = `Câu ôn tập ${currentIndex + 1} / ${currentQuizSet.length}`;
-            document.getElementById('question-category').textContent = q.category;
+            
+            // ẨN TIỀN TỐ TRÊN BADGE CỦA CÂU HỎI
+            document.getElementById('question-category').textContent = formatCategoryName(q.category);
             document.getElementById('question-text').textContent = q.question;
 
             const container = document.getElementById('options-container');
@@ -789,7 +811,9 @@
             const progress = (answeredCount / currentQuizSet.length) * 100;
             document.getElementById('progress-bar').style.width = `${progress}%`;
             document.getElementById('question-index').textContent = `Đã làm ${answeredCount} / ${currentQuizSet.length} câu`;
-            document.getElementById('question-category').textContent = isGeneralMode ? "Ngẫu nhiên" : selectedCategory;
+            
+            // ẨN TIỀN TỐ TRÊN BADGE CHẾ ĐỘ HIỂN THỊ TẤT CẢ
+            document.getElementById('question-category').textContent = isGeneralMode ? "Ngẫu nhiên" : formatCategoryName(selectedCategory);
 
             const listContainer = document.getElementById('all-questions-list');
             listContainer.innerHTML = '';
@@ -867,12 +891,20 @@
                 const chosenOption = ans.question.options[ans.selectedIdx];
                 const chosenText = chosenOption ? `${chosenOption.key}. ${chosenOption.text}` : "Chưa trả lời";
 
+                // Hiển thị phần Giải thích nếu có trong Google Sheet
+                let explanationHtml = ans.question.explanation ? `
+                    <div class="p-3.5 rounded-xl bg-sky-50 text-xs text-sky-900 mt-2 border border-sky-200">
+                        <span class="font-bold block mb-1 text-sky-800"><i class="fa-solid fa-lightbulb"></i> Giải thích chi tiết:</span>
+                        <span class="leading-relaxed">${ans.question.explanation}</span>
+                    </div>` : '';
+
                 let feedbackHtml = ans.isCorrect 
-                    ? `<div class="p-4 rounded-xl bg-emerald-50 text-sm text-emerald-800 mt-3"><span class="font-bold block mb-1">🎯 Bạn đã trả lời đúng:</span><span>${correctText}</span></div>`
-                    : `<div class="space-y-2 mt-3"><div class="p-4 rounded-xl bg-rose-50 text-sm text-rose-800"><span class="font-bold block mb-1">❌ Phương án bạn đã chọn:</span><span>${chosenText}</span></div><div class="p-4 rounded-xl bg-emerald-50 text-sm text-emerald-800"><span class="font-bold block mb-1">💡 Phương án đúng phải là:</span><span>${correctText}</span></div></div>`;
+                    ? `<div class="p-4 rounded-xl bg-emerald-50 text-sm text-emerald-800 mt-3"><span class="font-bold block mb-1">🎯 Bạn đã trả lời đúng:</span><span>${correctText}</span></div>${explanationHtml}`
+                    : `<div class="space-y-2 mt-3"><div class="p-4 rounded-xl bg-rose-50 text-sm text-rose-800"><span class="font-bold block mb-1">❌ Phương án bạn đã chọn:</span><span>${chosenText}</span></div><div class="p-4 rounded-xl bg-emerald-50 text-sm text-emerald-800"><span class="font-bold block mb-1">💡 Phương án đúng phải là:</span><span>${correctText}</span></div>${explanationHtml}</div>`;
 
                 card.className = `p-5 md:p-6 rounded-2xl border ${statusColorClasses} w-full text-left hover:shadow-md transition`;
-                card.innerHTML = `<div class="flex justify-between items-center mb-3 gap-2"><span class="text-xs bg-slate-100 text-slate-500 px-2.5 py-1 rounded font-bold">${ans.question.category}</span>${badgeHtml}</div><p class="font-black text-slate-800 text-sm md:text-base mb-4">${idx + 1}. ${ans.question.question}</p>${feedbackHtml}`;
+                // ẨN TIỀN TỐ TRONG PHẦN ĐÁNH GIÁ KẾT QUẢ
+                card.innerHTML = `<div class="flex justify-between items-center mb-3 gap-2"><span class="text-xs bg-slate-100 text-slate-500 px-2.5 py-1 rounded font-bold">${formatCategoryName(ans.question.category)}</span>${badgeHtml}</div><p class="font-black text-slate-800 text-sm md:text-base mb-4">${idx + 1}. ${ans.question.question}</p>${feedbackHtml}`;
                 reviewContainer.appendChild(card);
             });
             document.getElementById('main-scroll-area').scrollTo({ top: 0, behavior: 'smooth' });
