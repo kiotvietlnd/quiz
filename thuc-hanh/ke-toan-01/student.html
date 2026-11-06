@@ -393,8 +393,9 @@
                 exercises: [{
                     id: 'survey_start',
                     title: 'Điểm danh đầu giờ',
-                    desc: 'Quét mã QR trên màn hình Zoom hoặc nhấn vào nút bên dưới để làm khảo sát đánh giá mức độ tự tin và vướng mắc thực tế.',
-                    link: 'https://forms.gle/EjS52XmsosKgwFBZA',
+                    desc: 'Quét mã QR trên màn hình Google Meets hoặc nhấn vào nút bên dưới để làm khảo sát đánh giá mức độ tự tin và vướng mắc thực tế.',
+                    link: 'https://forms.gle/PCWMZnECzkw5TG1r8',
+                    image: 'https://i.postimg.cc/nzgXj5d2/qrcode-424731393-f244e1f65092b88748041410a814f686.png',
                     btnText: 'Form Khảo Sát',
                     requireUpload: false,
                     isSpecial: true,
@@ -439,6 +440,7 @@
                     title: 'Khảo sát khóa học sau đào tạo',
                     desc: 'Hoàn thành khảo sát để đánh giá khóa học và nhận lộ trình thi chứng chỉ Kế toán 01.',
                     link: 'https://docs.google.com/forms/d/e/1FAIpQLSfUjSF4NzBAf9AQhWhs09eE-a7InRHjAFcc_ZdeqlQl3F7R0A/viewform',
+                    image: 'https://i.postimg.cc/pX6P286s/khao-sat-cuoi-khoa-ke-toan.png',
                     btnText: 'Form Khảo Sát Cuối Khóa',
                     requireUpload: false,
                     isSpecial: true,
@@ -576,11 +578,21 @@
                 const oIdx = ex.originalIndex;
 
                 if (ex.isSurvey) {
-                    let linkBtn = `<a href="${ex.link}" target="_blank" class="mt-5 inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-bold text-xs px-6 py-3.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt text-lg text-indigo-500"></i> ${ex.btnText}</a>`;
+                    let qrImgHtml = '';
+                    if (ex.image) {
+                        qrImgHtml = `
+                        <div class="mt-4 mb-3">
+                            <div class="inline-block p-2.5 bg-white border border-slate-200 rounded-2xl shadow-sm hover:shadow-md transition">
+                                <img src="${ex.image}" alt="QR Code Khảo sát" class="w-48 h-48 sm:w-56 sm:h-56 object-contain rounded-xl block">
+                            </div>
+                        </div>`;
+                    }
+                    let linkBtn = `<a href="${ex.link}" target="_blank" class="inline-flex items-center gap-2 bg-indigo-50 text-indigo-700 border border-indigo-200 hover:bg-indigo-100 font-bold text-xs px-6 py-3.5 rounded-xl shadow-sm transition"><i class="fas fa-external-link-alt text-lg text-indigo-500"></i> ${ex.btnText}</a>`;
                     return `
                     <div id="sub_exercise_card_${subIdx}" class="sub-exercise-card w-full">
                         <p class="text-xs font-semibold text-slate-600 leading-relaxed">${ex.desc}</p>
-                        ${linkBtn}
+                        ${qrImgHtml}
+                        <div class="mt-2">${linkBtn}</div>
                     </div>`;
                 }
 
