@@ -155,7 +155,7 @@
                 <div id="general-config-screen" class="hidden w-full max-w-2xl bg-white rounded-3xl p-8 md:p-12 shadow-lg border border-slate-100 text-left mb-auto mt-auto">
                     <span class="inline-flex items-center gap-1.5 px-4 py-1.5 bg-emerald-50 text-emerald-700 text-xs font-black rounded-full mb-6"><i class="fa-solid fa-cube"></i> CHẾ ĐỘ NGẪU NHIÊN</span>
                     <h2 class="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">Luyện đề ngẫu nhiên</h2>
-                    <p class="text-sm text-slate-500 leading-relaxed mb-8">Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề ôn tập thử thách toàn diện. Với chế độ Ultra, mỗi bài học sẽ được ưu tiên có ít nhất 1 câu hỏi.</p>
+                    <p class="text-sm text-slate-500 leading-relaxed mb-8">Hệ thống sẽ chọn ngẫu nhiên các câu hỏi từ tất cả các bài học để tạo ra đề ôn tập thử thách toàn diện. Với chế độ Ultra, bạn sẽ thử sức với toàn bộ câu hỏi trong ngân hàng đề thi của khóa học.</p>
                     <div class="mb-10">
                         <label class="block text-xs font-black text-slate-400 uppercase tracking-wider mb-4">Lựa chọn số lượng câu hỏi:</label>
                         <div class="grid grid-cols-3 gap-4">
@@ -174,10 +174,10 @@
                                 </div>
                             </label>
                             <label class="cursor-pointer">
-                                <input type="radio" name="general-count" value="36" class="sr-only peer">
+                                <input type="radio" name="general-count" value="all" class="sr-only peer">
                                 <div class="p-6 rounded-2xl border-2 border-slate-100 bg-white peer-checked:border-emerald-500 peer-checked:bg-emerald-50/50 text-center transform hover:scale-[1.02] shadow-sm transition-all">
                                     <span class="block font-extrabold text-xs text-slate-800">Ultra 🔥</span>
-                                    <span class="block text-xs text-emerald-600 font-black mt-2">36 câu</span>
+                                    <span class="block text-xs text-emerald-600 font-black mt-2" id="ultra-count-label">Toàn bộ câu</span>
                                 </div>
                             </label>
                         </div>
@@ -1232,6 +1232,8 @@
             categoriesGlobal = Array.from(categories);
             categoryCountsGlobal = categoryCounts;
             buildCategorySidebar(categoriesGlobal, categoryCountsGlobal);
+            const ultraLabel = document.getElementById('ultra-count-label');
+            if (ultraLabel) ultraLabel.textContent = `Toàn bộ (${allQuestions.length} câu)`;
 
             document.getElementById('loading-screen').classList.add('hidden');
             document.getElementById('main-layout').classList.remove('hidden');
@@ -1412,39 +1414,42 @@
         // Chế độ Luyện đề ngẫu nhiên với logic Ultra 40 câu: Ưu tiên mỗi bài học có ít nhất 1 câu
         function startGeneralQuiz() {
             const countSelect = document.querySelector('input[name="general-count"]:checked').value;
-            const targetCount = parseInt(countSelect, 10);
-
-            const questionsByCat = {};
-            categoriesGlobal.forEach(cat => { questionsByCat[cat] = []; });
-            allQuestions.forEach(q => {
-                if (questionsByCat[q.category]) {
-                    questionsByCat[q.category].push(q);
-                }
-            });
+            const targetCount = countSelect === 'all' ? allQuestions.length : parseInt(countSelect, 10);
 
             let selectedPool = [];
-            let remainingPool = [];
-
-            if (targetCount >= categoriesGlobal.length) {
-                categoriesGlobal.forEach(cat => {
-                    const catQuestions = shuffle([...questionsByCat[cat]]);
-                    if (catQuestions.length > 0) {
-                        selectedPool.push(catQuestions[0]);
-                        for (let i = 1; i < catQuestions.length; i++) {
-                            remainingPool.push(catQuestions[i]);
-                        }
+            if (countSelect === 'all' || targetCount >= allQuestions.length) {
+                selectedPool = [...allQuestions];
+            } else {
+                const questionsByCat = {};
+                categoriesGlobal.forEach(cat => { questionsByCat[cat] = []; });
+                allQuestions.forEach(q => {
+                    if (questionsByCat[q.category]) {
+                        questionsByCat[q.category].push(q);
                     }
                 });
-            } else {
-                remainingPool = [...allQuestions];
-            }
 
-            remainingPool = shuffle(remainingPool);
-            const needed = targetCount - selectedPool.length;
-            if (needed > 0) {
-                selectedPool = selectedPool.concat(remainingPool.slice(0, Math.min(needed, remainingPool.length)));
-            } else if (needed < 0) {
-                selectedPool = shuffle(selectedPool).slice(0, targetCount);
+                let remainingPool = [];
+                if (targetCount >= categoriesGlobal.length) {
+                    categoriesGlobal.forEach(cat => {
+                        const catQuestions = shuffle([...questionsByCat[cat]]);
+                        if (catQuestions.length > 0) {
+                            selectedPool.push(catQuestions[0]);
+                            for (let i = 1; i < catQuestions.length; i++) {
+                                remainingPool.push(catQuestions[i]);
+                            }
+                        }
+                    });
+                } else {
+                    remainingPool = [...allQuestions];
+                }
+
+                remainingPool = shuffle(remainingPool);
+                const needed = targetCount - selectedPool.length;
+                if (needed > 0) {
+                    selectedPool = selectedPool.concat(remainingPool.slice(0, Math.min(needed, remainingPool.length)));
+                } else if (needed < 0) {
+                    selectedPool = shuffle(selectedPool).slice(0, targetCount);
+                }
             }
 
             currentQuizSet = shuffle(selectedPool);
@@ -1608,6 +1613,8 @@
                         localStorage.setItem(lsKeys.passedCategories, JSON.stringify(passedCats));
                     }
                     buildCategorySidebar(categoriesGlobal, categoryCountsGlobal);
+            const ultraLabel = document.getElementById('ultra-count-label');
+            if (ultraLabel) ultraLabel.textContent = `Toàn bộ (${allQuestions.length} câu)`;
                     checkCertificateUnlockStatus();
                 }
             }
