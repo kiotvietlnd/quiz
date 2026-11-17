@@ -76,6 +76,14 @@
                     <p class="text-[10px] text-blue-100 font-bold uppercase">Chuyên trang Ôn tập dành cho Chuyên viên tư vấn & CSKH KiotViet</p>
                 </div>
             </div>
+            <div class="hidden md:flex items-center gap-2">
+                <a href="https://kiotvietlnd.github.io/elearning/chuyen-de/channel-manager/ke-hoach-khoa-hoc.html" class="px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white border border-white/25 text-xs font-bold flex items-center gap-1.5 transition-all">
+                    <i class="fa-solid fa-list-check"></i> Cổng Học Tập &amp; Checklist
+                </a>
+                <a href="channel-manager-lead.html" class="px-3 py-1.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-900 text-xs font-extrabold flex items-center gap-1.5 shadow-sm transition-all">
+                    <i class="fa-solid fa-chalkboard-user"></i> CS Lead
+                </a>
+            </div>
         </div>
     </header>
 
@@ -348,9 +356,9 @@
                 "Thuật ngữ \"Allotment\" (Kho phòng) trong Channel Manager có ý nghĩa bản chất là gì?",
                 "",
                 1.0,
-                "Số lượng phòng trống mà khách sạn quyết định mở bán lên các kênh OTA trong một khoảng thời gian cụ thể",
-                "Tổng số lượng phòng vật lý thực tế có tại cơ sở khách sạn bao gồm cả phòng bảo trì",
-                "Số lượng khách lưu trú tối đa được phép ở trong một hạng phòng mà không bị tính phụ thu"
+                "Số lượng phòng trống mà khách sạn quyết định phân bổ để mở bán lên các kênh OTA trong khoảng thời gian xác định",
+                "Tổng số lượng phòng vật lý thực tế đang có tại cơ sở khách sạn bao gồm cả các phòng đang sửa chữa bảo trì hoặc đóng cửa",
+                "Số lượng khách lưu trú tiêu chuẩn và tối đa được phép nhận vào ở trong một hạng phòng mà không bị tính phụ thu thêm"
         ],
         [
                 "Một đáp án",
@@ -360,9 +368,9 @@
                 "Trên giao diện phần mềm KiotViet Hotel mới nhất, phân hệ Channel Manager được tích hợp tại vị trí nào?",
                 "",
                 2.0,
-                "Menu Phòng trên thanh điều hướng dọc bên trái, chọn Quản lý phòng OTA",
-                "Nút menu \"Kênh bán và OTA\" trên cùng, rê chuột xuống nhóm \"Channel Manager\" và chọn \"OTAs (Agoda, Airbnb...)\"",
-                "Menu Cài đặt gian hàng ở góc phải, chọn Thiết lập tính năng và bật Kênh bán trực tuyến"
+                "Menu Quản lý Phòng trên thanh điều hướng dọc bên trái, chọn mục Thiết lập phòng và kênh bán trực tuyến",
+                "Nút menu \"Kênh bán và OTA\" trên thanh điều hướng đầu trang, rê chuột xuống nhóm \"Channel Manager\" chọn \"OTAs\"",
+                "Menu Cài đặt gian hàng ở góc phải màn hình, chọn Thiết lập tính năng và bật phân hệ Kết nối đa kênh"
         ],
         [
                 "Một đáp án",
@@ -372,9 +380,9 @@
                 "Khi khách sạn muốn tạm thời ngừng nhận khách từ các sàn OTA trong đợt sửa chữa phòng 1 tuần, thao tác chuẩn mực trên KiotViet là gì?",
                 "",
                 3.0,
-                "Đăng nhập vào từng sàn Agoda, Booking để xóa toàn bộ hạng phòng đó đi",
-                "Vào KiotViet chỉnh biểu giá của hạng phòng đó lên 99 triệu đồng/đêm để chặn khách đặt",
-                "Vào mục Giá trên OTAs, chọn khoảng ngày sửa chữa trên lịch lưới và bật tính năng Đóng bán phòng (Stop Sell)"
+                "Đăng nhập lần lượt vào Extranet từng sàn Agoda, Booking để tạm xóa toàn bộ hạng phòng đang sửa chữa bảo trì đó đi",
+                "Vào phần mềm KiotViet chỉnh biểu giá của hạng phòng đang sửa lên 99 triệu đồng/đêm để chặn khách đặt phòng trực tuyến",
+                "Vào mục Giá trên OTAs, chọn khoảng ngày sửa chữa trên lịch lưới và bật trạng thái Đóng bán phòng (Stop Sell)"
         ],
         [
                 "Một đáp án",
@@ -384,9 +392,9 @@
                 "Luồng dữ liệu Chiều Đẩy (Push Flow) trong hệ thống Channel Manager thực hiện nhiệm vụ nào sau đây?",
                 "",
                 1.0,
-                "Đẩy số lượng phòng trống khả dụng (Allotment), giá bán phòng (Rates) và lệnh đóng phòng (Stop Sell) từ KiotViet lên các sàn OTA",
-                "Kéo toàn bộ đơn đặt phòng mới và đơn khách báo hủy từ sàn OTA về màn hình Lễ tân KiotViet",
-                "Tự động quét thông tin thẻ tín dụng của khách và gửi thông báo thanh toán về ngân hàng"
+                "Đẩy số lượng phòng trống khả dụng (Allotment), giá bán phòng và lệnh đóng phòng (Stop Sell) từ KiotViet lên sàn OTA",
+                "Kéo toàn bộ đơn đặt phòng mới phát sinh, đơn chỉnh sửa và đơn khách báo hủy từ các sàn OTA về màn hình Lễ tân KiotViet",
+                "Tự động quét thông tin thẻ tín dụng bảo đảm của khách đặt phòng và gửi lệnh thanh toán trực tiếp về ngân hàng liên kết"
         ],
         [
                 "Một đáp án",
@@ -396,9 +404,9 @@
                 "Khi khách sạn vừa hoàn tất kết nối Channel Manager, các đơn đặt phòng phát sinh trước ngày liên kết trên những sàn nào sẽ ĐƯỢC TỰ ĐỘNG quét và kéo về KiotViet?",
                 "",
                 2.0,
-                "Airbnb, Traveloka và Trip.com",
-                "Agoda, Booking.com và Expedia",
-                "Tất cả các sàn OTA kết nối với Channel Manager đều tự động đổ đơn cũ về bình thường"
+                "Chỉ các sàn thuộc nhóm kết nối API mới gồm Airbnb, Traveloka, Mytour và Trip.com mới tự kéo đơn cũ về hệ thống",
+                "Chỉ ba sàn quốc tế lớn gồm Agoda, Booking.com và Expedia mới hỗ trợ tự động quét và kéo các đơn cũ về KiotViet",
+                "Tất cả các sàn OTA đã kết nối với Channel Manager đều tự động đổ toàn bộ đơn đặt phòng cũ trước ngày kết nối về bình thường"
         ],
         [
                 "Một đáp án",
@@ -408,9 +416,9 @@
                 "Theo tiêu chuẩn an ninh quốc tế PCI-DSS, quy định bảo mật thông tin thẻ tín dụng của khách đặt qua Booking.com được hệ thống xử lý như thế nào?",
                 "",
                 3.0,
-                "Hiển thị vĩnh viễn trên màn hình Lễ tân KiotViet Hotel để nhân viên tra cứu trừ tiền bồi thường bất kỳ lúc nào",
-                "Cho phép xem tối đa 10 lần và lưu trữ thông tin thẻ trong vòng 30 ngày sau khi khách trả phòng",
-                "Xem trên Hotel Link Extranet; thông tin thẻ tự động xóa vĩnh viễn khi đã xem đủ 3 lần HOẶC sau 7 ngày kể từ ngày khách Checkout"
+                "Hiển thị trực tiếp trên màn hình Lễ tân KiotViet Hotel trong suốt thời gian lưu trú để nhân viên tra cứu thu tiền cọc phòng",
+                "Cho phép xem tối đa 10 lần trên KiotViet và lưu trữ thông tin thẻ trong vòng 30 ngày kể từ ngày khách hàng thực hiện trả phòng",
+                "Chỉ xem trên Hotel Link; thông tin thẻ tự động xóa vĩnh viễn sau khi đã xem đủ 3 lần HOẶC sau 7 ngày kể từ ngày khách Checkout"
         ],
         [
                 "Một đáp án",
@@ -420,9 +428,9 @@
                 "Tại sao việc gỡ bỏ Guaranteed Allotment (Kho phòng cam kết) và Free Sale (Bán tự do) trên Extranet sàn OTA là điều kiện bắt buộc trước khi kết nối Channel Manager?",
                 "",
                 1.0,
-                "Vì nếu còn bật các tính năng này, sàn OTA sẽ bỏ qua lệnh Stop Sell từ Channel Manager và tiếp tục cho khách đặt phòng ngay cả khi KiotViet đã hết phòng",
-                "Vì sàn OTA sẽ tự động tăng gấp đôi mức phí hoa hồng trên mỗi đơn đặt phòng phát sinh",
-                "Vì phần mềm KiotViet sẽ tự động khóa tài khoản kết nối của khách sạn"
+                "Vì nếu còn bật các chế độ này, sàn OTA sẽ bỏ qua lệnh Stop Sell và vẫn nhận đơn ngay cả khi KiotViet đã hết phòng",
+                "Vì nếu còn bật các chế độ này, sàn OTA sẽ tự động nhân đôi mức phí hoa hồng trên mỗi đơn đặt phòng mới phát sinh từ sàn",
+                "Vì hệ thống Hotel Link sẽ tự động phát hiện xung đột cấu hình bán phòng và từ chối kích hoạt khóa xác thực cho khách sạn đó"
         ],
         [
                 "Một đáp án",
@@ -432,9 +440,9 @@
                 "Khách sạn ký hợp đồng mua gói KiotViet Hotel Channel Manager Lite. Khách sạn này được phép kết nối tối đa bao nhiêu kênh OTA trực tuyến?",
                 "",
                 2.0,
-                "Tối đa 1 kênh OTA duy nhất và không được phép đổi kênh",
-                "Giới hạn tối đa 4 kênh OTA và mỗi OTA kết nối 1 cơ sở lưu trú",
-                "Không giới hạn số lượng kênh OTA kết nối"
+                "Chỉ được kết nối tối đa 01 kênh OTA duy nhất trong suốt thời hạn hợp đồng và không được đổi sang kênh khác",
+                "Được phép kết nối giới hạn tối đa 04 kênh OTA khác nhau, với điều kiện mỗi kênh OTA kết nối 01 cơ sở lưu trú",
+                "Được phép kết nối không giới hạn số lượng kênh OTA có trong danh mục đối tác của hệ thống Hotel Link Solutions"
         ],
         [
                 "Một đáp án",
@@ -444,9 +452,9 @@
                 "Quy tắc chuẩn hóa đặt tên cơ sở lưu trú của khách hàng khi tạo tài khoản trên hệ thống Hotel Link là gì?",
                 "",
                 3.0,
-                "Chỉ điền Họ và Tên của chủ khách sạn hoặc người đại diện ký hợp đồng",
-                "Tên quận huyện nơi khách sạn đặt cơ sở kinh doanh",
-                "Tên khách sạn gạch ngang Tên gian hàng KiotViet kèm Số thứ tự chi nhánh nếu có"
+                "Ghi chính xác Họ và Tên người đại diện pháp luật hoặc chủ khách sạn theo đúng thông tin trên hợp đồng đã ký kết",
+                "Ghi tên thương mại của khách sạn kèm tên tỉnh thành phố và mã bưu chính nơi cơ sở lưu trú đang hoạt động kinh doanh",
+                "Ghi Tên khách sạn gạch ngang Tên gian hàng KiotViet và bổ sung thêm Số thứ tự chi nhánh nếu khách có nhiều cơ sở"
         ],
         [
                 "Một đáp án",
@@ -456,33 +464,33 @@
                 "Theo quy trình chuẩn 241/QT-KIOTVIET, Bộ phận DVKH có trách nhiệm tiếp nhận Ticket yêu cầu kết nối Channel Manager từ NVKD trong thời gian tối đa bao lâu?",
                 "",
                 1.0,
-                "Trong vòng 01 giờ làm việc kể từ khi NVKD tạo Ticket trên CRM",
-                "Trong vòng 04 giờ làm việc kể từ khi khách hàng thanh toán",
-                "Trong vòng 24 giờ kể từ khi tiếp nhận hợp đồng dịch vụ"
+                "Trong vòng 01 giờ làm việc kể từ thời điểm NVKD hoàn tất tạo Ticket yêu cầu trên hệ thống CRM",
+                "Trong vòng 04 giờ làm việc kể từ khi bộ phận kế toán xác nhận khách hàng đã thanh toán đủ hợp đồng",
+                "Trong vòng 24 giờ làm việc kể từ thời điểm tiếp nhận hồ sơ bàn giao dịch vụ từ bộ phận Kinh doanh"
         ],
         [
                 "Một đáp án",
                 "KVCM 2.1 - Quy trình tiếp nhận yêu cầu từ NVKD qua Ticket CRM",
                 "Có",
                 "",
-                "Khi tiếp nhận Ticket từ NVKD, trường hợp nào sau đây DVKH ĐƯỢC PHÉP từ chối triển khai kỹ thuật và yêu cầu NVKD bổ sung thông tin?",
+                "Khi tiếp nhận Ticket từ NVKD, trường hợp nào sau đây DVKH ĐƯỢC PHÉP tạm dừng triển khai kỹ thuật và yêu cầu NVKD bổ sung thông tin?",
                 "",
                 2.0,
-                "Khách hàng đã ký hợp đồng 1 năm nhưng chỉ thanh toán trước 6 tháng",
-                "Ticket thiếu thông tin kênh bán, khai sai số lượng phòng so với hợp đồng, hoặc gian hàng KiotViet chưa tạo xong sơ đồ phòng",
-                "Khách hàng kinh doanh loại hình Homestay dưới 5 phòng"
+                "Khách hàng đã ký hợp đồng sử dụng gói 1 năm nhưng mới thanh toán trước khoản phí kích hoạt của 6 tháng đầu tiên",
+                "Ticket thiếu thông tin kênh bán, khai sai số lượng phòng so với hợp đồng hoặc gian hàng KiotViet chưa có sơ đồ phòng",
+                "Khách hàng kinh doanh mô hình Homestay quy mô nhỏ dưới 5 phòng nhưng đăng ký dùng gói Channel Manager Advance"
         ],
         [
                 "Một đáp án",
                 "KVCM 2.1 - Quy trình tiếp nhận yêu cầu từ NVKD qua Ticket CRM",
                 "Có",
                 "",
-                "Trường thông tin nào sau đây KHÔNG THỂ THIẾU trên Ticket CRM để DVKH có thể tiến hành mapping kết nối với sàn Agoda?",
+                "Trường thông tin nào sau đây KHÔNG THỂ THIẾU trên Ticket CRM để đối tác và DVKH có thể xác thực thiết lập ban đầu với sàn Agoda?",
                 "",
                 3.0,
-                "Số tài khoản ngân hàng cá nhân của chủ khách sạn",
-                "Mật khẩu wifi của quầy lễ tân khách sạn",
-                "Mã nhận diện tài khoản gian hàng trên sàn Agoda (Agoda Property ID)"
+                "Thông tin số tài khoản ngân hàng doanh nghiệp dùng để đối soát công nợ hoa hồng định kỳ hàng tháng với bộ phận kế toán Agoda",
+                "Thông tin tài khoản đăng nhập trang quản trị hóa đơn điện tử và mã số thuế đang hoạt động chính thức của khách sạn",
+                "Mã nhận diện tài khoản cơ sở lưu trú trên sàn Agoda (Agoda Property ID) cùng danh sách các kênh bán dự kiến"
         ],
         [
                 "Một đáp án",
@@ -492,9 +500,9 @@
                 "Khách hàng đang sử dụng gói Channel Manager Lite kết nối tối đa 4 kênh OTA. Khi khách muốn kết nối thêm kênh thứ 5 để bán phòng thì hệ thống xử lý như thế nào?",
                 "",
                 1.0,
-                "Hệ thống tự động chặn kết nối kênh thứ 5; khách bắt buộc phải nâng cấp lên gói Advance không giới hạn kênh",
-                "Hệ thống tự động cho phép kết nối và tự trừ tiền hoa hồng của sàn thứ 5",
-                "Hệ thống tự động hủy kết nối kênh đầu tiên để nhường chỗ cho kênh thứ 5"
+                "Hệ thống chặn không cho mở thêm kênh thứ 5; khách hàng cần nâng cấp lên gói Advance không giới hạn số kênh",
+                "Hệ thống tự động cho phép kết nối thêm kênh thứ 5 và phát sinh phụ phí duy trì hàng tháng tính theo từng kênh mới",
+                "Hệ thống tự động tạm ngưng kết nối kênh OTA có lượng đơn thấp nhất trong 4 kênh để nhường suất cho kênh thứ 5"
         ],
         [
                 "Một đáp án",
@@ -504,9 +512,9 @@
                 "Trong quá trình sử dụng gói Channel Manager Lite, khách sạn có được phép đổi từ kênh Agoda sang kênh Booking.com hay không?",
                 "",
                 2.0,
-                "Tuyệt đối không được đổi kênh dưới bất kỳ hình thức nào",
-                "Được phép đổi kênh hoàn toàn miễn phí trong hạn mức 4 kênh đối tác; DVKH tạo Ticket Đổi kênh gửi Support Group",
-                "Được đổi kênh nhưng phải đóng thêm 50% phí dịch vụ gói mới"
+                "Tuyệt đối không được phép thay đổi danh sách 4 kênh đã chọn ban đầu trong suốt thời hạn hợp đồng đang còn hiệu lực",
+                "Được phép đổi kênh hoàn toàn miễn phí trong hạn mức 4 kênh; chuyên viên DVKH tạo Ticket Đổi kênh gửi Support Group",
+                "Được phép đổi kênh trực tiếp trên giao diện KiotViet nhưng phải đóng thêm 50% phí chênh lệch chuyển đổi gói dịch vụ"
         ],
         [
                 "Một đáp án",
@@ -516,21 +524,21 @@
                 "Giải pháp nào sau đây giúp khách sạn bán phòng trực tiếp trên Website riêng mà KHÔNG PHẢI TRẢ PHÍ HOA HỒNG (15% - 25%) cho các sàn OTA?",
                 "",
                 3.0,
-                "Nâng cấp lên gói Channel Manager Advance",
-                "Đăng ký gói Multi-Link quản lý chuỗi căn hộ",
-                "Tích hợp công cụ đặt phòng trực tuyến Booking Engine nhúng trực tiếp vào Website khách sạn"
+                "Nâng cấp từ gói Lite lên gói Channel Manager Advance để bật chế độ bán phòng trực tiếp không giới hạn kênh kết nối",
+                "Đăng ký nâng cấp lên gói Multi-Link để gom nhiều tài khoản khách sạn và tự động cắt giảm tỷ lệ hoa hồng của từng sàn",
+                "Tích hợp công cụ đặt phòng trực tuyến Booking Engine nhúng thẳng vào Website riêng của khách sạn để nhận đơn trực tiếp"
         ],
         [
                 "Một đáp án",
                 "KVCM 2.3 - Tiếp nhận & Bàn giao thông tin kết nối sau thiết lập ban đầu",
                 "Có",
                 "",
-                "Sau khi đối tác Hotel Link Solutions phê duyệt Review Request, thời gian tối đa theo SLA để DVKH hoàn tất tạo key, tài khoản và gửi email bàn giao cho khách hàng là bao lâu?",
+                "Sau khi đối tác Hotel Link Solutions phê duyệt Review Request, thời gian tối đa theo SLA để hoàn tất tạo key, tài khoản và gửi email bàn giao cho khách hàng là bao lâu?",
                 "",
                 1.0,
-                "Trong vòng 03 giờ làm việc kể từ thời điểm nhận thông báo duyệt từ đối tác",
-                "Trong vòng 08 giờ làm việc kể từ ngày làm việc tiếp theo",
-                "Trong vòng 24 giờ sau khi NVKD gọi điện xác nhận với khách"
+                "Trong vòng 03 giờ làm việc kể từ thời điểm nhận được email thông báo phê duyệt thành công từ đối tác Hotel Link",
+                "Trong vòng 08 giờ làm việc tính từ đầu ca làm việc của ngày hôm sau sau khi đối tác duyệt hồ sơ kích hoạt",
+                "Trong vòng 24 giờ làm việc sau khi Nhân viên kinh doanh gọi điện xác nhận lại lịch triển khai trực tiếp với khách hàng"
         ],
         [
                 "Một đáp án",
@@ -540,33 +548,33 @@
                 "Khi tạo tài khoản người dùng (User Account) cho khách hàng trên hệ thống Hotel Link, quy định về Tên đăng nhập (Username) được chuẩn hóa như thế nào?",
                 "",
                 2.0,
-                "Sử dụng số điện thoại cá nhân của nhân viên kinh doanh tạo hợp đồng",
-                "Sử dụng chính địa chỉ Email chính thức của khách hàng làm Username đăng nhập",
-                "Sử dụng mã Hotel ID viết liền với tên gian hàng KiotViet"
+                "Sử dụng số điện thoại di động chính chủ của chủ khách sạn kết hợp với mã số hợp đồng CRM để tránh bị trùng lặp",
+                "Sử dụng chính xác địa chỉ Email đăng ký chính thức của khách hàng làm Tên đăng nhập (Username) trên hệ thống Hotel Link",
+                "Sử dụng mã định danh Hotel ID viết liền không dấu kết hợp với tên miền gian hàng KiotViet Hotel của cơ sở lưu trú"
         ],
         [
                 "Một đáp án",
                 "KVCM 2.3 - Tiếp nhận & Bàn giao thông tin kết nối sau thiết lập ban đầu",
                 "Có",
                 "",
-                "Cặp khóa xác thực Hotel ID và Hotel Key được tạo ra trên hệ thống Hotel Link dùng để làm gì?",
+                "Cặp khóa xác thực Hotel ID và Hotel Key được bàn giao sau khi khởi tạo trên hệ thống Hotel Link dùng để làm gì?",
                 "",
                 3.0,
-                "Dùng để đăng nhập vào trang quản trị Extranet của các sàn Agoda và Booking.com",
-                "Dùng để nhân viên lễ tân đăng nhập vào ứng dụng KiotViet Hotel trên điện thoại",
-                "Dùng để nhập vào phân hệ OTAs trên KiotViet Hotel nhằm xác thực và mở khóa cổng kết nối API 2 chiều"
+                "Dùng để điền vào phần cài đặt tài khoản quản trị Extranet trên các sàn Agoda và Booking.com nhằm cấp quyền cho KiotViet",
+                "Dùng để nhân viên lễ tân và chủ khách sạn đăng nhập trực tiếp vào ứng dụng KiotViet Hotel trên điện thoại di động",
+                "Dùng để nhập vào phân hệ OTAs trên KiotViet Hotel nhằm xác thực danh tính và mở khóa cổng kết nối API hai chiều"
         ],
         [
                 "Một đáp án",
                 "KVCM 3.1 - Kích hoạt phân hệ OTAs trên KiotViet bằng Hotel ID & Key",
                 "Có",
                 "",
-                "Trên giao diện phần mềm KiotViet Hotel mới nhất, phân hệ Channel Manager nằm ở vị trí nào?",
+                "Trên giao diện phần mềm KiotViet Hotel mới nhất, đường dẫn chính xác để vào phân hệ Channel Manager là gì?",
                 "",
                 1.0,
-                "Menu Kênh bán và OTA trên thanh điều hướng trên cùng, chọn OTAs (Agoda, Airbnb...)",
-                "Menu Phòng bên cột trái, chọn Quản lý phòng trực tuyến",
-                "Menu Cài đặt hệ thống ở góc phải trên màn hình, chọn Tích hợp OTAs"
+                "Nhấp menu \"Kênh bán và OTA\" trên thanh điều hướng đầu trang, rê chuột xuống nhóm Channel Manager và chọn \"OTAs\"",
+                "Nhấp menu \"Phòng\" ở thanh điều hướng dọc bên trái màn hình quản lý, sau đó chọn mục \"Quản lý phòng trực tuyến\"",
+                "Nhấp biểu tượng \"Cài đặt hệ thống\" ở góc trên bên phải màn hình, chọn \"Thiết lập tính năng\" rồi bật \"Tích hợp OTAs\""
         ],
         [
                 "Một đáp án",
@@ -576,21 +584,21 @@
                 "Khi khách hàng truy cập vào phân hệ OTAs và nhìn thấy nút bấm màu xanh ghi \"Bắt đầu cài đặt\", điều này chứng tỏ gian hàng đang ở trạng thái nào?",
                 "",
                 2.0,
-                "Gian hàng đã hoàn tất kết nối và đang đồng bộ dữ liệu thời gian thực",
-                "Gian hàng chưa từng được cấu hình kết nối Channel Manager và cần bắt đầu quy trình Stepper cài đặt ban đầu",
-                "Hệ thống đang bị mất kết nối API với đối tác và yêu cầu nhập lại mật khẩu"
+                "Gian hàng đã hoàn tất toàn bộ quá trình kết nối trước đó và đang ở trạng thái đồng bộ dữ liệu theo thời gian thực",
+                "Gian hàng chưa từng hoàn tất cấu hình kết nối Channel Manager và cần thực hiện quy trình Stepper cài đặt ban đầu",
+                "Hệ thống đang tạm thời bị mất kết nối API với đối tác Hotel Link và yêu cầu người dùng nhập lại mật khẩu xác thực"
         ],
         [
                 "Một đáp án",
                 "KVCM 3.1 - Kích hoạt phân hệ OTAs trên KiotViet bằng Hotel ID & Key",
                 "Có",
                 "",
-                "Màn hình Stepper cài đặt ban đầu của phân hệ Channel Manager trên KiotViet Hotel bao gồm bao nhiêu bước liên hoàn?",
+                "Luồng Stepper cài đặt ban đầu của phân hệ Channel Manager trên giao diện KiotViet Hotel mới bao gồm những bước nào?",
                 "",
                 3.0,
-                "Bao gồm 2 bước: Nhập Key xác thực và Bật đồng bộ",
-                "Bao gồm 5 bước: Nhập thông tin, Ghép phòng, Tạo giá, Cấu hình sàn và Đóng bán phòng",
-                "Bao gồm 3 bước: Kết nối KiotViet với CM (Nhập Hotel ID & Key), Kết nối CM với KiotViet (Ghép hạng phòng) và Thiết lập giá trên CM"
+                "Gồm 2 bước rút gọn: Nhập cặp mã Hotel ID/Key để xác thực kết nối đối tác và bấm nút Kích hoạt đồng bộ tự động",
+                "Gồm 5 bước chi tiết: Khai báo thông tin cơ sở, Tạo hạng phòng, Cài giá bán, Kết nối từng sàn OTA và Bật Stop Sell",
+                "Gồm 4 bước liên hoàn: Truy cập CM, Kết nối CM với KiotViet (nhập ID/Key & ghép phòng), Thiết lập giá CM và Kết nối OTAs"
         ],
         [
                 "Một đáp án",
@@ -600,9 +608,9 @@
                 "Tại Bước 2 (Kết nối CM với KiotViet) trên màn hình Stepper, sau khi đã tạo xong Loại phòng trên Hotel Link quay lại, thao tác bắt buộc đầu tiên là gì?",
                 "",
                 1.0,
-                "Nhấn nút \"Lấy dữ liệu từ CM\" để KiotViet tải toàn bộ danh sách Hạng phòng và Gói giá mới nhất từ Hotel Link về",
-                "Bấm ngay nút Lưu và Tiếp tục để chuyển sang bước tiếp theo",
-                "Đăng xuất khỏi phần mềm KiotViet rồi đăng nhập lại"
+                "Nhấp chuột vào nút \"[Đồng bộ]\" ở góc trên bên phải bảng ghép nối để KiotViet tải danh sách Loại phòng và Gói giá mới về",
+                "Nhấp ngay nút \"Lưu và Tiếp tục\" ở góc dưới màn hình để hệ thống tự động quét dữ liệu phòng và gói giá khi chuyển sang bước sau",
+                "Nhấp phím F5 tải lại trình duyệt hoặc đăng xuất khỏi tài khoản KiotViet rồi đăng nhập lại để làm mới hoàn toàn bộ nhớ đệm"
         ],
         [
                 "Một đáp án",
@@ -612,9 +620,9 @@
                 "Khi tạo Loại phòng (Room Type) trên cổng quản trị Hotel Link, hành động nào sau đây là BẮT BUỘC phải làm tiếp theo thì mới có thể ghép nối được trên KiotViet?",
                 "",
                 2.0,
-                "Điền mã số thuế của khách sạn vào mục thông tin thanh toán",
-                "Bắt buộc phải tạo ít nhất 01 Gói giá (Rate Plan) gán kèm cho Loại phòng đó",
-                "Gán quyền nhân viên cho tất cả các tài khoản phụ trên hệ thống"
+                "Khai báo đầy đủ mã số thuế, thông tin tài khoản ngân hàng và chính sách hoàn hủy của khách sạn vào mục Thanh toán",
+                "Bắt buộc phải tạo kèm ít nhất 01 Gói giá (Rate Plan) đi cùng với Loại phòng đó thì danh sách ghép nối mới hiển thị",
+                "Cấu hình phân quyền truy cập và gửi email kích hoạt cho toàn bộ tài khoản nhân viên lễ tân trong hệ thống Hotel Link"
         ],
         [
                 "Một đáp án",
@@ -624,9 +632,9 @@
                 "Tại Bước 3 (Thiết lập giá trên CM), nếu khách hàng bỏ trống giá của một gói giá (không điền mức giá bán), hậu quả kỹ thuật nào sẽ xảy ra?",
                 "",
                 3.0,
-                "Hệ thống KiotViet sẽ tự động gán giá mặc định là 0 đồng lên các sàn OTA",
-                "Sàn OTA sẽ tự động lấy giá của đối thủ cạnh tranh gần nhất để hiển thị",
-                "Hệ thống sẽ không thể đẩy dữ liệu lên sàn OTA và gói giá đó sẽ không được mở bán do thiếu thông tin giá cơ sở"
+                "Hệ thống KiotViet sẽ tự động gán mức giá mặc định bằng 0 đồng lên sàn OTA nên có nguy cơ khách đặt phòng miễn phí",
+                "Sàn OTA sẽ tự động lấy mức giá của hạng phòng liền kề gần nhất trên bảng giá KiotViet để áp dụng thay thế cho gói đó",
+                "Hệ thống sẽ vô hiệu hóa gói giá bị trống ô và không thể đẩy tồn phòng hay lệnh Stop Sell của gói đó lên các sàn OTA"
         ],
         [
                 "Một đáp án",
@@ -636,9 +644,9 @@
                 "Khi du khách thực hiện thao tác hủy đặt phòng trên sàn OTA (Agoda/Booking), hệ thống KiotViet Hotel Channel Manager sẽ tự động xử lý như thế nào?",
                 "",
                 1.0,
-                "Chuyển trạng thái đơn sang Đã hủy, hoàn trả lại số lượng phòng trống khả dụng trên KiotViet và tự động đẩy cập nhật tồn phòng lên tất cả các sàn còn lại",
-                "Xóa vĩnh viễn đơn đặt phòng khỏi hệ thống KiotViet để giải phóng dung lượng",
-                "Giữ nguyên phòng đó ở trạng thái khóa và yêu cầu lễ tân gọi điện cho khách hỏi lý do"
+                "Chuyển trạng thái đơn sang Đã hủy, tự động cộng hoàn phòng trống về KiotViet và đẩy cập nhật tồn lên các sàn còn lại",
+                "Tự động xóa vĩnh viễn mã đơn đặt phòng đó khỏi lịch sử đặt phòng KiotViet nhằm giải phóng sơ đồ phòng cho lễ tân",
+                "Giữ nguyên phòng đó ở trạng thái khóa tạm thời và gửi thông báo yêu cầu nhân viên lễ tân kiểm tra xác nhận hủy thủ công"
         ],
         [
                 "Một đáp án",
@@ -648,9 +656,9 @@
                 "Điểm khác biệt cốt lõi nhất giữa mô hình Hotel Collect và mô hình OTA Collect là gì?",
                 "",
                 2.0,
-                "Hotel Collect là khách thanh toán qua chuyển khoản ngân hàng, còn OTA Collect là khách thanh toán bằng tiền mặt",
-                "Hotel Collect là khách sạn thu tiền trực tiếp từ khách lưu trú khi check-in/out, còn OTA Collect là sàn OTA thu tiền trước của khách rồi định kỳ thanh toán lại cho khách sạn",
-                "Hotel Collect không bị trừ phí hoa hồng, còn OTA Collect bị trừ 100% phí hoa hồng"
+                "Hotel Collect là hình thức khách chuyển khoản trước khi đến, còn OTA Collect là khách thanh toán tiền mặt trực tiếp tại quầy",
+                "Hotel Collect là khách sạn tự thu tiền trực tiếp từ khách lưu trú, còn OTA Collect là sàn thu tiền trước rồi đối soát trả lại",
+                "Hotel Collect được miễn trừ hoàn toàn phí hoa hồng sàn, còn OTA Collect bị sàn OTA khấu trừ trực tiếp phí hoa hồng theo kỳ"
         ],
         [
                 "Một đáp án",
@@ -660,9 +668,9 @@
                 "Nếu khách sạn không bật tính năng \"Tự động ghi nhận thanh toán cho đơn OTA thu hộ\" trên KiotViet Hotel, rủi ro kế toán nào thường xuyên xảy ra nhất tại quầy lễ tân?",
                 "",
                 3.0,
-                "Sàn OTA sẽ giữ lại toàn bộ tiền phòng và từ chối chuyển khoản cho khách sạn",
-                "Phần mềm KiotViet sẽ tự động khóa sổ kế toán và ngừng nhận đơn mới",
-                "Lễ tân nhìn thấy đơn hiển thị trạng thái chưa thanh toán nên thu tiền lần 2 của khách, dẫn đến khiếu nại gay gắt do thu tiền 2 lần"
+                "Sàn OTA sẽ tự động giữ lại toàn bộ doanh thu phòng và tạm hoãn lệnh chuyển khoản đối soát định kỳ cho khách sạn",
+                "Phần mềm KiotViet sẽ không thể đồng bộ số liệu doanh thu phòng sang báo cáo quỹ cuối ngày và khóa sổ kế toán tự động",
+                "Lễ tân thấy đơn báo chưa thanh toán nên tiếp tục thu tiền lần 2 của khách tại quầy, gây ra khiếu nại gay gắt do thu trùng"
         ],
         [
                 "Một đáp án",
@@ -672,9 +680,9 @@
                 "Để mở quyền kết nối Channel Manager trên hệ thống Agoda YCS, khách hàng cần truy cập vào mục nào sau đây?",
                 "",
                 1.0,
-                "Menu Cài đặt (Settings), chọn Cài đặt kết nối kênh (Channel Manager) và chọn đối tác Hotel Link Solutions",
-                "Menu Giá & Tình trạng phòng trống, chọn Đồng bộ tự động",
-                "Menu Đơn đặt phòng, chọn Phân quyền kết nối bên thứ ba"
+                "Vào menu Cài đặt (Settings), chọn Cài đặt kết nối kênh (Channel Manager) và chọn nhà cung cấp Hotel Link Solutions",
+                "Vào menu Giá và Tình trạng phòng trống (Rates & Availability), chọn Đồng bộ tự động và nhập khóa Hotel Key",
+                "Vào menu Đơn đặt phòng (Bookings), chọn Phân quyền kết nối API bên thứ ba và xác nhận điều khoản sử dụng"
         ],
         [
                 "Một đáp án",
@@ -684,9 +692,9 @@
                 "Khách sạn vừa hoàn tất kết nối Channel Manager với Agoda vào lúc 14h chiều nay. Đối với các đơn đặt phòng mà du khách đã đặt từ trước trên Agoda (có ngày nhận phòng trong tương lai), hệ thống sẽ xử lý như thế nào?",
                 "",
                 2.0,
-                "Hệ thống sẽ bỏ qua các đơn cũ, lễ tân bắt buộc phải nhập tay từng đơn vào KiotViet",
-                "Hệ thống Agoda sẽ tự động quét và đẩy các đơn đặt phòng cũ về KiotViet trong lần đồng bộ đầu tiên sau khi kết nối thành công",
-                "Các đơn cũ sẽ bị sàn Agoda tự động hủy và yêu cầu khách đặt lại"
+                "Hệ thống Agoda chỉ đồng bộ các đơn phát sinh sau 14h, nên lễ tân bắt buộc phải nhập tay toàn bộ đơn cũ vào KiotViet",
+                "Hệ thống Agoda sẽ tự động quét và đẩy các đơn đặt phòng cũ về KiotViet trong lần đồng bộ đầu tiên sau khi hoàn tất",
+                "Các đơn đặt phòng cũ sẽ được giữ lại nguyên trạng trên Extranet Agoda và không được phép chỉnh sửa hay hủy trên KiotViet"
         ],
         [
                 "Một đáp án",
@@ -696,9 +704,9 @@
                 "Tại sao khách sạn đã bật tính năng Stop Sell (Đóng bán phòng) trên KiotViet nhưng du khách trên ứng dụng điện thoại vẫn có thể đặt được phòng qua chương trình Agoda Mobile Deal?",
                 "",
                 3.0,
-                "Do phần mềm KiotViet bị lỗi mất kết nối internet",
-                "Do nhân viên lễ tân chưa bấm nút xác nhận thanh toán",
-                "Do trên Agoda YCS khách sạn đang bật các gói khuyến mãi độc lập hoặc phòng cam kết Allotment ghi đè lên lệnh đóng phòng thông thường"
+                "Do phần mềm KiotViet tại quầy lễ tân bị gián đoạn kết nối mạng internet cục bộ đúng vào thời điểm nhân viên bấm Stop Sell",
+                "Do lệnh đóng bán phòng trên KiotViet Hotel chỉ có hiệu lực đối với phiên bản trình duyệt web máy tính, không áp dụng app",
+                "Do gói giá Mobile Deal là Linked Rate Plan hoặc còn bật phòng cam kết Allotment trên Agoda nên bỏ qua lệnh Stop Sell"
         ],
         [
                 "Một đáp án",
@@ -708,9 +716,9 @@
                 "Tại sao tài khoản kết nối trên Booking.com Extranet bắt buộc phải là tài khoản có quyền Admin / Master?",
                 "",
                 1.0,
-                "Vì chỉ tài khoản quyền Admin/Master mới có quyền truy cập menu Nhà cung cấp kết nối (Connectivity Provider) để xác nhận liên kết với Hotel Link",
-                "Vì tài khoản phụ không thể xem được giá phòng trên KiotViet Hotel",
-                "Vì Booking.com sẽ tự động khóa tài khoản phụ nếu kết nối với phần mềm bên ngoài"
+                "Vì chỉ tài khoản Admin/Master mới thấy được mục Connectivity Provider để gửi yêu cầu liên kết 2 chiều với Hotel Link",
+                "Vì các tài khoản phân quyền phụ (Staff) không được phép xem báo cáo giá bán và số lượng phòng trống trên Booking.com",
+                "Vì chính sách bảo mật của Booking.com sẽ tự động khóa vĩnh viễn tài khoản phụ nếu phát hiện thao tác kết nối phần mềm ngoài"
         ],
         [
                 "Một đáp án",
@@ -720,9 +728,9 @@
                 "Khi khách sạn thay đổi thông tin liên kết hoặc bị ngắt kết nối Booking.com, quy trình Re-connect chuẩn mực gồm những bước nào?",
                 "",
                 2.0,
-                "Tạo tài khoản Booking.com mới và nhập lại toàn bộ phòng từ đầu",
-                "Xác nhận lại nhà cung cấp Hotel Link trên Booking.com Extranet, sau đó vào Hotel Link Channel Manager kiểm tra và Mapping lại các hạng phòng",
-                "Gọi điện lên tổng đài Booking.com yêu cầu xóa tài khoản cũ"
+                "Đăng ký lại một mã Property ID mới trên Booking.com Extranet và tạo mới toàn bộ danh sách hạng phòng từ bước ban đầu",
+                "Xác nhận lại nhà cung cấp Hotel Link trên Booking.com Extranet, sau đó vào Hotel Link kiểm tra và Mapping lại hạng phòng",
+                "Liên hệ tổng đài hỗ trợ Booking.com yêu cầu xóa bỏ toàn bộ lịch sử kết nối cũ và chờ đối tác tự động kích hoạt lại sau 48h"
         ],
         [
                 "Một đáp án",
@@ -732,9 +740,9 @@
                 "Theo quy chuẩn bảo mật thẻ thanh toán quốc tế PCI-DSS trên Booking.com, thông tin thẻ tín dụng của khách lưu trú được xử lý như thế nào?",
                 "",
                 3.0,
-                "Lưu trữ vĩnh viễn trên màn hình Lễ tân KiotViet Hotel để tra cứu bất kỳ lúc nào",
-                "Gửi thông tin thẻ qua email cá nhân của nhân viên thu ngân",
-                "Xem trên Extranet có xác thực OTP; tự động ẩn vĩnh viễn sau tối đa 3 lần xem hoặc sau 7 ngày kể từ ngày khách Checkout"
+                "Lưu trữ an toàn trên màn hình chi tiết đơn đặt phòng tại Lễ tân KiotViet Hotel để nhân viên thu ngân tra cứu bất kỳ lúc nào",
+                "Gửi đường dẫn truy cập mã thẻ có bảo mật hai lớp qua email đăng ký chính thức của quản lý khách sạn ngay khi đơn vừa đổ về",
+                "Xem trực tiếp trên Hotel Link Extranet có xác thực; hệ thống tự xóa vĩnh viễn sau tối đa 3 lần xem hoặc 7 ngày sau Checkout"
         ],
         [
                 "Một đáp án",
@@ -744,9 +752,9 @@
                 "Điểm khác biệt lớn nhất về luồng đồng bộ đơn đặt phòng cũ giữa Airbnb so với Agoda và Booking.com khi mới kết nối là gì?",
                 "",
                 1.0,
-                "Airbnb KHÔNG tự động đổ các đơn đặt phòng cũ về KiotViet; lễ tân bắt buộc phải xuất danh sách đơn cũ và nhập tay vào KiotViet trước khi bật kết nối",
-                "Airbnb tự động kéo toàn bộ đơn cũ từ 1 năm trước về KiotViet",
-                "Airbnb sẽ tự động hủy các đơn cũ để tránh bán trùng phòng"
+                "Airbnb KHÔNG tự động kéo đơn đặt phòng cũ trước ngày kết nối về KiotViet; lễ tân bắt buộc phải nhập tay đơn cũ lên phần mềm",
+                "Airbnb tự động quét và kéo toàn bộ các đơn đặt phòng cũ trong vòng 12 tháng gần nhất về hiển thị trên màn hình KiotViet",
+                "Airbnb tự động chuyển toàn bộ đơn cũ vào tab Lỗi đồng bộ để nhân viên lễ tân tự kiểm tra và bấm nút xác nhận từng đơn"
         ],
         [
                 "Một đáp án",
@@ -756,21 +764,21 @@
                 "Khi kết nối kênh Airbnb với Channel Manager, tài khoản Airbnb của cơ sở lưu trú phải đáp ứng điều kiện nào sau đây?",
                 "",
                 2.0,
-                "Phải có chứng nhận Superhost và đạt trên 100 lượt đánh giá 5 sao",
-                "Đăng nhập quyền Chủ nhà (Host), danh sách phòng đã được đăng bán (Published) và không bị khóa tạm thời",
-                "Bắt buộc phải có địa chỉ đăng ký kinh doanh tại nước ngoài"
+                "Tài khoản bắt buộc phải đạt danh hiệu Chủ nhà siêu cấp (Superhost) và có tối thiểu từ 50 lượt đánh giá 5 sao trở lên",
+                "Đăng nhập bằng quyền Chủ nhà (Host), cài đặt tiền tệ VND, danh sách phòng đã đăng bán (Published) và cấp quyền OAuth",
+                "Tài khoản bắt buộc phải đăng ký giấy phép kinh doanh hộ cá thể tại Việt Nam và kích hoạt chế độ thanh toán tự động qua ví điện tử"
         ],
         [
                 "Một đáp án",
                 "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các sàn OTA khác",
                 "Có",
                 "",
-                "Nguyên lý chung khi kết nối các sàn OTA quốc tế khác (Expedia, Trip.com, Traveloka) với KiotViet Hotel Channel Manager là gì?",
+                "Nguyên lý chung khi kết nối các sàn OTA khác (Expedia, Trip.com, Traveloka) với KiotViet Hotel Channel Manager là gì?",
                 "",
                 3.0,
-                "Mỗi sàn đều tự động kết nối mà không cần nhập mã nhận diện hay phê duyệt",
-                "Khách sạn phải tự viết code API riêng cho từng sàn",
-                "Mở quyền kết nối Channel Manager đối tác Hotel Link trên Extranet sàn, lấy mã Property/Hotel ID khai báo trên Hotel Link và mapping đúng hạng phòng"
+                "Mỗi sàn OTA đều tự động nhận diện gian hàng KiotViet qua số điện thoại chủ cơ sở và tự ghép nối mà không cần khai báo ID",
+                "Khách sạn cần xuất file Excel danh sách phòng từ KiotViet rồi tải lên từng sàn OTA để đồng bộ dữ liệu theo định kỳ mỗi ngày",
+                "Mở kết nối đối tác Hotel Link trên Extranet sàn (hoặc qua Market Manager), lấy Property ID khai báo trên CM và map hạng phòng"
         ],
         [
                 "Một đáp án",
@@ -780,9 +788,9 @@
                 "Khi đơn đặt phòng từ OTA đổ về KiotViet nhưng du khách không cung cấp số điện thoại thật (chỉ có SĐT ảo hoặc để trống), hệ thống xử lý như thế nào?",
                 "",
                 1.0,
-                "Hệ thống tự động tạo mã khách hàng mới trên KiotViet kèm tên khách và ký hiệu kênh đặt để quản lý thống nhất",
-                "Hệ thống tự động hủy đơn đặt phòng đó và báo lỗi về sàn OTA",
-                "Hệ thống chặn không cho đơn phòng đổ về và đẩy vào danh sách vi phạm"
+                "Hệ thống vẫn nhận đơn về tab Đã đồng bộ, tự động tạo hồ sơ khách hàng theo tên khách kèm ký hiệu kênh OTA để quản lý",
+                "Hệ thống tự động từ chối tiếp nhận đơn đặt phòng đó và gửi thông báo yêu cầu sàn OTA cập nhật số điện thoại thật của khách",
+                "Hệ thống tự động đẩy đơn đặt phòng đó vào tab Lỗi đồng bộ và tạm giữ không trừ quỹ phòng trống cho đến khi có SĐT"
         ],
         [
                 "Một đáp án",
@@ -792,9 +800,9 @@
                 "Khi tiếp nhận một đơn đặt phòng OTA gồm nhiều phòng cùng lúc (Group Booking), thao tác chuẩn của lễ tân trên KiotViet là gì?",
                 "",
                 2.0,
-                "Xóa đơn đó đi và yêu cầu khách tạo từng đơn riêng lẻ trên sàn",
-                "Kiểm tra số lượng phòng từng hạng trên đơn, gán đúng các phòng trống thực tế tương ứng trên sơ đồ phòng KiotViet",
-                "Chỉ nhận phòng đầu tiên, các phòng còn lại để khách tự tìm khách sạn khác"
+                "Tách đơn đoàn thành các hóa đơn lẻ tương ứng với từng khách hàng trước khi thực hiện gán số phòng trên phần mềm KiotViet",
+                "Kiểm tra số lượng phòng từng hạng trên đơn, sau đó gán đầy đủ đúng số lượng phòng trống vật lý tương ứng trên sơ đồ phòng",
+                "Chỉ cần bấm Nhận phòng cho 01 phòng đại diện của trưởng đoàn, các phòng còn lại hệ thống sẽ tự động xếp ngẫu nhiên khi khách tới"
         ],
         [
                 "Một đáp án",
@@ -804,9 +812,9 @@
                 "Dấu hiệu nhận biết rõ ràng nhất một đơn đặt phòng đổ về từ kênh OTA trên màn hình Lễ tân KiotViet Hotel là gì?",
                 "",
                 3.0,
-                "Đơn phòng có chữ màu đỏ và phát ra âm thanh chuông báo động",
-                "Đơn phòng tự động bị trừ 50% tiền cọc tại quầy thu ngân",
-                "Đơn có gắn nhãn nguồn đặt phòng (ví dụ: Agoda, Booking.com) kèm mã đơn gốc (OTA Booking ID) trong thông tin chi tiết"
+                "Đơn đặt phòng hiển thị bằng khung viền màu đỏ nổi bật kèm thông báo nhắc nhở yêu cầu xác nhận nhận phòng trong vòng 15 phút",
+                "Đơn đặt phòng tự động chuyển sang trạng thái Đã thanh toán 100% tiền cọc ngay cả khi khách sạn chọn hình thức thanh toán tại quầy",
+                "Đơn có gắn nhãn nguồn kênh đặt (ví dụ: Agoda, Booking.com) kèm mã đơn gốc (OTA Booking ID) trong phần thông tin chi tiết"
         ],
         [
                 "Một đáp án",
@@ -816,9 +824,9 @@
                 "Khi phát hiện đơn đặt phòng rơi vào tab \"Lỗi đồng bộ\", hành động nào sau đây bị CẤM TUYỆT ĐỐI đối với nhân viên lễ tân?",
                 "",
                 1.0,
-                "Tuyệt đối KHÔNG được bấm nút \"Xóa đặt phòng\" vì sẽ làm mất dấu vết đơn trên KiotViet trong khi khách thực tế vẫn giữ đơn hợp lệ trên sàn OTA",
-                "Không được bấm vào xem chi tiết thông tin đơn đặt phòng",
-                "Không được báo cáo sự việc cho quản lý khách sạn"
+                "Tuyệt đối KHÔNG bấm nút \"Xóa đặt phòng\" vì sẽ mất dấu vết đơn trên KiotViet trong khi khách vẫn có booking hợp lệ trên sàn",
+                "Tuyệt đối không bấm nút \"Khắc phục lỗi\" khi chưa nhận được email xác nhận cho phép xử lý từ nhân viên kỹ thuật của sàn OTA",
+                "Tuyệt đối không thông báo cho quản lý khách sạn trước khi hết ca trực vì hệ thống sẽ tự động đồng bộ lại đơn đặt phòng sau 2 giờ"
         ],
         [
                 "Một đáp án",
@@ -828,9 +836,9 @@
                 "Nguyên nhân phổ biến nhất khiến đơn đặt phòng từ sàn OTA bị rơi vào tab Lỗi đồng bộ trên KiotViet là gì?",
                 "",
                 2.0,
-                "Do khách hàng sử dụng điện thoại iPhone để đặt phòng",
-                "Hạng phòng trên sàn chưa được ghép nối (mapping) với KiotViet, hoặc khách sạn đã hết sạch phòng trống thuộc hạng phòng đó trên KiotViet",
-                "Do sàn OTA đang trong thời gian bảo trì định kỳ hàng tháng"
+                "Do khách du lịch sử dụng ứng dụng đặt phòng phiên bản cũ hoặc thanh toán bằng thẻ tín dụng quốc tế chưa kích hoạt OTP",
+                "Do hạng phòng trên sàn chưa được ghép nối (mapping) với KiotViet, hoặc KiotViet đã hết sạch phòng trống thuộc hạng phòng đó",
+                "Do hệ thống Extranet của sàn OTA đang thực hiện bảo trì máy chủ định kỳ nên tạm thời làm sai lệch mã đơn hàng gửi sang CM"
         ],
         [
                 "Một đáp án",
@@ -840,21 +848,21 @@
                 "Quy trình xử lý chuẩn mực khi một đơn phòng bị lỗi do khách sạn đã hết phòng trống cục bộ là gì?",
                 "",
                 3.0,
-                "Ngay lập tức bấm hủy đơn trên sàn OTA mà không cần liên hệ với khách",
-                "Tắt nguồn máy tính thu ngân và chờ ca trực hôm sau xử lý",
-                "Kiểm tra hạng phòng tương đương hoặc cao hơn trên KiotViet để xếp phòng (Upgrade), hoặc chủ động liên hệ chuyển khách sang cơ sở liên kết và báo cáo quản lý"
+                "Ngay lập tức đăng nhập lên Extranet sàn OTA bấm hủy đơn đặt phòng đó mà không cần liên hệ trao đổi với khách hàng trước",
+                "Giữ nguyên đơn ở tab Lỗi đồng bộ và chờ đến khi có khách lưu trú khác trả phòng sớm trong ngày rồi mới thực hiện xếp phòng",
+                "Kiểm tra hạng phòng tương đương hoặc cao hơn trên KiotViet để xếp phòng (Upgrade), hoặc phối hợp dời khách sang cơ sở khác"
         ],
         [
                 "Một đáp án",
                 "KVCM 5.3 - Quản lý SL phòng, Giá tiêu chuẩn, Giá riêng & Khóa phòng (Stop Sell)",
                 "Có",
                 "",
-                "Trong hệ thống KiotViet Hotel Channel Manager, \"Giá riêng\" (Rate Override) có độ ưu tiên hiển thị như thế nào so với \"Giá tiêu chuẩn\" (Standard Rate)?`",
+                "Trong hệ thống KiotViet Hotel Channel Manager, \"Giá riêng\" (Rate Override) có độ ưu tiên hiển thị như thế nào so với \"Giá tiêu chuẩn\" (Standard Rate)?",
                 "",
                 1.0,
-                "Giá riêng có độ ưu tiên cao nhất; khi được thiết lập cho một khoảng ngày cụ thể, nó sẽ ghi đè hoàn toàn lên Giá tiêu chuẩn của những ngày đó",
-                "Giá riêng chỉ có hiệu lực vào ban đêm sau 22 giờ",
-                "Giá tiêu chuẩn luôn được ưu tiên hơn và giá riêng chỉ mang tính tham khảo"
+                "Giá riêng có độ ưu tiên cao nhất; khi thiết lập cho một khoảng ngày cụ thể, hệ thống sẽ ghi đè hoàn toàn lên Giá tiêu chuẩn",
+                "Giá riêng chỉ có hiệu lực áp dụng đối với các đơn đặt phòng phát sinh ngoài giờ hành chính hoặc đặt cận ngày nhận phòng",
+                "Giá tiêu chuẩn luôn có độ ưu tiên cao nhất trên toàn hệ thống, còn Giá riêng chỉ dùng làm mức giá tham khảo nội bộ khách sạn"
         ],
         [
                 "Một đáp án",
@@ -864,21 +872,21 @@
                 "Cơ chế \"Khóa phòng kép\" (Double Protection) để đóng bán phòng an toàn tuyệt đối 100% trong mùa cao điểm được thực hiện như thế nào?",
                 "",
                 2.0,
-                "Rút dây mạng internet của máy chủ khách sạn",
-                "Đồng thời kích hoạt tính năng Đóng bán phòng (Stop Sell) VÀ chỉnh số lượng phòng trống mở bán (Allotment) về mức 0 trên lịch lưới",
-                "Tăng giá phòng lên gấp 10 lần và xóa tên hạng phòng trên KiotViet"
+                "Tạm ngắt kết nối kênh bán trên Hotel Link đồng thời xóa bỏ toàn bộ lịch giá đã thiết lập trên từng sàn OTA liên kết",
+                "Đồng thời kích hoạt trạng thái Đóng bán phòng (Stop Sell = Yes) VÀ điều chỉnh số lượng phòng mở bán (Allotment) về mức 0",
+                "Tăng mức giá bán phòng trên KiotViet lên gấp 10 lần giá gốc đồng thời ẩn tên hạng phòng đó khỏi sơ đồ phòng lễ tân"
         ],
         [
                 "Một đáp án",
                 "KVCM 5.3 - Quản lý SL phòng, Giá tiêu chuẩn, Giá riêng & Khóa phòng (Stop Sell)",
                 "Có",
                 "",
-                "Sau khi qua đợt cao điểm lễ tết có cài đặt Giá riêng (Override), thao tác cần làm để giá phòng tự động quay về mức Giá tiêu chuẩn ban đầu là gì?",
+                "Sau khi qua đợt cao điểm lễ tết có cài đặt Giá riêng (Override - ô màu vàng nhạt), thao tác cần làm để giá phòng quay về Giá tiêu chuẩn ban đầu là gì?",
                 "",
                 3.0,
-                "Xóa toàn bộ hạng phòng đó đi và tạo lại từ đầu",
-                "Gọi điện cho từng sàn OTA yêu cầu khôi phục giá cũ",
-                "Chọn khoảng ngày đã cài giá riêng trên lịch lưới và bấm tính năng \"Gỡ bỏ giá riêng\" (Remove Override)"
+                "Xóa toàn bộ hạng phòng đó trên Hotel Link và tạo lại gói giá mới để hệ thống làm mới toàn bộ bảng giá lịch lưới 365 ngày tới",
+                "Liên hệ tổng đài hỗ trợ của từng sàn OTA để nhờ nhân viên kỹ thuật sàn tắt quy tắc giữ giá riêng trên Extranet giúp khách sạn",
+                "Chọn khoảng ngày đang hiển thị ô vàng nhạt trên lịch lưới và nhấp vào liên kết \"Gỡ bỏ giá riêng\" (Remove Override) để lưu lại"
         ],
         [
                 "Một đáp án",
@@ -888,9 +896,9 @@
                 "Khi xảy ra tình huống bán trùng phòng (Overbooking) và khách đã đến quầy lễ tân, nguyên tắc ứng xử ưu tiên số 1 của nhân viên là gì?",
                 "",
                 1.0,
-                "Trấn an khách hàng, chủ động nâng hạng phòng miễn phí nếu còn phòng cao cấp hơn, hoặc liên hệ khách sạn tương đương gần nhất kèm xe đưa đón và chi trả tiền phòng",
-                "Tranh cãi với khách và đổ lỗi do sàn OTA gửi đơn chậm",
-                "Yêu cầu khách tự ngồi đợi tại sảnh cho đến khi có khách khác trả phòng sớm"
+                "Trấn an khách hàng, chủ động nâng hạng phòng miễn phí nếu còn phòng cao hơn hoặc hỗ trợ dời sang khách sạn tương đương gần nhất",
+                "Giải thích nguyên nhân kỹ thuật là do độ trễ đồng bộ từ phía sàn OTA để khách hàng thông cảm và chủ động liên hệ sàn đổi đặt phòng",
+                "Đề nghị khách hàng tạm thời ngồi chờ tại khu vực sảnh lễ tân trong lúc nhân viên kiểm tra lại toàn bộ danh sách đơn đặt phòng trong ngày"
         ],
         [
                 "Một đáp án",
@@ -900,9 +908,9 @@
                 "Sau khi giải quyết xong chỗ ở cho khách bị bán trùng, bước kỹ thuật khẩn cấp tiếp theo DVKH cần kiểm tra trên hệ thống là gì?",
                 "",
                 2.0,
-                "Đổi mật khẩu tài khoản KiotViet của khách sạn",
-                "Kiểm tra lịch sử đồng bộ (Audit Log), đóng bán phòng (Stop Sell) ngay lập tức trên các sàn còn lại và kiểm tra xem có tính năng Free Sale/Allotment nào đang bật ngầm không",
-                "Gửi email khiếu nại yêu cầu sàn OTA bồi thường toàn bộ chi phí phát sinh"
+                "Hướng dẫn khách sạn đổi mật khẩu đăng nhập tài khoản KiotViet và tài khoản Extranet các sàn để tránh người lạ sửa phòng",
+                "Bật khóa phòng kép khẩn cấp trên các sàn còn lại, kiểm tra bảng mapping và rà soát chế độ Free Sale hoặc kích hoạt Auto Close",
+                "Gửi ngay phiếu khiếu nại lên bộ phận hỗ trợ của sàn OTA yêu cầu bồi hoàn 100% chi phí phát sinh cho đơn đặt phòng bị trùng"
         ],
         [
                 "Một đáp án",
@@ -912,9 +920,9 @@
                 "Trường hợp khách hàng đòi KiotViet bồi thường tiền phạt của sàn OTA do bán trùng phòng, chuyên viên DVKH cần đối soát căn cứ nào?",
                 "",
                 3.0,
-                "Dựa vào lời khai một phía của nhân viên kinh doanh phụ trách khách sạn",
-                "Đồng ý bồi thường ngay lập tức để giữ chân khách hàng mà không cần kiểm tra",
-                "Đối soát nhật ký kỹ thuật: thời điểm KiotViet đẩy lệnh Stop Sell so với thời điểm sàn chốt đơn; kiểm tra việc gỡ Base Allotment theo biên bản bàn giao ban đầu"
+                "Căn cứ vào tường trình qua điện thoại của chủ khách sạn và đề xuất hỗ trợ từ Nhân viên kinh doanh phụ trách hợp đồng đó",
+                "Chủ động cam kết phương án bồi hoàn chi phí ngay trong cuộc gọi đầu tiên để giữ thái độ hài lòng và tránh khách hủy gói",
+                "Đối soát nhật ký đồng bộ: mốc thời gian KiotViet đẩy lệnh Stop Sell so với lúc sàn chốt đơn và biên bản bàn giao gỡ Free Sale"
         ],
         [
                 "Một đáp án",
@@ -924,9 +932,9 @@
                 "Khi khách hàng phản ánh giá phòng hiển thị trên sàn Agoda thấp hơn giá khách cài đặt trên KiotViet (Lệch giá / Price Undercutting), nguyên nhân phổ biến nhất là gì?",
                 "",
                 1.0,
-                "Sàn Agoda tự ý trích một phần hoa hồng của sàn để giảm giá cho khách (Agoda Promotion / Member Deal), hoặc do khách sạn đang bật các gói khuyến mãi ngầm trên sàn",
-                "Do phần mềm KiotViet tự động hạ giá xuống để thu hút khách đặt",
-                "Do đường truyền mạng internet bị suy hao tín hiệu làm giảm số tiền"
+                "Sàn OTA tự bật khuyến mãi thành viên/chiết khấu hoa hồng (Agoda Promotion, Genius) hoặc có ô Override/Rate Adj. cài sai",
+                "Hệ thống KiotViet Hotel tự động kích hoạt chính sách giảm giá giờ chót vào cuối ngày nhằm tối ưu công suất phòng trống",
+                "Độ trễ đường truyền giữa máy chủ KiotViet và Hotel Link làm giá trị tiền tệ bị quy đổi sai lệch trong quá trình đẩy giá lên sàn"
         ],
         [
                 "Một đáp án",
@@ -936,21 +944,21 @@
                 "Khách sạn dùng gói Lite muốn dừng bán kênh Traveloka để chuyển sang kết nối kênh Trip.com trong hạn mức 4 kênh thì thủ tục thực hiện là gì?",
                 "",
                 2.0,
-                "Khách sạn tự ý xóa tài khoản Traveloka trên Extranet và tự kết nối Trip.com",
-                "Khách hàng gửi yêu cầu qua DVKH; DVKH tạo Ticket \"Đổi kênh với gói Lite Hotellink\" gửi Support Group để đổi kênh miễn phí trên hệ thống",
-                "Bắt buộc phải ký lại hợp đồng mới và đóng phí phạt đổi kênh"
+                "Khách sạn tự đăng nhập Extranet Traveloka để ngắt kết nối, sau đó tự vào mục Quản lý kênh bán trên KiotViet bật kênh Trip.com",
+                "Khách sạn gửi yêu cầu qua DVKH; chuyên viên DVKH tạo Ticket CRM \"Đổi kênh với gói Lite Hotellink\" gửi Support Group xử lý miễn phí",
+                "Khách sạn bắt buộc phải ký phụ lục thanh lý hợp đồng gói Lite cũ và đăng ký nâng cấp lên gói Advance mới được đổi sang kênh mới"
         ],
         [
                 "Một đáp án",
                 "KVCM 6.2 - Hỗ trợ Khách hàng Liên kết thêm kênh, Đổi kênh gói Lite & Lệch giá",
                 "Có",
                 "",
-                "Để kiểm tra nguyên nhân lệch giá giữa KiotViet và sàn OTA, công cụ kỹ thuật đầu tiên chuyên viên DVKH cần mở để kiểm tra là gì?",
+                "Để kiểm tra nguyên nhân lệch giá giữa KiotViet và sàn OTA, công cụ kỹ thuật đầu tiên chuyên viên DVKH cần mở để đối chiếu là gì?",
                 "",
                 3.0,
-                "Bảng chấm công nhân viên khách sạn trên phần mềm quản lý",
-                "Hóa đơn thanh toán tiền điện nước của cơ sở lưu trú",
-                "Mục \"Nhật ký đồng bộ\" (Sync Log) trên Hotel Link để đối chiếu mức giá đẩy đi từ KiotViet và mã phản hồi xác nhận từ sàn OTA"
+                "Mở danh sách bảng giá chung trên KiotViet PMS và báo cáo doanh thu chi tiết theo từng nhân viên thu ngân trực tiếp tại quầy lễ tân",
+                "Mở phần cài đặt tài khoản thanh toán và đối chiếu lịch sử hóa đơn thu hộ giữa khách sạn với bộ phận kế toán công nợ của từng sàn",
+                "Mở mục Nhật ký đẩy giá (Rate Push Log) và cấu hình Rate Adjustment trên Hotel Link, sau đó kiểm tra tab Khuyến mãi trên sàn"
         ],
         [
                 "Một đáp án",
@@ -960,9 +968,9 @@
                 "Theo mô hình hỗ trợ 4 cấp độ (4-Tier Escalation Model), khi gặp ca lỗi kỹ thuật vượt thẩm quyền xử lý của tổng đài L1, chuyên viên DVKH chuyển tiếp ca lên đâu?",
                 "",
                 1.0,
-                "Tạo Ticket CRM phân loại chuẩn xác và chuyển tiếp lên Nhóm Hỗ trợ Kỹ thuật chuyên sâu L2 (Support Group / Tech Specialist) kèm đầy đủ log lỗi",
-                "Cung cấp số điện thoại cá nhân của Giám đốc Kỹ thuật đối tác cho khách tự gọi",
-                "Đóng Ticket và hướng dẫn khách hàng tự tìm hiểu trên mạng internet"
+                "Tạo Ticket CRM phân loại đúng mức độ P1/P2/P3 kèm Bộ 8 thông tin vàng và chuyển tiếp lên nhóm Hỗ trợ chuyên sâu L2 (Support Group)",
+                "Cung cấp số điện thoại hotline nội bộ của đội ngũ kỹ sư đối tác Hotel Link để chủ khách sạn chủ động liên hệ xử lý trực tiếp",
+                "Lưu nháp thông tin sự cố vào file ghi chú cá nhân và chờ đến buổi họp giao ban cuối tuần để báo cáo lại cho Trưởng nhóm DVKH"
         ],
         [
                 "Một đáp án",
@@ -972,21 +980,21 @@
                 "Một Ticket báo lỗi kỹ thuật Channel Manager gửi sang đối tác Hotel Link Solutions bắt buộc phải đính kèm thông tin nào sau đây?",
                 "",
                 2.0,
-                "Tên đăng nhập và mật khẩu tài khoản ngân hàng của chủ cơ sở",
-                "Hotel ID, Tên cơ sở, Tên kênh bán OTA gặp sự cố, Mã đơn phòng bị lỗi (nếu có), Ảnh chụp màn hình lỗi và Thời điểm phát sinh sự cố",
-                "Số lượng nhân viên đang làm việc tại khách sạn"
+                "Thông tin tên đăng nhập, mật khẩu tài khoản quản trị KiotViet, giấy phép kinh doanh và số tài khoản ngân hàng của chủ cơ sở",
+                "Hotel ID, Tên cơ sở, Kênh OTA gặp lỗi, Mã Booking ID, Mốc thời gian phát sinh và Ảnh chụp Full Screen rõ URL kèm mô tả lỗi",
+                "Danh sách toàn bộ nhân viên lễ tân sử dụng phần mềm, lịch sử chấm công trong tháng và hợp đồng gốc ký kết với các sàn OTA"
         ],
         [
                 "Một đáp án",
                 "KVCM 6.3 - Quy trình tạo Ticket chuyển tiếp ca lỗi kỹ thuật đối tác",
                 "Có",
                 "",
-                "Cam kết thời gian phản hồi (SLA) chuẩn mực đối với các ca sự cố kỹ thuật nghiêm trọng (Severity 1 - Mất kết nối toàn bộ sàn OTA) là bao lâu?",
+                "Cam kết thời gian phản hồi (Response SLA) chuẩn mực đối với các ca sự cố kỹ thuật nghiêm trọng P1 (Overbooking / Mất kết nối toàn bộ sàn OTA) là bao lâu?",
                 "",
                 3.0,
-                "Trong vòng 7 ngày làm việc kể từ khi tiếp nhận ca",
-                "Chỉ xử lý vào giờ hành chính các ngày làm việc trong tuần",
-                "Phản hồi và bắt đầu can thiệp kỹ thuật khẩn cấp trong vòng 01 đến 02 giờ làm việc kể từ thời điểm tiếp nhận sự cố"
+                "Phản hồi tiếp nhận trong vòng 24 giờ làm việc và xử lý dứt điểm lỗi đồng bộ trong phạm vi từ 3 đến 5 ngày làm việc hành chính",
+                "Tiếp nhận phân loại trong giờ hành chính các ngày làm việc từ Thứ 2 đến Thứ 6 và xử lý hoàn tất trong vòng 48 giờ làm việc",
+                "Phản hồi khẩn cấp ngay trong vòng 15 đến 30 phút (tối đa 1-2 giờ) kể từ khi nhận báo động và ưu tiên xử lý dứt điểm 2-4 giờ"
         ]
 ];
         let allQuestions = [];
@@ -1010,6 +1018,7 @@
         let fontScale = parseFloat(localStorage.getItem(lsKeys.fontScale) || '0.9');
         let categoriesGlobal = [];
         let categoryCountsGlobal = {};
+        let categoryToLessonCode = {};
 
         window.addEventListener('DOMContentLoaded', () => {
             fetchData();
@@ -1146,6 +1155,9 @@
 
                     const rawCategory = row[1] ? row[1].toString().trim() : 'Chủ đề chung';
                     const category = cleanCategoryName(rawCategory);
+                    const codeMatch = rawCategory.match(/KVCM\s*(\d+\.\d+)/i);
+                    const lessonCode = codeMatch ? codeMatch[1] : '';
+                    if (lessonCode) categoryToLessonCode[category] = lessonCode;
                     const questionText = col4Val;
                     const explanation = row[5] ? row[5].toString().trim() : '';
                     const rawCorrectVal = row[6] ? row[6].toString().trim() : '';
@@ -1181,6 +1193,7 @@
                             categories.add(category);
                             categoryCounts[category] = (categoryCounts[category] || 0) + 1;
                             allQuestions.push({
+                                lessonCode: lessonCode,
                                 category: category,
                                 question: questionText,
                                 explanation: explanation,
@@ -1388,11 +1401,33 @@
             if (valEl) valEl.textContent = `${scalePercent}%`;
         }
 
+        function shuffleQuestionOptions(q) {
+            const validLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+            const clonedOpts = q.options.map((o, idx) => ({
+                text: o.text,
+                isCorrect: (o.isCorrect !== undefined) ? Boolean(o.isCorrect) : (idx === q.correctIndex)
+            }));
+            shuffle(clonedOpts);
+            const finalOpts = clonedOpts.map((o, idx) => ({
+                key: validLetters[idx] || String.fromCharCode(65 + idx),
+                text: o.text,
+                isCorrect: o.isCorrect
+            }));
+            const newCorrectIdx = finalOpts.findIndex(o => o.isCorrect);
+            return {
+                ...q,
+                options: finalOpts,
+                correctIndex: newCorrectIdx,
+                answerKey: newCorrectIdx !== -1 ? finalOpts[newCorrectIdx].key : q.answerKey
+            };
+        }
+
         function initQuizSession() {
             clearQuizState();
             currentIndex = 0;
             score = 0;
-            viewMode = 'single'; 
+            viewMode = 'single';
+            currentQuizSet = currentQuizSet.map(q => shuffleQuestionOptions(q));
             userAnswers = currentQuizSet.map(q => ({ question: q, selectedIdx: null, correctIdx: q.correctIndex, isCorrect: false }));
             saveQuizState();
         }
@@ -1604,6 +1639,9 @@
             document.getElementById('result-percent').textContent = `${percent}%`;
             document.getElementById('result-score').textContent = `${score}/${currentQuizSet.length}`;
 
+            if (!isGeneralMode) {
+                saveAndSyncLessonScore(selectedCategory, score, currentQuizSet.length, percent);
+            }
             if (percent >= 80) {
                 fireConfetti();
                 if (!isGeneralMode) {
@@ -1613,8 +1651,8 @@
                         localStorage.setItem(lsKeys.passedCategories, JSON.stringify(passedCats));
                     }
                     buildCategorySidebar(categoriesGlobal, categoryCountsGlobal);
-            const ultraLabel = document.getElementById('ultra-count-label');
-            if (ultraLabel) ultraLabel.textContent = `Toàn bộ (${allQuestions.length} câu)`;
+                    const ultraLabel = document.getElementById('ultra-count-label');
+                    if (ultraLabel) ultraLabel.textContent = `Toàn bộ (${allQuestions.length} câu)`;
                     checkCertificateUnlockStatus();
                 }
             }
@@ -1662,6 +1700,55 @@
         // CẤP PHÁT & KHÓA CHỨNG CHỈ
         // ==========================================
         
+        function saveAndSyncLessonScore(category, sc, total, pct) {
+            try {
+                const lessonCode = categoryToLessonCode[category] || category;
+                const scoresMap = JSON.parse(localStorage.getItem('KiotViet_CM_Scores') || '{}');
+                const prev = scoresMap[lessonCode] || {};
+                const record = {
+                    lessonCode: lessonCode,
+                    category: category,
+                    score: sc,
+                    total: total,
+                    percent: pct,
+                    bestPercent: Math.max(prev.bestPercent || 0, pct),
+                    passed: Boolean(prev.passed || pct >= 80),
+                    attempts: (prev.attempts || 0) + 1,
+                    updatedAt: new Date().toISOString()
+                };
+                scoresMap[lessonCode] = record;
+                localStorage.setItem('KiotViet_CM_Scores', JSON.stringify(scoresMap));
+                sendLessonProgressToLead(record);
+            } catch (e) {
+                console.warn('Error saving KiotViet_CM_Scores:', e);
+            }
+        }
+
+        function sendLessonProgressToLead(record) {
+            try {
+                const profile = JSON.parse(localStorage.getItem('kvcm_learner_profile_v1') || '{}');
+                const logs = JSON.parse(localStorage.getItem('KiotViet_CM_Activity_Log') || '[]');
+                logs.unshift({
+                    type: 'QUIZ_RESULT',
+                    learnerName: profile.name || 'Học viên',
+                    branch: profile.branch || 'DVKH',
+                    ...record
+                });
+                localStorage.setItem('KiotViet_CM_Activity_Log', JSON.stringify(logs.slice(0, 100)));
+                if (certDatabaseAppUrl && profile.name) {
+                    const formData = new URLSearchParams();
+                    formData.append('eventType', 'LESSON_QUIZ');
+                    formData.append('fullName', profile.name);
+                    formData.append('department', profile.branch || 'DVKH');
+                    formData.append('lessonCode', record.lessonCode);
+                    formData.append('score', `${record.score}/${record.total}`);
+                    formData.append('percent', `${record.percent}%`);
+                    formData.append('issueDate', new Date().toLocaleString('vi-VN'));
+                    fetch(certDatabaseAppUrl, { method: 'POST', mode: 'no-cors', body: formData }).catch(() => {});
+                }
+            } catch (e) {}
+        }
+
         function checkCertificateUnlockStatus() {
             const passedCats = JSON.parse(localStorage.getItem(lsKeys.passedCategories) || '[]');
             const totalCats = categoriesGlobal.length;
