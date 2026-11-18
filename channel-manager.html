@@ -369,10 +369,10 @@
                 "KVCM 1.1 - Bản chất Channel Manager & Bộ thuật ngữ cốt lõi Khách sạn",
                 "Có",
                 "",
-                "Khi khách sạn muốn tạm thời ngừng nhận khách từ các sàn OTA trong đợt sửa chữa phòng 1 tuần, thao tác chuẩn mực trên KiotViet là gì?",
+                "Khi khách sạn muốn tạm thời ngừng nhận khách từ các kênh OTA trong đợt sửa chữa phòng 1 tuần, thao tác chuẩn mực trên KiotViet là gì?",
                 "",
                 3.0,
-                "Đăng nhập lần lượt vào Extranet từng sàn Agoda, Booking để tạm xóa toàn bộ hạng phòng đang sửa chữa bảo trì đó đi",
+                "Đăng nhập lần lượt vào Extranet từng kênh OTA Agoda, Booking để tạm xóa toàn bộ hạng phòng đang sửa chữa bảo trì đó đi",
                 "Vào phần mềm KiotViet chỉnh biểu giá của hạng phòng đang sửa lên 99 triệu đồng/đêm để chặn khách đặt phòng trực tuyến",
                 "Vào mục Giá trên OTAs, chọn khoảng ngày sửa chữa trên lịch lưới và bật trạng thái Đóng bán phòng (Stop Sell)"
         ],
@@ -384,8 +384,8 @@
                 "Luồng dữ liệu Chiều Đẩy (Push Flow) trong hệ thống Channel Manager thực hiện nhiệm vụ nào sau đây?",
                 "",
                 1.0,
-                "Đẩy số lượng phòng trống khả dụng (Allotment), giá bán phòng và lệnh đóng phòng (Stop Sell) từ KiotViet lên sàn OTA",
-                "Kéo toàn bộ đơn đặt phòng mới phát sinh, đơn chỉnh sửa và đơn khách báo hủy từ các sàn OTA về màn hình Lễ tân KiotViet",
+                "Đẩy số lượng phòng trống khả dụng (Allotment), giá bán phòng và lệnh đóng phòng (Stop Sell) từ KiotViet lên kênh OTA",
+                "Kéo toàn bộ đơn đặt phòng mới phát sinh, đơn chỉnh sửa và đơn khách báo hủy từ các kênh OTA về màn hình Lễ tân KiotViet",
                 "Tự động quét thông tin thẻ tín dụng bảo đảm của khách đặt phòng và gửi lệnh thanh toán trực tiếp về ngân hàng liên kết"
         ],
         [
@@ -393,12 +393,12 @@
                 "KVCM 1.2 - Kiến trúc luồng dữ liệu & Phân định vai trò",
                 "Có",
                 "",
-                "Khi khách sạn vừa hoàn tất kết nối Channel Manager, các đơn đặt phòng phát sinh trước ngày liên kết trên những sàn nào sẽ ĐƯỢC TỰ ĐỘNG quét và kéo về KiotViet?",
+                "Khi khách sạn vừa hoàn tất kết nối Channel Manager, các đơn đặt phòng phát sinh trước ngày liên kết trên những kênh OTA nào sẽ ĐƯỢC TỰ ĐỘNG quét và kéo về KiotViet?",
                 "",
                 2.0,
-                "Chỉ các sàn thuộc nhóm kết nối API mới gồm Airbnb, Traveloka, Mytour và Trip.com mới tự kéo đơn cũ về hệ thống",
-                "Chỉ ba sàn quốc tế lớn gồm Agoda, Booking.com và Expedia mới hỗ trợ tự động quét và kéo các đơn cũ về KiotViet",
-                "Tất cả các sàn OTA đã kết nối với Channel Manager đều tự động đổ toàn bộ đơn đặt phòng cũ trước ngày kết nối về bình thường"
+                "Chỉ các kênh OTA thuộc nhóm kết nối API mới gồm Airbnb, Traveloka, Mytour và Trip.com mới tự kéo đơn cũ về hệ thống",
+                "Chỉ ba kênh OTA quốc tế lớn gồm Agoda, Booking.com và Expedia mới hỗ trợ tự động quét và kéo các đơn cũ về KiotViet",
+                "Tất cả các kênh OTA đã kết nối với Channel Manager đều tự động đổ toàn bộ đơn đặt phòng cũ trước ngày kết nối về bình thường"
         ],
         [
                 "Một đáp án",
@@ -417,11 +417,11 @@
                 "KVCM 1.3 - Checklist thẩm định gian hàng trước khi kết nối (Pre-onboarding)",
                 "Có",
                 "",
-                "Tại sao việc gỡ bỏ Guaranteed Allotment (Kho phòng cam kết) và Free Sale (Bán tự do) trên Extranet sàn OTA là điều kiện bắt buộc trước khi kết nối Channel Manager?",
+                "Tại sao việc gỡ bỏ Guaranteed Allotment (Kho phòng cam kết) và Free Sale (Bán tự do) trên Extranet kênh OTA là điều kiện bắt buộc trước khi kết nối Channel Manager?",
                 "",
                 1.0,
-                "Vì nếu còn bật các chế độ này, sàn OTA sẽ bỏ qua lệnh Stop Sell và vẫn nhận đơn ngay cả khi KiotViet đã hết phòng",
-                "Vì nếu còn bật các chế độ này, sàn OTA sẽ tự động nhân đôi mức phí hoa hồng trên mỗi đơn đặt phòng mới phát sinh từ sàn",
+                "Vì nếu còn bật các chế độ này, kênh OTA sẽ bỏ qua lệnh Stop Sell và vẫn nhận đơn ngay cả khi KiotViet đã hết phòng",
+                "Vì nếu còn bật các chế độ này, kênh OTA sẽ tự động nhân đôi mức phí hoa hồng trên mỗi đơn đặt phòng mới phát sinh từ kênh OTA",
                 "Vì hệ thống Hotel Link sẽ tự động phát hiện xung đột cấu hình bán phòng và từ chối kích hoạt khóa xác thực cho khách sạn đó"
         ],
         [
@@ -477,12 +477,12 @@
                 "KVCM 2.1 - Quy trình tiếp nhận yêu cầu từ NVKD qua Ticket CRM",
                 "Có",
                 "",
-                "Trường thông tin nào sau đây KHÔNG THỂ THIẾU trên Ticket CRM để đối tác và DVKH có thể xác thực thiết lập ban đầu với sàn Agoda?",
+                "Trường thông tin nào sau đây KHÔNG THỂ THIẾU trên Ticket CRM để đối tác và DVKH có thể xác thực thiết lập ban đầu với kênh OTA Agoda?",
                 "",
                 3.0,
                 "Thông tin số tài khoản ngân hàng doanh nghiệp dùng để đối soát công nợ hoa hồng định kỳ hàng tháng với bộ phận kế toán Agoda",
                 "Thông tin tài khoản đăng nhập trang quản trị hóa đơn điện tử và mã số thuế đang hoạt động chính thức của khách sạn",
-                "Mã nhận diện tài khoản cơ sở lưu trú trên sàn Agoda (Agoda Property ID) cùng danh sách các kênh bán dự kiến"
+                "Mã nhận diện tài khoản cơ sở lưu trú trên kênh OTA Agoda (Agoda Property ID) cùng danh sách các kênh bán dự kiến"
         ],
         [
                 "Một đáp án",
@@ -513,11 +513,11 @@
                 "KVCM 2.2 - Ý nghĩa 4 gói Hotel Link & Tư vấn nâng gói, nâng số lượng phòng",
                 "Có",
                 "",
-                "Giải pháp nào sau đây giúp khách sạn bán phòng trực tiếp trên Website riêng mà KHÔNG PHẢI TRẢ PHÍ HOA HỒNG (15% - 25%) cho các sàn OTA?",
+                "Giải pháp nào sau đây giúp khách sạn bán phòng trực tiếp trên Website riêng mà KHÔNG PHẢI TRẢ PHÍ HOA HỒNG (15% - 25%) cho các kênh OTA?",
                 "",
                 3.0,
                 "Nâng cấp từ gói Lite lên gói Channel Manager Advance để bật chế độ bán phòng trực tiếp không giới hạn kênh kết nối",
-                "Đăng ký nâng cấp lên gói Multi-Link để gom nhiều tài khoản khách sạn và tự động cắt giảm tỷ lệ hoa hồng của từng sàn",
+                "Đăng ký nâng cấp lên gói Multi-Link để gom nhiều tài khoản khách sạn và tự động cắt giảm tỷ lệ hoa hồng của từng kênh OTA",
                 "Tích hợp công cụ đặt phòng trực tuyến Booking Engine nhúng thẳng vào Website riêng của khách sạn để nhận đơn trực tiếp"
         ],
         [
@@ -552,7 +552,7 @@
                 "Cặp khóa xác thực Hotel ID và Hotel Key được bàn giao sau khi khởi tạo trên hệ thống Hotel Link dùng để làm gì?",
                 "",
                 3.0,
-                "Dùng để điền vào phần cài đặt tài khoản quản trị Extranet trên các sàn Agoda và Booking.com nhằm cấp quyền cho KiotViet",
+                "Dùng để điền vào phần cài đặt tài khoản quản trị Extranet trên các kênh OTA Agoda và Booking.com nhằm cấp quyền cho KiotViet",
                 "Dùng để nhân viên lễ tân và chủ khách sạn đăng nhập trực tiếp vào ứng dụng KiotViet Hotel trên điện thoại di động",
                 "Dùng để nhập vào phân hệ OTAs trên KiotViet Hotel nhằm xác thực danh tính và mở khóa cổng kết nối API hai chiều"
         ],
@@ -589,7 +589,7 @@
                 "",
                 3.0,
                 "Gồm 2 bước rút gọn: Nhập cặp mã Hotel ID/Key để xác thực kết nối đối tác và bấm nút Kích hoạt đồng bộ tự động",
-                "Gồm 5 bước chi tiết: Khai báo thông tin cơ sở, Tạo hạng phòng, Cài giá bán, Kết nối từng sàn OTA và Bật Stop Sell",
+                "Gồm 5 bước chi tiết: Khai báo thông tin cơ sở, Tạo hạng phòng, Cài giá bán, Kết nối từng kênh OTA và Bật Stop Sell",
                 "Gồm 4 bước liên hoàn: Truy cập CM, Kết nối CM với KiotViet (nhập ID/Key & ghép phòng), Thiết lập giá CM và Kết nối OTAs"
         ],
         [
@@ -624,19 +624,19 @@
                 "Tại Bước 3 (Thiết lập giá trên CM), nếu khách hàng bỏ trống giá của một gói giá (không điền mức giá bán), hậu quả kỹ thuật nào sẽ xảy ra?",
                 "",
                 3.0,
-                "Hệ thống KiotViet sẽ tự động gán mức giá mặc định bằng 0 đồng lên sàn OTA nên có nguy cơ khách đặt phòng miễn phí",
-                "Sàn OTA sẽ tự động lấy mức giá của hạng phòng liền kề gần nhất trên bảng giá KiotViet để áp dụng thay thế cho gói đó",
-                "Hệ thống sẽ vô hiệu hóa gói giá bị trống ô và không thể đẩy tồn phòng hay lệnh Stop Sell của gói đó lên các sàn OTA"
+                "Hệ thống KiotViet sẽ tự động gán mức giá mặc định bằng 0 đồng lên kênh OTA nên có nguy cơ khách đặt phòng miễn phí",
+                "Kênh OTA sẽ tự động lấy mức giá của hạng phòng liền kề gần nhất trên bảng giá KiotViet để áp dụng thay thế cho gói đó",
+                "Hệ thống sẽ vô hiệu hóa gói giá bị trống ô và không thể đẩy tồn phòng hay lệnh Stop Sell của gói đó lên các kênh OTA"
         ],
         [
                 "Một đáp án",
                 "KVCM 3.3 - Cấu hình Thiết lập chung, Xử lý Hủy phòng & Ghi nhận OTAs thu hộ",
                 "Có",
                 "",
-                "Khi du khách thực hiện thao tác hủy đặt phòng trên sàn OTA (Agoda/Booking), hệ thống KiotViet Hotel Channel Manager sẽ tự động xử lý như thế nào?",
+                "Khi du khách thực hiện thao tác hủy đặt phòng trên kênh OTA (Agoda/Booking), hệ thống KiotViet Hotel Channel Manager sẽ tự động xử lý như thế nào?",
                 "",
                 1.0,
-                "Chuyển trạng thái đơn sang Đã hủy, tự động cộng hoàn phòng trống về KiotViet và đẩy cập nhật tồn lên các sàn còn lại",
+                "Chuyển trạng thái đơn sang Đã hủy, tự động cộng hoàn phòng trống về KiotViet và đẩy cập nhật tồn lên các kênh OTA còn lại",
                 "Tự động xóa vĩnh viễn mã đơn đặt phòng đó khỏi lịch sử đặt phòng KiotViet nhằm giải phóng sơ đồ phòng cho lễ tân",
                 "Giữ nguyên phòng đó ở trạng thái khóa tạm thời và gửi thông báo yêu cầu nhân viên lễ tân kiểm tra xác nhận hủy thủ công"
         ],
@@ -649,8 +649,8 @@
                 "",
                 2.0,
                 "Hotel Collect là hình thức khách chuyển khoản trước khi đến, còn OTA Collect là khách thanh toán tiền mặt trực tiếp tại quầy",
-                "Hotel Collect là khách sạn tự thu tiền trực tiếp từ khách lưu trú, còn OTA Collect là sàn thu tiền trước rồi đối soát trả lại",
-                "Hotel Collect được miễn trừ hoàn toàn phí hoa hồng sàn, còn OTA Collect bị sàn OTA khấu trừ trực tiếp phí hoa hồng theo kỳ"
+                "Hotel Collect là khách sạn tự thu tiền trực tiếp từ khách lưu trú, còn OTA Collect là kênh OTA thu tiền trước rồi đối soát trả lại",
+                "Hotel Collect được miễn trừ hoàn toàn phí hoa hồng kênh OTA, còn OTA Collect bị kênh OTA khấu trừ trực tiếp phí hoa hồng theo kỳ"
         ],
         [
                 "Một đáp án",
@@ -660,7 +660,7 @@
                 "Nếu khách sạn không bật tính năng \"Tự động ghi nhận thanh toán cho đơn OTA thu hộ\" trên KiotViet Hotel, rủi ro kế toán nào thường xuyên xảy ra nhất tại quầy lễ tân?",
                 "",
                 3.0,
-                "Sàn OTA sẽ tự động giữ lại toàn bộ doanh thu phòng và tạm hoãn lệnh chuyển khoản đối soát định kỳ cho khách sạn",
+                "Kênh OTA sẽ tự động giữ lại toàn bộ doanh thu phòng và tạm hoãn lệnh chuyển khoản đối soát định kỳ cho khách sạn",
                 "Phần mềm KiotViet sẽ không thể đồng bộ số liệu doanh thu phòng sang báo cáo quỹ cuối ngày và khóa sổ kế toán tự động",
                 "Lễ tân thấy đơn báo chưa thanh toán nên tiếp tục thu tiền lần 2 của khách tại quầy, gây ra khiếu nại gay gắt do thu trùng"
         ],
@@ -738,7 +738,7 @@
         ],
         [
                 "Một đáp án",
-                "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các sàn OTA khác",
+                "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các kênh OTA khác",
                 "Có",
                 "",
                 "Điểm khác biệt lớn nhất về luồng đồng bộ đơn đặt phòng cũ giữa Airbnb so với Agoda và Booking.com khi mới kết nối là gì?",
@@ -750,7 +750,7 @@
         ],
         [
                 "Một đáp án",
-                "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các sàn OTA khác",
+                "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các kênh OTA khác",
                 "Có",
                 "",
                 "Khi kết nối kênh Airbnb với Channel Manager, tài khoản Airbnb của cơ sở lưu trú phải đáp ứng điều kiện nào sau đây?",
@@ -762,15 +762,15 @@
         ],
         [
                 "Một đáp án",
-                "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các sàn OTA khác",
+                "KVCM 4.3 - Hướng dẫn Liên kết kênh Airbnb & Nguyên lý kết nối các kênh OTA khác",
                 "Có",
                 "",
-                "Nguyên lý chung khi kết nối các sàn OTA khác (Expedia, Trip.com, Traveloka) với KiotViet Hotel Channel Manager là gì?",
+                "Nguyên lý chung khi kết nối các kênh OTA khác (Expedia, Trip.com, Traveloka) với KiotViet Hotel Channel Manager là gì?",
                 "",
                 3.0,
-                "Mỗi sàn OTA đều tự động nhận diện gian hàng KiotViet qua số điện thoại chủ cơ sở và tự ghép nối mà không cần khai báo ID",
-                "Khách sạn cần xuất file Excel danh sách phòng từ KiotViet rồi tải lên từng sàn OTA để đồng bộ dữ liệu theo định kỳ mỗi ngày",
-                "Mở kết nối đối tác Hotel Link trên Extranet sàn (hoặc qua Market Manager), lấy Property ID khai báo trên CM và map hạng phòng"
+                "Mỗi kênh OTA đều tự động nhận diện gian hàng KiotViet qua số điện thoại chủ cơ sở và tự ghép nối mà không cần khai báo ID",
+                "Khách sạn cần xuất file Excel danh sách phòng từ KiotViet rồi tải lên từng kênh OTA để đồng bộ dữ liệu theo định kỳ mỗi ngày",
+                "Mở kết nối đối tác Hotel Link trên Extranet kênh OTA (hoặc qua Market Manager), lấy Property ID khai báo trên CM và map hạng phòng"
         ],
         [
                 "Một đáp án",
@@ -781,7 +781,7 @@
                 "",
                 1.0,
                 "Hệ thống vẫn nhận đơn về tab Đã đồng bộ, tự động tạo hồ sơ khách hàng theo tên khách kèm ký hiệu kênh OTA để quản lý",
-                "Hệ thống tự động từ chối tiếp nhận đơn đặt phòng đó và gửi thông báo yêu cầu sàn OTA cập nhật số điện thoại thật của khách",
+                "Hệ thống tự động từ chối tiếp nhận đơn đặt phòng đó và gửi thông báo yêu cầu kênh OTA cập nhật số điện thoại thật của khách",
                 "Hệ thống tự động đẩy đơn đặt phòng đó vào tab Lỗi đồng bộ và tạm giữ không trừ quỹ phòng trống cho đến khi có SĐT"
         ],
         [
@@ -816,8 +816,8 @@
                 "Khi phát hiện đơn đặt phòng rơi vào tab \"Lỗi đồng bộ\", hành động nào sau đây bị CẤM TUYỆT ĐỐI đối với nhân viên lễ tân?",
                 "",
                 1.0,
-                "Tuyệt đối KHÔNG bấm nút \"Xóa đặt phòng\" vì sẽ mất dấu vết đơn trên KiotViet trong khi khách vẫn có booking hợp lệ trên sàn",
-                "Tuyệt đối không bấm nút \"Khắc phục lỗi\" khi chưa nhận được email xác nhận cho phép xử lý từ nhân viên kỹ thuật của sàn OTA",
+                "Tuyệt đối KHÔNG bấm nút \"Xóa đặt phòng\" vì sẽ mất dấu vết đơn trên KiotViet trong khi khách vẫn có booking hợp lệ trên kênh OTA",
+                "Tuyệt đối không bấm nút \"Khắc phục lỗi\" khi chưa nhận được email xác nhận cho phép xử lý từ nhân viên kỹ thuật của kênh OTA",
                 "Tuyệt đối không thông báo cho quản lý khách sạn trước khi hết ca trực vì hệ thống sẽ tự động đồng bộ lại đơn đặt phòng sau 2 giờ"
         ],
         [
@@ -825,12 +825,12 @@
                 "KVCM 5.2 - Xử lý Đơn đặt phòng rơi vào tab Lỗi Đồng Bộ",
                 "Có",
                 "",
-                "Nguyên nhân phổ biến nhất khiến đơn đặt phòng từ sàn OTA bị rơi vào tab Lỗi đồng bộ trên KiotViet là gì?",
+                "Nguyên nhân phổ biến nhất khiến đơn đặt phòng từ kênh OTA bị rơi vào tab Lỗi đồng bộ trên KiotViet là gì?",
                 "",
                 2.0,
                 "Do khách du lịch sử dụng ứng dụng đặt phòng phiên bản cũ hoặc thanh toán bằng thẻ tín dụng quốc tế chưa kích hoạt OTP",
-                "Do hạng phòng trên sàn chưa được ghép nối (mapping) với KiotViet, hoặc KiotViet đã hết sạch phòng trống thuộc hạng phòng đó",
-                "Do hệ thống Extranet của sàn OTA đang thực hiện bảo trì máy chủ định kỳ nên tạm thời làm sai lệch mã đơn hàng gửi sang CM"
+                "Do hạng phòng trên kênh OTA chưa được ghép nối (mapping) với KiotViet, hoặc KiotViet đã hết sạch phòng trống thuộc hạng phòng đó",
+                "Do hệ thống Extranet của kênh OTA đang thực hiện bảo trì máy chủ định kỳ nên tạm thời làm sai lệch mã đơn hàng gửi sang CM"
         ],
         [
                 "Một đáp án",
@@ -840,7 +840,7 @@
                 "Quy trình xử lý chuẩn mực khi một đơn phòng bị lỗi do khách sạn đã hết phòng trống cục bộ là gì?",
                 "",
                 3.0,
-                "Ngay lập tức đăng nhập lên Extranet sàn OTA bấm hủy đơn đặt phòng đó mà không cần liên hệ trao đổi với khách hàng trước",
+                "Ngay lập tức đăng nhập lên Extranet kênh OTA bấm hủy đơn đặt phòng đó mà không cần liên hệ trao đổi với khách hàng trước",
                 "Giữ nguyên đơn ở tab Lỗi đồng bộ và chờ đến khi có khách lưu trú khác trả phòng sớm trong ngày rồi mới thực hiện xếp phòng",
                 "Kiểm tra hạng phòng tương đương hoặc cao hơn trên KiotViet để xếp phòng (Upgrade), hoặc phối hợp dời khách sang cơ sở khác"
         ],
@@ -864,7 +864,7 @@
                 "Cơ chế \"Khóa phòng kép\" (Double Protection) để đóng bán phòng an toàn tuyệt đối 100% trong mùa cao điểm được thực hiện như thế nào?",
                 "",
                 2.0,
-                "Tạm ngắt kết nối kênh bán trên Hotel Link đồng thời xóa bỏ toàn bộ lịch giá đã thiết lập trên từng sàn OTA liên kết",
+                "Tạm ngắt kết nối kênh bán trên Hotel Link đồng thời xóa bỏ toàn bộ lịch giá đã thiết lập trên từng kênh OTA liên kết",
                 "Đồng thời kích hoạt trạng thái Đóng bán phòng (Stop Sell = Yes) VÀ điều chỉnh số lượng phòng mở bán (Allotment) về mức 0",
                 "Tăng mức giá bán phòng trên KiotViet lên gấp 10 lần giá gốc đồng thời ẩn tên hạng phòng đó khỏi sơ đồ phòng lễ tân"
         ],
@@ -877,7 +877,7 @@
                 "",
                 3.0,
                 "Xóa toàn bộ hạng phòng đó trên Hotel Link và tạo lại gói giá mới để hệ thống làm mới toàn bộ bảng giá lịch lưới 365 ngày tới",
-                "Liên hệ tổng đài hỗ trợ của từng sàn OTA để nhờ nhân viên kỹ thuật sàn tắt quy tắc giữ giá riêng trên Extranet giúp khách sạn",
+                "Liên hệ tổng đài hỗ trợ của từng kênh OTA để nhờ nhân viên kỹ thuật kênh OTA tắt quy tắc giữ giá riêng trên Extranet giúp khách sạn",
                 "Chọn khoảng ngày đang hiển thị ô vàng nhạt trên lịch lưới và nhấp vào liên kết \"Gỡ bỏ giá riêng\" (Remove Override) để lưu lại"
         ],
         [
@@ -889,7 +889,7 @@
                 "",
                 1.0,
                 "Trấn an khách hàng, chủ động nâng hạng phòng miễn phí nếu còn phòng cao hơn hoặc hỗ trợ dời sang khách sạn tương đương gần nhất",
-                "Giải thích nguyên nhân kỹ thuật là do độ trễ đồng bộ từ phía sàn OTA để khách hàng thông cảm và chủ động liên hệ sàn đổi đặt phòng",
+                "Giải thích nguyên nhân kỹ thuật là do độ trễ đồng bộ từ phía kênh OTA để khách hàng thông cảm và chủ động liên hệ kênh OTA đổi đặt phòng",
                 "Đề nghị khách hàng tạm thời ngồi chờ tại khu vực sảnh lễ tân trong lúc nhân viên kiểm tra lại toàn bộ danh sách đơn đặt phòng trong ngày"
         ],
         [
@@ -900,33 +900,33 @@
                 "Sau khi giải quyết xong chỗ ở cho khách bị bán trùng, bước kỹ thuật khẩn cấp tiếp theo DVKH cần kiểm tra trên hệ thống là gì?",
                 "",
                 2.0,
-                "Hướng dẫn khách sạn đổi mật khẩu đăng nhập tài khoản KiotViet và tài khoản Extranet các sàn để tránh người lạ sửa phòng",
-                "Bật khóa phòng kép khẩn cấp trên các sàn còn lại, kiểm tra bảng mapping và rà soát chế độ Free Sale hoặc kích hoạt Auto Close",
-                "Gửi ngay phiếu khiếu nại lên bộ phận hỗ trợ của sàn OTA yêu cầu bồi hoàn 100% chi phí phát sinh cho đơn đặt phòng bị trùng"
+                "Hướng dẫn khách sạn đổi mật khẩu đăng nhập tài khoản KiotViet và tài khoản Extranet các kênh OTA để tránh người lạ sửa phòng",
+                "Bật khóa phòng kép khẩn cấp trên các kênh OTA còn lại, kiểm tra bảng mapping và rà soát chế độ Free Sale hoặc kích hoạt Auto Close",
+                "Gửi ngay phiếu khiếu nại lên bộ phận hỗ trợ của kênh OTA yêu cầu bồi hoàn 100% chi phí phát sinh cho đơn đặt phòng bị trùng"
         ],
         [
                 "Một đáp án",
                 "KVCM 6.1 - Xử lý Tình huống Bán trùng phòng (Overbooking / Hết phòng)",
                 "Có",
                 "",
-                "Trường hợp khách hàng đòi KiotViet bồi thường tiền phạt của sàn OTA do bán trùng phòng, chuyên viên DVKH cần đối soát căn cứ nào?",
+                "Trường hợp khách hàng đòi KiotViet bồi thường tiền phạt của kênh OTA do bán trùng phòng, chuyên viên DVKH cần đối soát căn cứ nào?",
                 "",
                 3.0,
                 "Căn cứ vào tường trình qua điện thoại của chủ khách sạn và đề xuất hỗ trợ từ Nhân viên kinh doanh phụ trách hợp đồng đó",
                 "Chủ động cam kết phương án bồi hoàn chi phí ngay trong cuộc gọi đầu tiên để giữ thái độ hài lòng và tránh khách hủy gói",
-                "Đối soát nhật ký đồng bộ: mốc thời gian KiotViet đẩy lệnh Stop Sell so với lúc sàn chốt đơn và biên bản bàn giao gỡ Free Sale"
+                "Đối soát nhật ký đồng bộ: mốc thời gian KiotViet đẩy lệnh Stop Sell so với lúc kênh OTA chốt đơn và biên bản bàn giao gỡ Free Sale"
         ],
         [
                 "Một đáp án",
                 "KVCM 6.2 - Hỗ trợ Khách hàng Liên kết thêm kênh, Đổi kênh gói Lite & Lệch giá",
                 "Có",
                 "",
-                "Khi khách hàng phản ánh giá phòng hiển thị trên sàn Agoda thấp hơn giá khách cài đặt trên KiotViet (Lệch giá / Price Undercutting), nguyên nhân phổ biến nhất là gì?",
+                "Khi khách hàng phản ánh giá phòng hiển thị trên kênh OTA Agoda thấp hơn giá khách cài đặt trên KiotViet (Lệch giá / Price Undercutting), nguyên nhân phổ biến nhất là gì?",
                 "",
                 1.0,
-                "Sàn OTA tự bật khuyến mãi thành viên/chiết khấu hoa hồng (Agoda Promotion, Genius) hoặc có ô Override/Rate Adj. cài sai",
+                "Kênh OTA tự bật khuyến mãi thành viên/chiết khấu hoa hồng (Agoda Promotion, Genius) hoặc có ô Override/Rate Adj. cài sai",
                 "Hệ thống KiotViet Hotel tự động kích hoạt chính sách giảm giá giờ chót vào cuối ngày nhằm tối ưu công suất phòng trống",
-                "Độ trễ đường truyền giữa máy chủ KiotViet và Hotel Link làm giá trị tiền tệ bị quy đổi sai lệch trong quá trình đẩy giá lên sàn"
+                "Độ trễ đường truyền giữa máy chủ KiotViet và Hotel Link làm giá trị tiền tệ bị quy đổi sai lệch trong quá trình đẩy giá lên kênh OTA"
         ],
         [
                 "Một đáp án",
@@ -945,12 +945,12 @@
                 "KVCM 6.2 - Hỗ trợ Khách hàng Liên kết thêm kênh, Đổi kênh gói Lite & Lệch giá",
                 "Có",
                 "",
-                "Để kiểm tra nguyên nhân lệch giá giữa KiotViet và sàn OTA, công cụ kỹ thuật đầu tiên chuyên viên DVKH cần mở để đối chiếu là gì?",
+                "Để kiểm tra nguyên nhân lệch giá giữa KiotViet và kênh OTA, công cụ kỹ thuật đầu tiên chuyên viên DVKH cần mở để đối chiếu là gì?",
                 "",
                 3.0,
                 "Mở danh sách bảng giá chung trên KiotViet PMS và báo cáo doanh thu chi tiết theo từng nhân viên thu ngân trực tiếp tại quầy lễ tân",
-                "Mở phần cài đặt tài khoản thanh toán và đối chiếu lịch sử hóa đơn thu hộ giữa khách sạn với bộ phận kế toán công nợ của từng sàn",
-                "Mở mục Nhật ký đẩy giá (Rate Push Log) và cấu hình Rate Adjustment trên Hotel Link, sau đó kiểm tra tab Khuyến mãi trên sàn"
+                "Mở phần cài đặt tài khoản thanh toán và đối chiếu lịch sử hóa đơn thu hộ giữa khách sạn với bộ phận kế toán công nợ của từng kênh OTA",
+                "Mở mục Nhật ký đẩy giá (Rate Push Log) và cấu hình Rate Adjustment trên Hotel Link, sau đó kiểm tra tab Khuyến mãi trên kênh OTA"
         ],
         [
                 "Một đáp án",
@@ -974,14 +974,14 @@
                 2.0,
                 "Thông tin tên đăng nhập, mật khẩu tài khoản quản trị KiotViet, giấy phép kinh doanh và số tài khoản ngân hàng của chủ cơ sở",
                 "Hotel ID, Tên cơ sở, Kênh OTA gặp lỗi, Mã Booking ID, Mốc thời gian phát sinh và Ảnh chụp Full Screen rõ URL kèm mô tả lỗi",
-                "Danh sách toàn bộ nhân viên lễ tân sử dụng phần mềm, lịch sử chấm công trong tháng và hợp đồng gốc ký kết với các sàn OTA"
+                "Danh sách toàn bộ nhân viên lễ tân sử dụng phần mềm, lịch sử chấm công trong tháng và hợp đồng gốc ký kết với các kênh OTA"
         ],
         [
                 "Một đáp án",
                 "KVCM 6.3 - Quy trình tạo Ticket chuyển tiếp ca lỗi kỹ thuật đối tác",
                 "Có",
                 "",
-                "Cam kết thời gian phản hồi (Response SLA) chuẩn mực đối với các ca sự cố kỹ thuật nghiêm trọng P1 (Overbooking / Mất kết nối toàn bộ sàn OTA) là bao lâu?",
+                "Cam kết thời gian phản hồi (Response SLA) chuẩn mực đối với các ca sự cố kỹ thuật nghiêm trọng P1 (Overbooking / Mất kết nối toàn bộ kênh OTA) là bao lâu?",
                 "",
                 3.0,
                 "Phản hồi tiếp nhận trong vòng 24 giờ làm việc và xử lý dứt điểm lỗi đồng bộ trong phạm vi từ 3 đến 5 ngày làm việc hành chính",
