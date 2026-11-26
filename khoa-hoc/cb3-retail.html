@@ -442,7 +442,8 @@
                 const questionText = row[3] ? row[3].toString().trim() : '';
                 if (questionText === '') continue;
 
-                const rawAnsKey = row[5] ? row[5].toString().trim().toUpperCase() : '';
+                let rawAnsKey = row[5] ? row[5].toString().trim().toUpperCase() : '';
+                if (/^[1-6]$/.test(rawAnsKey)) rawAnsKey = 'ABCDEF'[parseInt(rawAnsKey, 10) - 1];
                 const correctIndex = validKeys.indexOf(rawAnsKey);
 
                 const options = [];
